@@ -13,19 +13,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(DragonSlashWave, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
-                new HitOnPlayerMechanic(DragonSlashBurst, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
-                new HitOnPlayerMechanic(new long[] { DragonSlashRush1, DragonSlashRush2 }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
-                new SkillOnPlayerMechanic(TargetedExpulsion, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150, (evt, log) => evt.HasDowned),
-                new PlayerBuffApplyMechanic(SharedDestructionLi, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
-                new HitOnPlayerMechanic(EnforcerRushingJustice, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new HitOnPlayerMechanic(new long[] { DragonSlashWave, DragonSlashWaveCM }, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
+                new HitOnPlayerMechanic(new long []{DragonSlashBurst, DragonSlashBurstCM }, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
+                new HitOnPlayerMechanic(new long[] { DragonSlashRush1, DragonSlashRush2, DragonSlashRush1CM, DragonSlashRush2CM }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
+                new SkillOnPlayerMechanic(new long[] {TargetedExpulsion, TargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150, (evt, log) => evt.HasDowned),
+                new PlayerBuffApplyMechanic(new long[] {SharedDestructionLi, SharedDestructionLiCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new HitOnPlayerMechanic(new long[] { EnforcerRushingJustice, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                 new HitOnPlayerMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
-                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindblade),
-                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcer),
+                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindblade || evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheMindbladeCM),
+                new PlayerBuffApplyMechanic(FixatedKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcer || evt.CreditedBy.ID == (int)ArcDPSEnums.TrashID.TheEnforcerCM),
                 new EnemyBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new HitOnPlayerMechanic(new long[]{StormOfSwords1, StormOfSwords2, StormOfSwords3 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new HitOnPlayerMechanic(JadeBusterCannon, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
-                new EnemyBuffApplyMechanic(DestructiveAura, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150)
+                new EnemyBuffApplyMechanic(DestructiveAura, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
+                new PlayerBuffApplyMechanic(Debilitated, "Debilitated", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkRed), "Debilitated", "Debilitated (Reduced outgoing damage)", "Debilitated", 0),
+                new PlayerBuffApplyMechanic(Infirmity, "Infirmity", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Infirmity", "Infirmity (Reduced incoming healing)", "Infirmity", 0),
+                new PlayerBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
             }
             );
             Icon = "https://i.imgur.com/7OutZup.png";
@@ -47,11 +50,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
                 (int)ArcDPSEnums.TrashID.TheEnforcer,
                 (int)ArcDPSEnums.TrashID.TheMindblade,
                 (int)ArcDPSEnums.TrashID.TheMechRider,
                 (int)ArcDPSEnums.TrashID.TheRitualist,
                 (int)ArcDPSEnums.TrashID.TheSniper,
+                (int)ArcDPSEnums.TrashID.TheEnforcerCM,
+                (int)ArcDPSEnums.TrashID.TheMindbladeCM,
+                (int)ArcDPSEnums.TrashID.TheMechRiderCM,
+                (int)ArcDPSEnums.TrashID.TheRitualistCM,
+                (int)ArcDPSEnums.TrashID.TheSniperCM,
             };
         }
 
@@ -60,6 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
             };
         }
 
@@ -77,6 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
+                (int)ArcDPSEnums.TargetID.MinisterLiCM,
             };
         }
 
@@ -104,10 +115,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private AbstractSingleActor GetMinisterLi(FightData fightData)
+        {
+            return Targets.FirstOrDefault(x => x.ID == (fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ministerLi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLi);
+            AbstractSingleActor ministerLi = GetMinisterLi(log.FightData);
             if (ministerLi == null)
             {
                 throw new MissingKeyActorsException("Minister Li not found");
@@ -125,11 +141,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(subPhases);
             //
-            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheEnforcer);
-            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheMindblade);
-            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheMechRider);
-            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheSniper);
-            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.TheRitualist);
+            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
+            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
+            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
+            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
+            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
             AddSplitPhase(phases, new List<AbstractSingleActor>() { enforcer, mindblade, ritualist }, ministerLi, log, 1);
             AddSplitPhase(phases, new List<AbstractSingleActor>() { mechRider, sniper }, ministerLi, log, 2);
             return phases;
@@ -137,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor ministerLi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLi);
+            AbstractSingleActor ministerLi = GetMinisterLi(fightData);
             if (ministerLi == null)
             {
                 throw new MissingKeyActorsException("Minister Li not found");
@@ -147,6 +163,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightData.SetSuccess(true, buffApplies[2].Time);
             }
+        }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLiCM);
+            return ministerLiCM != null ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
         }
     }
 }
