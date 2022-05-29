@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return de.Time >= phases[1].End;
             }),
-            new EnemyBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
+            new EnemyBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
                 if (phases.Count < 1)
                 {

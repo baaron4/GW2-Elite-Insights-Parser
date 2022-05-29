@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
                     sizeDict[m.PlotlySetting.Size] = mList;
                 }
                 mList.Add(m);
-                if (sizeDict.Count > 1)
+                if (mList.Count > 1)
                 {
                     throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same configuration");
                 }
