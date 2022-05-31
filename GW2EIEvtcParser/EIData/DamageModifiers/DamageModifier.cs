@@ -158,11 +158,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal DamageModifier UsingApproximate(bool approximate)
         {
-            Approximate = approximate;
-            if (Approximate)
+            if (!Approximate && approximate)
             {
                 Tooltip += "<br>Approximate";
             }
+            else if (Approximate && !approximate)
+            {
+                Tooltip = Tooltip.Replace("<br>Approximate", "");
+            }
+            Approximate = approximate;
             return this;
         }
 
