@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
                     }
-                    resBySrcAgentBySkillID.RemoveAll(x => x.ActualDuration <= 1);
+                    resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                     resBySrcAgent.AddRange(resBySrcAgentBySkillID);
                 }
                 resBySrcAgent = resBySrcAgent.OrderBy(x => x.Time).ToList();
