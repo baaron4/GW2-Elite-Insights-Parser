@@ -874,7 +874,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectIDToGUIDEvent> GetGUIDToEffectIDEvents(string guidKey)
+        public IReadOnlyList<EffectIDToGUIDEvent> GetEffectIDToGUIDEvents(string guidKey)
         {
             if (_metaDataEvents.GUIDToEffectIDEvents.TryGetValue(guidKey, out List<EffectIDToGUIDEvent> list))
             {
