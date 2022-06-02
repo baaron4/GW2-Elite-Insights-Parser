@@ -181,6 +181,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
                 || IsStateChange == ArcDPSEnums.StateChange.Tag
                 || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.Effect
                 ;
         }
 
@@ -198,6 +199,7 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None
                 || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+                || IsStateChange == ArcDPSEnums.StateChange.Effect
                 ;
         }
 

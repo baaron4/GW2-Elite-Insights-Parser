@@ -200,6 +200,16 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.BuffInitial:
                     buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
                     break;
+                case ArcDPSEnums.StateChange.Effect:
+                    var effectEvt = new EffectEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.EffectEventssByID, effectEvt.EffectID, effectEvt);
+                    Add(statusEvents.EffectsEventsBySrc, effectEvt.Src, effectEvt);
+                    break;
+                case ArcDPSEnums.StateChange.EffectIDToGUID:
+                    var idToGUIDEvt = new EffectIDToGUIDEvent(stateChangeEvent);
+                    Add(metaDataEvents.EffectIDToGUIDEvents, idToGUIDEvt.EffectID, idToGUIDEvt);
+                    Add(metaDataEvents.GUIDToEffectIDEvents, idToGUIDEvt.GuidKey, idToGUIDEvt);
+                    break;
                 default:
                     break;
             }

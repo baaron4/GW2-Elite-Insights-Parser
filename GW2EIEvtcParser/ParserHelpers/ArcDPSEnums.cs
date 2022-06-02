@@ -146,6 +146,8 @@ namespace GW2EIEvtcParser
             InstanceStart = 42,
             TickRate = 43,
             Last90BeforeDown = 44,
+            Effect = 45,
+            EffectIDToGUID = 46,
             Unknown
         };
 
