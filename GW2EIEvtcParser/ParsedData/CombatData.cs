@@ -865,6 +865,15 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
+        public IReadOnlyList<EffectEvent> GetEffectEventsDst(AgentItem dst)
+        {
+            if (_statusEvents.EffectsEventsByDst.TryGetValue(dst, out List<EffectEvent> list))
+            {
+                return list;
+            }
+            return new List<EffectEvent>();
+        }
+
         public IReadOnlyList<EffectEvent> GetEffectEvents(long effectID)
         {
             if (_statusEvents.EffectEventssByID.TryGetValue(effectID, out List<EffectEvent> list))

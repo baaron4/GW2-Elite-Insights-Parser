@@ -204,6 +204,10 @@ namespace GW2EIEvtcParser.ParsedData
                     var effectEvt = new EffectEvent(stateChangeEvent, agentData);
                     Add(statusEvents.EffectEventssByID, effectEvt.EffectID, effectEvt);
                     Add(statusEvents.EffectsEventsBySrc, effectEvt.Src, effectEvt);
+                    if (effectEvt.IsAroundDst)
+                    {
+                        Add(statusEvents.EffectsEventsByDst, effectEvt.Dst, effectEvt);
+                    }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
                     var idToGUIDEvt = new EffectIDToGUIDEvent(stateChangeEvent);
