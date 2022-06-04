@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
             byte[] last8 = BitConverter.GetBytes(evtcItem.DstAgent);
             first8.CopyTo(Guid, 0);
             last8.CopyTo(Guid, first8.Length);
-            GuidKey = BitConverter.ToUInt64(Guid, 0) + "-" + BitConverter.ToUInt64(Guid, 8);
+            GuidKey = evtcItem.SrcAgent + "-" + evtcItem.DstAgent;
             ContentType = evtcItem.OverstackValue;
             EffectID = evtcItem.SkillID;
         }
