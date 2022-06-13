@@ -724,7 +724,7 @@ namespace GW2EIEvtcParser
             {
                 if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Skipping invalid player " + playerAgent.Name);
+                    operation.UpdateProgressWithCancellationCheck("Skipping invalid player");
                     continue;
                 }
                 bool skip = false;
@@ -737,7 +737,7 @@ namespace GW2EIEvtcParser
                         {
                             skip = true;
                             ulong agent = p.AgentItem.Agent;
-                            operation.UpdateProgressWithCancellationCheck("Merging player " + p.Character);
+                            operation.UpdateProgressWithCancellationCheck("Merging player");
                             foreach (CombatItem c in _combatItems)
                             {
                                 if (c.DstMatchesAgent(player.AgentItem, _enabledExtensions))
@@ -912,7 +912,7 @@ namespace GW2EIEvtcParser
                 if (p.LastAware < 0)
                 {
                     agentsToRemove.Add(p.AgentItem);
-                    operation.UpdateProgressWithCancellationCheck("Removing player " + p.Character + " from player list (gone before fight start)");
+                    operation.UpdateProgressWithCancellationCheck("Removing player from player list (gone before fight start)");
                 }
             }
             //
@@ -932,7 +932,7 @@ namespace GW2EIEvtcParser
                             if (!damageEvents.Any())
                             {
                                 agentsToRemove.Add(p.AgentItem);
-                                operation.UpdateProgressWithCancellationCheck("Removing player " + p.Character + " from player list (spawned after fight start in 10 men content)");
+                                operation.UpdateProgressWithCancellationCheck("Removing player from player list (spawned after fight start in 10 men content)");
                             }
                         }
                     }

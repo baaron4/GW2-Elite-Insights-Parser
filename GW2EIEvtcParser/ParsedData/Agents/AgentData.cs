@@ -12,7 +12,9 @@ namespace GW2EIEvtcParser.ParsedData
         private Dictionary<int, List<AgentItem>> _allNPCsByID;
         private Dictionary<int, List<AgentItem>> _allGadgetsByID;
         private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
+#if DEBUG
         private Dictionary<string, List<AgentItem>> _allAgentsByName;
+#endif
         public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
         public HashSet<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
@@ -126,7 +128,9 @@ namespace GW2EIEvtcParser.ParsedData
             _allGadgetsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+#if DEBUG
             _allAgentsByName = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+#endif
         }
 
         public IReadOnlyList<AgentItem> GetAgentByType(AgentItem.AgentType type)

@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser
         public IReadOnlyDictionary<ParserHelper.Spec, List<AbstractSingleActor>> FriendliesListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
-        public EvtcParserSettings ParserSettings { get; }
+        internal EvtcParserSettings ParserSettings { get; }
         public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
 
         public MechanicData MechanicData { get; }
@@ -45,6 +45,19 @@ namespace GW2EIEvtcParser
             //
             _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
+            if (parserSettings.AnonymousPlayer)
+            {
+                operation.UpdateProgressWithCancellationCheck("Anonymous guilds");
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    Player player = PlayerList[i];
+                    GuildEvent guildEvent = CombatData.GetGuildEvents(player.AgentItem).FirstOrDefault();
+                    if (guildEvent != null)
+                    {
+                        guildEvent.Anonymize();
+                    }
+                }
+            }
             //
             operation.UpdateProgressWithCancellationCheck("Checking CM");
             FightData.SetCM(CombatData, AgentData);

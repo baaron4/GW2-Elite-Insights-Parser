@@ -124,6 +124,11 @@ namespace GW2EIEvtcParser.ParsedData
             Type = type;
         }
 
+        internal void OverrideName(string name)
+        {
+            Name = name;
+        }
+
         internal void SetInstid(ushort instid)
         {
             InstID = instid;

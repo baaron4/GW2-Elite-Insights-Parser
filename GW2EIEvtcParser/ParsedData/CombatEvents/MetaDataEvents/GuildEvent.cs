@@ -6,7 +6,9 @@ namespace GW2EIEvtcParser.ParsedData
     {
         public AgentItem Src { get; protected set; }
 
-        public byte[] Guid { get; }
+        private byte[] Guid { get; }
+
+        private bool _anomymous { set; get; } = false;
 
         internal GuildEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
@@ -29,6 +31,11 @@ namespace GW2EIEvtcParser.ParsedData
             last4.CopyTo(Guid, first8.Length + mid4.Length);
         }
 
+        internal void Anonymize()
+        {
+            _anomymous = true;
+        }
+
         private string ToHexString(int start, int end)
         {
             string res = "";
@@ -39,7 +46,7 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public string APIString => ToHexString(0, 4) + "-" + ToHexString(4, 6) + "-" +
+        public string APIString => _anomymous ? null : ToHexString(0, 4) + "-" + ToHexString(4, 6) + "-" +
                 ToHexString(6, 8) + "-" + ToHexString(8, 10) + "-" + ToHexString(10, 16);
 
     }

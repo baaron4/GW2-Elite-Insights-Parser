@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class EffectIDToGUIDEvent : AbstractMetaDataEvent
     {
 
-        public byte[] Guid { get; }
+        private byte[] Guid { get; }
 
         public string GuidKey { get; }
 
