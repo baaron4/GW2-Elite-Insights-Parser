@@ -47,14 +47,24 @@ namespace GW2EIEvtcParser
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
             if (parserSettings.AnonymousPlayer)
             {
-                operation.UpdateProgressWithCancellationCheck("Anonymous guilds");
+                operation.UpdateProgressWithCancellationCheck("Anonymous players");
                 for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    Player player = PlayerList[i];
-                    GuildEvent guildEvent = CombatData.GetGuildEvents(player.AgentItem).FirstOrDefault();
-                    if (guildEvent != null)
+                    PlayerList[i].Anonymize(i + 1);
+                }
+                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                var playerOffset = PlayerList.Count;
+                foreach (AgentItem playerAgent in allPlayerAgents)
+                {
+                    foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
                     {
                         guildEvent.Anonymize();
+                    }
+                    if (!PlayerAgents.Contains(playerAgent))
+                    {
+                        string character = "Player " + playerOffset;
+                        string account = "Account " + (playerOffset++);
+                        playerAgent.OverrideName(character + "\0:" + account + "\01");
                     }
                 }
             }

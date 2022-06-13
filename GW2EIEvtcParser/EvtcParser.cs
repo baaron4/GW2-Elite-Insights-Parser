@@ -943,15 +943,6 @@ namespace GW2EIEvtcParser
             {
                 throw new EvtcAgentException("No valid players");
             }
-
-            if (_parserSettings.AnonymousPlayer)
-            {
-                operation.UpdateProgressWithCancellationCheck("Anonymous players");
-                for (int i = 0; i < _playerList.Count; i++)
-                {
-                    _playerList[i].Anonymize(i + 1);
-                }
-            }
             //
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
             _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _enabledExtensions);
