@@ -39,12 +39,10 @@ namespace GW2EIEvtcParser
             FightData = fightData;
             AgentData = agentData;
             SkillData = skillData;
-            PlayerList = playerList; 
+            PlayerList = playerList;
+            PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
             ParserSettings = parserSettings;
             _operation = operation;
-            //
-            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
-            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
             if (parserSettings.AnonymousPlayer)
             {
                 operation.UpdateProgressWithCancellationCheck("Anonymous players");
@@ -56,15 +54,26 @@ namespace GW2EIEvtcParser
                 var playerOffset = PlayerList.Count;
                 foreach (AgentItem playerAgent in allPlayerAgents)
                 {
-                    foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
-                    {
-                        guildEvent.Anonymize();
-                    }
                     if (!PlayerAgents.Contains(playerAgent))
                     {
                         string character = "Player " + playerOffset;
                         string account = "Account " + (playerOffset++);
                         playerAgent.OverrideName(character + "\0:" + account + "\01");
+                    }
+                }
+            }
+            //
+            _operation.UpdateProgressWithCancellationCheck("Creating GW2EI Combat Events");
+            CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
+            if (parserSettings.AnonymousPlayer)
+            {
+                operation.UpdateProgressWithCancellationCheck("Anonymous guilds");
+                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                foreach (AgentItem playerAgent in allPlayerAgents)
+                {
+                    foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
+                    {
+                        guildEvent.Anonymize();
                     }
                 }
             }
@@ -79,7 +88,6 @@ namespace GW2EIEvtcParser
             friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
             Friendlies = friendlies;
             FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());
-            PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
             FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
             //
             _operation.UpdateProgressWithCancellationCheck("Checking Success");
