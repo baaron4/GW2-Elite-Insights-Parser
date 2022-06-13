@@ -448,11 +448,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Time Bomb", TimeBomb, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/9/91/Time_Bomb.png"),
                 //////////////////////////////////////////////
                 // Slothasor
-                new Buff("Narcolepsy", Narcolepsy, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Narcolepsy", NarcolepsyEffect, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Nauseated", Nauseated, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/3/30/Nauseated.png"),
                 new Buff("Magic Transformation", MagicTransformation, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/45/Magic_Transformation.png"),
                 new Buff("Fixated (Slothasor)", FixatedSlothasor, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
-                new Buff("Volatile Poison", VolatilePoison, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
+                new Buff("Volatile Poison", VolatilePoisonEffect, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
                 // Trio
                 new Buff("Not the Bees!", NotTheBees, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Slow Burn", SlowBurn, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
@@ -470,9 +470,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sacrifice", MatthiasSacrifice, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Unbalanced", Unbalanced, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/80/Unbalanced.png"),
                 new Buff("Zealous Benediction", ZealousBenediction, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/45/Unstable.png"),
-                new Buff("Snowstorm", Snowstorm, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
+                new Buff("Snowstorm", SnowstormEffect, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Heat Wave", HeatWave, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
-                new Buff("Downpour",Downpour, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
+                new Buff("Downpour",DownpourEffect, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
                 new Buff("Snowstorm (Matthias)", SnowstormMatthias, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/26/Snowstorm_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Heat Wave (Matthias)", HeatWaveMatthias, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Downpour (Matthias)",DownpourMatthias, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),

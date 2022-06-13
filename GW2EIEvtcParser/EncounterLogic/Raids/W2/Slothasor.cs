@@ -14,19 +14,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(34479, "Tantrum", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000),
-            new PlayerBuffApplyMechanic(VolatilePoison, "Volatile Poison", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
-            new HitOnPlayerMechanic(34481, "Volatile Poison", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
-            new HitOnPlayerMechanic(34516, "Halitosis", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
-            new HitOnPlayerMechanic(34482, "Spore Release", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new HitOnPlayerMechanic(TantrumDamage, "Tantrum", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000),
+            new PlayerBuffApplyMechanic(VolatilePoisonEffect, "Volatile Poison", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new HitOnPlayerMechanic(VolatilePoisonSkill, "Volatile Poison", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new HitOnPlayerMechanic(Halitosis, "Halitosis", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
+            new HitOnPlayerMechanic(SporeRelease, "Spore Release", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake","Spore Release (Coconut Shake)", "Shake",0),
             new PlayerBuffApplyMechanic(MagicTransformation, "Magic Transformation", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Teal), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open",Colors.LightPurple), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
             new PlayerBuffApplyMechanic(FixatedSlothasor, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Slothasor", "Fixated",0),
-            new HitOnPlayerMechanic(new long[] { 34565, 34537 }, "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+            new HitOnPlayerMechanic(new long[] { ToxicCloud1, ToxicCloud2 }, "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
             new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0, (ba,log) => ba.AppliedDuration == 8000),
-            new EnemyBuffApplyMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new EnemyBuffRemoveMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, (br,log) => br.RemovedDuration > 120000),
-            new EnemyBuffRemoveMechanic(Narcolepsy, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
+            new EnemyBuffApplyMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new EnemyBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, (br,log) => br.RemovedDuration > 120000),
+            new EnemyBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
             });
             Extension = "sloth";
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(34505, 34505, InstantCastFinder.DefaultICD), // Volatile Aura
+                new DamageCastFinder(VolatileAura, VolatileAura, InstantCastFinder.DefaultICD), // Volatile Aura
             };
         }
 
@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var sleepy = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 34515).ToList();
+            var sleepy = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == NarcolepsySkill).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
@@ -97,12 +97,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Slothasor:
-                    var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    var breath = cls.Where(x => x.SkillId == 34516).ToList();
+                    var breath = cls.Where(x => x.SkillId == Halitosis).ToList();
                     foreach (AbstractCastEvent c in breath)
                     {
                         int start = (int)c.Time;
@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, 0, range, direction, angle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
                         }
                     }
-                    var tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    var tantrum = cls.Where(x => x.SkillId == TantrumSkill).ToList();
                     foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
-                    var shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    var shakes = cls.Where(x => x.SkillId == SporeRelease).ToList();
                     foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;
@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Poison
-            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, VolatilePoison, p, true, true);
+            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, VolatilePoisonEffect, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in poisonToDrop)
             {
