@@ -42,9 +42,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Ensolyss, Determined762, 1500);
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.CMnoName;
+            return FightData.EncounterStatus.CMNoName;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

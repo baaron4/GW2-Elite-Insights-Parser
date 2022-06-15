@@ -185,9 +185,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetSkills().Contains(38098) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

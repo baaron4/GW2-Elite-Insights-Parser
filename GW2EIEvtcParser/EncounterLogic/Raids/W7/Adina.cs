@@ -351,14 +351,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (33530, 34050, 35450, 35970)*/);
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Adina);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Adina not found");
             }
-            return (target.GetHealth(combatData) > 23e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 23e6) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
         }
     }
 }

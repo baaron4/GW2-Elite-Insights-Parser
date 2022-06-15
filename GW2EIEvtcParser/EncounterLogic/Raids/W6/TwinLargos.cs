@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Twin Largos";
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
             AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
@@ -356,9 +356,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (kenut != null)
             {
-                return kenut.GetHealth(combatData) > 16e6 || nikare.GetHealth(combatData) > 18e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; // Kenut or nikare hp
+                return kenut.GetHealth(combatData) > 16e6 || nikare.GetHealth(combatData) > 18e6 ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal; // Kenut or nikare hp
             }
-            return (nikare.GetHealth(combatData) > 18e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM; //Health of Nikare
+            return (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal; //Health of Nikare
         }
     }
 }

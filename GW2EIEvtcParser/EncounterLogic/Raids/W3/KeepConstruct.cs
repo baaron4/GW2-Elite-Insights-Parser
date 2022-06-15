@@ -395,9 +395,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(34958) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetSkills().Contains(34958) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

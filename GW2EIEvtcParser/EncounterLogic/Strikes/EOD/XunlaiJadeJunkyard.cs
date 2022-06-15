@@ -142,14 +142,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
             if (ankka == null)
             {
                 throw new MissingKeyActorsException("Ankka not found");
             }
-            return ankka.GetHealth(combatData) > 50e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
         }
     }
 }

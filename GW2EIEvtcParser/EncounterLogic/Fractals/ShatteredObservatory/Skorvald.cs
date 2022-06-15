@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Skorvald);
             if (target == null)
@@ -131,13 +131,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 };
                 if(combatData.GetSkills().Intersect(cmSkills).Any()) 
                 {
-                    return FightData.CMStatus.CM;
+                    return FightData.EncounterStatus.CM;
                 }
-                return FightData.CMStatus.NoCM;
+                return FightData.EncounterStatus.Normal;
             }
             else
             {
-                return (target.GetHealth(combatData) == 5551340) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+                return (target.GetHealth(combatData) == 5551340) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
             }
         }
 

@@ -430,9 +430,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
         }
 
-        internal virtual FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal virtual FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.NoCM;
+            return FightData.EncounterStatus.Normal;
         }
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
