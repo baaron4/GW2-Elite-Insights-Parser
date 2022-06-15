@@ -437,7 +437,7 @@ namespace GW2EIEvtcParser
             Jessica = 16278,
             Galletta = 16228,
             Ianim = 16248,
-            Core = 16261,
+            KeepConstructCore = 16261,
             GreenPhantasm = 16237,
             InsidiousProjection = 16227,
             UnstableLeyRift = 16277,

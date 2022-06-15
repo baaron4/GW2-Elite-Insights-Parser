@@ -19,20 +19,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(35128, "Temporal Shred", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-            new HitOnPlayerMechanic(34913, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new HitOnPlayerMechanic(TemporalShredOrb, "Temporal Shred", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
+            new HitOnPlayerMechanic(TemporalShredAoE, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
             new PlayerBuffApplyMechanic(BloodstoneProtection, "Bloodstone Protection", new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
-            new EnemyCastStartMechanic(34887, "Summon Fragment Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0, (ce,log) => ce.ActualDuration > 11940),
-            new EnemyCastEndMechanic(34887, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 11940),
+            new EnemyCastStartMechanic(SummonFragments, "Summon Fragment Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
+            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0, (ce,log) => ce.ActualDuration > 11940),
+            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 11940),
             new PlayerBuffApplyMechanic(Derangement, "Derangement", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
             new PlayerBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new PlayerBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
             new PlayerBuffApplyMechanic(TwistingChaos, "Twisting Chaos", new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
             new PlayerBuffApplyMechanic(Intervention, "Intervention", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
-            new PlayerBuffApplyMechanic(34921, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
-            new PlayerBuffApplyMechanic(34997, "Teleport Out", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Teleport Out (Teleport to Platform)","TP",0),
-            new PlayerBuffApplyMechanic(35076, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
+            new PlayerBuffApplyMechanic(GravityWellXera, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
+            new PlayerBuffApplyMechanic(HerosDeparture, "Hero's Depature", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Hero's Departure (Teleport to Platform)","TP",0),
+            new PlayerBuffApplyMechanic(HerosReturn, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
             /*new Mechanic(35000, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
             //new Mechanic(35034, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
@@ -252,7 +252,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Xera:
-                    var summon = cls.Where(x => x.SkillId == 34887).ToList();
+                    var summon = cls.Where(x => x.SkillId == SummonFragments).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
