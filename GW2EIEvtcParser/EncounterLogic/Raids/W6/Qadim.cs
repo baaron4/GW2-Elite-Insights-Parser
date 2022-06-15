@@ -66,6 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
             GenericFallBackMethod = FallBackMethod.CombatExit;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

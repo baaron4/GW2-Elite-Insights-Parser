@@ -29,6 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "mo";
             Icon = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

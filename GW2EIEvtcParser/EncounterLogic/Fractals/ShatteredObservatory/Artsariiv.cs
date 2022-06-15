@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "arts";
             Icon = "https://i.imgur.com/aFlYs1I.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

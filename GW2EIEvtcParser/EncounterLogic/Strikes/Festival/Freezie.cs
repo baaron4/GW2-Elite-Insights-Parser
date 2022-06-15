@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Extension = "freezie";
             Icon = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
+            EncounterID |= 0x000001;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "adina";
             Icon = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()

@@ -44,6 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sam";
             Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

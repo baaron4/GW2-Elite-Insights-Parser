@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sabir";
             Icon = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000002;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

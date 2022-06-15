@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "ensol";
             Icon = "https://i.imgur.com/pqRYRGi.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

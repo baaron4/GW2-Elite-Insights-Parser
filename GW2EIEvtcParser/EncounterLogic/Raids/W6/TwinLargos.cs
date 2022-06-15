@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "twinlargos";
             Icon = "https://i.imgur.com/6O5MT7v.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

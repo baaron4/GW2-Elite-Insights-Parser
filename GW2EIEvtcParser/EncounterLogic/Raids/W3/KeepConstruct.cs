@@ -55,6 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "kc";
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

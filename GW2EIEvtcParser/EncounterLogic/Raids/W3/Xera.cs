@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.CombatExit;
             Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
+            EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

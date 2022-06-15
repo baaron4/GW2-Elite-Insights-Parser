@@ -14,6 +14,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public StoryInstance(int triggerID) : base(triggerID)
         {
+            EncounterCategoryInformation.Category = EncounterCategory.FightCategory.Story;
+            EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
             EncounterID |= EncounterIDs.EncounterMasks.StoryInstanceMask;
         }
     }

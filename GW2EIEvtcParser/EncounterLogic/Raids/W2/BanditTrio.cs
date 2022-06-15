@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/UZZQUdf.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000002;
         }
 
         protected override List<int> GetSuccessCheckIds()

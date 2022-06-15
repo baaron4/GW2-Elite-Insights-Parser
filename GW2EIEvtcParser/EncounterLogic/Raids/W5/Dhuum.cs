@@ -63,6 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "dhuum";
             Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
+            EncounterID |= 0x000006;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

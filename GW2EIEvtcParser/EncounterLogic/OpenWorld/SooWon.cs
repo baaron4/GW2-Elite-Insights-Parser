@@ -9,7 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
 {
-    internal class SooWon : FightLogic
+    internal class SooWon : OpenWorldLogic
     {
         public SooWon(int triggerID) : base(triggerID)
         {
@@ -35,8 +35,6 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             Extension = "soowon";
             Icon = "https://i.imgur.com/lcZGgBC.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterCategoryInformation.Category = EncounterCategory.FightCategory.OpenWorld;
-            EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

@@ -36,6 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "vg";
             Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

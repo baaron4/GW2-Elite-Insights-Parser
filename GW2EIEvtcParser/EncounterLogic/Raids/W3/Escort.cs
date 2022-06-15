@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "escort";
             Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal()

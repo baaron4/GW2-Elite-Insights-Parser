@@ -38,6 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000003;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
