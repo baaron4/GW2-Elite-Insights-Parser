@@ -10,7 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class HarvestTemple : CanthaStrike
+    internal class HarvestTemple : EODStrike
     {
         public HarvestTemple(int triggerID) : base(triggerID)
         {

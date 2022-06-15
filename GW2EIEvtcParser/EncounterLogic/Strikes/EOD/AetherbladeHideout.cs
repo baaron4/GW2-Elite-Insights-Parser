@@ -9,7 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class AetherbladeHideout : CanthaStrike
+    internal class AetherbladeHideout : EODStrike
     {
         public AetherbladeHideout(int triggerID) : base(triggerID)
         {

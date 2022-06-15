@@ -33,6 +33,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
 
+        public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
+
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
 
 

@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Raid;
+            EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
         }
 
         protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

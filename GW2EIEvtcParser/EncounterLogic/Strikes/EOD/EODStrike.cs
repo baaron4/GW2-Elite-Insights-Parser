@@ -6,11 +6,12 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class CanthaStrike : StrikeMissionLogic
+    internal abstract class EODStrike : StrikeMissionLogic
     {
-        public CanthaStrike(int triggerID) : base(triggerID)
+        public EODStrike(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.Cantha;
+            EncounterID |= EncounterIDs.StrikeMasks.EODMask;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

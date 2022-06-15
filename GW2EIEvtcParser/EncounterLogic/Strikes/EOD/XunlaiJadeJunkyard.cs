@@ -8,7 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class XunlaiJadeJunkyard : CanthaStrike
+    internal class XunlaiJadeJunkyard : EODStrike
     {
         public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
         {

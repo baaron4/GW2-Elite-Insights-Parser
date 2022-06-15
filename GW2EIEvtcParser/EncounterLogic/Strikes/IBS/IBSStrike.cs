@@ -10,6 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public IBSStrike(int triggerID) : base(triggerID)
         {
+            EncounterID |= EncounterIDs.StrikeMasks.IBSMask;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

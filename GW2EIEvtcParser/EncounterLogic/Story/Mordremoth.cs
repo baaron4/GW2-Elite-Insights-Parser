@@ -10,7 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Mordremoth : FightLogic
+    internal class Mordremoth : StoryInstance
     {
         public Mordremoth(int triggerID) : base(triggerID)
         {

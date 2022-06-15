@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Freezie : StrikeMissionLogic
+    internal class Freezie : FestivalStrikeMissionLogic
     {
         public Freezie(int triggerID) : base(triggerID)
         {

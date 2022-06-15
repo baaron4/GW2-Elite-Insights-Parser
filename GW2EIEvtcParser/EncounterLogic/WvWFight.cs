@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = _detailed ? "detailed_wvw" : "wvw";
             _defaultName = _detailed ? "Detailed WvW" : "World vs World";
             EncounterCategoryInformation.Category = FightCategory.WvW;
+            EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -95,24 +96,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case 38:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.EternalBattlegrounds;
+                    EncounterID |= EncounterIDs.WvWMasks.EternalBattlegroundsMask;
                     return _defaultName + " - Eternal Battlegrounds";
                 case 95:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.GreenAlpineBorderlands;
+                    EncounterID |= EncounterIDs.WvWMasks.GreenAlpineBorderlandsMask;
                     return _defaultName + " - Green Alpine Borderlands";
                 case 96:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.BlueAlpineBorderlands;
+                    EncounterID |= EncounterIDs.WvWMasks.BlueAlpineBorderlandsMask;
                     return _defaultName + " - Blue Alpine Borderlands";
                 case 1099:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.RedDesertBorderlands;
+                    EncounterID |= EncounterIDs.WvWMasks.RedDesertBorderlandsMask;
                     return _defaultName + " - Red Desert Borderlands";
                 case 899:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.ObsidianSanctum;
+                    EncounterID |= EncounterIDs.WvWMasks.ObsidianSanctumMask;
                     return _defaultName + " - Obsidian Sanctum";
                 case 968:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
+                    EncounterID |= EncounterIDs.WvWMasks.EdgeOfTheMistsMask;
                     return _defaultName + " - Edge of the Mists";
                 case 1315:
                     EncounterCategoryInformation.SubCategory = SubFightCategory.ArmisticeBastion;
+                    EncounterID |= EncounterIDs.WvWMasks.ArmisticeBastionMask;
                     return _defaultName + " - Armistice Bastion";
             }
             return _defaultName;

@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new SpawnMechanic((int)ArcDPSEnums.TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
             EncounterCategoryInformation.Category = FightCategory.Fractal;
+            EncounterID |= EncounterIDs.EncounterMasks.FractalMask;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
