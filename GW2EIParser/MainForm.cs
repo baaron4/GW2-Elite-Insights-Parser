@@ -186,7 +186,7 @@ namespace GW2EIParser
             BtnCancelAll.Enabled = true;
             BtnDiscordBatch.Enabled = false;
             ChkAutoDiscordBatch.Enabled = false;
-            if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
+            if (ProgramHelper.ParseMultipleLogs() && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
             }
@@ -210,7 +210,7 @@ namespace GW2EIParser
         /// </summary>
         private void _RunNextOperation()
         {
-            if (_logQueue.Count > 0 && (Properties.Settings.Default.ParseMultipleLogs || !_anyRunning))
+            if (_logQueue.Count > 0 && (ProgramHelper.ParseMultipleLogs() || !_anyRunning))
             {
                 _RunOperation(_logQueue.Dequeue());
             }

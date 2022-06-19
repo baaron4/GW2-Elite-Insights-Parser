@@ -97,6 +97,19 @@ namespace GW2EIParser
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
         }
 
+        public static bool ParseMultipleLogs()
+        {
+            if (Properties.Settings.Default.ParseMultipleLogs)
+            {
+                if (!HasFormat() && Properties.Settings.Default.UploadToDPSReports)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
         {
             //Upload Process
