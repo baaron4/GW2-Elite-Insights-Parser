@@ -816,7 +816,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/elHjamF.png";
                 case ArcDPSEnums.TrashID.Echo:
                     return "https://i.imgur.com/kcN9ECn.png";
-                case ArcDPSEnums.TrashID.Core:
+                case ArcDPSEnums.TrashID.KeepConstructCore:
                 case ArcDPSEnums.TrashID.ExquisiteConjunction:
                     return "https://i.imgur.com/yI34iqw.png";
                 case ArcDPSEnums.TrashID.Jessica:

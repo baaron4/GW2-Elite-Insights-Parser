@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(new long[] {34912, 34925 }, "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
-            new HitOnPlayerMechanic(35077, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
+            new PlayerBuffApplyMechanic(new long[] { StatueFixated1, StatueFixated2 }, "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
+            new HitOnPlayerMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
             new EnemyBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0, (de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
@@ -42,15 +42,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return condition;
             }),
-            new SpawnMechanic(16227, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new HitOnPlayerMechanic(new long[] {35137,34971, 35064  }, "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new HitOnPlayerMechanic(35086, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
+            new SpawnMechanic((int) ArcDPSEnums.TrashID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+            new HitOnPlayerMechanic(new long[] {PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1  }, "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new HitOnPlayerMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new HitOnPlayerMechanic(34914, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-            new HitOnPlayerMechanic(34972, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-            new HitOnPlayerMechanic(34914, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-            new HitOnPlayerMechanic(34972, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-            new HitOnEnemyMechanic(16261, "Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
+            new HitOnPlayerMechanic(WhiteOrb, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
+            new HitOnPlayerMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
+            new HitOnEnemyMechanic((int)ArcDPSEnums.TrashID.KeepConstructCore, "Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.Core,
+                ArcDPSEnums.TrashID.KeepConstructCore,
                 ArcDPSEnums.TrashID.GreenPhantasm,
                 ArcDPSEnums.TrashID.InsidiousProjection,
                 ArcDPSEnums.TrashID.UnstableLeyRift,
@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    var towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         start = (int)c.Time;
@@ -299,9 +299,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
-                    var blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-                    var blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-                    var blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1).ToList();
+                    var blades2 = cls.Where(x => x.SkillId == PhantasmalBlades2).ToList();
+                    var blades3 = cls.Where(x => x.SkillId == PhantasmalBlades3).ToList();
                     int bladeDelay = 150;
                     int duration = 1000;
                     foreach (AbstractCastEvent c in blades1)
@@ -359,7 +359,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.Core:
+                case (int)ArcDPSEnums.TrashID.KeepConstructCore:
                     break;
                 case (int)ArcDPSEnums.TrashID.Jessica:
                 case (int)ArcDPSEnums.TrashID.Olson:

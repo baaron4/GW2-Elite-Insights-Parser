@@ -507,6 +507,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Bloodstone Protection",BloodstoneProtection, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4e/Bloodstone_Protection.png"),
                 new Buff("Bloodstone Blessed",BloodstoneBlessed, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Bloodstone_Blessed.png"),
                 new Buff("Void Zone",VoidZone, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/56/Void_Zone.png"),
+                new Buff("Gravity Well (Xera)",GravityWellXera, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Hero's Departure",HerosDeparture, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Buff("Hero's Return",HerosReturn, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 //////////////////////////////////////////////
                 // Cairn        
                 new Buff("Shared Agony", SharedAgony, Source.FightSpecific, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/5/53/Shared_Agony.png"),
