@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ExitDeathShroud, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
             new DamageCastFinder(SpitefulSpirit, SpitefulSpirit, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
             new DamageCastFinder(LesserEnfeeble, LesserEnfeeble, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
-            new DamageCastFinder(lesserSpinalShivers, lesserSpinalShivers, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
+            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Armor
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.December2018Balance), // Spectral Walk
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Walk
