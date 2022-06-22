@@ -28,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> DefBuffs { get; } = new List<long>();
         public List<long> Debuffs { get; } = new List<long>();
         public List<long> GearBuffs { get; } = new List<long>();
-        public List<long> FractalInstabilities { get; } = new List<long>();
+        public List<object[]> InstanceBuffs { get; } = new List<object[]>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
         public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();
@@ -277,10 +277,10 @@ namespace GW2EIBuilders.HtmlModels
                 logData.GearBuffs.Add(gearBuff.ID);
                 usedBuffs[gearBuff.ID] = gearBuff;
             }
-            foreach (Buff fractalInstab in statistics.PresentFractalInstabilities)
+            foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
             {
-                logData.FractalInstabilities.Add(fractalInstab.ID);
-                usedBuffs[fractalInstab.ID] = fractalInstab;
+                logData.InstanceBuffs.Add(new object[] { instanceBuff.ID, stack });
+                usedBuffs[instanceBuff.ID] = instanceBuff;
             }
         }
 

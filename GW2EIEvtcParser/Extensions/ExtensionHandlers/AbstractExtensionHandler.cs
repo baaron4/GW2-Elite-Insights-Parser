@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.Extensions
         public string Name { get; } = "Unknown";
         public string Version { get; protected set; } = "Unknown";
 
-        protected readonly HashSet<AgentItem> RunningExtensionInternal;
+        protected HashSet<AgentItem> RunningExtensionInternal { get; private set; }
         public IReadOnlyCollection<AgentItem> RunningExtension => RunningExtensionInternal;
 
         internal AbstractExtensionHandler(uint sig, string name)
