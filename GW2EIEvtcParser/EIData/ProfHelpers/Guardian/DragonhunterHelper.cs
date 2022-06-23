@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Shield of Courage (Active)", ShieldOfCourageActive, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
                 new Buff("Spear of Justice", SpearOfJustice, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png"),
                 new Buff("Shield of Courage", ShieldOfCourage, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Shield_of_Courage.png"),
-                new Buff("Wings of Resolve", WingsOfResolve, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png"),
+                new Buff("Wings of Resolve", WingsOfResolveEffect, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png"),
                 new Buff("Hunter's Mark", HuntersMark, Source.Dragonhunter, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e6/Hunter%27s_Ward.png"),
         };
 
