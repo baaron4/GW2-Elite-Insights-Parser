@@ -37,6 +37,7 @@ namespace GW2EIEvtcParser.EIData
             // Soul Reaping
             new BuffDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", GW2Builds.December2018Balance, GW2Builds.May2021Balance, DamageModifierMode.All),
             new BuffDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
+            new BuffDamageModifier(new long[] {DeathShroud, ReapersShroud, HarbingerShroud}, "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => x.HasCrit), // no tracked for Scourge
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
         private static readonly HashSet<long> _shroudTransform = new HashSet<long>
         {
             EnterDeathShroud, ExitDeathShroud,
-            EnterKnightShroud, ExitKnightShroud, 
+            EnterReaperShroud, ExitReaperShroud, 
             EnterHarbingerShroud, ExitHarbingerShroud
         };
 

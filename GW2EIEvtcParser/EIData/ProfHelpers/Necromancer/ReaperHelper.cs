@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterKnightShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
-            new BuffLossCastFinder(ExitKnightShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
+            new BuffGainCastFinder(EnterReaperShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
+            new BuffLossCastFinder(ExitReaperShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
             new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect, EIData.InstantCastFinder.DefaultICD), // Infusing Terror
             new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings, EIData.InstantCastFinder.DefaultICD), // "You Are All Weaklings!"
             new DamageCastFinder(Suffer, Suffer, EIData.InstantCastFinder.DefaultICD), // "Suffer!"

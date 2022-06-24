@@ -520,11 +520,11 @@ namespace GW2EIEvtcParser
         public const long ContinuumShift = 30747;
         public const long Rise = 30772;
         public const long HuntersMark = 30778;
-        public const long EnterKnightShroud = 30792;
+        public const long EnterReaperShroud = 30792;
         public const long EliteMortarKit = 30800;
         public const long CorruptersDefense = 30845;
         public const long DeathsCarapace = 30845;
-        public const long ExitKnightShroud = 30961;
+        public const long ExitReaperShroud = 30961;
         public const long WatchfulEye = 31229;
         public const long DarkBond = 31247;
         public const long LotusTrainingSkill = 31267;
