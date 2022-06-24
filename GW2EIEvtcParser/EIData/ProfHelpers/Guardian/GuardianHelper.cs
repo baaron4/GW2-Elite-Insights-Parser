@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Virtue of Resolve", VirtueOfResolve, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b2/Virtue_of_Resolve.png"),
                 new Buff("Justice", Justice, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/10/Virtue_of_Justice.png"),
                 //traits
-                new Buff("Strength in Numbers",StrengthinNumbers, Source.Guardian, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png"),
+                new Buff("Strength in Numbers",StrengthinNumbers, Source.Guardian, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 new Buff("Invigorated Bulwark",InvigoratedBulwark, Source.Guardian, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/00/Invigorated_Bulwark.png"),
                 new Buff("Virtue of Resolve (Battle Presence)", VirtueOfResolveBattlePresence, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 new Buff("Virtue of Resolve (Battle Presence - Absolute Resolve)", VirtueOfResolveBattlePresenceAbsoluteResolve, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/b/b2/Virtue_of_Resolve.png"),
