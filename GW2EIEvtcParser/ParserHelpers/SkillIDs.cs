@@ -938,6 +938,7 @@ namespace GW2EIEvtcParser
         public const long SandCascadeSkill = 43448;
         public const long DualFireAttunement = 43470;
         public const long SignetOfCourageShared = 43487;
+        public const long SignetOfCouragePI = 43487;
         public const long WovenWater = 43499;
         public const long Charrzooka = 43503;
         public const long TomeOfCourage = 43508;
@@ -995,6 +996,7 @@ namespace GW2EIEvtcParser
         public const long CoolingVapor = 46444;
         public const long MantraOfTruthDamage = 46508;
         public const long SignetOfResolveShared = 46554;
+        public const long SignetOfResolvePI = 46554;
         public const long Malnourished = 46587;
         public const long FlameSurge = 46616;
         public const long FlameRush = 46618;
