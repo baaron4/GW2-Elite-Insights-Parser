@@ -323,13 +323,18 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="BuffMap"/>
         public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; set; }
-        
+
         /// <summary>
-        /// List of present fractal instabilities, the values are buff ids
+        /// List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead
         /// </summary>
         /// <seealso cref="BuffMap"/>
         public IReadOnlyList<long> PresentFractalInstabilities { get; set; }
-        
+        /// <summary>
+        /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
+        /// </summary>
+        /// <seealso cref="BuffMap"/>
+        public IReadOnlyList<long[]> PresentInstanceBuffs { get; set; }
+
         /// <summary>
         /// List of error messages given by ArcDPS
         /// </summary>

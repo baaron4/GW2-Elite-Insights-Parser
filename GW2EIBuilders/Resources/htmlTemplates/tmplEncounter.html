@@ -4,10 +4,10 @@
         <div class="card-body container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
-                    <div v-if="fractalInstabilities" class="d-flex flex-row justify-content-around">
-                        <img v-for="fractalInstability in fractalInstabilities"
-                            :data-original-title="fractalInstability.name + (fractalInstability.description ? '<br> ' + fractalInstability.description : '')"
-                            :src="fractalInstability.icon" class="icon icon-hover" />
+                    <div v-if="instanceBuffs" class="d-flex flex-row justify-content-around">
+                        <img v-for="instanceBuff in instanceBuffs"
+                            :data-original-title="instanceBuff.buff.name + (instanceBuff.stack > 1 ? '<br> ' + instanceBuff.stack + ' stacks' : '') + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
+                            :src="instanceBuff.buff.icon" class="icon icon-hover" />
                     </div>
                     <img class="icon-xl" :src="encounter.icon" :alt="encounter.name">
                 </div>
@@ -69,13 +69,13 @@
             resultStatus: function () {
                 return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-warning"] };
             },
-            fractalInstabilities: function () {
-                if (logData.fractalInstabilities.length == 0) {
+            instanceBuffs: function () {
+                if (logData.instanceBuffs.length == 0) {
                     return null;
                 }
                 var res = [];
-                for (var i = 0; i < logData.fractalInstabilities.length; i++) {
-                    res.push(findSkill(true, logData.fractalInstabilities[i]));
+                for (var i = 0; i < logData.instanceBuffs.length; i++) {
+                    res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
                 }
                 return res;
             },

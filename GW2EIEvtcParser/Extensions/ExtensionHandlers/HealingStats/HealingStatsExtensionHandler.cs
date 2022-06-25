@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.Extensions
             44428, // Garish Pillar (Transfusion)
             30783, // Wings of Resolve
             62667, // Elixir of Promise
-            HauntedShot,
+            HauntShot,
             GraspingShadows,
             DawnsRepose,
             EternalNight,

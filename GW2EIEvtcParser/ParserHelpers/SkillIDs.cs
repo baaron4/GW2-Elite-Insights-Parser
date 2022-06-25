@@ -317,7 +317,7 @@ namespace GW2EIEvtcParser
         public const long SelflessDaring = 13594;
         public const long StrengthinNumbers = 13796;
         public const long FleshOfTheMaster = 13810;
-        public const long lesserSpinalShivers = 13906;
+        public const long LesserSpinalShivers = 13906;
         public const long LesserEnfeeble = 13907;
         public const long OpeningStrike = 13980;
         public const long WindbornNotes = 13988;
@@ -1179,7 +1179,7 @@ namespace GW2EIEvtcParser
         public const long DiamondPalisade = 56636;
         public const long PoisonedPower = 56655;
         public const long Sunspot = 56883;
-        public const long EarthBlast = 56885;
+        public const long EarthenBlast = 56885;
         public const long SymbolicAvenger = 56890;
         public const long SicEmEffectPvP = 56923;
         public const long SpherifiedSesameOysterSoup = 57037;
@@ -1346,7 +1346,7 @@ namespace GW2EIEvtcParser
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
         public const long EndlessNight = 63358;
-        public const long HauntedShot = 63362;
+        public const long HauntShot = 63362;
         public const long OverclockSignetJDrive = 63378;
         public const long DeadlyBlades = 63409;
         public const long FierceAsFire = 63433;

@@ -62,9 +62,9 @@ namespace GW2EIParser
             //
             builder.AddField("Encounter Duration", log.FightData.DurationString);
             //
-            if (log.StatisticsHelper.PresentFractalInstabilities.Any())
+            if (log.FightData.Logic.GetInstanceBuffs(log).Any())
             {
-                builder.AddField("Instabilities", string.Join("\n", log.StatisticsHelper.PresentFractalInstabilities.Select(x => x.Name)));
+                builder.AddField("Instance Buffs", string.Join("\n", log.FightData.Logic.GetInstanceBuffs(log).Select(x => (x.stack > 1 ? x.stack + " " : "") + x.buff.Name)));
             }
             //
             /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
@@ -95,6 +95,19 @@ namespace GW2EIParser
         private static bool HasFormat()
         {
             return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
+        }
+
+        public static bool ParseMultipleLogs()
+        {
+            if (Properties.Settings.Default.ParseMultipleLogs)
+            {
+                if (!HasFormat() && Properties.Settings.Default.UploadToDPSReports)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo)

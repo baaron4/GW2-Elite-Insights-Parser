@@ -15,7 +15,7 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>3.0.0</Version>
+    <Version>3.1.0</Version>
     <Product>GW2 Elite Insights</Product>
     <Company>GW2 Elite Insights</Company>
     <Authors>EliphasNUIT</Authors>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="2.4.0" />
+    <PackageReference Include="Discord.Net.Webhook" Version="3.7.2" />
   </ItemGroup>
 
 </Project>

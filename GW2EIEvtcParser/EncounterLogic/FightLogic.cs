@@ -26,9 +26,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
         public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
-        protected readonly List<NPC> _trashMobs = new List<NPC>();
-        protected readonly List<AbstractSingleActor> _nonPlayerFriendlies = new List<AbstractSingleActor>();
-        protected readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
+        protected List<NPC> _trashMobs { get; } = new List<NPC>();
+        protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
+
+        protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
         protected int GenericTriggerID { get; }
@@ -83,6 +85,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _map.ComputeBoundingBox(log);
             }
             return _map;
+        }
+
+        protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            InstanceBuffs = new List<(Buff buff, int stack)>();
+            foreach (Buff fractalInstability in log.Buffs.BuffsBySource[ParserHelper.Source.FractalInstability])
+            {
+                if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
+                {
+                    InstanceBuffs.Add((fractalInstability, 1));
+                }
+            }
+        }
+
+        public virtual IReadOnlyList<(Buff buff, int stack)> GetInstanceBuffs(ParsedEvtcLog log)
+        {
+            if (InstanceBuffs == null)
+            {
+                SetInstanceBuffs(log);
+            }
+            return InstanceBuffs;
         }
 
         protected virtual List<int> GetTargetsIDs()

@@ -49,7 +49,7 @@ namespace GW2EIParser
 
         private void LoadSettingsWatcher(object sender, EventArgs e)
         {
-            AddTraceMessage("Loaded settings");
+            AddTraceMessage("Settings: Loaded settings");
             ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
             ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         }
@@ -74,7 +74,7 @@ namespace GW2EIParser
                 }
 
                 _logsFiles.Add(file);
-                AddTraceMessage("Added " + file);
+                AddTraceMessage("UI: Added " + file);
 
                 var operation = new FormOperationController(file, "Ready to parse", DgvFiles);
                 OperatorBindingSource.Add(operation);
@@ -97,18 +97,18 @@ namespace GW2EIParser
             _runningCount++;
             _settingsForm.ConditionalSettingDisable(_anyRunning);
             operation.ToQueuedState();
-            AddTraceMessage("Queued " + operation.InputFile);
+            AddTraceMessage("Operation: Queued " + operation.InputFile);
             var cancelTokenSource = new CancellationTokenSource();// Prepare task
             Task task = Task.Run(() =>
             {
                 operation.ToRunState();
-                AddTraceMessage("Parsing " + operation.InputFile);
+                AddTraceMessage("Operation: Parsing " + operation.InputFile);
                 ProgramHelper.DoWork(operation);
             }, cancelTokenSource.Token).ContinueWith(t =>
             {
                 cancelTokenSource.Dispose();
                 _runningCount--;
-                AddTraceMessage("Parsed " + operation.InputFile);
+                AddTraceMessage("Operation: Parsed " + operation.InputFile);
                 // Exception management
                 if (t.IsFaulted)
                 {
@@ -186,7 +186,7 @@ namespace GW2EIParser
             BtnCancelAll.Enabled = true;
             BtnDiscordBatch.Enabled = false;
             ChkAutoDiscordBatch.Enabled = false;
-            if (Properties.Settings.Default.ParseMultipleLogs && _runningCount < ProgramHelper.GetMaxParallelRunning())
+            if (ProgramHelper.ParseMultipleLogs() && _runningCount < ProgramHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
             }
@@ -210,7 +210,7 @@ namespace GW2EIParser
         /// </summary>
         private void _RunNextOperation()
         {
-            if (_logQueue.Count > 0 && (Properties.Settings.Default.ParseMultipleLogs || !_anyRunning))
+            if (_logQueue.Count > 0 && (ProgramHelper.ParseMultipleLogs() || !_anyRunning))
             {
                 _RunOperation(_logQueue.Dequeue());
             }
@@ -236,7 +236,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnParseClick(object sender, EventArgs e)
         {
-            AddTraceMessage("Parse all files");
+            AddTraceMessage("UI: Parse all files");
             //Clear queue before parsing all
             _logQueue.Clear();
 
@@ -262,7 +262,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnCancelAllClick(object sender, EventArgs e)
         {
-            AddTraceMessage("Cancelling all pending and ongoing parsing operations");
+            AddTraceMessage("UI: Cancelling all pending and ongoing parsing operations");
             //Clear queue so queued workers don't get started by any cancellations
             var operations = new HashSet<FormOperationController>(_logQueue);
             _logQueue.Clear();
@@ -294,7 +294,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
         {
-            AddTraceMessage("Opening settings");
+            AddTraceMessage("Settings: Opening settings");
             _settingsForm.Show();
             BtnSettings.Enabled = false;
         }
@@ -306,7 +306,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BtnClearAllClick(object sender, EventArgs e)
         {
-            AddTraceMessage("Clearing all logs");
+            AddTraceMessage("UI: Clearing all logs");
             BtnCancelAll.Enabled = false;
             BtnParse.Enabled = false;
 
@@ -330,7 +330,7 @@ namespace GW2EIParser
 
         private void BtnClearFailedClick(object sender, EventArgs e)
         {
-            AddTraceMessage("Clearing failed to parse logs");
+            AddTraceMessage("UI: Clearing failed to parse logs");
             for (int i = OperatorBindingSource.Count - 1; i >= 0; i--)
             {
                 var operation = OperatorBindingSource[i] as FormOperationController;
@@ -393,6 +393,7 @@ namespace GW2EIParser
                 switch (e.ColumnIndex)
                 {
                     case 0:
+                        AddTraceMessage("UI: Sorting logs");
                         _fileNameSorting *= -1;
                         SortDgvFiles();
                         LocationDataGridViewTextBoxColumn.HeaderText = "Input File " + (_fileNameSorting < 0 ? "↓" : "↑");
@@ -409,7 +410,7 @@ namespace GW2EIParser
                     if (operation.State == OperationState.Complete && e.Button == MouseButtons.Right && operation.DPSReportLink != null)
                     {
                         Clipboard.SetText(operation.DPSReportLink);
-                        MessageBox.Show("dps.report link copied to clipbloard");
+                        MessageBox.Show("UI: dps.report link copied to clipbloard");
                     }
                     else if (e.Button == MouseButtons.Left)
                     {
@@ -417,11 +418,13 @@ namespace GW2EIParser
                         {
                             case OperationState.Ready:
                             case OperationState.UnComplete:
+                                AddTraceMessage("UI: Run single log parsing");
                                 QueueOrRunOperation(operation);
                                 BtnCancelAll.Enabled = true;
                                 break;
 
                             case OperationState.Parsing:
+                                AddTraceMessage("UI: Cancel single log parsing");
                                 operation.ToCancelState();
                                 break;
 
@@ -440,6 +443,7 @@ namespace GW2EIParser
                                 break;
 
                             case OperationState.Complete:
+                                AddTraceMessage("UI: Opening generated files");
                                 foreach (string path in operation.OpenableFiles)
                                 {
                                     if (File.Exists(path))
@@ -460,6 +464,7 @@ namespace GW2EIParser
                         {
 
                             case OperationState.Complete:
+                                AddTraceMessage("UI: Opening folder where outputs have been generated");
                                 if (operation.OutLocation != null && Directory.Exists(operation.OutLocation))
                                 {
                                     System.Diagnostics.Process.Start(operation.OutLocation);
@@ -504,6 +509,7 @@ namespace GW2EIParser
         private void BtnPopulateFromDirectory(object sender, EventArgs e)
         {
             string path = null;
+            AddTraceMessage("UI: Populating from directory");
             using (var fbd = new FolderBrowserDialog())
             {
                 fbd.ShowNewFolderButton = false;
@@ -516,7 +522,7 @@ namespace GW2EIParser
             }
             if (path != null)
             {
-                AddTraceMessage("Adding files from " + path);
+                AddTraceMessage("UI: Adding files from " + path);
                 var toAdd = new List<string>();
                 foreach (string format in ParserHelper.GetSupportedFormats())
                 {
@@ -583,9 +589,10 @@ namespace GW2EIParser
         private string DiscordBatch(out List<ulong> ids)
         {
             ids = new List<ulong>();
-            AddTraceMessage("Sending batch to Discord");
+            AddTraceMessage("Discord: Sending batch to Discord");
             if (Properties.Settings.Default.WebhookURL == null)
             {
+                AddTraceMessage("Discord: No webhook url given");
                 return "Set a discord webhook url in settings first";
             }
             var fullDpsReportLogs = new List<FormOperationController>();
@@ -598,13 +605,16 @@ namespace GW2EIParser
             }
             if (!fullDpsReportLogs.Any())
             {
+                AddTraceMessage("Discord: Nothing to send");
                 return "Nothing to send";
             }
             // first sort by time
+            AddTraceMessage("Discord: Sorting logs by time");
             fullDpsReportLogs.Sort((x, y) =>
             {
                 return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
             });
+            AddTraceMessage("Discord: Splitting logs by start day");
             var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date).ToDictionary(x => x.Key, x => x.ToList());
             // split the logs so that a single embed does not reach the discord embed limit and also keep a reasonable size by embed
             string message = "";
@@ -619,6 +629,7 @@ namespace GW2EIParser
                 var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
                 message += pair.Key.ToString("yyyy-MM-dd") + " - ";
                 List<FormOperationController> curListToFill = splitDpsReportLogs.First();
+                AddTraceMessage("Discord: Splitting message to avoid reaching discord's character limit");
                 foreach (FormOperationController controller in pair.Value)
                 {
                     if (curListToFill.Count < 40)
@@ -628,18 +639,20 @@ namespace GW2EIParser
                     else
                     {
                         curListToFill = new List<FormOperationController>()
-                    {
-                        controller
-                    };
+                        {
+                            controller
+                        };
                         splitDpsReportLogs.Add(curListToFill);
                     }
                 }
                 foreach (List<FormOperationController> dpsReportLogs in splitDpsReportLogs)
                 {
                     EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
+                    AddTraceMessage("Discord: Creating embed for " + dpsReportLogs.Count + " logs");
                     var first = DateTime.Parse(dpsReportLogs.First().BasicMetaData.LogStart);
                     var last = DateTime.Parse(dpsReportLogs.Last().BasicMetaData.LogEnd);
                     embedBuilder.WithFooter(pair.Key.ToString("dd/MM/yyyy") + " - " + first.ToString("T") + " - " + last.ToString("T"));
+                    AddTraceMessage("Discord: Sorting logs by category");
                     dpsReportLogs.Sort((x, y) =>
                     {
                         int categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
@@ -652,6 +665,7 @@ namespace GW2EIParser
                     string currentSubCategory = "";
                     var embedFieldBuilder = new EmbedFieldBuilder();
                     string fieldValue = "I can not be empty";
+                    AddTraceMessage("Discord: Building embed body");
                     foreach (FormOperationController controller in dpsReportLogs)
                     {
                         string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();
@@ -679,8 +693,18 @@ namespace GW2EIParser
                         fieldValue += toAdd;
                     }
                     embedFieldBuilder.WithValue(fieldValue);
-                    ids.Add(WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, embedBuilder.Build(), out string curMessage));
-                    message += curMessage + " - ";
+                    AddTraceMessage("Discord: Sending embed");
+                    try
+                    {
+                        ids.Add(WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, embedBuilder.Build(), out string curMessage));
+                        AddTraceMessage("Discord: embed sent " + curMessage);
+                        message += curMessage + " - ";
+                    } 
+                    catch (Exception ex)
+                    {
+                        AddTraceMessage("Discord: couldn't send embed " + ex.Message);
+                        message += ex.Message + " - ";
+                    }
                 }
             }
             return message;
@@ -692,12 +716,22 @@ namespace GW2EIParser
             {
                 return;
             }
-            AddTraceMessage("Auto update Discord Batch");
+            AddTraceMessage("Discord: Auto update Discord Batch");
             ChkAutoDiscordBatch.Enabled = false;
             foreach (ulong id in _currentDiscordMessageIDs)
             {
-                WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out _);
+                AddTraceMessage("Discord: deleting existing message " + id);
+                try
+                {
+                    WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out string message);
+                    AddTraceMessage("Discord: deleted existing message " + message);
+                } 
+                catch (Exception ex)
+                {
+                    AddTraceMessage("Discord: couldn't deleted existing message " + ex.Message);
+                }
             }
+            _currentDiscordMessageIDs.Clear();
             DiscordBatch(out _currentDiscordMessageIDs);
             ChkAutoDiscordBatch.Enabled = true;
         }
@@ -712,7 +746,7 @@ namespace GW2EIParser
             BtnDiscordBatch.Enabled = false;
             ChkAutoDiscordBatch.Enabled = false;
             BtnParse.Enabled = false;
-            AddTraceMessage("Manual Discord Batch");
+            AddTraceMessage("UI: Manual Discord Batch");
             MessageBox.Show(DiscordBatch(out _));
             //    
             BtnDiscordBatch.Enabled = !_anyRunning;
@@ -766,7 +800,7 @@ namespace GW2EIParser
                 LblWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
                 LogFileWatcher.EnableRaisingEvents = true;
                 LblWatchingDir.Visible = true;
-                AddTraceMessage("Updated watch directory to " + Properties.Settings.Default.AutoAddPath);
+                AddTraceMessage("Settings: Updated watch directory to " + Properties.Settings.Default.AutoAddPath);
             }
             else
             {
@@ -778,17 +812,17 @@ namespace GW2EIParser
         private void ChkApplicationTracesCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
-            AddTraceMessage(Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces");
+            AddTraceMessage("Settings: " + (Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces"));
         }
         private void ChkAutoDiscordBatchCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoDiscordBatch = ChkAutoDiscordBatch.Checked;
-            AddTraceMessage(Properties.Settings.Default.AutoDiscordBatch ? "Enabled automatic discord batching" : "Disabled automatic discord batching");
+            AddTraceMessage("Settings: " + (Properties.Settings.Default.AutoDiscordBatch ? "Enabled automatic discord batching" : "Disabled automatic discord batching"));
         }
 
         private void EnableSettingsWatcher(object sender, EventArgs e)
         {
-            AddTraceMessage("Closing settings");
+            AddTraceMessage("Settings: Closing settings");
             BtnSettings.Enabled = true;
         }
     }

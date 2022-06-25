@@ -112,18 +112,24 @@ namespace GW2EIBuilders.JsonModels
             var buffMap = new Dictionary<string, BuffDesc>();
             var damageModMap = new Dictionary<string, DamageModDesc>();
 
-            if (log.StatisticsHelper.PresentFractalInstabilities.Any())
+            if (log.FightData.Logic.GetInstanceBuffs(log).Any())
             {
                 var presentFractalInstabilities = new List<long>();
-                foreach (Buff fractalInstab in log.StatisticsHelper.PresentFractalInstabilities)
+                var presentInstanceBuffs = new List<long[]>();
+                foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
                 {
-                    presentFractalInstabilities.Add(fractalInstab.ID);
-                    if (!buffMap.ContainsKey("b" + fractalInstab.ID))
+                    if (!buffMap.ContainsKey("b" + instanceBuff.ID))
                     {
-                        buffMap["b" + fractalInstab.ID] = BuildBuffDesc(fractalInstab, log);
+                        buffMap["b" + instanceBuff.ID] = BuildBuffDesc(instanceBuff, log);
                     }
+                    if (instanceBuff.Source == ParserHelper.Source.FractalInstability)
+                    {
+                        presentFractalInstabilities.Add(instanceBuff.ID);
+                    }
+                    presentInstanceBuffs.Add(new long[] { instanceBuff.ID, stack });
                 }
                 jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
+                jsonLog.PresentInstanceBuffs = presentInstanceBuffs;
             }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");

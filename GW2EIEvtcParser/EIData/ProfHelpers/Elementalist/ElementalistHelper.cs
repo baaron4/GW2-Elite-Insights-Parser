@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(MistForm, MistForm, EIData.InstantCastFinder.DefaultICD), // Mist Form
             new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill, EIData.InstantCastFinder.DefaultICD), // Signet of Air
             new DamageCastFinder(Sunspot, Sunspot, EIData.InstantCastFinder.DefaultICD), // Sunspot
-            new DamageCastFinder(EarthBlast, EarthBlast, EIData.InstantCastFinder.DefaultICD), // Earth Blast
+            new DamageCastFinder(EarthenBlast, EarthenBlast, EIData.InstantCastFinder.DefaultICD), // Earth Blast
             new DamageCastFinder(LightningStrike, LightningStrike, EIData.InstantCastFinder.DefaultICD), // Lightning Strike
             new DamageCastFinder(LightningRod, LightningRod, EIData.InstantCastFinder.DefaultICD), // Lightning Rod
         };

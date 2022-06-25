@@ -11,7 +11,7 @@ namespace GW2EIParser
 
         public ConsoleProgram(IEnumerable<string> logFiles)
         {
-            if (Properties.Settings.Default.ParseMultipleLogs)
+            if (ProgramHelper.ParseMultipleLogs())
             {
                 var splitLogFiles = new List<List<string>>();
                 var sizeSortedLogFiles = new List<string>(logFiles);
