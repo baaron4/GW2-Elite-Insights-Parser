@@ -326,14 +326,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
+            return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

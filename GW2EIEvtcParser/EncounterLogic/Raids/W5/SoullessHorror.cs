@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             var necrosis = combatData.GetBuffData(SkillIDs.Necrosis).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     minDiff = timeDiff;
                 }
             }
-            return (minDiff < 11000) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
+            return (minDiff < 11000) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

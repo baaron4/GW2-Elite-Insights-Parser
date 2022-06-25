@@ -227,14 +227,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
             if (maiTrin == null)
             {
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
-            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
+            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

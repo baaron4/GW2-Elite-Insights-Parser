@@ -295,6 +295,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             return phases;
         }
+        
+        internal void InvalidateEncounterID()
+        {
+            EncounterID = EncounterIDs.Unknown;
+        }
 
         internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
         {
@@ -455,9 +460,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
         }
 
-        internal virtual FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.EncounterStatus.Normal;
+            return FightData.EncounterMode.Normal;
         }
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)

@@ -519,20 +519,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            FightData.EncounterStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Normal;
+            FightData.EncounterMode cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
             
             if (_deimos10PercentTime > 0)
             {
                 // Deimos gains additional health during the last 10% so the max-health needs to be corrected
                 // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
-                if (cmStatus == FightData.EncounterStatus.CM)
+                if (cmStatus == FightData.EncounterMode.CM)
                 {
                     target.SetManualHealth(42804900);
                 }

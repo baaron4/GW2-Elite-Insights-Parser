@@ -43,9 +43,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11804, 4414, 12444, 5054)*/);
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.EncounterStatus.CMNoName;
+            return FightData.EncounterMode.CMNoName;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

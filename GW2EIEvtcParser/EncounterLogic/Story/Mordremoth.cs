@@ -92,14 +92,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.EncounterStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Mordremoth);
             if (mordremoth == null)
             {
                 throw new MissingKeyActorsException("Mordremoth not found");
             }
-            return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterStatus.CM : FightData.EncounterStatus.Story;
+            return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
         }
 
         protected override List<int> GetFriendlyNPCIDs()
