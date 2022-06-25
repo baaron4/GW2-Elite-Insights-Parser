@@ -7,13 +7,14 @@
 
         public static class EncounterMasks
         {
-            public static long RaidMask = 0x010000;
-            public static long FractalMask = 0x020000;
-            public static long StrikeMask = 0x030000;
-            public static long OpenWorldMask = 0x040000;
-            public static long StoryInstanceMask = 0x050000;
-            public static long WvWMask = 0x060000;
-            public static long GolemMask = 0x070000;
+            public static long Unsupported = 0x010000;
+            public static long RaidMask = 0x020000;
+            public static long FractalMask = 0x030000;
+            public static long StrikeMask = 0x040000;
+            public static long OpenWorldMask = 0x050000;
+            public static long StoryInstanceMask = 0x060000;
+            public static long WvWMask = 0x070000;
+            public static long GolemMask = 0x080000;
         }
 
         public static class RaidWingMasks
@@ -49,7 +50,7 @@
             public static long RedDesertBorderlandsMask = 0x000400;
             public static long ObsidianSanctumMask = 0x000500;
             public static long EdgeOfTheMistsMask = 0x000600;
-            public static long ArmisticeBastionMask = 0x000600;
+            public static long ArmisticeBastionMask = 0x000700;
         }
 
     }

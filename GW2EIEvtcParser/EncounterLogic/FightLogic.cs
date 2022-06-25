@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         
         internal void InvalidateEncounterID()
         {
-            EncounterID = EncounterIDs.Unknown;
+            EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         }
 
         internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
