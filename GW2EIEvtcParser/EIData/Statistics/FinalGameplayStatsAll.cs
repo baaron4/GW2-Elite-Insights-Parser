@@ -25,6 +25,9 @@ namespace GW2EIEvtcParser.EIData
         // Counts
         public int SwapCount { get; }
 
+        public double SkillCastUptime { get; }
+        public double SkillCastUptimeNoAA { get; }
+
         private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
         {
             var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -78,7 +81,45 @@ namespace GW2EIEvtcParser.EIData
             }
             TimeSaved = Math.Round(TimeSaved / 1000.0, ParserHelper.TimeDigit);
             TimeWasted = -Math.Round(TimeWasted / 1000.0, ParserHelper.TimeDigit);
-
+            //
+            foreach (AbstractCastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
+            {
+                var value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
+                SkillCastUptime += value;
+                if (!cl.Skill.AA)
+                {
+                    SkillCastUptimeNoAA += value;
+                }
+            }
+            long timeInCombat = 0;
+            foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(actor.AgentItem))
+            {
+                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(actor.AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
+                if (exCe != null)
+                {
+                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - Math.Max(enTe.Time, start), 0);
+                } 
+                else
+                {
+                    timeInCombat += Math.Max(end - Math.Max(enTe.Time, start), 0);
+                }
+            }
+            if (timeInCombat == 0)
+            {
+                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(actor.AgentItem).FirstOrDefault(x => x.Time > start);
+                if (exCe != null)
+                {
+                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - start, 1);
+                } else
+                {
+                    timeInCombat = Math.Max(end - start, 1);
+                }
+            }
+            SkillCastUptime /= timeInCombat;
+            SkillCastUptimeNoAA /= timeInCombat;
+            SkillCastUptime = Math.Round(100.0 * SkillCastUptime, ParserHelper.TimeDigit);
+            SkillCastUptimeNoAA = Math.Round(100.0 * SkillCastUptimeNoAA, ParserHelper.TimeDigit);
+            //
             double avgBoons = 0;
             foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Boon).Select(x => x.Value))
             {
@@ -87,7 +128,7 @@ namespace GW2EIEvtcParser.EIData
             AvgBoons = Math.Round(avgBoons / duration, ParserHelper.BuffDigit);
             long activeDuration = actor.GetActiveDuration(log, start, end);
             AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParserHelper.BuffDigit) : 0.0;
-
+            //
             double avgCondis = 0;
             foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Condition).Select(x => x.Value))
             {
@@ -95,7 +136,7 @@ namespace GW2EIEvtcParser.EIData
             }
             AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
-
+            //
             if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayPolledPositions(log).Any(x => x.X > int.MinValue + 1))
             {
                 StackDist = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
