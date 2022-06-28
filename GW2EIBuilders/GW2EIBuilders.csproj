@@ -55,6 +55,7 @@
     <None Include="Resources\htmlTemplates\tmplEncounter.html" />
     <None Include="Resources\htmlTemplates\tmplPhase.html" />
     <None Include="Resources\htmlTemplates\tmplGameplayTable.html" />
+    <None Include="Resources\htmlTemplates\tmplOffensiveTable.html" />
     <None Include="Resources\htmlTemplates\tmplMechanicsTable.html" />
     <None Include="Resources\htmlTemplates\tmplDefenseTable.html" />
     <None Include="Resources\htmlTemplates\tmplSupportTable.html" />

@@ -22,8 +22,8 @@ namespace GW2EIBuilders.HtmlModels
 
         public List<List<object>> DpsStats { get; set; }
         public List<List<List<object>>> DpsStatsTargets { get; set; }
-        public List<List<List<object>>> DmgStatsTargets { get; set; }
-        public List<List<object>> DmgStats { get; set; }
+        public List<List<List<object>>> GameplayStatsTargets { get; set; }
+        public List<List<object>> GameplayStats { get; set; }
         public List<List<object>> DefStats { get; set; }
         public List<List<object>> SupportStats { get; set; }
         // all
@@ -172,8 +172,8 @@ namespace GW2EIBuilders.HtmlModels
 
             DpsStats = PhaseDto.BuildDPSData(log, phase);
             DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase);
-            DmgStatsTargets = PhaseDto.BuildDMGStatsTargetsData(log, phase);
-            DmgStats = PhaseDto.BuildDMGStatsData(log, phase);
+            GameplayStatsTargets = PhaseDto.BuildGameplayStatsTargetsData(log, phase);
+            GameplayStats = PhaseDto.BuildGameplayStatsData(log, phase);
             DefStats = PhaseDto.BuildDefenseData(log, phase);
             SupportStats = PhaseDto.BuildSupportData(log, phase);
             //
@@ -263,9 +263,9 @@ namespace GW2EIBuilders.HtmlModels
 
         // helper methods
 
-        private static List<object> GetDMGStatData(FinalGameplayStatsAll stats)
+        private static List<object> GetGameplayStatData(FinalGameplayStatsAll stats)
         {
-            List<object> data = GetDMGTargetStatData(stats);
+            List<object> data = GetGameplayTargetStatData(stats);
             data.AddRange(new List<object>
                 {
                     // commons
@@ -277,12 +277,14 @@ namespace GW2EIBuilders.HtmlModels
 
                     stats.SwapCount, // 18
                     Math.Round(stats.StackDist, 2), // 19
-                    Math.Round(stats.DistToCom, 2) // 20
+                    Math.Round(stats.DistToCom, 2), // 20
+                    stats.SkillCastUptime, // 21
+                    stats.SkillCastUptimeNoAA, // 22
                 });
             return data;
         }
 
-        private static List<object> GetDMGTargetStatData(FinalGameplayStats stats)
+        private static List<object> GetGameplayTargetStatData(FinalGameplayStats stats)
         {
             var data = new List<object>
                 {
@@ -344,12 +346,12 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     defenses.DamageTaken,
                     defenses.DamageBarrier,
-                    defenses.BlockedCount,
-                    defenses.InvulnedCount,
+                    defenses.MissedCount,
                     defenses.InterruptedCount,
+                    defenses.InvulnedCount,
                     defenses.EvadedCount,
+                    defenses.BlockedCount,
                     defenses.DodgeCount,
-                    defenses.MissedCount
                 };
 
             if (defenses.DownDuration > 0)
@@ -405,18 +407,18 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<List<object>> BuildDMGStatsData(ParsedEvtcLog log, PhaseData phase)
+        public static List<List<object>> BuildGameplayStatsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<object>>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 FinalGameplayStatsAll stats = actor.GetGameplayStats(log, phase.Start, phase.End);
-                list.Add(GetDMGStatData(stats));
+                list.Add(GetGameplayStatData(stats));
             }
             return list;
         }
 
-        public static List<List<List<object>>> BuildDMGStatsTargetsData(ParsedEvtcLog log, PhaseData phase)
+        public static List<List<List<object>>> BuildGameplayStatsTargetsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<List<object>>>();
 
@@ -426,7 +428,7 @@ namespace GW2EIBuilders.HtmlModels
                 foreach (AbstractSingleActor target in phase.Targets)
                 {
                     FinalGameplayStats statsTarget = actor.GetGameplayStats(target, log, phase.Start, phase.End);
-                    playerData.Add(GetDMGTargetStatData(statsTarget));
+                    playerData.Add(GetGameplayTargetStatData(statsTarget));
                 }
                 list.Add(playerData);
             }
