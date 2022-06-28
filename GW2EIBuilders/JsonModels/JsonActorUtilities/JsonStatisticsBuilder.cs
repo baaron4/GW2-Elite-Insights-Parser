@@ -97,7 +97,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 AvgActiveBoons = stats.AvgActiveBoons,
                 AvgConditions = stats.AvgConditions,
                 AvgActiveConditions = stats.AvgActiveConditions,
-                SwapCount = stats.SwapCount
+                SwapCount = stats.SwapCount,
+                SkillCastUptime = stats.SkillCastUptime,
+                SkillCastUptimeNoAA = stats.SkillCastUptimeNoAA,
             };
             FillJsonGamePlayStats(jsonGameplayStatsAll, stats);
             return jsonGameplayStatsAll;
