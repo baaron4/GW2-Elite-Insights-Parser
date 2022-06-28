@@ -9,12 +9,15 @@ namespace GW2EIEvtcParser.ParsedData
         public uint BuffInstance { get; protected set; }
 
         private readonly bool _removedActive;
-        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && CreditedBy == ParserHelper._unknownAgent);
+        private readonly bool _byShouldntBeUnknown;
+        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
         private bool _lowValueRemove => (RemovedDuration <= ParserHelper.BuffSimulatorDelayConstant && RemovedDuration != 0);
 
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             _iff = evtcItem.IFF;
+            // Sometimes there is a dstAgent value but the agent itself is not in the pool, such cases should not trigger _overstackOrNaturalEnd
+            _byShouldntBeUnknown = evtcItem.DstAgent != 0;
             BuffInstance = evtcItem.Pad;
             _removedActive = evtcItem.IsShields > 0;
         }
