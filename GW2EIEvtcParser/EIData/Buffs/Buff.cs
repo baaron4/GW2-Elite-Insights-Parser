@@ -611,7 +611,7 @@ namespace GW2EIEvtcParser.EIData
                 //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", PillarPandemonium, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
-                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
+                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/c/c9/Persistently_Blinded.png"),
                 new Buff("Diamond Palisade (Damage)", DiamondPalisadeDamage, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Diamond Palisade", DiamondPalisade, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Eroding Curse", ErodingCurse, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
