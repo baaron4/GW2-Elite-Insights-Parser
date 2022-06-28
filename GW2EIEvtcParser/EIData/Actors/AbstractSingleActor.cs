@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void OverrideName(string name);
 
-        public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) GetStatus(ParsedEvtcLog log)
         {
             return _statusHelper.GetStatus(log);
         }
