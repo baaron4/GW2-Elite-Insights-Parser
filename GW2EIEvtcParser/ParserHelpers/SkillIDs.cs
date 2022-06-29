@@ -563,13 +563,13 @@ namespace GW2EIEvtcParser
         public const long Rise = 30772;
         public const long HuntersMark = 30778;
         public const long WingsOfResolveSkill = 30783;
-        public const long EnterKnightShroud = 30792;
+        public const long EnterReaperShroud = 30792;
         public const long EliteMortarKit = 30800;
         public const long WellOfAction = 30814;
         public const long CorruptersDefense = 30845;
         public const long DeathsCarapace = 30845;
         public const long TidalSurge = 30864;
-        public const long ExitKnightShroud = 30961;
+        public const long ExitReaperShroud = 30961;
         public const long WatchfulEye = 31229;
         public const long DarkBond = 31247;
         public const long LotusTrainingSkill = 31267;
@@ -988,6 +988,7 @@ namespace GW2EIEvtcParser
         public const long SandCascadeSkill = 43448;
         public const long DualFireAttunement = 43470;
         public const long SignetOfCourageShared = 43487;
+        public const long SignetOfCouragePI = 43487;
         public const long WovenWater = 43499;
         public const long Charrzooka = 43503;
         public const long TomeOfCourage = 43508;
@@ -1048,6 +1049,7 @@ namespace GW2EIEvtcParser
         public const long CoolingVapor = 46444;
         public const long MantraOfTruthDamage = 46508;
         public const long SignetOfResolveShared = 46554;
+        public const long SignetOfResolvePI = 46554;
         public const long Malnourished = 46587;
         public const long FlameSurge = 46616;
         public const long FlameRush = 46618;
@@ -1540,6 +1542,7 @@ namespace GW2EIEvtcParser
         public const long SharedDestructionLiCM = 68004;
         public const long EnforcerRushingJusticeCM = 68028;
         public const long VoidEmpowerment = 68083;
+        public const long Emboldened = 68087;
 
     }
 
