@@ -22,7 +22,8 @@ namespace GW2EIBuilders.HtmlModels
 
         public List<List<object>> DpsStats { get; set; }
         public List<List<List<object>>> DpsStatsTargets { get; set; }
-        public List<List<List<object>>> GameplayStatsTargets { get; set; }
+        public List<List<List<object>>> OffensiveStatsTargets { get; set; }
+        public List<List<object>> OffensiveStats { get; set; }
         public List<List<object>> GameplayStats { get; set; }
         public List<List<object>> DefStats { get; set; }
         public List<List<object>> SupportStats { get; set; }
@@ -172,7 +173,8 @@ namespace GW2EIBuilders.HtmlModels
 
             DpsStats = PhaseDto.BuildDPSData(log, phase);
             DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase);
-            GameplayStatsTargets = PhaseDto.BuildGameplayStatsTargetsData(log, phase);
+            OffensiveStatsTargets = PhaseDto.BuildOffensiveStatsTargetsData(log, phase);
+            OffensiveStats = PhaseDto.BuildOffensiveStatsData(log, phase);
             GameplayStats = PhaseDto.BuildGameplayStatsData(log, phase);
             DefStats = PhaseDto.BuildDefenseData(log, phase);
             SupportStats = PhaseDto.BuildSupportData(log, phase);
@@ -263,28 +265,27 @@ namespace GW2EIBuilders.HtmlModels
 
         // helper methods
 
-        private static List<object> GetGameplayStatData(FinalGameplayStats stats, FinalOffensiveStats offStats)
+        private static List<object> GetGameplayStatData(FinalGameplayStats stats)
         {
-            List<object> data = GetGameplayTargetStatData(offStats);
-            data.AddRange(new List<object>
+            var data = new List<object>
                 {
                     // commons
-                    stats.TimeWasted, // 14
-                    stats.Wasted, // 15
+                    stats.TimeWasted, // 0
+                    stats.Wasted, // 1
 
-                    stats.TimeSaved, // 16
-                    stats.Saved, // 17
+                    stats.TimeSaved, // 2
+                    stats.Saved, // 3
 
-                    stats.SwapCount, // 18
-                    Math.Round(stats.StackDist, 2), // 19
-                    Math.Round(stats.DistToCom, 2), // 20
-                    stats.SkillCastUptime, // 21
-                    stats.SkillCastUptimeNoAA, // 22
-                });
+                    stats.SwapCount, // 4
+                    Math.Round(stats.StackDist, 2), // 5
+                    Math.Round(stats.DistToCom, 2), // 6
+                    stats.SkillCastUptime, // 7
+                    stats.SkillCastUptimeNoAA, // 8
+                };
             return data;
         }
 
-        private static List<object> GetGameplayTargetStatData(FinalOffensiveStats stats)
+        private static List<object> GetOffensiveStatData(FinalOffensiveStats stats)
         {
             var data = new List<object>
                 {
@@ -413,12 +414,23 @@ namespace GW2EIBuilders.HtmlModels
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 FinalGameplayStats stats = actor.GetGameplayStats(log, phase.Start, phase.End);
-                list.Add(GetGameplayStatData(stats, actor.GetOffensiveStats(null, log, phase.Start, phase.End)));
+                list.Add(GetGameplayStatData(stats));
             }
             return list;
         }
 
-        public static List<List<List<object>>> BuildGameplayStatsTargetsData(ParsedEvtcLog log, PhaseData phase)
+        public static List<List<object>> BuildOffensiveStatsData(ParsedEvtcLog log, PhaseData phase)
+        {
+            var list = new List<List<object>>();
+            foreach (AbstractSingleActor actor in log.Friendlies)
+            {
+                FinalOffensiveStats stats = actor.GetOffensiveStats(null, log, phase.Start, phase.End);
+                list.Add(GetOffensiveStatData(stats));
+            }
+            return list;
+        }
+
+        public static List<List<List<object>>> BuildOffensiveStatsTargetsData(ParsedEvtcLog log, PhaseData phase)
         {
             var list = new List<List<List<object>>>();
 
@@ -428,7 +440,7 @@ namespace GW2EIBuilders.HtmlModels
                 foreach (AbstractSingleActor target in phase.Targets)
                 {
                     FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
-                    playerData.Add(GetGameplayTargetStatData(statsTarget));
+                    playerData.Add(GetOffensiveStatData(statsTarget));
                 }
                 list.Add(playerData);
             }

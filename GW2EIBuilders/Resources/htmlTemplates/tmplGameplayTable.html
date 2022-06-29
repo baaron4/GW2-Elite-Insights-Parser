@@ -85,8 +85,6 @@
 </template>
 
 <script>
-    var commonOffset = 17;
-
     Vue.component("gameplay-stats-component", {
         props: ["playerindex", "phaseindex"],
         template: `${template}`,
@@ -112,7 +110,7 @@
         },
         computed: {
             tableid: function() {
-                return "dmg-table";
+                return "gameplay-table";
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
@@ -146,11 +144,9 @@
                     total.count++;
                     var stats = this.phase.gameplayStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= commonOffset) {
-                            commons[j - commonOffset] = stats[j];
-                            groups[player.group].commons[j - commonOffset] = (groups[player.group].commons[j - commonOffset] || 0) + commons[j - commonOffset];
-                            total.commons[j - commonOffset] = (total.commons[j - commonOffset] || 0) + commons[j - commonOffset];
-                        }
+                        commons[j] = stats[j];
+                        groups[player.group].commons[j] = (groups[player.group].commons[j] || 0) + commons[j];
+                        total.commons[j] = (total.commons[j] || 0) + commons[j];
                     }
                     rows.push({
                         player: player,

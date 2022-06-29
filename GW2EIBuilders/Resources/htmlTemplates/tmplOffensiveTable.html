@@ -159,8 +159,6 @@
 </template>
 
 <script>
-    var commonOffset = 17;
-
     Vue.component("offensive-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
@@ -189,7 +187,7 @@
         },
         computed: {
             tableid: function() {
-                return "dmg-table";
+                return "off-table";
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
@@ -206,7 +204,7 @@
                     data: [],
                     count: 0
                 };
-                for (var i = 0; i < this.phase.gameplayStats.length; i++) {
+                for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = [];
                     var player = logData.players[i];
                     if (player.isFake) {
@@ -221,15 +219,11 @@
                     }
                     groups[player.group].count++;
                     total.count++;
-                    var stats = this.phase.gameplayStats[i];
+                    var stats = this.phase.offensiveStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= commonOffset) {
-                            break;
-                        } else {
-                            data[j] = stats[j];
-                            groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
-                            total.data[j] = (total.data[j] || 0) + data[j];
-                        }
+                        data[j] = stats[j];
+                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
+                        total.data[j] = (total.data[j] || 0) + data[j];
                     }
                     rows.push({
                         player: player,
@@ -263,7 +257,7 @@
                     data: [],
                     count: 0
                 };
-                for (var i = 0; i < this.phase.gameplayStats.length; i++) {
+                for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = [];
                     var player = logData.players[i];
                     if (player.isFake) {
@@ -278,22 +272,18 @@
                     }
                     groups[player.group].count++;
                     total.count++;
-                    var stats = this.phase.gameplayStats[i];
+                    var stats = this.phase.offensiveStats[i];
                     for (var j = 0; j < stats.length; j++) {
-                        if (j >= commonOffset) {                           
-                            break;
+                        if (this.activetargets.length > 0) {
+                            for (var k = 0; k < this.activetargets.length; k++) {
+                                var tar = this.phase.offensiveStatsTargets[i][this.activetargets[k]];
+                                data[j] = (data[j] || 0) + tar[j];
+                            }
                         } else {
-                            if (this.activetargets.length > 0) {
-                                for (var k = 0; k < this.activetargets.length; k++) {
-                                    var tar = this.phase.gameplayStatsTargets[i][this.activetargets[k]];
-                                    data[j] = (data[j] || 0) + tar[j];
-                                }
-                            } else {
-                                data[j] = (data[j] || 0);
-                            }             
-                            groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
-                            total.data[j] = (total.data[j] || 0) + data[j];
+                            data[j] = (data[j] || 0);
                         }
+                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
+                        total.data[j] = (total.data[j] || 0) + data[j];
                     }
                     rows.push({
                         player: player,
