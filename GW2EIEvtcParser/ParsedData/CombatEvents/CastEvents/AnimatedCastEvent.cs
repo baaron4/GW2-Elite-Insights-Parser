@@ -1,4 +1,5 @@
 ﻿using System;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -7,12 +8,23 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly int _scaledActualDuration;
         //private readonly int _effectHappenedDuration;
 
+        public Point3D EffectPosition { get; }
+
+        public bool HasEffectPosition { get; } = false;
+
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
             if (startItem.IsActivation == ArcDPSEnums.Activation.Quickness)
             {
                 Acceleration = 1;
+            }
+            if (startItem.DstAgent != 0 || startItem.OverstackValue != 0)
+            {
+                byte[] xyBytes = BitConverter.GetBytes(startItem.DstAgent);
+                byte[] zBytes = BitConverter.GetBytes(startItem.OverstackValue);
+                EffectPosition = new Point3D(BitConverter.ToSingle(xyBytes, 0), BitConverter.ToSingle(xyBytes, 4), BitConverter.ToSingle(zBytes, 0));
+                HasEffectPosition = true;
             }
             //_effectHappenedDuration = startItem.Value;
         }

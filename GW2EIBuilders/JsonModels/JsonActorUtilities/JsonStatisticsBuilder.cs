@@ -55,7 +55,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             return jsonDPS;
         }
 
-        private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalGameplayStats stats)
+        private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalOffensiveStats stats)
         {
             jsonGameplayStats.TotalDamageCount = stats.TotalDamageCount;
             jsonGameplayStats.DirectDamageCount = stats.DirectDamageCount;
@@ -76,14 +76,14 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             jsonGameplayStats.Downed = stats.Downed;
         }
 
-        public static JsonGameplayStats BuildJsonGameplayStats(FinalGameplayStats stats)
+        public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats stats)
         {
             var jsonGameplayStats = new JsonGameplayStats();
             FillJsonGamePlayStats(jsonGameplayStats, stats);
             return jsonGameplayStats;
         }
 
-        public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStatsAll stats)
+        public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStats stats, FinalOffensiveStats offStats)
         {
             var jsonGameplayStatsAll = new JsonGameplayStatsAll
             {
@@ -97,9 +97,11 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 AvgActiveBoons = stats.AvgActiveBoons,
                 AvgConditions = stats.AvgConditions,
                 AvgActiveConditions = stats.AvgActiveConditions,
-                SwapCount = stats.SwapCount
+                SwapCount = stats.SwapCount,
+                SkillCastUptime = stats.SkillCastUptime,
+                SkillCastUptimeNoAA = stats.SkillCastUptimeNoAA,
             };
-            FillJsonGamePlayStats(jsonGameplayStatsAll, stats);
+            FillJsonGamePlayStats(jsonGameplayStatsAll, offStats);
             return jsonGameplayStatsAll;
         }
 
