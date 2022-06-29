@@ -84,7 +84,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 }
                 targetDamageDist[j] = targetDamageDistList;
                 dpsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(player.GetDPSStats(target, log, phase.Start, phase.End))).ToArray();
-                statsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStats(player.GetGameplayStats(target, log, phase.Start, phase.End))).ToArray();
+                statsTargets[j] = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStats(player.GetOffensiveStats(target, log, phase.Start, phase.End))).ToArray();
             }
             if (settings.RawFormatTimelineArrays)
             {

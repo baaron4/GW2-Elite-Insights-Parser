@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
 
 
 
-        public (IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>, IReadOnlyList<(long start, long end)>) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) GetStatus(ParsedEvtcLog log)
         {
             if (_deads == null)
             {
@@ -35,6 +35,36 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
+        }
+
+        public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
+        {
+            long timeInCombat = 0;
+            foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(Actor.AgentItem))
+            {
+                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(Actor.AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
+                if (exCe != null)
+                {
+                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - Math.Max(enTe.Time, start), 0);
+                }
+                else
+                {
+                    timeInCombat += Math.Max(end - Math.Max(enTe.Time, start), 0);
+                }
+            }
+            if (timeInCombat == 0)
+            {
+                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(Actor.AgentItem).FirstOrDefault(x => x.Time > start);
+                if (exCe != null)
+                {
+                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - start, 0);
+                }
+                else
+                {
+                    timeInCombat = Math.Max(end - start, 0);
+                }
+            }
+            return timeInCombat;
         }
 
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)

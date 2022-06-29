@@ -89,6 +89,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplEncounter,
                 Properties.Resources.tmplFood,
                 Properties.Resources.tmplGameplayTable,
+                Properties.Resources.tmplOffensiveTable,
                 Properties.Resources.tmplBuffTables,
                 Properties.Resources.tmplStatTables,
                 Properties.Resources.tmplMechanicsTable,
