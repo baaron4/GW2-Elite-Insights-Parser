@@ -6,7 +6,7 @@
                 <div class="d-flex flex-column mr-3 justify-content-center">
                     <div v-if="instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
                         <span v-for="instanceBuff in instanceBuffs">
-                            {{instanceBuff.stack > 1 ? instanceBuff.stack + 'x' : ''}}
+                            {{instanceBuff.stack > 1 ? instanceBuff.stack + ' x' : ''}}
                             <img :data-original-title="instanceBuff.buff.name + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
                                  :src="instanceBuff.buff.icon" class="icon icon-hover" />
                         </span>                      
