@@ -351,7 +351,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (false && !Targetless)
+            if (!Targetless)
             {
                 var targetIDs = new HashSet<int>()
                 {
