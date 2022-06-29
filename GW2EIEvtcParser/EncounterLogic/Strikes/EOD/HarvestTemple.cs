@@ -348,5 +348,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (false && !Targetless)
+            {
+                var targetIDs = new HashSet<int>()
+                {
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
+                };
+                if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
+                {
+                    return FightData.CMStatus.CM;
+                }
+            }
+            var voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
+            if (voidMelters.Count > 5)
+            {
+                long firstAware = voidMelters[0].FirstAware;
+                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ParserHelper.ServerDelayConstant) > 5)
+                {
+                    return FightData.CMStatus.CM;
+                }
+            }
+            return FightData.CMStatus.NoCM;
+        }
     }
 }
