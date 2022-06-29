@@ -263,9 +263,9 @@ namespace GW2EIBuilders.HtmlModels
 
         // helper methods
 
-        private static List<object> GetGameplayStatData(FinalGameplayStatsAll stats)
+        private static List<object> GetGameplayStatData(FinalGameplayStats stats, FinalOffensiveStats offStats)
         {
-            List<object> data = GetGameplayTargetStatData(stats);
+            List<object> data = GetGameplayTargetStatData(offStats);
             data.AddRange(new List<object>
                 {
                     // commons
@@ -284,7 +284,7 @@ namespace GW2EIBuilders.HtmlModels
             return data;
         }
 
-        private static List<object> GetGameplayTargetStatData(FinalGameplayStats stats)
+        private static List<object> GetGameplayTargetStatData(FinalOffensiveStats stats)
         {
             var data = new List<object>
                 {
@@ -412,8 +412,8 @@ namespace GW2EIBuilders.HtmlModels
             var list = new List<List<object>>();
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                FinalGameplayStatsAll stats = actor.GetGameplayStats(log, phase.Start, phase.End);
-                list.Add(GetGameplayStatData(stats));
+                FinalGameplayStats stats = actor.GetGameplayStats(log, phase.Start, phase.End);
+                list.Add(GetGameplayStatData(stats, actor.GetOffensiveStats(null, log, phase.Start, phase.End)));
             }
             return list;
         }
@@ -427,7 +427,7 @@ namespace GW2EIBuilders.HtmlModels
                 var playerData = new List<List<object>>();
                 foreach (AbstractSingleActor target in phase.Targets)
                 {
-                    FinalGameplayStats statsTarget = actor.GetGameplayStats(target, log, phase.Start, phase.End);
+                    FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
                     playerData.Add(GetGameplayTargetStatData(statsTarget));
                 }
                 list.Add(playerData);

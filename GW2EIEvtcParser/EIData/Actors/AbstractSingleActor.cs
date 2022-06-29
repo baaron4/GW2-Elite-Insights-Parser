@@ -31,7 +31,8 @@ namespace GW2EIEvtcParser.EIData
         // Statistics
         private CachingCollectionWithTarget<FinalDPS> _dpsStats;
         private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
-        private CachingCollectionWithTarget<FinalGameplayStats> _gameplayStats;
+        private CachingCollectionWithTarget<FinalOffensiveStats> _offensiveStats;
+        private CachingCollection<FinalGameplayStats> _gameplayStats;
         private CachingCollectionWithTarget<FinalSupport> _supportStats;
         private CachingCollection<FinalToPlayersSupport> _toPlayerSupportStats;
 
@@ -459,21 +460,30 @@ namespace GW2EIEvtcParser.EIData
 
         // Gameplay Stats
 
-        public FinalGameplayStatsAll GetGameplayStats(ParsedEvtcLog log, long start, long end)
-        {
-            return GetGameplayStats(null, log, start, end) as FinalGameplayStatsAll;
-        }
-
-        public FinalGameplayStats GetGameplayStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, long start, long end)
         {
             if (_gameplayStats == null)
             {
-                _gameplayStats = new CachingCollectionWithTarget<FinalGameplayStats>(log);
+                _gameplayStats = new CachingCollection<FinalGameplayStats>(log);
             }
-            if (!_gameplayStats.TryGetValue(start, end, target, out FinalGameplayStats value))
+            if (!_gameplayStats.TryGetValue(start, end, out FinalGameplayStats value))
             {
-                value = target != null ? new FinalGameplayStats(log, start, end, this, target) : new FinalGameplayStatsAll(log, start, end, this);
-                _gameplayStats.Set(start, end, target, value);
+                value = new FinalGameplayStats(log, start, end, this);
+                _gameplayStats.Set(start, end, value);
+            }
+            return value;
+        }
+
+        public FinalOffensiveStats GetOffensiveStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (_offensiveStats == null)
+            {
+                _offensiveStats = new CachingCollectionWithTarget<FinalOffensiveStats>(log);
+            }
+            if (!_offensiveStats.TryGetValue(start, end, target, out FinalOffensiveStats value))
+            {
+                value = new FinalOffensiveStats(log, start, end, this, target);
+                _offensiveStats.Set(start, end, target, value);
             }
             return value;
         }

@@ -255,8 +255,8 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
-                FinalGameplayStats statsBoss = player.GetGameplayStats(_legacyTarget, _log, phase.Start, phase.End);
+                FinalGameplayStats stats = player.GetGameplayStats(_log, phase.Start, phase.End);
+                FinalOffensiveStats statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
                 IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -302,7 +302,8 @@ namespace GW2EIBuilders
             PhaseData phase = _phases[phaseIndex];
             foreach (Player player in _noFakePlayers)
             {
-                FinalGameplayStatsAll stats = player.GetGameplayStats(_log, phase.Start, phase.End);
+                FinalGameplayStats gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
+                FinalOffensiveStats offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
                 IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -316,14 +317,14 @@ namespace GW2EIBuilders
                 }
 
                 WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
-                Math.Round((double)(stats.CriticalCount) / stats.CritableDirectDamageCount * 100,1).ToString(), stats.CriticalCount.ToString(),stats.CriticalDmg.ToString(),
+                Math.Round((double)(offStats.CriticalCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalCount.ToString(),offStats.CriticalDmg.ToString(),
                 Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
                 Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-                Math.Round(stats.FlankingCount / (double)stats.ConnectedDirectDamageCount * 100,1).ToString(),stats.FlankingCount.ToString(),
-                Math.Round(stats.GlanceCount / (double)stats.ConnectedDirectDamageCount * 100,1).ToString(),stats.GlanceCount.ToString(),
-                Math.Round(stats.Missed / (double)stats.DirectDamageCount * 100,1).ToString(),stats.Missed.ToString(),
-                stats.DirectDamageCount.ToString(),
-                stats.Interrupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
+                Math.Round(offStats.FlankingCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.FlankingCount.ToString(),
+                Math.Round(offStats.GlanceCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.GlanceCount.ToString(),
+                Math.Round(offStats.Missed / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.Missed.ToString(),
+                offStats.DirectDamageCount.ToString(),
+                offStats.Interrupts.ToString(),offStats.Invulned.ToString(),gameplayStats.TimeWasted.ToString(),gameplayStats.TimeSaved.ToString(),gameplayStats.SwapCount.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
