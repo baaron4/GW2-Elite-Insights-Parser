@@ -84,6 +84,10 @@ namespace GW2EIEvtcParser.EIData
             //
             foreach (AbstractCastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
             {
+                if (cl.Status == AbstractCastEvent.AnimationStatus.Interrupted || cl.Status == AbstractCastEvent.AnimationStatus.Unknown)
+                {
+                    continue;
+                }
                 var value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
                 SkillCastUptime += value;
                 if (!cl.Skill.AA)
