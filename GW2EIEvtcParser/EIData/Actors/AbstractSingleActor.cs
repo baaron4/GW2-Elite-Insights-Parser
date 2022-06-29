@@ -70,6 +70,11 @@ namespace GW2EIEvtcParser.EIData
             return _statusHelper.GetStatus(log);
         }
 
+        public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
+        {
+            return _statusHelper.GetTimeSpentInCombat(log, start, end);
+        }
+
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
         {
             return _statusHelper.GetActiveDuration(log, start, end);

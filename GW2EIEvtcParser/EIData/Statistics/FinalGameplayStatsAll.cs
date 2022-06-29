@@ -91,30 +91,7 @@ namespace GW2EIEvtcParser.EIData
                     SkillCastUptimeNoAA += value;
                 }
             }
-            long timeInCombat = 0;
-            foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(actor.AgentItem))
-            {
-                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(actor.AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
-                if (exCe != null)
-                {
-                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - Math.Max(enTe.Time, start), 0);
-                } 
-                else
-                {
-                    timeInCombat += Math.Max(end - Math.Max(enTe.Time, start), 0);
-                }
-            }
-            if (timeInCombat == 0)
-            {
-                ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(actor.AgentItem).FirstOrDefault(x => x.Time > start);
-                if (exCe != null)
-                {
-                    timeInCombat += Math.Max(Math.Min(exCe.Time, end) - start, 1);
-                } else
-                {
-                    timeInCombat = Math.Max(end - start, 1);
-                }
-            }
+            long timeInCombat = Math.Max(actor.GetTimeSpentInCombat(log, start, end), 1);
             SkillCastUptime /= timeInCombat;
             SkillCastUptimeNoAA /= timeInCombat;
             SkillCastUptime = Math.Round(100.0 * SkillCastUptime, ParserHelper.TimeDigit);
