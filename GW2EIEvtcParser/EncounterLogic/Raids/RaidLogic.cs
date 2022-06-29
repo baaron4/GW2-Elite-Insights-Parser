@@ -23,6 +23,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            int emboldenedStacks = (int)log.PlayerList.Select(x => {
+                if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph)) 
+                {
+                    return graph.BuffChart.Max(y => y.Value);
+                } 
+                else
+                {
+                    return 0;
+                }
+            }).Max();
+            if (emboldenedStacks > 0)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
+            }
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>();

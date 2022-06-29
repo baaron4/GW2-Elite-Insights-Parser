@@ -1479,6 +1479,7 @@ namespace GW2EIEvtcParser
         public const long TargetedExpulsionCM = 67982;
         public const long SharedDestructionLiCM = 68004;
         public const long EnforcerRushingJusticeCM = 68028;
+        public const long Emboldened = 68087;
 
     }
 
