@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             Extension = "soowon";
             Icon = "https://i.imgur.com/lcZGgBC.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterID |= 0x000001;
+            EncounterID |= 0x000401;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
