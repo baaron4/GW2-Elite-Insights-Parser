@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "mordr";
             Icon = "https://i.imgur.com/4pNive1.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterID |= 0x000001;
+            EncounterID |= 0x000201;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

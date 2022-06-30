@@ -13,52 +13,63 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Golem(int id) : base(id)
         {
             Mode = ParseMode.Benchmark;
+            EncounterID |= EncounterIDs.EncounterMasks.GolemMask;
+            EncounterID |= 0x000100;
             switch (ArcDPSEnums.GetTargetID(id))
             {
                 case ArcDPSEnums.TargetID.MassiveGolem10M:
                     Extension = "MassiveGolem10M";
                     Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    EncounterID |= 0x000001;
                     break;
                 case ArcDPSEnums.TargetID.MassiveGolem4M:
                     Extension = "MassiveGolem4M";
                     Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    EncounterID |= 0x000002;
                     break;
                 case ArcDPSEnums.TargetID.MassiveGolem1M:
                     Extension = "MassiveGolem1M";
                     Icon = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    EncounterID |= 0x000003;
                     break;
                 case ArcDPSEnums.TargetID.VitalGolem:
                     Extension = "VitalGolem";
                     Icon = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    EncounterID |= 0x000004;
                     break;
                 case ArcDPSEnums.TargetID.AvgGolem:
                     Extension = "AvgGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    EncounterID |= 0x000005;
                     break;
                 case ArcDPSEnums.TargetID.StdGolem:
                     Extension = "StdGolem";
                     Icon = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+                    EncounterID |= 0x000006;
                     break;
                 case ArcDPSEnums.TargetID.ConditionGolem:
                     Extension = "ToughGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    EncounterID |= 0x000007;
                     break;
                 case ArcDPSEnums.TargetID.PowerGolem:
                     Extension = "ResGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    EncounterID |= 0x000008;
                     break;
                 case ArcDPSEnums.TargetID.LGolem:
                     Extension = "LGolem";
                     Icon = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    EncounterID |= 0x000009;
                     break;
                 case ArcDPSEnums.TargetID.MedGolem:
                     Extension = "MedGolem";
                     Icon = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    EncounterID |= 0x00000A;
                     break;
             }
             EncounterCategoryInformation.Category = FightCategory.Golem;
             EncounterCategoryInformation.SubCategory = SubFightCategory.Golem;
-            EncounterID |= EncounterIDs.EncounterMasks.GolemMask;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
