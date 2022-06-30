@@ -19,7 +19,7 @@ namespace GW2EIBuilders.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -175,10 +175,10 @@ namespace GW2EIBuilders.Properties {
         ///
         ///.scrollable-y {
         ///    overflow-y: auto;
-        ///    overflow-x: hidden;
         ///}
         ///
-        /// [rest of string was truncated]&quot;;.
+        ///.scrollable-x {
+        ///    over [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string css {
             get {
@@ -611,8 +611,8 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div class=&quot;scrollable-cr-dps-table&quot;&gt;
-        ///            &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;
+        ///        &lt;div class=&quot;scrollable-cr-dps-table scrollable-x&quot; style=&quot;max-width: 650px !important;&quot; &gt;
+        ///            &lt;table class=&quot;table table-sm table-striped table-hover&quot;cellspacing=&quot;0&quot; width=&quot;100%&quot;
         ///                :id=&quot;tableid&quot;&gt;
         ///                &lt;thead&gt;
         ///                    &lt;tr&gt;
@@ -620,8 +620,7 @@ namespace GW2EIBuilders.Properties {
         ///                        &lt;th class=&quot;text-left cr-dps-table-name&quot;&gt;
         ///                            Name
         ///                        &lt;/th&gt;
-        ///                        &lt;th class=&quot;cr-dps-table-dps&quot;&gt;
-        ///           [rest of string was truncated]&quot;;.
+        ///                [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageTable {
             get {
@@ -1109,8 +1108,8 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;div class=&quot;card-body container&quot;&gt;
         ///            &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///                &lt;div class=&quot;d-flex flex-column mr-3 justify-content-center&quot;&gt;
-        ///                    &lt;div v-if=&quot;fractalInstabilities&quot; class=&quot;d-flex flex-row justify-content-around&quot;&gt;
-        ///                        &lt;img v-for=&quot;fractalInstability in [rest of string was truncated]&quot;;.
+        ///                    &lt;div v-if=&quot;instanceBuffs&quot; class=&quot;d-flex flex-row justify-content-around&quot;&gt;
+        ///                        &lt;img v-for=&quot;instanceBuff in instanceBuff [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEncounter {
             get {
@@ -1141,17 +1140,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;!targetless&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///            &lt;ul class=&quot;nav nav-pills scale85&quot;&gt;
-        ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
-        ///                &lt;/li&gt;
-        ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: !mode }&quot;&gt;All&lt;/a&gt;
-        ///                &lt;/li&gt;
-        ///            &lt;/ul&gt;
-        ///        &lt;/div&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;tableid&quot;&gt;
+        ///            &lt;thead&gt;
+        ///                &lt;tr&gt;
+        ///                    &lt;th class=&quot;sub-cell&quot;&gt;Sub&lt;/th&gt;
+        ///                    &lt;th class=&quot;prof-cell&quot;&gt;&lt;/th&gt;
+        ///                    &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///                    &lt;th&gt;Account&lt;/th&gt;
+        ///                    &lt;th class=&quot;stat-cell&quot; data-original-title=&quot;Time wasted(in seconds) interupting skill casts&quot;&gt;
+        ///                        &lt;img src [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGameplayTable {
             get {
@@ -1437,6 +1434,27 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;!targetless&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-pills scale85&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode}&quot;&gt;Target&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: !mode }&quot;&gt;All&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///            &lt;/ul&gt;
+        ///        &lt;/div&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplOffensiveTable {
+            get {
+                return ResourceManager.GetString("tmplOffensiveTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; :id=&quot;tableid&quot;&gt;
         ///            &lt;thead&gt;
         ///                &lt;tr&gt;
@@ -1562,23 +1580,13 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;data&quot;&gt;&lt;/graph-component&gt;
-        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///
-        ///    function getActorsRotationLayout(images, color, players, phase) {
-        ///        var layout = {
-        ///            barmode: &apos;stack&apos;,
-        ///            legend: {
-        ///                traceorder: &apos;reversed&apos;
-        ///            },
-        ///            hovermode: &apos;x&apos;,
-        ///            hoverdistance: 50,
-        ///            images: images,
-        ///  [rest of string was truncated]&quot;;.
+        ///        &lt;div style=&quot;position:absolute; margin-top: 60px; z-index: 1;&quot;&gt;
+        ///            &lt;a href=&quot;#&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot; title=&quot;Filter Players&quot; style=&quot;font-size: 1.1em;&quot;&gt;
+        ///                Players &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;
+        ///            &lt;/a&gt;
+        ///            &lt;ul class=&quot;dropdown-menu p-2 font-weight-normal&quot; style=&quot;min-width: 145px; max-width: 145px;&quot;&gt;
+        ///                &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center mb-1&quot;
+        ///                    s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayersRotation {
             get {
@@ -1710,7 +1718,7 @@ namespace GW2EIBuilders.Properties {
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Gameplay Stats&lt;/a&gt;
         ///            &lt;/li&gt;
         ///            &lt;li&gt;
-        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 2}&quot; @click=&quot;tab = 2&quot;&gt;Defensive Stats&lt;/a&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 4}&quot; @click=&quot;tab = 4&quot;&gt;Offensive Stats&lt;/a&gt;
         ///            &lt;/li&gt;
         ///            &lt;li&gt;
         ///                &lt;a c [rest of string was truncated]&quot;;.

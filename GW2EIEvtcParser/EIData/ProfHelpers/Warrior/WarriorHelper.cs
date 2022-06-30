@@ -72,10 +72,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Stamina",SignetOfStamina, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6b/Signet_of_Stamina.png"),
                 new Buff("Signet of Rage",SignetOfRage, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bc/Signet_of_Rage.png"),
                 //banners
-                new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
-                new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
-                new Buff("Banner of Tactics",BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png"),
-                new Buff("Banner of Defense",BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png"),
+                new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+                new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+                new Buff("Banner of Tactics",BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+                new Buff("Banner of Defense",BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 //stances
                 new Buff("Shield Stance",ShieldStance, Source.Warrior, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Shield_Stance.png"),
                 new Buff("Berserker's Stance",BerserkersStanceEffecct, Source.Warrior, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/8a/Berserker_Stance.png"),
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                 //traits
                 new Buff("Soldier's Focus", SoldiersFocus, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/29/Soldier%27s_Focus.png", GW2Builds.October2019Balance, GW2Builds.EndOfLife),
                 new Buff("Brave Stride", BraveStride, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Death_from_Above.png"),
-                new Buff("Empower Allies", EmpowerAllies, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png"),
+                new Buff("Empower Allies", EmpowerAllies, Source.Warrior, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 new Buff("Peak Performance",PeakPerformance, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png"),
                 new Buff("Furious Surge", FuriousSurge, Source.Warrior, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),

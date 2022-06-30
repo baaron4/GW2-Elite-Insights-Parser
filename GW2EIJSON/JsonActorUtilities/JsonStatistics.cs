@@ -337,7 +337,17 @@ namespace GW2EIJSON
             /// </summary>
             public int SwapCount { get; set; }
 
-            
+            /// <summary>
+            /// % of time in combat spent in animation
+            /// </summary>
+            public double SkillCastUptime { get; set; }
+
+            /// <summary>
+            /// % of time in combat spent in animation, excluding auto attack skills
+            /// </summary>
+            public double SkillCastUptimeNoAA { get; set; }
+
+
             public JsonGameplayStatsAll()
             {
 

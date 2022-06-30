@@ -97,6 +97,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     InstanceBuffs.Add((fractalInstability, 1));
                 }
             }
+            int emboldenedStacks = (int)log.PlayerList.Select(x => {
+                if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
+                {
+                    return graph.BuffChart.Max(y => y.Value);
+                }
+                else
+                {
+                    return 0;
+                }
+            }).Max();
+            if (emboldenedStacks > 0)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
+            }
         }
 
         public virtual IReadOnlyList<(Buff buff, int stack)> GetInstanceBuffs(ParsedEvtcLog log)

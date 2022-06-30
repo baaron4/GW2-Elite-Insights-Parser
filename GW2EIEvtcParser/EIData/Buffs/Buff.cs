@@ -372,6 +372,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
                 // Generic
+                new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png" ),
                 new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
                 new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),
@@ -611,7 +612,7 @@ namespace GW2EIEvtcParser.EIData
                 //////////////////////////////////////////////
                 // Adina
                 new Buff("Pillar Pandemonium", PillarPandemonium, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d9/Captain%27s_Inspiration.png"),
-                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/6/6c/Radiant_Blindness.png"),
+                new Buff("Radiant Blindness", RadiantBlindness, Source.FightSpecific, BuffStackType.Queue, 25, BuffClassification.Debuff,"https://wiki.guildwars2.com/images/c/c9/Persistently_Blinded.png"),
                 new Buff("Diamond Palisade (Damage)", DiamondPalisadeDamage, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Diamond Palisade", DiamondPalisade, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Eroding Curse", ErodingCurse, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/de/Toxic_Gas.png"),
@@ -739,6 +740,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Repulsion 2", VoidRepulsion2, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Aerial Defense", AerialDefense, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Immunity", VoidImmunity, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Empowerment", VoidEmpowerment, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 //Open World Soo-Won
                 new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png"),

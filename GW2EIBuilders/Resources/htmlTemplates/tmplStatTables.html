@@ -8,6 +8,9 @@
                 <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Gameplay Stats</a>
             </li>
             <li>
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Offensive Stats</a>
+            </li>
+            <li>
                 <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Defensive Stats</a>
             </li>
             <li>
@@ -18,8 +21,11 @@
             <damage-stats-component v-if="tab === 0" :key="'damage'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets"></damage-stats-component>
             <gameplay-stats-component v-if="tab === 1" :key="'gameplay'"
-                :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets">
+                :phaseindex="phaseindex" :playerindex="playerindex">
             </gameplay-stats-component>
+            <offensive-stats-component v-if="tab === 4" :key="'offensive'" 
+                :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets">
+            </offensive-stats-component>
             <defense-stats-component v-if="tab === 2" :key="'defense'" :phaseindex="phaseindex"
                 :playerindex="playerindex"></defense-stats-component>
             <support-stats-component v-if="tab === 3" :key="'support'" :phaseindex="phaseindex"

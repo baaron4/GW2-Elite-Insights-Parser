@@ -1,0 +1,308 @@
+<template>
+    <div>
+        <div v-if="!targetless" class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+                </li>
+            </ul>
+        </div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="sub-cell">Sub</th>
+                    <th class="prof-cell"></th>
+                    <th class="text-left">Name</th>
+                    <th>Account</th>
+                    <th class="stat-cell" data-original-title="Percent time hits critical">
+                        <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
+                             class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Percent time hits while flanking">
+                        <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
+                             class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Percent time hits while glancing">
+                        <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
+                             class="icon icon-hover">
+                    </th>    
+                    <th class="stat-cell" data-original-title="Times the target got hit while moving">
+                        <img src="https://i.imgur.com/11uAbd4.png" alt="Against Moving"
+                             class="icon icon-hover">
+                    </th>  
+                    <th class="stat-cell" data-original-title="Number of hits while blinded">
+                        <img src="https://wiki.guildwars2.com/images/3/33/Blinded.png" alt="Miss"
+                             class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Number of hits used to interupt">
+                        <img src="https://wiki.guildwars2.com/images/7/79/Daze.png" alt="Interupts"
+                            
+                            class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Times the enemy was invulnerable to attacks">
+                        <img src="https://wiki.guildwars2.com/images/e/eb/Determined.png" alt="Ivuln"
+                             class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Times the enemy evaded an attack">
+                        <img src="https://wiki.guildwars2.com/images/e/e2/Evade.png" alt="Evaded"
+                             class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Times the enemy blocked an attack">
+                        <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
+                             class="icon icon-hover">
+                    </th>             
+                    <th class="stat-cell" v-if="wvw" data-original-title="Number of times downed target">
+                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                            alt="Downed" 
+                            class="icon icon-hover">
+                    </th>             
+                    <th class="stat-cell" v-if="wvw" data-original-title="Number of times killed target">
+                        <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png"
+                            alt="Killed" 
+                            class="icon icon-hover">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in (mode ? tableDataTarget.rows : tableData.rows)"
+                    :class="{active: row.player.id === playerindex}">
+                    <td>{{row.player.group}}</td>
+                    <td :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
+                            style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td class="text-left">{{row.player.name}}</td>
+                    <td>{{row.player.acc}}</td>
+                    <td
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
+                        {{round2(100*row.data[2] / row.data[1])}}%
+                    </td>
+                    <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
+                        {{round2(100*row.data[4]/ row.data[11])}}%
+                    </td>
+                    <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
+                        {{round2(100*row.data[5]/ row.data[11])}}%
+                    </td>
+                    <td :data-original-title="row.data[14] + ' out of ' + row.data[15] + ' connected hit(s)'">
+                        {{round2(100*row.data[14]/ row.data[15]) + '%' }}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[6]}}
+                    </td>
+                    <td>
+                        {{row.data[7]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[8]/ row.data[0]) + '% of '+ row.data[16] + ' hit(s)'">
+                        {{row.data[8]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[9]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[10]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[12]}}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr v-for="row in (mode ? tableDataTarget.sums : tableData.sums)">
+                    <td></td>
+                    <td></td>
+                    <td class="text-left">{{row.name}}</td>
+                    <td></td>
+                    <td
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
+                        {{round2(100*row.data[2] / row.data[1])}}%
+                    </td>
+                    <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
+                        {{round2(100*row.data[4]/ row.data[11])}}%
+                    </td>
+                    <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
+                        {{round2(100*row.data[5]/ row.data[11])}}%
+                    </td>
+                    <td :data-original-title="row.data[14] + ' out of ' + row.data[15] + ' connected hit(s)'">
+                        {{round2(100*row.data[14]/ row.data[15]) + '%' }}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[6]/ row.data[0])+ '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[6]}}
+                    </td>
+                    <td>
+                        {{row.data[7]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[8]/ row.data[0])+ '% of '+ row.data[16] + ' hit(s)'">
+                        {{row.data[8]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[9]/ row.data[0])+ '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[9]}}
+                    </td>
+                    <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
+                        {{row.data[10]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw">
+                        {{row.data[12]}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("offensive-stats-component", {
+        props: ["activetargets", "playerindex", "phaseindex"],
+        template: `${template}`,
+        mixins: [numberComponent],
+        data: function () {
+            return {
+                targetless: logData.targetless,
+                wvw: logData.wvw,
+                mode: logData.targetless ? 0 : 1,
+                cache: new Map(),
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "desc",
+                    index: 1
+                }
+            };
+        },
+        mounted() {
+            initializeTable(this.tableid, this.sortdata);
+        },
+        updated() {
+            updateTable(this.tableid);
+        },
+        activated() {
+            initializeTable(this.tableid, this.sortdata);
+        },
+        computed: {
+            tableid: function() {
+                return "off-table";
+            },
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            tableData: function () {
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
+                }
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
+                    name: "Total",
+                    data: [],
+                    count: 0
+                };
+                for (var i = 0; i < this.phase.offensiveStats.length; i++) {
+                    var data = [];
+                    var player = logData.players[i];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    if (!groups[player.group]) {
+                        groups[player.group] = {
+                            name: "Group " + player.group,
+                            data: [],
+                            count: 0
+                        };
+                    }
+                    groups[player.group].count++;
+                    total.count++;
+                    var stats = this.phase.offensiveStats[i];
+                    for (var j = 0; j < stats.length; j++) {
+                        data[j] = stats[j];
+                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
+                        total.data[j] = (total.data[j] || 0) + data[j];
+                    }
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                for (var i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push(groups[i]);
+                    }
+                }
+                sums.push(total);
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phaseindex, res);
+                return res;
+            },
+            tableDataTarget: function () {
+                var cacheID = this.phaseindex + '-';
+                cacheID += getTargetCacheID(this.activetargets);
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cacheTarget.get(cacheID);
+                }
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
+                    name: "Total",
+                    data: [],
+                    count: 0
+                };
+                for (var i = 0; i < this.phase.offensiveStats.length; i++) {
+                    var data = [];
+                    var player = logData.players[i];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    if (!groups[player.group]) {
+                        groups[player.group] = {
+                            name: "Group " + player.group,
+                            data: [],
+                            count: 0
+                        };
+                    }
+                    groups[player.group].count++;
+                    total.count++;
+                    var stats = this.phase.offensiveStats[i];
+                    for (var j = 0; j < stats.length; j++) {
+                        if (this.activetargets.length > 0) {
+                            for (var k = 0; k < this.activetargets.length; k++) {
+                                var tar = this.phase.offensiveStatsTargets[i][this.activetargets[k]];
+                                data[j] = (data[j] || 0) + tar[j];
+                            }
+                        } else {
+                            data[j] = (data[j] || 0);
+                        }
+                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
+                        total.data[j] = (total.data[j] || 0) + data[j];
+                    }
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                for (var i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push(groups[i]);
+                    }
+                }
+                sums.push(total);
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cacheTarget.set(cacheID, res);
+                return res;
+            }
+        }
+    });
+</script>

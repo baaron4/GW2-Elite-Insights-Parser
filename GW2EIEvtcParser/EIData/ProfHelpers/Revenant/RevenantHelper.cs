@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Legendary Assassin Stance",LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Legendary_Assassin_Stance.png"),
                 //traits
                 new Buff("Vicious Lacerations",ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cd/Vicious_Lacerations.png", 0, GW2Builds.February2020Balance),
-                new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
+                new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 new Buff("Expose Defenses", ExposeDefenses, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png"),
                 new Buff("Invoking Harmony",InvokingHarmony, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png"),
                 new Buff("Unyielding Devotion",UnyieldingDevotion, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),

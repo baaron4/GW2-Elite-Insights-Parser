@@ -321,33 +321,158 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ComputeFightTargets(agentData, combatData, extensions);
             int purificationID = 0;
+            var needRedirect = false;
+            (var jormagDamagingAgents, NPC jormag) = (new HashSet<ulong>(), null);
+            (var primordusDamagingAgents, NPC primordus) = (new HashSet<ulong>(), null);
+            (var kralkDamagingAgents, NPC kralk) = (new HashSet<ulong>(), null);
+            (var mordDamagingAgents, NPC mord) = (new HashSet<ulong>(), null);
+            (var zhaitanDamagingAgents, NPC zhaitan) = (new HashSet<ulong>(), null);
+            (var soowonDamagingAgents, NPC soowon) = (new HashSet<ulong>(), null);
             foreach (NPC target in Targets)
             {
                 switch(target.ID)
                 {
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                         target.OverrideName("The JormagVoid");
+                        jormag = target;
+                        needRedirect = true;
+                        var jormagAttacks = new HashSet<long>()
+                        {
+                            BreathOfJormag1,
+                            BreathOfJormag2,
+                            BreathOfJormag3,
+                        };
+                        jormagDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && jormagAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
                         target.OverrideName("The KralkatorrikVoid");
+                        kralk = target;
+                        needRedirect = true;
+                        var kralkAttacks = new HashSet<long>()
+                        {
+                            BrandingBeam,
+                            CrystalBarrage,
+                            VoidPoolKralkatorrik
+                        };
+                        kralkDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && kralkAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                         target.OverrideName("The MordremothVoid");
+                        mord = target;
+                        needRedirect = true;
+                        var mordAttacks = new HashSet<long>()
+                        {
+                            Shockwave,
+                            PoisonRoar,
+                        };
+                        mordDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && mordAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         target.OverrideName("The PrimordusVoid");
+                        primordus = target;
+                        needRedirect = true;
+                        var primordusAttacks = new HashSet<long>()
+                        {
+                            LavaSlam,
+                            JawsOfDestruction,
+                        };
+                        primordusDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && primordusAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         target.OverrideName("The SooWonVoid");
+                        soowon = target;
+                        needRedirect = true;
+                        var soowonAttacks = new HashSet<long>()
+                        {
+                            TsunamiSlam1,
+                            TsunamiSlam2,
+                            ClawSlap,
+                            MagicHail,
+                            VoidPurge,
+                            VoidPoolSooWon,
+                            TormentOfTheVoid
+                        };
+                        soowonDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && soowonAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                         target.OverrideName("The ZhaitanVoid");
+                        zhaitan = target;
+                        needRedirect = true;
+                        var zhaiAttacks = new HashSet<long>()
+                        {
+                            ScreamOfZhaitan,
+                            SlamZhaitan,
+                            PutridDeluge
+                        };
+                        zhaitanDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && zhaiAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                         target.OverrideName("Heart " + (++purificationID));
                         break;
                 }
             }
+            if (needRedirect)
+            {
+                foreach (CombatItem cbt in combatData)
+                {
+                    if (cbt.IsDamage())
+                    {
+                        if (jormagDamagingAgents.Any(x => cbt.SrcAgent == x && jormag.FirstAware <= cbt.Time && cbt.Time <= jormag.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(jormag.AgentItem.Agent);
+                        }
+                        else if (primordusDamagingAgents.Any(x => cbt.SrcAgent == x && primordus.FirstAware <= cbt.Time && cbt.Time <= primordus.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(primordus.AgentItem.Agent);
+                        }
+                        else if (kralkDamagingAgents.Any(x => cbt.SrcAgent == x && kralk.FirstAware <= cbt.Time && cbt.Time <= kralk.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(kralk.AgentItem.Agent);
+                        }
+                        else if (mordDamagingAgents.Any(x => cbt.SrcAgent == x && mord.FirstAware <= cbt.Time && cbt.Time <= mord.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(mord.AgentItem.Agent);
+                        }
+                        else if (zhaitanDamagingAgents.Any(x => cbt.SrcAgent == x && zhaitan.FirstAware <= cbt.Time && cbt.Time <= zhaitan.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(zhaitan.AgentItem.Agent);
+                        }
+                        else if (soowonDamagingAgents.Any(x => cbt.SrcAgent == x && soowon.FirstAware <= cbt.Time && cbt.Time <= soowon.LastAware))
+                        {
+                            cbt.OverrideSrcAgent(soowon.AgentItem.Agent);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (!Targetless)
+            {
+                var targetIDs = new HashSet<int>()
+                {
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
+                    (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
+                };
+                if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
+                {
+                    return FightData.CMStatus.CM;
+                }
+            }
+            var voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
+            if (voidMelters.Count > 5)
+            {
+                long firstAware = voidMelters[0].FirstAware;
+                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ParserHelper.ServerDelayConstant) > 5)
+                {
+                    return FightData.CMStatus.CM;
+                }
+            }
+            return FightData.CMStatus.NoCM;
         }
     }
 }
