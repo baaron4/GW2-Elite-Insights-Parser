@@ -218,6 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            //
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> { 
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
@@ -299,6 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            //
             IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate1);
             bool needRefresh = false;
             foreach (AgentItem voidAmal in voidAmalgamates)
@@ -319,7 +321,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Harvest Temple", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
                 Targetless = true;
             }
+            //
             ComputeFightTargets(agentData, combatData, extensions);
+            //
             int purificationID = 0;
             var needRedirect = false;
             (var jormagDamagingAgents, NPC jormag) = (new HashSet<ulong>(), null);
@@ -446,7 +450,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             if (!Targetless)
             {
@@ -460,7 +464,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 };
                 if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
                 {
-                    return FightData.CMStatus.CM;
+                    return FightData.EncounterMode.CM;
                 }
             }
             var voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
@@ -469,10 +473,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long firstAware = voidMelters[0].FirstAware;
                 if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ParserHelper.ServerDelayConstant) > 5)
                 {
-                    return FightData.CMStatus.CM;
+                    return FightData.EncounterMode.CM;
                 }
             }
-            return FightData.CMStatus.NoCM;
+            return FightData.EncounterMode.Normal;
         }
     }
 }
