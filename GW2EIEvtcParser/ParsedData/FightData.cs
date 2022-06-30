@@ -38,10 +38,10 @@ namespace GW2EIEvtcParser.ParsedData
         }
         public bool Success { get; private set; }
 
-        internal enum CMStatus { NotSet, CM, NoCM, CMnoName }
+        internal enum EncounterMode { NotSet, CM, Normal, CMNoName, Story }
 
-        private CMStatus _isCM = CMStatus.NotSet;
-        public bool IsCM => _isCM == CMStatus.CMnoName || _isCM == CMStatus.CM;
+        private EncounterMode _encounterStatus = EncounterMode.NotSet;
+        public bool IsCM => _encounterStatus == EncounterMode.CMNoName || _encounterStatus == EncounterMode.CM;
         // Constructors
         internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
         {
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void SetFightName(CombatData combatData, AgentData agentData)
         {
-            FightName = Logic.GetLogicName(combatData, agentData) + (_isCM == CMStatus.CM ? " CM" : "");
+            FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
         }
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
@@ -301,11 +301,15 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        internal void SetCM(CombatData combatData, AgentData agentData)
+        internal void SetEncounterMode(CombatData combatData, AgentData agentData)
         {
-            if (_isCM == CMStatus.NotSet)
+            if (_encounterStatus == EncounterMode.NotSet)
             {
-                _isCM = Logic.IsCM(combatData, agentData, this);
+                _encounterStatus = Logic.GetEncounterMode(combatData, agentData, this);
+                if (_encounterStatus == EncounterMode.Story)
+                {
+                    Logic.InvalidateEncounterID();
+                }
             }
         }
 

@@ -62,7 +62,8 @@ namespace GW2EIBuilders.HtmlModels
         public string ArcVersion { get; set; }
         public long EvtcVersion { get; set; }
         public ulong Gw2Build { get; set; }
-        public long FightID { get; set; }
+        public long TriggerID { get; set; }
+        public long EncounterID { get; set; }
         public string Parser { get; set; }
         public string RecordedBy { get; set; }
         public List<string> UploadLinks { get; set; }
@@ -77,7 +78,8 @@ namespace GW2EIBuilders.HtmlModels
             ArcVersion = log.LogData.ArcVersion;
             EvtcVersion = log.LogData.EvtcVersion;
             Gw2Build = log.LogData.GW2Build;
-            FightID = log.FightData.TriggerID;
+            TriggerID = log.FightData.TriggerID;
+            EncounterID = log.FightData.Logic.EncounterID;
             Parser = "Elite Insights " + parserVersion.ToString();
             RecordedBy = log.LogData.PoVName;
             UploadLinks = uploadLinks.ToList();

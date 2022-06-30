@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://i.imgur.com/eLyIWd2.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -325,14 +326,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

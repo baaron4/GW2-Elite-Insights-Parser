@@ -44,6 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sam";
             Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -236,14 +237,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Samarog not found");
             }
-            return (target.GetHealth(combatData) > 30e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 30e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

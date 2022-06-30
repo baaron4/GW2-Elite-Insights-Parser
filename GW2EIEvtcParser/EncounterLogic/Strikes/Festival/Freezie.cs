@@ -6,12 +6,13 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Freezie : StrikeMissionLogic
+    internal class Freezie : FestivalStrikeMissionLogic
     {
         public Freezie(int triggerID) : base(triggerID)
         {
             Extension = "freezie";
             Icon = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
+            EncounterID |= 0x000001;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

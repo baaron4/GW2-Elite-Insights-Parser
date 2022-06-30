@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "woj";
             Icon = "https://i.imgur.com/8GLwgfL.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
+            EncounterID |= 0x000005;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

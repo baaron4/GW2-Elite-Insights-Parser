@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public SalvationPass(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.SalvationPass;
+            EncounterID |= EncounterIDs.RaidWingMasks.SalvationPassMask;
         }  
     }
 }

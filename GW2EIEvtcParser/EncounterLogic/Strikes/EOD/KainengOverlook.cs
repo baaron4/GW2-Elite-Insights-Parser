@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class KainengOverlook : CanthaStrike
+    internal class KainengOverlook : EODStrike
     {
         public KainengOverlook(int triggerID) : base(triggerID)
         {
@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/7OutZup.png";
             Extension = "kaiover";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -165,10 +166,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MinisterLiCM);
-            return ministerLiCM != null ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

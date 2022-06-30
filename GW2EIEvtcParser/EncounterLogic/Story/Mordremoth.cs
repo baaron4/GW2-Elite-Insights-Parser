@@ -10,15 +10,14 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Mordremoth : FightLogic
+    internal class Mordremoth : StoryInstance
     {
         public Mordremoth(int triggerID) : base(triggerID)
         {
             Extension = "mordr";
             Icon = "https://i.imgur.com/4pNive1.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterCategoryInformation.Category = EncounterCategory.FightCategory.Story;
-            EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
+            EncounterID |= 0x000001;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -93,14 +92,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Mordremoth);
             if (mordremoth == null)
             {
                 throw new MissingKeyActorsException("Mordremoth not found");
             }
-            return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
         }
 
         protected override List<int> GetFriendlyNPCIDs()

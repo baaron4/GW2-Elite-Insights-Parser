@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/r9b2oww.png";
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Drizzlewood;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000006;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

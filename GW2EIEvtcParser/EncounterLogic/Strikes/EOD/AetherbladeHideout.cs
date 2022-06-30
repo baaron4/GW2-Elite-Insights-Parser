@@ -9,7 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class AetherbladeHideout : CanthaStrike
+    internal class AetherbladeHideout : EODStrike
     {
         public AetherbladeHideout(int triggerID) : base(triggerID)
         {
@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/UZmW8Sd.png";
             Extension = "aetherhide";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -226,14 +227,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.MaiTrinStrike);
             if (maiTrin == null)
             {
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
-            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

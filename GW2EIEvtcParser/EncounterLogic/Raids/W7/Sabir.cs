@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sabir";
             Icon = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000002;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -210,14 +211,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return enterCombat != null ? enterCombat.Time : fightData.LogStart;
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Sabir);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Sabir not found");
             }
-            return (target.GetHealth(combatData) > 32e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

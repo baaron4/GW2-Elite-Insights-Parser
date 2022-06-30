@@ -52,6 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "sab";
             Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

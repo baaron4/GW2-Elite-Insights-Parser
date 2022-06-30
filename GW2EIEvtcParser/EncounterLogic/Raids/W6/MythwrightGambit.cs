@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public MythwrightGambit(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.MythwrightGambit;
+            EncounterID |= EncounterIDs.RaidWingMasks.MythwrightGambitMask;
         }  
     }
 }

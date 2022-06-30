@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public HallOfChains(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.HallOfChains;
+            EncounterID |= EncounterIDs.RaidWingMasks.HallOfChainsMask;
         }  
     }
 }

@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "matt";
             Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

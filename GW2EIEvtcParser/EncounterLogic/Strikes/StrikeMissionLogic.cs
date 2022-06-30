@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Strike;
+            EncounterID |= EncounterIDs.EncounterMasks.StrikeMask;
         }
 
         protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)

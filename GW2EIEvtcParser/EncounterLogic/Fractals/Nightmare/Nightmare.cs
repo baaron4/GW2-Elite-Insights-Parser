@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Nightmare(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
+            EncounterID |= EncounterIDs.FractalMasks.NightmareMask;
         }
     }
 }

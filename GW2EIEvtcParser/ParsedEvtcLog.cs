@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser
             }
             //
             operation.UpdateProgressWithCancellationCheck("Checking CM");
-            FightData.SetCM(CombatData, AgentData);
+            FightData.SetEncounterMode(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Setting Fight Name");
             FightData.SetFightName(CombatData, AgentData);
             //

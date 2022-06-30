@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "souleater";
             Icon = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

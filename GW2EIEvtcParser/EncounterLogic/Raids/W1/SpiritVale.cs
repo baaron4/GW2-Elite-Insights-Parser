@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public SpiritVale(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.SpiritVale;
+            EncounterID |= EncounterIDs.RaidWingMasks.SpiritValeMask;
         }  
     }
 }

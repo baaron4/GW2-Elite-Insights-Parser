@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "arts";
             Icon = "https://i.imgur.com/aFlYs1I.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -142,9 +143,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.CMnoName;
+            return FightData.EncounterMode.CMNoName;
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)

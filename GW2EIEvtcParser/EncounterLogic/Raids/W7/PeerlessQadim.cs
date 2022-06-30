@@ -38,6 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "prlqadim";
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000003;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -452,14 +453,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
             }
-            return (target.GetHealth(combatData) > 48e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

@@ -35,6 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -283,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             var necrosis = combatData.GetBuffData(SkillIDs.Necrosis).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
@@ -313,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     minDiff = timeDiff;
                 }
             }
-            return (minDiff < 11000) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (minDiff < 11000) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

@@ -189,7 +189,11 @@ namespace GW2EIJSON
         /// The id with which the log has been triggered
         /// </summary>
         public int TriggerID { get; set; }
-        
+        /// <summary>
+        /// The elite insight id of the log, indicates which encounter the log corresponds to.
+        /// </summary>
+        public long EIEncounterID { get; set; }
+
         /// <summary>
         /// The name of the fight
         /// </summary>

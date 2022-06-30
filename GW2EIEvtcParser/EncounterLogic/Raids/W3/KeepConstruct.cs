@@ -55,6 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "kc";
             Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -395,9 +396,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(34958) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetSkills().Contains(34958) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "cairn";
             Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -185,9 +186,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(38098) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return combatData.GetSkills().Contains(38098) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

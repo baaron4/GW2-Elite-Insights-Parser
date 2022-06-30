@@ -58,6 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             EncounterCategoryInformation.Category = FightCategory.Golem;
             EncounterCategoryInformation.SubCategory = SubFightCategory.Golem;
+            EncounterID |= EncounterIDs.EncounterMasks.GolemMask;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

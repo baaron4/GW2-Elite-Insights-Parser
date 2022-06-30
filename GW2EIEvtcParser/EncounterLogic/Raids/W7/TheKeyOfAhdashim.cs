@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public TheKeyOfAhdashim(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
+            EncounterID |= EncounterIDs.RaidWingMasks.TheKeyOfAhdashimMask;
         }  
     }
 }

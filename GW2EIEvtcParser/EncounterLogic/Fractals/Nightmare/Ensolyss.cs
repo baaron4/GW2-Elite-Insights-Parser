@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "ensol";
             Icon = "https://i.imgur.com/pqRYRGi.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -42,9 +43,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Ensolyss, Determined762, 1500);
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.CMnoName;
+            return FightData.EncounterMode.CMNoName;
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

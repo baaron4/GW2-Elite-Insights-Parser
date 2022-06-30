@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "eyes";
             Icon = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000005;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

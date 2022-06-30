@@ -51,6 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GenericFallBackMethod = FallBackMethod.None;
             Icon = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
+            EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -518,20 +519,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
             }
-            FightData.CMStatus cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            FightData.EncounterMode cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
             
             if (_deimos10PercentTime > 0)
             {
                 // Deimos gains additional health during the last 10% so the max-health needs to be corrected
                 // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
-                if (cmStatus == FightData.CMStatus.CM)
+                if (cmStatus == FightData.EncounterMode.CM)
                 {
                     target.SetManualHealth(42804900);
                 }

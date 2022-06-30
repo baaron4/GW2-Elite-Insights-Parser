@@ -63,6 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "dhuum";
             Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
+            EncounterID |= 0x000006;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -467,14 +468,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Dhuum);
             if (target == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            return (target.GetHealth(combatData) > 35e6) ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            return (target.GetHealth(combatData) > 35e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

@@ -8,7 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class XunlaiJadeJunkyard : CanthaStrike
+    internal class XunlaiJadeJunkyard : EODStrike
     {
         public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
         {
@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Icon = "https://i.imgur.com/orWH6qw.png";
             Extension = "xunjadejunk";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -142,14 +143,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
             if (ankka == null)
             {
                 throw new MissingKeyActorsException("Ankka not found");
             }
-            return ankka.GetHealth(combatData) > 50e6 ? FightData.CMStatus.CM : FightData.CMStatus.NoCM;
+            MapIDEvent map = combatData.GetMapIDEvents().FirstOrDefault();
+            if (map != null && map.MapID == 1434)
+            {
+                return FightData.EncounterMode.Story;
+            }
+            return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }

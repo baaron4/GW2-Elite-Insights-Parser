@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public ShatteredObservatory(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
+            EncounterID |= EncounterIDs.FractalMasks.ShatteredObservatoryMask;
         }
 
         protected static HashSet<AgentItem> GetParticipatingPlayerAgents(AbstractSingleActor target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)

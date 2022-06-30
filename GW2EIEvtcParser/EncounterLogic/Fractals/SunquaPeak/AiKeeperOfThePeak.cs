@@ -63,20 +63,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "ai";
             Icon = "https://i.imgur.com/3mlCdI9.png";
             EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
+            EncounterID |= EncounterIDs.FractalMasks.SunquaPeakMask;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             if (_hasDarkMode && _hasElementalMode)
             {
+                EncounterID |= 0x000001;
                 return "Ai, Keeper of the Peak";
             }
             else if (_hasDarkMode)
             {
+                EncounterID |= 0x000003;
                 return "Dark Ai, Keeper of the Peak";
             }
             else
             {
+                EncounterID |= 0x000002;
                 return "Elemental Ai, Keeper of the Peak";
             }
         }
@@ -241,9 +245,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.CMnoName;
+            return FightData.EncounterMode.CMNoName;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

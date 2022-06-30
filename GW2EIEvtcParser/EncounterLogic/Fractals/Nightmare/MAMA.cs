@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "mama";
             Icon = "https://i.imgur.com/9URW7wh.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -42,9 +43,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11804, 4414, 12444, 5054)*/);
         }
 
-        internal override FightData.CMStatus IsCM(CombatData combatData, AgentData agentData, FightData fightData)
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.CMStatus.CMnoName;
+            return FightData.EncounterMode.CMNoName;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

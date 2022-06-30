@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Extension = "brokenking";
             Icon = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

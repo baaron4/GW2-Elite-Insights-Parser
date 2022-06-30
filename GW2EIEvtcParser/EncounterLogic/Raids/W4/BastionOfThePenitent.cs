@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public BastionOfThePenitent(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.BastionOfThePenitent;
+            EncounterID |= EncounterIDs.RaidWingMasks.BastionOfThePenitentMask;
         }  
     }
 }
