@@ -10,5 +10,6 @@ var searchData=
   ['powerdps',['PowerDps',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a6f2de79c1c635be8dbcf30e94e853dd1',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['presence',['Presence',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a3de8ba243388bd87a142f6a8f4e307b5',1,'GW2EIJSON::JsonBuffsUptime::JsonBuffsUptimeData']]],
   ['presentfractalinstabilities',['PresentFractalInstabilities',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae7632823761a550472d11de93ef38368',1,'GW2EIJSON::JsonLog']]],
+  ['presentinstancebuffs',['PresentInstanceBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae6fdd534b555fce5477b12fac5d7a63b',1,'GW2EIJSON::JsonLog']]],
   ['profession',['Profession',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af0d033faacc4a1370f73d354e5689fd3',1,'GW2EIJSON::JsonPlayer']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['eiencounterid',['EIEncounterID',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4bf983ea8df11f90bb0c45cc30bf28fd',1,'GW2EIJSON::JsonLog']]],
   ['eliteinsightsversion',['EliteInsightsVersion',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a131ac0acbf7ea98cb8d8f19ff6951f91',1,'GW2EIJSON::JsonLog']]],
   ['end',['End',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc',1,'GW2EIJSON.JsonActorCombatReplayData.End()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#aaf08c1505b75b98409ff29b96aa8e6a1',1,'GW2EIJSON.JsonPhase.End()']]],
   ['enemyplayer',['EnemyPlayer',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#aaccb118342bb867a368256c5a8d90850',1,'GW2EIJSON::JsonNPC']]],

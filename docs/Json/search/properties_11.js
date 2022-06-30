@@ -7,6 +7,8 @@ var searchData=
   ['signature',['Signature',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html#a286388e12ce26b442d8b6c53dc374c97',1,'GW2EIJSON::JsonLog::ExtensionDesc']]],
   ['sizes',['Sizes',['../class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data.html#ae5b64ee579a0138ccc00b9d913a30b14',1,'GW2EIJSON::JsonCombatReplayMetaData']]],
   ['skillbased',['SkillBased',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#a54f67f8cb1f7831576bd995c8defef92',1,'GW2EIJSON::JsonLog::DamageModDesc']]],
+  ['skillcastuptime',['SkillCastUptime',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ad30f1fec921e2b4cf0be3e3579ccec32',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
+  ['skillcastuptimenoaa',['SkillCastUptimeNoAA',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ace974c1637c46a7303cc95d3ccb2dfcc',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
   ['skillmap',['SkillMap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae3e4ba94e20ae35ce480d98923d3780d',1,'GW2EIJSON::JsonLog']]],
   ['skills',['Skills',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html#afa2cd62e65949326580ba5355a8f16d3',1,'GW2EIJSON::JsonRotation']]],
   ['squadbuffs',['SquadBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9501ef2b8f766599cff26462aaac6c9b',1,'GW2EIJSON::JsonPlayer']]],
