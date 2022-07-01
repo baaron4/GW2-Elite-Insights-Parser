@@ -6,6 +6,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all =
     [ "AvgConditions", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab2ed1d3f0ecfb1c6af3b8e885c262fc7", null ],
     [ "DistToCom", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a92a02508d55fa0f30b561a263f660300", null ],
     [ "Saved", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ac9bab979a4d1154876b92f95f21b863a", null ],
+    [ "SkillCastUptime", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ad30f1fec921e2b4cf0be3e3579ccec32", null ],
+    [ "SkillCastUptimeNoAA", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ace974c1637c46a7303cc95d3ccb2dfcc", null ],
     [ "StackDist", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a58bb410885eda68e3d04ca0360ed1a78", null ],
     [ "SwapCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab6586c29718477cff38d520b03bd2178", null ],
     [ "TimeSaved", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a62c63925557994224d7433c84625ce68", null ],

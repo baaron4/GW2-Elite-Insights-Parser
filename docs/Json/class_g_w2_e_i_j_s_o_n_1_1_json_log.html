@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.43.1+</span>
+   &#160;<span id="projectnumber">2.45.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -123,6 +123,10 @@ Properties</h2></td></tr>
 <tr class="memitem:a4003a61ee80e3c7fef014bd904ec5206"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4003a61ee80e3c7fef014bd904ec5206">TriggerID</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a4003a61ee80e3c7fef014bd904ec5206"><td class="mdescLeft">&#160;</td><td class="mdescRight">The id with which the log has been triggered  <a href="#a4003a61ee80e3c7fef014bd904ec5206">More...</a><br /></td></tr>
 <tr class="separator:a4003a61ee80e3c7fef014bd904ec5206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4bf983ea8df11f90bb0c45cc30bf28fd">EIEncounterID</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elite insight id of the log, indicates which encounter the log corresponds to. <br />
+see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/">https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/</a>  <a href="#a4bf983ea8df11f90bb0c45cc30bf28fd">More...</a><br /></td></tr>
+<tr class="separator:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab27aa1635469fe3020b5d104b12772e4"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab27aa1635469fe3020b5d104b12772e4">FightName</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ab27aa1635469fe3020b5d104b12772e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the fight  <a href="#ab27aa1635469fe3020b5d104b12772e4">More...</a><br /></td></tr>
 <tr class="separator:ab27aa1635469fe3020b5d104b12772e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,8 +203,11 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <tr class="memdesc:adeec27e4b0c355b6b6e70ed79fd58ade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of personal buffs. The key is the profession, the value is a list of buff ids  <a href="#adeec27e4b0c355b6b6e70ed79fd58ade">More...</a><br /></td></tr>
 <tr class="separator:adeec27e4b0c355b6b6e70ed79fd58ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7632823761a550472d11de93ef38368"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae7632823761a550472d11de93ef38368">PresentFractalInstabilities</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:ae7632823761a550472d11de93ef38368"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of present fractal instabilities, the values are buff ids  <a href="#ae7632823761a550472d11de93ef38368">More...</a><br /></td></tr>
+<tr class="memdesc:ae7632823761a550472d11de93ef38368"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead  <a href="#ae7632823761a550472d11de93ef38368">More...</a><br /></td></tr>
 <tr class="separator:ae7632823761a550472d11de93ef38368"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6fdd534b555fce5477b12fac5d7a63b"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; long[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae6fdd534b555fce5477b12fac5d7a63b">PresentInstanceBuffs</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ae6fdd534b555fce5477b12fac5d7a63b"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.  <a href="#ae6fdd534b555fce5477b12fac5d7a63b">More...</a><br /></td></tr>
+<tr class="separator:ae6fdd534b555fce5477b12fac5d7a63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82b2a1783260afb40910a0abd28c9f3a"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a82b2a1783260afb40910a0abd28c9f3a">LogErrors</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a82b2a1783260afb40910a0abd28c9f3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of error messages given by ArcDPS  <a href="#a82b2a1783260afb40910a0abd28c9f3a">More...</a><br /></td></tr>
 <tr class="separator:a82b2a1783260afb40910a0abd28c9f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -334,6 +341,31 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The duration of the fight in "xh xm xs xms" format </p>
+
+</div>
+</div>
+<a id="a4bf983ea8df11f90bb0c45cc30bf28fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf983ea8df11f90bb0c45cc30bf28fd">&#9670;&nbsp;</a></span>EIEncounterID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long GW2EIJSON.JsonLog.EIEncounterID</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The elite insight id of the log, indicates which encounter the log corresponds to. <br />
+see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/">https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/</a> </p>
 
 </div>
 </div>
@@ -649,7 +681,32 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </table>
 </div><div class="memdoc">
 
-<p>List of present fractal instabilities, the values are buff ids </p>
+<p>List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a23b06f8c19bd7dbd1c5c8d158f8a620a" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format">BuffMap</a></dd></dl>
+
+</div>
+</div>
+<a id="ae6fdd534b555fce5477b12fac5d7a63b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6fdd534b555fce5477b12fac5d7a63b">&#9670;&nbsp;</a></span>PresentInstanceBuffs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;long[]&gt; GW2EIJSON.JsonLog.PresentInstanceBuffs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a23b06f8c19bd7dbd1c5c8d158f8a620a" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format">BuffMap</a></dd></dl>
 
 </div>

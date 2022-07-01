@@ -190,7 +190,8 @@ namespace GW2EIJSON
         /// </summary>
         public int TriggerID { get; set; }
         /// <summary>
-        /// The elite insight id of the log, indicates which encounter the log corresponds to.
+        /// The elite insight id of the log, indicates which encounter the log corresponds to. \n
+        /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/
         /// </summary>
         public long EIEncounterID { get; set; }
 
