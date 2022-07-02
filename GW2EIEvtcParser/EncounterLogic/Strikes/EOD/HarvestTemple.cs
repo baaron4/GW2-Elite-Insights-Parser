@@ -421,6 +421,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     if (cbt.IsDamage())
                     {
+                        // sanity check
+                        if (agentData.GetAgent(cbt.SrcAgent, cbt.Time).GetFinalMaster().IsPlayer)
+                        {
+                            continue;
+                        }
                         if (jormagDamagingAgents.Any(x => cbt.SrcAgent == x && jormag.FirstAware <= cbt.Time && cbt.Time <= jormag.LastAware))
                         {
                             cbt.OverrideSrcAgent(jormag.AgentItem.Agent);
