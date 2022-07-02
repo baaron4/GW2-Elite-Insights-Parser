@@ -325,13 +325,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             //
             int purificationID = 0;
-            var needRedirect = false;
-            (var jormagDamagingAgents, NPC jormag) = (new HashSet<ulong>(), null);
-            (var primordusDamagingAgents, NPC primordus) = (new HashSet<ulong>(), null);
-            (var kralkDamagingAgents, NPC kralk) = (new HashSet<ulong>(), null);
-            (var mordDamagingAgents, NPC mord) = (new HashSet<ulong>(), null);
-            (var zhaitanDamagingAgents, NPC zhaitan) = (new HashSet<ulong>(), null);
-            (var soowonDamagingAgents, NPC soowon) = (new HashSet<ulong>(), null);
+            bool needRedirect = false;
+            (HashSet<ulong> jormagDamagingAgents, NPC jormag) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> primordusDamagingAgents, NPC primordus) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> kralkDamagingAgents, NPC kralk) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> mordDamagingAgents, NPC mord) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> zhaitanDamagingAgents, NPC zhaitan) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> soowonDamagingAgents, NPC soowon) = (new HashSet<ulong>(), null);
             foreach (NPC target in Targets)
             {
                 switch(target.ID)
@@ -467,7 +467,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return FightData.EncounterMode.CM;
                 }
             }
-            var voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
+            IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
             if (voidMelters.Count > 5)
             {
                 long firstAware = voidMelters[0].FirstAware;

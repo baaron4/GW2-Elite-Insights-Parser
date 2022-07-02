@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     continue;
                 }
-                var value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
+                long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
                 SkillCastUptime += value;
                 if (!cl.Skill.AA)
                 {

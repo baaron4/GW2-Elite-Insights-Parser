@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             phases.AddRange(GetPhasesByInvul(log, new long[] { 757, 66242 }, mainTarget, true, true, 0,
                 log.FightData.FightEnd));
 
-            var phaseOffset = GetPhaseOffset(log, mainTarget);
+            int phaseOffset = GetPhaseOffset(log, mainTarget);
             InitPhases(phases, mainTarget, tailTarget, phaseOffset);
 
             return phases;
@@ -84,13 +84,13 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         /// </returns>
         private static int GetPhaseOffset(ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            var initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
+            double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
             Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs =
                 log.CombatData.GetBuffData(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
             AbstractBuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
             AbstractBuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 
-            var offset = 0;
+            int offset = 0;
             if (initialHealth <= 80 && initialHealth > 60)
             {
                 offset = 2;

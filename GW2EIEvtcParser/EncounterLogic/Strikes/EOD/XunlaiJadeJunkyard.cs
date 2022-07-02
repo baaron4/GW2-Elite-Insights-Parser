@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (subPhase != null)
                 {
-                    var index = subPhases.IndexOf(subPhase);
+                    int index = subPhases.IndexOf(subPhase);
                     subsubPhase.OverrideStart(Math.Max(subsubPhase.Start, subPhase.Start));
                     subsubPhase.OverrideEnd(Math.Min(subsubPhase.End, subPhase.End));
                     subsubPhase.Name = "Location " + (index + 1) + " - " + (++curSubSubPhaseID);
