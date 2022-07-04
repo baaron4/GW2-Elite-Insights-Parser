@@ -685,6 +685,7 @@ namespace GW2EIParser
                             embedFieldBuilder = new EmbedFieldBuilder();
                             fieldValue = "";
                             embedBuilder.AddField(embedFieldBuilder);
+                            embedFieldBuilder.WithName(subCategory);
                         }
                         else
                         {
