@@ -455,6 +455,118 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                    //
+                    var purificationZones = log.CombatData.GetEffectIDToGUIDEvents(EffectGUIDs.HarvestTemplePurificationZones);
+                    var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
+                    var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
+                    var voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
+                    var voidShellRemovalOffset = 0;
+                    var purificationAdd = 0;
+                    var breakPurification = false;
+                    foreach (EffectIDToGUIDEvent purificationZone in purificationZones)
+                    {
+                        var purificationZoneEffects = log.CombatData.GetEffectEvents(purificationZone.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+                        foreach (EffectEvent purificationZoneEffect in purificationZoneEffects)
+                        {
+                            int start = (int)purificationZoneEffect.Time;
+                            int end = start + purificationZoneEffect.Duration;
+                            int radius = 360;
+                            if (voidShellRemovalOffset < voidShellRemovals.Count)
+                            {
+                                end = (int)voidShellRemovals[voidShellRemovalOffset++].Time;
+                            }
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(0, 180, 255, 0.3)", new PositionConnector(purificationZoneEffect.Position)));
+                            purificationAdd++;
+                            if (purificationAdd >= voidShellAppliesCount)
+                            {
+                                breakPurification = true;
+                            }
+                            if (breakPurification)
+                            {
+                                break;
+                            }
+                        }
+                        if (breakPurification)
+                        {
+                            break;
+                        }
+                    }
+                    //
+                    var lightnings = log.CombatData.GetEffectIDToGUIDEvents(EffectGUIDs.HarvestTemplePurificationLightnings);
+                    foreach (EffectIDToGUIDEvent lightning in lightnings)
+                    {
+                        var lightningEffects = log.CombatData.GetEffectEvents(lightning.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+                        foreach (EffectEvent lightningEffect in lightningEffects)
+                        {
+                            int start = (int)lightningEffect.Time - 2000;
+                            int duration = 2000;
+                            int end = start + duration;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 120, (start, end), "rgba(255, 180, 0, 0.2)", new PositionConnector(lightningEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 180, 0, 0.2)", new PositionConnector(lightningEffect.Position)));
+                        }
+                    }
+                    //
+                    /*var fires = log.CombatData.GetEffectIDToGUIDEvents(EffectGUIDs.HarvestTemplePurificationFires);
+                    foreach (EffectIDToGUIDEvent fire in fires)
+                    {
+                        var fireEffects = log.CombatData.GetEffectEvents(fire.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+                        foreach (EffectEvent fireEffect in fireEffects)
+                        {
+                            int start = (int)fireEffect.Time - 2000;
+                            int duration = 2000;
+                            int end = start + duration;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 120, (start, end), "rgba(255, 80, 0, 0.2)", new PositionConnector(fireEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 80, 0, 0.2)", new PositionConnector(fireEffect.Position)));
+                        }
+                    }*/
+                    //
+                    var voidZones = log.CombatData.GetEffectIDToGUIDEvents(EffectGUIDs.HarvestTemplePurificationVoidZones);
+                    foreach (EffectIDToGUIDEvent voidZone in voidZones)
+                    {
+                        var voidZoneEffects = log.CombatData.GetEffectEvents(voidZone.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+                        foreach (EffectEvent voidZoneEffect in voidZoneEffects)
+                        {
+                            int startLoad = (int)voidZoneEffect.Time - 2000;
+                            int loadDuration = 2000;
+                            int endLoad = startLoad + loadDuration;
+                            int start = (int)voidZoneEffect.Time;
+                            int end = start + 5000;
+                            replay.Decorations.Add(new CircleDecoration(true, endLoad, 80, (startLoad, end), "rgba(150, 0, 150, 0.1)", new PositionConnector(voidZoneEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 80, (startLoad, end), "rgba(150, 0, 150, 0.1)", new PositionConnector(voidZoneEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 80, (start, end), "rgba(250, 0, 250, 0.3)", new PositionConnector(voidZoneEffect.Position)));
+                        }
+                    }
+                    //
+                    var breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
+                    if (breakbar != null)
+                    {
+                        int start = (int)breakbar.Time;
+                        int end = (int)target.LastAware;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                    }
+                    //
+                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem);
+                    var effects2 = log.CombatData.GetEffectEvents(ParserHelper._unknownAgent).Where(x => x.EffectID != 0 && x.Time >= 20000 && x.Time <= 24000 && !x.IsAroundDst).ToList();
+                    foreach (EffectEvent effectEvt in effects2)
+                    {
+                        if (effectEvt.IsAroundDst)
+                        {
+                            continue;
+                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 10000), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                    }
+                    var test = log.CombatData.GetEffectIDToGUIDEvents(18235);*/
+                    break;
+                default:
+                    break;
+            }
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             if (!Targetless)

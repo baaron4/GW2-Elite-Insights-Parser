@@ -14,8 +14,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public float Orientation { get; }
 
-        public float OrientationZ { get; }
-        public bool OnlyZOrientation { get; }
+        //public float OrientationZ { get; }
 
         public long EffectID { get; }
 
@@ -29,7 +28,11 @@ namespace GW2EIEvtcParser.ParsedData
             } 
             else
             {
-                Position = new Point3D(Convert.ToSingle(evtcItem.Value), Convert.ToSingle(evtcItem.BuffDmg), Convert.ToSingle(evtcItem.OverstackValue));
+                Position = new Point3D(
+                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Value), 0), 
+                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.BuffDmg), 0), 
+                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.OverstackValue), 0)
+               );
             }
             {
                 byte[] orientationBytes = new byte[2 * sizeof(float)];
@@ -49,8 +52,7 @@ namespace GW2EIEvtcParser.ParsedData
 
                 Orientation = Point3D.GetRotationFromFacing(new Point3D(orientationFloats[0], orientationFloats[1], 0));
             }
-            OrientationZ = Convert.ToSingle(evtcItem.Pad);
-            OnlyZOrientation = evtcItem.IsFlanking > 0;
+            //OrientationZ = BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad),0);
             EffectID = evtcItem.SkillID;
             {
                 byte[] durationBytes = new byte[sizeof(ushort)];
