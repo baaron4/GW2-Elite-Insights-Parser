@@ -5,7 +5,7 @@
 "use strict";
 //// ACTORS
 class IconDrawable {
-    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc) {
+    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth) {
         this.pos = pos;
         this.start = start;
         this.end = end;
@@ -19,6 +19,7 @@ class IconDrawable {
         this.dead = typeof dead !== "undefined" ? dead : null;
         this.down = typeof down !== "undefined" ? down : null;
         this.dc = typeof dc !== "undefined" ? dc : null;
+        this.hitboxWidth = hitboxWidth;
     }
 
     isSelected() {
@@ -130,17 +131,25 @@ class IconDrawable {
         return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex));
     }
 
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.hitboxWidth > 0) {
+            return this.hitboxWidth;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
     draw() {
         const pos = this.getPosition();
         if (pos === null) {
             return;
         }
         var ctx = animator.mainContext;
-        const fullSize = this.pixelSize / animator.scale;
+        const fullSize = this.getSize();
         const halfSize = fullSize / 2;
         var isSelected = this.isSelected();
         var inSelectedGroup = this.inSelectedGroup();
-        if (animator.highlightSelectedGroup && !isSelected && inSelectedGroup) {
+        if (animator.displaySettings.highlightSelectedGroup && !isSelected && inSelectedGroup) {
             ctx.beginPath();
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = 'blue';
@@ -170,8 +179,8 @@ class IconDrawable {
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc);
+    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc, hitboxWidth) {
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth);
         this.group = group;
     }
 
@@ -182,8 +191,8 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, masterID) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc);
+    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, masterID, hitboxWidth) {
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth);
         this.masterID = typeof masterID === "undefined" ? -1 : masterID;
         this.master = null;
     }
@@ -192,8 +201,8 @@ class NonSquadIconDrawable extends IconDrawable {
         if (this.master === null) {
             this.master = animator.getActorData(this.masterID);
         }
-        if (this.master && !animator.displayAllMinions) {
-            return this.master.isSelected() && animator.displaySelectedMinions;
+        if (this.master && !animator.displaySettings.displayAllMinions) {
+            return this.master.isSelected() && animator.displaySettings.displaySelectedMinions;
         }
         return true;
     }

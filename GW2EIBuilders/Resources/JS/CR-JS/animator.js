@@ -63,11 +63,14 @@ class Animator {
         this.speed = 1;
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
-        this.highlightSelectedGroup = true;
-        this.displayAllMinions = false;
-        this.displaySelectedMinions = true;
-        this.displayMechanics = true;
-        this.displayTrashMobs = true;
+        this.displaySettings = {
+            highlightSelectedGroup: true,
+            displayAllMinions: false,
+            displaySelectedMinions: true,
+            displayMechanics: true,
+            displayTrashMobs: true,
+            useActorHitboxWidth: false,
+        };     
         this.coneControl = {
             enabled: false,
             openingAngle: 90,
@@ -162,7 +165,7 @@ class Animator {
             const actor = actors[i];
             switch (actor.type) {
                 case "Player":
-                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc, this.inchToPixel * actor.hitboxWidth));
                     if (this.times.length === 0) {
                         for (let j = 0; j < actor.positions.length / 2; j++) {
                             this.times.push(j * this.pollingRate);
@@ -171,13 +174,13 @@ class Animator {
                     break;
                 case "Target":
                 case "TargetPlayer":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc));
+                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, -1, this.inchToPixel * actor.hitboxWidth));
                     break;
                 case "Mob":
-                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
+                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                     break;
                 case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID));
+                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                     break;
                 case "Circle":
                     this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
@@ -298,27 +301,32 @@ class Animator {
     }
 
     toggleHighlightSelectedGroup() {
-        this.highlightSelectedGroup = !this.highlightSelectedGroup;
+        this.displaySettings.highlightSelectedGroup = !this.displaySettings.highlightSelectedGroup;
         animateCanvas(noUpdateTime);
     }
 
     toggleDisplayAllMinions() {
-        this.displayAllMinions = !this.displayAllMinions;
+        this.displaySettings.displayAllMinions = !this.displaySettings.displayAllMinions;
         animateCanvas(noUpdateTime);
     }
 
     toggleDisplaySelectedMinions() {
-        this.displaySelectedMinions = !this.displaySelectedMinions;
+        this.displaySettings.displaySelectedMinions = !this.displaySettings.displaySelectedMinions;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleUseActorHitboxWidth() {
+        this.displaySettings.useActorHitboxWidth = !this.displaySettings.useActorHitboxWidth;
         animateCanvas(noUpdateTime);
     }
 
     toggleTrashMobs() {
-        this.displayTrashMobs = !this.displayTrashMobs;
+        this.displaySettings.displayTrashMobs = !this.displaySettings.displayTrashMobs;
         animateCanvas(noUpdateTime);
     }
 
     toggleMechanics() {
-        this.displayMechanics = !this.displayMechanics;
+        this.displaySettings.displayMechanics = !this.displaySettings.displayMechanics;
         animateCanvas(noUpdateTime);
     }
 
@@ -595,7 +603,7 @@ class Animator {
         for (let i = 0; i < animator.backgroundActorData.length; i++) {
             animator.backgroundActorData[i].draw();
         }
-        if (this.displayMechanics) {
+        if (this.displaySettings.displayMechanics) {
             for (let i = 0; i < this.mechanicActorData.length; i++) {
                 this.mechanicActorData[i].draw();
             }
@@ -619,7 +627,7 @@ class Animator {
             }
         });
         
-        if (this.displayTrashMobs) {
+        if (this.displaySettings.displayTrashMobs) {
             this.trashMobData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
