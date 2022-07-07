@@ -1028,6 +1028,8 @@ namespace GW2EIEvtcParser
             {
                 case ArcDPSEnums.MinionID.RuneJaggedHorror:
                     return "https://i.imgur.com/opMTn10.png";
+                case ArcDPSEnums.MinionID.RuneMarkIGolem:
+                    return "https://i.imgur.com/0ePg7eN.png";
                 //
                 case ArcDPSEnums.MinionID.Clone1:
                 case ArcDPSEnums.MinionID.Clone2:

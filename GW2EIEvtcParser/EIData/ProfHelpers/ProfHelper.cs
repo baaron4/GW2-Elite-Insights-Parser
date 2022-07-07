@@ -287,6 +287,7 @@ namespace GW2EIEvtcParser.EIData
         private static HashSet<long> CommonMinions = new HashSet<long>()
         {
             (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
+            (int)ArcDPSEnums.MinionID.RuneMarkIGolem,
         };
 
         internal static bool IsKnownMinionID(AgentItem minion, Spec spec)
