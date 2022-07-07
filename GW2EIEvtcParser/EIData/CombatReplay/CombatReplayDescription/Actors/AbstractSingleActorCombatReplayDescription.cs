@@ -15,6 +15,8 @@ namespace GW2EIEvtcParser.EIData
         public long Start { get; }
         public long End { get; }
 
+        public long HitboxWidth { get; }
+
         private static string GetActorType(AbstractSingleActor actor, ParsedEvtcLog log)
         {
             if (actor.AgentItem.IsPlayer)
@@ -41,6 +43,7 @@ namespace GW2EIEvtcParser.EIData
             var positions = new List<float>();
             Positions = positions;
             Type = GetActorType(actor, log);
+            HitboxWidth = actor.AgentItem.HitboxWidth;
             foreach (Point3D pos in replay.PolledPositions)
             {
                 (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
