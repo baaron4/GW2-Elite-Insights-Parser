@@ -137,6 +137,16 @@ namespace GW2EIEvtcParser
             return groupByTime;
         }
 
+        internal static double RadiansToDegree(double radians)
+        {
+            return radians * 180.0 / Math.PI;
+        }
+
+        internal static double DegreeToRadians(double radians)
+        {
+            return radians * Math.PI / 180.0;
+        }
+
         internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
         {
             return en.Select(t => (value: t, eval: evaluate(t)))

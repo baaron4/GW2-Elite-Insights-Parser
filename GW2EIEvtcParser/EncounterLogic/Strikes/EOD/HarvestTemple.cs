@@ -461,13 +461,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                     //
                     var knownEffectsIDs = new HashSet<long>();
-                    var purificationZones = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationZones);
+                    IReadOnlyList<EffectIDToGUIDEvent> purificationZones = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationZones);
                     var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
                     var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
-                    var voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
-                    var voidShellRemovalOffset = 0;
-                    var purificationAdd = 0;
-                    var breakPurification = false;
+                    int voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
+                    int voidShellRemovalOffset = 0;
+                    int purificationAdd = 0;
+                    bool breakPurification = false;
                     foreach (EffectIDToGUIDEvent purificationZone in purificationZones)
                     {
                         var purificationZoneEffects = log.CombatData.GetEffectEvents(purificationZone.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -498,7 +498,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var lightnings = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationLightnings);
+                    IReadOnlyList<EffectIDToGUIDEvent> lightnings = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationLightnings);
                     foreach (EffectIDToGUIDEvent lightning in lightnings)
                     {
                         var lightningEffects = log.CombatData.GetEffectEvents(lightning.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -513,7 +513,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var fireBalls = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationFireBalls);
+                    IReadOnlyList<EffectIDToGUIDEvent> fireBalls = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationFireBalls);
                     foreach (EffectIDToGUIDEvent fireBall in fireBalls)
                     {
                         var fireBallEffects = log.CombatData.GetEffectEvents(fireBall.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -528,7 +528,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var voidZones = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationVoidZones);
+                    IReadOnlyList<EffectIDToGUIDEvent> voidZones = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationVoidZones);
                     foreach (EffectIDToGUIDEvent voidZone in voidZones)
                     {
                         var voidZoneEffects = log.CombatData.GetEffectEvents(voidZone.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -542,7 +542,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var beeLaunches = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationBeeLaunch);
+                    IReadOnlyList<EffectIDToGUIDEvent> beeLaunches = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationBeeLaunch);
                     foreach (EffectIDToGUIDEvent beeLaunch in beeLaunches)
                     {
                         var beeLaunchEffects = log.CombatData.GetEffectEvents(beeLaunch.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -556,7 +556,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var poisonTrails = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationPoisonTrail);
+                    IReadOnlyList<EffectIDToGUIDEvent> poisonTrails = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationPoisonTrail);
                     foreach (EffectIDToGUIDEvent poisonTrail in poisonTrails)
                     {
                         var poisonTrailEffects = log.CombatData.GetEffectEvents(poisonTrail.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
@@ -571,7 +571,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
+                    BreakbarStateEvent breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
                     if (breakbar != null)
                     {
                         int start = (int)breakbar.Time;

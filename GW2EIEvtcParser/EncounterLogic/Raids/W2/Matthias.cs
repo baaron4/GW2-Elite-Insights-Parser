@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
-                            int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
+                            int direction = (int)ParserHelper.RadiansToDegree(Math.Atan2(facing.Y, facing.X));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
                         }

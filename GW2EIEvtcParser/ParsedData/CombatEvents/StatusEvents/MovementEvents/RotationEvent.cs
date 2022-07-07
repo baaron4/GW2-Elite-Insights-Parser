@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void AddPoint3D(CombatReplay replay)
         {
-            (float x, float y, float z) = Unpack();
-            replay.Rotations.Add(new Point3D(x, y, z, Time));
+            (float x, float y, _) = Unpack();
+            replay.Rotations.Add(new Point3D(x, y, 0, Time));
         }
     }
 }
