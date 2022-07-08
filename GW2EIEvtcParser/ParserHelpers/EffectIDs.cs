@@ -13,5 +13,8 @@ namespace GW2EIEvtcParser
         public const long HarvestTemplePurificationFireBalls = 14767;
         public const long HarvestTemplePurificationBeeLaunch = 23438;
         public const long HarvestTemplePurificationPoisonTrail = 28926;
+        public const long HarvestTempleJormagIceShards = 31054;
+        public const long HarvestTempleSpread = 4573;
+        public const long HarvestTempleRedPuddleSelect = 17003;
     }
 }

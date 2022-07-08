@@ -456,11 +456,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+            var knownEffectsIDs = new HashSet<long>();
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                     //
-                    var knownEffectsIDs = new HashSet<long>();
                     IReadOnlyList<EffectIDToGUIDEvent> purificationZones = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTemplePurificationZones);
                     var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
                     var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
@@ -539,8 +539,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 5000;
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 90, 230, RadiansToDegreeF(voidZoneEffect.Orientation.Z),  (start, end), "rgba(150, 0, 150, 0.2)", new PositionConnector(voidZoneEffect.Position)));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, end, 90, 230, RadiansToDegreeF(voidZoneEffect.Orientation.Z), (start, end), "rgba(250, 0, 250, 0.3)", new PositionConnector(voidZoneEffect.Position)));
-                            /*replay.Decorations.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(150, 0, 150, 0.2)", new PositionConnector(voidZoneEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, end, 80, (start, end), "rgba(250, 0, 250, 0.3)", new PositionConnector(voidZoneEffect.Position)));*/
                         }
                     }
                     //
@@ -594,9 +592,118 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     var test = log.CombatData.GetEffectIDToGUIDEvents(18235);*/
                     break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                    IReadOnlyList<EffectIDToGUIDEvent> iceShards = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTempleJormagIceShards);
+                    foreach (EffectIDToGUIDEvent iceShard in iceShards)
+                    {
+                        var iceShardEffects = log.CombatData.GetEffectEvents(iceShard.EffectID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
+                        knownEffectsIDs.Add(iceShard.EffectID);
+                        foreach (EffectEvent iceShardEffect in iceShardEffects)
+                        {
+                            int duration = 2500;
+                            int start = (int)iceShardEffect.Time;
+                            int end = start + duration;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)));
+                        }
+                    }
+                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem).Where(x => x.EffectID != 0 && x.EffectID != 29656 && !knownEffectsIDs.Contains(x.EffectID)).ToList();
+                    var effects2 = log.CombatData.GetEffectEvents(ParserHelper._unknownAgent).Where(x => x.EffectID != 0 && !knownEffectsIDs.Contains(x.EffectID) && x.Time >= target.FirstAware && x.Time <= target.LastAware && (!x.IsAroundDst ||(x.IsAroundDst && x.Dst.IsPlayer)) && x.Time > 48500 && x.Time < 48600).ToList();
+                    foreach (EffectEvent effectEvt in effects2)
+                    {
+                        if (effectEvt.IsAroundDst)
+                        {
+                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                        } 
+                        else
+                        {
+
+                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                        }
+                    }*/
+                    break;
                 default:
                     break;
             }
+        }
+
+        private AbstractSingleActor FindActiveDragonVoid(long time)
+        {
+            var dragonVoidIDs = new List<int> {
+                (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
+                (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
+            };
+            return Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            var knownEffectsIDs = new HashSet<long>();
+            IReadOnlyList<EffectIDToGUIDEvent> spreads = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTempleSpread);
+            foreach (EffectIDToGUIDEvent spread in spreads)
+            {
+                var spreadEffects = log.CombatData.GetEffectEvents(spread.EffectID).Where(x => x.Dst == p.AgentItem).ToList();
+                knownEffectsIDs.Add(spread.EffectID);
+                foreach (EffectEvent spreadEffect in spreadEffects)
+                {
+                    int duration = 5500;
+                    int start = (int)spreadEffect.Time;
+                    int end = start + duration;
+                    AbstractSingleActor dragonVoid = FindActiveDragonVoid(spreadEffect.Time);
+                    if (dragonVoid == null)
+                    {
+                        continue;
+                    }
+                    int effectEnd = Math.Min((int)dragonVoid.LastAware, end);
+                    replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                }
+            }
+            IReadOnlyList<EffectIDToGUIDEvent> redSelecteds = log.CombatData.GetEffectIDToGUIDEvents(EffectIDs.HarvestTempleRedPuddleSelect);
+            foreach (EffectIDToGUIDEvent redSelected in redSelecteds)
+            {
+                var redSelectedEffects = log.CombatData.GetEffectEvents(redSelected.EffectID).Where(x => x.Dst == p.AgentItem).ToList();
+                knownEffectsIDs.Add(redSelected.EffectID);
+                foreach (EffectEvent redSelectedEffect in redSelectedEffects)
+                {
+                    int duration = 6500;
+                    int start = (int)redSelectedEffect.Time;
+                    int end = start + duration;
+                    AbstractSingleActor dragonVoid = FindActiveDragonVoid(redSelectedEffect.Time);
+                    if (dragonVoid == null)
+                    {
+                        continue;
+                    }
+                    int puddleEnd = (int)dragonVoid.LastAware;
+                    int effectEnd = Math.Min(puddleEnd, end);
+                    replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    Point3D pos = p.GetCurrentPosition(log, end);
+                    if (pos == null)
+                    {
+                        continue;
+                    }
+                    replay.Decorations.Add(new CircleDecoration(true, end + 1000, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
+                }
+            }
+            /*var test = log.CombatData.GetEffectEvents(p.AgentItem).Where(x => x.Time > 48000 && x.Time < 50000).ToList();
+            foreach (EffectEvent effectEvt in test)
+            {
+                if (effectEvt.IsAroundDst)
+                {
+                    //replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    //replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                }
+            }*/
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
