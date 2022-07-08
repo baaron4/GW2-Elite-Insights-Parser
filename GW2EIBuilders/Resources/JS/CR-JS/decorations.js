@@ -34,6 +34,9 @@ class MechanicDrawable {
                 let masterId = this.connectedTo;
                 this.master = animator.getActorData(masterId);
             }
+            if (!this.master) {
+                return null;
+            }
             return this.master.getPosition();
         }
     }
@@ -340,6 +343,9 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             if (this.endmaster === null) {
                 let masterId = this.connectedFrom;
                 this.endmaster = animator.getActorData(masterId);
+            }       
+            if (!this.endmaster) {
+                return null;
             }
             return this.endmaster.getPosition();
         }

@@ -318,7 +318,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -332,11 +332,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades3)
@@ -349,14 +349,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadiansToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     break;

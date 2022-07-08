@@ -450,12 +450,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, 900, (RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(false, 0, 900, (RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                             if (i % 5 != 0)
                             {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                                replay.Decorations.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(true, 0, 900, (RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
+                                replay.Decorations.Add(new PieDecoration(false, 0, 900, (RadiansToDegreeF(Math.Atan2(facing.Y, facing.X)) - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                             }
                         }
                     }

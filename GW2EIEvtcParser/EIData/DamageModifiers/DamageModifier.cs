@@ -234,6 +234,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, 0, GW2Builds.May2021Balance, DamageModifierMode.All),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
             new DamageLogDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png", ((x, log) => x.SkillId == OneWolfPackSkill), BySkill, DamageModifierMode.All),
+            new BuffDamageModifier(Emboldened, "Emboldened", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/5/52/Emboldened_%28zero_defeats%29.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife, DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> FightSpecificDamageModifiers = new List<DamageModifier>
         {
