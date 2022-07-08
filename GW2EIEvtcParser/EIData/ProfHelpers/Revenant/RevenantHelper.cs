@@ -82,6 +82,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png"),
                 new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png"),
                 new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png"),
+                new Buff("Tranquil", Tranquil, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png"),
                 new Buff("Impossible Odds", ImpossibleOddsEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png"),
                 new Buff("Legendary Centaur Stance",LegendaryCentaurStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
                 new Buff("Legendary Dwarf Stance",LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b2/Legendary_Dwarf_Stance.png"),
