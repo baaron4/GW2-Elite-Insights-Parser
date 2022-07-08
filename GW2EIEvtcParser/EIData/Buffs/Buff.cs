@@ -740,7 +740,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Repulsion 2", VoidRepulsion2, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Aerial Defense", AerialDefense, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Immunity", VoidImmunity, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
-                new Buff("Void Empowerment", VoidEmpowerment, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
+                new Buff("Void Empowerment", VoidEmpowerment, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 //Open World Soo-Won
                 new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png"),
