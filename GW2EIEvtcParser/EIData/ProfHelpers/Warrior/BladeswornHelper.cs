@@ -40,6 +40,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png"),
             new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
             new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
+            new Buff("TacticalReload", TacticalReload, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/47/Tactical_Reload.png"),
+            new Buff("Overcharged Cartridges", OverchargedCartridges, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/0a/Overcharged_Cartridges.png"),
         };
 
 

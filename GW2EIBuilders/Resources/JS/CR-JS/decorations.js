@@ -343,8 +343,8 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             if (this.endmaster === null) {
                 let masterId = this.connectedFrom;
                 this.endmaster = animator.getActorData(masterId);
-            }          
-            if (!this.master) {
+            }       
+            if (!this.endmaster) {
                 return null;
             }
             return this.endmaster.getPosition();
