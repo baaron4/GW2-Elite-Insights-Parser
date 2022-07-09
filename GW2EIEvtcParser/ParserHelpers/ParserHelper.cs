@@ -169,6 +169,16 @@ namespace GW2EIEvtcParser
                 .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
         }
 
+        internal static string ToHexString(byte[] bytes, int start, int end)
+        {
+            string res = "";
+            for (int i = start; i < end; i++)
+            {
+                res += bytes[i].ToString("X2");
+            }
+            return res;
+        }
+
         /*
         public static string UppercaseFirst(string s)
         {

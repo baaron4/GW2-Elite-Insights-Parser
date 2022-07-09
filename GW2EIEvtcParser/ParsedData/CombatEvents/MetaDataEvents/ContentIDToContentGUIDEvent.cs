@@ -6,8 +6,6 @@ namespace GW2EIEvtcParser.ParsedData
     public class ContentIDToContentGUIDEvent : AbstractMetaDataEvent
     {
 
-        private byte[] ContentGuid { get; }
-
         public string ContentGuidKey { get; }
 
         public ContentLocal ContentType { get; }
@@ -16,12 +14,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal ContentIDToContentGUIDEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            ContentGuid = new byte[16];
+            var guid = new byte[16];
             byte[] first8 = BitConverter.GetBytes(evtcItem.SrcAgent);
             byte[] last8 = BitConverter.GetBytes(evtcItem.DstAgent);
-            first8.CopyTo(ContentGuid, 0);
-            last8.CopyTo(ContentGuid, first8.Length);
-            ContentGuidKey = evtcItem.SrcAgent + "-" + evtcItem.DstAgent;
+            first8.CopyTo(guid, 0);
+            last8.CopyTo(guid, first8.Length);
+            ContentGuidKey = ParserHelper.ToHexString(guid, 0, 16);
             ContentType = GetContentLocal((byte)evtcItem.OverstackValue);
             ContentID = evtcItem.SkillID;
         }
