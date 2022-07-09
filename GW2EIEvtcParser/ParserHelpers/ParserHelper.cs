@@ -1041,6 +1041,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.TheSniperCM:
                     return "https://i.imgur.com/RWIjUoe.png";
                 case ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                case ArcDPSEnums.TrashID.KillableVoidAmalgamate:
                     return "https://i.imgur.com/BuKbosz.png";
             }
             //

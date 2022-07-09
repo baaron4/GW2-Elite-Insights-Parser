@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(subPhase);
             }
             int purificationID = 0;
-            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate))
+            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate || x.ID == (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate))
             {
                 long end;
                 DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
@@ -160,7 +160,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TrashID.VoidObliterator,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
-                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate
+                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
+                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -176,8 +177,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.ZhaitansReach,
                 ArcDPSEnums.TrashID.VoidAbomination,
-                ArcDPSEnums.TrashID.VoidAmalgamate1,
-                ArcDPSEnums.TrashID.VoidAmalgamate2,
+                ArcDPSEnums.TrashID.VoidAmalgamate,
                 ArcDPSEnums.TrashID.VoidBrandbomber,
                 ArcDPSEnums.TrashID.VoidBurster,
                 ArcDPSEnums.TrashID.VoidColdsteel,
@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //
-            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate1);
+            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate);
             bool needRefresh = false;
             foreach (AgentItem voidAmal in voidAmalgamates)
             {
@@ -410,6 +410,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         zhaitanDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && zhaiAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                    case (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate:
                         target.OverrideName("Heart " + (++purificationID));
                         break;
                 }

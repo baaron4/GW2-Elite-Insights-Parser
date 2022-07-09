@@ -618,8 +618,8 @@ namespace GW2EIEvtcParser
             SpiritOfDestruction = 23961,
             // Void Amalgamate
             PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
-            VoidAmalgamate1 = 24375,
-            VoidAmalgamate2 = 23956,
+            VoidAmalgamate = 24375,
+            KillableVoidAmalgamate = 23956,
             VoidTangler = 25138,
             VoidColdsteel = 23945,
             VoidAbomination = 23936,
