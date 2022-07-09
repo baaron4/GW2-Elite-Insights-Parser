@@ -858,7 +858,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<EffectEvent> GetEffectEvents(AgentItem src)
         {
-            if (_statusEvents.EffectsEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
             {
                 return list;
             }
@@ -867,7 +867,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<EffectEvent> GetEffectEventsDst(AgentItem dst)
         {
-            if (_statusEvents.EffectsEventsByDst.TryGetValue(dst, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsByDst.TryGetValue(dst, out List<EffectEvent> list))
             {
                 return list;
             }
@@ -876,11 +876,16 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<EffectEvent> GetEffectEvents(long effectID)
         {
-            if (_statusEvents.EffectEventssByID.TryGetValue(effectID, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsByID.TryGetValue(effectID, out List<EffectEvent> list))
             {
                 return list;
             }
             return new List<EffectEvent>();
+        }
+
+        public IReadOnlyList<EffectEvent> GetEffectEvents()
+        {
+            return _statusEvents.EffectEvents;
         }
 
         public IReadOnlyList<ContentIDToContentGUIDEvent> GetContentIDToContentGUIDEvents(string contentGuidKey)

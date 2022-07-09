@@ -202,11 +202,12 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.StateChange.Effect:
                     var effectEvt = new EffectEvent(stateChangeEvent, agentData);
-                    Add(statusEvents.EffectEventssByID, effectEvt.EffectID, effectEvt);
-                    Add(statusEvents.EffectsEventsBySrc, effectEvt.Src, effectEvt);
+                    statusEvents.EffectEvents.Add(effectEvt);
+                    Add(statusEvents.EffectEventsByID, effectEvt.EffectID, effectEvt);
+                    Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     if (effectEvt.IsAroundDst)
                     {
-                        Add(statusEvents.EffectsEventsByDst, effectEvt.Dst, effectEvt);
+                        Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
