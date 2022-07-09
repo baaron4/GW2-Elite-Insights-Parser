@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
         public Dictionary<ArcDPSEnums.BuffCategory, List<BuffInfoEvent>> BuffInfoEventsByCategory { get; } = new Dictionary<ArcDPSEnums.BuffCategory, List<BuffInfoEvent>>();
         public Dictionary<long, SkillInfoEvent> SkillInfoEvents { get; } = new Dictionary<long, SkillInfoEvent>();
         public List<ErrorEvent> ErrorEvents { get; } = new List<ErrorEvent>();
-        public Dictionary<long, List<EffectIDToGUIDEvent>> EffectIDToGUIDEvents { get; } = new Dictionary<long, List<EffectIDToGUIDEvent>>();
-        public Dictionary<string, List<EffectIDToGUIDEvent>> GUIDToEffectIDEvents { get; } = new Dictionary<string, List<EffectIDToGUIDEvent>>();
+        public Dictionary<long, List<ContentIDToContentGUIDEvent>> ContentIDToContentGUIDEvents { get; } = new Dictionary<long, List<ContentIDToContentGUIDEvent>>();
+        public Dictionary<string, List<ContentIDToContentGUIDEvent>> ContentGUIDToContentIDEvents { get; } = new Dictionary<string, List<ContentIDToContentGUIDEvent>>();
     }
 }

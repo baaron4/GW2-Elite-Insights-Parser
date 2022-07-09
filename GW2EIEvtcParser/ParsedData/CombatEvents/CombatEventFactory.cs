@@ -210,9 +210,9 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
-                    var idToGUIDEvt = new EffectIDToGUIDEvent(stateChangeEvent);
-                    Add(metaDataEvents.EffectIDToGUIDEvents, idToGUIDEvt.EffectID, idToGUIDEvt);
-                    Add(metaDataEvents.GUIDToEffectIDEvents, idToGUIDEvt.GuidKey, idToGUIDEvt);
+                    var idToGUIDEvt = new ContentIDToContentGUIDEvent(stateChangeEvent);
+                    Add(metaDataEvents.ContentIDToContentGUIDEvents, idToGUIDEvt.ContentID, idToGUIDEvt);
+                    Add(metaDataEvents.ContentGUIDToContentIDEvents, idToGUIDEvt.ContentGuidKey, idToGUIDEvt);
                     break;
                 default:
                     break;

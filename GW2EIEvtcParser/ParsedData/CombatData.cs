@@ -883,22 +883,22 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectIDToGUIDEvent> GetEffectIDToGUIDEvents(string guidKey)
+        public IReadOnlyList<ContentIDToContentGUIDEvent> GetContentIDToContentGUIDEvents(string contentGuidKey)
         {
-            if (_metaDataEvents.GUIDToEffectIDEvents.TryGetValue(guidKey, out List<EffectIDToGUIDEvent> list))
+            if (_metaDataEvents.ContentGUIDToContentIDEvents.TryGetValue(contentGuidKey, out List<ContentIDToContentGUIDEvent> list))
             {
                 return list;
             }
-            return new List<EffectIDToGUIDEvent>();
+            return new List<ContentIDToContentGUIDEvent>();
         }
 
-        public IReadOnlyList<EffectIDToGUIDEvent> GetEffectIDToGUIDEvents(long effectID)
+        public IReadOnlyList<ContentIDToContentGUIDEvent> GetContentIDToContentGUIDEvents(long contentID)
         {
-            if (_metaDataEvents.EffectIDToGUIDEvents.TryGetValue(effectID, out List<EffectIDToGUIDEvent> list))
+            if (_metaDataEvents.ContentIDToContentGUIDEvents.TryGetValue(contentID, out List<ContentIDToContentGUIDEvent> list))
             {
                 return list;
             }
-            return new List<EffectIDToGUIDEvent>();
+            return new List<ContentIDToContentGUIDEvent>();
         }
 
     }

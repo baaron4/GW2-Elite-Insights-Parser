@@ -323,6 +323,19 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
         }
 
+        // Content local
+
+        public enum ContentLocal : byte
+        {
+            Effect = 0,
+            Marker = 1,
+            Unknown
+        }
+        internal static ContentLocal GetContentLocal(byte bt)
+        {
+            return bt < (byte)ContentLocal.Unknown ? (ContentLocal)bt : ContentLocal.Unknown;
+        }
+
         // Friend of for
 
         public enum IFF : byte
