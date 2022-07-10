@@ -864,6 +864,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Lump of Crystallized Nougat", LumpOfCrystallizedNougat, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8f/Lump_of_Crystallized_Nougat.png"),
                 new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/9/96/Skale_Venom_%28consumable%29.png"),
                 new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
+                //
+                new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
         internal static readonly List<Buff> Writs = new List<Buff>

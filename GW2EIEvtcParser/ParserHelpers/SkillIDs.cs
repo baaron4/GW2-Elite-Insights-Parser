@@ -192,6 +192,7 @@ namespace GW2EIEvtcParser
         public const long SmiteCondition = 9245;
         public const long JudgesIntervention = 9247;
         public const long RenewedFocus = 9255;
+        public const long ReinforcedArmor = 9283;
         public const long SigilOfBloodlust = 9286;
         public const long SigilOfAir = 9292;
         public const long SigilOfCorruption = 9374;
