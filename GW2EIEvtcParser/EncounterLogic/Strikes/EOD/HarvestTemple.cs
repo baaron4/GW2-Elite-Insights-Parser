@@ -211,7 +211,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var targetOffs = targetables.Where(x => !x.Targetable).ToList();
                 if (targetOffs.Count == 2)
                 {
-                    fightData.SetSuccess(true, targetOffs[1].Time);
+                    AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                    if (lastDamageTaken != null)
+                    {
+                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 100, fightData.FightEnd), playerAgents))
+                        {
+                            return;
+                        }
+                        fightData.SetSuccess(true, targetOffs[1].Time);
+                    }
                 }
             }
         }
