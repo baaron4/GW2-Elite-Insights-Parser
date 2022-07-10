@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.ParsedData
                         case ArcDPSEnums.TrashID.HauntingStatue:
                             Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                             break;
-                        case ArcDPSEnums.TrashID.VoidAmalgamate1:
+                        case ArcDPSEnums.TrashID.VoidAmalgamate:
                             Logic = new HarvestTemple(id);
                             break;
                         default:

@@ -618,14 +618,16 @@ class Animator {
             }
         });
         
-        this.playerData.forEach(function (value, key, map) {
-            if (!value.isSelected()) {
-                value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
+        if (!this.displaySettings.useActorHitboxWidth) {           
+            this.playerData.forEach(function (value, key, map) {
+                if (!value.isSelected()) {
+                    value.draw();
+                    if (_this.attachedActorData.has(key)) {
+                        _this.attachedActorData.get(key).draw();
+                    }
                 }
-            }
-        });
+            });
+        }
         
         if (this.displaySettings.displayTrashMobs) {
             this.trashMobData.forEach(function (value, key, map) {
@@ -646,6 +648,16 @@ class Animator {
                 }
             }
         });
+        if (this.displaySettings.useActorHitboxWidth) {           
+            this.playerData.forEach(function (value, key, map) {
+                if (!value.isSelected()) {
+                    value.draw();
+                    if (_this.attachedActorData.has(key)) {
+                        _this.attachedActorData.get(key).draw();
+                    }
+                }
+            });
+        }
         if (this.selectedActor !== null) {
             this.selectedActor.draw();
             if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {

@@ -64,6 +64,7 @@ namespace GW2EIEvtcParser
             internal const int DirectX11Update = 20210923;
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
+            internal const int FunctionalIDToGUIDEvents = 20220709;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -168,6 +169,16 @@ namespace GW2EIEvtcParser
         {
             return en.Select(t => (value: t, eval: evaluate(t)))
                 .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
+        }
+
+        internal static string ToHexString(byte[] bytes, int start, int end)
+        {
+            string res = "";
+            for (int i = start; i < end; i++)
+            {
+                res += bytes[i].ToString("X2");
+            }
+            return res;
         }
 
         /*

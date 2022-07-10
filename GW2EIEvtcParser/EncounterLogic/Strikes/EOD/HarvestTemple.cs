@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(subPhase);
             }
             int purificationID = 0;
-            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate))
+            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate || x.ID == (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate))
             {
                 long end;
                 DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
@@ -161,7 +161,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TrashID.VoidObliterator,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
-                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate
+                (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
+                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -177,8 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.ZhaitansReach,
                 ArcDPSEnums.TrashID.VoidAbomination,
-                ArcDPSEnums.TrashID.VoidAmalgamate1,
-                ArcDPSEnums.TrashID.VoidAmalgamate2,
+                ArcDPSEnums.TrashID.VoidAmalgamate,
                 ArcDPSEnums.TrashID.VoidBrandbomber,
                 ArcDPSEnums.TrashID.VoidBurster,
                 ArcDPSEnums.TrashID.VoidColdsteel,
@@ -192,6 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.VoidTimeCaster,
                 ArcDPSEnums.TrashID.VoidWarforged1,
                 ArcDPSEnums.TrashID.VoidWarforged2,
+                ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate
             };
         }
 
@@ -251,7 +252,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
                 // Events to be copied
-                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                posFacingHP.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
@@ -269,7 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         end = targetOff.Time;
                     }
-                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, dragonVoid.HitboxWidth, dragonVoid.HitboxHeight);
+                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
                     ulong lastHPUpdate = ulong.MaxValue;
                     foreach (CombatItem c in combatData)
                     {
@@ -287,6 +289,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;
                                 }
+                                c.OverrideSrcAgent(extra.Agent);
+                            }
+                            // Redirect effects from attack target to main body
+                            if (c.IsStateChange == ArcDPSEnums.StateChange.Effect && c.SrcMatchesAgent(atAgent, extensions))
+                            {
                                 c.OverrideSrcAgent(extra.Agent);
                             }
                             if (c.DstMatchesAgent(dragonVoid, extensions))
@@ -309,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //
-            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate1);
+            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate);
             bool needRefresh = false;
             foreach (AgentItem voidAmal in voidAmalgamates)
             {
@@ -318,6 +325,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate);
                     needRefresh = true;
                 }
+            }
+            AgentItem dragonBodyVoidAmalgamate = voidAmalgamates.MaxBy(x => x.LastAware - x.FirstAware);
+            if (dragonBodyVoidAmalgamate != null)
+            {
+                dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate);
+                needRefresh = true;
             }
             if (needRefresh)
             {
@@ -419,6 +432,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         zhaitanDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && zhaiAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                         break;
                     case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+                    case (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate:
                         target.OverrideName("Heart " + (++purificationID));
                         break;
                 }
