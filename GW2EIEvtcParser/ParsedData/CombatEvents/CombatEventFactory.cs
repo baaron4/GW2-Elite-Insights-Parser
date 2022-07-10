@@ -172,9 +172,8 @@ namespace GW2EIEvtcParser.ParsedData
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case ArcDPSEnums.StateChange.Tag:
-                    // Getting ready in case this becomes an actual state event
-                    _ = new TagEvent(stateChangeEvent, agentData);
-                    //Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
+                    var tagEvent = new TagEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.TagEvents, tagEvent.Src, tagEvent);
                     break;
                 case ArcDPSEnums.StateChange.Velocity:
                     var velEvt = new VelocityEvent(stateChangeEvent, agentData);
@@ -211,9 +210,24 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
-                    var idToGUIDEvt = new ContentIDToContentGUIDEvent(stateChangeEvent);
-                    Add(metaDataEvents.ContentIDToContentGUIDEvents, idToGUIDEvt.ContentID, idToGUIDEvt);
-                    Add(metaDataEvents.ContentGUIDToContentIDEvents, idToGUIDEvt.ContentGuidKey, idToGUIDEvt);
+                    switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
+                    {
+                        case ArcDPSEnums.ContentLocal.Effect:
+                            var effectGUID = new EffectGUIDEvent(stateChangeEvent);
+                            metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
+                            metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
+                            break;
+                        case ArcDPSEnums.ContentLocal.Marker:
+                            if (evtcVersion >= ParserHelper.ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                            {
+                                var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
+                                metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
+                                metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 default:
                     break;

@@ -63,6 +63,7 @@ namespace GW2EIEvtcParser
             internal const int DirectX11Update = 20210923;
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
+            internal const int FunctionalIDToGUIDEvents = 20220709;
             //
             internal const int EndOfLife = int.MaxValue;
         }

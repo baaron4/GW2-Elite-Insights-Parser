@@ -36,8 +36,6 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsFake { get; }
         public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
-        public bool HasCommanderTag { get; protected set; }
-
         // Constructors
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
         {
@@ -105,7 +103,6 @@ namespace GW2EIEvtcParser.ParsedData
             HitboxHeight = other.HitboxHeight;
             InstID = other.InstID;
             Master = other.Master;
-            HasCommanderTag = other.HasCommanderTag;
             IsFake = other.IsFake;
         }
 
@@ -167,11 +164,6 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             Master = master;
-        }
-
-        internal void SetCommanderTag(TagEvent tagEvt)
-        {
-            HasCommanderTag = tagEvt.TagID != 0;
         }
 
         private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)

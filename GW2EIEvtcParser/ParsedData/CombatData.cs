@@ -556,14 +556,14 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TargetableEvent>();
         }
 
-        /*public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
+        public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
         {
             if (_statusEvents.TagEvents.TryGetValue(key, out List<TagEvent> list))
             {
                 return list;
             }
             return new List<TagEvent>();
-        }*/
+        }
 
         public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
         {
@@ -888,22 +888,41 @@ namespace GW2EIEvtcParser.ParsedData
             return _statusEvents.EffectEvents;
         }
 
-        public IReadOnlyList<ContentIDToContentGUIDEvent> GetContentIDToContentGUIDEvents(string contentGuidKey)
+        public EffectGUIDEvent GetEffectGUIDEvent(string effectGUID)
         {
-            if (_metaDataEvents.ContentGUIDToContentIDEvents.TryGetValue(contentGuidKey, out List<ContentIDToContentGUIDEvent> list))
+            if (_metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt))
             {
-                return list;
+                return evt;
             }
-            return new List<ContentIDToContentGUIDEvent>();
+            return null;
         }
 
-        public IReadOnlyList<ContentIDToContentGUIDEvent> GetContentIDToContentGUIDEvents(long contentID)
+        public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
         {
-            if (_metaDataEvents.ContentIDToContentGUIDEvents.TryGetValue(contentID, out List<ContentIDToContentGUIDEvent> list))
+            if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
             {
-                return list;
+                return evt;
             }
-            return new List<ContentIDToContentGUIDEvent>();
+            return null;
+        }
+
+
+        public MarkerGUIDEvent GetMarkerGUIDEvent(string markerGUID)
+        {
+            if (_metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(markerGUID, out MarkerGUIDEvent evt))
+            {
+                return evt;
+            }
+            return null;
+        }
+
+        public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
+        {
+            if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
+            {
+                return evt;
+            }
+            return null;
         }
 
     }

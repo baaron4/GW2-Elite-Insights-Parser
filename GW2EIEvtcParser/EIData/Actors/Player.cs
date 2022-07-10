@@ -14,6 +14,8 @@ namespace GW2EIEvtcParser.EIData
     {
         // Fields
 
+        private int _isCommander = -1;
+
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
@@ -66,6 +68,29 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     return FinalActorBuffs.GetBuffsForSelf(log, this, start, end);
             }
+        }
+
+        public bool IsCommander(ParsedEvtcLog log)
+        {
+            if (_isCommander == -1)
+            {
+                IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
+                foreach (TagEvent tagEvent in tagEvents)
+                {
+                    MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
+                    if (marker != null)
+                    {
+                        // check command GUID here
+                    }
+                    else if (tagEvent.TagID != 0)
+                    {
+                        _isCommander = 1;
+                        return true;
+                    }
+                }
+                _isCommander = 0;
+            }            
+            return _isCommander == 1;
         }
 
         public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)

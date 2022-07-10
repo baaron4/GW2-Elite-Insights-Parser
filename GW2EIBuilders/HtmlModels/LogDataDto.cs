@@ -304,7 +304,7 @@ namespace GW2EIBuilders.HtmlModels
             log.UpdateProgressWithCancellationCheck("HTML: building Players");
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                logData.HasCommander = logData.HasCommander || actor.HasCommanderTag;
+                logData.HasCommander = logData.HasCommander || (actor is Player p && p.IsCommander(log));
                 logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
             }
 
