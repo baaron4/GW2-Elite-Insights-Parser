@@ -617,6 +617,7 @@ class Animator {
                 }
             }
         });
+        
         if (!this.displaySettings.useActorHitboxWidth) {           
             this.playerData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
