@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -93,7 +94,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return fightData.LogStart;
         }
-
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new BuffGainCastFinder(MushroomKingsBlessing, 46970, 500), // Mushroom King's Blessing`
+            };
+        }
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
