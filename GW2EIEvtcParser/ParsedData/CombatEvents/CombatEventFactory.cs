@@ -210,23 +210,23 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
-                    switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
+                    if (evtcVersion >= ParserHelper.ArcDPSBuilds.FunctionalIDToGUIDEvents)
                     {
-                        case ArcDPSEnums.ContentLocal.Effect:
-                            var effectGUID = new EffectGUIDEvent(stateChangeEvent);
-                            metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
-                            metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
-                            break;
-                        case ArcDPSEnums.ContentLocal.Marker:
-                            if (evtcVersion >= ParserHelper.ArcDPSBuilds.FunctionalIDToGUIDEvents)
-                            {
+                        switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
+                        {
+                            case ArcDPSEnums.ContentLocal.Effect:
+                                var effectGUID = new EffectGUIDEvent(stateChangeEvent);
+                                metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
+                                metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
+                                break;
+                            case ArcDPSEnums.ContentLocal.Marker:
                                 var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
                                 metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
                                 metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
-                            }
-                            break;
-                        default:
-                            break;
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     break;
                 default:
