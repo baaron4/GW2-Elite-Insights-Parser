@@ -1153,7 +1153,7 @@ namespace GW2EIEvtcParser
         public const long FacetOfNatureDemon = 51704;
         public const long FacetOfElementsTraited = 51706;
         public const long LampBond = 51726;
-        public const long AquaticDetainment = 51755;
+        public const long AquaticDetainmentEffect = 51755;
         public const long EnragedQadim = 51933;
         public const long Waterlogged = 51935;
         public const long PowerOfTheLamp = 52035;
@@ -1175,6 +1175,7 @@ namespace GW2EIEvtcParser
         public const long ConjuredShield = 52754;
         public const long MythwrightSurge = 52863;
         public const long AquaticAuraNikare = 52929;
+        public const long AquaticDetainmentHit = 52931;
         public const long Fixation = 52943;
         public const long ConjuredProtection = 52973;
         public const long Shielded = 53003;

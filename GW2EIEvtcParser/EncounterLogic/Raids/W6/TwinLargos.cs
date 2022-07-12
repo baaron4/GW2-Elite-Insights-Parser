@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
             new HitOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
             new PlayerBuffApplyMechanic(TidalPool, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
-            new HitOnPlayerMechanic(AquaticDetainment, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
+            new HitOnPlayerMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
             new HitOnPlayerMechanic(52130, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
             new HitOnPlayerMechanic(51965, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
             new EnemyBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainment, p, true, true);
+            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainmentEffect, p, true, true);
             int bubbleStart = 0;
             foreach (AbstractBuffEvent c in bubble)
             {
