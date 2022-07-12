@@ -27,13 +27,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _skills[ID];
         }
 
-        internal HashSet<long> _NotAccurate = new HashSet<long>();
-        internal HashSet<long> _Accurate = new HashSet<long>();
+        internal HashSet<long> NotAccurate = new HashSet<long>();
 
         public bool IsNotAccurate(long ID)
         {
-            // Accurate has priority
-            return !_Accurate.Contains(ID) && _NotAccurate.Contains(ID);
+            return NotAccurate.Contains(ID);
         }
 
         internal void Add(long id, string name)
