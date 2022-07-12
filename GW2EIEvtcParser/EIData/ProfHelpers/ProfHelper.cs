@@ -257,26 +257,16 @@ namespace GW2EIEvtcParser.EIData
         {
             var res = new List<InstantCastEvent>();
             ulong build = combatData.GetBuildEvent().Build;
-            var dict = new Dictionary<long, InstantCastFinder>();
-            // Fill dictionary with priority on accurate
             foreach (InstantCastFinder icf in instantCastFinders)
             {
                 if (icf.Available(build))
                 {
-                    if (!dict.TryGetValue(icf.SkillID, out InstantCastFinder inst) || !inst.NotAccurate)
+                    if (icf.NotAccurate)
                     {
-                        dict.Add(icf.SkillID, icf);
-                    } 
+                        skillData.NotAccurate.Add(icf.SkillID);
+                    }
+                    res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
                 }
-            }
-            // Compute instant casts
-            foreach (InstantCastFinder icf in dict.Values)
-            {
-                if (icf.NotAccurate)
-                {
-                    skillData.NotAccurate.Add(icf.SkillID);
-                }
-                res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
             }
             return res;
         }
