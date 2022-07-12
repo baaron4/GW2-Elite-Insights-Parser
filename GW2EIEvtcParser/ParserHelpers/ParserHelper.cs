@@ -950,9 +950,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SorrowDemon3:
                 case ArcDPSEnums.TrashID.SorrowDemon4:
                 case ArcDPSEnums.TrashID.SorrowDemon5:
-                case ArcDPSEnums.TrashID.ScarletPhantom2:
-                case ArcDPSEnums.TrashID.ScarletPhantom1:
                 case ArcDPSEnums.TrashID.ScarletPhantomHP:
+                case ArcDPSEnums.TrashID.ScarletPhantomHP2:
                 case ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:

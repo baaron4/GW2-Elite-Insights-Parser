@@ -580,6 +580,7 @@ namespace GW2EIEvtcParser
             ScarletPhantom1 = 24404,
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
+            ScarletPhantomHP2 = 25262,
             ScarletPhantom2 = 24396,
             // Xunlai Jade Junkyard
             Ankka = 24634,
