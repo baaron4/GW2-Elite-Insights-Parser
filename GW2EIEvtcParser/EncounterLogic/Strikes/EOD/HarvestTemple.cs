@@ -757,17 +757,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
                 }
             }
-            /*var test = log.CombatData.GetEffectEvents(p.AgentItem).Where(x => x.Time > 48000 && x.Time < 50000).ToList();
+            /*if (p != log.PlayerList[0])
+            {
+                return;
+            }
+            var test = log.CombatData.GetEffectEvents(p.AgentItem);
             foreach (EffectEvent effectEvt in test)
             {
                 if (effectEvt.IsAroundDst)
                 {
-                    //replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    //replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
                 }
             }*/
         }
