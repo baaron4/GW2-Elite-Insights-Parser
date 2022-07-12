@@ -83,6 +83,8 @@ namespace GW2EIEvtcParser.EIData
                         switch (marker.ContentGUID)
                         {
                             case MarkerGUIDs.CommanderTag1:
+                            case MarkerGUIDs.CommanderTag2:
+                            case MarkerGUIDs.CommanderTag3:
                                 _isCommander = 1;
                                 return true;
                             default:
