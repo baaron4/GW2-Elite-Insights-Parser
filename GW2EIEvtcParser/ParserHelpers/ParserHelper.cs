@@ -959,6 +959,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
+                case ArcDPSEnums.TrashID.VoidGoliath:
                 case ArcDPSEnums.TrashID.VoidTimeCaster:
                 case ArcDPSEnums.TrashID.VoidGiant2:
                 case ArcDPSEnums.TrashID.VoidTimeCaster2:

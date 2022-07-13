@@ -625,6 +625,7 @@ namespace GW2EIEvtcParser
             VoidWarforged2 = 24855,
             VoidStormseer = 24677,
             VoidMelter = 24223,
+            VoidGoliath = 24761,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals

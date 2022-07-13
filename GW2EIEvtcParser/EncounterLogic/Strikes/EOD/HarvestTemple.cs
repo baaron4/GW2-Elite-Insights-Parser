@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            var subPhasesData = new List<(long start, long end, string name, NPC target)>();
+            var subPhasesData = new List<(long start, long end, string name, NPC target, bool canBeSubPhase)>();
             foreach (NPC target in Targets)
             {
                 long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
@@ -54,27 +54,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                     case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
                     case (int)ArcDPSEnums.TrashID.VoidObliterator:
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, target.Character, target));
+                    case (int)ArcDPSEnums.TrashID.VoidGoliath:
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, target.Character, target, false));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Jormag", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Jormag", target, true));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Kralkatorrik", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Kralkatorrik", target, true));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target, true));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordus", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordus", target, true));
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target, true));
                         AttackTargetEvent attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                         if (attackTargetEvent != null)
                         {
@@ -91,13 +92,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     end = targetOff.Time;
                                 }
-                                subPhasesData.Add((start, end, "Soo-Won " + (++id), target));
+                                subPhasesData.Add((start, end, "Soo-Won " + (++id), target, true));
                             }
                         }
                         break;
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
                         phases[0].AddTarget(target);
-                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target));
+                        subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target, true));
                         break;
                     case (int)ArcDPSEnums.TargetID.DummyTarget:
                         phases[0].AddTarget(target);
@@ -108,10 +109,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            foreach ((long start, long end, string name, NPC target) subPhaseData in subPhasesData)
+            foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
             {
-                var subPhase = new PhaseData(subPhaseData.start, subPhaseData.end, subPhaseData.name);
-                subPhase.AddTarget(subPhaseData.target);
+                var subPhase = new PhaseData(start, end, name);
+                subPhase.CanBeSubPhase = canBeSubPhase;
+                subPhase.AddTarget(target);
                 phases.Add(subPhase);
             }
             int purificationID = 0;
@@ -160,6 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TrashID.VoidObliterator,
+                (int)ArcDPSEnums.TrashID.VoidGoliath,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
                 (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
                 (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate
