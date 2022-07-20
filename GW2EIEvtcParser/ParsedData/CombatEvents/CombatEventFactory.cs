@@ -113,6 +113,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.AttackTarget:
                     var aTEvt = new AttackTargetEvent(stateChangeEvent, agentData);
                     Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
+                    Add(statusEvents.AttackTargetEventsByAttackTarget, aTEvt.AttackTarget, aTEvt);
                     break;
                 case ArcDPSEnums.StateChange.Targetable:
                     var tarEvt = new TargetableEvent(stateChangeEvent, agentData);

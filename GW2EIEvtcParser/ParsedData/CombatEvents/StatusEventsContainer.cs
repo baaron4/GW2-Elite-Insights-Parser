@@ -6,6 +6,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         public Dictionary<AgentItem, List<AliveEvent>> AliveEvents { get; } = new Dictionary<AgentItem, List<AliveEvent>>();
         public Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEvents { get; } = new Dictionary<AgentItem, List<AttackTargetEvent>>();
+        public Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEventsByAttackTarget { get; } = new Dictionary<AgentItem, List<AttackTargetEvent>>();
         public Dictionary<AgentItem, List<DeadEvent>> DeadEvents { get; } = new Dictionary<AgentItem, List<DeadEvent>>();
         public Dictionary<AgentItem, List<DespawnEvent>> DespawnEvents { get; } = new Dictionary<AgentItem, List<DespawnEvent>>();
         public Dictionary<AgentItem, List<DownEvent>> DownEvents { get; } = new Dictionary<AgentItem, List<DownEvent>>();

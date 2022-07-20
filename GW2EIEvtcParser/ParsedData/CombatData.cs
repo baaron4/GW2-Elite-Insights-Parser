@@ -452,6 +452,15 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AttackTargetEvent>();
         }
 
+        public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)
+        {
+            if (_statusEvents.AttackTargetEventsByAttackTarget.TryGetValue(attackTarget, out List<AttackTargetEvent> list))
+            {
+                return list;
+            }
+            return new List<AttackTargetEvent>();
+        }
+
         public IReadOnlyList<DeadEvent> GetDeadEvents(AgentItem src)
         {
             if (_statusEvents.DeadEvents.TryGetValue(src, out List<DeadEvent> list))
