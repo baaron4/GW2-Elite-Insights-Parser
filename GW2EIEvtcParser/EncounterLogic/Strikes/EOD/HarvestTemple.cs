@@ -255,8 +255,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
                 // Events to be copied
-                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                posFacingHP.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
+                var posFacingHPEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                posFacingHPEventsToCopy.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
+                var attackTargetEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget)).ToList();
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
@@ -309,12 +310,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                     attackTargetCopy.OverrideTime(extra.FirstAware);
                     attackTargetCopy.OverrideDstAgent(extra.Agent);
                     combatData.Add(attackTargetCopy);
-                    foreach (CombatItem c in posFacingHP)
+                    foreach (CombatItem c in posFacingHPEventsToCopy)
                     {
                         var cExtra = new CombatItem(c);
                         cExtra.OverrideTime(extra.FirstAware);
                         cExtra.OverrideSrcAgent(extra.Agent);
                         combatData.Add(cExtra);
+                    }
+                    foreach (CombatItem c in attackTargetEventsToCopy)
+                    {
+                        var cExtra = new CombatItem(c);
+                        cExtra.OverrideTime(extra.FirstAware);
+                        cExtra.OverrideDstAgent(extra.Agent);
+                        //combatData.Add(cExtra);
                     }
                 }
             }
