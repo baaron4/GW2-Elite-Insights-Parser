@@ -159,12 +159,30 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void DebugEffects(AbstractSingleActor p, ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
         {
-            IReadOnlyList<EffectEvent> tst = log.CombatData.GetEffectEvents();
-            IReadOnlyList<EffectEvent> tst1 = log.CombatData.GetEffectEventsByDst(p.AgentItem);
-            var effectGUIDs1 = tst1.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
-            IReadOnlyList<EffectEvent> tst2 = log.CombatData.GetEffectEvents(p.AgentItem);
-            var effectGUIDs2 = tst2.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
-            foreach (EffectEvent effectEvt in tst)
+            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents();
+            IReadOnlyList<EffectEvent> effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(p.AgentItem);
+            var hashOnAgent = new HashSet<EffectEvent>(effectEventsOnAgent);
+            var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEvents(p.AgentItem);
+            var hashByAgent = new HashSet<EffectEvent>(effectEventsByAgent);
+            var effectGUIDsByAgent = effectEventsByAgent.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            foreach (EffectEvent effectEvt in allEffectEvents)
+            {
+                if (effectEvt.Time <= start || effectEvt.Time >= end || hashOnAgent.Contains(effectEvt) || hashByAgent.Contains(effectEvt))
+                {
+                    continue;
+                }
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                }
+            }
+            foreach (EffectEvent effectEvt in effectEventsOnAgent)
             {
                 if (effectEvt.Time <= start || effectEvt.Time >= end)
                 {
@@ -172,12 +190,28 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                }
+            }
+            foreach (EffectEvent effectEvt in effectEventsByAgent)
+            {
+                if (effectEvt.Time <= start || effectEvt.Time >= end)
+                {
+                    continue;
+                }
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
         }
