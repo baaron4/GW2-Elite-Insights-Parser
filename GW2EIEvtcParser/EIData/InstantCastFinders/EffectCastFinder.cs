@@ -10,6 +10,17 @@ namespace GW2EIEvtcParser.EIData
         private readonly EffectCastChecker _triggerCondition;
 
         private readonly string _effectGUID;
+
+        protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
+        {
+            return combatData.GetEffectEvents(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        }
+
+        protected virtual AgentItem GetAgent(EffectEvent effectEvent)
+        {
+            return effectEvent.Src;
+        }
+
         public EffectCastFinder(long skillID, string effectGUID, long icd, EffectCastChecker checker = null) : base(skillID, icd)
         {
             NotAccurate = true; // TODO: confirm if culling is server side logic
@@ -29,30 +40,30 @@ namespace GW2EIEvtcParser.EIData
             var res = new List<InstantCastEvent>();
             EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
             if (effectGUIDEvent != null)
-            {            
-                var effects = combatData.GetEffectEvents(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            {
+                Dictionary<AgentItem, List<EffectEvent>> effects = GetEffectEventDict(effectGUIDEvent, combatData);
                 foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
                 {
                     long lastTime = int.MinValue;
-                    foreach (EffectEvent de in pair.Value)
+                    foreach (EffectEvent effectEvent in pair.Value)
                     {
-                        if (de.Time - lastTime < ICD)
+                        if (effectEvent.Time - lastTime < ICD)
                         {
-                            lastTime = de.Time;
+                            lastTime = effectEvent.Time;
                             continue;
                         }
                         if (_triggerCondition != null)
                         {
-                            if (_triggerCondition(de, combatData))
+                            if (_triggerCondition(effectEvent, combatData))
                             {
-                                lastTime = de.Time;
-                                res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.Src));
+                                lastTime = effectEvent.Time;
+                                res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
                             }
                         }
                         else
                         {
-                            lastTime = de.Time;
-                            res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.Src));
+                            lastTime = effectEvent.Time;
+                            res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
                         }
                     }
                 }
