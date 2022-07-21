@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
     public abstract class DamageModifier : IVersionable
     {
 
-        public enum DamageModifierMode { PvE, sPvP, WvW, All, sPvPWvW };
+        public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW };
         public enum DamageSource { All, NoPets };
 
         private DamageType _compareType { get; }
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal DamageModifier WithBuilds(ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife)
+        internal DamageModifier WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
         {
             _minBuild = minBuild;
             _maxBuild = maxBuild;
@@ -154,11 +154,13 @@ namespace GW2EIEvtcParser.EIData
             switch (mode)
             {
                 case FightLogic.ParseMode.Unknown:
+                case FightLogic.ParseMode.OpenWorld:
+                    return Mode == DamageModifierMode.PvE;
                 case FightLogic.ParseMode.FullInstance:
                 case FightLogic.ParseMode.Instanced5:
                 case FightLogic.ParseMode.Instanced10:
                 case FightLogic.ParseMode.Benchmark:
-                    return Mode == DamageModifierMode.PvE;
+                    return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly;
                 case FightLogic.ParseMode.WvW:
                     return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
                 case FightLogic.ParseMode.sPvP:

@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     public abstract class FightLogic
     {
 
-        public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, Unknown };
+        public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
