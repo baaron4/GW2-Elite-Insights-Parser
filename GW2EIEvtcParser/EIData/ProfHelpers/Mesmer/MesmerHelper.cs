@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink, EIData.InstantCastFinder.DefaultICD),
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack, EIData.InstantCastFinder.DefaultICD, (evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD, (evt, log) => evt.Src.Spec == Spec.Mirage || evt.Src.Spec == Spec.Mesmer), // bladesong dissonance generates the same effect
             new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion, EIData.InstantCastFinder.DefaultICD, (evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2)),
         };
 
