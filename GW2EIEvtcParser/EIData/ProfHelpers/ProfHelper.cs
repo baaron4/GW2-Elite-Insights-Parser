@@ -273,6 +273,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            CombatReplay.DebugEffects(p, log, replay, new HashSet<long>());
             return;
         }
 

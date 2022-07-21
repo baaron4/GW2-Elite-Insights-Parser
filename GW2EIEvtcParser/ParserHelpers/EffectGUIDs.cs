@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
         public const string MirageSandThroughGlass = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
-        public const string MirageIllusionaryAmbush = "D7A05478BA0E164396EB90C037DCCF42";
+        //public const string MirageIllusionaryAmbush = "D7A05478BA0E164396EB90C037DCCF42"; // share the same effect with other stuff
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
