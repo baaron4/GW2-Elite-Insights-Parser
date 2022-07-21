@@ -271,6 +271,28 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            return;
+            IReadOnlyList<EffectEvent> tst = log.CombatData.GetEffectEvents();
+            IReadOnlyList<EffectEvent> tst1 = log.CombatData.GetEffectEventsByDst(p.AgentItem);
+            var effectGUIDs1 = tst1.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            IReadOnlyList<EffectEvent> tst2 = log.CombatData.GetEffectEvents(p.AgentItem);
+            var effectGUIDs2 = tst2.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            foreach (EffectEvent effectEvt in tst)
+            {
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                }
+            }      
+        }
+
 
         private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
         {

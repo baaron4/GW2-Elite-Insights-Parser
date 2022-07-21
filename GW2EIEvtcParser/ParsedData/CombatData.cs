@@ -565,14 +565,14 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TargetableEvent>();
         }
 
-        /*public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
+        public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
         {
             if (_statusEvents.TagEvents.TryGetValue(key, out List<TagEvent> list))
             {
                 return list;
             }
             return new List<TagEvent>();
-        }*/
+        }
 
         public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
         {
@@ -867,16 +867,16 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<EffectEvent> GetEffectEvents(AgentItem src)
         {
-            if (_statusEvents.EffectsEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
             {
                 return list;
             }
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEventsDst(AgentItem dst)
+        public IReadOnlyList<EffectEvent> GetEffectEventsByDst(AgentItem dst)
         {
-            if (_statusEvents.EffectsEventsByDst.TryGetValue(dst, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsByDst.TryGetValue(dst, out List<EffectEvent> list))
             {
                 return list;
             }
@@ -885,29 +885,53 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<EffectEvent> GetEffectEvents(long effectID)
         {
-            if (_statusEvents.EffectEventssByID.TryGetValue(effectID, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsByID.TryGetValue(effectID, out List<EffectEvent> list))
             {
                 return list;
             }
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectIDToGUIDEvent> GetEffectIDToGUIDEvents(string guidKey)
+        public IReadOnlyList<EffectEvent> GetEffectEvents()
         {
-            if (_metaDataEvents.GUIDToEffectIDEvents.TryGetValue(guidKey, out List<EffectIDToGUIDEvent> list))
-            {
-                return list;
-            }
-            return new List<EffectIDToGUIDEvent>();
+            return _statusEvents.EffectEvents;
         }
 
-        public IReadOnlyList<EffectIDToGUIDEvent> GetEffectIDToGUIDEvents(long effectID)
+        public EffectGUIDEvent GetEffectGUIDEvent(string effectGUID)
         {
-            if (_metaDataEvents.EffectIDToGUIDEvents.TryGetValue(effectID, out List<EffectIDToGUIDEvent> list))
+            if (_metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt))
             {
-                return list;
+                return evt;
             }
-            return new List<EffectIDToGUIDEvent>();
+            return null;
+        }
+
+        public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
+        {
+            if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
+            {
+                return evt;
+            }
+            return null;
+        }
+
+
+        public MarkerGUIDEvent GetMarkerGUIDEvent(string markerGUID)
+        {
+            if (_metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(markerGUID, out MarkerGUIDEvent evt))
+            {
+                return evt;
+            }
+            return null;
+        }
+
+        public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
+        {
+            if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
+            {
+                return evt;
+            }
+            return null;
         }
 
     }

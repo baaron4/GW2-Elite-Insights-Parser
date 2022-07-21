@@ -60,7 +60,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             Acc = actor.Account;
             Profession = actor.Spec.ToString();
             IsPoV = log.LogData.PoV == actor.AgentItem;
-            IsCommander = actor.HasCommanderTag;
+            IsCommander = actor is Player p && p.IsCommander(log);
             (ColTarget, ColCleave, ColTotal) = GetSpecGraphColor(actor.BaseSpec);
             IsFake = actor.IsFakeActor;
             NotInSquad = !(actor is Player);

@@ -173,9 +173,8 @@ namespace GW2EIEvtcParser.ParsedData
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case ArcDPSEnums.StateChange.Tag:
-                    // Getting ready in case this becomes an actual state event
-                    _ = new TagEvent(stateChangeEvent, agentData);
-                    //Add(metaDataEvents.TagEvents, tagEvt.Src, tagEvt);
+                    var tagEvent = new TagEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.TagEvents, tagEvent.Src, tagEvent);
                     break;
                 case ArcDPSEnums.StateChange.Velocity:
                     var velEvt = new VelocityEvent(stateChangeEvent, agentData);
@@ -203,17 +202,33 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.StateChange.Effect:
                     var effectEvt = new EffectEvent(stateChangeEvent, agentData);
-                    Add(statusEvents.EffectEventssByID, effectEvt.EffectID, effectEvt);
-                    Add(statusEvents.EffectsEventsBySrc, effectEvt.Src, effectEvt);
+                    statusEvents.EffectEvents.Add(effectEvt);
+                    Add(statusEvents.EffectEventsByID, effectEvt.EffectID, effectEvt);
+                    Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     if (effectEvt.IsAroundDst)
                     {
-                        Add(statusEvents.EffectsEventsByDst, effectEvt.Dst, effectEvt);
+                        Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
-                    var idToGUIDEvt = new EffectIDToGUIDEvent(stateChangeEvent);
-                    Add(metaDataEvents.EffectIDToGUIDEvents, idToGUIDEvt.EffectID, idToGUIDEvt);
-                    Add(metaDataEvents.GUIDToEffectIDEvents, idToGUIDEvt.GuidKey, idToGUIDEvt);
+                    if (evtcVersion >= ParserHelper.ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                    {
+                        switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
+                        {
+                            case ArcDPSEnums.ContentLocal.Effect:
+                                var effectGUID = new EffectGUIDEvent(stateChangeEvent);
+                                metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
+                                metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
+                                break;
+                            case ArcDPSEnums.ContentLocal.Marker:
+                                var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
+                                metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
+                                metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
                 default:
                     break;

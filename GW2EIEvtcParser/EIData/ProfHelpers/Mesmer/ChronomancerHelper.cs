@@ -13,6 +13,9 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(ContinuumSplit, TimeAnchored, EIData.InstantCastFinder.DefaultICD), // Continuum Split
             new BuffLossCastFinder(ContinuumShift, TimeAnchored, EIData.InstantCastFinder.DefaultICD), // Continuum Shift
+            new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink, EIData.InstantCastFinder.DefaultICD),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

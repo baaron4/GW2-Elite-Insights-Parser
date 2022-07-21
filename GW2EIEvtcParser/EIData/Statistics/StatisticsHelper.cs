@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EIData
         private void SetStackCommanderPositions(ParsedEvtcLog log)
         {
             _stackCommanderPositions = new List<Point3D>();
-            Player commander = log.PlayerList.FirstOrDefault(x => x.HasCommanderTag);
+            Player commander = log.PlayerList.FirstOrDefault(x => x.IsCommander(log));
             if (log.CombatData.HasMovementData && commander != null)
             {
                 _stackCommanderPositions = new List<Point3D>(commander.GetCombatReplayPolledPositions(log));

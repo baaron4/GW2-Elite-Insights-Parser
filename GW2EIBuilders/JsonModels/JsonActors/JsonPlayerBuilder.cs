@@ -39,7 +39,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonPlayer.GuildID = guildEvent.APIString;
             }
             jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
-            jsonPlayer.HasCommanderTag = player.HasCommanderTag;
+            jsonPlayer.HasCommanderTag = player is Player p && p.IsCommander(log);
             //
             jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonPlayerSupport(player.GetToPlayerSupportStats(log, phase.Start, phase.End))).ToArray();
             var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
