@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
                 IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
                 foreach (TagEvent tagEvent in tagEvents)
                 {
-                    MarkerGUIDEvent marker = null;// log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
+                    MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
                     if (marker != null)
                     {
                         switch (marker.ContentGUID)
