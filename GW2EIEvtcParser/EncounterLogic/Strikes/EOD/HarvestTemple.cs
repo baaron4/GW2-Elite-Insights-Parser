@@ -683,6 +683,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         continue;
                     }
                     int effectEnd = Math.Min((int)dragonVoid.LastAware, end);
+                    DeadEvent deadEvent = log.CombatData.GetDeadEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
+                    if (deadEvent != null)
+                    {
+                        effectEnd = Math.Min((int)deadEvent.Time, end);
+                    }
+                    DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
+                    if (despawnEvent != null)
+                    {
+                        effectEnd = Math.Min((int)despawnEvent.Time, end);
+                    }
                     replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                 }
