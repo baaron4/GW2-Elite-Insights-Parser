@@ -609,17 +609,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
-                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem).Where(x => x.EffectID != 0 && x.EffectID != 29656 && !knownEffectsIDs.Contains(x.EffectID)).ToList();
-                    var effects2 = log.CombatData.GetEffectEvents(ParserHelper._unknownAgent).Where(x => x.EffectID != 0 && !knownEffectsIDs.Contains(x.EffectID) && x.Time >= target.FirstAware && x.Time <= target.LastAware && !x.IsAroundDst).ToList();
-                    foreach (EffectEvent effectEvt in effects)
-                    {
-                        if (effectEvt.IsAroundDst)
-                        {
-                            continue;
-                        }
-                        replay.Decorations.Insert(0,new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 2000), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
-                    }
-                    var test = log.CombatData.GetEffectIDToGUIDEvents(18235);*/
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                     EffectGUIDEvent iceShard = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagIceShards);
@@ -636,20 +625,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)));
                         }
                     }
-                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem).Where(x => x.EffectID != 0 && x.EffectID != 29656 && !knownEffectsIDs.Contains(x.EffectID)).ToList();
-                    var effects2 = log.CombatData.GetEffectEvents(ParserHelper._unknownAgent).Where(x => x.EffectID != 0 && !knownEffectsIDs.Contains(x.EffectID) && x.Time >= target.FirstAware && x.Time <= target.LastAware && (!x.IsAroundDst ||(x.IsAroundDst && x.Dst.IsPlayer)) && x.Time > 48500 && x.Time < 48600).ToList();
-                    foreach (EffectEvent effectEvt in effects2)
-                    {
-                        if (effectEvt.IsAroundDst)
-                        {
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
-                        } 
-                        else
-                        {
-
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
-                        }
-                    }*/
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                     EffectGUIDEvent smallJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusSmallJaw);
@@ -668,36 +643,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 580, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
                         }
                     }
-                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem).Where(x => x.EffectID != 0 && x.EffectID != 3819 && !knownEffectsIDs.Contains(x.EffectID)).ToList();
-                    var effects2 = log.CombatData.GetEffectEvents(ParserHelper._unknownAgent).Where(x => x.EffectID != 0 && x.EffectID != 3819 && !knownEffectsIDs.Contains(x.EffectID) && x.EffectID != EffectGUIDs.HarvestTempleJormagIceShards && x.Time >= target.FirstAware && x.Time <= target.LastAware && (!x.IsAroundDst) && x.Time > 170000 && x.Time < 175000).ToList();
-                    foreach (EffectEvent effectEvt in effects2)
-                    {
-                        if (effectEvt.IsAroundDst)
-                        {
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
-                        } 
-                        else
-                        {
-
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
-                        }
-                    }*/
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
-                    /*var effects = log.CombatData.GetEffectEvents(target.AgentItem).Where(x => x.EffectID != 0 && !knownEffectsIDs.Contains(x.EffectID)).ToList();
-                    var effects2 = log.CombatData.GetEffectEvents().Where(x => x.EffectID != 0 && !knownEffectsIDs.Contains(x.EffectID) && x.Time >= target.FirstAware && x.Time <= target.LastAware && (!x.IsAroundDst || (x.IsAroundDst && x.Dst.IsPlayer)) && x.Time > 133000 && x.Time < 142000 && x.Src != ParserHelper._unknownAgent && !x.Src.GetFinalMaster().IsPlayer).ToList();
-                    foreach (EffectEvent effectEvt in effects2)
-                    {
-                        if (effectEvt.IsAroundDst)
-                        {
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
-                        }
-                        else
-                        {
-
-                            replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
-                        }
-                    }*/
                     break;
                 default:
                     break;
@@ -768,23 +715,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
                 }
             }
-            /*if (p != log.PlayerList[0])
-            {
-                return;
-            }
-            var test = log.CombatData.GetEffectEvents(p.AgentItem);
-            foreach (EffectEvent effectEvt in test)
-            {
-                if (effectEvt.IsAroundDst)
-                {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
-                }
-                else
-                {
-
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
-                }
-            }*/
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
