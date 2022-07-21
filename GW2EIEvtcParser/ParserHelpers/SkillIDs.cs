@@ -258,8 +258,10 @@ namespace GW2EIEvtcParser
         public const long BowlOfFireMeatChili = 10119;
         public const long CryOfFrustration = 10190;
         public const long MindWrack = 10191;
+        public const long DistortionSkill = 10192;
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
+        public const long Blink = 10200;
         public const long MantraOfPain = 10211;
         public const long PowerSpike = 10212;
         public const long MantraOfRecovery = 10213;
@@ -269,11 +271,13 @@ namespace GW2EIEvtcParser
         public const long SignetOfMidnightSkill = 10234;
         public const long SignetOfInspirationEffect = 10235;
         public const long SignetOfInspirationSkill = 10236;
-        public const long Distortion = 10243;
+        public const long DistortionEffect = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
         public const long IllusionaryCounter = 10278;
         public const long IllusionaryRiposte = 10279;
+        public const long Diversion = 10287;
+        public const long Feedback = 10302;
         public const long ChaosAura = 10332;
         public const long Blur = 10335;
         public const long IllusionOfLife = 10346;
@@ -978,6 +982,7 @@ namespace GW2EIEvtcParser
         public const long ExitBeastMode = 43014;
         public const long WovenAir = 43038;
         public const long BraveStride = 43063;
+        public const long SandThroughGlass = 43064;
         public const long SpectrumShieldEffect = 43066;
         public const long UnbrokenLines = 43194;
         public const long BreakingWave = 43199;
@@ -1028,6 +1033,7 @@ namespace GW2EIEvtcParser
         public const long Deadly = 44932;
         public const long SoulcleavesSummit = 45026;
         public const long MoaStanceEffect = 45038;
+        public const long IllusionaryAmbush = 45046;
         public const long StoneResonanceEffect = 45097;
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
@@ -1119,6 +1125,7 @@ namespace GW2EIEvtcParser
         public const long SoulStoneVenomSkill = 49052;
         public const long CompoundingPower = 49058;
         public const long IronBlooded = 49065;
+        public const long MindWrackAmmo = 49068;
         public const long SoulStoneVenomEffect = 49083;
         public const long IllusionaryDefense = 49099;
         public const long EchosPickup = 49125;
@@ -1235,6 +1242,7 @@ namespace GW2EIEvtcParser
         public const long BatteringBlitz = 56616;
         public const long DiamondPalisade = 56636;
         public const long PoisonedPower = 56655;
+        public const long TimeSink = 56873;
         public const long Sunspot = 56883;
         public const long EarthenBlast = 56885;
         public const long SymbolicAvenger = 56890;
