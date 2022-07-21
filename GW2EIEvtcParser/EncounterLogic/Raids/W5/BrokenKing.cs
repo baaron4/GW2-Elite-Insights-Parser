@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48218, 48218, InstantCastFinder.DefaultICD), // Biting Aura
+                new DamageCastFinder(48218, 48218), // Biting Aura
             };
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

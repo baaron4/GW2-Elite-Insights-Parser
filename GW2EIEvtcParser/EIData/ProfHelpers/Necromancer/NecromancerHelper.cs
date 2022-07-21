@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterDeathShroud, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
-            new BuffLossCastFinder(ExitDeathShroud, DeathShroud, EIData.InstantCastFinder.DefaultICD), // Death shroud
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit, EIData.InstantCastFinder.DefaultICD), // Spiteful Spirit
-            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble, EIData.InstantCastFinder.DefaultICD), // Lesser Enfeeble
-            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers, EIData.InstantCastFinder.DefaultICD), // Lesser Spinal Shivers
-            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Armor
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.December2018Balance), // Spectral Walk
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.December2018Balance, GW2Builds.EndOfLife), // Spectral Walk
+            new BuffGainCastFinder(EnterDeathShroud, DeathShroud), // Death shroud
+            new BuffLossCastFinder(ExitDeathShroud, DeathShroud), // Death shroud
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit), // Spiteful Spirit
+            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble), // Lesser Enfeeble
+            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers), // Lesser Spinal Shivers
+            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Armor
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance), // Spectral Walk
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Walk
         };
 
 

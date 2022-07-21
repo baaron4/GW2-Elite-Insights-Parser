@@ -51,10 +51,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian, InstantCastFinder.DefaultICD),
+                new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian),
+                new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian),
+                new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian),
+                new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian),
             };
         }
 

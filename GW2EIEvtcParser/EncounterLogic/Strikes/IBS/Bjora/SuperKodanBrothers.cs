@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58174, 58174, InstantCastFinder.DefaultICD), // Vengeful Aura Claw
+                new DamageCastFinder(58174, 58174), // Vengeful Aura Claw
             };
         }
         protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)

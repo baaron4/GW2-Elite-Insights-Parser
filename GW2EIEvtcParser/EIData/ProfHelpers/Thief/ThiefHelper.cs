@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Shadowstep,Infiltration,EIData.InstantCastFinder.DefaultICD), // Shadowstep
-            new BuffLossCastFinder(ShadowReturn,Infiltration,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(Mug, Mug, EIData.InstantCastFinder.DefaultICD), // Mug
-            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive,EIData.InstantCastFinder.DefaultICD), // Assassin's Signet
-            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect,EIData.InstantCastFinder.DefaultICD), // Devourer Venom
-            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect,EIData.InstantCastFinder.DefaultICD), // Ice Drake Venom
-            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect,EIData.InstantCastFinder.DefaultICD), // Skale Venom
-            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect,EIData.InstantCastFinder.DefaultICD), // Soul Stone Venom
+            new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
+            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
+            new DamageCastFinder(Mug, Mug), // Mug
+            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
+            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect), // Devourer Venom
+            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
+            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
             //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
         };
 

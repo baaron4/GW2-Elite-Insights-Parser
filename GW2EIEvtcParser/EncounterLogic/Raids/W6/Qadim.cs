@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(52522, 52522, InstantCastFinder.DefaultICD), // Burning Crucible
+                new DamageCastFinder(52522, 52522), // Burning Crucible
             };
         }
 

@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Celestial Avatar
-            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar,EIData.InstantCastFinder.DefaultICD), // Release Celestial Avatar
-            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality, EIData.InstantCastFinder.DefaultICD), // Glyph of Equality (non-CA)
+            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar), // Celestial Avatar
+            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar), // Release Celestial Avatar
+            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality), // Glyph of Equality (non-CA)
         };
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>

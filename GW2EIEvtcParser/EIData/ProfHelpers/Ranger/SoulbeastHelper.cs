@@ -12,24 +12,24 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Stout
-            new BuffGainCastFinder(EnterBeastMode,Stout,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Stout,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Stout), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Stout), // Leave Beastmode
             // Deadly
-            new BuffGainCastFinder(EnterBeastMode,Deadly,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Deadly,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Deadly), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Deadly), // Leave Beastmode
             // Versatile
-            new BuffGainCastFinder(EnterBeastMode,Versatile,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Versatile,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Versatile), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Versatile), // Leave Beastmode
             // Ferocious
-            new BuffGainCastFinder(EnterBeastMode,Ferocious,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Ferocious,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Ferocious), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Ferocious), // Leave Beastmode
             // Supportive
-            new BuffGainCastFinder(EnterBeastMode,Supportive,EIData.InstantCastFinder.DefaultICD), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Supportive,EIData.InstantCastFinder.DefaultICD), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode,Supportive), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode,Supportive), // Leave Beastmode
             // 
-            new BuffGiveCastFinder(DolyakStanceSkill,DolyakStanceEffect,EIData.InstantCastFinder.DefaultICD), // Dolyak Stance
-            new BuffGiveCastFinder(MoaStanceSkill,MoaStanceEffect,EIData.InstantCastFinder.DefaultICD), // Moa Stance
-            new BuffGiveCastFinder(VultureStanceSkill,VultureStanceEffect,EIData.InstantCastFinder.DefaultICD), // Vulture Stance
+            new BuffGiveCastFinder(DolyakStanceSkill,DolyakStanceEffect), // Dolyak Stance
+            new BuffGiveCastFinder(MoaStanceSkill,MoaStanceEffect), // Moa Stance
+            new BuffGiveCastFinder(VultureStanceSkill,VultureStanceEffect), // Vulture Stance
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

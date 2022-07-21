@@ -13,19 +13,20 @@ namespace GW2EIEvtcParser.EIData
     {
         private class EngineerKitFinder : WeaponSwapCastFinder
         {
-            public EngineerKitFinder(long skillID, long icd, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife) : base(skillID, WeaponSetIDs.KitSet, icd, minBuild, maxBuild, (swap, combatData, skillData) =>
+            public EngineerKitFinder(long skillID) : base(skillID, WeaponSetIDs.KitSet)
             {
-                SkillItem skill = skillData.Get(skillID);
-                if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
+                UsingChecker((swap, combatData, skillData) =>
                 {
-                    return false;
-                }
-                WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
-                long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
-                var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
-                return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
-            })
-            {
+                    SkillItem skill = skillData.Get(skillID);
+                    if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
+                    {
+                        return false;
+                    }
+                    WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
+                    long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
+                    var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
+                    return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
+                });
                 NotAccurate = true;
             }
         }
@@ -49,17 +50,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Explosive Entrance
-            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect,EIData.InstantCastFinder.DefaultICD), // Elixir S
-            new DamageCastFinder(OverchargedShot,OverchargedShot,EIData.InstantCastFinder.DefaultICD), // Overcharged Shot
+            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance), // Explosive Entrance
+            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect), // Elixir S
+            new DamageCastFinder(OverchargedShot,OverchargedShot), // Overcharged Shot
             // Kits
-            new EngineerKitFinder(BombKit, EIData.InstantCastFinder.DefaultICD), // Bomb Kit
-            new EngineerKitFinder(ElixirGun, EIData.InstantCastFinder.DefaultICD), // Elixir Gun
-            new EngineerKitFinder(Flamethrower, EIData.InstantCastFinder.DefaultICD), // Flamethrower
-            new EngineerKitFinder(GrenadeKit, EIData.InstantCastFinder.DefaultICD), // Grenade Kit
-            new EngineerKitFinder(MedKitSkill, EIData.InstantCastFinder.DefaultICD), // Med Kit
-            new EngineerKitFinder(ToolKit, EIData.InstantCastFinder.DefaultICD), // Tool Kit
-            new EngineerKitFinder(EliteMortarKit, EIData.InstantCastFinder.DefaultICD), // Elite Mortar Kit
+            new EngineerKitFinder(BombKit), // Bomb Kit
+            new EngineerKitFinder(ElixirGun), // Elixir Gun
+            new EngineerKitFinder(Flamethrower), // Flamethrower
+            new EngineerKitFinder(GrenadeKit), // Grenade Kit
+            new EngineerKitFinder(MedKitSkill), // Med Kit
+            new EngineerKitFinder(ToolKit), // Tool Kit
+            new EngineerKitFinder(EliteMortarKit), // Elite Mortar Kit
         };
 
 

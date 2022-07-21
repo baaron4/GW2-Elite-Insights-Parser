@@ -15,29 +15,29 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceEffect, EIData.InstantCastFinder.DefaultICD), // Primordial Stance
-            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceEffect, 500), // Stone Resonance
-            new BuffGainCastFinder(UnravelSkill, UnravelEffect, EIData.InstantCastFinder.DefaultICD), // Unravel
+            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceEffect), // Primordial Stance
+            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceEffect).UsingICD(500), // Stone Resonance
+            new BuffGainCastFinder(UnravelSkill, UnravelEffect), // Unravel
             // Fire       
-            new BuffGainCastFinder(DualFireAttunement, DualFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireAirAttunement, FireAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(FireEarthAttunement, FireEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(DualFireAttunement, DualFireAttunement),
+            new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement),
+            new BuffGainCastFinder(FireAirAttunement, FireAirAttunement),
+            new BuffGainCastFinder(FireEarthAttunement, FireEarthAttunement),
             // Water
-            new BuffGainCastFinder(WaterFireAttunement, WaterFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualWaterAttunement, DualWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(WaterAirAttunement, WaterAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(WaterEarthAttunement, WaterEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(WaterFireAttunement, WaterFireAttunement),
+            new BuffGainCastFinder(DualWaterAttunement, DualWaterAttunement),
+            new BuffGainCastFinder(WaterAirAttunement, WaterAirAttunement),
+            new BuffGainCastFinder(WaterEarthAttunement, WaterEarthAttunement),
             // Air
-            new BuffGainCastFinder(AirFireAttunement, AirFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(AirWaterAttunement, AirWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualAirAttunement, DualAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(AirEarthAttunement, AirEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(AirFireAttunement, AirFireAttunement),
+            new BuffGainCastFinder(AirWaterAttunement, AirWaterAttunement),
+            new BuffGainCastFinder(DualAirAttunement, DualAirAttunement),
+            new BuffGainCastFinder(AirEarthAttunement, AirEarthAttunement),
             // Earth
-            new BuffGainCastFinder(EarthFireAttunement, EarthFireAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(EarthWaterAttunement, EarthWaterAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(EarthAirAttunement, EarthAirAttunement, EIData.InstantCastFinder.DefaultICD),
-            new BuffGainCastFinder(DualEarthAttunement, DualEarthAttunement, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(EarthFireAttunement, EarthFireAttunement),
+            new BuffGainCastFinder(EarthWaterAttunement, EarthWaterAttunement),
+            new BuffGainCastFinder(EarthAirAttunement, EarthAirAttunement),
+            new BuffGainCastFinder(DualEarthAttunement, DualEarthAttunement),
         };
 
 

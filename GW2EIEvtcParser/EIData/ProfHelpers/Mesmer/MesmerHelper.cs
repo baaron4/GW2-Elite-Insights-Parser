@@ -16,10 +16,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(PowerSpike, PowerSpike, EIData.InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Power spike
-            new DamageCastFinder(MantraOfPain, MantraOfPain, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Pain
-            new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery, EIData.InstantCastFinder.DefaultICD, GW2Builds.May2021Balance, GW2Builds.EndOfLife), // Mantra of Recovery
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect, EIData.InstantCastFinder.DefaultICD, (brae, combatData) => {
+            new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.May2021Balance), // Power spike
+            new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance), // Mantra of Pain
+            new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance), // Mantra of Recovery
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData) => {
                 return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == SkillIDs.HideInShadows &&
@@ -27,11 +27,10 @@ namespace GW2EIEvtcParser.EIData
                                     bae.CreditedBy == brae.To &&
                                     Math.Abs(brae.Time - bae.Time) <= ServerDelayConstant
                                  );
-                }
-            ), // Signet of Midnight
-            new BuffGainCastFinder(PortalEntre, PortalWeaving, EIData.InstantCastFinder.DefaultICD), // Portal Entre
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender, EIData.InstantCastFinder.DefaultICD), // Lesser Phantasmal Defender
-            /*new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
+                }), // Signet of Midnight
+            new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
+            /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
                     10235, 30739, 21751, 10231, 10246, 10233
@@ -46,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
 
             }), // Distortion
-            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
+            new BuffGainCastFinder(10192, 10243, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
                 if (evt.To.Prof == "Chronomancer")
                 {
                     return false;
@@ -65,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
 
             }), // Distortion
-            new BuffGainCastFinder(10192, 10243, EIData.InstantCastFinder.DefaultICD, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
+            new BuffGainCastFinder(10192, 10243, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
                     10235, 30739, 21751, 10231, 10246, 10233
@@ -80,12 +79,12 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack, EIData.InstantCastFinder.DefaultICD, (evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion, EIData.InstantCastFinder.DefaultICD, (evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2)),
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
         };
 
 

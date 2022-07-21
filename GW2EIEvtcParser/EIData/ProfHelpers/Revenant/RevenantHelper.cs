@@ -12,19 +12,19 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Assassin Stance
-            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Demon Stance
-            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Dwarf Stance
-            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Centaur Stance
-            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsEffect, 500), // Impossible Odds
-            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect, 500), // Relinquish Power
-            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect, EIData.InstantCastFinder.DefaultICD), // Vengeful Hammers
-            new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect, EIData.InstantCastFinder.DefaultICD), // Release Hammers
-            new DamageCastFinder(InvokingTorment, InvokingTorment, EIData.InstantCastFinder.DefaultICD, GW2Builds.February2020Balance, GW2Builds.EndOfLife), // Invoking Torment
-            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin, EIData.InstantCastFinder.DefaultICD), // Call of the Assassin
-            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf, EIData.InstantCastFinder.DefaultICD), // Call of the Dwarf
-            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon, EIData.InstantCastFinder.DefaultICD), // Call of the Demon
-            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur, EIData.InstantCastFinder.DefaultICD), // Call of the Centaur
+            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceEffect), // Legendary Assassin Stance
+            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceEffect), // Legendary Demon Stance
+            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceEffect), // Legendary Dwarf Stance
+            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceEffect), // Legendary Centaur Stance
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsEffect).UsingICD(500), // Impossible Odds
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect).UsingICD(500), // Relinquish Power
+            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect), // Vengeful Hammers
+            new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect), // Release Hammers
+            new DamageCastFinder(InvokingTorment, InvokingTorment).WithBuilds(GW2Builds.February2020Balance), // Invoking Torment
+            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
+            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
+            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
+            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
         };
 
 
