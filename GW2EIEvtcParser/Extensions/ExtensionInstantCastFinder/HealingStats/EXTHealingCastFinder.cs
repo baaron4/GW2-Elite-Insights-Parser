@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.Extensions
             NotAccurate = true;
             _damageSkillID = damageSkillID;
         }
-        internal EXTHealingCastFinder UsingChecker(HealingCastChecker checker = null)
+        internal EXTHealingCastFinder UsingChecker(HealingCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

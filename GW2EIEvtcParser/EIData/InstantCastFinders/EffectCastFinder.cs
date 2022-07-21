@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             _effectGUID = effectGUID;
         }
 
-        internal EffectCastFinder UsingChecker(EffectCastChecker checker = null)
+        internal EffectCastFinder UsingChecker(EffectCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

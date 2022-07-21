@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         {
             _swappedTo = swappedTo;
         }
-        internal WeaponSwapCastFinder UsingChecker(WeaponSwapCastChecker checker = null)
+        internal WeaponSwapCastFinder UsingChecker(WeaponSwapCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

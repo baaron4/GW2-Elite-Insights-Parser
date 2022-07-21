@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.Extensions
             NotAccurate = true;
             _damageSkillID = damageSkillID;
         }
-        internal EXTBarrierCastFinder UsingChecker(BarrierCastChecker checker = null)
+        internal EXTBarrierCastFinder UsingChecker(BarrierCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

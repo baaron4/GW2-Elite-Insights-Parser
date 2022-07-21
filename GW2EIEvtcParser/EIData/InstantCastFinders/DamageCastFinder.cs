@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             _damageSkillID = damageSkillID;
         }
 
-        internal DamageCastFinder UsingChecker(DamageCastChecker checker = null)
+        internal DamageCastFinder UsingChecker(DamageCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

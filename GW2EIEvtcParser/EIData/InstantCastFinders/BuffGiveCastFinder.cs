@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffGiveCastFinder UsingChecker(BuffGiveCastChecker checker = null)
+        internal BuffGiveCastFinder UsingChecker(BuffGiveCastChecker checker)
         {
             _triggerCondition = checker;
             return this;

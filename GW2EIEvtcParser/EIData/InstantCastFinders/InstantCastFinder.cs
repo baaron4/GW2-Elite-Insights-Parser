@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             SkillID = skillID;
         }
 
-        internal InstantCastFinder WithBuilds(ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife)
+        internal InstantCastFinder WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffLossCastFinder UsingChecker(BuffLossCastChecker checker = null)
+        internal BuffLossCastFinder UsingChecker(BuffLossCastChecker checker)
         {
             _triggerCondition = checker;
             return this;
