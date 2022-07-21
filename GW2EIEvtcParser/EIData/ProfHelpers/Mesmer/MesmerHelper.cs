@@ -80,6 +80,12 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack, EIData.InstantCastFinder.DefaultICD, (evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion, EIData.InstantCastFinder.DefaultICD, (evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2)),
         };
 
 
@@ -130,7 +136,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Signet of Midnight",SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
                 new Buff("Signet of Humility",SignetOfHumility, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
                 //skills
-                new Buff("Distortion",Distortion, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Buff("Distortion",DistortionEffect, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
                 new Buff("Blur", Blur , Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
                 new Buff("Mirror",Mirror, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
                 new Buff("Echo",Echo, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
