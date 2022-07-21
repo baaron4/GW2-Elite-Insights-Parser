@@ -85,6 +85,8 @@ namespace GW2EIEvtcParser.EIData
                             case MarkerGUIDs.CommanderTag1:
                             case MarkerGUIDs.CommanderTag2:
                             case MarkerGUIDs.CommanderTag3:
+                            case MarkerGUIDs.BlueCatmanderTag:
+                            case MarkerGUIDs.GreenCatmanderTag:
                                 _isCommander = 1;
                                 return true;
                             default:
