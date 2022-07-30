@@ -149,6 +149,7 @@ namespace GW2EIEvtcParser
         public const long ElixirGun = 5933;
         public const long MedKitEffect = 5943;
         public const long TurretExplosion = 5958;
+        public const long HealingMist = 5966;
         public const long Superspeed = 5974;
         public const long GearShield = 5997;
         public const long GrenadeKit = 6020;
@@ -540,12 +541,15 @@ namespace GW2EIEvtcParser
         public const long Echo = 29664;
         public const long QuickDraw = 29703;
         public const long LastRites = 29726;
+        public const long PurgeGyro = 29739;
         public const long TestOfFaith = 29786;
         public const long SymbolOfEnergy = 29789;
         public const long ContinuumSplit = 29830;
         public const long WellOfRecall = 29856;
         public const long ShieldOfCourageActive = 29906;
         public const long InfusingTerrorSkill = 29958;
+        public const long DefenseField = 30027;
+        public const long BulwarkGyro = 30101;
         public const long InfusingTerrorEffect = 30129;
         public const long TimeAnchored = 30136;
         public const long LesserPhantasmalDefender = 30192;
@@ -992,6 +996,7 @@ namespace GW2EIEvtcParser
         public const long BraveStride = 43063;
         public const long SandThroughGlass = 43064;
         public const long SpectrumShieldEffect = 43066;
+        public const long FlashSpark = 43176;
         public const long UnbrokenLines = 43194;
         public const long BreakingWave = 43199;
         public const long AirMinorAttunement = 43229;
@@ -1410,7 +1415,8 @@ namespace GW2EIEvtcParser
         public const long SaintOfzuHeltzer = 62994;
         public const long OverclockSignet = 63059;
         public const long BarrierSignet = 63064;
-        public const long ShiftSignet = 63068;
+        public const long ShiftSignetEffect = 63068;
+        public const long ShiftSignetSkill = 63111;
         public const long PetUnleashed = 63145;
         public const long EnterShadowShroud = 63155;
         public const long EternalNight = 63160;
