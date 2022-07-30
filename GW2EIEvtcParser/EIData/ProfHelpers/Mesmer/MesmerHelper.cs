@@ -80,12 +80,12 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack, EIData.InstantCastFinder.DefaultICD, (evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion, EIData.InstantCastFinder.DefaultICD, (evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2)),
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback, EIData.InstantCastFinder.DefaultICD, (evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink, EIData.InstantCastFinder.DefaultICD, (evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack, EIData.InstantCastFinder.DefaultICD, (evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration, EIData.InstantCastFinder.DefaultICD, (evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion, EIData.InstantCastFinder.DefaultICD, (evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion, EIData.InstantCastFinder.DefaultICD, (evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
         };
 
 
