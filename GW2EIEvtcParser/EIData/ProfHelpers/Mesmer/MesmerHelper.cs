@@ -79,12 +79,12 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink),
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant)),
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, log) => !log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
         };
 
 
