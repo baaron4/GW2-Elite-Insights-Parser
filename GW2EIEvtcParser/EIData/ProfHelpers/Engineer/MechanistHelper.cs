@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingChecker((evt, log) => evt.Src.Spec == Spec.Mechanist),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -35,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Rectifier Signet",RectifierSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c4/Rectifier_Signet.png"),
             new Buff("Barrier Signet",BarrierSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Barrier_Signet.png"),
             new Buff("Force Signet",ForceSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b3/Force_Signet.png"),
-            new Buff("Shift Signet",ShiftSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Shift_Signet.png"),
+            new Buff("Shift Signet",ShiftSignetEffect, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Shift_Signet.png"),
             new Buff("Superconducting Signet",SuperconductingSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/51/Superconducting_Signet.png"),
             new Buff("Overclock Signet",OverclockSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c7/Overclock_Signet.png"),
             //
