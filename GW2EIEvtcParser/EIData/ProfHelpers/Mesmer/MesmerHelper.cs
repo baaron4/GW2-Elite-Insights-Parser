@@ -85,6 +85,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolve).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentration).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
         };
 
 

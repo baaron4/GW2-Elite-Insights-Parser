@@ -264,6 +264,7 @@ namespace GW2EIEvtcParser
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
         public const long Blink = 10200;
+        public const long MantraOfResolve = 10207;
         public const long MantraOfPain = 10211;
         public const long PowerSpike = 10212;
         public const long MantraOfRecovery = 10213;
@@ -273,6 +274,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfMidnightSkill = 10234;
         public const long SignetOfInspirationEffect = 10235;
         public const long SignetOfInspirationSkill = 10236;
+        public const long MantraOfConcentration = 10237;
         public const long DistortionEffect = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
