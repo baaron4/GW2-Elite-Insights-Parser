@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(37989, 37989, InstantCastFinder.DefaultICD), // Cosmic Aura
+                new DamageCastFinder(37989, 37989), // Cosmic Aura
             };
         }
 

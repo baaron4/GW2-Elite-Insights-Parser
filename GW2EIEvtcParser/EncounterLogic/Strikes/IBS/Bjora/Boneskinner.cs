@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58736, 58736, InstantCastFinder.DefaultICD), // Unnatural Aura
+                new DamageCastFinder(58736, 58736), // Unnatural Aura
             };
         }
 

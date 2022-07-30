@@ -8,15 +8,15 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public delegate bool BuffGiveCastChecker(BuffApplyEvent evt, CombatData combatData);
-        private readonly BuffGiveCastChecker _triggerCondition;
-        public BuffGiveCastFinder(long skillID, long buffID, long icd, BuffGiveCastChecker checker = null) : base(skillID, buffID, icd)
+        private BuffGiveCastChecker _triggerCondition { get; set; }
+        public BuffGiveCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-            _triggerCondition = checker;
         }
 
-        public BuffGiveCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffGiveCastChecker checker = null) : base(skillID, buffID, icd, minBuild, maxBuild)
+        internal BuffGiveCastFinder UsingChecker(BuffGiveCastChecker checker)
         {
             _triggerCondition = checker;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

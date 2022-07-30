@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(56523, 56523, InstantCastFinder.DefaultICD), // Bolt Break
+                new DamageCastFinder(56523, 56523), // Bolt Break
             };
         }
 

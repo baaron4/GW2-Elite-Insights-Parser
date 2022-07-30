@@ -15,20 +15,20 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FireAttunementSkill, FireAttunementEffect, EIData.InstantCastFinder.DefaultICD), // Fire
-            new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementEffect, EIData.InstantCastFinder.DefaultICD), // Water
-            new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect, EIData.InstantCastFinder.DefaultICD), // Air
-            new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect, EIData.InstantCastFinder.DefaultICD), // Earth
-            new DamageCastFinder(ArcaneBlast, ArcaneBlast, EIData.InstantCastFinder.DefaultICD), // Arcane Blast
-            new BuffGiveCastFinder(AranePowerSkill, ArcanePowerEffect, EIData.InstantCastFinder.DefaultICD), // Arcane Power
-            new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect, EIData.InstantCastFinder.DefaultICD), // Arcane Shield
-            new DamageCastFinder(ArcaneWave, ArcaneWave, EIData.InstantCastFinder.DefaultICD), // Arcane Wave
-            new BuffGainCastFinder(MistForm, MistForm, EIData.InstantCastFinder.DefaultICD), // Mist Form
-            new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill, EIData.InstantCastFinder.DefaultICD), // Signet of Air
-            new DamageCastFinder(Sunspot, Sunspot, EIData.InstantCastFinder.DefaultICD), // Sunspot
-            new DamageCastFinder(EarthenBlast, EarthenBlast, EIData.InstantCastFinder.DefaultICD), // Earth Blast
-            new DamageCastFinder(LightningStrike, LightningStrike, EIData.InstantCastFinder.DefaultICD), // Lightning Strike
-            new DamageCastFinder(LightningRod, LightningRod, EIData.InstantCastFinder.DefaultICD), // Lightning Rod
+            new BuffGainCastFinder(FireAttunementSkill, FireAttunementEffect), // Fire
+            new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementEffect), // Water
+            new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect), // Air
+            new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect), // Earth
+            new DamageCastFinder(ArcaneBlast, ArcaneBlast), // Arcane Blast
+            new BuffGiveCastFinder(AranePowerSkill, ArcanePowerEffect), // Arcane Power
+            new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect), // Arcane Shield
+            new DamageCastFinder(ArcaneWave, ArcaneWave), // Arcane Wave
+            new BuffGainCastFinder(MistForm, MistForm), // Mist Form
+            new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill), // Signet of Air
+            new DamageCastFinder(Sunspot, Sunspot), // Sunspot
+            new DamageCastFinder(EarthenBlast, EarthenBlast), // Earth Blast
+            new DamageCastFinder(LightningStrike, LightningStrike), // Lightning Strike
+            new DamageCastFinder(LightningRod, LightningRod), // Lightning Rod
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

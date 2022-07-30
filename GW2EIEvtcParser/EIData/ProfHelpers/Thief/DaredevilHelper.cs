@@ -11,9 +11,9 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(BoundingDodgerSkill, BoundingDodgerEffect, EIData.InstantCastFinder.DefaultICD), // Bounding Dodger
-            new BuffGainCastFinder(LotusTrainingSkill, LotusTrainingEffect, EIData.InstantCastFinder.DefaultICD), // Lotus Training
-            //new DamageCastFinder(30520, 30520, EIData.InstantCastFinder.DefaultICD), // Debilitating Arc
+            new BuffGainCastFinder(BoundingDodgerSkill, BoundingDodgerEffect), // Bounding Dodger
+            new BuffGainCastFinder(LotusTrainingSkill, LotusTrainingEffect), // Lotus Training
+            //new DamageCastFinder(30520, 30520), // Debilitating Arc
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
