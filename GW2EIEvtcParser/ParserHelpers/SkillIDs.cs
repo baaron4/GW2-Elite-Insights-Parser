@@ -538,6 +538,7 @@ namespace GW2EIEvtcParser
         public const long Echo = 29664;
         public const long QuickDraw = 29703;
         public const long LastRites = 29726;
+        public const long TestOfFaith = 29786;
         public const long SymbolOfEnergy = 29789;
         public const long ContinuumSplit = 29830;
         public const long WellOfRecall = 29856;
@@ -564,6 +565,7 @@ namespace GW2EIEvtcParser
         public const long SelflessAmplification = 30509;
         public const long PulmonaryImpact = 30510;
         public const long WellOfCalamity = 30525;
+        public const long FragmentsOfFaith = 30553;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;

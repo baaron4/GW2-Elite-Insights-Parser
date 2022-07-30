@@ -31,6 +31,9 @@ namespace GW2EIEvtcParser
         public const string FirebrandMantraOfLoreSymbol = "3D01B04C5700904BA279E9F135A3FAB3";
         public const string FirebrandMantraOfPotenceCone = "FB70E37EB3915F4BAB6E06E328832D1D";
         public const string FirebrandMantraOfPotenceSymbol = "95B52793B838524AB237EB9FED7834BF";
+        public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
+        public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
+        public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
