@@ -22,6 +22,15 @@ namespace GW2EIEvtcParser
         public const string MirageSandThroughGlass = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageIllusionaryAmbush = "D7A05478BA0E164396EB90C037DCCF42";
+        // Guardian
+        public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
+        public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // is it shout in general?
+        public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
+        public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
+        public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";
+        public const string FirebrandMantraOfLoreSymbol = "3D01B04C5700904BA279E9F135A3FAB3";
+        public const string FirebrandMantraOfPotenceCone = "FB70E37EB3915F4BAB6E06E328832D1D";
+        public const string FirebrandMantraOfPotenceSymbol = "95B52793B838524AB237EB9FED7834BF";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";

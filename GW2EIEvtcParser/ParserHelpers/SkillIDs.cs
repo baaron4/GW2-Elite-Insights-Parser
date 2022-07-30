@@ -178,6 +178,7 @@ namespace GW2EIEvtcParser
         public const long SymbolOfSwiftness = 9143;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
+        public const long HoldTheLine = 9152;
         public const long SignetOfJudgment = 9156;
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
@@ -191,6 +192,7 @@ namespace GW2EIEvtcParser
         public const long BaneSignetPI = 9240;
         public const long SmiteCondition = 9245;
         public const long JudgesIntervention = 9247;
+        public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
         public const long ReinforcedArmor = 9283;
         public const long SigilOfBloodlust = 9286;
@@ -947,6 +949,7 @@ namespace GW2EIEvtcParser
         public const long SymbolOfVengeance = 40624;
         public const long HeatTherapy = 40694;
         public const long FalseOasis = 40802;
+        public const long MantraOfPotence = 40915;
         public const long FireMajorAttunement = 40926;
         public const long RazorclawsRage = 41016;
         public const long OverheatEffect = 41037;
@@ -989,6 +992,7 @@ namespace GW2EIEvtcParser
         public const long BreakingWave = 43199;
         public const long AirMinorAttunement = 43229;
         public const long WaterMajorAttunement = 43236;
+        public const long MantraOfLiberation = 43357;
         public const long SharpenSpines = 43266;
         public const long WaterMinorAttunement = 43370;
         public const long PathUses = 43410;
@@ -1040,6 +1044,7 @@ namespace GW2EIEvtcParser
         public const long Quickfire = 45123;
         public const long PerfectWeave = 45267;
         public const long Jaunt = 45449;
+        public const long MantraOfLore = 45460;
         public const long LossAversion = 45534;
         public const long TwiceAsVicious = 45600;
         public const long ImprovedKallasFervor = 45614;
