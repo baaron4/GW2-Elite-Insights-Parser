@@ -273,7 +273,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            return;
+        }
+
+        internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
             IReadOnlyList<EffectEvent> tst = log.CombatData.GetEffectEvents();
             IReadOnlyList<EffectEvent> tst1 = log.CombatData.GetEffectEventsByDst(p.AgentItem);
             var effectGUIDs1 = tst1.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
