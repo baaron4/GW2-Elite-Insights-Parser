@@ -20,9 +20,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.NoPets, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 86181, GW2Builds.December2018Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
-            new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", GW2Builds.December2018Balance, GW2Builds.March2019Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
-            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", GW2Builds.March2019Balance, GW2Builds.May2021Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
+            new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.NoPets, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All).WithBuilds(86181, GW2Builds.December2018Balance).UsingChecker((x, log) => x.HasCrit),
+            new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance, GW2Builds.March2019Balance).UsingChecker((x, log) => x.HasCrit),
+            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance, GW2Builds.May2021Balance).UsingChecker((x, log) => x.HasCrit),
         };
 
 
