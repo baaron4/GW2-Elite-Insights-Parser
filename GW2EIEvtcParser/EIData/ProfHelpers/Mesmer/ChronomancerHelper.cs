@@ -11,11 +11,11 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ContinuumSplit, TimeAnchored, EIData.InstantCastFinder.DefaultICD), // Continuum Split
-            new BuffLossCastFinder(ContinuumShift, TimeAnchored, EIData.InstantCastFinder.DefaultICD), // Continuum Shift
-            new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder, EIData.InstantCastFinder.DefaultICD),
-            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink, EIData.InstantCastFinder.DefaultICD),
+            new BuffGainCastFinder(ContinuumSplit, TimeAnchored), // Continuum Split
+            new BuffLossCastFinder(ContinuumShift, TimeAnchored), // Continuum Shift
+            new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond).UsingChecker((evt, log) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, log) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, log) => evt.Src.Spec == Spec.Chronomancer),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

@@ -149,6 +149,7 @@ namespace GW2EIEvtcParser
         public const long ElixirGun = 5933;
         public const long MedKitEffect = 5943;
         public const long TurretExplosion = 5958;
+        public const long HealingMist = 5966;
         public const long Superspeed = 5974;
         public const long GearShield = 5997;
         public const long GrenadeKit = 6020;
@@ -178,6 +179,7 @@ namespace GW2EIEvtcParser
         public const long SymbolOfSwiftness = 9143;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
+        public const long HoldTheLine = 9152;
         public const long SignetOfJudgment = 9156;
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
@@ -191,6 +193,7 @@ namespace GW2EIEvtcParser
         public const long BaneSignetPI = 9240;
         public const long SmiteCondition = 9245;
         public const long JudgesIntervention = 9247;
+        public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
         public const long ReinforcedArmor = 9283;
         public const long SigilOfBloodlust = 9286;
@@ -262,6 +265,7 @@ namespace GW2EIEvtcParser
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
         public const long Blink = 10200;
+        public const long MantraOfResolve = 10207;
         public const long MantraOfPain = 10211;
         public const long PowerSpike = 10212;
         public const long MantraOfRecovery = 10213;
@@ -271,6 +275,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfMidnightSkill = 10234;
         public const long SignetOfInspirationEffect = 10235;
         public const long SignetOfInspirationSkill = 10236;
+        public const long MantraOfConcentration = 10237;
         public const long DistortionEffect = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
@@ -536,11 +541,15 @@ namespace GW2EIEvtcParser
         public const long Echo = 29664;
         public const long QuickDraw = 29703;
         public const long LastRites = 29726;
+        public const long PurgeGyro = 29739;
+        public const long TestOfFaith = 29786;
         public const long SymbolOfEnergy = 29789;
         public const long ContinuumSplit = 29830;
         public const long WellOfRecall = 29856;
         public const long ShieldOfCourageActive = 29906;
         public const long InfusingTerrorSkill = 29958;
+        public const long DefenseField = 30027;
+        public const long BulwarkGyro = 30101;
         public const long InfusingTerrorEffect = 30129;
         public const long TimeAnchored = 30136;
         public const long LesserPhantasmalDefender = 30192;
@@ -562,6 +571,7 @@ namespace GW2EIEvtcParser
         public const long SelflessAmplification = 30509;
         public const long PulmonaryImpact = 30510;
         public const long WellOfCalamity = 30525;
+        public const long FragmentsOfFaith = 30553;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
@@ -947,6 +957,7 @@ namespace GW2EIEvtcParser
         public const long SymbolOfVengeance = 40624;
         public const long HeatTherapy = 40694;
         public const long FalseOasis = 40802;
+        public const long MantraOfPotence = 40915;
         public const long FireMajorAttunement = 40926;
         public const long RazorclawsRage = 41016;
         public const long OverheatEffect = 41037;
@@ -985,10 +996,12 @@ namespace GW2EIEvtcParser
         public const long BraveStride = 43063;
         public const long SandThroughGlass = 43064;
         public const long SpectrumShieldEffect = 43066;
+        public const long FlashSpark = 43176;
         public const long UnbrokenLines = 43194;
         public const long BreakingWave = 43199;
         public const long AirMinorAttunement = 43229;
         public const long WaterMajorAttunement = 43236;
+        public const long MantraOfLiberation = 43357;
         public const long SharpenSpines = 43266;
         public const long WaterMinorAttunement = 43370;
         public const long PathUses = 43410;
@@ -1040,6 +1053,7 @@ namespace GW2EIEvtcParser
         public const long Quickfire = 45123;
         public const long PerfectWeave = 45267;
         public const long Jaunt = 45449;
+        public const long MantraOfLore = 45460;
         public const long LossAversion = 45534;
         public const long TwiceAsVicious = 45600;
         public const long ImprovedKallasFervor = 45614;
@@ -1401,7 +1415,8 @@ namespace GW2EIEvtcParser
         public const long SaintOfzuHeltzer = 62994;
         public const long OverclockSignet = 63059;
         public const long BarrierSignet = 63064;
-        public const long ShiftSignet = 63068;
+        public const long ShiftSignetEffect = 63068;
+        public const long ShiftSignetSkill = 63111;
         public const long PetUnleashed = 63145;
         public const long EnterShadowShroud = 63155;
         public const long EternalNight = 63160;

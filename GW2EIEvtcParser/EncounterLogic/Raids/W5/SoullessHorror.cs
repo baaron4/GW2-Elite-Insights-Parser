@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(47837, 47837, InstantCastFinder.DefaultICD), // Chilling Aura
+                new DamageCastFinder(47837, 47837), // Chilling Aura
             };
         }
 

@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightEffect, EIData.InstantCastFinder.DefaultICD), // Sight beyond Sight
-            new DamageCastFinder(LossAversion, LossAversion, EIData.InstantCastFinder.DefaultICD), // Loss Aversion
+            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightEffect), // Sight beyond Sight
+            new DamageCastFinder(LossAversion, LossAversion), // Loss Aversion
 
         };
 

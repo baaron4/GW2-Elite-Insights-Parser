@@ -12,21 +12,27 @@ namespace GW2EIEvtcParser.EIData
 
         public bool NotAccurate { get; protected set; } = false;
 
-        protected long ICD { get; }
+        protected long ICD { get; private set; } = DefaultICD;
 
-        private ulong _maxBuild { get; } = GW2Builds.EndOfLife;
-        private ulong _minBuild { get; } = GW2Builds.StartOfLife;
+        private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
 
-        protected InstantCastFinder(long skillID, long icd)
+        protected InstantCastFinder(long skillID)
         {
             SkillID = skillID;
-            ICD = icd;
         }
 
-        protected InstantCastFinder(long skillID, long icd, ulong minBuild, ulong maxBuild) : this(skillID, icd)
+        internal InstantCastFinder WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;
+            return this;
+        }
+
+        internal InstantCastFinder UsingICD(long icd = DefaultICD)
+        {
+            ICD = icd;
+            return this;
         }
 
 

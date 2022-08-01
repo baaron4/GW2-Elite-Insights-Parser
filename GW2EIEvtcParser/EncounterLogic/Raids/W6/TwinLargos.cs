@@ -58,8 +58,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(52779, 52779, InstantCastFinder.DefaultICD), // Nikare Aquatic Aura
-                new DamageCastFinder(52005, 52005, InstantCastFinder.DefaultICD), // Kenut Aquatic Aura
+                new DamageCastFinder(52779, 52779), // Nikare Aquatic Aura
+                new DamageCastFinder(52005, 52005), // Kenut Aquatic Aura
             };
         }
 

@@ -16,11 +16,7 @@ namespace GW2EIEvtcParser.EIData
             return effectEvent.Dst;
         }
 
-        public EffectCastFinderByDst(long skillID, string effectGUID, long icd, EffectCastChecker checker = null) : base(skillID, effectGUID, icd, checker)
-        {
-        }
-
-        public EffectCastFinderByDst(long skillID, string effectGUID, long icd, ulong minBuild, ulong maxBuild, EffectCastChecker checker = null) : base(skillID, effectGUID, icd, minBuild, maxBuild, checker)
+        public EffectCastFinderByDst(long skillID, string effectGUID) : base(skillID, effectGUID)
         {
         }
     }

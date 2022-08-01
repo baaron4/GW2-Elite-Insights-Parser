@@ -372,7 +372,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FightSpecific = new List<Buff>
         {
                 // Generic
-                new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/52/Emboldened_%28zero_defeats%29.png" ),
+                new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/69/Emboldened.png" ),
                 new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png" ),
                 new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/be/Agony.png" ),
                 new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png" ),

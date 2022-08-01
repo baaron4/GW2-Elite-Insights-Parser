@@ -7,21 +7,19 @@ namespace GW2EIEvtcParser.EIData
     internal class DamageCastFinder : InstantCastFinder
     {
         public delegate bool DamageCastChecker(AbstractHealthDamageEvent evt, CombatData combatData);
-        private readonly DamageCastChecker _triggerCondition;
+        private DamageCastChecker _triggerCondition { get; set; }
 
         private readonly long _damageSkillID;
-        public DamageCastFinder(long skillID, long damageSkillID, long icd, DamageCastChecker checker = null) : base(skillID, icd)
+        public DamageCastFinder(long skillID, long damageSkillID ) : base(skillID)
         {
             NotAccurate = true;
-            _triggerCondition = checker;
             _damageSkillID = damageSkillID;
         }
 
-        public DamageCastFinder(long skillID, long damageSkillID, long icd, ulong minBuild, ulong maxBuild, DamageCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        internal DamageCastFinder UsingChecker(DamageCastChecker checker)
         {
-            NotAccurate = true;
             _triggerCondition = checker;
-            _damageSkillID = damageSkillID;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

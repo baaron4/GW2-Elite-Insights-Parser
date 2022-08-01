@@ -11,13 +11,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterReaperShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
-            new BuffLossCastFinder(ExitReaperShroud, ReapersShroud, EIData.InstantCastFinder.DefaultICD), // Reaper shroud
-            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect, EIData.InstantCastFinder.DefaultICD), // Infusing Terror
-            new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings, EIData.InstantCastFinder.DefaultICD), // "You Are All Weaklings!"
-            new DamageCastFinder(Suffer, Suffer, EIData.InstantCastFinder.DefaultICD), // "Suffer!"
-            new BuffGainCastFinder(Rise, DarkBond, 500), // "Rise!"
-            new DamageCastFinder(ChillingNova, ChillingNova, EIData.InstantCastFinder.DefaultICD), // Chilling Nova
+            new BuffGainCastFinder(EnterReaperShroud, ReapersShroud), // Reaper shroud
+            new BuffLossCastFinder(ExitReaperShroud, ReapersShroud), // Reaper shroud
+            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect), // Infusing Terror
+            new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings), // "You Are All Weaklings!"
+            new DamageCastFinder(Suffer, Suffer), // "Suffer!"
+            new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // "Rise!"
+            new DamageCastFinder(ChillingNova, ChillingNova), // Chilling Nova
         };
 
 

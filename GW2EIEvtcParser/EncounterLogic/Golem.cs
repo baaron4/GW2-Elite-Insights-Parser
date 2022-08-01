@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new BuffGainCastFinder(MushroomKingsBlessing, 46970, 500), // Mushroom King's Blessing`
+                new BuffGainCastFinder(MushroomKingsBlessing, 46970).UsingICD(500), // Mushroom King's Blessing`
             };
         }
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -113,6 +113,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            ProfHelper.DEBUG_ComputeProfessionCombatReplayActors(p, log, replay);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

@@ -8,21 +8,18 @@ namespace GW2EIEvtcParser.Extensions
     internal class EXTHealingCastFinder : InstantCastFinder
     {
         public delegate bool HealingCastChecker(EXTAbstractHealingEvent evt, CombatData combatData);
-        private readonly HealingCastChecker _triggerCondition;
+        private HealingCastChecker _triggerCondition { get; set; }
 
         private readonly long _damageSkillID;
-        public EXTHealingCastFinder(long skillID, long damageSkillID, long icd, HealingCastChecker checker = null) : base(skillID, icd)
+        public EXTHealingCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             NotAccurate = true;
-            _triggerCondition = checker;
             _damageSkillID = damageSkillID;
         }
-
-        public EXTHealingCastFinder(long skillID, long damageSkillID, long icd, ulong minBuild, ulong maxBuild, HealingCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        internal EXTHealingCastFinder UsingChecker(HealingCastChecker checker)
         {
-            NotAccurate = true;
             _triggerCondition = checker;
-            _damageSkillID = damageSkillID;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

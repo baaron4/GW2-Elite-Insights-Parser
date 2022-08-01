@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     internal class EffectCastFinder : InstantCastFinder
     {
         public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData);
-        private readonly EffectCastChecker _triggerCondition;
+        private EffectCastChecker _triggerCondition { get; set; }
 
         private readonly string _effectGUID;
 
@@ -21,18 +21,16 @@ namespace GW2EIEvtcParser.EIData
             return effectEvent.Src;
         }
 
-        public EffectCastFinder(long skillID, string effectGUID, long icd, EffectCastChecker checker = null) : base(skillID, icd)
+        public EffectCastFinder(long skillID, string effectGUID) : base(skillID)
         {
             NotAccurate = true; // TODO: confirm if culling is server side logic
-            _triggerCondition = checker;
             _effectGUID = effectGUID;
         }
 
-        public EffectCastFinder(long skillID, string effectGUID, long icd, ulong minBuild, ulong maxBuild, EffectCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        internal EffectCastFinder UsingChecker(EffectCastChecker checker)
         {
-            NotAccurate = true; // TODO: confirm if culling is server side logic
             _triggerCondition = checker;
-            _effectGUID = effectGUID;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(HauntingAura, HauntingAura, InstantCastFinder.DefaultICD), // Haunting Aura
+                new DamageCastFinder(HauntingAura, HauntingAura), // Haunting Aura
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

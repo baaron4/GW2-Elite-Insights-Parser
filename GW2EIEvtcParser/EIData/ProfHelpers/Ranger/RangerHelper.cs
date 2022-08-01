@@ -16,15 +16,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            //new DamageCastFinder(12573,12573,EIData.InstantCastFinder.DefaultICD), // Hunter's Shot
-            //new DamageCastFinder(12507,12507,EIData.InstantCastFinder.DefaultICD), // Crippling Shot
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!"
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP,EIData.InstantCastFinder.DefaultICD), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive,EIData.InstantCastFinder.DefaultICD, (evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect,EIData.InstantCastFinder.DefaultICD), // Sharpening Stone
-            new EXTHealingCastFinder(WindbornNotes, WindbornNotes, EIData.InstantCastFinder.DefaultICD), // Windborne Notes
-            new EXTBarrierCastFinder(ProtectMe, ProtectMe, EIData.InstantCastFinder.DefaultICD), // Protect Me!
+            //new DamageCastFinder(12573,12573), // Hunter's Shot
+            //new DamageCastFinder(12507,12507), // Crippling Shot
+            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect), // "Sic 'Em!"
+            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect), // Sharpening Stone
+            new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
+            new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
         };
 
 

@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58219, 58219, InstantCastFinder.DefaultICD), // Frostbite Aura
+                new DamageCastFinder(58219, 58219), // Frostbite Aura
             };
         }
 

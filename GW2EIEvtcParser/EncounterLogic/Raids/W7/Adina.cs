@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(56351, 56351, InstantCastFinder.DefaultICD), // Seismic Suffering
+                new DamageCastFinder(56351, 56351), // Seismic Suffering
             };
         }
         
