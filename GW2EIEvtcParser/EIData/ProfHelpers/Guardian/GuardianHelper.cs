@@ -12,19 +12,19 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect, EIData.InstantCastFinder.DefaultICD), // Shield of Wrath
-            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect, 0), // Zealot's Flame
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0), // Zealot's Flame
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(JudgesIntervention,JudgesIntervention, EIData.InstantCastFinder.DefaultICD), // Judge's Intervention
-            new DamageCastFinder(WrathOfJustice,WrathOfJustice, EIData.InstantCastFinder.DefaultICD), // Wrath of Justice
-            new DamageCastFinder(SmitersBoon,SmitersBoon, EIData.InstantCastFinder.DefaultICD), // Smiter's Boon
-            new DamageCastFinder(SmiteCondition,SmiteCondition, EIData.InstantCastFinder.DefaultICD), // Smite Condition
-            //new DamageCastFinder(9097,9097, EIData.InstantCastFinder.DefaultICD), // Symbol of Blades
-            new DamageCastFinder(GlacialHeart, GlacialHeart, EIData.InstantCastFinder.DefaultICD), // Glacial Heart
-            new DamageCastFinder(ShatteredAegis, ShatteredAegis, EIData.InstantCastFinder.DefaultICD), // Shattered Aegis
-            new EXTHealingCastFinder(SelflessDaring, SelflessDaring, EIData.InstantCastFinder.DefaultICD), // Selfless Daring
+            new DamageCastFinder(JudgesIntervention,JudgesIntervention), // Judge's Intervention
+            new DamageCastFinder(WrathOfJustice,WrathOfJustice), // Wrath of Justice
+            new DamageCastFinder(SmitersBoon,SmitersBoon), // Smiter's Boon
+            new DamageCastFinder(SmiteCondition,SmiteCondition), // Smite Condition
+            //new DamageCastFinder(9097,9097), // Symbol of Blades
+            new DamageCastFinder(GlacialHeart, GlacialHeart), // Glacial Heart
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis), // Shattered Aegis
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring), // Selfless Daring
         };
 
 

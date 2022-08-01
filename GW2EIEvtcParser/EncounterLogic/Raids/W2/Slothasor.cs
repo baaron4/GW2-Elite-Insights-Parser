@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(VolatileAura, VolatileAura, InstantCastFinder.DefaultICD), // Volatile Aura
+                new DamageCastFinder(VolatileAura, VolatileAura), // Volatile Aura
             };
         }
 

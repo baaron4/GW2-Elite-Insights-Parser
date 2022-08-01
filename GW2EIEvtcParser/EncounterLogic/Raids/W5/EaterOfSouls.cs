@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48794, 48794, InstantCastFinder.DefaultICD), // Hungering Aura
+                new DamageCastFinder(48794, 48794), // Hungering Aura
             };
         }
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

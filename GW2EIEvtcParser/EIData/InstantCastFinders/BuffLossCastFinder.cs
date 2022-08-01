@@ -8,17 +8,17 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public delegate bool BuffLossCastChecker(BuffRemoveAllEvent evt, CombatData combatData);
-        private readonly BuffLossCastChecker _triggerCondition;
+        private BuffLossCastChecker _triggerCondition { get; set; }
 
 
-        public BuffLossCastFinder(long skillID, long buffID, long icd, BuffLossCastChecker checker = null) : base(skillID, buffID, icd)
+        public BuffLossCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-            _triggerCondition = checker;
         }
 
-        public BuffLossCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffLossCastChecker checker = null) : base(skillID, buffID, icd, minBuild, maxBuild)
+        internal BuffLossCastFinder UsingChecker(BuffLossCastChecker checker)
         {
             _triggerCondition = checker;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

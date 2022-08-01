@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -221,6 +222,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     maiTrins[i].OverrideID(ArcDPSEnums.TargetID.DummyMaiTrinStrike);
                 }
                 agentData.Refresh();
+            }
+            if (agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
+            {
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
             var echoesOfScarlet = Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM || x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).ToList();

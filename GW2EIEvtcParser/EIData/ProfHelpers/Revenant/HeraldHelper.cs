@@ -11,13 +11,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryDragonStanceSkill, LegendaryDragonStanceEffect, EIData.InstantCastFinder.DefaultICD), // Legendary Dragon Stance
-            new BuffGainCastFinder(FacetOfNatureSkill, FacetOfNatureEffect, EIData.InstantCastFinder.DefaultICD), // Facet of Nature
-            new BuffGainCastFinder(FacetOfDarknessSkill, FacetOfDarknessUW, EIData.InstantCastFinder.DefaultICD), // Facet of Darkness
-            new BuffGainCastFinder(FacetOfElementsSkill, FacetOfElementsEffect, EIData.InstantCastFinder.DefaultICD), // Facet of Elements
-            new BuffGainCastFinder(FacetOfStrengthSkill, FacetOfStrengthEffect, EIData.InstantCastFinder.DefaultICD), // Facet of Strength
-            new BuffGainCastFinder(FacetOfChaosSkill, FacetOfChaosEffect, EIData.InstantCastFinder.DefaultICD), // Facet of Chaos
-            new DamageCastFinder(CallOfTheDragon, CallOfTheDragon, EIData.InstantCastFinder.DefaultICD), // Call of the Dragon
+            new BuffGainCastFinder(LegendaryDragonStanceSkill, LegendaryDragonStanceEffect), // Legendary Dragon Stance
+            new BuffGainCastFinder(FacetOfNatureSkill, FacetOfNatureEffect), // Facet of Nature
+            new BuffGainCastFinder(FacetOfDarknessSkill, FacetOfDarknessUW), // Facet of Darkness
+            new BuffGainCastFinder(FacetOfElementsSkill, FacetOfElementsEffect), // Facet of Elements
+            new BuffGainCastFinder(FacetOfStrengthSkill, FacetOfStrengthEffect), // Facet of Strength
+            new BuffGainCastFinder(FacetOfChaosSkill, FacetOfChaosEffect), // Facet of Chaos
+            new DamageCastFinder(CallOfTheDragon, CallOfTheDragon), // Call of the Dragon
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

@@ -11,11 +11,12 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(OverheatSkill, OverheatEffect, EIData.InstantCastFinder.DefaultICD), // Overheat
-            new BuffGainCastFinder(EnterPhotonForge, PhotonForge, EIData.InstantCastFinder.DefaultICD), // Photon Forge
-            new BuffLossCastFinder(ExitPhotonForge, PhotonForge, EIData.InstantCastFinder.DefaultICD), // Deactivate Photon Forge - red or blue irrevelant
-            new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldEffect, EIData.InstantCastFinder.DefaultICD), // Spectrum Shield
-            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve, EIData.InstantCastFinder.DefaultICD), // Thermal Release Valve
+            new BuffGainCastFinder(OverheatSkill, OverheatEffect), // Overheat
+            new BuffGainCastFinder(EnterPhotonForge, PhotonForge), // Photon Forge
+            new BuffLossCastFinder(ExitPhotonForge, PhotonForge), // Deactivate Photon Forge - red or blue irrevelant
+            new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldEffect), // Spectrum Shield
+            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve), // Thermal Release Valve
+            new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Holosmith),
         };
 
         private static readonly HashSet<long> _photonForgeCast = new HashSet<long>

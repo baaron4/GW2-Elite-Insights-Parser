@@ -99,9 +99,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phases[0].AddTarget(target);
                         subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target, true));
                         break;
-                    case (int)ArcDPSEnums.TargetID.DummyTarget:
-                        phases[0].AddTarget(target);
-                        break;
                 }
             }
             if (!requirePhases)
@@ -152,7 +149,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.DummyTarget,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
@@ -210,6 +206,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (soowon != null)
             {
                 AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+                if (attackTargetEvent == null)
+                {
+                    return;
+                }
                 var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
                 var targetOffs = targetables.Where(x => !x.Targetable).ToList();
                 if (targetOffs.Count == 2)
@@ -346,11 +346,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            if (index == 0)
+            // Add missing agents
+            for (int i = index; i < idsToUse.Count; i++)
             {
-                // Add dummy target as there are no dragon voids
-                agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Harvest Temple", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
-                Targetless = true;
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Dragonvoid", Spec.NPC, (int)idsToUse[i], false);
             }
             //
             ComputeFightTargets(agentData, combatData, extensions);
@@ -729,9 +728,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (!Targetless)
-            {
-                var targetIDs = new HashSet<int>()
+            var targetIDs = new HashSet<int>()
                 {
                     (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
                     (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
@@ -739,10 +736,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
                     (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 };
-                if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
-                {
-                    return FightData.EncounterMode.CM;
-                }
+            if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
+            {
+                return FightData.EncounterMode.CM;
             }
             IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
             if (voidMelters.Count > 5)

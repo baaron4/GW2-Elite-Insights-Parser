@@ -16,11 +16,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Flame Wheel
-            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Icy Coil
-            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Crescent Wind
-            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Rockyh Loop
-            new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect, EIData.InstantCastFinder.DefaultICD, GW2Builds.EODBeta4, GW2Builds.EndOfLife), // Invigorating Air
+            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect).WithBuilds(GW2Builds.EODBeta4), // Flame Wheel
+            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect).WithBuilds(GW2Builds.EODBeta4), // Icy Coil
+            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).WithBuilds(GW2Builds.EODBeta4), // Crescent Wind
+            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).WithBuilds(GW2Builds.EODBeta4), // Rockyh Loop
+            new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4), // Invigorating Air
         };
 
 

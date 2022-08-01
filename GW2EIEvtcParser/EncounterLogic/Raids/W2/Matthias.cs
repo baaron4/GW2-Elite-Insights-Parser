@@ -56,9 +56,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(SpontaneousCombustion, SpontaneousCombustion, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(SnowstormSkill, SnowstormSkill, InstantCastFinder.DefaultICD),
-                new DamageCastFinder(DownpourSkill, DownpourSkill, InstantCastFinder.DefaultICD),
+                new DamageCastFinder(SpontaneousCombustion, SpontaneousCombustion),
+                new DamageCastFinder(SnowstormSkill, SnowstormSkill),
+                new DamageCastFinder(DownpourSkill, DownpourSkill),
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

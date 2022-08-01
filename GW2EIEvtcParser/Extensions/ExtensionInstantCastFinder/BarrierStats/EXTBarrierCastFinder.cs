@@ -8,21 +8,18 @@ namespace GW2EIEvtcParser.Extensions
     internal class EXTBarrierCastFinder : InstantCastFinder
     {
         public delegate bool BarrierCastChecker(EXTAbstractBarrierEvent evt, CombatData combatData);
-        private readonly BarrierCastChecker _triggerCondition;
+        private BarrierCastChecker _triggerCondition { get; set; }
 
         private readonly long _damageSkillID;
-        public EXTBarrierCastFinder(long skillID, long damageSkillID, long icd, BarrierCastChecker checker = null) : base(skillID, icd)
+        public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             NotAccurate = true;
-            _triggerCondition = checker;
             _damageSkillID = damageSkillID;
         }
-
-        public EXTBarrierCastFinder(long skillID, long damageSkillID, long icd, ulong minBuild, ulong maxBuild, BarrierCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        internal EXTBarrierCastFinder UsingChecker(BarrierCastChecker checker)
         {
-            NotAccurate = true;
             _triggerCondition = checker;
-            _damageSkillID = damageSkillID;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

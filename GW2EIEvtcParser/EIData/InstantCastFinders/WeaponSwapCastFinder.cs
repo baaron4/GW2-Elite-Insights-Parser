@@ -6,19 +6,17 @@ namespace GW2EIEvtcParser.EIData
     internal class WeaponSwapCastFinder : InstantCastFinder
     {
         public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, CombatData combatData, SkillData skillData);
-        private readonly WeaponSwapCastChecker _triggerCondition;
+        private WeaponSwapCastChecker _triggerCondition { get; set; }
 
         private readonly long _swappedTo;
-        public WeaponSwapCastFinder(long skillID, long swappedTo, long icd, WeaponSwapCastChecker checker = null) : base(skillID, icd)
+        public WeaponSwapCastFinder(long skillID, long swappedTo) : base(skillID)
         {
-            _triggerCondition = checker;
             _swappedTo = swappedTo;
         }
-
-        public WeaponSwapCastFinder(long skillID, long swappedTo, long icd, ulong minBuild, ulong maxBuild, WeaponSwapCastChecker checker = null) : base(skillID, icd, minBuild, maxBuild)
+        internal WeaponSwapCastFinder UsingChecker(WeaponSwapCastChecker checker)
         {
             _triggerCondition = checker;
-            _swappedTo = swappedTo;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

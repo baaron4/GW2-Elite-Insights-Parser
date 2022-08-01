@@ -13,10 +13,10 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth, 500), // Earth Sigil
-            new DamageCastFinder(SigilOfAir, SigilOfAir, 500), // Air Sigil
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy, 500), // Hydro Sigil
-            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1, EIData.InstantCastFinder.DefaultICD), // Water Blast Combo
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500), // Earth Sigil
+            new DamageCastFinder(SigilOfAir, SigilOfAir).UsingICD(500), // Air Sigil
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500), // Hydro Sigil
+            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1), // Water Blast Combo
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
@@ -273,8 +273,28 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            //CombatReplay.DebugEffects(p, log, replay, new HashSet<long>());
             return;
+        }
+
+        internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<EffectEvent> tst = log.CombatData.GetEffectEvents();
+            IReadOnlyList<EffectEvent> tst1 = log.CombatData.GetEffectEventsByDst(p.AgentItem);
+            var effectGUIDs1 = tst1.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            IReadOnlyList<EffectEvent> tst2 = log.CombatData.GetEffectEvents(p.AgentItem);
+            var effectGUIDs2 = tst2.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            foreach (EffectEvent effectEvt in tst)
+            {
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 180, 255, 1.0)", new PositionConnector(effectEvt.Position)));
+                }
+            }      
         }
 
 

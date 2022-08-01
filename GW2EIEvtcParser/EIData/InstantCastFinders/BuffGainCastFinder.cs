@@ -8,21 +8,21 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public delegate bool BuffGainCastChecker(BuffApplyEvent evt, CombatData combatData);
-        private readonly BuffGainCastChecker _triggerCondition;
+        private BuffGainCastChecker _triggerCondition { get; set; }
 
         protected virtual AgentItem GetCasterAgent(AgentItem agent)
         {
             return agent;
         }
 
-        public BuffGainCastFinder(long skillID, long buffID, long icd, BuffGainCastChecker checker = null) : base(skillID, buffID, icd)
+        public BuffGainCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-            _triggerCondition = checker;
         }
 
-        public BuffGainCastFinder(long skillID, long buffID, long icd, ulong minBuild, ulong maxBuild, BuffGainCastChecker checker = null) : base(skillID, buffID, icd, minBuild, maxBuild)
+        internal BuffGainCastFinder UsingChecker(BuffGainCastChecker checker)
         {
             _triggerCondition = checker;
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
