@@ -82,11 +82,24 @@ namespace GW2EIEvtcParser.EIData
                     {
                         switch (marker.ContentGUID)
                         {
-                            case MarkerGUIDs.CommanderTag1:
-                            case MarkerGUIDs.CommanderTag2:
-                            case MarkerGUIDs.CommanderTag3:
+                            case MarkerGUIDs.BlueCommanderTag:
+                            case MarkerGUIDs.CyanCommanderTag:
+                            case MarkerGUIDs.GreenCommanderTag:
+                            case MarkerGUIDs.OrangeCommanderTag:
+                            case MarkerGUIDs.PinkCommanderTag:
+                            case MarkerGUIDs.PurpleCommanderTag:
+                            case MarkerGUIDs.RedCommanderTag:
+                            case MarkerGUIDs.WhiteCommanderTag:
+                            case MarkerGUIDs.YellowCommanderTag:
                             case MarkerGUIDs.BlueCatmanderTag:
+                            case MarkerGUIDs.CyanCatmanderTag:
                             case MarkerGUIDs.GreenCatmanderTag:
+                            case MarkerGUIDs.OrangeCatmanderTag:
+                            case MarkerGUIDs.PinkCatmanderTag:
+                            case MarkerGUIDs.PurpleCatmanderTag:
+                            case MarkerGUIDs.RedCatmanderTag:
+                            case MarkerGUIDs.WhiteCatmanderTag:
+                            case MarkerGUIDs.YellowCatmanderTag:
                                 _isCommander = 1;
                                 return true;
                             default:

@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(Jaunt, Jaunt), // Jaunt
             new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
             new EffectCastFinder(SandThroughGlass, EffectGUIDs.MirageSandThroughGlass).UsingChecker((evt, log) => evt.Src.Spec == Spec.Mirage),
-            new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
+            //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
