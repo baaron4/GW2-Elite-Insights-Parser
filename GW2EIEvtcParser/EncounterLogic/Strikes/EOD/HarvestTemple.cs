@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
-                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 100, fightData.FightEnd), playerAgents))
+                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 200, fightData.FightEnd), playerAgents))
                         {
                             return;
                         }
@@ -256,7 +256,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Events to be copied
                 var posFacingHPEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
                 posFacingHPEventsToCopy.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
-                var attackTargetEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget)).ToList();
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
@@ -267,7 +266,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     int id = (int)idsToUse[index++];
                     long start = targetOn.Time;
-                    long end = fightData.FightEnd;
+                    long end = dragonVoid.LastAware;
                     CombatItem targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                     // Don't split Soo won into two
                     if (targetOff != null && id != (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon)
@@ -315,13 +314,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         cExtra.OverrideTime(extra.FirstAware);
                         cExtra.OverrideSrcAgent(extra.Agent);
                         combatData.Add(cExtra);
-                    }
-                    foreach (CombatItem c in attackTargetEventsToCopy)
-                    {
-                        var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideDstAgent(extra.Agent);
-                        //combatData.Add(cExtra);
                     }
                 }
             }
