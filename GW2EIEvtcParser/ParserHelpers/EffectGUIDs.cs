@@ -56,5 +56,6 @@ namespace GW2EIEvtcParser
         public const string HarvestTemplePrimordusBigJaw = "4D8CA1836969BD4BBF345719576ACAAF";
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
+        public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
     }
 }
