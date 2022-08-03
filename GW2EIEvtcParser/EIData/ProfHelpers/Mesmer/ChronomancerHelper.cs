@@ -23,6 +23,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.NoPets, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", 86181, GW2Builds.December2018Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
             new BuffDamageModifierTarget(Slow, "Danger Time", "30% crit damage on slowed target", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", GW2Builds.December2018Balance, GW2Builds.March2019Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
             new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/3/33/Fragility.png", GW2Builds.March2019Balance, GW2Builds.May2021Balance, DamageModifierMode.All, ((x, log) => x.HasCrit)),
+            new BuffDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacirt", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/e/e9/Improved_Alacrity.png", GW2Builds.August2022BalanceHotFix, GW2Builds.EndOfLife, DamageModifierMode.All, ((x, log) => x.HasCrit)),
         };
 
 
