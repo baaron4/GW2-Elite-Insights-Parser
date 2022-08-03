@@ -52,6 +52,8 @@ namespace GW2EIEvtcParser
         public const string HarvestTemplePurificationPoisonTrail = "CCBA0AD77B52774DA48EE37AED9108F4";
         public const string HarvestTempleJormagIceShards = "2B9395E6BDE51E4C90AD3A9CA78FBCE7";
         public const string HarvestTemplePrimordusSmallJaw = "EDA1C033B296404BA403E106F6F258C0";
+        public const string HarvestTemplePrimordusGeneralJawAttack = "160CBAE34F4A2941885EB3F3CD6BB0C3";
+        public const string HarvestTemplePrimordusBigJaw = "4D8CA1836969BD4BBF345719576ACAAF";
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
     }

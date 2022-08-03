@@ -634,8 +634,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 580, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
                         }
                     }
+                    EffectGUIDEvent bigJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusBigJaw);
+                    if (bigJaw != null)
+                    {
+                        IReadOnlyList<EffectEvent> bigJawEffects = log.CombatData.GetEffectEvents(bigJaw.ContentID);
+                        knownEffectsIDs.Add(bigJaw.ContentID);
+                        foreach (EffectEvent bigJawEffect in bigJawEffects)
+                        {
+                            int start = (int)bigJawEffect.Time;
+                            int end = start + 7000;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1700, (end, end + 5000), "rgba(200, 0, 0, 0.4)", new AgentConnector(target)));
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 230000, 238000);
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
+                    break;
+                case (int)ArcDPSEnums.TrashID.VoidWarforged1:
+                case (int)ArcDPSEnums.TrashID.VoidWarforged2:
+                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
                     break;
                 default:
                     break;
@@ -675,12 +696,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     int effectEnd = Math.Min((int)dragonVoid.LastAware, end);
                     DeadEvent deadEvent = log.CombatData.GetDeadEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
-                    if (deadEvent != null)
+                    if (deadEvent != null && deadEvent.Time <= effectEnd)
                     {
                         effectEnd = Math.Min((int)deadEvent.Time, end);
                     }
                     DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
-                    if (despawnEvent != null)
+                    if (despawnEvent != null && despawnEvent.Time <= effectEnd)
                     {
                         effectEnd = Math.Min((int)despawnEvent.Time, end);
                     }
