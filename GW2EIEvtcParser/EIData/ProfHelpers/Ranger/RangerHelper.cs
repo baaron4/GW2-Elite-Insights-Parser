@@ -39,16 +39,7 @@ namespace GW2EIEvtcParser.EIData
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
-                    IReadOnlyList<AttackTargetEvent> atEvents = log.CombatData.GetAttackTargetEventsByAttackTarget(effectApply.By);
-                    if (atEvents.Any()) // agent is attack target
-                    {
-                        AttackTargetEvent atEvent = atEvents.LastOrDefault(y => x.Time >= y.Time);
-                        return atEvent?.Src == x.To;
-                    }
-                    else
-                    {
-                        return x.To == effectApply.By;
-                    }
+                    return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
                 }
                 return false;
             }),
@@ -57,16 +48,7 @@ namespace GW2EIEvtcParser.EIData
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
-                    IReadOnlyList<AttackTargetEvent> atEvents = log.CombatData.GetAttackTargetEventsByAttackTarget(effectApply.By);
-                    if (atEvents.Any()) // agent is attack target
-                    {
-                        AttackTargetEvent atEvent = atEvents.LastOrDefault(y => x.Time >= y.Time);
-                        return atEvent?.Src == x.To;
-                    }
-                    else
-                    {
-                        return x.To == effectApply.By;
-                    }
+                    return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
                 }
                 return false;
             }),
@@ -75,16 +57,7 @@ namespace GW2EIEvtcParser.EIData
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
-                    IReadOnlyList<AttackTargetEvent> atEvents = log.CombatData.GetAttackTargetEventsByAttackTarget(effectApply.By);
-                    if (atEvents.Any()) // agent is attack target
-                    {
-                        AttackTargetEvent atEvent = atEvents.LastOrDefault(y => x.Time >= y.Time);
-                        return atEvent?.Src == x.To;
-                    } 
-                    else
-                    {
-                        return x.To == effectApply.By;
-                    }
+                    return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
                 }
                 return false;
             }),
