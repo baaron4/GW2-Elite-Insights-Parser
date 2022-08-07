@@ -12,7 +12,9 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar), // Celestial Avatar
             new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar), // Release Celestial Avatar
-            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality), // Glyph of Equality (non-CA)
+            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingChecker((evt, log) => log.GetEffectEvents().Count == 0), // Disable this one when effect events are present
+            new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Druid),
+            new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingChecker((evt, log) => evt.Src.Spec == Spec.Druid)
         };
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>

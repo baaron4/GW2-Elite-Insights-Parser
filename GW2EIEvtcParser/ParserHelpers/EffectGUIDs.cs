@@ -45,6 +45,13 @@ namespace GW2EIEvtcParser
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        // Ranger
+        public const string RangerLightningReflexes = "3CF1D1228CBC3740AA33EDA357EABED4";
+        public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
+        public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
+        public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
+        public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
+        public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";

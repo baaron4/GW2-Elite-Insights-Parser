@@ -318,6 +318,7 @@ namespace GW2EIEvtcParser
         public const long SeedTurret = 12456;
         public const long TakeRootSkill = 12457;
         public const long TakeRootEffect = 12459;
+        public const long LightningReflexes = 12494;
         public const long SignetOfStone = 12500;
         public const long SignetOfTheWild = 12518;
         public const long SharpeningStonesEffect = 12536;
@@ -327,11 +328,13 @@ namespace GW2EIEvtcParser
         public const long SignetOfStoneActive = 12543;
         public const long FrostSpiritOld = 12544;
         public const long StoneSpiritOld = 12547;
+        public const long QuickeningZephyr = 12550;
         public const long StrengthOfThePack = 12554;
         public const long AttackOfOpportunity = 12574;
         public const long SignetOfTheHuntPassive = 12626;
         public const long SignetOfStonePassive = 12627;
         public const long ProtectMe = 12631;
+        public const long GuardSkill = 12632;
         public const long SicEmSkill = 12633;
         public const long SignetOfTheWildPet = 12636;
         public const long WaterBlastCombo1 = 12836;
@@ -600,6 +603,7 @@ namespace GW2EIEvtcParser
         public const long GlyphOfUnity = 31385;
         public const long DistributedMagicRed = 31391;
         public const long UnstableMagicSpike = 31392;
+        public const long GlyphOfEqualityCA = 31401;
         public const long BanditKick = 31408;
         public const long ExitCelestialAvatar = 31411;
         public const long BluePylonPower = 31413;
@@ -711,6 +715,7 @@ namespace GW2EIEvtcParser
         public const long TinOfFruitcake = 34211;
         public const long FreshAir = 34241;
         public const long RockGuard = 34256;
+        public const long GuardEffect = 34281;
         public const long InstantReflexes = 34283;
         public const long WellOfTheProfane = 34336;
         public const long FieryVortexNarella = 34344;
@@ -1419,11 +1424,13 @@ namespace GW2EIEvtcParser
         public const long ShiftSignetEffect = 63068;
         public const long ShiftSignetSkill = 63111;
         public const long PetUnleashed = 63145;
+        public const long UnleashRanger = 63147;
         public const long EnterShadowShroud = 63155;
         public const long EternalNight = 63160;
         public const long GraspingShadows = 63167;
         public const long RotWallowVenom = 63168;
         public const long FerociousSymbiosis = 63191;
+        public const long UnnaturalTraversal = 63195;
         public const long ShroudedAlly = 63207;
         public const long DawnsRepose = 63220;
         public const long BarrierSignetJDrive = 63228;
@@ -1432,10 +1439,12 @@ namespace GW2EIEvtcParser
         public const long ForceSignet = 63243;
         public const long MindShock = 63249;
         public const long ExitShadowShroud = 63251;
+        public const long MutateConditions = 63256;
         public const long PerilousGift = 63284;
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
+        public const long UnleashPet = 63344;
         public const long EndlessNight = 63358;
         public const long HauntShot = 63362;
         public const long OverclockSignetJDrive = 63378;

@@ -25,6 +25,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect), // Sharpening Stone
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
+            new BuffGiveCastFinder(GuardSkill, GuardEffect),
+            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Ranger),
+            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Ranger)
         };
 
 
@@ -155,6 +158,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sic 'Em! (PvP)",SicEmEffectPvP, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png"),
                 new Buff("Sharpening Stones",SharpeningStonesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Buff("Sharpen Spines",SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/95/Sharpen_Spines.png"),
+                new Buff("Guard!",GuardEffect, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7f/%22Guard%21%22.png"),
                 //traits
                 new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/b0/Spotter.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 new Buff("Opening Strike",OpeningStrike, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png"),
