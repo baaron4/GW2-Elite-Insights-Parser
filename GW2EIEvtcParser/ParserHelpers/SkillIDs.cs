@@ -948,6 +948,7 @@ namespace GW2EIEvtcParser
         public const long Supportive = 40069;
         public const long PrimordialStanceSkill = 40183;
         public const long Stout = 40272;
+        public const long TrailOfAnguish = 40274;
         public const long SignetOfTheLocustShroud = 40283;
         public const long MirageCloak = 40408;
         public const long VultureStanceSkill = 40498;

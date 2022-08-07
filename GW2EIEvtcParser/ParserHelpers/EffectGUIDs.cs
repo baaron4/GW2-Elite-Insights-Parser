@@ -24,6 +24,8 @@ namespace GW2EIEvtcParser
         public const string MirageSandThroughGlass = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         // public const string MirageIllusionaryAmbush = "D7A05478BA0E164396EB90C037DCCF42"; // share the same effect with other stuff
+        // Necromancer
+        public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
         // Guardian
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // is it shout in general?
