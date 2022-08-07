@@ -616,21 +616,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)));
                         }
                     }
-                    // greens start from Jormag and onwards, we only need to process them once
-                    EffectGUIDEvent green = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen);
-                    if (green != null)
-                    {
-                        IReadOnlyList<EffectEvent> greenEffects = log.CombatData.GetEffectEvents(green.ContentID);
-                        knownEffectsIDs.Add(green.ContentID);
-                        foreach (EffectEvent greenEffect in greenEffects)
-                        {
-                            int duration = 5000;
-                            int start = (int)greenEffect.Time - duration;
-                            int end = (int)greenEffect.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, end, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                        }
-                    }
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
@@ -669,6 +654,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 230000, 238000);
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
+                    EffectGUIDEvent green = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen);
+                    if (green != null)
+                    {
+                        IReadOnlyList<EffectEvent> greenEffects = log.CombatData.GetEffectEvents(green.ContentID);
+                        knownEffectsIDs.Add(green.ContentID);
+                        foreach (EffectEvent greenEffect in greenEffects)
+                        {
+                            int duration = 5000;
+                            int start = (int)greenEffect.Time - duration;
+                            int end = (int)greenEffect.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
                 case (int)ArcDPSEnums.TrashID.VoidWarforged2:
