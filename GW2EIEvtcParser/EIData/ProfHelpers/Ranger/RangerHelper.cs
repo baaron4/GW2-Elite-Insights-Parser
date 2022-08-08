@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Skills
-            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.StartOfLife, GW2Builds.May2021Balance, DamageModifierMode.PvE, (x, log) => {
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -48,8 +48,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
                 return false;
-            }),
-            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.StartOfLife, GW2Builds.May2021Balance, DamageModifierMode.sPvPWvW, (x, log) => {
+            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -66,8 +66,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
                 return false;
-            }),
-            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", GW2Builds.May2021Balance, GW2Builds.EndOfLife, DamageModifierMode.All, (x, log) => {
+            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+            new BuffDamageModifier(SicEmEffect, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png", DamageModifierMode.All).UsingChecker( (x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmEffect).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
@@ -77,14 +77,14 @@ namespace GW2EIEvtcParser.EIData
                     {
                         AttackTargetEvent atEvent = atEvents.LastOrDefault(y => x.Time >= y.Time);
                         return atEvent?.Src == x.To;
-                    } 
+                    }
                     else
                     {
                         return x.To == effectApply.By;
                     }
                 }
                 return false;
-            }),
+            }).WithBuilds(GW2Builds.May2021Balance),
             // Marksmanship
             new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true),
+            }, ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance),
             new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png", (x, log) => {
                 if (!x.Skill.IsWeaponSkill)
                 {
@@ -111,12 +111,12 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-            }, ByPresence, GW2Builds.July2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All).UsingApproximate(true),
+            }, ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance),
             new BuffDamageModifierTarget(new long[] { 872, 833, 721, 727, 791, 722, 27705}, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png", DamageModifierMode.All),
             // Skirmishing
-            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.February2020Balance, GW2Builds.June2022Balance, DamageModifierMode.All),
-            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.June2022Balance, GW2Builds.EndOfLife, DamageModifierMode.sPvPWvW),
-            new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, GW2Builds.June2022Balance, GW2Builds.EndOfLife, DamageModifierMode.PvE),
+            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All).WithBuilds( GW2Builds.February2020Balance, GW2Builds.June2022Balance),
+            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
+            new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger,"https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png", (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance),
             new BuffDamageModifier(LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png", DamageModifierMode.All),
             // Nature Magic
             // We can't check buffs on minions yet
