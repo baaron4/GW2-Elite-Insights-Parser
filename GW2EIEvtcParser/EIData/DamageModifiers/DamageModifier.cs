@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        internal DamageModifier UsingChecker(DamageLogChecker dlChecker)
+        internal virtual DamageModifier UsingChecker(DamageLogChecker dlChecker)
         {
             DLChecker = dlChecker;
             return this;

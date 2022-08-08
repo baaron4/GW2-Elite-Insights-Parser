@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -26,6 +27,11 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             return res;
+        }
+
+        internal override DamageModifier UsingChecker(DamageLogChecker dlChecker)
+        {
+            throw new InvalidOperationException("Checker is already required for DamageLog modifiers");
         }
     }
 }
