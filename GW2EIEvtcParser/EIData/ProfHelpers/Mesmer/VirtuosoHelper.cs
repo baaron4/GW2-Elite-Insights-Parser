@@ -28,8 +28,8 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-            }, ByPresence, GW2Builds.EODBeta1, GW2Builds.EndOfLife, DamageModifierMode.PvE).UsingApproximate(true),
-            new BuffDamageModifier(63409, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", GW2Builds.EODBeta4, GW2Builds.EndOfLife, DamageModifierMode.All),
+            }, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
+            new BuffDamageModifier(63409, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

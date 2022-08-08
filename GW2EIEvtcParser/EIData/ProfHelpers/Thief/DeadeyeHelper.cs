@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, "https://wiki.guildwars2.com/images/d/d7/Premeditation.png", DamageModifierMode.All),
-            new BuffDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, "https://wiki.guildwars2.com/images/d/dd/Iron_Sight.png", DamageModifierMode.All, (x, log) => {
+            new BuffDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, "https://wiki.guildwars2.com/images/d/dd/Iron_Sight.png", DamageModifierMode.All).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
