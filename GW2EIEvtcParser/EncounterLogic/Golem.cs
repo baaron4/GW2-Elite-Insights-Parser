@@ -117,7 +117,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+#if DEBUG
             ProfHelper.DEBUG_ComputeProfessionCombatReplayActors(p, log, replay);
+#endif
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

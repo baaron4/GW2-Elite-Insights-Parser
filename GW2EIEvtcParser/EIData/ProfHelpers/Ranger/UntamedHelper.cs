@@ -13,6 +13,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new BuffGainCastFinder(UnleashPet, PetUnleashed),
+            new BuffGainCastFinder(UnleashRanger, Unleashed),
+            new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Untamed),
+            new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Untamed)
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
