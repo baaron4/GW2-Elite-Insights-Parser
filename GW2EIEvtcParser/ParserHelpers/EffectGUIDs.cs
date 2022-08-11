@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser
         public const string MesmerDistortion = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
         public const string MesmerMantraOfResolve = "593E668A006AB24D84999AED68F2E4C4";
         public const string MesmerMantraOfConcentration = "5B488D552E316045AD99C4A98EEDDB1E";
-        public const string ChronomancerShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast
-        public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A";
+        public const string ChronomancerSeizeTheMomentShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
+        public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
         public const string MirageSandThroughGlass = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C";

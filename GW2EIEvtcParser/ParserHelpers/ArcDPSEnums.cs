@@ -6,6 +6,8 @@ namespace GW2EIEvtcParser
 {
     public static class ArcDPSEnums
     {
+
+        public const int ArcDPSPollingRate = 300;
         // Activation
         public enum Activation : byte
         {

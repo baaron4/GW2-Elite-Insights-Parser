@@ -21,18 +21,48 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return false;
                 }
-                // Clones also trigger this effect but it is sourced to the master, we need to check that the effect happened at the same time as a shatter effect event
-                EffectGUIDEvent shatterGUIDEvent = combatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerShatter);
-                if (shatterGUIDEvent == null)
+                // Clones also trigger this effect but it is sourced to the master, we need additional checks
+                // Seize the moment makes for a very clear and clean check 
+                EffectGUIDEvent shatterSeizeTheMomentGUIDEvent = combatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerSeizeTheMomentShatter);
+                if (shatterSeizeTheMomentGUIDEvent != null)
+                {
+                    IReadOnlyList<EffectEvent> shatterEvents = combatData.GetEffectEvents(shatterSeizeTheMomentGUIDEvent.ContentID);
+                    if  (shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1)) {
+                        return true;
+                    }
+                    return false;
+                } 
+                // This is not reliable enough, leaving the code commented
+                //Otherwise, we check the position
+                /*IEnumerable<PositionEvent> positionEvents = combatData.GetMovementData(evt.Src).OfType<PositionEvent>();
+                PositionEvent prevPositionEvent = positionEvents.LastOrDefault(x => x.Time <= evt.Time);
+                if (prevPositionEvent == null)
                 {
                     return false;
                 }
-                var shatterEvents = combatData.GetEffectEvents(shatterGUIDEvent.ContentID);
-                if  (shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ParserHelper.ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1)) {
-                    return true;
+                PositionEvent nextPositionEvent = positionEvents.FirstOrDefault(x => x.Time >= evt.Time && x.Time <= prevPositionEvent.Time + ArcDPSPollingRate + ServerDelayConstant);
+                Point3D currentPosition;
+                if (nextPositionEvent != null)
+                {
+
+                    (var xPrevPos, var yPrevPos, _) = prevPositionEvent.Unpack();
+                    (var xNextPos, var yNextPos, _) = nextPositionEvent.Unpack();
+                    float ratio = (float)(evt.Time - prevPositionEvent.Time) / (nextPositionEvent.Time - prevPositionEvent.Time);
+                    var prevPosition = new Point3D(xPrevPos, yPrevPos, 0);
+                    var nextPosition = new Point3D(xNextPos, yNextPos, 0);
+                    currentPosition = new Point3D(prevPosition, nextPosition, ratio, 0);
+                } 
+                else
+                {
+                    (var xPos, var yPos, _) = prevPositionEvent.Unpack();
+                    currentPosition = new Point3D(xPos, yPos, 0);
                 }
+                // Allow an error a little bit below half the hitbox width of a player (48)
+                if  (currentPosition.Distance2DToPoint(evt.Position) < 15) {
+                    return true;
+                }*/
                 return false;
-            }),
+            }).UsingNotAccurate(true),
             new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, combatData) => evt.Src.Spec == Spec.Chronomancer),
             new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, combatData) => evt.Src.Spec == Spec.Chronomancer),
         };
