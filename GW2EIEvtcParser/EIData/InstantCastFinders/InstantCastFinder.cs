@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         public const long DefaultICD = 50;
         public long SkillID { get; }
 
-        public bool NotAccurate { get; protected set; } = false;
+        public bool NotAccurate { get; private set; } = false;
 
         protected long ICD { get; private set; } = DefaultICD;
 
@@ -32,6 +32,12 @@ namespace GW2EIEvtcParser.EIData
         internal InstantCastFinder UsingICD(long icd = DefaultICD)
         {
             ICD = icd;
+            return this;
+        }
+
+        internal InstantCastFinder UsingNotAccurate(bool notAccurate)
+        {
+            NotAccurate = notAccurate;
             return this;
         }
 

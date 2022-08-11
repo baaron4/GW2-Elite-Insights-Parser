@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly long _damageSkillID;
         public DamageCastFinder(long skillID, long damageSkillID ) : base(skillID)
         {
-            NotAccurate = true;
+            UsingNotAccurate(true);
             _damageSkillID = damageSkillID;
         }
 

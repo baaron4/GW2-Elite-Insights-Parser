@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
                     var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
                     return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
                 });
-                NotAccurate = true;
+                UsingNotAccurate(true);
             }
         }
 

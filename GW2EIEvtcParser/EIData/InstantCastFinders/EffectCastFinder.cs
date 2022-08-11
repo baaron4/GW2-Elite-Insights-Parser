@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public EffectCastFinder(long skillID, string effectGUID) : base(skillID)
         {
-            NotAccurate = true; // TODO: confirm if culling is server side logic
+            UsingNotAccurate(true); // TODO: confirm if culling is server side logic
             _effectGUID = effectGUID;
         }
 

@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.Extensions
         private readonly long _damageSkillID;
         public EXTHealingCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
-            NotAccurate = true;
+            UsingNotAccurate(true);
             _damageSkillID = damageSkillID;
         }
         internal EXTHealingCastFinder UsingChecker(HealingCastChecker checker)
