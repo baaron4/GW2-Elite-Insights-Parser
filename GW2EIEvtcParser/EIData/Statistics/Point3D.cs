@@ -19,6 +19,11 @@ namespace GW2EIEvtcParser.EIData
             float distance = (float)Math.Sqrt((endPoint.X - X) * (endPoint.X - X) + (endPoint.Y - Y) * (endPoint.Y - Y) + (endPoint.Z - Z) * (endPoint.Z - Z));
             return distance;
         }
+        public float Distance2DToPoint(Point3D endPoint)
+        {
+            float distance = (float)Math.Sqrt((endPoint.X - X) * (endPoint.X - X) + (endPoint.Y - Y) * (endPoint.Y - Y));
+            return distance;
+        }
 
         public float Length()
         {
