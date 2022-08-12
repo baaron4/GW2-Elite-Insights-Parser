@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -13,7 +15,6 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageCastFinder(Jaunt, Jaunt), // Jaunt
             new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
-            new EffectCastFinder(SandThroughGlass, EffectGUIDs.MirageSandThroughGlass).UsingChecker((evt, log) => evt.Src.Spec == Spec.Mirage),
             //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
         };
 
