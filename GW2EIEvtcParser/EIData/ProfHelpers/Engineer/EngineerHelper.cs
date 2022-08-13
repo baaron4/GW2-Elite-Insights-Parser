@@ -82,7 +82,27 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All ).UsingApproximate(true),
+            }, ByPresence, DamageModifierMode.All ).UsingApproximate(true).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+            new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            {
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (selfHP < 0.0 || dstHP < 0.0)
+                {
+                    return false;
+                }
+                return selfHP > dstHP;
+            }, ByPresence, DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.August2022Balance),
+            new DamageLogDamageModifier("Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            {
+                double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+                double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+                if (selfHP < 0.0 || dstHP < 0.0)
+                {
+                    return false;
+                }
+                return selfHP > dstHP;
+            }, ByPresence, DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.August2022Balance),
             // Firearms
             new BuffDamageModifier(ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
             new BuffDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
