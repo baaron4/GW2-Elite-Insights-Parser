@@ -4,14 +4,77 @@ namespace GW2EIEvtcParser.EIData
 {
     public class Point3D
     {
-        public float X { get; }
-        public float Y { get; }
-        public float Z { get; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
+        public float Z { get; private set; }
         public long Time { get; }
 
         private static float Mix(float a, float b, float c)
         {
             return (1.0f - c) * a + c * b;
+        }
+
+        public static Point3D operator +(Point3D a, Point3D b)
+        {
+            var newPt = new Point3D(a);
+            newPt.Add(b);
+            return newPt;
+        }
+
+        public static Point3D operator -(Point3D a, Point3D b)
+        {
+            var newPt = new Point3D(a);
+            newPt.Substract(b);
+            return newPt;
+        }
+        public static Point3D operator *(Point3D a, Point3D b)
+        {
+            var newPt = new Point3D(a);
+            newPt.Multiply(b);
+            return newPt;
+        }
+        public static Point3D operator *(float a, Point3D b)
+        {
+            var newPt = new Point3D(b);
+            newPt.MultiplyScalar(a);
+            return newPt;
+        }
+        public static Point3D operator *(Point3D a, float b)
+        {
+            var newPt = new Point3D(a);
+            newPt.MultiplyScalar(b);
+            return newPt;
+        }
+        public static Point3D operator -(Point3D a)
+        {
+            var newPt = new Point3D(a);
+            newPt.MultiplyScalar(-1);
+            return newPt;
+        }
+
+        public void Add(Point3D a)
+        {
+            X += a.X;
+            Y += a.Y;
+            Z += a.Z;
+        }
+        public void Substract(Point3D a)
+        {
+            X -= a.X;
+            Y -= a.Y;
+            Z -= a.Z;
+        }
+        public void Multiply(Point3D a)
+        {
+            X *= a.X;
+            Y *= a.Y;
+            Z *= a.Z;
+        }
+        public void MultiplyScalar(float a)
+        {
+            X *= a;
+            Y *= a;
+            Z *= a;
         }
 
         public float DistanceToPoint(Point3D endPoint)
@@ -41,6 +104,14 @@ namespace GW2EIEvtcParser.EIData
         public Point3D(float x, float y, float z, long time) : this(x,y,z)
         {
             Time = time;
+        }
+
+        public Point3D(Point3D a) : this(a.X, a.Y, a.Z, a.Time)
+        {
+        }
+
+        public Point3D(Point3D a, long time) : this(a.X, a.Y, a.Z, time)
+        {
         }
 
         public Point3D(Point3D a, Point3D b, float ratio, long time)

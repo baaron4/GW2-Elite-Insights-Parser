@@ -24,7 +24,46 @@ class MechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.connectedTo instanceof Array) {
+        if (this.connectedTo.interpolationMethod >= 0) {
+            // only linear support for now
+            var index = -1;
+            for (var i = 0; i < this.connectedTo.positions.length / 3; i++) {
+                var posTime = this.connectedTo.positions[3 * i + 2];
+                if (time < posTime) {
+                    break;
+                }
+                index = i;
+            }
+            if (index === -1) {
+                return {
+                    x: this.connectedTo.positions[0],
+                    y: this.connectedTo.positions[1]
+                }; 
+            } else if (index === this.connectedTo.positions.length / 3 - 1) {
+                return {
+                    x: this.connectedTo.positions[3 * index],
+                    y: this.connectedTo.positions[3 * index + 1]
+                }; 
+            } else {
+                var cur = {
+                    x: this.connectedTo.positions[3 * index ],
+                    y: this.connectedTo.positions[3 * index + 1]
+                };
+                var curTime = this.connectedTo.positions[3 * index + 2];
+                var next = {
+                    x: this.connectedTo.positions[3 * (index + 1) ],
+                    y: this.connectedTo.positions[3 * (index + 1) + 1]
+                };
+                var nextTime = this.connectedTo.positions[3 * (index + 1) + 2];
+                var pt = {
+                    x: 0,
+                    y: 0
+                };                    
+                pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
+                pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
+                return pt;
+            }
+        }else if (this.connectedTo instanceof Array) {
             return {
                 x: this.connectedTo[0],
                 y: this.connectedTo[1]
