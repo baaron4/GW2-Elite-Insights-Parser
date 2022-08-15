@@ -631,8 +631,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, end, 580, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 580, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
                         }
                     }
                     EffectGUIDEvent bigJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusBigJaw);
@@ -643,10 +643,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent bigJawEffect in bigJawEffects)
                         {
                             int start = (int)bigJawEffect.Time;
-                            int end = start + 7000;
+                            int end = start + 7500;
                             replay.Decorations.Add(new CircleDecoration(true, end, 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 1700, (end, end + 5000), "rgba(200, 0, 0, 0.4)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1700, (end, end + 4000), "rgba(200, 0, 0, 0.4)", new AgentConnector(target)));
                         }
                     }
                     break;
@@ -664,8 +664,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 5000;
                             int start = (int)greenEffect.Time - duration;
                             int end = (int)greenEffect.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, end, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
                         }
                     }
                     break;
@@ -678,7 +678,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private AbstractSingleActor FindActiveDragonVoid(long time)
+        private AbstractSingleActor FindActiveOrNextDragonVoid(long time)
         {
             var dragonVoidIDs = new List<int> {
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
@@ -688,7 +688,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            return Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+            AbstractSingleActor activeDragon = Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+            return activeDragon ?? Targets.FirstOrDefault(x => x.FirstAware >= time);
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -704,7 +705,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 5500;
                     int start = (int)spreadEffect.Time;
                     int end = start + duration;
-                    AbstractSingleActor dragonVoid = FindActiveDragonVoid(spreadEffect.Time);
+                    AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(spreadEffect.Time);
                     if (dragonVoid == null)
                     {
                         continue;
@@ -720,8 +721,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         effectEnd = Math.Min((int)despawnEvent.Time, end);
                     }
-                    replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                 }
             }
             EffectGUIDEvent redSelected = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddleSelect);
@@ -734,22 +735,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 6500;
                     int start = (int)redSelectedEffect.Time;
                     int end = start + duration;
-                    AbstractSingleActor dragonVoid = FindActiveDragonVoid(redSelectedEffect.Time);
+                    AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(redSelectedEffect.Time);
                     if (dragonVoid == null)
                     {
                         continue;
                     }
                     int puddleEnd = (int)dragonVoid.LastAware;
                     int effectEnd = Math.Min(puddleEnd, end);
-                    replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
                     Point3D pos = p.GetCurrentPosition(log, end);
                     if (pos == null)
                     {
                         continue;
                     }
-                    replay.Decorations.Add(new CircleDecoration(true, end + 1000, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
+                    replay.Decorations.Add(new CircleDecoration(true, end + 1500, 400, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
                 }
             }
         }
