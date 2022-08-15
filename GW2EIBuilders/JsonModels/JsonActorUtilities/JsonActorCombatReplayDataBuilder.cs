@@ -18,7 +18,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
         public static JsonActorCombatReplayData BuildJsonActorCombatReplayDataBuilder(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
-            AbstractSingleActorCombatReplayDescription description = actor.GetCombatReplayDescription(map, log);
+            AbstractSingleActorDescription description = actor.GetCombatReplayDescription(map, log);
             var actorCombatReplayData = new JsonActorCombatReplayData()
             {
                 IconURL = description.Img,
@@ -66,8 +66,8 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 IReadOnlyList<GenericDecoration> decorations = actor.GetCombatReplayDecorations(log);
                 foreach (GenericDecoration decoration in decorations)
                 {
-                    GenericDecorationCombatReplayDescription decDescription = decoration.GetCombatReplayDescription(map, log);
-                    if (decDescription is FacingDecorationCombatReplayDescription facingDescription)
+                    GenericDecorationDescription decDescription = decoration.GetCombatReplayDescription(map, log);
+                    if (decDescription is FacingDecorationDescription facingDescription)
                     {
                         actorCombatReplayData.Orientations = facingDescription.FacingData;
                     }

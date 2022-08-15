@@ -19,9 +19,9 @@ namespace GW2EIEvtcParser.EIData
 
         //
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new FacingDecorationCombatReplayDescription(log, this, map);
+            return new FacingDecorationDescription(log, this, map);
         }
     }
 }

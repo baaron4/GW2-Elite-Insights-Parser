@@ -6,6 +6,6 @@
         {
         }
 
-        public abstract override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
     }
 }

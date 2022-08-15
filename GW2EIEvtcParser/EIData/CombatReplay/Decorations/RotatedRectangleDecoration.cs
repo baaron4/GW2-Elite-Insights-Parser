@@ -25,9 +25,9 @@
             SpinAngle = spinAngle;
         }
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new RotatedRectangleDecorationCombatReplayDescription(log, this, map);
+            return new RotatedRectangleDecorationDescription(log, this, map);
         }
     }
 }

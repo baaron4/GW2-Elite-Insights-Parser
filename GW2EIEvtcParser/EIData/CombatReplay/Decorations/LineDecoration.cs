@@ -10,9 +10,9 @@
             ConnectedFrom = targetConnector;
         }
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new LineDecorationCombatReplayDescription(log, this, map);
+            return new LineDecorationDescription(log, this, map);
         }
     }
 }

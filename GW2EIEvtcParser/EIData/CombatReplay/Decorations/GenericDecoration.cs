@@ -10,7 +10,7 @@
         }
         //
 
-        public abstract GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
     }
 }
