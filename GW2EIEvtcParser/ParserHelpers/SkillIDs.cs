@@ -788,6 +788,7 @@ namespace GW2EIEvtcParser
         public const long StatueFixated2 = 34925;
         public const long CreepingPursuit = 34927;
         public const long SoothingWaters = 34955;
+        public const long InterventionSAK = 34956;
         public const long ChaoticHaze = 34963;
         public const long Derangement = 34965;
         public const long PhantasmalBlades3 = 34971;
