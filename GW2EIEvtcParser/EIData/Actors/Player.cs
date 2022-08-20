@@ -125,10 +125,10 @@ namespace GW2EIEvtcParser.EIData
                 InitCombatReplay(log);
             }
             (IReadOnlyList<(long start, long end)> deads, _, IReadOnlyList<(long start, long end)> dcs) = GetStatus(log);
-            var activePositions = new List<Point3D>(GetCombatReplayPolledPositions(log));
+            var activePositions = new List<ParametricPoint3D>(GetCombatReplayPolledPositions(log));
             for (int i = 0; i < activePositions.Count; i++)
             {
-                Point3D cur = activePositions[i];
+                ParametricPoint3D cur = activePositions[i];
                 foreach ((long start, long end) in deads)
                 {
                     if (cur.Time >= start && cur.Time <= end)

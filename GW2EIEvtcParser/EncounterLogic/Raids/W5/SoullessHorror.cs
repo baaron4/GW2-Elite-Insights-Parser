@@ -191,8 +191,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = start + 4000;
-                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
-                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
+                        ParametricPoint3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
+                        ParametricPoint3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (next != null || prev != null)
                         {
                             replay.Decorations.Add(new CircleDecoration(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
@@ -260,7 +260,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
                     break;
                 case (int)ArcDPSEnums.TrashID.SurgingSoul:
-                    List<Point3D> positions = replay.Positions;
+                    List<ParametricPoint3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
                         break;

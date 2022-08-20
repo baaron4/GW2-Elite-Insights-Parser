@@ -309,7 +309,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<Point3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {
@@ -659,7 +659,7 @@ namespace GW2EIEvtcParser.EIData
 
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
         {
-            IReadOnlyList<Point3D> positions = GetCombatReplayPolledPositions(log);
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             if (!positions.Any())
             {
                 return null;

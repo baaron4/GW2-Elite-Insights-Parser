@@ -6,9 +6,9 @@ namespace GW2EIEvtcParser.EIData
     {
         public List<float> Angles { get; } = new List<float>();
 
-        public FacingDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
+        public FacingDecoration((int start, int end) lifespan, AgentConnector connector, IReadOnlyList<ParametricPoint3D> facings) : base(lifespan, connector)
         {
-            foreach (Point3D facing in facings)
+            foreach (ParametricPoint3D facing in facings)
             {
                 if(facing.Time >= lifespan.start && facing.Time <= lifespan.end)
                 {

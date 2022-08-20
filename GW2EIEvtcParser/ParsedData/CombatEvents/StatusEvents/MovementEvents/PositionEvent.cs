@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return;
             }
-            replay.Positions.Add(new Point3D(x, y, z, Time));
+            replay.Positions.Add(new ParametricPoint3D(x, y, z, Time));
 
         }
     }

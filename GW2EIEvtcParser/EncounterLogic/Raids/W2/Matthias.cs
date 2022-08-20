@@ -302,8 +302,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int corruptedMatthiasEnd = (int)c.Time;
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
-                    Point3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
-                    Point3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
+                    ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
+                    ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
                     if (wellNextPosition != null || wellPrevPosition != null)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
@@ -325,8 +325,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int wellMatthiasEnd = (int)c.Time;
                     replay.Decorations.Add(new CircleDecoration(false, 0, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
                     replay.Decorations.Add(new CircleDecoration(true, wellMatthiasStart + 9000, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                    Point3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
-                    Point3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
+                    ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
+                    ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
                     if (wellNextPosition != null || wellPrevPosition != null)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
