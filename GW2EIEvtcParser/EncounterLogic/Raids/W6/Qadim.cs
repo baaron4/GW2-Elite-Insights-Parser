@@ -642,9 +642,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData lastPhase = phases[6];
 
-                List<Point3D> qadimMovement = replay.Positions;
+                List<ParametricPoint3D> qadimMovement = replay.Positions;
 
-                Point3D lastMove = qadimMovement.FirstOrDefault(
+                ParametricPoint3D lastMove = qadimMovement.FirstOrDefault(
                     pt =>
                     {
                         return Math.Abs(pt.X - qadimFinalX) < 5 && Math.Abs(pt.Y - qadimFinalY) < 5;

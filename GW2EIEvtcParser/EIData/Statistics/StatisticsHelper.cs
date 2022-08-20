@@ -125,10 +125,10 @@ namespace GW2EIEvtcParser.EIData
 
 
         //Positions for group
-        private List<Point3D> _stackCenterPositions = null;
-        private List<Point3D> _stackCommanderPositions = null;
+        private List<ParametricPoint3D> _stackCenterPositions = null;
+        private List<ParametricPoint3D> _stackCommanderPositions = null;
 
-        public IReadOnlyList<Point3D> GetStackCenterPositions(ParsedEvtcLog log)
+        public IReadOnlyList<ParametricPoint3D> GetStackCenterPositions(ParsedEvtcLog log)
         {
             if (_stackCenterPositions == null)
             {
@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EIData
             return _stackCenterPositions;
         }
 
-        public IReadOnlyList<Point3D> GetStackCommanderPositions(ParsedEvtcLog log)
+        public IReadOnlyList<ParametricPoint3D> GetStackCommanderPositions(ParsedEvtcLog log)
         {
             if (_stackCommanderPositions == null)
             {
@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EIData
 
         private void SetStackCenterPositions(ParsedEvtcLog log)
         {
-            _stackCenterPositions = new List<Point3D>();
+            _stackCenterPositions = new List<ParametricPoint3D>();
             if (log.CombatData.HasMovementData)
             {
                 var GroupsPosList = new List<IReadOnlyList<Point3D>>();
@@ -180,17 +180,17 @@ namespace GW2EIEvtcParser.EIData
                     x /= activePlayers;
                     y /= activePlayers;
                     z /= activePlayers;
-                    _stackCenterPositions.Add(new Point3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
+                    _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
                 }
             }
         }
         private void SetStackCommanderPositions(ParsedEvtcLog log)
         {
-            _stackCommanderPositions = new List<Point3D>();
+            _stackCommanderPositions = new List<ParametricPoint3D>();
             Player commander = log.PlayerList.FirstOrDefault(x => x.IsCommander(log));
             if (log.CombatData.HasMovementData && commander != null)
             {
-                _stackCommanderPositions = new List<Point3D>(commander.GetCombatReplayPolledPositions(log));
+                _stackCommanderPositions = new List<ParametricPoint3D>(commander.GetCombatReplayPolledPositions(log));
             }
         }
 

@@ -7,11 +7,11 @@ namespace GW2EIEvtcParser.EIData
 {
     public class CombatReplay
     {
-        internal List<Point3D> Positions { get; } = new List<Point3D>();
-        internal List<Point3D> PolledPositions { get; private set; } = new List<Point3D>();
-        internal List<Point3D> Velocities { get; private set; } = new List<Point3D>();
-        internal List<Point3D> Rotations { get; } = new List<Point3D>();
-        internal List<Point3D> PolledRotations { get; private set; } = new List<Point3D>();
+        internal List<ParametricPoint3D> Positions { get; } = new List<ParametricPoint3D>();
+        internal List<ParametricPoint3D> PolledPositions { get; private set; } = new List<ParametricPoint3D>();
+        internal List<ParametricPoint3D> Velocities { get; private set; } = new List<ParametricPoint3D>();
+        internal List<ParametricPoint3D> Rotations { get; } = new List<ParametricPoint3D>();
+        internal List<ParametricPoint3D> PolledRotations { get; private set; } = new List<ParametricPoint3D>();
         private long _start = -1;
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);
@@ -32,14 +32,14 @@ namespace GW2EIEvtcParser.EIData
             _end = Math.Max(_start, Math.Min(end, _end));
         }
 
-        private static int UpdateVelocityIndex(List<Point3D> velocities, int time, int currentIndex)
+        private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, int time, int currentIndex)
         {
             if (!velocities.Any())
             {
                 return -1;
             }
             int res = Math.Max(currentIndex, 0);
-            Point3D cuvVelocity = velocities[res];
+            ParametricPoint3D cuvVelocity = velocities[res];
             while (res < velocities.Count && cuvVelocity.Time < time)
             {
                 res++;
@@ -55,27 +55,27 @@ namespace GW2EIEvtcParser.EIData
         {
             if (Positions.Count == 0)
             {
-                Positions.Add(new Point3D(int.MinValue, int.MinValue, 0, 0));
+                Positions.Add(new ParametricPoint3D(int.MinValue, int.MinValue, 0, 0));
             }
             int positionTablePos = 0;
             int velocityTablePos = 0;
             //
             for (int i = (int)Math.Min(0, rate * ((Positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
-                Point3D pt = Positions[positionTablePos];
+                ParametricPoint3D pt = Positions[positionTablePos];
                 if (i <= pt.Time)
                 {
-                    PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                    PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
                     if (positionTablePos == Positions.Count - 1)
                     {
-                        PolledPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                        PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        Point3D ptn = Positions[positionTablePos + 1];
+                        ParametricPoint3D ptn = Positions[positionTablePos + 1];
                         if (ptn.Time < i)
                         {
                             positionTablePos++;
@@ -83,21 +83,21 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            Point3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
+                            ParametricPoint3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
                             velocityTablePos = UpdateVelocityIndex(Velocities, i, velocityTablePos);
-                            Point3D velocity = null;
+                            ParametricPoint3D velocity = null;
                             if (velocityTablePos >= 0 && velocityTablePos < Velocities.Count)
                             {
                                 velocity = Velocities[velocityTablePos];
                             }
                             if (velocity == null || (Math.Abs(velocity.X) <= 1e-1 && Math.Abs(velocity.Y) <= 1e-1))
                             {
-                                PolledPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
+                                PolledPositions.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
                             }
                             else
                             {
                                 float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                                PolledPositions.Add(new Point3D(last, ptn, ratio, i));
+                                PolledPositions.Add(new ParametricPoint3D(last, ptn, ratio, i));
                             }
 
                         }
@@ -122,20 +122,20 @@ namespace GW2EIEvtcParser.EIData
             int rotationTablePos = 0;
             for (int i = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
-                Point3D pt = Rotations[rotationTablePos];
+                ParametricPoint3D pt = Rotations[rotationTablePos];
                 if (i <= pt.Time)
                 {
-                    PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                    PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
                     if (rotationTablePos == Rotations.Count - 1)
                     {
-                        PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                        PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        Point3D ptn = Rotations[rotationTablePos + 1];
+                        ParametricPoint3D ptn = Rotations[rotationTablePos + 1];
                         if (ptn.Time < i)
                         {
                             rotationTablePos++;
@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            PolledRotations.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                            PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                         }
                     }
                 }

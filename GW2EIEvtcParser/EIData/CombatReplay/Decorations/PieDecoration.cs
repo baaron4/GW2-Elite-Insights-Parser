@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
 
         public PieDecoration(bool fill, int growing, Point3D startPoint, Point3D endPoint, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, connector)
         {
-            Direction = Point3D.GetRotationFromFacing(Point3D.Substract(endPoint, startPoint));
+            Direction = Point3D.GetRotationFromFacing(endPoint - startPoint);
             OpeningAngle = openingAngle;
         }
 

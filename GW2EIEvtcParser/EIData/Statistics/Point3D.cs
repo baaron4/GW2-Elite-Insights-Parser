@@ -7,7 +7,6 @@ namespace GW2EIEvtcParser.EIData
         public float X { get; private set; }
         public float Y { get; private set; }
         public float Z { get; private set; }
-        public long Time { get; }
 
         private static float Mix(float a, float b, float c)
         {
@@ -94,42 +93,32 @@ namespace GW2EIEvtcParser.EIData
             return length;
         }
 
-        public Point3D(float x, float y, float z)
+        public Point3D(float x, float y)
         {
             X = x;
             Y = y;
+            Z = 0;
+        }
+
+        public Point3D(float x, float y, float z) : this(x,y)
+        {
             Z = z;
         }
 
-        public Point3D(float x, float y, float z, long time) : this(x,y,z)
-        {
-            Time = time;
-        }
-
-        public Point3D(Point3D a) : this(a.X, a.Y, a.Z, a.Time)
+        public Point3D(Point3D a) : this(a.X, a.Y, a.Z)
         {
         }
 
-        public Point3D(Point3D a, long time) : this(a.X, a.Y, a.Z, time)
-        {
-        }
-
-        public Point3D(Point3D a, Point3D b, float ratio, long time)
+        public Point3D(Point3D a, Point3D b, float ratio)
         {
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
             Z = Mix(a.Z, b.Z, ratio);
-            Time = time;
         }
 
         public static float GetRotationFromFacing(Point3D facing)
         {
             return (float)Math.Round(ParserHelper.RadianToDegree(Math.Atan2(facing.Y, facing.X)), ParserHelper.CombatReplayDataDigit);
-        }
-
-        public static Point3D Substract(Point3D a, Point3D b)
-        {
-            return new Point3D(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
     }
 }

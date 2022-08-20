@@ -2,7 +2,7 @@
 {
     internal class InterpolatedPositionConnector : PositionConnector
     {
-        public InterpolatedPositionConnector(Point3D prev, Point3D next, int time) : base(prev)
+        public InterpolatedPositionConnector(ParametricPoint3D prev, ParametricPoint3D next, int time) : base(prev)
         {
             if (prev != null && next != null)
             {
@@ -14,7 +14,7 @@
                 else
                 {
                     float ratio = (float)(time - prev.Time) / denom;
-                    Position = new Point3D(prev, next, ratio, time);
+                    Position = new Point3D(prev, next, ratio);
                 }
             }
             else

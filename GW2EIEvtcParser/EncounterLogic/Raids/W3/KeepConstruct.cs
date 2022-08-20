@@ -292,8 +292,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         int skillCast = end - 1000;
-                        Point3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
-                        Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
+                        ParametricPoint3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
+                        ParametricPoint3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         if (prev != null || next != null)
                         {
                             replay.Decorations.Add(new CircleDecoration(false, 0, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));

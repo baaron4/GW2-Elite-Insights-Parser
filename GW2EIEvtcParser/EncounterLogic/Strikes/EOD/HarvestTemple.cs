@@ -574,11 +574,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 380, 30, RadianToDegreeF(beeLaunchEffect.Orientation.Z), 190, (start, end), "rgba(250, 50, 0, 0.4)", new PositionConnector(beeLaunchEffect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
-                            var initialPosition = new Point3D(beeLaunchEffect.Position, end);
+                            var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             var velocity = 50;
                             var lifespan = 15000;
-                            var finalPosition = new Point3D(initialPosition + (velocity * lifespan/1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z), 0), end + lifespan);
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
+                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan/1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
+                            //replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
                         }
                     }
                     //

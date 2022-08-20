@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class InterpolationConnector : Connector
     {
-        protected IReadOnlyList<Point3D> Positions { get; set; }
+        protected IReadOnlyList<ParametricPoint3D> Positions { get; set; }
 
         internal enum InterpolationMethod
         {
@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         private readonly InterpolationMethod _method;
 
-        public InterpolationConnector(IReadOnlyList<Point3D> positions, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
+        public InterpolationConnector(IReadOnlyList<ParametricPoint3D> positions, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
         {
             Positions = positions;
             _method = interpolationMethod;
@@ -23,11 +23,11 @@ namespace GW2EIEvtcParser.EIData
         {
             public int InterpolationMethod { get; set; }
             public IReadOnlyList<float> Positions { get; set; }
-            public InterpolationDescriptor(IReadOnlyList<Point3D> points, InterpolationMethod interpolationMethod, CombatReplayMap map)
+            public InterpolationDescriptor(IReadOnlyList<ParametricPoint3D> points, InterpolationMethod interpolationMethod, CombatReplayMap map)
             {
                 InterpolationMethod = (int)interpolationMethod;
                 var positions = new List<float>();
-                foreach (Point3D pos in points)
+                foreach (ParametricPoint3D pos in points)
                 {
                     (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
                     positions.Add(x);

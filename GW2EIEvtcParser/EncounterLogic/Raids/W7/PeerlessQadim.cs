@@ -396,8 +396,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int magmaDropEnd = (int)c.Time;
                     replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
                     replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
-                    Point3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
-                    Point3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
+                    ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
+                    ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
                     if (magmaNextPos != null || magmaPrevPos != null)
                     {
                         string colorToUse = magmaColors[magmaColor];

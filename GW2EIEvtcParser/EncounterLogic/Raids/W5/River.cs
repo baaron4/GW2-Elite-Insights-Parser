@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
-                    Point3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                    ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
                     if (firstBomberMovement != null)
                     {
                         replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.RiverOfSouls:
-                    Point3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                    ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
                     if (firstRiverMovement != null)
                     {
                         replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
