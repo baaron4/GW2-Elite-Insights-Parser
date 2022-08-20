@@ -1,11 +1,11 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    public class PieDecorationDescription : CircleDecorationDescription
+    public class PieDecorationCombatReplayDescription : CircleDecorationCombatReplayDescription
     {
         public float Direction { get; set; }
         public float OpeningAngle { get; set; }
 
-        internal PieDecorationDescription(ParsedEvtcLog log, PieDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal PieDecorationCombatReplayDescription(ParsedEvtcLog log, PieDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Pie";
             Direction = decoration.Direction;

@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EIData
             Positions.Add((x, y, z, (float)angle, (float)opacity, time));
         }
 
-        public override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new MovingPlatformDecorationDescription(this, map);
+            return new MovingPlatformDecorationCombatReplayDescription(this, map);
         }
     }
 }

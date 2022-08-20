@@ -66,8 +66,8 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 IReadOnlyList<GenericDecoration> decorations = actor.GetCombatReplayDecorations(log);
                 foreach (GenericDecoration decoration in decorations)
                 {
-                    GenericDecorationDescription decDescription = decoration.GetCombatReplayDescription(map, log);
-                    if (decDescription is FacingDecorationDescription facingDescription)
+                    GenericDecorationCombatReplayDescription decDescription = decoration.GetCombatReplayDescription(map, log);
+                    if (decDescription is FacingDecorationCombatReplayDescription facingDescription)
                     {
                         actorCombatReplayData.Orientations = facingDescription.FacingData;
                     }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class MovingPlatformDecorationDescription : BackgroundDecorationDescription
+    public class MovingPlatformDecorationCombatReplayDescription : BackgroundDecorationCombatReplayDescription
     {
         private class PositionConverter : JsonConverter
         {
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
         public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
 
 
-        internal MovingPlatformDecorationDescription(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
+        internal MovingPlatformDecorationCombatReplayDescription(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
         {
             Type = "MovingPlatform";
             Image = decoration.Image;

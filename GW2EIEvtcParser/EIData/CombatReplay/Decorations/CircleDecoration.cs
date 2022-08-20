@@ -18,9 +18,9 @@
 
         //
 
-        public override GenericDecorationDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new CircleDecorationDescription(log, this, map);
+            return new CircleDecorationCombatReplayDescription(log, this, map);
         }
     }
 }
