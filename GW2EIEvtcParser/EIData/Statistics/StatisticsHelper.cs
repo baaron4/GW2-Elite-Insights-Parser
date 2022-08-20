@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EIData
                     float y = 0;
                     float z = 0;
                     int activePlayers = GroupsPosList.Count;
-                    foreach (List<Point3D> points in GroupsPosList)
+                    foreach (IReadOnlyList<Point3D> points in GroupsPosList)
                     {
                         Point3D point = points[time];
                         if (point != null)
