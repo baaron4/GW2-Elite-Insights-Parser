@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser
             internal const ulong June2022Balance = 130910;
             internal const ulong June2022BalanceHotFix = 131084;
             internal const ulong August2022BalanceHotFix = 132359;
-            internal const ulong August2022Balance = ulong.MaxValue;
+            internal const ulong August2022Balance = 133322;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
