@@ -458,6 +458,7 @@ namespace GW2EIEvtcParser
         public const long SwiftMoaFeather = 23239;
         public const long MushroomKingsBlessing = 23488;
         public const long Reflection2 = 24014;
+        public const long SigilOfWater = 24241;
         public const long StoneHeart = 24304;
         public const long LightningRod = 24305;
         public const long RousingResilience = 24383;
@@ -597,10 +598,11 @@ namespace GW2EIEvtcParser
         public const long Firestorm = 31332;
         public const long Rebound = 31337;
         public const long DistributedMagicBlue = 31340;
+        public const long GlyphOfUnityCA = 31348;
         public const long HarmoniousConduit = 31353;
         public const long TranscendentTempest = 31353;
         public const long MagicAuraGreenGuardian = 31375;
-        public const long GlyphOfUnity = 31385;
+        public const long GlyphOfUnityEffect = 31385;
         public const long DistributedMagicRed = 31391;
         public const long UnstableMagicSpike = 31392;
         public const long GlyphOfEqualityCA = 31401;
@@ -621,7 +623,7 @@ namespace GW2EIEvtcParser
         public const long UnstablePylonRed = 31539;
         public const long VividEcho = 31548;
         public const long FlakShot = 31544;
-        public const long GlyphOfUnityCA = 31556;
+        public const long GlyphOfUnityEffectCA = 31556;
         public const long MagicAuraValeGuardian = 31557;
         public const long AncestralGrace = 31584;
         public const long Exposed31589 = 31589;

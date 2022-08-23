@@ -108,6 +108,10 @@ namespace GW2EIEvtcParser.ParsedData
             {49077, "Soul Stone Venom Strike" },
             {MantraOfSolace, "Mantra of Solace" },
             {43260, "Desert Empowerment" },
+            {SigilOfWater, "Sigil of Water" },
+            {GlyphOfUnityCA, "Glyph of Unity (CA)" },
+            {12836, "Water Blast Combo" }, // Water Blast Combo
+            {12825, "Water Blast Combo" }, // Water Blast Combo
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -179,7 +183,7 @@ namespace GW2EIEvtcParser.ParsedData
             {20479, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
             {31707, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
             {31629, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
-            {24241, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
+            {SigilOfWater, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
             {31371, "https://wiki.guildwars2.com/images/a/a9/Solar_Beam.png" },
             {12567, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
             {29997, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
@@ -200,6 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
             {DeathDropDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
+            {GlyphOfUnityCA, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png" },
             // Weaver attunements
             {DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },
