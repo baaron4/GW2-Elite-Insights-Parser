@@ -983,7 +983,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spherified Peppercorn-Spiced Oyster Soup", SpherifiedPeppercornSpicedOysterSoup, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/4/43/Spherified_Peppercorn-Spiced_Oyster_Soup.png"),
                 new Buff("Spherified Sesame Oyster Soup", SpherifiedSesameOysterSoup, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/5/51/Spherified_Sesame_Oyster_Soup.png"),
                 new Buff("Spiced Pepper Creme Brulee", SpicedPepperCremeBrulee, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/b/ba/Spiced_Pepper_Creme_Brulee.png"),
-                new Buff("Spiced Peppercorn Cheesecake",SpicedPeppercornCheesecake, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
+                new Buff("Spiced Peppercorn Cheesecake", SpicedPeppercornCheesecake, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/9/9c/Spiced_Peppercorn_Cheesecake.png"),
                 new Buff("Strawberry Cilantro Cheesecake", StrawberryCilantroCheesecake, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8d/Strawberry_Cilantro_Cheesecake.png"),
                 new Buff("Plate of Imperial Palace Special", PlateOfImperialPalaceSpecial , Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/c/c4/Plate_of_Imperial_Palace_Special.png"),
                 new Buff("Plate of Crispy Fish Pancakes", PlateOfCrispyFishPancakes , Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/f5/Plate_of_Crispy_Fish_Pancakes.png"),
