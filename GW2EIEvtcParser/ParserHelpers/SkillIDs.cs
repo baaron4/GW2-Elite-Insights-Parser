@@ -279,6 +279,7 @@ namespace GW2EIEvtcParser
         public const long DistortionEffect = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
+        public const long WindsOfChaos = 10273;
         public const long IllusionaryCounter = 10278;
         public const long IllusionaryRiposte = 10279;
         public const long Diversion = 10287;
@@ -955,6 +956,7 @@ namespace GW2EIEvtcParser
         public const long BearStance = 40045;
         public const long Supportive = 40069;
         public const long PrimordialStanceSkill = 40183;
+        public const long ChaosVortex = 40184;
         public const long Stout = 40272;
         public const long TrailOfAnguish = 40274;
         public const long SignetOfTheLocustShroud = 40283;

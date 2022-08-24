@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class EffectCastFinder : InstantCastFinder
     {
-        public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData);
+        public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData, AgentData agentData);
         private EffectCastChecker _triggerCondition { get; set; }
 
         private readonly string _effectGUID;
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         if (_triggerCondition != null)
                         {
-                            if (_triggerCondition(effectEvent, combatData))
+                            if (_triggerCondition(effectEvent, combatData, agentData))
                             {
                                 lastTime = effectEvent.Time;
                                 res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));

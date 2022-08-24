@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingChecker((evt, log) => evt.Src.Spec == Spec.Mechanist),
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Mechanist),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

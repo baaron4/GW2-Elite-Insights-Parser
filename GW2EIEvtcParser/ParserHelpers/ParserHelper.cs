@@ -1071,7 +1071,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.MinionID.Clone3:
                 case ArcDPSEnums.MinionID.Clone4:
                 case ArcDPSEnums.MinionID.Clone5:
-                case ArcDPSEnums.MinionID.Clone6:
+                case ArcDPSEnums.MinionID.CloneStaff:
                 case ArcDPSEnums.MinionID.Clone7:
                 case ArcDPSEnums.MinionID.Clone8:
                 case ArcDPSEnums.MinionID.Clone9:

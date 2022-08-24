@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             new EngineerKitFinder(MedKitSkill), // Med Kit
             new EngineerKitFinder(ToolKit), // Tool Kit
             new EngineerKitFinder(EliteMortarKit), // Elite Mortar Kit
-            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
+            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, combatData, agentData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
         };
 
 

@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
-            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
-            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingChecker((evt, log) => evt.Src.Spec == Spec.Scrapper),
+            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Scrapper),
+            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Scrapper),
+            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Scrapper),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

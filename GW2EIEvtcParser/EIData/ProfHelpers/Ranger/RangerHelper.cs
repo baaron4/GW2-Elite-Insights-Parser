@@ -26,8 +26,8 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
-            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Ranger),
-            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Ranger)
+            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, combatData, agentData) => evt.Src.BaseSpec == Spec.Ranger),
+            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, combatData, agentData) => evt.Dst.BaseSpec == Spec.Ranger)
         };
 
 
