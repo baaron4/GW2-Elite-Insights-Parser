@@ -1295,7 +1295,7 @@ namespace GW2EIEvtcParser
         public const long StrawberryCilantroCheesecake = 57239;
         public const long SoySesameSousVideSteak = 57241;
         public const long CilantroLimeSousVideSteak = 57244;
-        public const long CoqAuVinWithSalsa = 57253;
+        public const long PlateOfCoqAuVinWithSalsa = 57253;
         public const long PlateOfPeppercornSpicedCoqAuVin = 57260;
         public const long MintAndVeggieFlatbread = 57263;
         public const long MangoCilantroCremeBrulee = 57267;
@@ -1306,7 +1306,7 @@ namespace GW2EIEvtcParser
         public const long PlateOfPeppercornSpicedPoultryAspic = 57299;
         public const long PlateOfCloveSpicedPoultryAspic = 57302;
         public const long SesameCheesecake = 57328;
-        public const long PoultryAspicWithSalsaGarnish = 57341;
+        public const long PlateOfPoultryAspicWithSalsaGarnish = 57341;
         public const long SousVideSteakWithMintParsleySauce = 57342;
         public const long SpherifiedCilantroOysterSoup = 57356;
         public const long PlateOfCoqAuVinWithMintGarnish = 57362;
@@ -1314,13 +1314,11 @@ namespace GW2EIEvtcParser
         public const long PeppercornAndVeggieFlatbread = 57382;
         public const long MintStrawberryCheesecake = 57384;
         public const long MushroomCloveSousVideSteak = 57393;
-        public const long FruitSaladWithCilantroGarnish = 57401;
+        public const long BowlOfFruitSaladWithCilantroGarnish = 57401;
         public const long CilantroAndCuredMeatFlatbread = 57409;
         public const long CloveAndVeggieFlatbread = -1;
         public const long MintPearCuredMeatFlatbread = -1;
-        public const long PlateOfPoultryAspicWithSalsaGarnish = -1;
         public const long CloveSpicedEggsBenedict = -1;
-        public const long PlateOfCoqAuVinWithSalsa = -1;
         public const long PlateOfCloveSpicedClearTruffleRavioli = -1;
         public const long BowlOfSesameFruitSalad = -1;
         public const long SpicedPepperCremeBrulee = -1;
@@ -1328,7 +1326,6 @@ namespace GW2EIEvtcParser
         public const long EggsBenedictWithMintParsleySauce = -1;
         public const long OrangeCloveCheesecake = -1;
         public const long CloveSpicedCremeBrulee = -1;
-        public const long BowlOfFruitSaladWithCilantroGarnish = -1;
         public const long PlateOfPepperedClearTruffleRavioli = -1;
         public const long PlateOfSesamePoultryAspic = -1;
         public const long PlateOfCloveSpicedCoqAuVin = -1;
