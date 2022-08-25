@@ -599,7 +599,7 @@ namespace GW2EIEvtcParser
         public const long Firestorm = 31332;
         public const long Rebound = 31337;
         public const long DistributedMagicBlue = 31340;
-        public const long GlyphOfUnityCA = 31348;
+        public const long GlyphOfAlignemntCA = 31348;
         public const long HarmoniousConduit = 31353;
         public const long TranscendentTempest = 31353;
         public const long MagicAuraGreenGuardian = 31375;
@@ -633,6 +633,7 @@ namespace GW2EIEvtcParser
         public const long GhastlyPrison = 31623;
         public const long CannonBarrage = 31643;
         public const long Enraged1_200 = 31648;
+        public const long GlyphOfUnityCA = 31657;
         public const long GlyphOfEquality = 31658;
         public const long PylonAttunementRed = 31695;
         public const long FlamesOfWar = 31708;
