@@ -599,7 +599,7 @@ namespace GW2EIEvtcParser
         public const long Firestorm = 31332;
         public const long Rebound = 31337;
         public const long DistributedMagicBlue = 31340;
-        public const long GlyphOfAlignemntCA = 31348;
+        public const long GlyphOfAlignmentCA = 31348;
         public const long HarmoniousConduit = 31353;
         public const long TranscendentTempest = 31353;
         public const long MagicAuraGreenGuardian = 31375;
