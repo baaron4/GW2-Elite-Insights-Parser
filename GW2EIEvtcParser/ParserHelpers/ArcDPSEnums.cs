@@ -865,7 +865,7 @@ namespace GW2EIEvtcParser
             Clone4 = 8108,
             Clone5 = 8110,
             CloneStaff = 8111,
-            Clone7 = 10542,
+            CloneDownstate = 10542,
             Clone8 = 15003,
             Clone9 = 15032,
             Clone10 = 15044,

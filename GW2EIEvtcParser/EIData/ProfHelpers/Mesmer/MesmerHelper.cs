@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return false;
                 }
-                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || agentData.GetNPCsByID((int)MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
+                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID((int)MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
                 {
                     return false;
                 }
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Clone4,
             (int)MinionID.Clone5,
             (int)MinionID.CloneStaff,
-            (int)MinionID.Clone7,
+            (int)MinionID.CloneDownstate,
             (int)MinionID.Clone8,
             (int)MinionID.Clone9,
             (int)MinionID.Clone10,
