@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.ParsedData
         public int TriggerID { get; }
         public FightLogic Logic { get; }
         public long FightEnd { get; private set; } = long.MaxValue;
+        public long FightStart { get; } = 0;
         public long FightDuration => FightEnd;
 
         public string FightName { get; private set; }
