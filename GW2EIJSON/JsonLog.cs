@@ -261,6 +261,16 @@ namespace GW2EIJSON
         /// The duration of the fight in "xh xm xs xms" format
         /// </summary>
         public string Duration { get; set; }
+
+        /// <summary>
+        /// The duration of the fight in ms
+        /// </summary>
+        public long DurationMS { get; set; }
+
+        /// <summary>
+        /// Offset between fight start and log start
+        /// </summary>
+        public long LogStartOffset { get; set; }
         
         /// <summary>
         /// The success status of the fight

@@ -101,6 +101,8 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.TimeStartStd = log.LogData.LogStartStd;
             jsonLog.TimeEndStd = log.LogData.LogEndStd;
             jsonLog.Duration = log.FightData.DurationString;
+            jsonLog.DurationMS = log.FightData.FightDuration;
+            jsonLog.LogStartOffset = log.FightData.FightStartOffset;
             jsonLog.Success = log.FightData.Success;
             jsonLog.GW2Build = log.LogData.GW2Build;
             jsonLog.UploadLinks = uploadLinks;
