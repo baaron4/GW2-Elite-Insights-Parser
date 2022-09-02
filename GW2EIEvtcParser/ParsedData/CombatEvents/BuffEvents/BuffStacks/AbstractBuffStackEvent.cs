@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
             To = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         }
 
-        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
         {
             return BuffID != SkillIDs.NoBuff && hasStackIDs && BuffInstance != 0;
         }

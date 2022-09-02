@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
             _removedActive = removedActive;
         }
 
-        internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
         {
             if (BuffID == SkillIDs.NoBuff)
             {

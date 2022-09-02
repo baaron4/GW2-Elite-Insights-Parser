@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent) 
         {
-            if (!buffEvent.IsBuffSimulatorCompliant(log.FightData.FightEnd, log.CombatData.HasStackIDs))
+            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
             {
                 return;
             }

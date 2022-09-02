@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         // get rid of logs invalid for HasStackIDs false
                         log.UpdateProgressWithCancellationCheck("Failed id based simulation on " + Actor.Character + " for " + buff.Name);
-                        buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
+                        buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                         simulator = buff.CreateSimulator(log, true);
                         simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                     }
