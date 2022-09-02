@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
             if (mainTarget == null)
@@ -105,10 +105,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     start = c.Time;
                 }
             }
-            if (fightDuration - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
+            if (fightEnd - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
             {
-                phases.Add(new PhaseData(start, fightDuration));
-                start = fightDuration;
+                phases.Add(new PhaseData(start, fightEnd));
+                start = fightEnd;
             }
             for (int i = 1; i < phases.Count; i++)
             {
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new Segment(start, Math.Min(c.Time, fightDuration), orbCount));
+                    segments.Add(new Segment(start, Math.Min(c.Time, fightEnd), orbCount));
                     orbCount = 0;
                     start = 0;
                 }
@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

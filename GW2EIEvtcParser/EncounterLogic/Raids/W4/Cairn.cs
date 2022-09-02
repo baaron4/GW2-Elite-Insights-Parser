@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             BuffApplyEvent enrageApply = log.CombatData.GetBuffData(EnragedCairn).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
             if (enrageApply != null)
             {
-                var normalPhase = new PhaseData(0, enrageApply.Time)
+                var normalPhase = new PhaseData(log.FightData.FightStart, enrageApply.Time)
                 {
                     Name = "Calm"
                 };
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Cairn:

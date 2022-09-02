@@ -107,12 +107,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(phase);
             }
             //
-            var teleports = voice.GetCastEvents(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 58382).ToList();
+            var teleports = voice.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == 58382).ToList();
             long tpCount = 0;
             long preTPPhaseStart = 0;
             foreach (AbstractCastEvent teleport in teleports)
             {
-                long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightDuration);
+                long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
                 AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw && x.FirstAware >= preTPPhaseStart);
                 if (voiceAndClaw != null)
                 {
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > preTPPhaseStart);
                 long finalStart = preTPPhaseStart;
-                long finalPositionEnd = log.FightData.FightDuration;
+                long finalPositionEnd = log.FightData.FightEnd;
                 if (nextUnmergedPhase != null)
                 {
                     finalStart = nextUnmergedPhase.Start + 1;

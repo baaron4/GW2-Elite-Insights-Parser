@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
             agentData.Refresh();
-            AgentItem sword = agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+            AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
@@ -309,7 +309,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {

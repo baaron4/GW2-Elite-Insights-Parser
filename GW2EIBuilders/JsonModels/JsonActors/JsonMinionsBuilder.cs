@@ -79,7 +79,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonMinions.TotalTargetBreakbarDamage = totalTargetBreakbarDamage;
             }
             //
-            var skillByID = minions.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            var skillByID = minions.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             if (skillByID.Any())
             {
                 jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillDesc);

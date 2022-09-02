@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             var targetPhases = new List<PhaseData>();
             var states = new List<AbstractTimeCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
@@ -93,16 +93,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     start = state.Time;
                     if (i == states.Count - 1)
                     {
-                        targetPhases.Add(new PhaseData(start, fightDuration));
+                        targetPhases.Add(new PhaseData(start, fightEnd));
                     }
                 }
                 else
                 {
-                    end = Math.Min(state.Time, fightDuration);
+                    end = Math.Min(state.Time, fightEnd);
                     targetPhases.Add(new PhaseData(start, end));
                     if (i == states.Count - 1 && targetPhases.Count < 3)
                     {
-                        targetPhases.Add(new PhaseData(end, fightDuration));
+                        targetPhases.Add(new PhaseData(end, fightEnd));
                     }
                 }
             }
@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Nikare:

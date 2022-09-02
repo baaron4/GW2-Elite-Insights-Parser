@@ -139,7 +139,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
-                long fightDuration = log.FightData.FightEnd;
                 var thresholds = new List<double> { 80, 60, 40, 20, 0 };
                 string[] numberNames = new string[] { "First Number", "Second Number", "Third Number", "Fourth Number" };
                 // Fifth number would the equivalent of full fight phase
@@ -148,7 +147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     HealthUpdateEvent hpUpdate = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[j]);
                     if (hpUpdate != null)
                     {
-                        var phase = new PhaseData(0, hpUpdate.Time, numberNames[j])
+                        var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j])
                         {
                             CanBeSubPhase = false
                         };

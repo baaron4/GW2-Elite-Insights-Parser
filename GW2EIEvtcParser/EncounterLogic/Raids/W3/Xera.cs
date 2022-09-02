@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = GetMainTarget();
             if (mainTarget == null)
@@ -98,14 +98,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase1.AddTarget(mainTarget);
                     phases.Add(phase1);
 
-                    long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightDuration;
+                    long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
                     var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
                     glidingPhase.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.ChargedBloodstone));
                     phases.Add(glidingPhase);
 
                     if (_xeraSecondPhaseStartTime > 0)
                     {
-                        var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightDuration, "Phase 2");
+                        var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
                         phase2.AddTarget(mainTarget);
                         phase2.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.BloodstoneShard));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);

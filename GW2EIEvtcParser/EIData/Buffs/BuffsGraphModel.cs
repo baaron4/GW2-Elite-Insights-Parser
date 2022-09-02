@@ -46,6 +46,7 @@ namespace GW2EIEvtcParser.EIData
         internal void FuseSegments()
         {
             _buffChart = Segment.FuseSegments(_buffChart);
+            _buffChart.RemoveAll(x => x.Start > x.End);
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Twisted Castle", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }
 

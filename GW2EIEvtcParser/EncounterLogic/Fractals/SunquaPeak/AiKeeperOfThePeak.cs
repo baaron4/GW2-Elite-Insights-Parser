@@ -280,7 +280,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (_hasElementalMode)
             {
                 BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).FirstOrDefault();
-                long eleStart = Math.Max(elementalAi.FirstAware, 0);
+                long eleStart = Math.Max(elementalAi.FirstAware, log.FightData.FightStart);
                 long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
                 if (_hasDarkMode)
                 {
@@ -329,7 +329,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (_hasDarkMode)
             {
                 BuffApplyEvent invul895Gain = log.CombatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == darkAi.AgentItem).FirstOrDefault();
-                long darkStart = Math.Max(darkAi.FirstAware, 0);
+                long darkStart = Math.Max(darkAi.FirstAware, log.FightData.FightStart);
                 long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
                 if (_hasElementalMode)
                 {

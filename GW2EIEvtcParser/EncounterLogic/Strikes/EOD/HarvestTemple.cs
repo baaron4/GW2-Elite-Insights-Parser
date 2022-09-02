@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = deadEvent.Time;
                 }
-                var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, 0), Math.Min(end, log.FightData.FightEnd), "Purification " + (++purificationID));
+                var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), Math.Min(end, log.FightData.FightEnd), "Purification " + (++purificationID));
                 purificationPhase.AddTarget(voidAmal);
                 phases.Add(purificationPhase);
             }

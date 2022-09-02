@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.SoullessHorror);
             if (mainTarget == null)
@@ -113,19 +113,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var howling = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == 48662).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
             {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Pre-Breakbar " + i++);
+                var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i++);
                 phase.AddTarget(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
-            if (fightDuration - start > 3000)
+            if (fightEnd - start > 3000)
             {
-                var lastPhase = new PhaseData(start, fightDuration, "Final");
+                var lastPhase = new PhaseData(start, fightEnd, "Final");
                 lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

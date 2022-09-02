@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
 
         public bool Intersect(Segment seg)
         {
-            if (seg.Start == seg.End)
+            if (seg.Start >= seg.End)
             {
                 return false;
             }
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
 
         public bool Intersect(long start, long end)
         {
-            if (Start == End)
+            if (Start >= End)
             {
                 return false;
             }
@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
                 lastValue = state;
             }
             res.Add(new Segment(res.Last().End, max, lastValue));
-            res.RemoveAll(x => x.Start == x.End);
+            res.RemoveAll(x => x.Start >= x.End);
             return FuseSegments(res);
         }
 

@@ -84,13 +84,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void SetPhasePerTarget(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
         {
-            long fightDuration = log.FightData.FightEnd;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
             if (phaseStart != null)
             {
                 long start = phaseStart.Time;
                 DeadEvent phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-                long end = fightDuration;
+                long end = log.FightData.FightEnd;
                 if (phaseEnd != null)
                 {
                     end = phaseEnd.Time;
@@ -184,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Berg:

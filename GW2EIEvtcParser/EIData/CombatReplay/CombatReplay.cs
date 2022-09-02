@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal CombatReplay(ParsedEvtcLog log)
         {
-            _start = 0;
-            _end = log.FightData.FightDuration;
+            _start = log.FightData.FightStart;
+            _end = log.FightData.FightEnd;
         }
 
         internal void Trim(long start, long end)

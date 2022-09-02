@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
                 DamageEvents = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    DamageEvents.AddRange(minion.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
+                    DamageEvents.AddRange(minion.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
                 BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
                 DamageTakenEvents = new List<AbstractHealthDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
+                    DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
                 DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EIData
                 BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
             CastEvents = new List<AbstractCastEvent>();
             foreach (NPC minion in _minionList)
             {
-                CastEvents.AddRange(minion.GetCastEvents(log, 0, log.FightData.FightEnd));
+                CastEvents.AddRange(minion.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd));
             }
             CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => x.Skill.IsSwap).ToList();
         }
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EIData
         internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();
-            long fightDur = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             foreach (NPC minion in _minionList)
             {
                 var minionSegments = new List<Segment>();
@@ -197,10 +197,11 @@ namespace GW2EIEvtcParser.EIData
                     end = Math.Min(despawn.Time, end);
                 }
                 //
-                end = Math.Min(end, fightDur);
-                minionSegments.Add(new Segment(0, start, 0));
+                end = Math.Min(end, fightEnd);
+                minionSegments.Add(new Segment(log.FightData.FightStart, start, 0));
                 minionSegments.Add(new Segment(start, end, 1));
-                minionSegments.Add(new Segment(end, fightDur, 0));
+                minionSegments.Add(new Segment(end, fightEnd, 0));
+                minionSegments.RemoveAll(x => x.Start > x.End);
                 minionsSegments.Add(minionSegments);
             }
             return minionsSegments;

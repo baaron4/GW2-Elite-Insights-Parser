@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int phaseCount = 0;
             foreach (NPC target in Targets)
             {
-                var phase = new PhaseData(Math.Max(0, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
+                var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
                 phase.AddTarget(target);
                 phases.Add(phase);
             }
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
             }
             _targets.RemoveAll(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget);
-            AgentItem dummyAgent = agentData.AddCustomNPCAgent(0, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.Instance, true);
+            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.Instance, true);
             ComputeFightTargets(agentData, combatData, extensions);
             _targets.RemoveAll(x => x.LastAware - x.FirstAware < 2200);
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));

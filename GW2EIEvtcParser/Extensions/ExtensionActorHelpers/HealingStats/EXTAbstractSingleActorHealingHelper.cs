@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.Extensions
                 IReadOnlyDictionary<long, Minions> minionsList = _actor.GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    HealEvents.AddRange(mins.EXTHealing.GetOutgoingHealEvents(null, log, 0, log.FightData.FightEnd));
+                    HealEvents.AddRange(mins.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 HealEvents = HealEvents.OrderBy(x => x.Time).ToList();
                 HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

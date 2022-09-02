@@ -231,8 +231,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            long fightDuration = log.FightData.FightEnd;
-            long start = 0;
+            long fightEnd = log.FightData.FightEnd;
+            long start = log.FightData.FightStart;
             double offset = 100.0 / thresholds.Count;
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (int i = 0; i < thresholds.Count; i++)
@@ -242,14 +242,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     break;
                 }
-                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
+                var phase = new PhaseData(start, Math.Min(evt.Time, fightEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
-                start = Math.Max(evt.Time, 0);
+                start = Math.Max(evt.Time, log.FightData.FightStart);
             }
             if (phases.Count > 0 && phases.Count < thresholds.Count)
             {
-                var lastPhase = new PhaseData(start, fightDuration, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
+                var lastPhase = new PhaseData(start, fightEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
                 lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
@@ -296,14 +296,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
         {
-            return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, 0, log.FightData.FightEnd);
+            return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
         protected static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
         {
             var phases = new List<PhaseData>();
-            long fightDuration = log.FightData.FightEnd;
-            phases.Add(new PhaseData(0, fightDuration, "Full Fight")
+            phases.Add(new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
             {
                 CanBeSubPhase = false
             });
@@ -331,7 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
                 {
-                    long start = Math.Max(active.Time - 2000, 0);
+                    long start = Math.Max(active.Time - 2000, log.FightData.FightStart);
                     BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
                     long end;
                     if (notActive == null)

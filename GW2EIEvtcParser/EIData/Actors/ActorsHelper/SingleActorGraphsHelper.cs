@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_healthUpdates == null)
             {
-                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
+                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
             return _healthUpdates;
         }
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_breakbarPercentUpdates == null)
             {
-                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
+                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
             return _breakbarPercentUpdates;
         }
@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_barrierUpdates == null)
             {
-                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), 0, log.FightData.FightEnd);
+                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
             return _barrierUpdates;
         }

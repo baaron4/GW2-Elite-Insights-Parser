@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Slothasor);
             if (mainTarget == null)
@@ -76,17 +76,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var sleepy = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == NarcolepsySkill).ToList();
+            var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == NarcolepsySkill).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
             {
-                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration), "Phase " + i++);
+                var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Phase " + i++);
                 phase.AddTarget(mainTarget);
                 start = c.EndTime;
                 phases.Add(phase);
             }
-            var lastPhase = new PhaseData(start, fightDuration, "Phase " + i++);
+            var lastPhase = new PhaseData(start, fightEnd, "Phase " + i++);
             lastPhase.AddTarget(mainTarget);
             phases.Add(lastPhase);
             return phases;
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Slothasor:

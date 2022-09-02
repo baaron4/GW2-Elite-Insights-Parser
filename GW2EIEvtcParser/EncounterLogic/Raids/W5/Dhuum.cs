@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, AbstractSingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var cataCycles = cls.Where(x => x.SkillId == 48398).ToList();
             var gDeathmarks = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmarks.Count < cataCycles.Count)
@@ -156,8 +156,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Sometimes the pre event is not in the evtc
-            IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, 0, log.FightData.FightEnd);
-            IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, 0, 20000);
+            IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, log.FightData.FightStart, 20000);
             if (dhuumCast.Any(x => !(x is InstantCastEvent)))
             {
                 // full fight does not contain the pre event
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: correct position
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

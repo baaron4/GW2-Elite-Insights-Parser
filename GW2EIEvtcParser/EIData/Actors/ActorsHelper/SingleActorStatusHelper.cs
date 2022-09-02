@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int swapped = -1;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
             long lastDeathTime = 0;
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = Actor.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = Actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)
             {
                 _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));

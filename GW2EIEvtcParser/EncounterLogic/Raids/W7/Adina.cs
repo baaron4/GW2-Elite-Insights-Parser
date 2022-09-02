@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int crStart = (int)replay.TimeOffsets.start;
             int crEnd = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Adina:
@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhaseEnds.Add(pair.Key);
                 }
             }
-            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
+            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             if (mainPhaseEnds.Any())
             {

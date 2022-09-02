@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int crStart = (int)replay.TimeOffsets.start;
             int crEnd = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Sabir:

@@ -420,7 +420,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:

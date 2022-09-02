@@ -41,7 +41,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, skillDesc, buffDesc)).ToList();
             }
             //
-            var skillByID = actor.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            var skillByID = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             if (skillByID.Any())
             {
                 jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillDesc);

@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                 {
                     if (p.Spec == ParserHelper.Spec.Vindicator)
                     {
-                        _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == SkillIDs.ImperialImpactDodge));
+                        _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == SkillIDs.ImperialImpactDodge));
                     }
                 }
                 _vindicatorDodges = new List<AbstractCastEvent>(_vindicatorDodges.OrderBy(x => x.Time));

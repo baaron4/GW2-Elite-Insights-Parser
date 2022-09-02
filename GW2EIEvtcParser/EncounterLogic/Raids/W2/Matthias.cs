@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            long fightDuration = log.FightData.FightEnd;
+            long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Matthias);
             if (mainTarget == null)
@@ -91,22 +91,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == Invulnerability757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
-                            phases.Add(new PhaseData(invulRemove.Time, fightDuration));
+                            phases.Add(new PhaseData(invulRemove.Time, fightEnd));
                         }
                     }
                     else
                     {
-                        phases.Add(new PhaseData(downPour.Time, fightDuration));
+                        phases.Add(new PhaseData(downPour.Time, fightEnd));
                     }
                 }
                 else
                 {
-                    phases.Add(new PhaseData(heatWave.Time, fightDuration));
+                    phases.Add(new PhaseData(heatWave.Time, fightEnd));
                 }
             }
             else
             {
-                phases.Add(new PhaseData(0, fightDuration));
+                phases.Add(new PhaseData(log.FightData.FightStart, fightEnd));
             }
             string[] namesMat = new[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)

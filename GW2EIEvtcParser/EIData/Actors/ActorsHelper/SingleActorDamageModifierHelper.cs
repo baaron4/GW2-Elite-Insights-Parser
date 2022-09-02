@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             // Check if damage mods against target
-            if (_damageModifierEventsPerTargets.TryGetValue(0, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
+            if (_damageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
             {
                 var res = new Dictionary<string, DamageModifierStat>();
                 foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             // Check if we already filled the cache, that means no damage modifiers against given target
-            else if (_damageModifierEventsPerTargets.TryGetValue(0, log.FightData.FightEnd, null, out events))
+            else if (_damageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
             {
                 var res = new Dictionary<string, DamageModifierStat>();
                 _damageModifiersPerTargets.Set(start, end, target, res);
@@ -94,11 +94,11 @@ namespace GW2EIEvtcParser.EIData
             }
             damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
-            _damageModifierEventsPerTargets.Set(0, log.FightData.FightEnd, null, damageModifiersEvents);
+            _damageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
             var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList()));
             foreach (AgentItem actor in damageModifiersEventsByTarget.Keys)
             {
-                _damageModifierEventsPerTargets.Set(0, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);
+                _damageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);
             }
             //
             res = ComputeDamageModifierStats(target, log, start, end);
@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
         {
-            return new HashSet<string>(GetDamageModifierStats(null, log, 0, log.FightData.FightEnd).Keys);
+            return new HashSet<string>(GetDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
         }
 
     }

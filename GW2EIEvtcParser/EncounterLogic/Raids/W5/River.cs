@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            agentData.AddCustomNPCAgent(0, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }
 
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                     }
-                    var bomberman = target.GetCastEvents(log, 0, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
+                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;

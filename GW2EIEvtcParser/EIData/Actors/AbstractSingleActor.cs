@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge) || MesmerHelper.IsClone(pair.Value.ReferenceAgentItem))
+                    if (pair.Value.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge) || MesmerHelper.IsClone(pair.Value.ReferenceAgentItem))
                     {
                         _minions[pair.Value.UniqueID] = pair.Value;
                     }
@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageEvents(null, log, 0, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, 0, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
+                    if (pair.Value.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
                     {
                         _minions[pair.Value.UniqueID] = pair.Value;
                     }
@@ -353,7 +353,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightEnd);
+            CombatReplay.PollingRate(log.FightData.FightDuration);
             TrimCombatReplay(log);
             if (!IsFakeActor)
             {
@@ -532,7 +532,7 @@ namespace GW2EIEvtcParser.EIData
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    DamageEvents.AddRange(mins.GetDamageEvents(null, log, 0, log.FightData.FightEnd));
+                    DamageEvents.AddRange(mins.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -570,7 +570,7 @@ namespace GW2EIEvtcParser.EIData
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, 0, log.FightData.FightEnd));
+                    BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

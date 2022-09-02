@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.Extensions
                 IReadOnlyDictionary<long, Minions> minionsList = _actor.GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {
-                    BarrierEvents.AddRange(mins.EXTBarrier.GetOutgoingBarrierEvents(null, log, 0, log.FightData.FightEnd));
+                    BarrierEvents.AddRange(mins.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BarrierEvents = BarrierEvents.OrderBy(x => x.Time).ToList();
                 BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

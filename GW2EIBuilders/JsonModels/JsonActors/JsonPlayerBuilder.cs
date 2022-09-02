@@ -118,7 +118,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             jsonPlayer.OffGroupBuffsActive = GetPlayerBuffGenerations(phases.Select(phase => player.GetActiveBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, buffDesc);
             jsonPlayer.SquadBuffsActive = GetPlayerBuffGenerations(phases.Select(phase => player.GetActiveBuffs(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, buffDesc);
             //
-            IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, 0, log.FightData.FightEnd);
+            IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
             if (consumables.Any())
             {
                 var consumablesJSON = new List<JsonConsumable>();

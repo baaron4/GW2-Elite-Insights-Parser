@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
                     start = Math.Min(start, startTime);
                     end = Math.Max(end, deadTime);
                 }
-                Start = Math.Max(Math.Max(Start, start), 0);
+                Start = Math.Max(Math.Max(Start, start), log.FightData.FightStart);
                 End = Math.Min(Math.Min(End, end), log.FightData.FightEnd);
             }
             DurationInM = (End - Start) / 60000;

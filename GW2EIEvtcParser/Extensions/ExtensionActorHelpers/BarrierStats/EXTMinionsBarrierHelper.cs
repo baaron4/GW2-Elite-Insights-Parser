@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.Extensions
                 BarrierEvents = new List<EXTAbstractBarrierEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, 0, log.FightData.FightEnd));
+                    BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BarrierEvents = BarrierEvents.OrderBy(x => x.Time).ToList();
                 BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.Extensions
                 BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>();
                 foreach (NPC minion in _minionList)
                 {
-                    BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, 0, log.FightData.FightEnd));
+                    BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
                 BarrierReceivedEvents = BarrierReceivedEvents.OrderBy(x => x.Time).ToList();
                 BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());

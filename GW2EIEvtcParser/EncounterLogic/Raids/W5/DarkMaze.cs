@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     if (abe is BuffApplyEvent)
                     {
-                        var phase = new PhaseData(start, Math.Min(abe.Time, log.FightData.FightDuration))
+                        var phase = new PhaseData(start, Math.Min(abe.Time, log.FightData.FightEnd))
                         {
                             Name = eye.Character + " " + (++count)
                         };
@@ -89,12 +89,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         res.Add(phase);
                     } else
                     {
-                        start = Math.Min(abe.Time, log.FightData.FightDuration);
+                        start = Math.Min(abe.Time, log.FightData.FightEnd);
                     }
                 }
-                if (start < log.FightData.FightDuration)
+                if (start < log.FightData.FightEnd)
                 {
-                    var phase = new PhaseData(start, log.FightData.FightDuration)
+                    var phase = new PhaseData(start, log.FightData.FightEnd)
                     {
                         Name = eye.Character + " " + (++count)
                     };

@@ -46,13 +46,13 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         }
 
-        public void Simulate(List<AbstractBuffEvent> logs, long fightDuration)
+        public void Simulate(List<AbstractBuffEvent> logs, long fightStart, long fightEnd)
         {
             if (GenerationSimulation.Any())
             {
                 return;
             }
-            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, 0) : 0;
+            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, fightStart) : fightStart;
             long timeCur = firstTimeValue;
             long timePrev = firstTimeValue;
             foreach (AbstractBuffEvent log in logs)
@@ -66,10 +66,10 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 log.UpdateSimulator(this);
                 timePrev = timeCur;
             }
-            Update(fightDuration - timePrev);
+            Update(fightEnd - timePrev);
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
             Clear();
-            Trim(fightDuration);
+            Trim(fightEnd);
         }
 
         protected abstract void Clear();

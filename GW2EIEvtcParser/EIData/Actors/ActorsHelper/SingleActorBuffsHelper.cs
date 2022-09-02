@@ -199,8 +199,6 @@ namespace GW2EIEvtcParser.EIData
                 ComputeBuffMap(log);
             }
             BuffDictionary buffMap = _buffMap;
-            long dur = log.FightData.FightEnd;
-            int fightDuration = (int)(dur) / 1000;
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
             var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
             BuffsGraphModel numberOfClonesGraph = null;
@@ -224,7 +222,7 @@ namespace GW2EIEvtcParser.EIData
                     try
                     {
                         simulator = buff.CreateSimulator(log, false);
-                        simulator.Simulate(buffEvents, dur);
+                        simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                     }
                     catch (EIBuffSimulatorIDException)
                     {
@@ -232,7 +230,7 @@ namespace GW2EIEvtcParser.EIData
                         log.UpdateProgressWithCancellationCheck("Failed id based simulation on " + Actor.Character + " for " + buff.Name);
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(log.FightData.FightEnd, false));
                         simulator = buff.CreateSimulator(log, true);
-                        simulator.Simulate(buffEvents, dur);
+                        simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                     }
                     _buffSimulators[buffID] = simulator;
                     bool updateBoonPresence = boonIds.Contains(buffID);
@@ -244,7 +242,7 @@ namespace GW2EIEvtcParser.EIData
                         var segment = simul.ToSegment();
                         if (graphSegments.Count == 0)
                         {
-                            graphSegments.Add(new Segment(0, segment.Start, 0));
+                            graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
                         }
                         else if (graphSegments.Last().End != segment.Start)
                         {
@@ -255,12 +253,13 @@ namespace GW2EIEvtcParser.EIData
                     // Graph object creation
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new Segment(graphSegments.Last().End, dur, 0));
+                        graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
                     }
                     else
                     {
-                        graphSegments.Add(new Segment(0, dur, 0));
+                        graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
                     }
+
                     _buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
@@ -341,7 +340,6 @@ namespace GW2EIEvtcParser.EIData
         {
             IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByClassification[BuffClassification.Consumable];
             _consumeList = new List<Consumable>();
-            long fightDuration = log.FightData.FightEnd;
             foreach (Buff consumable in consumableList)
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
@@ -355,7 +353,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         time = ba.Time;
                     }
-                    if (time <= fightDuration)
+                    if (time <= log.FightData.FightEnd)
                     {
                         Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
                         if (existing != null)
