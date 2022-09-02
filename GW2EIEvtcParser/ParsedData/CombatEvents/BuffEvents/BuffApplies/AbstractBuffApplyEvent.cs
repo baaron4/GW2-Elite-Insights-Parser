@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != SkillIDs.NoBuff && Time <= fightEnd - ParserHelper.BuffSimulatorDelayConstant;
+            return BuffID != SkillIDs.NoBuff;
         }
     }
 }

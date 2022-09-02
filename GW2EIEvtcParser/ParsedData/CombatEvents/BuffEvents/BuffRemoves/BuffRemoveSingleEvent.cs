@@ -11,7 +11,6 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly bool _removedActive;
         private readonly bool _byShouldntBeUnknown;
         private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
-        private bool _lowValueRemove => (RemovedDuration <= ParserHelper.BuffSimulatorDelayConstant && RemovedDuration != 0);
 
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
@@ -30,9 +29,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            if (BuffID == SkillIDs.NoBuff || Time > fightEnd - ParserHelper.BuffSimulatorDelayConstant)
+            if (BuffID == SkillIDs.NoBuff)
             {
-                // don't take into account removal that are close to the end of the fight
                 return false;
             }
             if (hasStackIDs)
@@ -40,8 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return true;
             }
             // overstack or natural end removals
-            // low value single stack remove that can mess up with the simulator if server delay
-            return !_overstackOrNaturalEnd && !_lowValueRemove;
+            return !_overstackOrNaturalEnd;
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
