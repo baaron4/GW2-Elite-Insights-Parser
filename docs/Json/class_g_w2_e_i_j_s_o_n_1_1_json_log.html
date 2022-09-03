@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.45.0+</span>
+   &#160;<span id="projectnumber">2.46.1.3+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -169,6 +169,12 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <tr class="memitem:a6620fe4750b338fef3b8365f032d7c78"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6620fe4750b338fef3b8365f032d7c78">Duration</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a6620fe4750b338fef3b8365f032d7c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the fight in "xh xm xs xms" format  <a href="#a6620fe4750b338fef3b8365f032d7c78">More...</a><br /></td></tr>
 <tr class="separator:a6620fe4750b338fef3b8365f032d7c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab104f45d79c85e280cbf3f0c26058417"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab104f45d79c85e280cbf3f0c26058417">DurationMS</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ab104f45d79c85e280cbf3f0c26058417"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the fight in ms  <a href="#ab104f45d79c85e280cbf3f0c26058417">More...</a><br /></td></tr>
+<tr class="separator:ab104f45d79c85e280cbf3f0c26058417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e1890a14195ad2f83a75d25235157bf"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1e1890a14195ad2f83a75d25235157bf">LogStartOffset</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a1e1890a14195ad2f83a75d25235157bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset between fight start and log start  <a href="#a1e1890a14195ad2f83a75d25235157bf">More...</a><br /></td></tr>
+<tr class="separator:a1e1890a14195ad2f83a75d25235157bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a5ec959a120ce2016a7463dd447742"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad3a5ec959a120ce2016a7463dd447742">Success</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ad3a5ec959a120ce2016a7463dd447742"><td class="mdescLeft">&#160;</td><td class="mdescRight">The success status of the fight  <a href="#ad3a5ec959a120ce2016a7463dd447742">More...</a><br /></td></tr>
 <tr class="separator:ad3a5ec959a120ce2016a7463dd447742"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -341,6 +347,30 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 </div><div class="memdoc">
 
 <p>The duration of the fight in "xh xm xs xms" format </p>
+
+</div>
+</div>
+<a id="ab104f45d79c85e280cbf3f0c26058417"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab104f45d79c85e280cbf3f0c26058417">&#9670;&nbsp;</a></span>DurationMS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long GW2EIJSON.JsonLog.DurationMS</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The duration of the fight in ms </p>
 
 </div>
 </div>
@@ -558,6 +588,30 @@ see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/En
 </div><div class="memdoc">
 
 <p>List of error messages given by ArcDPS </p>
+
+</div>
+</div>
+<a id="a1e1890a14195ad2f83a75d25235157bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e1890a14195ad2f83a75d25235157bf">&#9670;&nbsp;</a></span>LogStartOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long GW2EIJSON.JsonLog.LogStartOffset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Offset between fight start and log start </p>
 
 </div>
 </div>
