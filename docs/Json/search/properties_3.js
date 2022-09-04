@@ -32,5 +32,6 @@ var searchData=
   ['dps',['Dps',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a4c95a1d0d4d60e149134f1e6ca2608f7',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['dpsall',['DpsAll',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#adf85821c8f9f08c12f0084031d5061d9',1,'GW2EIJSON::JsonActor']]],
   ['dpstargets',['DpsTargets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a1353f113c4abc3b85f8e99296ecd9ccd',1,'GW2EIJSON::JsonPlayer']]],
-  ['duration',['Duration',['../class_g_w2_e_i_j_s_o_n_1_1_json_consumable.html#a0c174683a882ed7f4690b23568edf664',1,'GW2EIJSON.JsonConsumable.Duration()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#a22cc207246b937fbffa30b1dcc9c6391',1,'GW2EIJSON.JsonRotation.JsonSkill.Duration()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6620fe4750b338fef3b8365f032d7c78',1,'GW2EIJSON.JsonLog.Duration()']]]
+  ['duration',['Duration',['../class_g_w2_e_i_j_s_o_n_1_1_json_consumable.html#a0c174683a882ed7f4690b23568edf664',1,'GW2EIJSON.JsonConsumable.Duration()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#a22cc207246b937fbffa30b1dcc9c6391',1,'GW2EIJSON.JsonRotation.JsonSkill.Duration()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6620fe4750b338fef3b8365f032d7c78',1,'GW2EIJSON.JsonLog.Duration()']]],
+  ['durationms',['DurationMS',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab104f45d79c85e280cbf3f0c26058417',1,'GW2EIJSON::JsonLog']]]
 ];
