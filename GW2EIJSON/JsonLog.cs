@@ -47,7 +47,11 @@ namespace GW2EIJSON
             /// </summary>
             public bool IsSwap { get; set; }
             /// <summary>
-            /// True in case where the skill is an instant cast and the detection may have missed some
+            /// True when the skill is an instant cast
+            /// </summary>
+            public bool IsInstantCast { get; set; }
+            /// <summary>
+            /// True when the skill is an instant cast and the detection may have missed some
             /// </summary>
             public bool IsNotAccurate { get; set; }
             /// <summary>

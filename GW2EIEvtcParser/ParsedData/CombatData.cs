@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
         private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataById;
+        private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataById;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
@@ -179,6 +180,7 @@ namespace GW2EIEvtcParser.ParsedData
             var castAgentsToSort = new HashSet<AgentItem>();
             var wepSwapAgentsToSort = new HashSet<AgentItem>();
             var instantAgentsToSort = new HashSet<AgentItem>();
+            var instantIDsToSort = new HashSet<long>();
             foreach (AbstractCastEvent cast in toAdd)
             {
                 if (cast is AnimatedCastEvent ace)
@@ -201,12 +203,12 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     else
                     {
-                        _animatedCastDataById[cast.SkillId] = new List<AnimatedCastEvent>()
-                    {
-                        ace
-                    };
+                        _animatedCastDataById[ace.SkillId] = new List<AnimatedCastEvent>()
+                        {
+                            ace
+                        };
                     }
-                    castIDsToSort.Add(cast.SkillId);
+                    castIDsToSort.Add(ace.SkillId);
                 }
                 if (cast is WeaponSwapEvent wse)
                 {
@@ -237,6 +239,18 @@ namespace GW2EIEvtcParser.ParsedData
                         };
                     }
                     instantAgentsToSort.Add(ice.Caster);
+                    if (_instantCastDataById.TryGetValue(ice.SkillId, out List<InstantCastEvent> instantCastListByID))
+                    {
+                        instantCastListByID.Add(ice);
+                    }
+                    else
+                    {
+                        _instantCastDataById[ice.SkillId] = new List<InstantCastEvent>()
+                        {
+                            ice
+                        };
+                    }
+                    instantIDsToSort.Add(ice.SkillId);
                 }
             }
             foreach (long castID in castIDsToSort)
@@ -254,6 +268,10 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (AgentItem a in instantAgentsToSort)
             {
                 _instantCastData[a] = _instantCastData[a].OrderBy(x => x.Time).ToList();
+            }
+            foreach (long instantID in instantIDsToSort)
+            {
+                _instantCastDataById[instantID] = _instantCastDataById[instantID].OrderBy(x => x.Time).ToList();
             }
         }
 
@@ -398,6 +416,7 @@ namespace GW2EIEvtcParser.ParsedData
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _instantCastData = new Dictionary<AgentItem, List<InstantCastEvent>>();
+            _instantCastDataById = new Dictionary<long, List<InstantCastEvent>>();
             _animatedCastDataById = animatedCastData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             //
             operation.UpdateProgressWithCancellationCheck("Creating Buff Events");
@@ -783,6 +802,20 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyList<InstantCastEvent> GetInstantCastData(AgentItem caster)
         {
             if (_instantCastData.TryGetValue(caster, out List<InstantCastEvent> res))
+            {
+                return res;
+            }
+            return new List<InstantCastEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of instant cast events done by Agent
+        /// </summary>
+        /// <param name="caster"></param> Agent
+        /// <returns></returns>
+        public IReadOnlyList<InstantCastEvent> GetInstantCastData(long skillID)
+        {
+            if (_instantCastDataById.TryGetValue(skillID, out List<InstantCastEvent> res))
             {
                 return res;
             }
