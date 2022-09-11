@@ -33,7 +33,7 @@
             :class="{'rot-swap': isSwap(rota[1]) ,'mb-1': isSwap(rota[1]), 'rot-small': small || (smallAA && getSkill(rota[1]).aa)}"
             v-show="showSkill(rota)">
             <img class="rot-icon"
-                :class="{'rot-cancelled': rota[3] === 2, 'rot-animfull': rota[3] === 3, 'rot-unknown': rota[3] === 0, 'rot-instant': rota[3] === 4}"
+                :class="{'rot-cancelled': rota[3] === RotationStatus.CANCEL, 'rot-animfull': rota[3] === RotationStatus.FULL, 'rot-unknown': rota[3] === RotationStatus.UNKNOWN, 'rot-instant': rota[3] === RotationStatus.INSTANT}"
                 :src="getSkill(rota[1]).icon"
                 :data-original-title="getSkill(rota[1]).name + ', Time: ' + rota[0] + 's, Dur: ' + rota[2] + 'ms'">
         </span>
@@ -78,6 +78,9 @@
         computed: {
             rotation: function () {
                 return this.target ? logData.targets[this.actorindex].details.rotation[this.phaseindex] : logData.players[this.actorindex].details.rotation[this.phaseindex];
+            },
+            RotationStatus: function() {
+                return RotationStatus;
             }
         },
         methods: {
@@ -93,14 +96,14 @@
                     if (!this.autoattack) {
                         return false;
                     }
-                    if (this.hideInterruptedAA && rota[3] === 2) {
+                    if (this.hideInterruptedAA && rota[3] === RotationStatus.CANCEL) {
                         return false;
                     }
                 }
-                if (this.hideInstantCast && rota[3] === 4 && !this.isSwap(rota[1])) {
+                if (this.hideInstantCast && rota[3] === RotationStatus.INSTANT && !this.isSwap(rota[1])) {
                     return false;
                 }
-                if (this.hideSmallTime && rota[3] !== 4) {
+                if (this.hideSmallTime && rota[3] !== RotationStatus.INSTANT) {
                     return rota[2] > 10;
                 }
                 return true;

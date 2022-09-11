@@ -273,20 +273,16 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
 
             var fillColor;
             var originalDuration = duration;
-            if (endType == 1) { 
+            if (endType === RotationStatus.REDUCED) { 
                 fillColor = 'rgb(0,0,255)'; 
-            }
-            else if (endType == 2) { 
+            } else if (endType === RotationStatus.CANCEL) { 
                 fillColor = 'rgb(255,0,0)'; 
-            }
-            else if (endType == 3) { 
+            } else if (endType === RotationStatus.FULL) { 
                 fillColor = 'rgb(0,255,0)'; 
-            }
-            else if (endType == 4) { 
+            } else if (endType === RotationStatus.INSTANT) { 
                 fillColor = 'rgb(0,255,255)'; 
-                duration = 50;
-            }
-            else { 
+                duration = 50; // so that the quad is visible
+            } else { // UNKNOWN
                 fillColor = 'rgb(255,255,0)'; 
             }
 

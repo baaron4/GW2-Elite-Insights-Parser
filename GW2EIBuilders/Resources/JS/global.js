@@ -199,3 +199,11 @@ const specToBase = {
     Weaver: "Elementalist",
     Catalyst: "Elementalist"
 };
+
+const RotationStatus = {
+    UNKNOWN: 0,
+    REDUCED: 1,
+    CANCEL: 2,
+    FULL: 3,
+    INSTANT: 4
+};
