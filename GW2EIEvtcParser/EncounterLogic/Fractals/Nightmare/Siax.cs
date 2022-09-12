@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.EchoOfTheUnclean,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
-                    phase.Name = "Caustic Explosion " + (i/2 + 1);
+                    phase.Name = "Caustic Explosion " + (i/2);
                 }
                 else
                 {
