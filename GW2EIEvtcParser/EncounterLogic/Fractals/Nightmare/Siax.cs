@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -42,12 +44,48 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.SiaxHallucination,
                 ArcDPSEnums.TrashID.NightmareHallucinationSiax,
+                ArcDPSEnums.TrashID.EchoOfTheUnclean,
             };
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.EncounterMode.CMNoName;
+        }
+
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Siax);
+            if (siax == null)
+            {
+                throw new MissingKeyActorsException("Siax not found");
+            }
+            phases[0].AddTarget(siax);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, Determined762, siax, true, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i % 2 == 0)
+                {
+                    var ids = new List<int>
+                    {
+                       (int) ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                    };
+                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    phase.Name = "Caustic Explosion " + (i/2 + 1);
+                }
+                else
+                {
+                    phase.Name = "Phase " + (i + 1) / 2;
+                    phase.AddTarget(siax);
+                }
+            }
+            return phases;
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)

@@ -940,6 +940,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/INCGLIK.png";
                 case ArcDPSEnums.TrashID.BanditBombardier:
                 case ArcDPSEnums.TrashID.SmotheringShadow:
+                case ArcDPSEnums.TrashID.EchoOfTheUnclean:
                 case ArcDPSEnums.TrashID.SurgingSoul:
                 case ArcDPSEnums.TrashID.MazeMinotaur:
                 case ArcDPSEnums.TrashID.Enervator:
