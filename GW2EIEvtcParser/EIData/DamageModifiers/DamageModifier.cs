@@ -232,6 +232,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(NumberOfBoons, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png", DamageModifierMode.All),
             new BuffDamageModifierTarget(Chilled, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png", DamageModifierMode.All),
             new BuffDamageModifier(Fury, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(new long[] { Stun, KnockDown }, "Impact Sigil", "7% on stunned or knocked-down target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png", DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> CommonDamageModifiers = new List<DamageModifier>
         {
