@@ -158,6 +158,7 @@ namespace GW2EIEvtcParser
         public const long RocketTurretDamage = 6108;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
+        public const long KnockDown = 6892;
         public const long LeapOfFaith = 9080;
         public const long ShieldOfWrathSkill = 9082;
         public const long SymbolOfPunishment = 9090;
