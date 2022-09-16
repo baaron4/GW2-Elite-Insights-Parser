@@ -199,11 +199,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (cur is SpawnEvent)
                 {
-                    dc.Add((0, cTime));
+                    dc.Add((long.MinValue, cTime));
                 }
                 else if (cur is AliveEvent)
                 {
-                    dead.Add((0, cTime));
+                    dead.Add((long.MinValue, cTime));
                 }
             }
         }
@@ -221,13 +221,21 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, fightData.FightEnd, i);
+                AddValueToStatusList(dead, down, dc, cur, next, LastAware, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, fightData.FightEnd, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, null, LastAware, status.Count - 1);
+                if (cur is DeadEvent)
+                {
+                    dead.Add((LastAware, long.MaxValue));
+                } 
+                else
+                {
+                    dc.Add((LastAware, long.MaxValue));
+                }
             }
         }
 
