@@ -140,6 +140,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 subPhases[i].Name = "Phase " + (i + 1);
                 subPhases[i].AddTarget(ministerLi);
             }
+            // when wiped during a split phase, Li's LastAware is well before fight end
+            subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ParserHelper.ServerDelayConstant);
             phases.AddRange(subPhases);
             //
             AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.ID == (log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
