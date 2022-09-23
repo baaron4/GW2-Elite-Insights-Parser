@@ -66,24 +66,24 @@
             };
         },
         mounted() {
-            initializeTable(this.tablePid, this.sortPdata);
+            refreshTable(this.tablePid, this.sortPdata);
             //
             if (this.enemyMechHeader.length) {
-                initializeTable(this.tableEid, this.sortEdata);
+                refreshTable(this.tableEid, this.sortEdata);
             }
         },
         updated() {
-            updateTable(this.tablePid);
+            refreshTable(this.tablePid, this.sortPdata);
             //
             if (this.enemyMechHeader.length) {
-                updateTable(this.tableEid);
+                refreshTable(this.tableEid, this.sortEdata);
             }
         },
         activated() {
-            initializeTable(this.tablePid, this.sortPdata);
+            refreshTable(this.tablePid, this.sortPdata);
             //
             if (this.enemyMechHeader.length) {
-                initializeTable(this.tableEid, this.sortEdata);
+                refreshTable(this.tableEid, this.sortEdata);
             }
         },
         computed: {

@@ -725,14 +725,19 @@ function initializeTable(tableid, sortdata) {
     );
 }
 
-function updateTable(id) {
-    var divID = "#" + id;
+function updateTable(tableid) {
+    var divID = "#" + tableid;
     var table = $(divID);
     if ($.fn.dataTable.isDataTable(divID)) {
         table.DataTable().rows().invalidate('dom');
         table.DataTable().draw();
     }
     //}
+};
+
+function refreshTable(tableid, sortdata) {
+    initializeTable(tableid, sortdata);
+    updateTable(tableid);
 };
 
 /*function getActorGraphLayout(images, boonYs, stackingBoons) {

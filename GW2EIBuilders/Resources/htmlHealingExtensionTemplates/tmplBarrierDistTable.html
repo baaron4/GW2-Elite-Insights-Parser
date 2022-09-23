@@ -137,7 +137,7 @@
         },
         mixins: [numberComponent],
         mounted() {
-            initializeTable(this.tableid, this.sortdata);
+            refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
         beforeUpdate() {
@@ -146,11 +146,11 @@
                 .destroy();
         },
         updated() {      
-            initializeTable(this.tableid, this.sortdata);
+            refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
         activated() {             
-            initializeTable(this.tableid, this.sortdata);
+            refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
         methods: {

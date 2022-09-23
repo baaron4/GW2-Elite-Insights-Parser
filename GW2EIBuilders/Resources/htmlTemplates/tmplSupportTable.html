@@ -70,13 +70,13 @@
         },
         mixins: [numberComponent],
         mounted() {
-            initializeTable(this.tableid, this.sortdata);
+            refreshTable(this.tableid, this.sortdata);
         },
         updated() {
-            updateTable(this.tableid);
+            refreshTable(this.tableid, this.sortdata);
         },
         activated() {
-            initializeTable(this.tableid, this.sortdata);
+            refreshTable(this.tableid, this.sortdata);
         },
         computed: {
             tableid: function() {
