@@ -96,7 +96,13 @@ class FacingMechanicDrawable extends MechanicDrawable {
         var time = animator.reactiveDataStatus.time;
         if (time - timeValue > 0 && offsetedIndex < this.facingData.length - 1) {
             const nextTimeValue = animator.times[currentIndex + 1];
-            const nextAngle = this.facingData[offsetedIndex + 1];
+            let nextAngle = this.facingData[offsetedIndex + 1];
+            // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
+            if (nextAngle - initialAngle < -180) {
+                nextAngle += 360.0;
+            } else if (nextAngle - initialAngle > 180) {
+                nextAngle -= 360.0;
+            }
             angle = initialAngle + (time - timeValue) / (nextTimeValue - timeValue) * (nextAngle - initialAngle);
         } else {
             angle = initialAngle;
