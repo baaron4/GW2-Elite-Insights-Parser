@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect).UsingICD(500), // Relinquish Power
             new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect), // Vengeful Hammers
             new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect), // Release Hammers
+            new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness), // Release Hammers
             new DamageCastFinder(InvokingTorment, InvokingTorment).WithBuilds(GW2Builds.February2020Balance), // Invoking Torment
             new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf

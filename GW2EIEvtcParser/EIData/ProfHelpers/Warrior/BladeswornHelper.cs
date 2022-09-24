@@ -13,7 +13,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber sheath
-            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber         
+            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber     
+            new BuffGainCastFinder(OverchargedCartridgesSkill, OverchargedCartridgesEffect).WithBuilds(GW2Builds.June2022Balance).UsingICD(500),             
             new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2), // Unseen Sword
         };
 
@@ -41,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
             new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
             new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/47/Tactical_Reload.png"),
-            new Buff("Overcharged Cartridges", OverchargedCartridges, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/0a/Overcharged_Cartridges.png"),
+            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/0a/Overcharged_Cartridges.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
 

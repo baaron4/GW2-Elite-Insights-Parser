@@ -343,7 +343,8 @@ namespace GW2EIEvtcParser
         public const long Shadowstep = 13002;
         public const long Mug = 13014;
         public const long Stealth = 13017;
-        public const long SpiderVenom = 13036;
+        public const long SpiderVenomEffect = 13036;
+        public const long SpiderVenomSkill = 13037;
         public const long AssassinsSignet = 13046;
         public const long AssassinsSignetPassive = 13047;
         public const long SignetOfMalice = 13049;
@@ -492,6 +493,7 @@ namespace GW2EIEvtcParser
         public const long RiteOfTheGreatDwarf = 26596;
         public const long FacetOfStrengthSkill = 26644;
         public const long BattleScars = 26646;
+        public const long ResistTheDarkness = 26693;
         public const long Slow = 26766;
         public const long AssassinsPresence = 26854;
         public const long ReleaseHammers = 26956;
@@ -1620,8 +1622,9 @@ namespace GW2EIEvtcParser
         public const long EnforcerRushingJusticeCM = 68028;
         public const long Tranquil = 68065;
         public const long VoidEmpowerment = 68083;
+        public const long OverchargedCartridgesSkill = 68085;
         public const long Emboldened = 68087;
-        public const long OverchargedCartridges = 68095;
+        public const long OverchargedCartridgesEffect = 68095;
         public const long TacticalReload = 68126;
     }
 

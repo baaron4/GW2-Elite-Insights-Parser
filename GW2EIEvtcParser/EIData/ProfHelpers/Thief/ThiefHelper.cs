@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
             new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
-            //new BuffGiveCastFinder(13037,13036,InstantCastFinder.DefaultICD), // Spider Venom - same id as leeching venom trait?
+            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect), // Spider Venom - same id as leeching venom trait?
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Ice Drake Venom",IceDrakeVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Buff("Devourer Venom", DevourerVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
                 new Buff("Skale Venom", SkaleVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
-                new Buff("Spider Venom",SpiderVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
+                new Buff("Spider Venom",SpiderVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
                 new Buff("Soul Stone Venom",SoulStoneVenomEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
                 new Buff("Basilisk Venom", BasiliskVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 new Buff("Infiltration",Infiltration, Source.Thief, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
