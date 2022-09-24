@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.May2021Balance), // Power spike
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance), // Mantra of Pain
             new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance), // Mantra of Recovery
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData) => {
-                return combatData.GetBuffData(brae.To).Any(x =>
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, log) => {
+                return log.CombatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == SkillIDs.HideInShadows &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ServerDelayConstant &&
@@ -79,25 +79,32 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, combatData, agentData) => evt.Src.BaseSpec == Spec.Mesmer),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, combatData, agentData) => 
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, log) => 
             {
                 if (evt.Dst.BaseSpec != Spec.Mesmer)
                 {
                     return false;
                 }
-                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID((int)MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
+                AbstractSingleActor player = log.FindActor(evt.Dst, false);
+                if (player == null)
+                {
+                    return false;
+                }
+                WeaponSets weps = player.GetWeaponSets(log);
+                // conflict with phase retreat (staff skill), ignore if staff is present or despite a land swap we couldn't detect one of the slots
+                if (weps.LandSet1.MH == "Staff" || weps.LandSet2.MH == "Staff" || (weps.HasLandSwapped && (weps.IsLand1Unknown || weps.IsLand2Unknown)))
                 {
                     return false;
                 }
                 return true;
             }),
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData) => combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolve).UsingChecker((evt, combatData, agentData) => evt.Src.BaseSpec == Spec.Mesmer),
-            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentration).UsingChecker((evt, combatData, agentData) => evt.Dst.BaseSpec == Spec.Mesmer),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, log) => !log.CombatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, log) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, log) => log.CombatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolve).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentration).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Mesmer),
         };
 
 

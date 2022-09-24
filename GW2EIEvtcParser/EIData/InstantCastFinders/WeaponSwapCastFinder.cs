@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class WeaponSwapCastFinder : InstantCastFinder
     {
-        public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, CombatData combatData, SkillData skillData);
+        public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, ParsedEvtcLog log);
         private WeaponSwapCastChecker _triggerCondition { get; set; }
 
         private readonly long _swappedTo;
@@ -19,12 +19,12 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+        public override List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log)
         {
             var res = new List<InstantCastEvent>();
-            foreach (AgentItem playerAgent in agentData.GetAgentByType(AgentItem.AgentType.Player))
+            foreach (AgentItem playerAgent in log.AgentData.GetAgentByType(AgentItem.AgentType.Player))
             {
-                IReadOnlyList<WeaponSwapEvent> swaps = combatData.GetWeaponSwapData(playerAgent);
+                IReadOnlyList<WeaponSwapEvent> swaps = log.CombatData.GetWeaponSwapData(playerAgent);
                 long lastTime = int.MinValue;
                 foreach (WeaponSwapEvent swap in swaps)
                 {
@@ -39,16 +39,16 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (_triggerCondition != null)
                     {
-                        if (_triggerCondition(swap, combatData, skillData))
+                        if (_triggerCondition(swap, log))
                         {
                             lastTime = swap.Time;
-                            res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
+                            res.Add(new InstantCastEvent(swap.Time, log.SkillData.Get(SkillID), swap.Caster));
                         }
                     }
                     else
                     {
                         lastTime = swap.Time;
-                        res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
+                        res.Add(new InstantCastEvent(swap.Time, log.SkillData.Get(SkillID), swap.Caster));
                     }
                 }
             }

@@ -18,9 +18,9 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(MantraOfFlameCast,MantraOfFlameDamage).WithBuilds(GW2Builds.May2021Balance), // Mantra of Flame
             new DamageCastFinder(MantraOfTruthCast,MantraOfTruthDamage).WithBuilds(GW2Builds.May2021Balance), // Mantra of Truth
             new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace).WithBuilds(GW2Builds.May2021Balance), // Mantra of Solace
-            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, combatData, agentData) => evt.Dst.Spec == Spec.Firebrand),
-            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, combatData, agentData) => evt.Dst.Spec == Spec.Firebrand),
-            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData) => evt.Dst.Spec == Spec.Firebrand),
+            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Firebrand),
+            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Firebrand),
+            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Firebrand),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

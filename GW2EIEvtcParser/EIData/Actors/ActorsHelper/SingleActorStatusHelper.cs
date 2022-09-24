@@ -136,6 +136,12 @@ namespace GW2EIEvtcParser.EIData
                     swappedTime = swe.Time;
                 }
             }
+            int land1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstLandSet);
+            int land2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondLandSet);
+            int water1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstWaterSet);
+            int water2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondWaterSet);
+            _weaponSets.HasLandSwapped = land1Swaps > 0 && land2Swaps > 0;
+            _weaponSets.HasWaterSwapped = water1Swaps > 0 && water2Swaps > 0;
         }
         public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
         {

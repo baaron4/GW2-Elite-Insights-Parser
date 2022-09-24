@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.Extensions
 {
     internal class EXTBarrierCastFinder : InstantCastFinder
     {
-        public delegate bool BarrierCastChecker(EXTAbstractBarrierEvent evt, CombatData combatData);
+        public delegate bool BarrierCastChecker(EXTAbstractBarrierEvent evt, ParsedEvtcLog log);
         private BarrierCastChecker _triggerCondition { get; set; }
 
         private readonly long _damageSkillID;
@@ -22,14 +22,14 @@ namespace GW2EIEvtcParser.Extensions
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+        public override List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log)
         {
             var res = new List<InstantCastEvent>();
-            if (!combatData.HasEXTBarrier)
+            if (!log.CombatData.HasEXTBarrier)
             {
                 return res;
             }
-            var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            var heals = log.CombatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in heals)
             {
                 long lastTime = int.MinValue;
@@ -46,16 +46,16 @@ namespace GW2EIEvtcParser.Extensions
                     }
                     if (_triggerCondition != null)
                     {
-                        if (_triggerCondition(de, combatData))
+                        if (_triggerCondition(de, log))
                         {
                             lastTime = de.Time;
-                            res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.From));
+                            res.Add(new InstantCastEvent(de.Time, log.SkillData.Get(SkillID), de.From));
                         }
                     }
                     else
                     {
                         lastTime = de.Time;
-                        res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.From));
+                        res.Add(new InstantCastEvent(de.Time, log.SkillData.Get(SkillID), de.From));
                     }
                 }
             }

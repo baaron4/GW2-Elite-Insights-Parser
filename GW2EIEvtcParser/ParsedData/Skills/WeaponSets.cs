@@ -11,10 +11,12 @@ namespace GW2EIEvtcParser.ParsedData
         private string LandOH1 = Unknown;
         private string LandMH2 = Unknown;
         private string LandOH2 = Unknown;
+        public bool HasLandSwapped { get; internal set; } = false;
         private string WaterMH1 = Unknown;
         private string WaterOH1 = Unknown;
         private string WaterMH2 = Unknown;
         private string WaterOH2 = Unknown;
+        public bool HasWaterSwapped { get; internal set; } = false;
 
         internal WeaponSets()
         {
@@ -158,16 +160,20 @@ namespace GW2EIEvtcParser.ParsedData
 
         public string[] ToArray() => new string[] { LandMH1, LandOH1, LandMH2, LandOH2, WaterMH1, WaterOH1, WaterMH2, WaterOH2 };
 
-        public (string, string) LandSet1 => (LandMH1, LandOH1);
+        public (string MH, string OH) LandSet1 => (LandMH1, LandOH1);
         public bool IsLand1TwoHand => LandOH1 == TwoHand;
+        public bool IsLand1Unknown => LandMH1 == Unknown && LandOH1 == Unknown;
 
-        public (string, string) LandSet2 => (LandMH2, LandOH2);
+        public (string MH, string OH) LandSet2 => (LandMH2, LandOH2);
         public bool IsLand2TwoHand => LandOH2 == TwoHand;
+        public bool IsLand2Unknown => LandMH2 == Unknown && LandOH2 == Unknown;
 
-        public (string, string) WaterSet1 => (WaterMH1, WaterOH1);
+        public (string MH, string OH) WaterSet1 => (WaterMH1, WaterOH1);
         public bool IsWater1TwoHand => WaterOH1 == TwoHand;
+        public bool IsWater1Unknown => WaterMH1 == Unknown && WaterOH1 == Unknown;
 
-        public (string, string) WaterSet2 => (WaterMH2, WaterOH2);
+        public (string MH, string OH) WaterSet2 => (WaterMH2, WaterOH2);
         public bool IsWater2TwoHand => WaterOH2 == TwoHand;
+        public bool IsWater2Unknown => WaterMH2 == Unknown && WaterOH2 == Unknown;
     }
 }

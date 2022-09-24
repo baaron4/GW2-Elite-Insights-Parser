@@ -47,6 +47,6 @@ namespace GW2EIEvtcParser.EIData
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
-        public abstract List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData);
+        public abstract List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log);
     }
 }

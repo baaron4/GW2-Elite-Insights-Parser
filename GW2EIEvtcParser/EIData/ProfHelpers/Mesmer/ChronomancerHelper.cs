@@ -16,17 +16,17 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(ContinuumSplit, TimeAnchored), // Continuum Split
             new BuffLossCastFinder(ContinuumShift, TimeAnchored), // Continuum Shift
-            new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond).UsingChecker((evt, combatData, agentData) => {
+            new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond).UsingChecker((evt, log) => {
                 if (evt.Src.Spec != Spec.Chronomancer)
                 {
                     return false;
                 }
                 // Clones also trigger this effect but it is sourced to the master, we need additional checks
                 // Seize the moment makes for a very clear and clean check 
-                EffectGUIDEvent shatterSeizeTheMomentGUIDEvent = combatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerSeizeTheMomentShatter);
+                EffectGUIDEvent shatterSeizeTheMomentGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerSeizeTheMomentShatter);
                 if (shatterSeizeTheMomentGUIDEvent != null)
                 {
-                    IReadOnlyList<EffectEvent> shatterEvents = combatData.GetEffectEvents(shatterSeizeTheMomentGUIDEvent.ContentID);
+                    IReadOnlyList<EffectEvent> shatterEvents = log.CombatData.GetEffectEvents(shatterSeizeTheMomentGUIDEvent.ContentID);
                     if  (shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1)) {
                         return true;
                     }
@@ -63,8 +63,8 @@ namespace GW2EIEvtcParser.EIData
                 }*/
                 return false;
             }).UsingNotAccurate(true),
-            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Chronomancer),
-            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, combatData, agentData) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, log) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, log) => evt.Src.Spec == Spec.Chronomancer),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
