@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int combatPhase = 0;
                 EnterCombatEvent firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
                 ExitCombatEvent firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
-                if (firstExitCombat != null && (firstEnterCombat == null || firstEnterCombat.Time > firstEnterCombat.Time))
+                if (firstExitCombat != null && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
                 {
                     var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
                     {
