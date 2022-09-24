@@ -83,12 +83,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.PointOfView);
-            if (pov != null)
+            if (pov == null)
             {
                 // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
+                    CombatItem exitCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat);
+                    if (exitCombat != null && exitCombat.Time <= enterCombat.Time)
+                    {
+                        return fightData.LogStart;
+                    } 
                     return enterCombat.Time;
                 }
             }
