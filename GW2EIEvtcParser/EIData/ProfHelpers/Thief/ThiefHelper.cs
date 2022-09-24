@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -19,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
             new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
-            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect), // Spider Venom - same id as leeching venom trait?
+            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, log) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
