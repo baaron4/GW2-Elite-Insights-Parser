@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -148,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int combatPhase = 0;
                 EnterCombatEvent firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
                 ExitCombatEvent firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
-                if (firstExitCombat != null && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
+                if (firstExitCombat != null && (log.FightData.FightEnd  - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
                 {
                     var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
                     {
@@ -161,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     ExitCombatEvent exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                     long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
-                    var phase = new PhaseData(ece.Time, phaseEndTime, "PoV in Combat " + (++combatPhase))
+                    var phase = new PhaseData(ece.Time, Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase))
                     {
                         CanBeSubPhase = false
                     };
