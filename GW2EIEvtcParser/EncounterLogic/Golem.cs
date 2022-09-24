@@ -79,26 +79,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (895, 629),
                             (18115.12, -13978.016, 22590.12, -10833.016));
         }
-
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.PointOfView);
-            if (pov == null)
-            {
-                // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
-                if (enterCombat != null)
-                {
-                    CombatItem exitCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat);
-                    if (exitCombat != null && exitCombat.Time <= enterCombat.Time)
-                    {
-                        return fightData.LogStart;
-                    } 
-                    return enterCombat.Time;
-                }
-            }
-            return fightData.LogStart;
-        }
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()
@@ -161,6 +141,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
                 phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
+            }
+            AgentItem pov = log.LogData.PoV;
+            if (pov != null)
+            {
+                int combatPhase = 0;
+                EnterCombatEvent firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
+                ExitCombatEvent firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
+                if (firstExitCombat != null && (firstEnterCombat == null || firstEnterCombat.Time > firstEnterCombat.Time))
+                {
+                    var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
+                    {
+                        CanBeSubPhase = false
+                    };
+                    phase.AddTarget(mainTarget);
+                    phases.Add(phase);
+                }
+                foreach (EnterCombatEvent ece in log.CombatData.GetEnterCombatEvents(pov))
+                {
+                    ExitCombatEvent exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
+                    long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
+                    var phase = new PhaseData(ece.Time, phaseEndTime, "PoV in Combat " + (++combatPhase))
+                    {
+                        CanBeSubPhase = false
+                    };
+                    phase.AddTarget(mainTarget);
+                    phases.Add(phase);
+                }
             }
 
             return phases;
