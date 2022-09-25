@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
+using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -26,6 +28,12 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
             new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
+            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, log) => evt.Dst.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, log) => evt.Dst.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.ID == (int)MinionID.VentariTablet),
         };
 
 
@@ -121,10 +129,32 @@ namespace GW2EIEvtcParser.EIData
             return _legendSwaps.Contains(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>();
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (long)MinionID.VentariTablet
+        };
         internal static bool IsKnownMinionID(long id)
         {
             return Minions.Contains(id);
         }
+
+        public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
+        {
+            EffectGUIDEvent tabletAutoHealEffect = combatData.GetEffectGUIDEvent(EffectGUIDs.RevenantTabletAutoHeal);
+            if (tabletAutoHealEffect != null)
+            {
+                var allTablets = new HashSet<AgentItem>(combatData.GetEffectEvents(tabletAutoHealEffect.ContentID).Select(x => x.Src));
+                foreach (AgentItem tablet in allTablets)
+                {
+                    tablet.OverrideType(AgentItem.AgentType.NPC);
+                    tablet.OverrideID((int)MinionID.VentariTablet);
+                }
+                if (allTablets.Any())
+                {
+                    agentData.Refresh();
+                }
+            }
+        }
+
     }
 }

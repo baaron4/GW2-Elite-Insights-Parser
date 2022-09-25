@@ -340,14 +340,16 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
             EIMetaAndStatusParse(fightData, arcdpsVersion);
             // master attachements
-            operation.UpdateProgressWithCancellationCheck("Attaching Banners to Warriors");
-            WarriorHelper.AttachMasterToWarriorBanners(players, this);
-            operation.UpdateProgressWithCancellationCheck("Attaching Turrets to Engineers");
-            EngineerHelper.AttachMasterToEngineerTurrets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Attaching Ranger Gadgets to Rangers");
-            RangerHelper.AttachMasterToRangerGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Attaching Racial Gadgets to Players");
-            ProfHelper.AttachMasterToRacialGadgets(players, this);
+            operation.UpdateProgressWithCancellationCheck("Processing Warrior Gadgets");
+            WarriorHelper.ProcessGadgets(players, this);
+            operation.UpdateProgressWithCancellationCheck("Processing Engineer Gadgets");
+            EngineerHelper.ProcessGadgets(players, this);
+            operation.UpdateProgressWithCancellationCheck("Attaching Ranger Gadgets");
+            RangerHelper.ProcessGadgets(players, this);
+            operation.UpdateProgressWithCancellationCheck("Processing Revenant Gadgets");
+            RevenantHelper.ProcessGadgets(players, this, agentData);
+            operation.UpdateProgressWithCancellationCheck("Processing Racial Gadget");
+            ProfHelper.ProcessRacialGadgets(players, this);
         }
 
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
