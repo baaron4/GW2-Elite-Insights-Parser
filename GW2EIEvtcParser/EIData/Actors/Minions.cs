@@ -176,6 +176,31 @@ namespace GW2EIEvtcParser.EIData
             return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
 
+        internal bool IsActive(ParsedEvtcLog log)
+        {
+            if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+            {
+                return true;
+            }
+            if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+            {
+                return true;
+            }
+            if (GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+            {
+                return true;
+            }
+            if (GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
+            {
+                return true;
+            }
+            /*if (_minionList[0] is NPC && _minionList.Any(x => log.CombatData.GetMovementData(x.AgentItem).Any()))
+            {
+                return true;
+            }*/
+            return false;
+        }
+
         internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
         {
             var minionsSegments = new List<List<Segment>>();

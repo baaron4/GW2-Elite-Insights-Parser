@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge) || MesmerHelper.IsClone(pair.Value.ReferenceAgentItem))
+                    if (pair.Value.IsActive(log) || MesmerHelper.IsClone(pair.Value.ReferenceAgentItem))
                     {
                         _minions[pair.Value.UniqueID] = pair.Value;
                     }
@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxGadgetMinions)
                 {
-                    if (pair.Value.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0 || pair.Value.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
+                    if (pair.Value.IsActive(log))
                     {
                         _minions[pair.Value.UniqueID] = pair.Value;
                     }
