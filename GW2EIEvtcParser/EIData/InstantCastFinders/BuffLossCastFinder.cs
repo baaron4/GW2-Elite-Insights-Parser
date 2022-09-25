@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     internal class BuffLossCastFinder : BuffCastFinder
     {
 
-        public delegate bool BuffLossCastChecker(BuffRemoveAllEvent evt, ParsedEvtcLog log);
+        public delegate bool BuffLossCastChecker(BuffRemoveAllEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
         private BuffLossCastChecker _triggerCondition { get; set; }
 
 
@@ -21,10 +21,10 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var res = new List<InstantCastEvent>();
-            var removals = log.CombatData.GetBuffData(BuffID).OfType<BuffRemoveAllEvent>().GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            var removals = combatData.GetBuffData(BuffID).OfType<BuffRemoveAllEvent>().GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<BuffRemoveAllEvent>> pair in removals)
             {
                 long lastTime = int.MinValue;
@@ -37,16 +37,16 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (_triggerCondition != null)
                     {
-                        if (_triggerCondition(brae, log))
+                        if (_triggerCondition(brae, combatData, agentData, skillData))
                         {
                             lastTime = brae.Time;
-                            res.Add(new InstantCastEvent(brae.Time, log.SkillData.Get(SkillID), brae.To));
+                            res.Add(new InstantCastEvent(brae.Time, skillData.Get(SkillID), brae.To));
                         }
                     }
                     else
                     {
                         lastTime = brae.Time;
-                        res.Add(new InstantCastEvent(brae.Time, log.SkillData.Get(SkillID), brae.To));
+                        res.Add(new InstantCastEvent(brae.Time, skillData.Get(SkillID), brae.To));
                     }
                 }
             }

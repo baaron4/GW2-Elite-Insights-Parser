@@ -178,6 +178,8 @@ namespace GW2EIEvtcParser.ParsedData
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();
             var wepSwapAgentsToSort = new HashSet<AgentItem>();
+            var instantAgentsToSort = new HashSet<AgentItem>();
+            var instantIDsToSort = new HashSet<long>();
             foreach (AbstractCastEvent cast in toAdd)
             {
                 if (cast is AnimatedCastEvent ace)
@@ -223,27 +225,9 @@ namespace GW2EIEvtcParser.ParsedData
                     wepSwapAgentsToSort.Add(wse.Caster);
                 }
             }
-            foreach (long castID in castIDsToSort)
-            {
-                _animatedCastDataById[castID] = _animatedCastDataById[castID].OrderBy(x => x.Time).ToList();
-            }
-            foreach (AgentItem a in castAgentsToSort)
-            {
-                _animatedCastData[a] = _animatedCastData[a].OrderBy(x => x.Time).ToList();
-            }
-            foreach (AgentItem a in wepSwapAgentsToSort)
-            {
-                _weaponSwapData[a] = _weaponSwapData[a].OrderBy(x => x.Time).ToList();
-            }
-        }
-
-        internal void EIInstantCastParse(ParsedEvtcLog log)
-        {
-            IReadOnlyList<InstantCastEvent> toAdd = ProfHelper.ComputeInstantCastEvents(log);
+            IReadOnlyList<InstantCastEvent> instantCasts = ProfHelper.ComputeInstantCastEvents(players, this, agentData, skillData, fightData);
             //
-            var instantAgentsToSort = new HashSet<AgentItem>();
-            var instantIDsToSort = new HashSet<long>();
-            foreach (InstantCastEvent ice in toAdd)
+            foreach (InstantCastEvent ice in instantCasts)
             {
                 if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
                 {
@@ -270,6 +254,18 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 instantIDsToSort.Add(ice.SkillId);
             }
+            foreach (long castID in castIDsToSort)
+            {
+                _animatedCastDataById[castID] = _animatedCastDataById[castID].OrderBy(x => x.Time).ToList();
+            }
+            foreach (AgentItem a in castAgentsToSort)
+            {
+                _animatedCastData[a] = _animatedCastData[a].OrderBy(x => x.Time).ToList();
+            }
+            foreach (AgentItem a in wepSwapAgentsToSort)
+            {
+                _weaponSwapData[a] = _weaponSwapData[a].OrderBy(x => x.Time).ToList();
+            }
             foreach (AgentItem a in instantAgentsToSort)
             {
                 _instantCastData[a] = _instantCastData[a].OrderBy(x => x.Time).ToList();
@@ -278,6 +274,10 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _instantCastDataById[instantID] = _instantCastDataById[instantID].OrderBy(x => x.Time).ToList();
             }
+        }
+
+        internal void EIInstantCastParse(ParsedEvtcLog log)
+        {
         }
 
         private void EIMetaAndStatusParse(FightData fightData, int arcdpsVersion)

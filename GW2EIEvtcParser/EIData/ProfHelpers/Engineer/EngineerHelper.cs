@@ -15,16 +15,16 @@ namespace GW2EIEvtcParser.EIData
         {
             public EngineerKitFinder(long skillID) : base(skillID, WeaponSetIDs.KitSet)
             {
-                UsingChecker((swap, log) =>
+                UsingChecker((swap, combatData, agentData, skillData) =>
                 {
-                    SkillItem skill = log.SkillData.Get(skillID);
+                    SkillItem skill = skillData.Get(skillID);
                     if (skill.ApiSkill == null || skill.ApiSkill.BundleSkills == null)
                     {
                         return false;
                     }
-                    WeaponSwapEvent nextSwap = log.CombatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
+                    WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
                     long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
-                    var castIds = new HashSet<long>(log.CombatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
+                    var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
                     return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
                 });
                 UsingNotAccurate(true);
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             new EngineerKitFinder(MedKitSkill), // Med Kit
             new EngineerKitFinder(ToolKit), // Tool Kit
             new EngineerKitFinder(EliteMortarKit), // Elite Mortar Kit
-            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
+            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
         };
 
 

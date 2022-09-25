@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ExitPhotonForge, PhotonForge), // Deactivate Photon Forge - red or blue irrevelant
             new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldEffect), // Spectrum Shield
             new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve), // Thermal Release Valve
-            new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Holosmith),
+            new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Holosmith),
         };
 
         private static readonly HashSet<long> _photonForgeCast = new HashSet<long>

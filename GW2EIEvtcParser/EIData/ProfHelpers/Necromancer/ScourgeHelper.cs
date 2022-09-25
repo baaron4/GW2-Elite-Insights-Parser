@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Trail of Anguish ? Unique effect?
-            new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingChecker((evt, log) => evt.Src.Spec == ParserHelper.Spec.Scourge).UsingICD(6100),
+            new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == ParserHelper.Spec.Scourge).UsingICD(6100),
             new EXTBarrierCastFinder(DesertShroud, DesertShroud), // Desert Shroud
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier), // Sand Cascade
             // Sandstorm Shroud ? The detonation part is problematic

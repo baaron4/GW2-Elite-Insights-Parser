@@ -94,12 +94,12 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-        public static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(ParsedEvtcLog log)
+        public static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData, SkillData skillData, FightData fightData)
         {
             var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
-            log.FightData.Logic.GetInstantCastFinders().ForEach(x => instantCastFinders.Add(x));
+            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastFinders.Add(x));
             var res = new List<InstantCastEvent>();
-            foreach (Player p in log.PlayerList)
+            foreach (Player p in players)
             {
                 switch (p.Spec)
                 {
@@ -249,23 +249,23 @@ namespace GW2EIEvtcParser.EIData
                         break;
                 }
             }
-            res.AddRange(ComputeInstantCastEventsFromFinders(log, instantCastFinders.ToList()));
+            res.AddRange(ComputeInstantCastEventsFromFinders(combatData, agentData, skillData, instantCastFinders.ToList()));
             return res;
         }
 
-        private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(ParsedEvtcLog log, IReadOnlyList<InstantCastFinder> instantCastFinders)
+        private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(CombatData combatData, AgentData agentData, SkillData skillData, IReadOnlyList<InstantCastFinder> instantCastFinders)
         {
             var res = new List<InstantCastEvent>();
-            ulong build = log.CombatData.GetBuildEvent().Build;
+            ulong build = combatData.GetBuildEvent().Build;
             foreach (InstantCastFinder icf in instantCastFinders)
             {
                 if (icf.Available(build))
                 {
                     if (icf.NotAccurate)
                     {
-                        log.SkillData.NotAccurate.Add(icf.SkillID);
+                        skillData.NotAccurate.Add(icf.SkillID);
                     }
-                    res.AddRange(icf.ComputeInstantCast(log));
+                    res.AddRange(icf.ComputeInstantCast(combatData, agentData, skillData));
                 }
             }
             return res;

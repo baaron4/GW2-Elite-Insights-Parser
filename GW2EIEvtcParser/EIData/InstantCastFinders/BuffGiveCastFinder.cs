@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     internal class BuffGiveCastFinder : BuffCastFinder
     {
 
-        public delegate bool BuffGiveCastChecker(BuffApplyEvent evt, ParsedEvtcLog log);
+        public delegate bool BuffGiveCastChecker(BuffApplyEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
         private BuffGiveCastChecker _triggerCondition { get; set; }
         public BuffGiveCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
@@ -19,10 +19,10 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var res = new List<InstantCastEvent>();
-            var applies = log.CombatData.GetBuffData(BuffID).OfType<BuffApplyEvent>().GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
+            var applies = combatData.GetBuffData(BuffID).OfType<BuffApplyEvent>().GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<BuffApplyEvent>> pair in applies)
             {
                 long lastTime = int.MinValue;
@@ -39,16 +39,16 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (_triggerCondition != null)
                     {
-                        if (_triggerCondition(bae, log))
+                        if (_triggerCondition(bae, combatData, agentData, skillData))
                         {
                             lastTime = bae.Time;
-                            res.Add(new InstantCastEvent(bae.Time, log.SkillData.Get(SkillID), bae.CreditedBy));
+                            res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.CreditedBy));
                         }
                     }
                     else
                     {
                         lastTime = bae.Time;
-                        res.Add(new InstantCastEvent(bae.Time, log.SkillData.Get(SkillID), bae.CreditedBy));
+                        res.Add(new InstantCastEvent(bae.Time, skillData.Get(SkillID), bae.CreditedBy));
                     }
                 }
             }

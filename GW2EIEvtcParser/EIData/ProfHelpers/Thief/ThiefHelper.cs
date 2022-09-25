@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
-            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
+            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
             new DamageCastFinder(Mug, Mug), // Mug
             new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
             new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
             new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
-            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, log) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
+            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

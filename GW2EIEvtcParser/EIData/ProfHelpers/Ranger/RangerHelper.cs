@@ -20,14 +20,14 @@ namespace GW2EIEvtcParser.EIData
             //new DamageCastFinder(12507,12507), // Crippling Shot
             new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect), // "Sic 'Em!"
             new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect), // Sharpening Stone
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
-            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Ranger),
-            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, log) => evt.Dst.BaseSpec == Spec.Ranger)
+            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Ranger),
+            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Ranger)
         };
 
 

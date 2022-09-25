@@ -28,12 +28,12 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
             new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
-            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
-            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, log) => evt.Dst.ID == (int)MinionID.VentariTablet),
-            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, log) => evt.Dst.ID == (int)MinionID.VentariTablet),
-            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
-            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, log) => evt.Src.ID == (int)MinionID.VentariTablet),
-            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, log) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.ID == (int)MinionID.VentariTablet),
+            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.ID == (int)MinionID.VentariTablet),
         };
 
 

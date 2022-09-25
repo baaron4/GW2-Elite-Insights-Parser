@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class EffectCastFinder : InstantCastFinder
     {
-        public delegate bool EffectCastChecker(EffectEvent evt, ParsedEvtcLog log);
+        public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
         private EffectCastChecker _triggerCondition { get; set; }
 
         private readonly string _effectGUID;
@@ -33,13 +33,13 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(ParsedEvtcLog log)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var res = new List<InstantCastEvent>();
-            EffectGUIDEvent effectGUIDEvent = log.CombatData.GetEffectGUIDEvent(_effectGUID);
+            EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
             if (effectGUIDEvent != null)
             {
-                Dictionary<AgentItem, List<EffectEvent>> effects = GetEffectEventDict(effectGUIDEvent, log.CombatData);
+                Dictionary<AgentItem, List<EffectEvent>> effects = GetEffectEventDict(effectGUIDEvent, combatData);
                 foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
                 {
                     long lastTime = int.MinValue;
@@ -52,16 +52,16 @@ namespace GW2EIEvtcParser.EIData
                         }
                         if (_triggerCondition != null)
                         {
-                            if (_triggerCondition(effectEvent, log))
+                            if (_triggerCondition(effectEvent, combatData, agentData, skillData))
                             {
                                 lastTime = effectEvent.Time;
-                                res.Add(new InstantCastEvent(effectEvent.Time, log.SkillData.Get(SkillID), GetAgent(effectEvent)));
+                                res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
                             }
                         }
                         else
                         {
                             lastTime = effectEvent.Time;
-                            res.Add(new InstantCastEvent(effectEvent.Time, log.SkillData.Get(SkillID), GetAgent(effectEvent)));
+                            res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
                         }
                     }
                 }
