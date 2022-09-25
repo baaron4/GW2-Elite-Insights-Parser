@@ -111,8 +111,6 @@ namespace GW2EIEvtcParser
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");
             StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
-            _operation.UpdateProgressWithCancellationCheck("Computing Instant Cast Skills");
-            CombatData.EIInstantCastParse(this);
         }
 
         public void UpdateProgressWithCancellationCheck(string status)
