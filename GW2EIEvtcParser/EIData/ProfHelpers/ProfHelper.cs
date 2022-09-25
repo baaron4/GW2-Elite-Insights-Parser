@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void AttachMasterToRacialGadgets(IReadOnlyList<Player> players, CombatData combatData)
+        internal static void ProcessRacialGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // Sylvari stuff

@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        public static void AttachMasterToRangerGadgets(IReadOnlyList<Player> players, CombatData combatData)
+        public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
