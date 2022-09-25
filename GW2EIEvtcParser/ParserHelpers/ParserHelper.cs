@@ -1128,6 +1128,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/SkSsLmw.png";
                 case ArcDPSEnums.MinionID.OfelaSoulcleave:
                     return "https://i.imgur.com/xFsl0gj.png";
+                case ArcDPSEnums.MinionID.VentariTablet:
+                    return "https://i.imgur.com/nRoYMep.png";
                 //
                 case ArcDPSEnums.MinionID.FrostSpirit:
                     return "https://i.imgur.com/dfbRWGh.png";

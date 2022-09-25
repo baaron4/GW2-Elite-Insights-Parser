@@ -24,6 +24,14 @@ namespace GW2EIEvtcParser
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
+        // Revenant
+        public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
+        public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
+        public const string RevenantProtectiveSolace = "63683ECFD27DA746BF0B16404D817978";
+        public const string RevenantNaturalHarmony = "390487E4E5DFEA4C922AE3156A86D9DB";
+        public const string RevenantNaturalHarmonyEnergyRelease = "E239BA17214B4943A4EC2D6B43F6175F";
+        public const string RevenantPurifyingEssence = "D2B388E8DB721544A110979C3A384977";
+        public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
         // Guardian
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // is it shout in general?

@@ -378,6 +378,7 @@ namespace GW2EIEvtcParser
         private const int TheDragonVoidPrimordus = -22;
         private const int PushableVoidAmalgamate = -23;
         private const int DragonBodyVoidAmalgamate = -24;
+        private const int VentariTablet = -25;
 
 
         //
@@ -1005,6 +1006,7 @@ namespace GW2EIEvtcParser
             JasRazorclaw = 18791,
             EraBreakrazor = 18806,
             OfelaSoulcleave = 19002,
+            VentariTablet = ArcDPSEnums.VentariTablet,
             //
             JadeMech = 23549,
             //
