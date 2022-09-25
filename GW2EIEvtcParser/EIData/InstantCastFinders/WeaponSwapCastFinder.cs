@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
             foreach (AgentItem playerAgent in agentData.GetAgentByType(AgentItem.AgentType.Player))

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
             var damages = combatData.GetDamageData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());

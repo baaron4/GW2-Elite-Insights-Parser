@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.Extensions
             return this;
         }
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, AgentData agentData, SkillData skillData)
+        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
             if (!combatData.HasEXTHealing)

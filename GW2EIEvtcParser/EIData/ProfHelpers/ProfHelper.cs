@@ -265,7 +265,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         skillData.NotAccurate.Add(icf.SkillID);
                     }
-                    res.AddRange(icf.ComputeInstantCast(combatData, agentData, skillData));
+                    res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
                 }
             }
             return res;
