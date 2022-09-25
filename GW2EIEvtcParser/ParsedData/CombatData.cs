@@ -276,10 +276,6 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal void EIInstantCastParse(ParsedEvtcLog log)
-        {
-        }
-
         private void EIMetaAndStatusParse(FightData fightData, int arcdpsVersion)
         {
             foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
