@@ -341,6 +341,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfTheWildPet = 12636;
         public const long WaterBlastCombo1 = 12836;
         public const long Shadowstep = 13002;
+        public const long InfiltratorsStrike = 13015;
         public const long Mug = 13014;
         public const long Stealth = 13017;
         public const long SpiderVenomEffect = 13036;

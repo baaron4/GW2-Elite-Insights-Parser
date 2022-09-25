@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
             new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
             new DamageCastFinder(Mug, Mug), // Mug
+            new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
             new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
             new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect), // Devourer Venom
             new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
