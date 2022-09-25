@@ -982,6 +982,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfRenewal = 41147;
         public const long DualWaterAttunement = 41166;
         public const long SpectrumShieldSkill = 41218;
+        public const long Mercy = 41372;
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
