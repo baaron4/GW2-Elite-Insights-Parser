@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -50,7 +51,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Slubling1,
                 ArcDPSEnums.TrashID.Slubling2,
                 ArcDPSEnums.TrashID.Slubling3,
-                ArcDPSEnums.TrashID.Slubling4
+                ArcDPSEnums.TrashID.Slubling4,
+                ArcDPSEnums.TrashID.PoisonMushroom
             };
         }
 
@@ -90,6 +92,51 @@ namespace GW2EIEvtcParser.EncounterLogic
             lastPhase.AddTarget(mainTarget);
             phases.Add(lastPhase);
             return phases;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            // Mushrooms
+            var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
+            if (mushroomAgents.Any())
+            {
+                var idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
+                foreach (AgentItem mushroom in mushroomAgents)
+                {
+                    if (mushroom.ID != idToKeep)
+                    {
+                        continue;
+                    }
+                    var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
+                    var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
+                    var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
+                    long lastDeadTime = long.MinValue;
+                    var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(mushroom) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
+                    foreach (CombatItem aliveEvent in aliveUpdates)
+                    {
+                        CombatItem deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
+                        if (deadEvent == null)
+                        {
+                            lastDeadTime = Math.Min(fightData.LogEnd, mushroom.LastAware);
+                        } 
+                        else
+                        {
+                            lastDeadTime = deadEvent.Time;
+                        }
+                        AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, (int)ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
+                        // We only need to copy metadata
+                        foreach (CombatItem c in posFacingHP)
+                        {
+                            var cExtra = new CombatItem(c);
+                            cExtra.OverrideTime(aliveMushroom.FirstAware);
+                            cExtra.OverrideSrcAgent(aliveMushroom.Agent);
+                            combatData.Add(cExtra);
+                        }
+                    }
+                }
+                agentData.Refresh();
+            }
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -135,6 +182,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, 0, 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, end, 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
+                    break;
+                case (int)ArcDPSEnums.TrashID.PoisonMushroom:
                     break;
                 default:
                     break;

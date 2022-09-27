@@ -379,6 +379,7 @@ namespace GW2EIEvtcParser
         private const int PushableVoidAmalgamate = -23;
         private const int DragonBodyVoidAmalgamate = -24;
         private const int VentariTablet = -25;
+        private const int PoisonMushroom = -26;
 
 
         //
@@ -422,6 +423,7 @@ namespace GW2EIEvtcParser
             Slubling2 = 16071,
             Slubling3 = 16077,
             Slubling4 = 16104,
+            PoisonMushroom = ArcDPSEnums.PoisonMushroom,
             // Trio
             BanditSaboteur = 16117,
             Warg = 7481,

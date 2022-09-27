@@ -914,6 +914,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.SmallKillerTornado:
                 case ArcDPSEnums.TrashID.BigKillerTornado:
                     return "https://i.imgur.com/6zNPTUw.png";
+                case ArcDPSEnums.TrashID.PoisonMushroom:
+                    return "https://i.imgur.com/AaxHiot.png";
                 case ArcDPSEnums.TrashID.QadimLamp:
                     return "https://i.imgur.com/89Kjv0N.png";
                 case ArcDPSEnums.TrashID.PyreGuardianRetal:
