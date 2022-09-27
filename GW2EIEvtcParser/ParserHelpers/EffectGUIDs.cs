@@ -60,6 +60,9 @@ namespace GW2EIEvtcParser
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
         // Thief
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
+        // Vale Guardian
+        public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
+        public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
