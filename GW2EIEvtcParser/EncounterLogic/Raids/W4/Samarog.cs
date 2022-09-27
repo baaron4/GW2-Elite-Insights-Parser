@@ -103,6 +103,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            /*var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+            if (spearAgents.Any())
+            {
+                foreach (AgentItem spear in spearAgents)
+                {
+                    spear.OverrideType(AgentItem.AgentType.NPC);
+                    spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion);
+                }
+                agentData.Refresh();
+            }*/
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             int curGuldhem = 1;
             int curRigom = 1;
@@ -129,9 +139,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>() { 
+                ArcDPSEnums.TrashID.SpearAggressionRevulsion
+            };
+        }
+
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+            var knownEffects = new HashSet<long>() {  };
             // TODO: facing information (shock wave)
             switch (target.ID)
             {
@@ -150,9 +168,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
+                    var test = log.CombatData.GetDamageData(38180);
+                    CombatReplay.DebugUnknownEffects(log, replay, knownEffects, 65000, 70000);
                     break;
                 case (int)ArcDPSEnums.TrashID.Rigom:
                 case (int)ArcDPSEnums.TrashID.Guldhem:
+                    break;
+                case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)target.FirstAware, (int)target.LastAware), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
                     break;
                 default:
                     break;

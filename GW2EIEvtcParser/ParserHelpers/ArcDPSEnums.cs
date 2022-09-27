@@ -380,6 +380,7 @@ namespace GW2EIEvtcParser
         private const int DragonBodyVoidAmalgamate = -24;
         private const int VentariTablet = -25;
         private const int PoisonMushroom = -26;
+        private const int SpearAggressionRevulsion = -27;
 
 
         //
@@ -483,6 +484,7 @@ namespace GW2EIEvtcParser
             // Samarog
             Guldhem = 17208,
             Rigom = 17124,
+            SpearAggressionRevulsion = ArcDPSEnums.SpearAggressionRevulsion,
             // Deimos
             Saul = 17126,
             Thief = 17206,
