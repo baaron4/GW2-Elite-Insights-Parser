@@ -745,7 +745,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
-                    int puddleEnd = (int)dragonVoid.LastAware;
+                    int puddleEnd = Math.Min((int)dragonVoid.LastAware, end + 300000); // puddles stay alive for 5 minutes
                     int effectEnd = Math.Min(puddleEnd, end);
                     replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
