@@ -941,11 +941,15 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/xa7Fefn.png";
                 case ArcDPSEnums.TrashID.Scythe:
                     return "https://i.imgur.com/INCGLIK.png";
-                case ArcDPSEnums.TrashID.BanditBombardier:
                 case ArcDPSEnums.TrashID.SmotheringShadow:
+                    return "https://i.imgur.com/iOtx7l1.png";
+                case ArcDPSEnums.TrashID.MazeMinotaur:
+                    return "https://i.imgur.com/EMR1lQG.png";
+                case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
+                    return "https://i.imgur.com/KuC1xF1.png";
+                case ArcDPSEnums.TrashID.BanditBombardier:
                 case ArcDPSEnums.TrashID.EchoOfTheUnclean:
                 case ArcDPSEnums.TrashID.SurgingSoul:
-                case ArcDPSEnums.TrashID.MazeMinotaur:
                 case ArcDPSEnums.TrashID.Enervator:
                 case ArcDPSEnums.TrashID.WhisperEcho:
                 case ArcDPSEnums.TrashID.CharrTank:
@@ -962,7 +966,6 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
-                case ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                 case ArcDPSEnums.TrashID.VoidGiant:
                 case ArcDPSEnums.TrashID.VoidObliterator:
                 case ArcDPSEnums.TrashID.VoidGoliath:
