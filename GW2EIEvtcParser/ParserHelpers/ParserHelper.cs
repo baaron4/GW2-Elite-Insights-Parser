@@ -702,7 +702,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
                 case ArcDPSEnums.TargetID.Freezie:
-                    return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
+                    return "https://i.imgur.com/98uyYXk.png";
                 case ArcDPSEnums.TargetID.Adina:
                     return "https://i.imgur.com/or3m1yb.png";
                 case ArcDPSEnums.TargetID.Sabir:
@@ -735,7 +735,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TargetID.Skorvald:
                     return "https://i.imgur.com/IOPAHRE.png";
                 case ArcDPSEnums.TargetID.Artsariiv:
-                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                    return "https://i.imgur.com/HwZ2g1n.png";
                 case ArcDPSEnums.TargetID.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
                 case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
@@ -744,19 +744,18 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/I8nwhAw.png";
                 case ArcDPSEnums.TargetID.LGolem:
                 case ArcDPSEnums.TargetID.VitalGolem:
-                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
-                case ArcDPSEnums.TargetID.AvgGolem:
-                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ArcDPSEnums.TargetID.StdGolem:
-                    return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-                case ArcDPSEnums.TargetID.MassiveGolem10M:
-                case ArcDPSEnums.TargetID.MassiveGolem4M:
-                case ArcDPSEnums.TargetID.MassiveGolem1M:
-                    return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    return "https://i.imgur.com/Te4dz9y.png";
                 case ArcDPSEnums.TargetID.PowerGolem:
                 case ArcDPSEnums.TargetID.ConditionGolem:
                 case ArcDPSEnums.TargetID.MedGolem:
-                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                case ArcDPSEnums.TargetID.AvgGolem:
+                    return "https://i.imgur.com/S6eQaSf.png";
+                case ArcDPSEnums.TargetID.StdGolem:
+                    return "https://i.imgur.com/TCSo8TI.png";
+                case ArcDPSEnums.TargetID.MassiveGolem10M:
+                case ArcDPSEnums.TargetID.MassiveGolem4M:
+                case ArcDPSEnums.TargetID.MassiveGolem1M:
+                    return "https://i.imgur.com/LRlXv1t.png";
                 //case ArcDPSEnums.TargetID.DummyTarget:
                 //return "https://i.imgur.com/ZBm5Uga.png";
                 case ArcDPSEnums.TargetID.MaiTrinFract:
@@ -1023,9 +1022,15 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.BLIGHT:
                 case ArcDPSEnums.TrashID.PLINK:
                 case ArcDPSEnums.TrashID.CHOP:
-                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    return "https://i.imgur.com/Te4dz9y.png";
+                case ArcDPSEnums.TrashID.Archdiviner:
+                    return "https://i.imgur.com/cuLLR43.png";
+                case ArcDPSEnums.TrashID.EliteBrazenGladiator:
+                    return "https://i.imgur.com/PrQdM0K.png";
+                case ArcDPSEnums.TrashID.Fanatic:
+                    return "https://i.imgur.com/niPMlFb.png";
                 case ArcDPSEnums.TrashID.FreeziesFrozenHeart:
-                    return "https://wiki.guildwars2.com/images/9/9e/Mini_Freezie%27s_Heart.png";
+                    return "https://i.imgur.com/OP8aYhI.png";
                 case ArcDPSEnums.TrashID.RiverOfSouls:
                     return "https://i.imgur.com/4pXEnaX.png";
                 case ArcDPSEnums.TrashID.DhuumDesmina:
@@ -1039,7 +1044,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.BlueKnight:
                     return "https://i.imgur.com/lpBm4d6.png";
                 case ArcDPSEnums.TrashID.CloneArtsariiv:
-                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                    return "https://i.imgur.com/8I6ectk.png";
                 case ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho:
                     return "https://i.imgur.com/GjHgAtX.png";
                 case ArcDPSEnums.TrashID.SooWonTail:
