@@ -975,6 +975,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidBrandstalker:
                 case ArcDPSEnums.TrashID.VoidColdsteel2:
                 case ArcDPSEnums.TrashID.VoidObliterator2:
+                case ArcDPSEnums.TrashID.SpiritOfDestruction:
+                case ArcDPSEnums.TrashID.SpiritOfPain:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:
