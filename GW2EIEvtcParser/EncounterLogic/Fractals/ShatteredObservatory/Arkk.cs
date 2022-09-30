@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
@@ -80,9 +81,46 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TargetID.Arkk,
                 (int)ArcDPSEnums.TrashID.Archdiviner,
-                (int)ArcDPSEnums.TrashID.BrazenGladiator
+                (int)ArcDPSEnums.TrashID.EliteBrazenGladiator
             };
         }
+
+        private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
+        {
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == targetID);
+            if (target == null)
+            {
+                return;
+            }
+            var phaseData = new PhaseData(Math.Max(target.FirstAware, log.FightData.FightStart), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
+            AddTargetsToPhaseAndFit(phaseData, new List<int> { targetID }, log);
+            phases.Add(phaseData);
+        }
+
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Arkk);
+            if (arkk == null)
+            {
+                throw new MissingKeyActorsException("Arkk not found");
+            }
+            phases[0].AddTarget(arkk);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, Determined762, arkk, false, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                phases[i].Name = "Phase " + i;
+                phases[i].AddTarget(arkk);
+            }
+            GetMiniBossPhase((int)ArcDPSEnums.TrashID.Archdiviner, log, "Archdiviner", phases);
+            GetMiniBossPhase((int)ArcDPSEnums.TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+            return phases;
+        }
+
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {

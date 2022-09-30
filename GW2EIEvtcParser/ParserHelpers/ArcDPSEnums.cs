@@ -680,7 +680,7 @@ namespace GW2EIEvtcParser
             TemporalAnomaly2 = 17720,
             Archdiviner = 17893,
             Fanatic = 11282,
-            BrazenGladiator = 17730,
+            EliteBrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,
             DOC = 16657,
