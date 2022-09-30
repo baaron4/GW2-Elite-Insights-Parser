@@ -22,10 +22,6 @@ namespace GW2EIEvtcParser.EIData
 
         protected double ComputeGain(int stack, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            if (DLChecker != null && !DLChecker(dl, log))
-            {
-                return -1.0;
-            }
             // When gain per stack is 0, we only count hits done under the buff or in its absence
             double gain = GainComputer.ComputeGain(GainPerStack == 0.0 ? 1.0 : GainPerStack, stack);
             return gain > 0.0 ? (GainPerStack == 0.0 ? 0.0 : gain * dl.HealthDamage) : -1.0;
@@ -42,6 +38,10 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
+                if (DLChecker != null && !DLChecker(evt, log))
+                {
+                    continue;
+                }
                 res.Add(new DamageModifierEvent(evt, this, ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log)));
             }
             res.RemoveAll(x => x.DamageGain == -1.0);
