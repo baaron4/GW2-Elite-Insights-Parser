@@ -149,7 +149,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            var knownEffects = new HashSet<long>() {  };
             // TODO: facing information (shock wave)
             switch (target.ID)
             {
@@ -168,8 +167,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         }
                     }
-                    var test = log.CombatData.GetDamageData(38180);
-                    CombatReplay.DebugUnknownEffects(log, replay, knownEffects, 65000, 70000);
                     break;
                 case (int)ArcDPSEnums.TrashID.Rigom:
                 case (int)ArcDPSEnums.TrashID.Guldhem:
