@@ -29,6 +29,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(EarthenBlast, EarthenBlast), // Earth Blast
             new DamageCastFinder(LightningStrike, LightningStrike), // Lightning Strike
             new DamageCastFinder(LightningRod, LightningRod), // Lightning Rod
+            new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist)
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
