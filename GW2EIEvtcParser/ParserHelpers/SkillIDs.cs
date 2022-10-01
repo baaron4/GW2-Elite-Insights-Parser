@@ -1428,6 +1428,7 @@ namespace GW2EIEvtcParser
         public const long DeathDropSkill = 62693;
         public const long CallOfTheAlliance = 62705;
         public const long CrescentWindEffect = 62707;
+        public const long DeployJadeSphereWater = 62723;
         public const long InvigoratingAirEffect = 62726;
         public const long DeathDropDodge = 62730;
         public const long ElementalEmpowerment = 62733;
@@ -1439,10 +1440,12 @@ namespace GW2EIEvtcParser
         public const long GunsaberMode = 62769;
         public const long RelentlessFire = 62805;
         public const long ForerunnerOfDeath = 62811;
+        public const long DeployJadeSphereFire = 62813;
         public const long ImperialGuard = 62819;
         public const long DragonTrigger = 62823;
         public const long IcyCoilSkill = 62834;
         public const long PositiveFlow = 62836;
+        public const long DeployJadeSphereEarth = 62837;
         public const long StimState = 62846;
         public const long UnseenSword = 62847;
         public const long FortifiedEarth = 62858;
@@ -1457,6 +1460,7 @@ namespace GW2EIEvtcParser
         public const long FlameWheelEffect = 62931;
         public const long ImperialImpactDodge = 62932;
         public const long EmpoweringAuras = 62939;
+        public const long DeployJadeSphereAir = 62940;
         public const long RockyLoopSkill = 62975;
         public const long InvigoratingAirSkill = 62982;
         public const long IcyCoilEffect = 62984;
@@ -1491,9 +1495,17 @@ namespace GW2EIEvtcParser
         public const long EndlessNight = 63358;
         public const long HauntShot = 63362;
         public const long OverclockSignetJDrive = 63378;
+        public const long DeployJadeSphereFire2 = 63396;
         public const long DeadlyBlades = 63409;
+        public const long DeployJadeSphereWaterUW = 63416;
         public const long FierceAsFire = 63433;
+        public const long DeployJadeSphereAirUW = 63439;
+        public const long DeployJadeSphereEarthUW = 63454;
         public const long ConsumeShadows = 63456;
+        public const long DeployJadeSphereFireUW = 63458;
+        public const long DeployJadeSphereAir2 = 63459;
+        public const long DeployJadeSphereWater2 = 63461;
+        public const long DeployJadeSphereEarth2 = 63472;
         public const long StormOfSwords2 = 63550;
         public const long BiteOW = 63571;
         public const long ClawSlap = 63588;

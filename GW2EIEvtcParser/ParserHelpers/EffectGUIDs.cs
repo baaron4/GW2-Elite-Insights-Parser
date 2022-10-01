@@ -32,6 +32,10 @@ namespace GW2EIEvtcParser
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
+        public const string CatalystDeployFireJadeSphere = "AFC5D5C7DA63D64BAAD55F787205B64F";
+        public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
+        public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";
+        public const string CatalystDeployEarthJadeSphere = "A674D3E7BC0C4342BC7A4EF0EE8FF8F0";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";

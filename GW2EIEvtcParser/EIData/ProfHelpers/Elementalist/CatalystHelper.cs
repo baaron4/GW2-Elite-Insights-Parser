@@ -21,6 +21,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).WithBuilds(GW2Builds.EODBeta4), // Crescent Wind
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).WithBuilds(GW2Builds.EODBeta4), // Rockyh Loop
             new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4), // Invigorating Air
+            new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereWater, EffectGUIDs.CatalystDeployWaterJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereEarth, EffectGUIDs.CatalystDeployEarthJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst)
         };
 
 
