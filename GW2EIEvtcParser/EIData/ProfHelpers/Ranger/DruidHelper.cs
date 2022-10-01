@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -12,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar), // Celestial Avatar
             new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar), // Release Celestial Avatar
-            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => combatData.GetEffectEvents().Count == 0), // Disable this one when effect events are present
+            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData), // Disable this one when effect events are present
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Druid)
         };

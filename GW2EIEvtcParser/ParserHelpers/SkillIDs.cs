@@ -91,6 +91,7 @@ namespace GW2EIEvtcParser
         public const long Determined3892 = 3892;
         public const long WaterTrident = 5510;
         public const long CleansingFire = 5535;
+        public const long LightningFlash = 5536;
         public const long ArcaneBlast = 5539;
         public const long MistForm = 5543;
         public const long SignetOfFire = 5544;

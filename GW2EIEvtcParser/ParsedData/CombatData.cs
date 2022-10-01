@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal bool HasStackIDs { get; } = false;
 
         public bool HasBreakbarDamageData { get; } = false;
+        public bool HasEffectData { get; } = false;
 
         private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData)
         {
@@ -410,6 +411,7 @@ namespace GW2EIEvtcParser.ParsedData
             HasStackIDs = false;// arcdpsVersion > 20210529 && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent) && (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Any();
+            HasEffectData = _statusEvents.EffectEvents.Any();
             //
             operation.UpdateProgressWithCancellationCheck("Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);

@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
         public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200";
+        public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
