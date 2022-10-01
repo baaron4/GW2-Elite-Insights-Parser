@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             //new DamageCastFinder(30662, 30662, 10000), // "Feel the Burn!" - shockwave, fire aura indiscernable from the focus skill
+            new EffectCastFinder(FeelTheBurn, EffectGUIDs.TempestFeelTheBurn).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Tempest)
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

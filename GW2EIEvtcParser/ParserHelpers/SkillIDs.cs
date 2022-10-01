@@ -590,6 +590,7 @@ namespace GW2EIEvtcParser
         public const long PulmonaryImpact = 30510;
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
+        public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
