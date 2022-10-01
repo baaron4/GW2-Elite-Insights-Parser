@@ -567,6 +567,7 @@ namespace GW2EIEvtcParser
         public const long ShieldOfCourageActive = 29906;
         public const long InfusingTerrorSkill = 29958;
         public const long DefenseField = 30027;
+        public const long EyeOfTheStormShout = 30047;
         public const long BulwarkGyro = 30101;
         public const long InfusingTerrorEffect = 30129;
         public const long TimeAnchored = 30136;
