@@ -1078,6 +1078,7 @@ namespace GW2EIEvtcParser
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
         public const long LossAversion = 45534;
+        public const long OrdersFromAbove = 45537;
         public const long TwiceAsVicious = 45600;
         public const long ImprovedKallasFervor = 45614;
         public const long WovenEarth = 45662;
