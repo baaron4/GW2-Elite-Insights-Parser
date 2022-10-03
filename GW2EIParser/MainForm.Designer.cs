@@ -101,7 +101,7 @@
             this.NumericCustomPopulateLimit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.NumericCustomPopulateLimit.Location = new System.Drawing.Point(361, 311);
             this.NumericCustomPopulateLimit.Maximum = new decimal(new int[] {
-            438300,
+            86400000,
             0,
             0,
             0});
