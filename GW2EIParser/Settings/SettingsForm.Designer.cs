@@ -512,11 +512,11 @@
             // ChkSaveOutTrace
             // 
             this.ChkSaveOutTrace.AutoSize = true;
-            this.ChkSaveOutTrace.Location = new System.Drawing.Point(341, 24);
+            this.ChkSaveOutTrace.Location = new System.Drawing.Point(330, 24);
             this.ChkSaveOutTrace.Name = "ChkSaveOutTrace";
-            this.ChkSaveOutTrace.Size = new System.Drawing.Size(87, 17);
+            this.ChkSaveOutTrace.Size = new System.Drawing.Size(108, 17);
             this.ChkSaveOutTrace.TabIndex = 40;
-            this.ChkSaveOutTrace.Text = "Save Traces";
+            this.ChkSaveOutTrace.Text = "Save Log Traces";
             this.ChkSaveOutTrace.UseVisualStyleBackColor = true;
             this.ChkSaveOutTrace.CheckedChanged += new System.EventHandler(this.ChkSaveOutTraceCheckedChanged);
             // 
