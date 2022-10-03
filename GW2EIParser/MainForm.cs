@@ -33,6 +33,7 @@ namespace GW2EIParser
             // Traces
             ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
             ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
+            NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
             //display version
             string version = Application.ProductVersion;
             LblVersion.Text = version;
@@ -52,6 +53,7 @@ namespace GW2EIParser
             AddTraceMessage("Settings: Loaded settings");
             ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
             ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
+            NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
         }
 
         public MainForm(IEnumerable<string> filesArray) : this()
@@ -520,6 +522,7 @@ namespace GW2EIParser
                     path = fbd.SelectedPath;
                 }
             }
+            DateTime currentTime = DateTime.Now;
             if (path != null)
             {
                 AddTraceMessage("UI: Adding files from " + path);
@@ -528,7 +531,16 @@ namespace GW2EIParser
                 {
                     try
                     {
-                        toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
+                        if (Properties.Settings.Default.PopulateHourLimit > 0)
+                        {
+                            var fileList = new DirectoryInfo(path).EnumerateFiles("*" + format, SearchOption.AllDirectories).ToList();
+                            var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Properties.Settings.Default.PopulateHourLimit).ToList();
+                            toAdd.AddRange(toKeep.Select(x => x.FullName));
+                        } 
+                        else
+                        {
+                            toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
+                        }
                     }
                     catch
                     {
@@ -814,6 +826,12 @@ namespace GW2EIParser
         {
             Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
             AddTraceMessage("Settings: " + (Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces"));
+        }
+
+        private void NumericCustomPopulateLimitValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PopulateHourLimit = (long)NumericCustomPopulateLimit.Value;
+            AddTraceMessage("Settings: Updated populate function hour limit to " + Properties.Settings.Default.PopulateHourLimit);
         }
         private void ChkAutoDiscordBatchCheckedChanged(object sender, EventArgs e)
         {
