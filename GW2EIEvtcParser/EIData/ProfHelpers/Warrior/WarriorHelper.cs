@@ -33,7 +33,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(PeakPerformance, "Peak Performance", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
             new BuffDamageModifier(PeakPerformance, "Peak Performance", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2018Balance),
             new BuffDamageModifier(PeakPerformance, "Peak Performance", "33%", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-            new BuffDamageModifier(BerserkersPower, "Berserker's Power", "7% per stack", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", DamageModifierMode.All),
+            new BuffDamageModifier(BerserkersPower, "Berserker's Power", "7% per stack", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new BuffDamageModifier(BerserkersPower, "Berserker's Power", "5.25% per stack", DamageSource.NoPets, 5.25, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", DamageModifierMode.All).WithBuilds(GW2Builds.October2022Balance),
+            new BuffDamageModifier(Stability, "Stalwart Strength", "?%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", DamageModifierMode.All).WithBuilds(GW2Builds.October2022Balance),
             // Can merciless hammer conditions be tracked reliably?
             // Defense
             new BuffDamageModifierTarget(Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, "https://wiki.guildwars2.com/images/7/72/Cull_the_Weak.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -89,9 +91,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Furious Surge", FuriousSurge, Source.Warrior, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Furious.png"),
                 //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),
                 new Buff("Rousing Resilience",RousingResilience, Source.Warrior, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ca/Rousing_Resilience.png"),
-                new Buff("Berserker's Power",BerserkersPower, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
+                new Buff("Berserker's Power",BerserkersPower, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+                new Buff("Berserker's Power",BerserkersPower, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png", GW2Builds.October2022Balance, GW2Builds.EndOfLife),
                 new Buff("Signet of Ferocity",SignetOfFerocity, Source.Warrior, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ef/Signet_Mastery.png"),
-                new Buff("Adrenal Health",AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Adrenal_Health.png"),
+                new Buff("Adrenal Health",AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Adrenal_Health.png", GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+                new Buff("Adrenal Health",AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Adrenal_Health.png", GW2Builds.October2022Balance, GW2Builds.EndOfLife),
         };
 
 

@@ -41,7 +41,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png"),
                 new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
                 new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
-                new Buff("Natural Mender",NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png"),
+                new Buff("Natural Mender",NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png", GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+                new Buff("Natural Mender",NaturalMender, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png", GW2Builds.October2022Balance, GW2Builds.EndOfLife),
                 new Buff("Lingering Light",LingeringLight, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5d/Lingering_Light.png"),
         };
 
