@@ -153,8 +153,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 dashGreenEnd = (int)endEvent.EndTime;
                             }
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 220, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 220, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
                         }
                     }
                     //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
