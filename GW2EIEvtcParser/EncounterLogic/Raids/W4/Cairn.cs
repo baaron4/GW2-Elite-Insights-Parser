@@ -15,20 +15,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
-            new HitOnPlayerMechanic(38113, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
-            new HitOnPlayerMechanic(new long[] {37611, 37629, 37642, 37673, 38074, 38302 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(new long[] {37611, 37629, 37642, 37673, 38074, 38302 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, (de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(31875, "Spectral Impact", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(38313, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
+            new HitOnPlayerMechanic(CairnDisplacement, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
+            new HitOnPlayerMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, (de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new HitOnPlayerMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
             new PlayerBuffApplyMechanic(SharedAgony, "Shared Agony", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
-            new PlayerBuffApplyMechanic(38170, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
-            new PlayerBuffApplyMechanic(37768, "Shared Agony", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
-            new PlayerBuffApplyMechanic(38209, "Shared Agony", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
+            new PlayerBuffApplyMechanic(SharedAgony25, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
+            new PlayerBuffApplyMechanic(SharedAgony50, "Shared Agony", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
+            new PlayerBuffApplyMechanic(SharedAgony75, "Shared Agony", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
             // new Mechanic(37775, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "Agony Damage",0), from old raidheroes logs? Small damage packets. Is also named "Shared Agony" in the evtc. Doesn't seem to occur anymore.
             // new Mechanic(38210, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "SA.dmg","Shared Agony Damage dealt", "Shared Agony dmg",0), //could flip. HP% attack, thus only shows on down/absorb hits.
-            new HitOnPlayerMechanic(38060, "Energy Surge", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap","Jump between green fields", "Leap",100),
-            new HitOnPlayerMechanic(37631, "Orbital Sweep", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
-            new HitOnPlayerMechanic(37910, "Gravity Wave", new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
+            new HitOnPlayerMechanic(EnergySurge, "Energy Surge", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap","Jump between green fields", "Leap",100),
+            new HitOnPlayerMechanic(OrbitalSweep, "Orbital Sweep", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
+            new HitOnPlayerMechanic(GravityWave, "Gravity Wave", new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
             // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
             // Greens after Energy Surge/Orbital Sweep: 38302
             //100% - 75%: 37611
@@ -99,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Cairn:
-                    var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
+                    var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {
                         int start = (int)c.Time;
@@ -116,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    var wave = cls.Where(x => x.SkillId == 37910).ToList();
+                    var wave = cls.Where(x => x.SkillId == GravityWave).ToList();
                     foreach (AbstractCastEvent c in wave)
                     {
                         int start = (int)c.Time;
@@ -130,6 +129,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
+                    EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
+                    if (displacementEffectGUID != null)
+                    {
+                        IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEvents(displacementEffectGUID.ContentID);
+                        foreach (EffectEvent displacement in displacementEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, (int)displacement.Time + 3000, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                        }
+                    }
+                    EffectGUIDEvent dashGreenEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDashGreen);
+                    if (dashGreenEffectGUID != null)
+                    {
+                        var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
+                        IReadOnlyList<EffectEvent> dashGreenEffects = log.CombatData.GetEffectEvents(dashGreenEffectGUID.ContentID);
+                        foreach (EffectEvent dashGreen in dashGreenEffects)
+                        {
+                            int dashGreenStart = (int)dashGreen.Time;
+                            int dashGreenEnd = (int)target.LastAware;
+                            AbstractCastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
+                            if (endEvent != null)
+                            {
+                                dashGreenEnd = (int)endEvent.EndTime;
+                            }
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                        }
+                    }
+                    //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
                     break;
                 default:
                     break;

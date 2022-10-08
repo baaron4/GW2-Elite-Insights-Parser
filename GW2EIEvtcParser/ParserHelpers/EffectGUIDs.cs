@@ -76,6 +76,9 @@ namespace GW2EIEvtcParser
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
+        // Cairn
+        public const string CairnDisplacement = "7798B97ED6B6EB489F7E33DF9FE6BD99";
+        public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
