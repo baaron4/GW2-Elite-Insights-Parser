@@ -966,15 +966,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.AnkkaHallucination1:
                 case ArcDPSEnums.TrashID.AnkkaHallucination2:
                 case ArcDPSEnums.TrashID.AnkkaHallucination3:
-                case ArcDPSEnums.TrashID.VoidGiant:
-                case ArcDPSEnums.TrashID.VoidObliterator:
-                case ArcDPSEnums.TrashID.VoidGoliath:
-                case ArcDPSEnums.TrashID.VoidTimeCaster:
-                case ArcDPSEnums.TrashID.VoidGiant2:
-                case ArcDPSEnums.TrashID.VoidTimeCaster2:
                 case ArcDPSEnums.TrashID.VoidBrandstalker:
-                case ArcDPSEnums.TrashID.VoidColdsteel2:
-                case ArcDPSEnums.TrashID.VoidObliterator2:
                 case ArcDPSEnums.TrashID.SpiritOfDestruction:
                 case ArcDPSEnums.TrashID.SpiritOfPain:
                     return "https://i.imgur.com/k79t7ZA.png";
@@ -1040,6 +1032,59 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/4pXEnaX.png";
                 case ArcDPSEnums.TrashID.DhuumDesmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                case ArcDPSEnums.TrashID.VoidStormseer:
+                case ArcDPSEnums.TrashID.VoidStormseer2:
+                case ArcDPSEnums.TrashID.VoidStormseer3:
+                    return "https://i.imgur.com/ZullvP1.png";
+                case ArcDPSEnums.TrashID.VoidWarforged1:
+                case ArcDPSEnums.TrashID.VoidWarforged2:
+                    return "https://i.imgur.com/gea0hIt.png";
+                case ArcDPSEnums.TrashID.VoidRotswarmer:
+                    return "https://i.imgur.com/Lyi1n9c.png";
+                case ArcDPSEnums.TrashID.VoidMelter:
+                case ArcDPSEnums.TrashID.VoidMelter1:
+                case ArcDPSEnums.TrashID.VoidMelter2:
+                    return "https://i.imgur.com/k6jyCMc.png";
+                case ArcDPSEnums.TrashID.VoidGiant:
+                case ArcDPSEnums.TrashID.VoidGiant2:
+                    return "https://i.imgur.com/PnaeYp4.png";
+                case ArcDPSEnums.TrashID.ZhaitansReach:
+                    return "https://i.imgur.com/h1sNdhU.png";
+                case ArcDPSEnums.TrashID.VoidAbomination:
+                case ArcDPSEnums.TrashID.VoidAbomination2:
+                    return "https://i.imgur.com/h4ONU1u.png";
+                case ArcDPSEnums.TrashID.VoidColdsteel:
+                case ArcDPSEnums.TrashID.VoidColdsteel2:
+                case ArcDPSEnums.TrashID.VoidColdsteel3:
+                    return "https://i.imgur.com/iEofFua.png";
+                case ArcDPSEnums.TrashID.VoidTangler:
+                case ArcDPSEnums.TrashID.VoidTangler2:
+                    return "https://i.imgur.com/qqUgKGE.png";
+                case ArcDPSEnums.TrashID.VoidObliterator:
+                case ArcDPSEnums.TrashID.VoidObliterator2:
+                    return "https://i.imgur.com/5DzJct1.png";
+                case ArcDPSEnums.TrashID.VoidGoliath:
+                    return "https://i.imgur.com/Yz62GKB.png";
+                case ArcDPSEnums.TrashID.VoidBrandbomber:
+                    return "https://i.imgur.com/s8e1QhP.png";
+                case ArcDPSEnums.TrashID.VoidSkullpiercer:
+                    return "https://i.imgur.com/7HLTnsp.png";
+                case ArcDPSEnums.TrashID.VoidTimeCaster:
+                case ArcDPSEnums.TrashID.VoidTimeCaster2:
+                    return "https://i.imgur.com/AKWe7od.png";
+                case ArcDPSEnums.TrashID.VoidThornheart1:
+                case ArcDPSEnums.TrashID.VoidThornheart2:
+                    return "https://i.imgur.com/rts8zEg.png";
+                case ArcDPSEnums.TrashID.VoidBrandfang1:
+                case ArcDPSEnums.TrashID.VoidBrandfang2:
+                    return "https://i.imgur.com/UUuIS9u.png";
+                case ArcDPSEnums.TrashID.VoidBrandbeast:
+                    return "https://i.imgur.com/bnuIjnn.png";
+                case ArcDPSEnums.TrashID.VoidBrandscale1:
+                case ArcDPSEnums.TrashID.VoidBrandscale2:
+                    return "https://i.imgur.com/RlcKaWe.png";
+                case ArcDPSEnums.TrashID.VoidFrostwing:
+                    return "https://i.imgur.com/KbTHpBb.png";
                 //case CastleFountain:
                 //    return "https://i.imgur.com/xV0OPWL.png";
                 case ArcDPSEnums.TrashID.HauntingStatue:
