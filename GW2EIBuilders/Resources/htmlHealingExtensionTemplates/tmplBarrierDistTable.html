@@ -146,7 +146,7 @@
                 .destroy();
         },
         updated() {      
-            updateTable(this.tableid);
+            refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
         activated() {             

@@ -73,10 +73,10 @@
             }
         },
         updated() {
-            updateTable(this.tablePid);
+            refreshTable(this.tablePid, this.sortPdata);
             //
             if (this.enemyMechHeader.length) {
-                updateTable(this.tableEid);
+                refreshTable(this.tableEid, this.sortEdata);
             }
         },
         activated() {
