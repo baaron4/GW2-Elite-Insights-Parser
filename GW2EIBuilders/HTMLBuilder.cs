@@ -216,9 +216,9 @@ namespace GW2EIBuilders
             // Priority to cdn
             if (!cdnNull)
             {
-                filePath = cdnPath + "/" + fileName;
+                return cdnPath + "/" + fileName;
             }
-            return filePath;
+            return "file://" + filePath;
         }
 
         private string BuildCombatReplayJS(string externalPath, string cdnPath)
