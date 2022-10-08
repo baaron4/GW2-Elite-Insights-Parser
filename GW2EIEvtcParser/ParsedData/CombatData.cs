@@ -328,14 +328,6 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
         {
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
-            EIBuffParse(players, skillData, fightData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
-            EIDamageParse(skillData, fightData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
-            EICastParse(players, skillData, fightData, agentData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
-            EIMetaAndStatusParse(fightData, arcdpsVersion);
             // master attachements
             operation.UpdateProgressWithCancellationCheck("Processing Warrior Gadgets");
             WarriorHelper.ProcessGadgets(players, this);
@@ -347,6 +339,15 @@ namespace GW2EIEvtcParser.ParsedData
             RevenantHelper.ProcessGadgets(players, this, agentData);
             operation.UpdateProgressWithCancellationCheck("Processing Racial Gadget");
             ProfHelper.ProcessRacialGadgets(players, this);
+            // Custom events
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
+            EIBuffParse(players, skillData, fightData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
+            EIDamageParse(skillData, fightData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
+            EICastParse(players, skillData, fightData, agentData);
+            operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
+            EIMetaAndStatusParse(fightData, arcdpsVersion);
         }
 
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
