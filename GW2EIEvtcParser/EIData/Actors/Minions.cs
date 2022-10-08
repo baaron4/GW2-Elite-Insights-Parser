@@ -182,6 +182,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return true;
             }
+            if (ArcDPSEnums.IsKnownMinionID(ReferenceAgentItem, Master.Spec))
+            {
+                return true;
+            }
             if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
             {
                 return true;

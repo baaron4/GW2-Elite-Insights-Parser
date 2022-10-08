@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)
                 {
-                    if (pair.Value.IsActive(log) || MesmerHelper.IsClone(pair.Value.ReferenceAgentItem))
+                    if (pair.Value.IsActive(log))
                     {
                         _minions[pair.Value.UniqueID] = pair.Value;
                     }
