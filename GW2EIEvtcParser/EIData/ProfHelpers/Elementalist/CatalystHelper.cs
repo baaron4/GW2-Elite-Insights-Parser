@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance),
             new BuffDamageModifier(RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.March2022Balance),
             new BuffDamageModifier(FlameWheelSkill, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, "https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png", DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2022Balance),
-            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2),
+            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2),
         };
 
 
