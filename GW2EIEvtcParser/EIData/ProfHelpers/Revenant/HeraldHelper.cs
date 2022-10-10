@@ -55,8 +55,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Facet of Nature",FacetOfNatureEffect, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 new Buff("Facet of Nature (Traited)",FacetOfNatureTraited, Source.Herald, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),//Lingering buff with Draconic Echo trait
                 new Buff("Facet of Nature-Assassin",FacetOfNatureAssassin, Source.Herald, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/c/cd/Facet_of_Nature%E2%80%95Assassin.png"),
-                new Buff("Facet of Nature-Dragon",FacetOfNatureDragon, Source.Herald, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
-                new Buff("Facet of Nature-Demon",FacetOfNatureDemon, Source.Herald, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
+                new Buff("Facet of Nature-Dragon",FacetOfNatureDragon, Source.Herald, BuffClassification.Support, "https://wiki.guildwars2.com/images/4/47/Facet_of_Nature%E2%80%95Dragon.png"),
+                new Buff("Facet of Nature-Demon",FacetOfNatureDemon, Source.Herald, BuffClassification.Support, "https://wiki.guildwars2.com/images/f/ff/Facet_of_Nature%E2%80%95Demon.png"),
                 new Buff("Facet of Nature-Dwarf",FacetOfNatureDwarf, Source.Herald, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/4/4c/Facet_of_Nature%E2%80%95Dwarf.png"),
                 new Buff("Facet of Nature-Centaur",FacetOfNatureCentaur, Source.Herald, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/74/Facet_of_Nature%E2%80%95Centaur.png"),
                 new Buff("Naturalistic Resonance", NaturalisticResonance, Source.Herald, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
