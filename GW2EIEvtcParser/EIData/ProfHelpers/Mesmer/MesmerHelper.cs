@@ -96,8 +96,28 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && evt.Src.BaseSpec == Spec.Mesmer && evt.Src.Spec != Spec.Virtuoso).WithBuilds(GW2Builds.October2022Balance),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) =>{
+                if (evt.Src.Spec != Spec.Mesmer || evt.Src.Spec != Spec.Mirage)
+                {
+                    return false;
+                }
+                if (!combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
+                {
+                    return false;
+                }
+                return true;
+            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => {
+                if (evt.Src.BaseSpec != Spec.Mesmer || evt.Src.Spec == Spec.Virtuoso)
+                {
+                    return false;
+                }
+                if (!combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
+                {
+                    return false;
+                }
+                return true;
+            }).WithBuilds(GW2Builds.October2022Balance),
             new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolve).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer),
             new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentration).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer),
         };
