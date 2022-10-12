@@ -1265,10 +1265,10 @@ namespace GW2EIEvtcParser
         public const long MistlockInstabilitySlipperySlope1 = 54559;
         public const long MistlockInstabilityWeBleedFire = 54719;
         public const long MistlockInstabilitySlipperySlope2 = 54817;
+        public const long GlyphOfTheStarsCA = 55026;
         public const long FeelNoPainSavageInstinct = 55030;
         public const long UnyieldingDevotion = 55044;
         public const long GlyphOfTheStars = 55048;
-        public const long GlyphOfTheStarsCA = 55049;
         public const long DiamondPalisadeDamage = 56099;
         public const long IonShield = 56100;
         public const long PowerShare = 56104;
