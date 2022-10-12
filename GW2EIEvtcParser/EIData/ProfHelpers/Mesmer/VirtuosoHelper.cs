@@ -15,6 +15,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => {
+                if(evt.Src.Spec != Spec.Virtuoso) {
+                    return false;
+                }
+                if (!combatData.GetBuffData(DistortionEffect).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                {
+                    return false;
+                }
+                if (combatData.GetAnimatedCastData(BladeRenewal).Any(castEvt => castEvt.Caster == evt.Src && evt.Time <= castEvt.EndTime && evt.Time >= castEvt.Time)) {
+                    return false;
+                }
+                return true;
+            }).WithBuilds(GW2Builds.October2022Balance),
         };
 
 
@@ -59,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     res.Add(new BuffApplyEvent(a, a, bae.Time, bae.AppliedDuration, skill, bae.BuffInstance, true));
                     lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
-                } 
+                }
                 else if (blade is BuffRemoveAllEvent brae)
                 {
                     if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint remmovedInstance))
