@@ -1045,6 +1045,7 @@ namespace GW2EIEvtcParser
         public const long WaterMajorAttunement = 43236;
         public const long MantraOfLiberation = 43357;
         public const long SharpenSpines = 43266;
+        public const long BladeRenewal = 43343;
         public const long WaterMinorAttunement = 43370;
         public const long PathUses = 43410;
         public const long SandCascadeSkill = 43448;
@@ -1678,6 +1679,7 @@ namespace GW2EIEvtcParser
         public const long Emboldened = 68087;
         public const long OverchargedCartridgesEffect = 68095;
         public const long TacticalReload = 68126;
+        public const long BladesongDistortion = 68273;
     }
 
 }
