@@ -231,6 +231,20 @@ namespace GW2EIEvtcParser.ParsedData
             {DawnsRepose, "https://wiki.guildwars2.com/images/3/31/Dawn%27s_Repose.png" },
             {EternalNight, "https://wiki.guildwars2.com/images/7/7b/Eternal_Night.png" },
             {MindShock, "https://wiki.guildwars2.com/images/e/e6/Mind_Shock.png" },
+            //
+            {DragonSlashBoost, "https://wiki.guildwars2.com/images/7/75/Dragon_Slash%E2%80%94Boost.png" },
+            {DragonSlashForce, "https://wiki.guildwars2.com/images/b/b5/Dragon_Slash%E2%80%94Force.png" },
+            {DragonSlashReach, "https://wiki.guildwars2.com/images/e/eb/Dragon_Slash%E2%80%94Reach.png" },
+            {Triggerguard, "https://wiki.guildwars2.com/images/4/4e/Triggerguard.png" },
+            {FlickerStep, "https://wiki.guildwars2.com/images/d/de/Flicker_Step.png" },
+            {ExplosiveThrust, "https://wiki.guildwars2.com/images/9/99/Explosive_Thrust.png" },
+            {SteelDivide, "https://wiki.guildwars2.com/images/9/9a/Steel_Divide.png" },
+            {SwiftCut, "https://wiki.guildwars2.com/images/e/e3/Swift_Cut.png" },
+            {BloomingFire, "https://wiki.guildwars2.com/images/d/d0/Blooming_Fire.png" },
+            {ArtillerySlash, "https://wiki.guildwars2.com/images/6/68/Artillery_Slash.png" },
+            {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
+            {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
+
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
