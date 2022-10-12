@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
         public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200";
-        public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC";
+        //public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Conflicts with certain field combos
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
