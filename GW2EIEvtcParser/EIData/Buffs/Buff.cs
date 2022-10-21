@@ -648,6 +648,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fractal Prodigy", FractalProdigy, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png"),
                 new Buff("Fractal Champion", FractalChampion, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png"),
                 new Buff("Fractal God", FractalGod, Source.Common, BuffClassification.Offensive,"https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png"),
+                new Buff("Debilitated (Toxic Sickness)",DebilitatedToxicSickness, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/80/Debilitated.png"),
                 // Siax 
                 new Buff("Fixated (Nightmare)", FixatedNightmare, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Ensolyss 
