@@ -221,6 +221,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return;
                         }
+                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
+                        if (lastHPUpdate != null && lastHPUpdate.HPPercent > 2.0)
+                        {
+                            return;
+                        }
                         fightData.SetSuccess(true, targetOffs[1].Time);
                     }
                 }
@@ -782,6 +787,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return FightData.EncounterMode.CM;
                 }
+            }
+            // fallback for late logs
+            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen) != null || agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+            {
+                return FightData.EncounterMode.CM;
             }
             return FightData.EncounterMode.Normal;
         }
