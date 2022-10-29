@@ -806,6 +806,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Kimchi Pancakes", PlateOfKimchiPancakes, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/3/34/Plate_of_Kimchi_Pancakes.png"),
                 new Buff("Bowl of Kimchi Tofu Stew", BowlOfKimchiTofuStew, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/2/22/Bowl_of_Kimchi_Tofu_Stew.png"),
                 new Buff("Meaty Asparagus Skewer", MeatyAsparagusSkewer, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/d/d6/Meaty_Asparagus_Skewer.png"),
+                new Buff("Bloodstone Bisque", BloodstoneBisque, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/1/14/Bowl_of_Bloodstone_Bisque.png"),
         };
 
         internal static readonly List<Buff> Utilities = new List<Buff>
