@@ -636,6 +636,7 @@ namespace GW2EIEvtcParser
         public const long CelestialAvatar = 31508;
         public const long DistributedMagic = 31529;
         public const long Enraged_500 = 31534;
+        public const long AstralWispAttachment = 31536;
         public const long UnstablePylonRed = 31539;
         public const long VividEcho = 31548;
         public const long FlakShot = 31544;
@@ -788,6 +789,7 @@ namespace GW2EIEvtcParser
         public const long DownpourSkill = 34554;
         public const long ToxicCloud1 = 34565;
         public const long DownpourMatthias = 34568;
+        public const long BloodstoneBisque = 34570;
         public const long RockBarrier = 34633;
         public const long CompactHardenedSharpeningStone = 34657;
         public const long LeadAttacks = 34659;

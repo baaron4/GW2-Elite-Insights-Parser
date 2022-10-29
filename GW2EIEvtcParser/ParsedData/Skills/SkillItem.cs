@@ -112,6 +112,7 @@ namespace GW2EIEvtcParser.ParsedData
             {GlyphOfUnityCA, "Glyph of Unity (CA)" },
             {12836, "Water Blast Combo" }, // Water Blast Combo
             {12825, "Water Blast Combo" }, // Water Blast Combo
+            {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -191,7 +192,7 @@ namespace GW2EIEvtcParser.ParsedData
             {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
             {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
             {SandCascadeBarrier, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
-            {31536, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
+            {AstralWispAttachment, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
             {29863, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
             {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
             {14024, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
