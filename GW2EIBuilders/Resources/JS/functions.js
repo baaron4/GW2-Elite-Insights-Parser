@@ -703,6 +703,9 @@ function _initTable (id, cell, order, orderCallBack) {
             [cell, order]
         ]
     };
+    if ($.fn.dataTable.isDataTable(id)) {
+        table.DataTable().destroy();
+    }
     table.DataTable(data);
     if (orderCallBack) {
         table.DataTable().on('order.dt', orderCallBack);
