@@ -78,6 +78,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         }
 
+        protected override List<int> GetSuccessCheckIds()
+        {
+            return new List<int> { (int)ArcDPSEnums.TargetID.Xera };
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             long fightEnd = log.FightData.FightEnd;
