@@ -2,11 +2,11 @@
 {
     public class LogStartNPCUpdateEvent : LogDateEvent
     {
-        public int SpeciesID { get; }
+        public int AgentID { get; }
 
         internal LogStartNPCUpdateEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            SpeciesID = (ushort)evtcItem.SrcAgent;
+            AgentID = (ushort)evtcItem.SrcAgent;
         }
 
     }
