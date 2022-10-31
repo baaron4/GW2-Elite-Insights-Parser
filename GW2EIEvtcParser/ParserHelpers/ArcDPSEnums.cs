@@ -150,6 +150,7 @@ namespace GW2EIEvtcParser
             Last90BeforeDown = 44,
             Effect = 45,
             EffectIDToGUID = 46,
+            LogStartNPCUpdate = 47,
             Unknown
         };
 

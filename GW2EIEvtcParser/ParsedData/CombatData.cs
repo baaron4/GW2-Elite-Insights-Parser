@@ -646,6 +646,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.LogStartEvent;
         }
 
+        public LogStartNPCUpdateEvent GetLogStartNPCUpdateEvent()
+        {
+            return _metaDataEvents.LogStartNPCUpdateEvent;
+        }
+
         public LogEndEvent GetLogEndEvent()
         {
             return _metaDataEvents.LogEndEvent;

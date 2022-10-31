@@ -605,6 +605,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                return logStartNPCUpdate.Time;
+            }
             return fightData.LogStart;
         }
 

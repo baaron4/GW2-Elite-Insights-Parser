@@ -70,6 +70,9 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
                     break;
+                case ArcDPSEnums.StateChange.LogStartNPCUpdate:
+                    metaDataEvents.LogStartNPCUpdateEvent = new LogStartNPCUpdateEvent(stateChangeEvent);
+                    break;
                 case ArcDPSEnums.StateChange.LogEnd:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {

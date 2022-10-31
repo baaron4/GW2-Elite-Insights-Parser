@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         public LanguageEvent LanguageEvent { get; set; }
         public LogEndEvent LogEndEvent { get; set; }
         public LogStartEvent LogStartEvent { get; set; }
+        public LogStartNPCUpdateEvent LogStartNPCUpdateEvent { get; set; }
         public List<MapIDEvent> MapIDEvents { get; } = new List<MapIDEvent>();
         public List<ShardEvent> ShardEvents { get; } = new List<ShardEvent>();
         public PointOfViewEvent PointOfViewEvent { get; set; }
