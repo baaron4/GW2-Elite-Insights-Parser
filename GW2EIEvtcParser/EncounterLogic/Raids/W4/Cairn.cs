@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            return fightData.LogStart;
+            return base.GetFightOffset(fightData, agentData, combatData);
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return startCast.Time;
             }
-            return fightData.LogStart;
+            return base.GetFightOffset(fightData, agentData, combatData);
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

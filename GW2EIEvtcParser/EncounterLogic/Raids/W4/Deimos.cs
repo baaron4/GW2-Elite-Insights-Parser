@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
-            long start = fightData.LogStart;
+            long start = long.MinValue;
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                 }
             }
-            return start;
+            return start >= 0 ? start : base.GetFightOffset(fightData, agentData, combatData);
         }
 
         internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)

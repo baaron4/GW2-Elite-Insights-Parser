@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
+        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
         {
             // Find target
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return invulLost.Time + 1;
                 }
             }
-            return fightData.LogStart;
+            return base.GetFightOffset(fightData, agentData, combatData);
         }
 
     }

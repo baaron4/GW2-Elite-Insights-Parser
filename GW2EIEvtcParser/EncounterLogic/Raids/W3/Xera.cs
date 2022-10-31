@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return enterCombat.Time;
             }
-            return fightData.LogStart;
+            return base.GetFightOffset(fightData, agentData, combatData);
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
