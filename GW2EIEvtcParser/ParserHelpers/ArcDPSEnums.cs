@@ -382,6 +382,7 @@ namespace GW2EIEvtcParser
         private const int VentariTablet = -25;
         private const int PoisonMushroom = -26;
         private const int SpearAggressionRevulsion = -27;
+        private const int DragonOrb = -28;
 
 
         //
@@ -647,6 +648,7 @@ namespace GW2EIEvtcParser
             VoidStormseer = 24677,
             VoidMelter = 24223,
             VoidGoliath = 24761,
+            DragonEnergyOrb = ArcDPSEnums.DragonOrb,
             // Freezie
             FreeziesFrozenHeart = 21328,
             // Fractals

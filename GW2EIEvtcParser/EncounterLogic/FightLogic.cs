@@ -201,6 +201,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 _trashMobs.Add(new NPC(a));
             }
+#if DEBUG
+            var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == 0 && x.InstID != 0 && x.LastAware - x.FirstAware > 1000).ToList();
+            foreach (AgentItem a in unknownAList)
+            {
+                _trashMobs.Add(new NPC(a));
+            }
+#endif
             _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
             List<int> friendlyNPCIDs = GetFriendlyNPCIDs();

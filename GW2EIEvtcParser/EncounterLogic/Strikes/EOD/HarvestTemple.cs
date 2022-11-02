@@ -190,7 +190,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.VoidTimeCaster,
                 ArcDPSEnums.TrashID.VoidWarforged1,
                 ArcDPSEnums.TrashID.VoidWarforged2,
-                ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate
+                ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate,
+                ArcDPSEnums.TrashID.DragonEnergyOrb
             };
         }
 
@@ -221,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return;
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
+                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault(x => x.Time <= targetOffs[1].Time);
                         if (lastHPUpdate != null && lastHPUpdate.HPPercent > 2.0)
                         {
                             return;
@@ -234,6 +235,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool needRefreshAgentPool = false;
+            //
+            var dragonOrbMaxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 491550).ToList();
+            foreach (CombatItem dragonOrbMaxHP in dragonOrbMaxHPs)
+            {
+                AgentItem dragonOrb = agentData.GetAgent(dragonOrbMaxHP.SrcAgent, dragonOrbMaxHP.Time);
+                if (dragonOrb != ParserHelper._unknownAgent)
+                {
+                    dragonOrb.OverrideName("Dragon Orb");
+                    dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
+                }
+            }
+            if (dragonOrbMaxHPs.Any())
+            {
+                needRefreshAgentPool = true;
+            }
             //
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> { 
@@ -324,22 +341,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //
             IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate);
-            bool needRefresh = false;
             foreach (AgentItem voidAmal in voidAmalgamates)
             {
                 if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
                 {
                     voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate);
-                    needRefresh = true;
+                    needRefreshAgentPool = true;
                 }
             }
             AgentItem dragonBodyVoidAmalgamate = voidAmalgamates.MaxBy(x => x.LastAware - x.FirstAware);
             if (dragonBodyVoidAmalgamate != null)
             {
                 dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate);
-                needRefresh = true;
+                needRefreshAgentPool = true;
             }
-            if (needRefresh)
+            if (needRefreshAgentPool)
             {
                 agentData.Refresh();
             }
@@ -627,6 +643,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
+                    break;
+                case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
+                    (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, (dragonOrbStart, dragonOrbEnd), "rgba(200, 50, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                     EffectGUIDEvent smallJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusSmallJaw);

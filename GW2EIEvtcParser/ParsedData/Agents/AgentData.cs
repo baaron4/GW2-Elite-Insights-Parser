@@ -6,7 +6,11 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class AgentData
     {
+#if DEBUG
+        public readonly List<AgentItem> _allAgentsList;
+#else
         private readonly List<AgentItem> _allAgentsList;
+#endif
         private Dictionary<ulong, List<AgentItem>> _allAgentsByAgent;
         private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
         private Dictionary<int, List<AgentItem>> _allNPCsByID;
@@ -63,24 +67,18 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<AgentItem> GetNPCsByID(int id)
         {
-            if (id != 0)
+            if (_allNPCsByID.TryGetValue(id, out List<AgentItem> list))
             {
-                if (_allNPCsByID.TryGetValue(id, out List<AgentItem> list))
-                {
-                    return list;
-                }
+                return list;
             }
             return new List<AgentItem>();
         }
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
         {
-            if (id != 0)
+            if (_allGadgetsByID.TryGetValue(id, out List<AgentItem> list))
             {
-                if (_allGadgetsByID.TryGetValue(id, out List<AgentItem> list))
-                {
-                    return list;
-                }
+                return list;
             }
             return new List<AgentItem>();
         }
@@ -105,6 +103,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void ReplaceAgentsFromID(AgentItem agentItem)
         {
+            if (agentItem.ID == 0)
+            {
+                return;
+            }
             _allAgentsList.RemoveAll(x => x.ID == agentItem.ID);
             _allAgentsList.Add(agentItem);
             Refresh();

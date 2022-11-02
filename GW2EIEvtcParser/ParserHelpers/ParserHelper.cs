@@ -649,6 +649,10 @@ namespace GW2EIEvtcParser
 
         internal static string GetNPCIcon(int id)
         {
+            if (id == 0)
+            {
+                return "https://i.imgur.com/nSYuby8.png";
+            }
             switch (ArcDPSEnums.GetTargetID(id))
             {
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
@@ -975,6 +979,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VoidBrandstalker:
                 case ArcDPSEnums.TrashID.SpiritOfDestruction:
                 case ArcDPSEnums.TrashID.SpiritOfPain:
+                case ArcDPSEnums.TrashID.DragonEnergyOrb:
                     return "https://i.imgur.com/k79t7ZA.png";
                 case ArcDPSEnums.TrashID.HandOfErosion:
                 case ArcDPSEnums.TrashID.HandOfEruption:

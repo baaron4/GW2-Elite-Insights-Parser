@@ -779,6 +779,15 @@ namespace GW2EIEvtcParser
 
         private void CompleteAgents(ParserController operation)
         {
+            var allAgentValues = new HashSet<ulong> ( _combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent) );
+            allAgentValues.UnionWith(_combatItems.Where(x => x.DstIsAgent()).Select(x => x.DstAgent));
+            allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
+            allAgentValues.Remove(0);
+            operation.UpdateProgressWithCancellationCheck("Creating " + allAgentValues.Count + " missing agents");
+            foreach (ulong missingAgentValue in allAgentValues)
+            {
+                _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, 0, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
+            }
             var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
             // Set Agent instid, firstAware and lastAware
@@ -835,7 +844,8 @@ namespace GW2EIEvtcParser
                 _combatItems.RemoveAll(x => invalidCombatItems.Contains(x));
 #endif
             }
-            _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
+            _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
+            operation.UpdateProgressWithCancellationCheck("Keeping " + _allAgentsList.Count + " agents");
             _agentData = new AgentData(_allAgentsList);
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
