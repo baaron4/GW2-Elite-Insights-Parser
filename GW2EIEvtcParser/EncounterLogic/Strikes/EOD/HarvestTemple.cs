@@ -646,7 +646,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
                     (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, (dragonOrbStart, dragonOrbEnd), "rgba(200, 50, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 160, (dragonOrbStart, dragonOrbEnd), "rgba(200, 50, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
                     EffectGUIDEvent smallJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusSmallJaw);
