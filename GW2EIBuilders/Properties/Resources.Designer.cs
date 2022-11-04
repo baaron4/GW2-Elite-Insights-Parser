@@ -68,15 +68,14 @@ namespace GW2EIBuilders.Properties {
         ///&quot;use strict&quot;;
         /////// ACTORS
         ///class IconDrawable {
-        ///    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc) {
+        ///    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth) {
         ///        this.pos = pos;
         ///        this.start = start;
         ///        this.end = end;
         ///        this.img = new Image();
         ///        this.img.src = imgSrc;
         ///        this.img.onload = function () {
-        ///            animateCanvas(noUpdateTime);
-        ///         [rest of string was truncated]&quot;;.
+        ///            animateCanvas(noUpdateTim [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string actors {
             get {
@@ -488,15 +487,33 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;    
+        ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; :class=&quot;{active: activeduration === 0}&quot;&gt;Phase
+        ///                        duration&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffStatsPlayer {
+            get {
+                return ResourceManager.GetString("tmplBuffStatsPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;div&gt;
         ///            &lt;h3 class=&quot;text-center&quot;&gt;Conditions&lt;/h3&gt;
-        ///            &lt;buff-table-component :condition=&quot;true&quot; :generation=&quot;true&quot; :id=&quot;&apos;condition-stats-table-&apos; + target.id&quot; :buffs=&quot;conditions&quot;
+        ///            &lt;buff-table-component :condition=&quot;true&quot; :generation=&quot;true&quot; :id=&quot;&apos;condition-stats-target-table-&apos; + target.id&quot; :buffs=&quot;conditions&quot;
         ///                :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;&lt;/buff-table-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div v-show=&quot;hasBoons&quot; class=&quot;mt-2&quot;&gt;
         ///            &lt;h3 class=&quot;text-center&quot;&gt;Boons&lt;/h3&gt;
-        ///            &lt;buff-table-component :condition=&quot; [rest of string was truncated]&quot;;.
+        ///            &lt;buff-table-component :cond [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffStatsTarget {
             get {
@@ -580,12 +597,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-column justify-content-center flex-wrap&quot;
-        ///        :style=&quot;{&apos;width&apos;: Math.max(canvasSize.x, canvasSize.y) + &apos;px&apos;}&quot;&gt;
-        ///        &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot;
-        ///            :style=&quot;{&apos;width&apos;: &apos;100%&apos;, &apos;min-width&apos;: canvasSize.x + &apos;px&apos;, &apos;height&apos;: canvasSize.y + &apos;px&apos;, &apos;position&apos;: &apos;relative&apos;}&quot;&gt;
-        ///            &lt;canvas :width=&quot;canvasSize.x + &apos;px&apos;&quot; :height=&quot;canvasSize.y + &apos;px&apos;&quot; :id=&quot;htmlElementIDs.mainCanvasID&quot;
-        ///                class=&quot;replay [rest of string was truncated]&quot;;.
+        ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div v-if=&quot;showNormalPhases&quot; class=&quot;mb-1&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot; style=&quot;max-width: 700px;&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot;
+        ///                    v-show=&quot;!getPhaseData(id).breakbarPhase &amp;&amp; !getPhaseData(id).dummy&quot;
+        ///                    :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
+        ///                    &lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -1108,8 +1126,8 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;div class=&quot;card-body container&quot;&gt;
         ///            &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
         ///                &lt;div class=&quot;d-flex flex-column mr-3 justify-content-center&quot;&gt;
-        ///                    &lt;div v-if=&quot;instanceBuffs&quot; class=&quot;d-flex flex-row justify-content-around&quot;&gt;
-        ///                        &lt;img v-for=&quot;instanceBuff in instanceBuff [rest of string was truncated]&quot;;.
+        ///                    &lt;div v-if=&quot;instanceBuffs&quot; class=&quot;d-flex flex-row justify-content-around mb-1&quot;&gt;
+        ///                        &lt;span v-for=&quot;instanceBuff in instan [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEncounter {
             get {

@@ -74,6 +74,7 @@ namespace GW2EIBuilders
             var templates = new List<string>
             {
                 Properties.Resources.tmplBuffStats,
+                Properties.Resources.tmplBuffStatsPlayer,
                 Properties.Resources.tmplBuffStatsTarget,
                 Properties.Resources.tmplBuffTable,
                 Properties.Resources.tmplDamageDistPlayer,
