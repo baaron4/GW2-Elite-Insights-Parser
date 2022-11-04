@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                 return phases;
             }
 
-            phases.AddRange(GetPhasesByInvul(log, new long[] { 757, 66242 }, mainTarget, true, true, log.FightData.FightStart,
+            phases.AddRange(GetPhasesByInvul(log, new long[] { Invulnerability757, SooWonSpearPhaseInvul }, mainTarget, true, true, log.FightData.FightStart,
                 log.FightData.FightEnd));
 
             int phaseOffset = GetPhaseOffset(log, mainTarget);

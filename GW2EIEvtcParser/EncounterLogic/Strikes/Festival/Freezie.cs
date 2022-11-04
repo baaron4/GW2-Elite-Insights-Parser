@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -29,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 895, mainTarget, true, true));
+            phases.AddRange(GetPhasesByInvul(log, Determined895, mainTarget, true, true));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
