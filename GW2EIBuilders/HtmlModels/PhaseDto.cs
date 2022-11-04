@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
@@ -29,6 +30,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<List<object>> SupportStats { get; set; }
         // all
         public List<BuffData> BoonStats { get; set; }
+        public List<List<BuffData>> BoonDictionaries { get; set; }
         public List<BuffData> BoonGenSelfStats { get; set; }
         public List<BuffData> BoonGenGroupStats { get; set; }
         public List<BuffData> BoonGenOGroupStats { get; set; }
@@ -59,6 +61,7 @@ namespace GW2EIBuilders.HtmlModels
 
         // active
         public List<BuffData> BoonActiveStats { get; set; }
+        public List<List<BuffData>> BoonActiveDictionaries { get; set; }
         public List<BuffData> BoonGenActiveSelfStats { get; set; }
         public List<BuffData> BoonGenActiveGroupStats { get; set; }
         public List<BuffData> BoonGenActiveOGroupStats { get; set; }
@@ -180,6 +183,7 @@ namespace GW2EIBuilders.HtmlModels
             SupportStats = PhaseDto.BuildSupportData(log, phase);
             //
             BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, phase);
+            BoonDictionaries = BuffData.BuildBuffDictionariesData(log, statistics.PresentBoons, phase);
             OffBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentOffbuffs, phase);
             SupBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentSupbuffs, phase);
             DefBuffStats = BuffData.BuildBuffUptimeData(log, statistics.PresentDefbuffs, phase);
@@ -205,6 +209,7 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffGenSquadStats = BuffData.BuildBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
             //
             BoonActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentBoons, phase);
+            BoonActiveDictionaries = BuffData.BuildActiveBuffDictionariesData(log, statistics.PresentBoons, phase);
             OffBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentOffbuffs, phase);
             SupBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentSupbuffs, phase);
             DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase);
@@ -240,7 +245,7 @@ namespace GW2EIBuilders.HtmlModels
 
             foreach (AbstractSingleActor target in phase.Targets)
             {
-                TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase.Start, phase.End, target));
+                TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase, target));
                 TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
                 TargetsBoonTotals.Add(BuffData.BuildTargetBoonData(log, phase, target));
             }
