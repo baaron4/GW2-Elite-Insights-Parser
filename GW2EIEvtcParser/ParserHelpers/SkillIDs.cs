@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
@@ -1505,6 +1506,7 @@ namespace GW2EIEvtcParser
         public const long EternalNight = 63160;
         public const long GraspingShadows = 63167;
         public const long RotWallowVenom = 63168;
+        public const long MechCoreBarrierEngine = 63173;
         public const long FerociousSymbiosis = 63191;
         public const long UnnaturalTraversal = 63195;
         public const long ShroudedAlly = 63207;

@@ -113,6 +113,7 @@ namespace GW2EIEvtcParser.ParsedData
             {12836, "Water Blast Combo" }, // Water Blast Combo
             {12825, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
+            {MechCoreBarrierEngine, "Mech Core: Barrier Engine" }
         };
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
@@ -245,6 +246,7 @@ namespace GW2EIEvtcParser.ParsedData
             {ArtillerySlash, "https://wiki.guildwars2.com/images/6/68/Artillery_Slash.png" },
             {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
+            {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" }
 
         };
 
