@@ -206,7 +206,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         /////
         public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
-            Dictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, start, end);
+            IReadOnlyDictionary<long, FinalBuffsDictionary> conditions = target.GetBuffsDictionary(log, start, end);
             var list = new List<BuffData>();
 
             foreach (AbstractSingleActor actor in log.Friendlies)

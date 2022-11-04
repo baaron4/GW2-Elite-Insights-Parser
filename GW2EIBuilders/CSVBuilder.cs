@@ -784,7 +784,7 @@ namespace GW2EIBuilders
         private void CreateCondiGen(int phaseIndex)
         {
             PhaseData phase = _phases[phaseIndex];
-            Dictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phase.Start, phase.End);
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");

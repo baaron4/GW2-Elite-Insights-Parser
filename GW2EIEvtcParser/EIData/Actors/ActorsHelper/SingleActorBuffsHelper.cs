@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<BuffDistribution> _buffDistribution;
         private CachingCollection<Dictionary<long, long>> _buffPresence;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]> _buffStats;
-        private CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)> _buffsDictionary;
+        private CachingCollection<Dictionary<long, FinalBuffsDictionary>[]> _buffsDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
 
         public SingleActorBuffsHelper(AbstractSingleActor actor) : base(actor)
@@ -299,17 +299,31 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffsDictionary == null)
             {
-                _buffsDictionary = new CachingCollection<(Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>)>(log);
+                _buffsDictionary = new CachingCollection<Dictionary<long, FinalBuffsDictionary>[]>(log);
             }
-            if (!_buffsDictionary.TryGetValue(start, end, out (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) value))
+            if (!_buffsDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffsDictionary>[] value))
             {
                 value = ComputeBuffsDictionary(log, start, end);
                 _buffsDictionary.Set(start, end, value);
             }
-            return value.Item1;
+            return value[0];
         }
 
-        private (Dictionary<long, FinalBuffsDictionary>, Dictionary<long, FinalBuffsDictionary>) ComputeBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        public Dictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            if (_buffsDictionary == null)
+            {
+                _buffsDictionary = new CachingCollection<Dictionary<long, FinalBuffsDictionary>[]>(log);
+            }
+            if (!_buffsDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffsDictionary>[] value))
+            {
+                value = ComputeBuffsDictionary(log, start, end);
+                _buffsDictionary.Set(start, end, value);
+            }
+            return value[1];
+        }
+
+        private Dictionary<long, FinalBuffsDictionary>[] ComputeBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
             var rates = new Dictionary<long, FinalBuffsDictionary>();
@@ -324,7 +338,7 @@ namespace GW2EIEvtcParser.EIData
                     (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffsDictionary.GetFinalBuffsDictionary(log, buff, buffDistribution, duration, activeDuration);
                 }
             }
-            return (rates, ratesActive);
+            return new Dictionary<long, FinalBuffsDictionary>[] { rates, ratesActive };
         }
 
 

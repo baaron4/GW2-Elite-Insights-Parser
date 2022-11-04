@@ -295,9 +295,14 @@ namespace GW2EIEvtcParser.EIData
         }
 
        
-        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetBuffsDictionary(log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetActiveBuffsDictionary(log, start, end);
         }
 
         //
