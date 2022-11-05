@@ -216,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return combatData.GetSkills().Contains(38098) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+            return combatData.GetSkills().Contains(Countdown) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Determined check
-            phases.AddRange(GetPhasesByInvul(log, 762, mainTarget, true, true));
+            phases.AddRange(GetPhasesByInvul(log, Determined762, mainTarget, true, true));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
