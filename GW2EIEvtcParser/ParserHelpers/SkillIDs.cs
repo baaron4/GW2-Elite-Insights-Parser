@@ -802,8 +802,8 @@ namespace GW2EIEvtcParser
         public const long VoidZone = 34883;
         public const long SummonFragments = 34887;
         public const long StatueFixated1 = 34912;
-        public const long WhiteOrb = 34912;
         public const long TemporalShredAoE = 34913;
+        public const long WhiteOrb = 34914;
         public const long BloodstoneBlessed = 34917;
         public const long SpatialDistortion = 34918;
         public const long GravityWellXera = 34921;
