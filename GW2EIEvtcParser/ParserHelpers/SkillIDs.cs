@@ -1684,6 +1684,7 @@ namespace GW2EIEvtcParser
         public const long OverchargedCartridgesEffect = 68095;
         public const long TacticalReload = 68126;
         public const long DebilitatedToxicSickness = 68170;
+        public const long DecadeEnhancement = 68235;
         public const long BladesongDistortion = 68273;
     }
 

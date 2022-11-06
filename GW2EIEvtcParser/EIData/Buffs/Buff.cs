@@ -894,6 +894,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Writ of Basic Speed", WritOfBasicSpeed, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/e/e6/Writ_of_Basic_Speed.png"),
                 new Buff("Writ of Studied Speed", WritOfStudiedSpeed, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/d/d1/Recipe_sheet_fine_boots.png"),
                 new Buff("Writ of Masterful Speed", WritOfMasterfulSpeed, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8e/Recipe_sheet_masterwork_boots.png"),
+                new Buff("Decade Enhancement", DecadeEnhancement, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/7/76/Decade_Enhancement_Station.png"),
         };
 
         internal static readonly List<Buff> Potions = new List<Buff>
