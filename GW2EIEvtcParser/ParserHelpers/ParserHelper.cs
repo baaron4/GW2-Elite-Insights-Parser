@@ -1283,6 +1283,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/2EK2OBE.png";
                 case ArcDPSEnums.MinionID.JuvenileSandLion:
                     return "https://i.imgur.com/XDkpvp9.png";
+                case ArcDPSEnums.MinionID.JuvenileWhiteTiger:
+                    return "https://i.imgur.com/B6wtfhQ.png";
                 case ArcDPSEnums.MinionID.JuvenileShark:
                     return "https://i.imgur.com/vZ9jIE9.png";
                 case ArcDPSEnums.MinionID.JuvenileSmokescale:

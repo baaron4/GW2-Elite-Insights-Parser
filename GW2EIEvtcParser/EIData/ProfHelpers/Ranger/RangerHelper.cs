@@ -213,6 +213,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileTiger,
             (int)MinionID.JuvenileWarthog,
             (int)MinionID.JuvenileWhiptailDevourer,
+            (int)MinionID.JuvenileWhiteTiger,
             (int)MinionID.JuvenileWolf,
         };
         internal static bool IsKnownMinionID(long id)
