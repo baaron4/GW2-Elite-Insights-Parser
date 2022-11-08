@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class KainengOverlook : EODStrike
+    internal class KainengOverlook : EndOfDragonsStrike
     {
         public KainengOverlook(int triggerID) : base(triggerID)
         {

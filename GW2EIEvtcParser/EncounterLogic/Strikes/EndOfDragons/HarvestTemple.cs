@@ -9,7 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class HarvestTemple : EODStrike
+    internal class HarvestTemple : EndOfDragonsStrike
     {
         public HarvestTemple(int triggerID) : base(triggerID)
         {

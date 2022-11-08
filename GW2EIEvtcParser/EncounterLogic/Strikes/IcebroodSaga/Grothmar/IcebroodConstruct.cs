@@ -5,7 +5,7 @@ using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class IcebroodConstruct : IBSStrike
+    internal class IcebroodConstruct : IcebroodSagaStrike
     {
         public IcebroodConstruct(int triggerID) : base(triggerID)
         {

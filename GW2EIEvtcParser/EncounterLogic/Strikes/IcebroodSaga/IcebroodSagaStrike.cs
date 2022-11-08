@@ -6,9 +6,9 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class IBSStrike : StrikeMissionLogic
+    internal abstract class IcebroodSagaStrike : StrikeMissionLogic
     {
-        public IBSStrike(int triggerID) : base(triggerID)
+        public IcebroodSagaStrike(int triggerID) : base(triggerID)
         {
             EncounterID |= EncounterIDs.StrikeMasks.IBSMask;
         }

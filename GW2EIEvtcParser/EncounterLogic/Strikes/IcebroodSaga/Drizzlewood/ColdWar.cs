@@ -5,7 +5,7 @@ using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class ColdWar : IBSStrike
+    internal class ColdWar : IcebroodSagaStrike
     {
         public ColdWar(int triggerID) : base(triggerID)
         {
