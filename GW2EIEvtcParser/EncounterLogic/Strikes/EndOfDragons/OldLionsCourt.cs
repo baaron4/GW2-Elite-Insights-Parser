@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phaseName + " 10% - 0%",
             };
             DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-            var subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, log.FightData.FightStart, dead != null ? dead.Time : log.FightData.FightEnd);
+            List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, log.FightData.FightStart, dead != null ? dead.Time : log.FightData.FightEnd);
             if (subPhases.Count > 4)
             {
                 return new List<PhaseData>();
@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor vermilion = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PrototypeVermilion);
-            var canComputePhases = requirePhases;
+            var canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
             if (vermilion != null)
             {
                 phases[0].AddTarget(vermilion);
@@ -100,10 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phases.AddRange(GetSubPhases(vermilion, log, "Vermilion"));
                 }
-            } else
-            {
-                canComputePhases = false;
-            }
+            } 
             AbstractSingleActor indigo = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PrototypeIndigo);
             if (indigo != null)
             {
