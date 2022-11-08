@@ -1431,6 +1431,7 @@ namespace GW2EIEvtcParser
         public const long ExitHarbingerShroud = 62540;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
+        public const long Bladeturn = 62592;
         public const long FlowingResolveSkill = 62603;
         public const long VirtuosoBlade5 = 62613;
         public const long CrashingCourage = 62615;
@@ -1686,6 +1687,13 @@ namespace GW2EIEvtcParser
         public const long DebilitatedToxicSickness = 68170;
         public const long DecadeEnhancement = 68235;
         public const long BladesongDistortion = 68273;
+        public const long MalfunctioningLeyWovenShielding = 68303;
+        public const long NakedSingularity = 68319;
+        public const long TidalTorment = 68330;
+        public const long PowerTransfer = 68375;
+        public const long LeyWovenShielding = 68508;
+        public const long ErgoShear = 68546;
+        public const long FixatedOldLionsCourt = 68562;
     }
 
 }

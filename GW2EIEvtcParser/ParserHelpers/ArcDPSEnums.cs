@@ -816,6 +816,9 @@ namespace GW2EIEvtcParser
             TheDragonVoidSooWon = ArcDPSEnums.TheDragonVoidSooWon,
             TheDragonVoidPrimordus = ArcDPSEnums.TheDragonVoidPrimordus,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
+            PrototypeVermilion = 25413,
+            PrototypeIndigo = 25419,
+            PrototypeArsenite = 25415,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
@@ -950,6 +953,7 @@ namespace GW2EIEvtcParser
             JuvenileCheetah = 19005,
             JuvenileRockGazelle = 19104,
             JuvenileSandLion = 19166,
+            JuvenileWhiteTiger = 24298,
             //
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,
