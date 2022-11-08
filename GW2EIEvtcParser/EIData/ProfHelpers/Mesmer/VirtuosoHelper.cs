@@ -49,6 +49,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png"),
+            new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/43/Bladeturn_Requiem.png"),
             new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png"),
         };
 
