@@ -615,15 +615,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
-            if (logStartNPCUpdate != null)
-            {
-                throw new InvalidOperationException("LogStartNPCUpdate detected, all fight logics require an override for GetFightOffset");
-            }
-            return GetGenericFightOffset(fightData);
-        }
+        internal abstract long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData);
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
