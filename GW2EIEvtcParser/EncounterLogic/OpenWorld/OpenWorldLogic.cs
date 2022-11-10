@@ -19,5 +19,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
             EncounterID |= EncounterIDs.EncounterMasks.OpenWorldMask;
         }
+
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                return GetEnterCombatTime(fightData, agentData, combatData);
+            }
+            return GetGenericFightOffset(fightData);
+        }
     }
 }
