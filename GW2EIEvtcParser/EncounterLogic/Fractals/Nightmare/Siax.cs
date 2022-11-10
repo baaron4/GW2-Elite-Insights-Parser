@@ -88,10 +88,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Siax, Determined762, 1500);
-        }
-
     }
 }

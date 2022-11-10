@@ -615,6 +615,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
+        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            if (mainTarget == null)
+            {
+                throw new MissingKeyActorsException("Main target not found");
+            }
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget.AgentItem));
+            return enterCombat != null ? enterCombat.Time : GetGenericFightOffset(fightData);
+        }
+
         internal abstract long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData);
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

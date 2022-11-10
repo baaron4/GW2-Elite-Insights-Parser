@@ -18,6 +18,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                return GetEnterCombatTime(fightData, agentData, combatData);
+            }
+            return GetGenericFightOffset(fightData);
+        }
+
         protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();

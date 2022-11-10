@@ -38,10 +38,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-6144, -6144, 9216, 9216),
                             (11804, 4414, 12444, 5054)*/);
         }
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Ensolyss, Determined762, 1500);
-        }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
