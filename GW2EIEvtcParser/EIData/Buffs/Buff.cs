@@ -128,11 +128,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
             }
-            /*if (buffInfoEvent.StackingType != StackType)
+            if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
             {
-                //_stackType = buffInfoEvent.StackingType; // might be unreliable due to its absence on some logs
+#if DEBUG
+                throw new InvalidDataException("Stacking types do not match, manually verify to make sure everything is in order");
+#endif
                 operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
-            }*/
+            }
         }
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
@@ -455,7 +457,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fixated (Slothasor)", FixatedSlothasor, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Volatile Poison", VolatilePoisonEffect, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
                 // Trio
-                new Buff("Not the Bees!", NotTheBees, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
+                new Buff("Not the Bees!", NotTheBees, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Slow Burn", SlowBurn, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),
                 new Buff("Targeted", Targeted, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/24/Targeted.png"),
                 new Buff("Target!", Target, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/09/Target.png"),
@@ -589,19 +591,19 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Locked On",LockedOn  , Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/3/39/Target%21.png"),
                 new Buff("CA Invul",CAInvul , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
                 new Buff("Arm Up",ArmUp , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png"),
-                new Buff("Fixation", Fixation, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixation", Fixation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Twin Largos
                 new Buff("Aquatic Detainment", AquaticDetainmentEffect , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Tidal Pool", TidalPool , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Aquatic Aura (Kenut)",AquaticAuraKenut , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",AquaticAuraNikare , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
                 new Buff("Waterlogged",Waterlogged , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
-                new Buff("Enraged (Twin Largos)", EnragedTwinLargos, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
+                new Buff("Enraged (Twin Largos)", EnragedTwinLargos, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 // Qadim
                 new Buff("Flame Armor",FlameArmor, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png"),
                 new Buff("Fiery Surge",FierySurge, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f9/Fiery_Surge.png"),
                 new Buff("Power of the Lamp", PowerOfTheLamp, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/e5/Break_Out%21.png"),
-                new Buff("Unbearable Flames", UnbearableFlames, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png"),
+                new Buff("Unbearable Flames", UnbearableFlames, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png"),
                 new Buff("Parry", Parry, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/28/Parry_%28effect%29.png"),
                 new Buff("Mythwright Surge", MythwrightSurge, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/7a/Swiftness_%28effect%29.png"),
                 new Buff("Lamp Bond", LampBond, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/db/Lamp_Bond.png"),
@@ -729,9 +731,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Equalization Matrix", EqualizationMatrix, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fc/Equalization_Matrix.png" ),
                 new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/06/Power_of_the_Void.png" ),
                 new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/c/c1/Extreme_Vulnerability.png" ),
-                new Buff("Fixated (Kaineng Overlook)",FixatedKainengOverlook, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Ankka & Kaineng Overlook)",FixatedAnkkaKainengOverlook, Source.FightSpecific, BuffStackType.CappedDuration, 999, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Shared Destruction (Li)",SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
-                new Buff("Shared Destruction (Li CM)",SharedDestructionLiCM, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
+                new Buff("Shared Destruction (Li CM)",SharedDestructionLiCM, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png"),
                 new Buff("Debilitated",Debilitated, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/80/Debilitated.png"),
                 new Buff("Infirmity",Infirmity, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/b/bb/Debilitating_Void.png"),
                 //Harvest Temple
@@ -744,10 +746,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Empowerment", VoidEmpowerment, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Old Lion's Court
-                new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
+                new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("ErgoShear", ErgoShear, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
                 new Buff("Tidal Torment", TidalTorment, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
-                new Buff("Naked Singularity", NakedSingularity, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
+                new Buff("Naked Singularity", NakedSingularity, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
                 new Buff("Ley-Woven Shielding", LeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
                 new Buff("Malfunctioning Ley-Woven Shielding", MalfunctioningLeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
                 new Buff("Power Transfer", PowerTransfer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),

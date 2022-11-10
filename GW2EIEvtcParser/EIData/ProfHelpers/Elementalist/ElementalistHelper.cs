@@ -94,13 +94,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
                 new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
                 // Summons
-                new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Glyph_of_Lesser_Elementals_%28air%29.png"),
+                new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Glyph_of_Lesser_Elementals_%28air%29.png"),
                 new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/84/Glyph_of_Elementals_%28air%29.png"),
-                new Buff("Lesser Water Elemental Summoned", LesserWaterElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/49/Glyph_of_Lesser_Elementals_%28water%29.png"),
+                new Buff("Lesser Water Elemental Summoned", LesserWaterElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/49/Glyph_of_Lesser_Elementals_%28water%29.png"),
                 new Buff("Water Elemental Summoned", WaterElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c6/Glyph_of_Elementals_%28water%29.png"),
-                new Buff("Lesser Fire Elemental Summoned", LesserFireElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/18/Glyph_of_Lesser_Elementals_%28fire%29.png"),
+                new Buff("Lesser Fire Elemental Summoned", LesserFireElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/18/Glyph_of_Lesser_Elementals_%28fire%29.png"),
                 new Buff("Fire Elemental Summoned", FireElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/01/Glyph_of_Elementals_%28fire%29.png"),
-                new Buff("Lesser Earth Elemental Summoned", LesserEarthElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0f/Glyph_of_Lesser_Elementals_%28earth%29.png"),
+                new Buff("Lesser Earth Elemental Summoned", LesserEarthElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0f/Glyph_of_Lesser_Elementals_%28earth%29.png"),
                 new Buff("Earth Elemental Summoned", EarthElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e4/Glyph_of_Elementals_%28earth%29.png"),
                 //skills
                 new Buff("Arcane Power",ArcanePowerEffect, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),

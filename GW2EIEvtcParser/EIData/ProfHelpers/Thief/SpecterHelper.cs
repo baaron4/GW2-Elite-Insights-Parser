@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Endless Night",EndlessNight, Source.Specter, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9e/Endless_Night.png"),
             new Buff("Shrouded Ally",ShroudedAlly, Source.Specter, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3a/Siphon.png"),
             new Buff("Rot Wallow Venom",RotWallowVenom, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/5/57/Dark_Sentry.png"),
-            new Buff("Consume Shadows", ConsumeShadows, Source.Specter, ArcDPSEnums.BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
+            new Buff("Consume Shadows", ConsumeShadows, Source.Specter, ArcDPSEnums.BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/94/Consume_Shadows.png"),
         };
 
         private static HashSet<long> Minions = new HashSet<long>()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
@@ -30,7 +31,8 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Berserk",Berserk, Source.Berserker, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
                 new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/6f/Flames_of_War_%28warrior_skill%29.png"),
-                new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png"),
+                new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png", GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+                new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png", GW2Builds.October2022Balance, GW2Builds.EndOfLife),
                 new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png"),
                 new Buff("Feel No Pain (Savage Instinct)",FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4d/Savage_Instinct.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
                 new Buff("Always Angry",AlwaysAngry, Source.Berserker, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/63/Always_Angry.png", 0 , GW2Builds.April2019Balance),

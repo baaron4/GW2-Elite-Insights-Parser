@@ -1625,7 +1625,7 @@ namespace GW2EIEvtcParser
         public const long BlockOfTofu = 65937;
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRush1 = 66090;
-        public const long FixatedKainengOverlook = 66140;
+        public const long FixatedAnkkaKainengOverlook = 66140;
         public const long DragonsEndContributor2 = 66185;
         public const long BreathOfJormag2 = 66216;
         public const long SooWonSpearPhaseInvul = 66242;

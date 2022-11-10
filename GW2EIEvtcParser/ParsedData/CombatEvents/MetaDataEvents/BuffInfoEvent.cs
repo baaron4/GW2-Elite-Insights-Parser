@@ -14,8 +14,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         public ArcDPSEnums.BuffCategory Category { get; private set; }
 
-        public byte StackingTypeByte { get; private set; }
-        public ArcDPSEnums.BuffStackType StackingType { get; private set; }
+        public byte StackingTypeByte { get; private set; } = 6;
+        public ArcDPSEnums.BuffStackType StackingType { get; private set; } = ArcDPSEnums.BuffStackType.Unknown;
 
         public bool ProbablyResistance { get; private set; }
 
@@ -41,22 +41,26 @@ namespace GW2EIEvtcParser.ParsedData
                     BuildFromBuffFormula(evtcItem, evtcVersion);
                     break;
                 case ArcDPSEnums.StateChange.BuffInfo:
-                    BuildFromBuffInfo(evtcItem);
+                    BuildFromBuffInfo(evtcItem, evtcVersion);
                     break;
                 default:
                     throw new InvalidDataException("Invalid combat event in BuffDataEvent complete method");
             }
         }
 
-        private void BuildFromBuffInfo(CombatItem evtcItem)
+        private void BuildFromBuffInfo(CombatItem evtcItem, int evtcVersion)
         {
             ProbablyInvul = evtcItem.IsFlanking > 0;
             ProbablyInvert = evtcItem.IsShields > 0;
             Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
             MaxStacks = evtcItem.SrcMasterInstid;
             DurationCap = evtcItem.OverstackValue;
-            StackingTypeByte = evtcItem.Pad1;
-            StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
+            // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
+            if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            {
+                StackingTypeByte = evtcItem.Pad1;
+                StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
+            }
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
 
