@@ -610,14 +610,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
         }
 
+        protected static long GetGenericFightOffset(FightData fightData)
+        {
+            return fightData.LogStart;
+        }
+
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return logStartNPCUpdate.Time;
+                throw new InvalidOperationException("LogStartNPCUpdate detected, all fight logics require an override for GetFightOffset");
             }
-            return fightData.LogStart;
+            return GetGenericFightOffset(fightData);
         }
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

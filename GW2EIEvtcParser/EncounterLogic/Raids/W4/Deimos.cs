@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                 }
             }
-            return start >= 0 ? start : base.GetFightOffset(fightData, agentData, combatData);
+            return start >= 0 ? start : GetGenericFightOffset(fightData);
         }
 
         internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)

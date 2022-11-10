@@ -208,7 +208,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Sabir not found");
             }
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(target));
-            return enterCombat != null ? enterCombat.Time : base.GetFightOffset(fightData, agentData, combatData);
+            return enterCombat != null ? enterCombat.Time : GetGenericFightOffset(fightData);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -77,10 +77,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
-        {
-            // As we need to check first invul loss around combat start, we need to make sure we are at least at LogStartNPCUpdate
-            long startToUse = base.GetFightOffset(fightData, agentData, combatData);
+        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
+        {         
+            long startToUse = GetGenericFightOffset(fightData);
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate))
+            {
+                // TODO
+            }
             // Find target
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             if (target == null)
