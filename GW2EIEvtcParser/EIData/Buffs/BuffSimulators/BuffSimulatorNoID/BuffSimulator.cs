@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
         {
-            var toAdd = new BuffStackItem(start, duration, src);
+            var toAdd = new BuffStackItem(start, duration, src, stackID);
             // Find empty slot
             if (!IsFull)
             {
@@ -71,11 +71,15 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, start));
                 }
             }
+            if (addedActive)
+            {
+                _logic.Activate(BuffStack, stackID);
+            }
         }
 
-        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool atFirst, bool isExtension)
+        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool atFirst, bool isExtension, uint stackID)
         {
-            var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension);
+            var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
             // Find empty slot
             if (!IsFull)
             {
@@ -142,11 +146,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Activate(uint id)
         {
-
+            _logic.Activate(BuffStack, id);
         }
         public override void Reset(uint id, long toDuration)
         {
-
+            _logic.Reset(BuffStack, id, toDuration);
         }
     }
 }

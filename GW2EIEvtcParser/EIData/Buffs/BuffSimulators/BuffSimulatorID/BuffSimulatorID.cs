@@ -12,14 +12,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         protected class BuffStackItemID : BuffStackItem
         {
 
-            public long StackID { get; protected set; } = 0;
-
             public bool Active { get; protected set; } = false;
 
-            public BuffStackItemID(long start, long boonDuration, AgentItem src, bool active, long stackID) : base(start, boonDuration, src)
+            public BuffStackItemID(long start, long boonDuration, AgentItem src, bool active, long stackID) : base(start, boonDuration, src, stackID)
             {
                 Active = active;
-                StackID = stackID;
             }
 
             public void Activate()

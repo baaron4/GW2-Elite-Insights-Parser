@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             }
             else
             {
-                Add(oldValue + extension, src, _lastSrcRemove.agent, start, true, _lastSrcRemove.extension);
+                Add(oldValue + extension, src, _lastSrcRemove.agent, start, true, _lastSrcRemove.extension, stackID);
             }
         }
 

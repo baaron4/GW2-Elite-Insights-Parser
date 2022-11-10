@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         public AgentItem Src { get; private set; }
         public AgentItem SeedSrc { get; }
         public bool IsExtension { get; private set; }
+        public long StackID { get; } = 0;
 
         public long TotalDuration
         {
@@ -28,22 +29,24 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-        public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension)
+        public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension, long stackID)
         {
             Start = start;
             SeedSrc = seedSrc;
             Duration = boonDuration;
             Src = src;
             IsExtension = isExtension;
+            StackID = stackID;
         }
 
-        public BuffStackItem(long start, long boonDuration, AgentItem src)
+        public BuffStackItem(long start, long boonDuration, AgentItem src, long stackID)
         {
             Start = start;
             SeedSrc = src;
             Duration = boonDuration;
             Src = src;
             IsExtension = false;
+            StackID = stackID;
         }
 
         public virtual void Shift(long startShift, long durationShift)
