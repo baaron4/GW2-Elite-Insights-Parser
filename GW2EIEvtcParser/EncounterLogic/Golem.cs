@@ -174,6 +174,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                return logStartNPCUpdate.Time;
+            }
+            return GetGenericFightOffset(fightData);
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);

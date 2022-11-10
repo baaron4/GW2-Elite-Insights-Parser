@@ -59,6 +59,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetGenericFightOffset(fightData);
+        }
+
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();

@@ -56,6 +56,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetGenericFightOffset(fightData);
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             if (!_targetIDs.Any())
