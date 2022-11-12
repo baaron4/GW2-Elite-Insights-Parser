@@ -628,12 +628,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return GetEnterCombatTime(fightData, agentData, combatData);
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData);
             }
-            return GetGenericFightOffset(fightData);
+            return startToUse;
         }
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
