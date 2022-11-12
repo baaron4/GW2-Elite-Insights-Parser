@@ -423,13 +423,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             //fixated Statue
             var fixatedStatue = GetFilteredList(log.CombatData, StatueFixated1, p, true, true).Concat(GetFilteredList(log.CombatData, StatueFixated2, p, true, true)).ToList();
             int fixationStatueStart = 0;
-            NPC statue = null;
+            AbstractSingleActor statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationStatueStart = (int)c.Time;
-                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
+                    statue = Targets.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
                 }
                 else
                 {
