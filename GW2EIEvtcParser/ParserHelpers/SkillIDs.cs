@@ -946,6 +946,7 @@ namespace GW2EIEvtcParser
         public const long CosmicStreaks = 39021;
         public const long RedMarble1 = 39029;
         public const long HorizonStrikeSkorvald2 = 39031;
+        public const long ArkkStartBuff = 39032;
         public const long AstralSurge = 39035;
         public const long DiaphanousShielding = 39111;
         public const long FixatedBloom1 = 39131;
