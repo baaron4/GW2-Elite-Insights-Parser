@@ -24,16 +24,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.EncounterMasks.FractalMask;
         }
 
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
-            if (logStartNPCUpdate != null)
-            {
-                return GetEnterCombatTime(fightData, agentData, combatData);
-            }
-            return GetGenericFightOffset(fightData);
-        }
-
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             // generic method for fractals
