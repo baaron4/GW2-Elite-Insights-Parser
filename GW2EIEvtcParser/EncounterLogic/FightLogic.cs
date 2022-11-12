@@ -623,7 +623,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Main target not found");
             }
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget));
-            return enterCombat != null ? enterCombat.Time : GetGenericFightOffset(fightData);
+            return enterCombat != null ? enterCombat.Time : mainTarget.FirstAware;
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
