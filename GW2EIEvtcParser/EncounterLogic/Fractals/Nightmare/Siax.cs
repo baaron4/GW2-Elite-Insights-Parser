@@ -43,8 +43,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.SiaxHallucination,
-                ArcDPSEnums.TrashID.NightmareHallucinationSiax,
-                ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                ArcDPSEnums.TrashID.NightmareHallucinationSiax
+            };
+        }
+        protected override List<int> GetTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.Siax,
+                (int)ArcDPSEnums.TrashID.EchoOfTheUnclean,
             };
         }
 
