@@ -87,12 +87,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
+        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
         {         
             long startToUse = GetGenericFightOffset(fightData);
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate))
             {
-                // TODO
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData);
             }
             // Find target
             AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
