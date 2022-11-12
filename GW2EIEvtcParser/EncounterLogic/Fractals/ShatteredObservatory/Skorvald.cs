@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 // Skorvald may spawns with 0% hp
                 CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
-                return firstNonZeroHPUpdate != null ? firstNonZeroHPUpdate.Time : GetGenericFightOffset(fightData);
+                return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, logStartNPCUpdate.Time): GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
         }
