@@ -46,6 +46,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (13440, 14336, 15360, 16256)*/);
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetGenericFightOffset(fightData);
+        }
+
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>
