@@ -617,12 +617,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AgentItem mainTarget = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target not found");
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget.AgentItem));
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget));
             return enterCombat != null ? enterCombat.Time : GetGenericFightOffset(fightData);
         }
 
