@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.ParsedData
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
 #if DEBUG
-            _allAgentsByName = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByName = _allAgentsList.Where(x => !x.Name.Contains("UNKNOWN")).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
         }
 
