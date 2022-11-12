@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Skorvald not found");
                 }
-                // Skorvald spawns with 0% hp
+                // Skorvald may spawns with 0% hp
                 CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
                 return firstNonZeroHPUpdate != null ? firstNonZeroHPUpdate.Time : GetGenericFightOffset(fightData);
             }
