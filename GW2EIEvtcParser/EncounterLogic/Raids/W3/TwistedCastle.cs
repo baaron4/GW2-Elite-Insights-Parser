@@ -47,6 +47,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HauntingStatue);
+                long start = long.MaxValue;
+                foreach (AgentItem statue in statues)
+                {
+                    CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(statue));
+                    if (enterCombat != null)
+                    {
+                        start = Math.Min(start, enterCombat.Time);
+                    }
+                }
+                return start < long.MaxValue ? start : GetGenericFightOffset(fightData);
+            }
+            return GetGenericFightOffset(fightData);
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
