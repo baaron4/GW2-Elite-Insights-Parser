@@ -221,6 +221,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                AgentItem messenger = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Messenger).MinBy(x => x.FirstAware);
+                if (messenger != null)
+                {
+                    startToUse = messenger.FirstAware;
+                }
+            }
+            return startToUse;
+        }
+
         private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
         {
             { new Point3D(16897, 1225, -6215), 0 },
