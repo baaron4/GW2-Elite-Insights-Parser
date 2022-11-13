@@ -68,6 +68,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+            }
+            return startToUse;
+        }
+
         private static List<PhaseData> GetSubPhases(AbstractSingleActor eye, ParsedEvtcLog log)
         {
             var res = new List<PhaseData>();
