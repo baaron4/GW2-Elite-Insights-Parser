@@ -33,6 +33,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508)*/);
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                startToUse = logStartNPCUpdate.Time;
+            }
+            return startToUse;
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             var green = log.CombatData.GetBuffData(SkillIDs.FrozenWind).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
