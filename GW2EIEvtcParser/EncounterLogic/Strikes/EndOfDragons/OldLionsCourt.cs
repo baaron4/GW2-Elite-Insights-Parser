@@ -88,6 +88,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return subPhases;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = base.GetFightOffset(fightData, agentData, combatData);
+            AgentItem vermillion = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.PrototypeVermilion).FirstOrDefault();
+            if (vermillion != null)
+            {
+                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermillion) && x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState && x.Value == 0);
+                if (breakbarStateActive != null)
+                {
+                    startToUse = breakbarStateActive.Time;
+                }
+            }
+            return startToUse;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
