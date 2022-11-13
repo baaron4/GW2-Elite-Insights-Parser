@@ -615,14 +615,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return fightData.LogStart;
         }
 
-        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)
         {
             AgentItem mainTarget = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target not found");
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget));
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
             return enterCombat != null ? enterCombat.Time : mainTarget.FirstAware;
         }
 
@@ -632,7 +632,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                startToUse = GetEnterCombatTime(fightData, agentData, combatData);
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
             }
             return startToUse;
         }
