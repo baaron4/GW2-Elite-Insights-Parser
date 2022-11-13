@@ -237,6 +237,13 @@ namespace GW2EIEvtcParser.ParsedData
                     dc.Add((LastAware, long.MaxValue));
                 }
             }
+            if (!dead.Any() || dead[0].start != long.MinValue)
+            {
+                if (!dc.Any() || dc[0].start != long.MinValue)
+                {
+                    dc.Insert(0, (long.MinValue, FirstAware));
+                }
+            }
         }
 
         public AgentItem GetFinalMaster()
