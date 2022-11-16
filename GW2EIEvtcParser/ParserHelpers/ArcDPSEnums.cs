@@ -270,6 +270,9 @@ namespace GW2EIEvtcParser
             MovementSpeedStacking = -28,
             MovementSpeedStacking2 = -29,
             FishingPower = -30,
+            MaximumHP = -31,
+            VitalityPercent = -32,
+            DefensePercent = -33,
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {

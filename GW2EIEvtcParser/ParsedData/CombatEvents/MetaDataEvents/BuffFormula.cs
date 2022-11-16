@@ -17,7 +17,10 @@ namespace GW2EIEvtcParser.ParsedData
                     return "Precision";
                 case Toughness:
                     return "Toughness";
+                case DefensePercent:
+                    return "Defense";
                 case Vitality:
+                case VitalityPercent:
                     return "Vitality";
                 case Ferocity:
                     return "Ferocity";
@@ -97,6 +100,8 @@ namespace GW2EIEvtcParser.ParsedData
                 case MovementSpeedStacking:
                 case MovementSpeedStacking2:
                     return "Movement Speed (Stacking)";
+                case MaximumHP:
+                    return "Maximum Health";
                 case KarmaBonus:
                     return "Karma Bonus";
                 case SkillRechargeSpeedIncrease:
@@ -165,10 +170,13 @@ namespace GW2EIEvtcParser.ParsedData
                 case MovementSpeed:
                 case MovementSpeedStacking:
                 case MovementSpeedStacking2:
+                case MaximumHP:
                 case KarmaBonus:
                 case SkillRechargeSpeedIncrease:
                 case MagicFind:
                 case WXP:
+                case DefensePercent:
+                case VitalityPercent:
                     return "%";
                 case MovementActivationDamageFormula:
                     return " adds";
