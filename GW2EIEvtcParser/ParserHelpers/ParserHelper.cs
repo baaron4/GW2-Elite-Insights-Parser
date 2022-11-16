@@ -793,6 +793,12 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/9dpoFqR.png";
                 case ArcDPSEnums.TargetID.SooWonOW:
                     return "https://i.imgur.com/lcZGgBC.png";
+                case ArcDPSEnums.TargetID.PrototypeVermilion:
+                    return "https://i.imgur.com/Lwz1Ypr.png";
+                case ArcDPSEnums.TargetID.PrototypeArsenite:
+                    return "https://i.imgur.com/tSD5Phl.png";
+                case ArcDPSEnums.TargetID.PrototypeIndigo:
+                    return "https://i.imgur.com/DRdLQSr.png";
             }
             switch (ArcDPSEnums.GetTrashID(id))
             {

@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
-            Icon = "https://i.imgur.com/UZmW8Sd.png";
+            Icon = "https://i.imgur.com/Q2g9aLD.png";
             Extension = "lioncourt";
             EncounterCategoryInformation.InSubCategoryOrder = 4;
             EncounterID |= 0x000005;
