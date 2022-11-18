@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected override Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
         {
-            return combatData.GetEffectEvents(effectGUIDEvent.ContentID).Where(x => x.IsAroundDst).GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.ToList());
+            return combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).Where(x => x.IsAroundDst).GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         protected override AgentItem GetAgent(EffectEvent effectEvent)

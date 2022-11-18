@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
                     if (distributedMagicGUIDEvent != null)
                     {
-                        IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEvents(distributedMagicGUIDEvent.ContentID);
+                        IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
                         //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
                         foreach (EffectEvent distributedMagic in distributedMagicEvents)
                         {
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
                     if (magicSpikeGUIDEvent != null)
                     {
-                        IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEvents(magicSpikeGUIDEvent.ContentID);
+                        IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
                         //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
                         foreach (EffectEvent magicSpike in magicSpikeEvents)
                         {

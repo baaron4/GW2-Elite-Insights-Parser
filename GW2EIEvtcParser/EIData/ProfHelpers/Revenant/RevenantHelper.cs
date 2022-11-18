@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EIData
             EffectGUIDEvent tabletAutoHealEffect = combatData.GetEffectGUIDEvent(EffectGUIDs.RevenantTabletAutoHeal);
             if (tabletAutoHealEffect != null)
             {
-                var allTablets = new HashSet<AgentItem>(combatData.GetEffectEvents(tabletAutoHealEffect.ContentID).Select(x => x.Src));
+                var allTablets = new HashSet<AgentItem>(combatData.GetEffectEventsByEffectID(tabletAutoHealEffect.ContentID).Select(x => x.Src));
                 foreach (AgentItem tablet in allTablets)
                 {
                     tablet.OverrideType(AgentItem.AgentType.NPC);

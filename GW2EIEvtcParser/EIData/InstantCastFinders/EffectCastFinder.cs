@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
         {
-            return combatData.GetEffectEvents(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            return combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         protected virtual AgentItem GetAgent(EffectEvent effectEvent)

@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
                     if (displacementEffectGUID != null)
                     {
-                        IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEvents(displacementEffectGUID.ContentID);
+                        IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEventsByEffectID(displacementEffectGUID.ContentID);
                         foreach (EffectEvent displacement in displacementEffects)
                         {
                             replay.Decorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (dashGreenEffectGUID != null)
                     {
                         var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
-                        IReadOnlyList<EffectEvent> dashGreenEffects = log.CombatData.GetEffectEvents(dashGreenEffectGUID.ContentID);
+                        IReadOnlyList<EffectEvent> dashGreenEffects = log.CombatData.GetEffectEventsByEffectID(dashGreenEffectGUID.ContentID);
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
                             int dashGreenStart = (int)dashGreen.Time;

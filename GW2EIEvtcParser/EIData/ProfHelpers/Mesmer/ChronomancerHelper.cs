@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDEvent shatterSeizeTheMomentGUIDEvent = combatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerSeizeTheMomentShatter);
                 if (shatterSeizeTheMomentGUIDEvent != null)
                 {
-                    IReadOnlyList<EffectEvent> shatterEvents = combatData.GetEffectEvents(shatterSeizeTheMomentGUIDEvent.ContentID);
+                    IReadOnlyList<EffectEvent> shatterEvents = combatData.GetEffectEventsByEffectID(shatterSeizeTheMomentGUIDEvent.ContentID);
                     if  (shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1)) {
                         return true;
                     }

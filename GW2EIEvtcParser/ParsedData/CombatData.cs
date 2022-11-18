@@ -927,14 +927,24 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEvents(long effectID)
+        public IReadOnlyList<EffectEvent> GetEffectEventsByEffectID(long effectID)
         {
-            if (_statusEvents.EffectEventsByID.TryGetValue(effectID, out List<EffectEvent> list))
+            if (_statusEvents.EffectEventsByEffectID.TryGetValue(effectID, out List<EffectEvent> list))
             {
                 return list;
             }
             return new List<EffectEvent>();
         }
+
+        public IReadOnlyList<EffectEvent> GetEffectEventsByTrackingID(long trackingID)
+        {
+            if (_statusEvents.EffectEventsByTrackingID.TryGetValue(trackingID, out List<EffectEvent> list))
+            {
+                return list;
+            }
+            return new List<EffectEvent>();
+        }
+
 
         public IReadOnlyList<EffectEvent> GetEffectEvents()
         {
