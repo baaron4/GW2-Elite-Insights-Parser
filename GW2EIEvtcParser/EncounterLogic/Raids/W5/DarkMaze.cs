@@ -74,6 +74,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
+                var lightThieves = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.LightThieves);
+                if (lightThieves.Any())
+                {
+                    startToUse = lightThieves.Min(x => x.FirstAware);
+                }
             }
             return startToUse;
         }
