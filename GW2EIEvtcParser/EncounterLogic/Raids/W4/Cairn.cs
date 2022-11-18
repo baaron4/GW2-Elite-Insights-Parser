@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             AbstractCastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                             if (endEvent != null)
                             {
-                                dashGreenEnd = (int)endEvent.EndTime;
+                                dashGreenEnd = (int)endEvent.Time + 3300; // from skill def
                             }
                             replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
