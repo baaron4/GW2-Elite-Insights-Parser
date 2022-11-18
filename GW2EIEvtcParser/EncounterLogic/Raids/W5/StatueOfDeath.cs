@@ -6,10 +6,10 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class EaterOfSouls : HallOfChains
+    internal class StatueOfDeath : HallOfChains
     {
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
-        public EaterOfSouls(int triggerID) : base(triggerID)
+        public StatueOfDeath(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

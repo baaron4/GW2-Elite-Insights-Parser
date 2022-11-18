@@ -8,10 +8,10 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class DarkMaze : HallOfChains
+    internal class StatueOfDarkness : HallOfChains
     {
         // TODO - add CR icons and some mechanics
-        public DarkMaze(int triggerID) : base(triggerID)
+        public StatueOfDarkness(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

@@ -6,10 +6,10 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class BrokenKing : HallOfChains
+    internal class StatueOfIce : HallOfChains
     {
         // TODO - add CR icons and some mechanics
-        public BrokenKing(int triggerID) : base(triggerID)
+        public StatueOfIce(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
