@@ -612,17 +612,32 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected static long GetGenericFightOffset(FightData fightData)
         {
             return fightData.LogStart;
+
         }
 
-        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)
+        internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit, int id)
         {
-            AgentItem mainTarget = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+            AgentItem mainTarget = agentData.GetNPCsByID(id).FirstOrDefault();
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target not found");
             }
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
-            return enterCombat != null ? enterCombat.Time : mainTarget.FirstAware;
+            if (enterCombat != null)
+            {
+                CombatItem exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
+                if (exitCombat != null)
+                {
+                    return mainTarget.FirstAware;
+                }
+                return enterCombat.Time;
+            }
+            return mainTarget.FirstAware;
+        }
+
+        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)
+        {
+            return GetEnterCombatTime(fightData, agentData, combatData, upperLimit, GenericTriggerID);
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
