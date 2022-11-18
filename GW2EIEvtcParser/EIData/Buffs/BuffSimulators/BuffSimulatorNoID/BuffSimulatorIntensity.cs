@@ -27,12 +27,12 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 if (_lastSrcRemoves.Any())
                 {
-                    Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension);
+                    Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension, stackID);
                     _lastSrcRemoves.RemoveAt(0);
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start, 0, true, 0);
+                    Add(oldValue + extension, src, start, stackID, true, 0);
                 }
             }
         }
