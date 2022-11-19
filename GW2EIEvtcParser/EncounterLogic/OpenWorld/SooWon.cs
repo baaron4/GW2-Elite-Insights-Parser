@@ -38,6 +38,17 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             EncounterID |= 0x000401;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                return logStartNPCUpdate.Time;
+            }
+            return startToUse;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
