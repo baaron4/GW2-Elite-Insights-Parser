@@ -115,6 +115,8 @@ Kaineng Overlook: 0x040303
 
 Harvest Temple: 0x040304
 
+Old Lion's Court: 0x040305
+
 ## Open World
 Soo-Won: 0x050401
 
