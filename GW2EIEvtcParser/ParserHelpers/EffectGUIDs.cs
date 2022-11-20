@@ -79,6 +79,8 @@ namespace GW2EIEvtcParser
         // Cairn
         public const string CairnDisplacement = "7798B97ED6B6EB489F7E33DF9FE6BD99";
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
+        // CA
+        public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";

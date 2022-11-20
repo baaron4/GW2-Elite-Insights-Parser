@@ -332,7 +332,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int i = 0;
                 IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                IReadOnlyList<BreakbarPercentEvent> breakbarPercentEvents = log.CombatData.GetBreakbarPercentEvents(target.AgentItem);
                 var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
                 var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
@@ -613,16 +612,43 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected static long GetGenericFightOffset(FightData fightData)
         {
             return fightData.LogStart;
+
+        }
+
+        internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit, int id)
+        {
+            AgentItem mainTarget = agentData.GetNPCsByID(id).FirstOrDefault();
+            if (mainTarget == null)
+            {
+                throw new MissingKeyActorsException("Main target not found");
+            }
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
+            if (enterCombat != null)
+            {
+                CombatItem exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
+                if (exitCombat != null)
+                {
+                    return mainTarget.FirstAware;
+                }
+                return enterCombat.Time;
+            }
+            return mainTarget.FirstAware;
+        }
+
+        internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)
+        {
+            return GetEnterCombatTime(fightData, agentData, combatData, upperLimit, GenericTriggerID);
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                throw new InvalidOperationException("LogStartNPCUpdate detected, all fight logics require an override for GetFightOffset");
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
             }
-            return GetGenericFightOffset(fightData);
+            return startToUse;
         }
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

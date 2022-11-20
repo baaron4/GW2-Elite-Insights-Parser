@@ -161,10 +161,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Minister Li not found");
             }
-            var buffApplies = combatData.GetBuffData(SkillIDs.Determined762).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
-            if (buffApplies.Count >= 3)
+            var buffApplies = combatData.GetBuffData(SkillIDs.Resurrection).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
+            if (buffApplies.Any())
             {
-                fightData.SetSuccess(true, buffApplies[2].Time);
+                fightData.SetSuccess(true, buffApplies[0].Time);
             }
         }
 

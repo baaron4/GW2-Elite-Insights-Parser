@@ -8,10 +8,10 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class DarkMaze : HallOfChains
+    internal class StatueOfDarkness : HallOfChains
     {
         // TODO - add CR icons and some mechanics
-        public DarkMaze(int triggerID) : base(triggerID)
+        public StatueOfDarkness(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -66,6 +66,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.EyeOfFate,
                 (int)ArcDPSEnums.TargetID.EyeOfJudgement
             };
+        }
+
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.LightThieves);
+                if (lightThieves.Any())
+                {
+                    startToUse = lightThieves.Min(x => x.FirstAware);
+                }
+            }
+            return startToUse;
         }
 
         private static List<PhaseData> GetSubPhases(AbstractSingleActor eye, ParsedEvtcLog log)

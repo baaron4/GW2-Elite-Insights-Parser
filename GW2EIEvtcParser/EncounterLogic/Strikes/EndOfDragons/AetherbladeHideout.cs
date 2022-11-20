@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
                 long maiTrinEnd = lastHPUpdate.Time;
                 long maiTrinStart = 0;
-                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem).FirstOrDefault();
+                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
                 if (buffRemove != null)
                 {
                     maiTrinStart = buffRemove.Time;

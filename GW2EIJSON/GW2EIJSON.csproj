@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.47.0.0</Version>
+    <Version>2.48.0.0</Version>ns
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 

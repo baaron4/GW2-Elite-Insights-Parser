@@ -12,13 +12,18 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            var guid = new byte[16];
-            byte[] first8 = BitConverter.GetBytes(evtcItem.SrcAgent);
-            byte[] last8 = BitConverter.GetBytes(evtcItem.DstAgent);
-            first8.CopyTo(guid, 0);
-            last8.CopyTo(guid, first8.Length);
-            ContentGUID = ParserHelper.ToHexString(guid, 0, 16);
+            ContentGUID = UnpackGUID(evtcItem.SrcAgent, evtcItem.DstAgent);
             ContentID = evtcItem.SkillID;
+        }
+
+        internal static string UnpackGUID(ulong first8, ulong last8)
+        {
+            var guid = new byte[16];
+            byte[] first8Bytes = BitConverter.GetBytes(first8);
+            byte[] last8Bytes = BitConverter.GetBytes(last8);
+            first8Bytes.CopyTo(guid, 0);
+            last8Bytes.CopyTo(guid, first8Bytes.Length);
+            return ParserHelper.ToHexString(guid, 0, 16);
         }
 
     }

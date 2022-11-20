@@ -46,6 +46,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (13440, 14336, 15360, 16256)*/);
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            // time starts at first smash
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID))
+            {
+                CombatItem armSmashGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
+                if (armSmashGUID != null)
+                {
+                    CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Effect && x.SkillID == armSmashGUID.SkillID);
+                    if (firstArmSmash != null)
+                    {
+                        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+                        if (logStartNPCUpdate != null)
+                        {
+                            // we couldn't have hit CA before the initial smash
+                            return firstArmSmash.Time > logStartNPCUpdate.Time ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                        } 
+                        else
+                        {
+                            // Before new logging, log would start when everyone in combat + boss in combat or enters combat
+                            // as such the first smash can only happen within the first few seconds of the start
+                            return firstArmSmash.Time - fightData.LogStart > 6000 ? GetGenericFightOffset(fightData) : firstArmSmash.Time ;
+                        }
+                    }
+                }
+            }
+            return GetGenericFightOffset(fightData);
+        }
+
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>

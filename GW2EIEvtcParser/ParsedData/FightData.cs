@@ -111,14 +111,14 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
                     break;
                 case ArcDPSEnums.TargetID.BrokenKing:
-                    Logic = new BrokenKing(id);
+                    Logic = new StatueOfIce(id);
                     break;
                 case ArcDPSEnums.TargetID.SoulEater:
-                    Logic = new EaterOfSouls(id);
+                    Logic = new StatueOfDeath(id);
                     break;
                 case ArcDPSEnums.TargetID.EyeOfFate:
                 case ArcDPSEnums.TargetID.EyeOfJudgement:
-                    Logic = new DarkMaze(id);
+                    Logic = new StatueOfDarkness(id);
                     break;
                 case ArcDPSEnums.TargetID.Dhuum:
                     // some eyes logs are registered as Dhuum
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.ParsedData
                         agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
                     {
                         TriggerID = (int)ArcDPSEnums.TargetID.EyeOfFate;
-                        Logic = new DarkMaze(TriggerID);
+                        Logic = new StatueOfDarkness(TriggerID);
                         break;
                     }
                     Logic = new Dhuum(id);

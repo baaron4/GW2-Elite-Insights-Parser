@@ -120,7 +120,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             GetMiniBossPhase((int)ArcDPSEnums.TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
             return phases;
         }
-
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                AgentItem arkk = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Arkk).FirstOrDefault();
+                if (arkk == null)
+                {
+                    throw new MissingKeyActorsException("Arkk not found");
+                }
+                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
+                return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
+            }
+            return GetGenericFightOffset(fightData);
+        }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {

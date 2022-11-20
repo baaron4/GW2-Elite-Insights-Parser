@@ -121,10 +121,5 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.TwistedHorror
             };
         }
-
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
-        {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.MAMA, Determined762, 1500);
-        }
     }
 }

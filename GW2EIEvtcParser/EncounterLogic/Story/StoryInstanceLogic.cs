@@ -18,5 +18,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
             EncounterID |= EncounterIDs.EncounterMasks.StoryInstanceMask;
         }
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            return GetGenericFightOffset(fightData);
+        }
     }
 }

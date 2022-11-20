@@ -6,10 +6,10 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class BrokenKing : HallOfChains
+    internal class StatueOfIce : HallOfChains
     {
         // TODO - add CR icons and some mechanics
-        public BrokenKing(int triggerID) : base(triggerID)
+        public StatueOfIce(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -31,6 +31,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (2497, 5388, 7302, 9668)/*,
                             (-21504, -12288, 24576, 12288),
                             (19072, 15484, 20992, 16508)*/);
+        }
+
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                startToUse = logStartNPCUpdate.Time;
+            }
+            return startToUse;
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

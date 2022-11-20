@@ -66,6 +66,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                AgentItem enervator = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
+                if (enervator != null)
+                {
+                    startToUse = enervator.FirstAware;
+                }
+            }
+            return startToUse;
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);

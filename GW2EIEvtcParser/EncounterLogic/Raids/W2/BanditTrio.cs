@@ -82,6 +82,35 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = GetGenericFightOffset(fightData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                startToUse = long.MaxValue;
+                AgentItem berg = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Berg).FirstOrDefault();
+                if (berg == null)
+                {
+                    throw new MissingKeyActorsException("Berg not found");
+                }
+                startToUse = Math.Min(berg.FirstAware, startToUse);
+                AgentItem zane = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Zane).FirstOrDefault();
+                if (zane == null)
+                {
+                    throw new MissingKeyActorsException("Zane not found");
+                }
+                startToUse = Math.Min(zane.FirstAware, startToUse);
+                AgentItem narella = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Narella).FirstOrDefault();
+                if (narella == null)
+                {
+                    throw new MissingKeyActorsException("Narella not found");
+                }
+                startToUse = Math.Min(narella.FirstAware, startToUse);
+            }
+            return startToUse;
+        }
+
         private static void SetPhasePerTarget(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
         {
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
