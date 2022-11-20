@@ -130,9 +130,6 @@ namespace GW2EIEvtcParser.EIData
             }
             if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
             {
-#if DEBUG
-                throw new InvalidDataException("Stacking types do not match, manually verify to make sure everything is in order");
-#endif
                 operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
             }
         }

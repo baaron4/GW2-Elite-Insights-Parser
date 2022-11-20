@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private List<PhaseData> GetSubPhases(AbstractSingleActor target, ParsedEvtcLog log, string phaseName)
+        private static List<PhaseData> GetSubPhases(AbstractSingleActor target, ParsedEvtcLog log, string phaseName)
         {
             var phaseNames = new[]
             {
