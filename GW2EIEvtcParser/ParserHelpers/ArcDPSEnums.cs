@@ -386,6 +386,7 @@ namespace GW2EIEvtcParser
         private const int PoisonMushroom = -26;
         private const int SpearAggressionRevulsion = -27;
         private const int DragonOrb = -28;
+        private const int ChestOfSouls = -29;
 
 
         //
@@ -855,6 +856,17 @@ namespace GW2EIEvtcParser
         public static TargetID GetTargetID(int id)
         {
             return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
+        }
+
+        public enum ChestID : int
+        {
+            ChestOfSouls = ArcDPSEnums.ChestOfSouls,
+            //
+            Unknown = int.MaxValue,
+        };
+        public static ChestID GetChestID(int id)
+        {
+            return Enum.IsDefined(typeof(ChestID), id) ? (ChestID)id : ChestID.Unknown;
         }
 
         public enum MinionID : int

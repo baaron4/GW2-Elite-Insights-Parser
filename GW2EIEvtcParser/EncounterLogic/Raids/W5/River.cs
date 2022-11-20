@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class River : HallOfChains
     {
+        private static readonly (double x, double y , double z) ChestOfSoulsPosition = (7906.54, 2147.48, -5746.19);
         public River(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -86,34 +87,67 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-                if (desmina == null)
+                AgentItem chestOfSouls = agentData.GetGadgetsByID((int)ArcDPSEnums.ChestID.ChestOfSouls).FirstOrDefault();
+                if (chestOfSouls != null)
                 {
-                    throw new MissingKeyActorsException("Desmina not found");
-                }
-                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
-                if (ooc != null)
+                    fightData.SetSuccess(true, chestOfSouls.FirstAware);
+                } 
+                else
                 {
-                    long time = 0;
-                    foreach (NPC mob in TrashMobs)
+                    // Old way
+                    AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
+                    if (desmina == null)
                     {
-                        time = Math.Max(mob.LastAware, time);
+                        throw new MissingKeyActorsException("Desmina not found");
                     }
-                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
-                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
+                    ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
+                    if (ooc != null)
                     {
-                        if (!AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
+                        long time = 0;
+                        foreach (NPC mob in TrashMobs)
                         {
-                            return;
+                            time = Math.Max(mob.LastAware, time);
                         }
-                        fightData.SetSuccess(true, time);
+                        DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
+                        if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
+                        {
+                            if (AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
+                            {
+                                fightData.SetSuccess(true, time);
+                            }
+                        }
                     }
                 }
+                
             }
         }
 
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            AgentItem chest = combatData.Where(evt =>
+            {
+                if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
+                {
+                    return false;
+                }
+                AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
+                if (agent.Type != AgentItem.AgentType.Gadget)
+                {
+                    return false;
+                }
+                (double x, double y, double z) = AbstractMovementEvent.UnpackMovementData(evt.DstAgent, evt.Value);
+                if (Math.Abs(x - ChestOfSoulsPosition.x) < 5 && Math.Abs(y - ChestOfSoulsPosition.y) < 5)
+                {
+                    return true;
+                }
+                return false;
+            }
+            ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => x.HitboxWidth == 100 && x.HitboxHeight == 1200);
+            if (chest != null)
+            {
+                chest.OverrideID((int)ArcDPSEnums.ChestID.ChestOfSouls);
+            }
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }
