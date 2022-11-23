@@ -176,12 +176,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //
             var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
-            foreach (AgentItem gadget in chargedBloodStones)
+            /*foreach (AgentItem gadget in chargedBloodStones)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
 
-            }
+            }*/
             if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
             {
                 agentData.Refresh();
