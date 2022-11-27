@@ -108,10 +108,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                         continue;
                     }
                     c.OverrideSrcAgent(target.Agent);
+                    if (c.Time < target.FirstAware)
+                    {
+                        c.OverrideTime(target.FirstAware);
+                    }
                 }
                 if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
                 {
                     c.OverrideDstAgent(target.Agent);
+                    if (c.Time < target.FirstAware)
+                    {
+                        c.OverrideTime(target.FirstAware);
+                    }
                 }
             }
         }
