@@ -22,16 +22,17 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
-        public bool Intersect(Segment seg)
+        public bool IntersectSegment(Segment seg)
         {
-            if (seg.Start >= seg.End)
-            {
-                return false;
-            }
-            return Intersect(seg.Start, seg.End);
+            return IntersectSegment(seg.Start, seg.End);
         }
 
-        public bool Intersect(long start, long end)
+        public long IntersectingArea(Segment seg)
+        {
+            return IntersectingArea(seg.Start, seg.End);
+        }
+
+        public bool IntersectSegment(long start, long end)
         {
             if (Start >= End)
             {
@@ -40,6 +41,18 @@ namespace GW2EIEvtcParser.EIData
             long maxStart = Math.Max(start, Start);
             long minEnd = Math.Min(end, End);
             return minEnd - maxStart >= 0;
+        }
+
+        public long IntersectingArea(long start, long end)
+        {
+            long maxStart = Math.Max(start, Start);
+            long minEnd = Math.Min(end, End);
+            return Math.Max(minEnd - maxStart, 0);
+        }
+
+        public bool ContainsPoint(long time)
+        {
+            return Start <= time && End >= time;
         }
 
         public static List<Segment> FromStates(List<(long start, double state)> states, long min, long max)

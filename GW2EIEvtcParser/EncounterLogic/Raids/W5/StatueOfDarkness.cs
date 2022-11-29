@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return;
                 }
-                if (lastFate.Intersect(lastJudge))
+                if (lastFate.IntersectSegment(lastJudge))
                 {
                     fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
                 }

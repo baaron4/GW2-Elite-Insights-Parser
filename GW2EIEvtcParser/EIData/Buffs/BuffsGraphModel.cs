@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Segment seg in BuffChart)
             {
-                if (seg.Intersect(time, time))
+                if (seg.ContainsPoint(time))
                 {
                     return (int)seg.Value;
                 }

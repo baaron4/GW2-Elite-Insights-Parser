@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void OverrideName(string name);
 
-        public (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
         {
             return _statusHelper.GetStatus(log);
         }
@@ -81,18 +81,18 @@ namespace GW2EIEvtcParser.EIData
         }
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
-            (_, IReadOnlyList<(long start, long end)> downs, _) = _statusHelper.GetStatus(log);
-            return downs.Any(x => x.start <= time && x.end >= time);
+            (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
+            return downs.Any(x => x.ContainsPoint(time));
         }
         public bool IsDead(ParsedEvtcLog log, long time)
         {
-            (IReadOnlyList<(long start, long end)> deads,_ , _) = _statusHelper.GetStatus(log);
-            return deads.Any(x => x.start <= time && x.end >= time);
+            (IReadOnlyList<Segment> deads,_ , _) = _statusHelper.GetStatus(log);
+            return deads.Any(x => x.ContainsPoint(time));
         }
         public bool IsDC(ParsedEvtcLog log, long time)
         {
-            (_, _, IReadOnlyList<(long start, long end)> dcs) = _statusHelper.GetStatus(log);
-            return dcs.Any(x => x.start <= time && x.end >= time);
+            (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
+            return dcs.Any(x => x.ContainsPoint(time));
         }
 
         //

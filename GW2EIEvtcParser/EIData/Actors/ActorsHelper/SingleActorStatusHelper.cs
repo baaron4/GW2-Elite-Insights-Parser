@@ -11,9 +11,9 @@ namespace GW2EIEvtcParser.EIData
     internal class SingleActorStatusHelper : AbstractSingleActorHelper
     {
 
-        private List<(long start, long end)> _deads;
-        private List<(long start, long end)> _downs;
-        private List<(long start, long end)> _dcs;
+        private List<Segment> _deads;
+        private List<Segment> _downs;
+        private List<Segment> _dcs;
         //
         private List<DeathRecap> _deathRecaps;
         //weaponslist
@@ -25,13 +25,13 @@ namespace GW2EIEvtcParser.EIData
 
 
 
-        public (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) GetStatus(ParsedEvtcLog log)
+        public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
         {
             if (_deads == null)
             {
-                _deads = new List<(long start, long end)>();
-                _downs = new List<(long start, long end)>();
-                _dcs = new List<(long start, long end)>();
+                _deads = new List<Segment>();
+                _downs = new List<Segment>();
+                _dcs = new List<Segment>();
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
@@ -69,28 +69,10 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
         {
-            (IReadOnlyList<(long start, long end)> dead, IReadOnlyList<(long start, long end)> down, IReadOnlyList<(long start, long end)> dc) = GetStatus(log);
+            (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
             return (end - start) -
-                dead.Sum(x =>
-                {
-                    if (x.start <= end && x.end >= start)
-                    {
-                        long s = Math.Max(x.start, start);
-                        long e = Math.Min(x.end, end);
-                        return e - s;
-                    }
-                    return 0;
-                }) -
-                dc.Sum(x =>
-                {
-                    if (x.start <= end && x.end >= start)
-                    {
-                        long s = Math.Max(x.start, start);
-                        long e = Math.Min(x.end, end);
-                        return e - s;
-                    }
-                    return 0;
-                });
+                dead.Sum(x => x.IntersectingArea(start, end)) -
+                dc.Sum(x => x.IntersectingArea(start, end));
         }
 
 

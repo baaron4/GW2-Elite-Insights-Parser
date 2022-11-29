@@ -533,15 +533,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             int playerDeadOrDCCount = 0;
             foreach (AgentItem playerAgent in playerAgents)
             {
-                var deads = new List<(long start, long end)>();
-                var downs = new List<(long start, long end)>();
-                var dcs = new List<(long start, long end)>();
+                var deads = new List<Segment>();
+                var downs = new List<Segment>();
+                var dcs = new List<Segment>();
                 playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
-                if (deads.Any(x => x.start <= timeToCheck && x.end >= timeToCheck))
+                if (deads.Any(x => x.ContainsPoint(timeToCheck)))
                 {
                     playerDeadOrDCCount++;
                 }
-                else if (dcs.Any(x => x.start <= timeToCheck && x.end >= timeToCheck))
+                else if (dcs.Any(x => x.ContainsPoint(timeToCheck)))
                 {
                     playerDeadOrDCCount++;
                 }

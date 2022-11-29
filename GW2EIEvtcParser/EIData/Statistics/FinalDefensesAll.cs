@@ -17,15 +17,15 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
-            (IReadOnlyList<(long start, long end)>  dead, IReadOnlyList<(long start, long end)>  down, IReadOnlyList<(long start, long end)>  dc) = actor.GetStatus(log);
+            (IReadOnlyList<Segment>  dead, IReadOnlyList<Segment>  down, IReadOnlyList<Segment>  dc) = actor.GetStatus(log);
 
             DownCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DownMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DeadCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DeathMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DcCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DespawnMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
 
-            DownDuration = down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-            DeadDuration = dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
-            DcDuration = dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            DownDuration = down.Sum(x => x.IntersectingArea(start, end));
+            DeadDuration = dead.Sum(x => x.IntersectingArea(start, end));
+            DcDuration = dc.Sum(x => x.IntersectingArea(start, end));
         }
     }
 }

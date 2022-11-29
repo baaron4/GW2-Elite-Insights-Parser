@@ -26,8 +26,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                (_, IReadOnlyList<(long start, long end)> downs , _) = actor.GetStatus(log);
-                bool hitInDown = downs.Any(x => x.start < ce.Time && ce.Time < x.end);
+                (_, IReadOnlyList<Segment> downs , _) = actor.GetStatus(log);
+                bool hitInDown = downs.Any(x => x.ContainsPoint(ce.Time));
                 return !hitInDown;
             }),
             new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),

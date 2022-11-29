@@ -62,14 +62,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int playersWithBisque = 0;
                 int expectedPlayersForSuccess = 0;
                 long fightEnd = log.FightData.FightEnd - ParserHelper.ServerDelayConstant;
+                long fightStart = log.FightData.FightStart + ParserHelper.ServerDelayConstant;
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.HasBuff(log, BloodstoneBisque, fightEnd))
+                    Dictionary<long, BuffsGraphModel> graphs = p.GetBuffGraphs(log);
+                    if (graphs.TryGetValue(BloodstoneBisque, out BuffsGraphModel graph))
                     {
-                        playersWithBisque++;
+                        if (!graph.BuffChart.Any(x => x.Value == 0 && x.IntersectSegment(fightStart, fightEnd)))
+                        {
+                            playersWithBisque++;
+                        }
                     }
-                    (_, _, IReadOnlyList<(long start, long end)> dcs) = p.GetStatus(log);
-                    if (!dcs.Any(x => x.start <= fightEnd && x.end >= fightEnd))
+                    (_, _, IReadOnlyList<Segment> dcs) = p.GetStatus(log);
+                    if (!dcs.Any(x => x.ContainsPoint(fightEnd)))
                     {
                         expectedPlayersForSuccess++;
                     }

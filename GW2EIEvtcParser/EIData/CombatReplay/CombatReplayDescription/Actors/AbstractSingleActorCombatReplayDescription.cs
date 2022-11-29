@@ -59,22 +59,22 @@ namespace GW2EIEvtcParser.EIData
             Down = down;
             var dc = new List<long>();
             Dc = dc;
-            (IReadOnlyList<(long start, long end)> deads, IReadOnlyList<(long start, long end)> downs, IReadOnlyList<(long start, long end)> dcs) = a.GetStatus(log);
+            (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) = a.GetStatus(log);
 
-            foreach ((long start, long end) in deads)
+            foreach (Segment seg in deads)
             {
-                dead.Add(start);
-                dead.Add(end);
+                dead.Add(seg.Start);
+                dead.Add(seg.End);
             }
-            foreach ((long start, long end) in downs)
+            foreach (Segment seg in downs)
             {
-                down.Add(start);
-                down.Add(end);
+                down.Add(seg.Start);
+                down.Add(seg.End);
             }
-            foreach ((long start, long end) in dcs)
+            foreach (Segment seg in dcs)
             {
-                dc.Add(start);
-                dc.Add(end);
+                dc.Add(seg.Start);
+                dc.Add(seg.End);
             }
         }
 
