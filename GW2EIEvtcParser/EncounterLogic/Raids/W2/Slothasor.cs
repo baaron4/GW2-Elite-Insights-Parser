@@ -27,7 +27,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0, (ba,log) => ba.AppliedDuration == 8000),
             new EnemyBuffApplyMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
             new EnemyBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0, (br,log) => br.RemovedDuration > 120000),
-            new EnemyBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000)
+            new EnemyBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0, (br,log) => br.RemovedDuration <= 120000),
+            new PlayerBuffApplyMechanic(SlipperySlubling, "Slippery Slubling", new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb","Slippery Slubling", "Slippery Slubling",0),
             });
             Extension = "sloth";
             Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
@@ -42,6 +43,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (5822, -3491, 9549, 2205)/*,
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210)*/);
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> slipperySlublings = log.CombatData.GetBuffData(SlipperySlubling);
+            if (slipperySlublings.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, SlipperySlubling, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[SlipperySlubling], 1));
+                        break;
+                    }
+                }
+            }
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

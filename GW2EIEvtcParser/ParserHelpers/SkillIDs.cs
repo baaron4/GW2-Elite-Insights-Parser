@@ -766,6 +766,7 @@ namespace GW2EIEvtcParser
         public const long OverheadSmashBerg = 34448;
         public const long UnstableBloodMagic = 34450;
         public const long HeatWaveMatthias = 34458;
+        public const long SlipperySlubling = 34461;
         public const long SlowBurn = 34464;
         public const long FieryVortex = 34466;
         public const long NarcolepsyEffect = 34467;

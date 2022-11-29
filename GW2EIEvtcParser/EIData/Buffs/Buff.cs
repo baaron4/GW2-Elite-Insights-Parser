@@ -453,6 +453,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Magic Transformation", MagicTransformation, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/45/Magic_Transformation.png"),
                 new Buff("Fixated (Slothasor)", FixatedSlothasor, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 new Buff("Volatile Poison", VolatilePoisonEffect, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/12/Volatile_Poison.png"),
+                new Buff("Slippery Slubling", SlipperySlubling, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/10/Achievement_effect.png"),
                 // Trio
                 new Buff("Not the Bees!", NotTheBees, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/08/Throw_Jar.png"),
                 new Buff("Slow Burn", SlowBurn, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/6e/Heat_Wave_%28Matthias_Gabrel_effect%29.png"),

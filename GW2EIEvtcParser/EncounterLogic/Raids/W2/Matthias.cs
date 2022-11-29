@@ -52,6 +52,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210)*/);
         }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
+            if (bloodstoneBisque.Any() && log.FightData.Success)
+            {
+                int playersWithBisque = 0;
+                int expectedPlayersForSuccess = 0;
+                long fightEnd = log.FightData.FightEnd - ParserHelper.ServerDelayConstant;
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, BloodstoneBisque, fightEnd))
+                    {
+                        playersWithBisque++;
+                    }
+                    (_, _, IReadOnlyList<(long start, long end)> dcs) = p.GetStatus(log);
+                    if (!dcs.Any(x => x.start <= fightEnd && x.end >= fightEnd))
+                    {
+                        expectedPlayersForSuccess++;
+                    }
+                }
+                if (expectedPlayersForSuccess <= playersWithBisque)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[BloodstoneBisque], 1));
+                }
+            }
+        }
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()
