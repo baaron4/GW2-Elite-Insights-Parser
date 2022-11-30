@@ -59,6 +59,8 @@ namespace GW2EIEvtcParser.EIData
             //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist,"https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png", x => x.IsOverNinety, ByPresence, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             // Arcane
             new BuffDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png", DamageModifierMode.All),
+
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, KnockDown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e1/Stormsoul.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.December2018Balance),
         };
 
 
