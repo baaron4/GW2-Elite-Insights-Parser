@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EIData
             DeadCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DeathMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
             DcCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DespawnMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
 
-            DownDuration = down.Sum(x => x.IntersectingArea(start, end));
-            DeadDuration = dead.Sum(x => x.IntersectingArea(start, end));
-            DcDuration = dc.Sum(x => x.IntersectingArea(start, end));
+            DownDuration = (long)down.Sum(x => x.IntersectingArea(start, end));
+            DeadDuration = (long)dead.Sum(x => x.IntersectingArea(start, end));
+            DcDuration = (long)dc.Sum(x => x.IntersectingArea(start, end));
         }
     }
 }
