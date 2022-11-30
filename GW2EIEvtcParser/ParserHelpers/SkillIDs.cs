@@ -1689,6 +1689,7 @@ namespace GW2EIEvtcParser
         public const long DebilitatedToxicSickness = 68170;
         public const long DecadeEnhancement = 68235;
         public const long BladesongDistortion = 68273;
+        public const long EmpowererWatchknightTriumverate = 68302;
         public const long MalfunctioningLeyWovenShielding = 68303;
         public const long NakedSingularity = 68319;
         public const long TidalTorment = 68330;

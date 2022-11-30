@@ -745,12 +745,13 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Old Lion's Court
                 new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
-                new Buff("ErgoShear", ErgoShear, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
-                new Buff("Tidal Torment", TidalTorment, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
+                new Buff("ErgoShear", ErgoShear, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a2/Ergo_Shear.png"),
+                new Buff("Tidal Torment", TidalTorment, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c2/Tidal_Torment.png"),
                 new Buff("Naked Singularity", NakedSingularity, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
-                new Buff("Ley-Woven Shielding", LeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
-                new Buff("Malfunctioning Ley-Woven Shielding", MalfunctioningLeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
-                new Buff("Power Transfer", PowerTransfer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
+                new Buff("Ley-Woven Shielding", LeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/2b/Ley_Energy_Shield.png"),
+                new Buff("Malfunctioning Ley-Woven Shielding", MalfunctioningLeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png"),
+                new Buff("Power Transfer", PowerTransfer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/88/Spirit_Energy_Tracker.png"),
+                new Buff("Empowered (Watchknight Triumverate)", EmpowererWatchknightTriumverate, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/d/d1/Charging_Energies_%28attack_effect%29.png"),
                 //Open World Soo-Won
                 new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png"),
                 new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png"),
