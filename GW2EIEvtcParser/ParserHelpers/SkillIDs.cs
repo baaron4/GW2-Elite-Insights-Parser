@@ -1697,6 +1697,9 @@ namespace GW2EIEvtcParser
         public const long LeyWovenShielding = 68508;
         public const long ErgoShear = 68546;
         public const long FixatedOldLionsCourt = 68562;
+        public const long DormantCourage = 68585;
+        public const long DormantJustice = 68607;
+        public const long DormantResolve = 68640;
     }
 
 }
