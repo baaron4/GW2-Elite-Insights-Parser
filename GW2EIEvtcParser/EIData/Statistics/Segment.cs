@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             return IntersectSegment(seg.Start, seg.End);
         }
 
-        public long IntersectingArea(Segment seg)
+        public double IntersectingArea(Segment seg)
         {
             return IntersectingArea(seg.Start, seg.End);
         }
@@ -43,11 +43,11 @@ namespace GW2EIEvtcParser.EIData
             return minEnd - maxStart >= 0;
         }
 
-        public long IntersectingArea(long start, long end)
+        public double IntersectingArea(long start, long end)
         {
             long maxStart = Math.Max(start, Start);
             long minEnd = Math.Min(end, End);
-            return Math.Max(minEnd - maxStart, 0);
+            return Math.Max(minEnd - maxStart, 0) * Value;
         }
 
         public bool ContainsPoint(long time)

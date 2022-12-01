@@ -71,8 +71,8 @@ namespace GW2EIEvtcParser.EIData
         {
             (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
             return (end - start) -
-                dead.Sum(x => x.IntersectingArea(start, end)) -
-                dc.Sum(x => x.IntersectingArea(start, end));
+                (long)dead.Sum(x => x.IntersectingArea(start, end)) -
+                (long)dc.Sum(x => x.IntersectingArea(start, end));
         }
 
 
