@@ -821,8 +821,11 @@ namespace GW2EIEvtcParser
             TheDragonVoidPrimordus = ArcDPSEnums.TheDragonVoidPrimordus,
             TheDragonVoidMordremoth = ArcDPSEnums.TheDragonVoidMordremoth,
             PrototypeVermilion = 25413,
-            PrototypeIndigo = 25419,
             PrototypeArsenite = 25415,
+            PrototypeIndigo = 25419,
+            PrototypeVermilionCM = 25414,
+            PrototypeArseniteCM = 25416,
+            PrototypeIndigoCM = 25423,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,

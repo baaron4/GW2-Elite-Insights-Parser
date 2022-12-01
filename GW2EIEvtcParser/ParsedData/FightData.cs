@@ -195,6 +195,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.PrototypeVermilion:
                 case ArcDPSEnums.TargetID.PrototypeArsenite:
                 case ArcDPSEnums.TargetID.PrototypeIndigo:
+                case ArcDPSEnums.TargetID.PrototypeVermilionCM:
+                case ArcDPSEnums.TargetID.PrototypeArseniteCM:
+                case ArcDPSEnums.TargetID.PrototypeIndigoCM:
                     Logic = new OldLionsCourt(id);
                     break;
                 //
