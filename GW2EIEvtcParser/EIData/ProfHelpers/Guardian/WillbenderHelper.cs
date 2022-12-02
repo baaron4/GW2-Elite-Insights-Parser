@@ -41,6 +41,25 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
+            new BuffDamageModifier(LethalTempo, "Lethal Tempo", "1% per stack", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 6000;
+                }
+                return false;
+            }).UsingApproximate(true).WithBuilds( GW2Builds.EODBeta4, GW2Builds.November2022Balance),
+            new BuffDamageModifier(LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 6000;
+                }
+                return false;
+            }).UsingApproximate(true).WithBuilds( GW2Builds.November2022Balance),
+            //
             new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.All).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -50,15 +69,6 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-            new BuffDamageModifier(LethalTempo, "Lethal Tempo", "1% per stack", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                   return x.Time - effectApply.Time < 6000;
-                }
-                return false;
-            }).UsingApproximate(true).WithBuilds( GW2Builds.EODBeta4),
             new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -67,22 +77,23 @@ namespace GW2EIEvtcParser.EIData
                    return x.Time - effectApply.Time < 4000;
                 }
                 return false;
-            }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
+            }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4, GW2Builds.November2022Balance),
+            new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.PvE).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 4000;
+                }
+                return false;
+            }).UsingApproximate(true).WithBuilds(GW2Builds.November2022Balance),
+            //
             new BuffDamageModifier(LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png", DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                    return x.Time - effectApply.Time < 6000;
-                }
-                return false;
-            }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
-            new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "4% per stack", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                   return x.Time - effectApply.Time < 4000;
                 }
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
@@ -95,6 +106,16 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.March2022Balance2),
+            //
+            new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "4% per stack", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 4000;
+                }
+                return false;
+            }).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
             new BuffDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png", DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -104,6 +125,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.March2022Balance2),
+            //
             new BuffDamageModifier(62529, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
         };
 

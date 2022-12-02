@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.February2020Balance).UsingChecker((x, log) => {
+            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.February2020Balance, GW2Builds.November2022Balance).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(JusticeDragonhunter).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 10000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
@@ -53,6 +53,18 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
+            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png", DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.November2022Balance).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AgentItem dst = x.To;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(JusticeDragonhunter).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 12000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 12000;
+                }
+                return false;
+            }),
+            //         
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, KnockDown, Fear, Taunt }, "Heavy Light", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/a/a3/Heavy_Light.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
