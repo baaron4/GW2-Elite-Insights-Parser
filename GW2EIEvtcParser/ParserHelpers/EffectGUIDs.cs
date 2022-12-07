@@ -54,6 +54,12 @@ namespace GW2EIEvtcParser
         public const string FirebrandMantraOfLoreSymbol = "3D01B04C5700904BA279E9F135A3FAB3";
         public const string FirebrandMantraOfPotenceCone = "FB70E37EB3915F4BAB6E06E328832D1D";
         public const string FirebrandMantraOfPotenceSymbol = "95B52793B838524AB237EB9FED7834BF";
+        public const string FirebrandMantraOfSolaceCone = "D2C28FC5AB651746914FC595D1591623";
+        public const string FirebrandMantraOfSolaceSymbol = "8F0C77784AFD7F40B27446617DC05CDC";
+        public const string FirebrandMantraOfTruthCone = "C2F283E74AC9024DBB865BA0F98AF20B";
+        public const string FirebrandMantraOfTruthSymbol = "E33EA0A63898CA469F864EDA1336FCD0";
+        public const string FirebrandMantraOfFlameCone = "9C2F9434C5827943A7F175EFF245D39F";
+        public const string FirebrandMantraOfFlameSymbol = "AF2B09AC1145AA4880B967C32A11E81C";
         public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
