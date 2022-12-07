@@ -7,6 +7,10 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class InstantCastFinder : IVersionable
     {
+        public delegate bool InstantCastEnableChecker(CombatData combatData);
+        private InstantCastEnableChecker _enableCondition { get; set; }
+
+
         public const long DefaultICD = 50;
         public long SkillID { get; }
 
@@ -41,9 +45,19 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-
-        public bool Available(ulong gw2Build)
+        internal InstantCastFinder UsingEnable(InstantCastEnableChecker checker)
         {
+            _enableCondition = checker;
+            return this;
+        }
+
+
+        public bool Available(CombatData combatData)
+        {
+            if (_enableCondition != null && !_enableCondition(combatData)) {
+                return false;
+            }
+            ulong gw2Build = combatData.GetBuildEvent().Build;
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 

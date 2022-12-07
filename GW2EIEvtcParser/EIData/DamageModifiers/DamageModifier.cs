@@ -132,8 +132,9 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public bool Available(ulong gw2Build)
+        public bool Available(CombatData combatData)
         {
+            ulong gw2Build = combatData.GetBuildEvent().Build;
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 

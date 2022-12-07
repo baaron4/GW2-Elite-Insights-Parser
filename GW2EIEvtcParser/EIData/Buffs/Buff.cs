@@ -167,29 +167,31 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static BuffSourceFinder GetBuffSourceFinder(ulong version, HashSet<long> boonIds)
+        internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)
         {
-            if (version >= GW2Builds.EODBeta2)
+            ulong gw2Build = combatData.GetBuildEvent().Build;
+            if (gw2Build >= GW2Builds.EODBeta2)
             {
                 return new BuffSourceFinder20210921(boonIds);
             }
-            if (version >= GW2Builds.May2021Balance)
+            if (gw2Build >= GW2Builds.May2021Balance)
             {
                 return new BuffSourceFinder20210511(boonIds);
             }
-            if (version >= GW2Builds.October2019Balance)
+            if (gw2Build >= GW2Builds.October2019Balance)
             {
                 return new BuffSourceFinder20191001(boonIds);
             }
-            if (version >= GW2Builds.March2019Balance)
+            if (gw2Build >= GW2Builds.March2019Balance)
             {
                 return new BuffSourceFinder20190305(boonIds);
             }
             return new BuffSourceFinder20181211(boonIds);
         }
 
-        public bool Available(ulong gw2Build)
+        public bool Available(CombatData combatData)
         {
+            ulong gw2Build = combatData.GetBuildEvent().Build;
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 

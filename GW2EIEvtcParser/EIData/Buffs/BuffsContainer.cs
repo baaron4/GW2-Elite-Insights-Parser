@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly BuffSourceFinder _buffSourceFinder;
 
 
-        internal BuffsContainer(ulong build, CombatData combatData, ParserController operation)
+        internal BuffsContainer(CombatData combatData, ParserController operation)
         {
             var AllBuffs = new List<List<Buff>>()
             {
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             var currentBuffs = new List<Buff>();
             foreach (List<Buff> buffs in AllBuffs)
             {
-                currentBuffs.AddRange(buffs.Where(x => x.Available(build)));
+                currentBuffs.AddRange(buffs.Where(x => x.Available(combatData)));
             }
             _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
                 return x.First();
             });
             operation.UpdateProgressWithCancellationCheck("Adjusting Buffs");
-            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation, build);
+            BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
                 BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
             BuffsByClassification = currentBuffs.GroupBy(x => x.Classification).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             //
-            _buffSourceFinder = GetBuffSourceFinder(build, new HashSet<long>(BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)));
+            _buffSourceFinder = GetBuffSourceFinder(combatData, new HashSet<long>(BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)));
         }
 
         public bool TryGetBuffByName(string name, out Buff buff)

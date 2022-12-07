@@ -104,9 +104,9 @@ namespace GW2EIEvtcParser
             LogData = new LogData(evtcVersion, CombatData, evtcLogDuration, playerList, extensions, operation);
             //
             _operation.UpdateProgressWithCancellationCheck("Creating Buff Container");
-            Buffs = new BuffsContainer(LogData.GW2Build, CombatData, operation);
+            Buffs = new BuffsContainer(CombatData, operation);
             _operation.UpdateProgressWithCancellationCheck("Creating Damage Modifier Container");
-            DamageModifiers = new DamageModifiersContainer(LogData.GW2Build, fightData.Logic.Mode, parserSettings);
+            DamageModifiers = new DamageModifiersContainer(CombatData, fightData.Logic.Mode, parserSettings);
             _operation.UpdateProgressWithCancellationCheck("Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Creating General Statistics Container");

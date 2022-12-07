@@ -1,7 +1,9 @@
-﻿namespace GW2EIEvtcParser.Interfaces
+﻿using GW2EIEvtcParser.ParsedData;
+
+namespace GW2EIEvtcParser.Interfaces
 {
     internal interface IVersionable
     {
-        bool Available(ulong gw2Build);
+        bool Available(CombatData combatData);
     }
 }

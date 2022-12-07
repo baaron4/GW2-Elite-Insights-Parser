@@ -38,8 +38,9 @@ namespace GW2EIEvtcParser.EIData
                 _maxBuild = maxBuild;
             }
 
-            public bool Available(ulong gw2Build)
+            public bool Available(CombatData combatData)
             {
+                ulong gw2Build = combatData.GetBuildEvent().Build;
                 return gw2Build < _maxBuild && gw2Build >= _minBuild;
             }
 
@@ -162,12 +163,12 @@ namespace GW2EIEvtcParser.EIData
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DefensePercent), ReinforcedArmor },
         };
 
-        public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation, ulong gw2Build)
+        public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
         {
             var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
             foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
             {
-                if (!pair.Key.Available(gw2Build))
+                if (!pair.Key.Available(combatData))
                 {
                     continue;
                 }

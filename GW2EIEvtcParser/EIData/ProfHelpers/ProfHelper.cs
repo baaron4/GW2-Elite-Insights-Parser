@@ -256,10 +256,9 @@ namespace GW2EIEvtcParser.EIData
         private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(CombatData combatData, AgentData agentData, SkillData skillData, IReadOnlyList<InstantCastFinder> instantCastFinders)
         {
             var res = new List<InstantCastEvent>();
-            ulong build = combatData.GetBuildEvent().Build;
             foreach (InstantCastFinder icf in instantCastFinders)
             {
-                if (icf.Available(build))
+                if (icf.Available(combatData))
                 {
                     if (icf.NotAccurate)
                     {
