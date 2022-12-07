@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.Extensions
         public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             UsingNotAccurate(true);
+            UsingEnableInternal((combatData) => combatData.HasEXTBarrier);
             _damageSkillID = damageSkillID;
         }
         internal EXTBarrierCastFinder UsingChecker(BarrierCastChecker checker)
@@ -25,10 +26,6 @@ namespace GW2EIEvtcParser.Extensions
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            if (!combatData.HasEXTBarrier)
-            {
-                return res;
-            }
             var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in heals)
             {

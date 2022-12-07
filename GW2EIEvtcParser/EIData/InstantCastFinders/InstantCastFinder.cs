@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         public delegate bool InstantCastEnableChecker(CombatData combatData);
         private InstantCastEnableChecker _enableCondition { get; set; }
+        private InstantCastEnableChecker _enableConditionInternal { get; set; }
 
 
         public const long DefaultICD = 50;
@@ -51,9 +52,19 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        protected InstantCastFinder UsingEnableInternal(InstantCastEnableChecker checker)
+        {
+            _enableConditionInternal = checker;
+            return this;
+        }
+
 
         public bool Available(CombatData combatData)
         {
+            if (_enableConditionInternal != null && !_enableConditionInternal(combatData))
+            {
+                return false;
+            }
             if (_enableCondition != null && !_enableCondition(combatData)) {
                 return false;
             }

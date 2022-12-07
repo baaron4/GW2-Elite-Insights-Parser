@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.Extensions
         public EXTHealingCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             UsingNotAccurate(true);
+            UsingEnableInternal((combatData) => combatData.HasEXTHealing);
             _damageSkillID = damageSkillID;
         }
         internal EXTHealingCastFinder UsingChecker(HealingCastChecker checker)
@@ -25,10 +26,6 @@ namespace GW2EIEvtcParser.Extensions
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            if (!combatData.HasEXTHealing)
-            {
-                return res;
-            }
             var heals = combatData.EXTHealingCombatData.GetHealData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in heals)
             {
