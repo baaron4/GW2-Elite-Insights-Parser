@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return;
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault(x => x.Time <= targetOffs[1].Time);
+                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault(x => x.Time <= targetOffs[1].Time - ServerDelayConstant);
                         if (lastHPUpdate != null && lastHPUpdate.HPPercent > 2.0)
                         {
                             return;
