@@ -201,8 +201,9 @@ namespace GW2EIEvtcParser
         public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
         public const long ReinforcedArmor = 9283;
+        public const long FlameBlastSigil = 9284;
         public const long SigilOfBloodlust = 9286;
-        public const long SigilOfAir = 9292;
+        public const long LightningStrikeSigil = 9292;
         public const long SigilOfCorruption = 9374;
         public const long SigilOfPerception = 9385;
         public const long SigilOfLife = 9386;
@@ -652,6 +653,7 @@ namespace GW2EIEvtcParser
         public const long Enraged1_200 = 31648;
         public const long GlyphOfUnityCA = 31657;
         public const long GlyphOfEquality = 31658;
+        public const long LightningJolt = 31686;
         public const long PylonAttunementRed = 31695;
         public const long FlamesOfWar = 31708;
         public const long SpiritKick = 31720;

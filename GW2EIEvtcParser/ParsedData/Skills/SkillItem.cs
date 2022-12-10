@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.ParsedData
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"},
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png"},
             {LossAversion, "https://wiki.guildwars2.com/images/8/85/Loss_Aversion.png" },
-            {SigilOfAir, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
+            {LightningStrikeSigil, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
             {SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
             {40015, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
             {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
@@ -252,24 +252,25 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
                     {
-                        { SigilOfAir, GW2Builds.StartOfLife }, // Lightning Strike (Sigil)
-                        { FireAttunementSkill, GW2Builds.December2018Balance },  // Fire Attunement
+                        { LightningStrikeSigil, GW2Builds.StartOfLife }, 
+                        { FlameBlastSigil, GW2Builds.StartOfLife },
+                        { FireAttunementSkill, GW2Builds.December2018Balance }, 
                         { Mug, GW2Builds.StartOfLife }, // Mug
                         { 30770, 54485 }, // Pulmonary Impact
                         { 52370, GW2Builds.StartOfLife },
-                        { 31686, GW2Builds.StartOfLife }, // Lightning Jolt
-                        { Sunspot, GW2Builds.December2018Balance }, // Sunspot
-                        { EarthenBlast, GW2Builds.December2018Balance }, // Earthen Blast
-                        { ChillingNova, GW2Builds.December2018Balance }, // Chilling Nova
+                        { LightningJolt, GW2Builds.StartOfLife },
+                        { Sunspot, GW2Builds.December2018Balance },
+                        { EarthenBlast, GW2Builds.December2018Balance },
+                        { ChillingNova, GW2Builds.December2018Balance },
                                          // Spontaneous Destruction GW2Builds.December2018Balance
-                        {LesserEnfeeble, GW2Builds.December2018Balance }, // Weakening Shroud
-                        {SpitefulSpirit, GW2Builds.December2018Balance }, // Spiteful Spirit
-                        {LesserSpinalShivers, GW2Builds.December2018Balance }, // Chill of Death
+                        {LesserEnfeeble, GW2Builds.December2018Balance },
+                        {SpitefulSpirit, GW2Builds.December2018Balance },
+                        {LesserSpinalShivers, GW2Builds.December2018Balance }, 
                                          // Power block GW2Builds.December2018Balance
-                        {ShatteredAegis, GW2Builds.December2018Balance }, // Shattered Aegis
-                        {GlacialHeart, GW2Builds.December2018Balance }, // Glacial Heart
-                        {ThermalReleaseValve, GW2Builds.December2018Balance }, // Thermal Release Valve
-                        {LossAversion, GW2Builds.December2018Balance }, // Loss Aversion
+                        {ShatteredAegis, GW2Builds.December2018Balance }, 
+                        {GlacialHeart, GW2Builds.December2018Balance }, 
+                        {ThermalReleaseValve, GW2Builds.December2018Balance },
+                        {LossAversion, GW2Builds.December2018Balance },
                         // 
                     };
 
