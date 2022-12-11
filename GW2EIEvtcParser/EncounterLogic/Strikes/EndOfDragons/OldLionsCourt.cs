@@ -24,12 +24,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000005;
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/Qhnhrvp.png",
-                            (838, 639),
-                            (1165, 540, 4194, 2850));
-        }*/
+            return new CombatReplayMap("https://i.imgur.com/s1R1CRq.png",
+                            (1008, 1008),
+                            (-1400, 3030, 1600, 6030));
+        }
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>
