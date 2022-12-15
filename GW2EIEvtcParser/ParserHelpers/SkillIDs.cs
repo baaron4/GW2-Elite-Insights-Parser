@@ -763,7 +763,7 @@ namespace GW2EIEvtcParser
         public const long SnowstormMatthias = 34433;
         public const long NotTheBees = 34434;
         public const long LocustTrail = 34439;
-        public const long BloodShardsAbomination = 34480;
+        public const long BloodShardsAbomination = 34440;
         public const long MatthiasSacrifice = 34442;
         public const long OverheadSmashBerg = 34448;
         public const long UnstableBloodMagic = 34450;
