@@ -137,6 +137,7 @@ namespace GW2EIEvtcParser.ParsedData
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png"},
             {LossAversion, "https://wiki.guildwars2.com/images/8/85/Loss_Aversion.png" },
             {LightningStrikeSigil, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
+            {FlameBlastSigil, "https://wiki.guildwars2.com/images/5/56/Superior_Sigil_of_Fire.png" },
             {SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
             {40015, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
             {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
