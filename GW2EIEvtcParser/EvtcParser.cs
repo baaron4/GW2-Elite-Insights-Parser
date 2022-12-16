@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
                     PreProcessEvtcData(operation);
                     operation.UpdateProgressWithCancellationCheck("Data parsed");
-                    var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _logEndTime - _logStartTime, _parserSettings, operation);
+                    var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
                     //
                     if (multiThreadAccelerationForBuffs)
                     {
@@ -604,11 +604,13 @@ namespace GW2EIEvtcParser
             // 64 bytes: each combat
             long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
             operation.UpdateProgressWithCancellationCheck("Combat Event Count " + cbtItemCount);
+            int discardedCbtEvents = 0;
             for (long i = 0; i < cbtItemCount; i++)
             {
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
                 if (!IsValid(combatItem, operation))
                 {
+                    discardedCbtEvents++;
                     continue;
                 }
                 if (combatItem.HasTime())
@@ -625,6 +627,7 @@ namespace GW2EIEvtcParser
                     _gw2Build = combatItem.SrcAgent;
                 }
             }
+            operation.UpdateProgressWithCancellationCheck("Combat Event Discarded " + discardedCbtEvents);
             if (!_combatItems.Any())
             {
                 throw new EvtcCombatEventException("No combat events found");
@@ -672,7 +675,7 @@ namespace GW2EIEvtcParser
                     return _enabledExtensions.ContainsKey(combatItem.Pad);
                 }
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.Effect)
             {
                 return false;
             }
@@ -915,7 +918,7 @@ namespace GW2EIEvtcParser
         {
             operation.UpdateProgressWithCancellationCheck("Offset time");
             OffsetEvtcData();
-            operation.UpdateProgressWithCancellationCheck("Offset of " + (-_fightData.LogStart) + " added");
+            operation.UpdateProgressWithCancellationCheck("Offset of " + (-_fightData.LogStart) + " ms added");
             // Removal of players present before the fight but not during
             var agentsToRemove = new HashSet<AgentItem>();
             foreach (Player p in _playerList)
