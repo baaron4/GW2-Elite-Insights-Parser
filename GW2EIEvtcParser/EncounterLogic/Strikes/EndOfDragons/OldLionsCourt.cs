@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/s1R1CRq.png",
                             (1008, 1008),
-                            (-1400, 3030, 1600, 6030));
+                            (-1420, 3010, 1580, 6010));
         }
         protected override List<int> GetTargetsIDs()
         {

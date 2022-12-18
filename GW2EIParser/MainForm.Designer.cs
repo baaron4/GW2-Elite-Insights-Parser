@@ -187,7 +187,7 @@
             // 
             this.LocationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.LocationDataGridViewTextBoxColumn.DataPropertyName = "InputFile";
-            this.LocationDataGridViewTextBoxColumn.FillWeight = 70F;
+            this.LocationDataGridViewTextBoxColumn.FillWeight = 60F;
             this.LocationDataGridViewTextBoxColumn.HeaderText = "Input File";
             this.LocationDataGridViewTextBoxColumn.Name = "LocationDataGridViewTextBoxColumn";
             this.LocationDataGridViewTextBoxColumn.ReadOnly = true;
@@ -197,7 +197,7 @@
             // 
             this.StatusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.StatusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            this.StatusDataGridViewTextBoxColumn.FillWeight = 20F;
+            this.StatusDataGridViewTextBoxColumn.FillWeight = 30F;
             this.StatusDataGridViewTextBoxColumn.HeaderText = "Status";
             this.StatusDataGridViewTextBoxColumn.Name = "StatusDataGridViewTextBoxColumn";
             this.StatusDataGridViewTextBoxColumn.ReadOnly = true;
