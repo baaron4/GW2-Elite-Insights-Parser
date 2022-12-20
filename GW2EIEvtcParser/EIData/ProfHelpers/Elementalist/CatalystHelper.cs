@@ -16,10 +16,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect).WithBuilds(GW2Builds.EODBeta4), // Flame Wheel
-            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect).WithBuilds(GW2Builds.EODBeta4), // Icy Coil
-            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).WithBuilds(GW2Builds.EODBeta4), // Crescent Wind
-            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).WithBuilds(GW2Builds.EODBeta4), // Rockyh Loop
+            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverstackDuration == 0).WithBuilds(GW2Builds.EODBeta4), 
+            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverstackDuration == 0).WithBuilds(GW2Builds.EODBeta4),
+            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverstackDuration == 0).WithBuilds(GW2Builds.EODBeta4), 
+            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverstackDuration == 0).WithBuilds(GW2Builds.EODBeta4),
             new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4), // Invigorating Air
             new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
             new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
