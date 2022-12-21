@@ -918,7 +918,7 @@ namespace GW2EIEvtcParser
         {
             operation.UpdateProgressWithCancellationCheck("Offset time");
             OffsetEvtcData();
-            operation.UpdateProgressWithCancellationCheck("Offset of " + (-_fightData.LogStart) + " ms added");
+            operation.UpdateProgressWithCancellationCheck("Offset of " + (_fightData.FightStartOffset) + " ms added");
             // Removal of players present before the fight but not during
             var agentsToRemove = new HashSet<AgentItem>();
             foreach (Player p in _playerList)
