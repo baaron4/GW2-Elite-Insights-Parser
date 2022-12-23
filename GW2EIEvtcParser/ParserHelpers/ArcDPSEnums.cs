@@ -387,6 +387,8 @@ namespace GW2EIEvtcParser
         private const int SpearAggressionRevulsion = -27;
         private const int DragonOrb = -28;
         private const int ChestOfSouls = -29;
+        private const int ShackledPrisoner = -30;
+        private const int DemonicBond = -31;
 
 
         //
@@ -493,6 +495,8 @@ namespace GW2EIEvtcParser
             SpearAggressionRevulsion = ArcDPSEnums.SpearAggressionRevulsion,
             // Deimos
             Saul = 17126,
+            ShackledPrisoner = ArcDPSEnums.ShackledPrisoner,
+            DemonicBond = ArcDPSEnums.DemonicBond,
             Thief = 17206,
             Gambler = 17335,
             GamblerClones = 17161,

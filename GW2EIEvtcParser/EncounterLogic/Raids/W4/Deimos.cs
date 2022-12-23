@@ -15,6 +15,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private long _deimos10PercentTime = 0;
 
+        private bool _hasPreEvent = false;
+
+        private long _deimos100PercentTime = 0;
+
+        private const long PreEventConsiderationConstant = 5000;
+
         public Deimos(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -85,7 +91,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TrashID.Saul
+                (int)ArcDPSEnums.TrashID.Saul,
+                (int)ArcDPSEnums.TrashID.ShackledPrisoner
             };
         }
 
@@ -235,21 +242,50 @@ namespace GW2EIEvtcParser.EncounterLogic
             return firstAware;
         }
 
+        private static AgentItem GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 1000980);
+            if (shackledPrisonerMaxHP != null)
+            {
+                AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
+                if (shackledPrisoner.ID > 0) // sanity check against unknown
+                {
+                    return shackledPrisoner;
+                }
+            }
+            return null;
+        }
+
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
             long start = long.MinValue;
+            long genericStart = GetGenericFightOffset(fightData);
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
-                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == 34113);
+                CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == SpawnProtection);
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
-
+                    if (start - genericStart > PreEventConsiderationConstant)
+                    {
+                        AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+                        if (shackledPrisoner != null)
+                        {
+                            CombatItem firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
+                            CombatItem firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
+                            if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && firstHPUpdate.DstAgent == 10000) // sanity check
+                            {
+                                _hasPreEvent = true;
+                                _deimos100PercentTime = start - firstHPUpdate.Time;
+                                start = firstHPUpdate.Time;
+                            }
+                        }
+                    }
                 }
             }
-            return start >= 0 ? start : GetGenericFightOffset(fightData);
+            return start >= 0 ? start : genericStart;
         }
 
         internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
@@ -264,6 +300,28 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool needsRefresh = false;
+            AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+            AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+            if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
+            {
+                shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
+                shackledPrisoner.OverrideType(AgentItem.AgentType.NPC);
+                if (saul != null)
+                {
+                    shackledPrisoner.OverrideAwareTimes(shackledPrisoner.FirstAware, saul.FirstAware);
+                }
+                needsRefresh = true;
+            }
+            if (_hasPreEvent)
+            {
+                agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                needsRefresh = false; // AddCustomNPCAgent already refreshes
+            }
+            if (needsRefresh)
+            {
+                agentData.Refresh();
+            }
             ComputeFightTargets(agentData, combatData, extensions);
             // Find target
             AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
@@ -327,6 +385,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (requirePhases)
             {
+                if (_deimos100PercentTime > 0)
+                {
+                    var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
+                    if (Targets.Any(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond))
+                    {
+                        phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond));
+                    } 
+                    else
+                    {
+                        phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
+                    }
+                    phases.Add(phasePreEvent);
+                    var phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
+                    phase100to0.AddTarget(mainTarget);
+                    phases.Add(phase100to0);
+                }
                 phases = AddBossPhases(phases, log, mainTarget);
                 phases = AddAddPhases(phases, log, mainTarget);
                 phases = AddBurstPhases(phases, log, mainTarget);
@@ -342,7 +416,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (invulDei != null)
             {
-                var phase100to10 = new PhaseData(0, invulDei.Time, "100% - 10%");
+                var phase100to10 = new PhaseData(_deimos100PercentTime, invulDei.Time, "100% - 10%");
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
@@ -404,9 +478,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.Deimos,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
                 (int)ArcDPSEnums.TrashID.Thief,
                 (int)ArcDPSEnums.TrashID.Drunkard,
-                (int)ArcDPSEnums.TrashID.Gambler
+                (int)ArcDPSEnums.TrashID.Gambler,
+                (int)ArcDPSEnums.TrashID.DemonicBond
             };
         }
 
