@@ -179,21 +179,20 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
+        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, int index)
         {
             long cTime = cur.Time;
-            long nTime = next != null ? next.Time : endTime;
             if (cur is DownEvent)
             {
-                down.Add(new Segment(cTime, nTime, 1));
+                down.Add(new Segment(cTime, nextTime, 1));
             }
             else if (cur is DeadEvent)
             {
-                dead.Add(new Segment(cTime, nTime, 1));
+                dead.Add(new Segment(cTime, nextTime, 1));
             }
             else if (cur is DespawnEvent)
             {
-                dc.Add(new Segment(cTime, nTime, 1));
+                dc.Add(new Segment(cTime, nextTime, 1));
             }
             else if (index == 0)
             {
@@ -216,18 +215,24 @@ namespace GW2EIEvtcParser.ParsedData
             status.AddRange(combatData.GetDeadEvents(this));
             status.AddRange(combatData.GetSpawnEvents(this));
             status.AddRange(combatData.GetDespawnEvents(this));
+            dc.Add(new Segment(long.MinValue, FirstAware, 1));
+            if (!status.Any())
+            {
+                dc.Add(new Segment(LastAware, long.MaxValue, 1));
+                return;
+            }
             status = status.OrderBy(x => x.Time).ToList();
             for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next, LastAware, i);
+                AddValueToStatusList(dead, down, dc, cur, next.Time, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, null, LastAware, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, LastAware, status.Count - 1);
                 if (cur is DeadEvent)
                 {
                     dead.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -235,13 +240,6 @@ namespace GW2EIEvtcParser.ParsedData
                 else
                 {
                     dc.Add(new Segment(LastAware, long.MaxValue, 1));
-                }
-            }
-            if (!dead.Any() || dead[0].Start != long.MinValue)
-            {
-                if (!dc.Any() || dc[0].Start != long.MinValue)
-                {
-                    dc.Insert(0, new Segment(long.MinValue, FirstAware, 1));
                 }
             }
         }
