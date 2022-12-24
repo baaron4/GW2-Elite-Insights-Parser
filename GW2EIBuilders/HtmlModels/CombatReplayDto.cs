@@ -50,7 +50,7 @@ namespace GW2EIBuilders.HtmlModels
                     {
                         continue;
                     }
-                    if (ArcDPSEnums.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
+                    if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                     {
                         fromNonFriendliesSet.UnionWith(minions.MinionList);
                     }

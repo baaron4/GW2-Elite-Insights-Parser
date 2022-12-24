@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return true;
             }
-            if (ArcDPSEnums.IsKnownMinionID(ReferenceAgentItem, Master.Spec))
+            if (ParserHelper.IsKnownMinionID(ReferenceAgentItem, Master.Spec))
             {
                 return true;
             }
