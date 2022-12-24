@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => x.HitboxWidth == 100 && x.HitboxHeight == 1200);
             if (chest != null)
             {
-                chest.OverrideID((int)ArcDPSEnums.ChestID.ChestOfSouls);
+                chest.OverrideID(ArcDPSEnums.ChestID.ChestOfSouls);
             }
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);

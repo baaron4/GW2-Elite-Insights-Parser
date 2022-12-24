@@ -146,6 +146,16 @@ namespace GW2EIEvtcParser.ParsedData
             ID = (int)id;
         }
 
+        internal void OverrideID(ArcDPSEnums.MinionID id)
+        {
+            ID = (int)id;
+        }
+
+        internal void OverrideID(ArcDPSEnums.ChestID id)
+        {
+            ID = (int)id;
+        }
+
         internal void OverrideToughness(ushort toughness)
         {
             Toughness = toughness;
@@ -324,6 +334,31 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentPosition(log, time);
+        }
+
+        public bool IsSpecy(int id)
+        {
+            return ID == id;
+        }
+
+        public bool IsSpecy(ArcDPSEnums.TrashID id)
+        {
+            return IsSpecy((int)id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.TargetID id)
+        {
+            return IsSpecy((int)id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.MinionID id)
+        {
+            return IsSpecy((int)id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.ChestID id)
+        {
+            return IsSpecy((int)id);
         }
     }
 }

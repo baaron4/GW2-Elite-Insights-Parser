@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem tablet in allTablets)
                 {
                     tablet.OverrideType(AgentItem.AgentType.NPC);
-                    tablet.OverrideID((int)MinionID.VentariTablet);
+                    tablet.OverrideID(MinionID.VentariTablet);
                 }
                 if (allTablets.Any())
                 {
