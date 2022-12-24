@@ -307,10 +307,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
                 shackledPrisoner.OverrideType(AgentItem.AgentType.NPC);
-                if (saul != null)
-                {
-                    shackledPrisoner.OverrideAwareTimes(shackledPrisoner.FirstAware, saul.FirstAware);
-                }
                 needsRefresh = true;
             }
             if (_hasPreEvent)
@@ -576,6 +572,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int delayOil = 3000;
                     replay.Decorations.Add(new CircleDecoration(true, start + delayOil, 200, (start, start + delayOil), "rgba(255,100, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
+                    break;
+                case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
+                    AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Saul);
+                    if (Saul != null)
+                    {
+                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware - 1);
+                    }
                     break;
                 default:
                     break;
