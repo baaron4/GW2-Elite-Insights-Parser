@@ -849,7 +849,9 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.BloodstoneFragment:
                 case ArcDPSEnums.TrashID.ChargedBloodstone:
                     return "https://i.imgur.com/PZ2VNAN.png";
-                case ArcDPSEnums.TrashID.BloodstoneShard:
+                case ArcDPSEnums.TrashID.BloodstoneShardMainFight:
+                case ArcDPSEnums.TrashID.BloodstoneShardRift:
+                case ArcDPSEnums.TrashID.BloodstoneShardButton:
                 case ArcDPSEnums.TrashID.GamblerReal:
                     return "https://i.imgur.com/J6oMITN.png";
                 case ArcDPSEnums.TrashID.Pride:

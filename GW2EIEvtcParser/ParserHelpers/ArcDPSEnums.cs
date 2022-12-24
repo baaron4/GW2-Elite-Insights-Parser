@@ -368,7 +368,7 @@ namespace GW2EIEvtcParser
         private const int AiKeeperOfThePeak2 = -8;
         private const int MatthiasSacrifice = -9;
         private const int BloodstoneFragment = -10;
-        private const int BloodstoneShard = -11;
+        private const int BloodstoneShardMainFight = -11;
         private const int ChargedBloodstone = -12;
         private const int PyreGuardianResolution = -13;
         private const int CASword = -14;
@@ -389,6 +389,8 @@ namespace GW2EIEvtcParser
         private const int ChestOfSouls = -29;
         private const int ShackledPrisoner = -30;
         private const int DemonicBond = -31;
+        private const int BloodstoneShardRift = -32;
+        private const int BloodstoneShardButton = -33;
 
 
         //
@@ -476,7 +478,9 @@ namespace GW2EIEvtcParser
             HauntingStatue = 16247,
             //CastleFountain = 32951,
             // Xera
-            BloodstoneShard = ArcDPSEnums.BloodstoneShard,
+            BloodstoneShardMainFight = ArcDPSEnums.BloodstoneShardMainFight,
+            BloodstoneShardRift = ArcDPSEnums.BloodstoneShardRift,
+            BloodstoneShardButton = ArcDPSEnums.BloodstoneShardButton,
             ChargedBloodstone = ArcDPSEnums.ChargedBloodstone,
             BloodstoneFragment = ArcDPSEnums.BloodstoneFragment,
             XerasPhantasm = 16225,
@@ -487,6 +491,7 @@ namespace GW2EIEvtcParser
             WhiteMantleBattleMage1 = 16221,
             WhiteMantleBattleMage2 = 16226,
             ExquisiteConjunction = 16232,
+            FakeXera = 16289,
             // MO
             Jade = 17181,
             // Samarog
