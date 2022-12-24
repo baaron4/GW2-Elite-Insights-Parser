@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool Initial { get; }
         public int AppliedDuration { get; }
 
-        public uint OverstackDuration { get; }
+        public uint OverridenDuration { get; }
         private readonly bool _addedActive;
 
         internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
             Initial = evtcItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
             _addedActive = evtcItem.IsShields > 0;
-            OverstackDuration = evtcItem.OverstackValue;
+            OverridenDuration = evtcItem.OverstackValue;
         }
 
         internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool addedActive) : base(by, to, time, buffSkill, id)
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss, OverstackDuration);
+            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss);
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)
