@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem enervator = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
+                AgentItem enervator = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
                 if (enervator != null)
                 {
                     startToUse = enervator.FirstAware;
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AgentItem chestOfSouls = agentData.GetGadgetsByID((int)ArcDPSEnums.ChestID.ChestOfSouls).FirstOrDefault();
+                AgentItem chestOfSouls = agentData.GetGadgetsByID(ArcDPSEnums.ChestID.ChestOfSouls).FirstOrDefault();
                 if (chestOfSouls != null)
                 {
                     fightData.SetSuccess(true, chestOfSouls.FirstAware);
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     // Old way
-                    AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
+                    AgentItem desmina = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
                     if (desmina == null)
                     {
                         throw new MissingKeyActorsException("Desmina not found");
@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 chest.OverrideID((int)ArcDPSEnums.ChestID.ChestOfSouls);
             }
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }
 

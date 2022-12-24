@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             bool needsRefresh = false;
             bool needsDummy = true;
             // find target
-            AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            AgentItem firstXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (firstXera == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }*/
             if (_hasPreEvent && needsDummy)
             {
-                agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
                 needsRefresh = false; // AddCustomNPCAgent already refreshes
             }
             if (needsRefresh)
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             // find split
-            AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
+            AgentItem secondXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera2).FirstOrDefault();
             if (secondXera != null)
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);

@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem skorvald = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Skorvald).FirstOrDefault();
+                AgentItem skorvald = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Skorvald).FirstOrDefault();
                 if (skorvald == null)
                 {
                     throw new MissingKeyActorsException("Skorvald not found");

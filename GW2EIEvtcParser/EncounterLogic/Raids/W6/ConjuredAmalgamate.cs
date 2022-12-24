@@ -105,13 +105,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
-            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : (int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate);
             if (!cas.Any())
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CALeftArm_CHINA : (int)ArcDPSEnums.TargetID.CALeftArm);
-            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? (int)ArcDPSEnums.TargetID.CARightArm_CHINA : (int)ArcDPSEnums.TargetID.CARightArm);
+            IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.CALeftArm_CHINA : ArcDPSEnums.TargetID.CALeftArm);
+            IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.CARightArm_CHINA : ArcDPSEnums.TargetID.CARightArm);
             foreach (AgentItem ca in cas)
             {
                 ca.OverrideType(AgentItem.AgentType.NPC);
@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
             agentData.Refresh();
-            AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, (int)ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+            AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Conjured Amalgamate not found");
                 }
-                AgentItem zommoros = agentData.GetNPCsByID(21118).LastOrDefault();
+                AgentItem zommoros = agentData.GetNPCsByID(ArcDPSEnums.TrashID.ChillZommoros).LastOrDefault();
                 if (zommoros == null)
                 {
                     return;

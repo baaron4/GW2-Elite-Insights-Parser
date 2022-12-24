@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem firstAmalgamate = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate).MinBy(x => x.FirstAware);
+                AgentItem firstAmalgamate = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).MinBy(x => x.FirstAware);
                 if (firstAmalgamate != null)
                 {
                     startToUse = firstAmalgamate.FirstAware;
@@ -301,12 +301,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         break;
                     }
-                    int id = (int)idsToUse[index++];
+                    ArcDPSEnums.TargetID id = idsToUse[index++];
                     long start = targetOn.Time;
                     long end = dragonVoid.LastAware;
                     CombatItem targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                     // Don't split Soo won into two
-                    if (targetOff != null && id != (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon)
+                    if (targetOff != null && id != ArcDPSEnums.TargetID.TheDragonVoidSooWon)
                     {
                         end = targetOff.Time;
                     }
@@ -355,7 +355,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //
-            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidAmalgamate);
+            IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate);
             foreach (AgentItem voidAmal in voidAmalgamates)
             {
                 if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Add missing agents
             for (int i = index; i < idsToUse.Count; i++)
             {
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Dragonvoid", Spec.NPC, (int)idsToUse[i], false);
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Dragonvoid", Spec.NPC, idsToUse[i], false);
             }
             //
             ComputeFightTargets(agentData, combatData, extensions);
@@ -814,7 +814,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return FightData.EncounterMode.CM;
             }
-            IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidMelter);
+            IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidMelter);
             if (voidMelters.Count > 5)
             {
                 long firstAware = voidMelters[0].FirstAware;
@@ -824,7 +824,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // fallback for late logs
-            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen) != null || agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
             {
                 return FightData.EncounterMode.CM;
             }

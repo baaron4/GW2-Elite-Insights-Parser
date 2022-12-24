@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem messenger = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Messenger).MinBy(x => x.FirstAware);
+                AgentItem messenger = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Messenger).MinBy(x => x.FirstAware);
                 if (messenger != null)
                 {
                     startToUse = messenger.FirstAware;

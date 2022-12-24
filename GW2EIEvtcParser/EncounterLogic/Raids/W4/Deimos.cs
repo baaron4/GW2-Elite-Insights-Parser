@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Deimos not found");
                 }
-                AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+                AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
                 if (saul == null)
                 {
                     throw new MissingKeyActorsException("Saul not found");
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
+            IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Deimos);
             long start = long.MinValue;
             long genericStart = GetGenericFightOffset(fightData);
             foreach (AgentItem deimos in deimosAgents)
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             bool needsRefresh = false;
             AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
-            AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+            AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
             if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
             {
                 shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (_hasPreEvent)
             {
-                agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
                 needsRefresh = false; // AddCustomNPCAgent already refreshes
             }
             if (needsRefresh)

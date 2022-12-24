@@ -51,14 +51,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(hand) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                int id = (int)ArcDPSEnums.TrashID.HandOfErosion;
+                ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
                 if (pos != null)
                 {
                     (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(pos.DstAgent, 0);
                     if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
                             (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
                     {
-                        id = (int)ArcDPSEnums.TrashID.HandOfEruption;
+                        id = ArcDPSEnums.TrashID.HandOfEruption;
                     }
                 }
                 for (int i = 0; i < attackOn.Count; i++)

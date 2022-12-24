@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem arkk = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Arkk).FirstOrDefault();
+                AgentItem arkk = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Arkk).FirstOrDefault();
                 if (arkk == null)
                 {
                     throw new MissingKeyActorsException("Arkk not found");

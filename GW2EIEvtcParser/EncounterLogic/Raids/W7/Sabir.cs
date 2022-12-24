@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Sabir).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Sabir).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Sabir not found");

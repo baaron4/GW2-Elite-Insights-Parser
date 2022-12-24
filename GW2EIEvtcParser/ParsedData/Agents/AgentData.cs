@@ -93,6 +93,11 @@ namespace GW2EIEvtcParser.ParsedData
             return GetNPCsByID((int)id);
         }
 
+        public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.MinionID id)
+        {
+            return GetNPCsByID((int)id);
+        }
+
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
         {
@@ -109,6 +114,15 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.TargetID id)
+        {
+            return GetNPCsByID((int)id);
+        }
+        public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.MinionID id)
+        {
+            return GetNPCsByID((int)id);
+        }
+
+        public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.ChestID id)
         {
             return GetNPCsByID((int)id);
         }

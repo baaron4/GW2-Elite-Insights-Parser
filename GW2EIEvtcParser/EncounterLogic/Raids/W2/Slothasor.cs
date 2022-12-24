@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             lastDeadTime = deadEvent.Time;
                         }
-                        AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, (int)ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
+                        AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
                         // We only need to copy metadata
                         foreach (CombatItem c in posFacingHP)
                         {

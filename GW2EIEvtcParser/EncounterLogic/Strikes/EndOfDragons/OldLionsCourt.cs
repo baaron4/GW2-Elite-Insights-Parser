@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(fightData, agentData, combatData);
-            AgentItem vermillion = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.PrototypeVermilion).FirstOrDefault();
+            AgentItem vermillion = agentData.GetNPCsByID(ArcDPSEnums.TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.PrototypeVermilion).FirstOrDefault();
             if (vermillion != null)
             {
                 CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermillion) && x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState && x.Value == 0);

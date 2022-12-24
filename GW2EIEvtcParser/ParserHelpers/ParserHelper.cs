@@ -905,7 +905,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/e10lZMa.png";
                 case ArcDPSEnums.TrashID.Jade:
                     return "https://i.imgur.com/ivtzbSP.png";
-                case ArcDPSEnums.TrashID.Zommoros:
+                case ArcDPSEnums.TrashID.AngryZommoros:
+                case ArcDPSEnums.TrashID.ChillZommoros:
                     return "https://i.imgur.com/BxbsRCI.png";
                 case ArcDPSEnums.TrashID.AncientInvokedHydra:
                     return "https://i.imgur.com/YABLiBz.png";

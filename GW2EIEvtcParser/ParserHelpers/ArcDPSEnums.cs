@@ -564,7 +564,8 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
-            Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            AngryZommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            ChillZommoros = 21118,
             // Adina
             HandOfErosion = ArcDPSEnums.HandOfErosion,
             HandOfEruption = ArcDPSEnums.HandOfEruption,
@@ -779,6 +780,7 @@ namespace GW2EIEvtcParser
             Escort = 16253, // McLeod the Silent
             KeepConstruct = 16235,
             Xera = 16246,
+            Xera2 = 16286,
             Cairn = 17194,
             MursaatOverseer = 17172,
             Samarog = 17188,
