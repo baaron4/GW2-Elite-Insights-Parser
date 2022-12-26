@@ -899,6 +899,7 @@ namespace GW2EIEvtcParser
         public const long CrystallineHeart = 37657;
         public const long SpatialManipulation4 = 37673;
         public const long EnragedCairn = 37675;
+        public const long JadeSoldierAura = 37677;
         public const long FixatedRigom = 37693;
         public const long FluxBombEffect = 37695;
         public const long DispelSAK = 37697;
@@ -908,6 +909,7 @@ namespace GW2EIEvtcParser
         public const long TearInstability = 37733;
         public const long SharedAgony50 = 37768;
         public const long ClaimSAK = 37779;
+        public const long JadeSoldierExplosion = 37788;
         public const long ProtectSAK = 37813;
         public const long FixatedSamarog = 37868;
         public const long FormUpAndAdvance = 37871;
