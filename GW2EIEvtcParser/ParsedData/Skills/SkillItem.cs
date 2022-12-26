@@ -204,6 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
             {26997, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
             {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
             {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
+            {53471, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             {DeathDropDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
