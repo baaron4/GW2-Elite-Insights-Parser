@@ -892,6 +892,7 @@ namespace GW2EIEvtcParser
         public const long NightmareDevastation1 = 37523;
         public const long Leap = 37577;
         public const long SpatialManipulation1 = 37611;
+        public const long MindCrush = 37613;
         public const long Empowered = 37626;
         public const long SpatialManipulation2 = 37629;
         public const long OrbitalSweep = 37631;
@@ -904,6 +905,7 @@ namespace GW2EIEvtcParser
         public const long FluxBombEffect = 37695;
         public const long DispelSAK = 37697;
         public const long GazeAvoidance = 37714;
+        public const long RapidDecay = 37716;
         public const long Devour = 37718;
         public const long DeimosSelectedByGreen = 37730;
         public const long TearInstability = 37733;
@@ -913,15 +915,20 @@ namespace GW2EIEvtcParser
         public const long TramplingRush = 37797;
         public const long ProtectSAK = 37813;
         public const long SpearImpact = 37816;
+        public const long OffBalance = 37846;
         public const long InevitableBetrayalFailBig = 37851;
         public const long FixatedSamarog = 37868;
         public const long FormUpAndAdvance = 37871;
         public const long SoulSwarm = 37892;
         public const long EffigyPulse = 37901;
         public const long GravityWave = 37910;
+        public const long Annihilate1 = 37929;
         public const long InevitableBetrayalBig = 37966;
+        public const long DemonicShockWaveRight = 37980;
+        public const long DemonicShockWaveCenter = 37982;
         public const long SamarogShockwave = 37996;
         public const long BrutalizeKill = 38013;
+        public const long DemonicShockWaveLeft = 38046;
         public const long SharedAgony = 38049;
         public const long EnergySurge = 38060;
         public const long SpatialManipulation5 = 38074;
@@ -932,9 +939,11 @@ namespace GW2EIEvtcParser
         public const long UnseenBurden = 38153;
         public const long MursaatOverseersShield = 38155;
         public const long PrisonerSweep = 38168;
+        public const long GreenTeleport = 38169;
         public const long SharedAgony25 = 38170;
         public const long SpearReturn = 38180;
         public const long WeakMinded = 38187;
+        public const long Annihilate2 = 38208;
         public const long SharedAgony75 = 38209;
         public const long FixatedGuldhem = 38223;
         public const long UnnaturalSignet = 38224;
@@ -943,6 +952,7 @@ namespace GW2EIEvtcParser
         public const long InevitableBetrayalSmall = 38247;
         public const long InevitableBetrayalFailSmall = 38260;
         public const long UnseenBurdenDeimos = 38266;
+        public const long BoonThief = 38272;
         public const long SpatialManipulation6 = 38302;
         public const long Bludgeon = 38305;
         public const long MeteorSwarm = 38313;
