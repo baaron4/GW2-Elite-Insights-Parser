@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -24,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, true);
+                SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
             }
         }
     }

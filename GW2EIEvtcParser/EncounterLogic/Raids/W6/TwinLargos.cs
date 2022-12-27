@@ -5,6 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -65,7 +68,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<int> GetSuccessCheckIds()
         {
-            return GetTargetsIDs();
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.Nikare,
+                (int)ArcDPSEnums.TargetID.Kenut
+            };
         }
 
         internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)

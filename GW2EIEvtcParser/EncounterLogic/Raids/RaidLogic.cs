@@ -2,6 +2,9 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
-            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
+            EncounterLogicTimeUtils.SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -56,10 +59,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 switch (GenericFallBackMethod)
                 {
                     case FallBackMethod.Death:
-                        SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
                         break;
                     case FallBackMethod.CombatExit:
-                        SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
                         if (!fightData.Success)
                         {
                             SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
@@ -68,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case FallBackMethod.ChestGadget:
                         if (!fightData.Success)
                         {
-                            SetSuccessByChestGadget(agentData, fightData);
+                            SetSuccessByChestGadget(ChestID, agentData, fightData);
                         }
                         break;
                     default:
