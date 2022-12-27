@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal static class EncounterLogicUtils
     {
-        internal static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal static void RegroupTargetsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             if (agents.Count > 1)
@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static void NegateDamageAgainstBarrier(CombatData combatData, List<AgentItem> agentItems)
+        internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
         {
             var dmgEvts = new List<AbstractHealthDamageEvent>();
             foreach (AgentItem agentItem in agentItems)

@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal static class EncounterLogicPhaseUtils
     {
 
-        internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, List<double> thresholds)
+        internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, IReadOnlyList<double> thresholds)
         {
             var phases = new List<PhaseData>();
             if (thresholds.Count == 0)

@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
-        internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit, int id)
+        internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, int id)
         {
             AgentItem mainTarget = agentData.GetNPCsByID(id).FirstOrDefault();
             if (mainTarget == null)
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return mainTarget.FirstAware;
         }
 
-        internal static void SetSuccessByCombatExit(List<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        internal static void SetSuccessByCombatExit(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {
