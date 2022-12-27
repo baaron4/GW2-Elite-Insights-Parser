@@ -30,6 +30,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
 
+        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.Unknown;
+
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
@@ -59,12 +61,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();
-        }
-
-        // Only used for CSV files
-        public NPC GetLegacyTarget()
-        {
-            return Targets.OfType<NPC>().FirstOrDefault();
         }
 
         internal MechanicData GetMechanicData()
@@ -528,6 +524,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected void SetSuccessByChestGadget(AgentData agentData, FightData fightData)
+        {
+            if (ChestID == ArcDPSEnums.ChestID.Unknown)
+            {
+                return;
+            }
+            AgentItem chest = agentData.GetGadgetsByID((int)ChestID).FirstOrDefault();
+            if (chest != null)
+            {
+                fightData.SetSuccess(true, chest.FirstAware);
+            }
+        }
+
         protected static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
         {
             int playerDeadOrDCCount = 0;
@@ -686,6 +695,42 @@ namespace GW2EIEvtcParser.EncounterLogic
                 filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
+        }
+
+
+        internal delegate bool ChestAgentChecker(AgentItem agent);
+
+        internal bool FindChestGadget(AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker chestChecker)
+        {
+            if (ChestID == ArcDPSEnums.ChestID.Unknown)
+            {
+                return false;
+            }
+            AgentItem chest = combatData.Where(evt =>
+            {
+                if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
+                {
+                    return false;
+                }
+                AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
+                if (agent.Type != AgentItem.AgentType.Gadget)
+                {
+                    return false;
+                }
+                (float x, float y, float z) = AbstractMovementEvent.UnpackMovementData(evt.DstAgent, evt.Value);
+                if (Math.Abs(x - chestPosition.X) < 5 && Math.Abs(y - chestPosition.Y) < 5)
+                {
+                    return true;
+                }
+                return false;
+            }
+            ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => chestChecker(x));
+            if (chest != null)
+            {
+                chest.OverrideID((int)ChestID);
+                return true;
+            }
+            return false;
         }
 
     }

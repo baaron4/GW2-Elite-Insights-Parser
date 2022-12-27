@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class River : HallOfChains
     {
-        private static readonly (double x, double y , double z) ChestOfSoulsPosition = (7906.54, 2147.48, -5746.19);
+        private static readonly Point3D ChestOfSoulsPosition = new Point3D(7906.54f, 2147.48f, -5746.19f);
         public River(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             );
             GenericFallBackMethod = FallBackMethod.None;
+            ChestID = ArcDPSEnums.ChestID.ChestOfSouls;
             Extension = "river";
             Targetless = true;
             Icon = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
@@ -87,67 +88,35 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AgentItem chestOfSouls = agentData.GetGadgetsByID((int)ArcDPSEnums.ChestID.ChestOfSouls).FirstOrDefault();
-                if (chestOfSouls != null)
+                AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
+                if (desmina == null)
                 {
-                    fightData.SetSuccess(true, chestOfSouls.FirstAware);
-                } 
-                else
+                    throw new MissingKeyActorsException("Desmina not found");
+                }
+                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
+                if (ooc != null)
                 {
-                    // Old way
-                    AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-                    if (desmina == null)
+                    long time = 0;
+                    foreach (NPC mob in TrashMobs)
                     {
-                        throw new MissingKeyActorsException("Desmina not found");
+                        time = Math.Max(mob.LastAware, time);
                     }
-                    ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
-                    if (ooc != null)
+                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
+                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
                     {
-                        long time = 0;
-                        foreach (NPC mob in TrashMobs)
+                        if (AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
                         {
-                            time = Math.Max(mob.LastAware, time);
-                        }
-                        DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
-                        if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
-                        {
-                            if (AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
-                            {
-                                fightData.SetSuccess(true, time);
-                            }
+                            fightData.SetSuccess(true, time);
                         }
                     }
                 }
-                
             }
         }
 
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem chest = combatData.Where(evt =>
-            {
-                if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
-                {
-                    return false;
-                }
-                AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-                if (agent.Type != AgentItem.AgentType.Gadget)
-                {
-                    return false;
-                }
-                (double x, double y, double z) = AbstractMovementEvent.UnpackMovementData(evt.DstAgent, evt.Value);
-                if (Math.Abs(x - ChestOfSoulsPosition.x) < 5 && Math.Abs(y - ChestOfSoulsPosition.y) < 5)
-                {
-                    return true;
-                }
-                return false;
-            }
-            ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => x.HitboxWidth == 100 && x.HitboxHeight == 1200);
-            if (chest != null)
-            {
-                chest.OverrideID((int)ArcDPSEnums.ChestID.ChestOfSouls);
-            }
+            FindChestGadget(agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
         }

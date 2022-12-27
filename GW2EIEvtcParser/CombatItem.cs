@@ -252,8 +252,8 @@ namespace GW2EIEvtcParser
             }
             return false;
         }
-        
-        public bool StartCasting()
+
+        internal bool StartCasting()
         {
             if (IsExtension)
             {
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser
             return IsActivation == ArcDPSEnums.Activation.Normal || IsActivation == ArcDPSEnums.Activation.Quickness;
         }
 
-        public bool EndCasting()
+        internal bool EndCasting()
         {
             if (IsExtension)
             {
