@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.BrokenKing);
+            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

@@ -62,6 +62,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<int> GetSuccessCheckIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.EyeOfFate,
+                (int)ArcDPSEnums.TargetID.EyeOfJudgement
+            };
+        }
+
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
@@ -141,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, (int)ArcDPSEnums.TargetID.EyeOfFate, (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
             if (!fightData.Success)
             {
                 AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);

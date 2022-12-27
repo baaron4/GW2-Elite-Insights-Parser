@@ -127,15 +127,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static void SetSuccessByDeath(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
-        {
-            var idsToUse = new List<int>
-            {
-                idFirst
-            };
-            idsToUse.AddRange(ids);
-            SetSuccessByDeath(targets, combatData, fightData, playerAgents, all, idsToUse);
-        }
-
     }
 }
