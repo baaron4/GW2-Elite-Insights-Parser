@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000002;
         }
 
-        protected override List<int> GetSuccessCheckIds()
+        protected override List<int> GetSuccessCheckIDs()
         {
             return new List<int>
             {
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         fightData.SetSuccess(true, deadEvent.Time);
                         return;
                     }
-                    SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIDs()), combatData, fightData, playerAgents);
                 }
             }
         }

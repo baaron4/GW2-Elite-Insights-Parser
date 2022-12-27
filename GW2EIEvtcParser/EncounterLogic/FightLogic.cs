@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.Normal;
         }
 
-        protected virtual List<int> GetSuccessCheckIds()
+        protected virtual List<int> GetSuccessCheckIDs()
         {
             return new List<int>
             {
@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
         }
 
         internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)

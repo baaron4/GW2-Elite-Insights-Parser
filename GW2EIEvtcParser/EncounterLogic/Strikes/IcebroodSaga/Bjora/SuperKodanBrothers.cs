@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Super Kodan Brothers";
         }
 
-        protected override List<int> GetSuccessCheckIds()
+        protected override List<int> GetSuccessCheckIDs()
         {
             return new List<int>
             {

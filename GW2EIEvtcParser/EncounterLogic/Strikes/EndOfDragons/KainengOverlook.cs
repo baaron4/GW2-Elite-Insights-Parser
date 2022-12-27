@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<int> GetSuccessCheckIds()
+        protected override List<int> GetSuccessCheckIDs()
         {
             return new List<int>
             {

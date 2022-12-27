@@ -59,13 +59,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 switch (GenericFallBackMethod)
                 {
                     case FallBackMethod.Death:
-                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
                         break;
                     case FallBackMethod.CombatExit:
-                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
                         if (!fightData.Success)
                         {
-                            SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
+                            SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIDs()), combatData, fightData, playerAgents);
                         }
                         break;
                     case FallBackMethod.ChestGadget:
