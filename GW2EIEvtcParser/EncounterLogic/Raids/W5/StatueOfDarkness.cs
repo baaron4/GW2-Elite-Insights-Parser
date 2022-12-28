@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
+            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
                 AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);

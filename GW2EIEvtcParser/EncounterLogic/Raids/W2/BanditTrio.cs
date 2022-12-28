@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         fightData.SetSuccess(true, deadEvent.Time);
                         return;
                     }
-                    SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIDs()), combatData, fightData, playerAgents);
+                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
                 }
             }
         }

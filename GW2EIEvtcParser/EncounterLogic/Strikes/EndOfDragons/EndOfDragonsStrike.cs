@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
+                NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             }
         }
     }

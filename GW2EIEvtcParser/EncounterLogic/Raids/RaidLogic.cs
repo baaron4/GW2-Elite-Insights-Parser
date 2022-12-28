@@ -10,21 +10,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal abstract class RaidLogic : FightLogic
     {
-        protected enum FallBackMethod { None, Death, CombatExit, ChestGadget }
-
-        protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
         protected RaidLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Raid;
             EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
-        }
-
-        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
-            EncounterLogicTimeUtils.SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -56,27 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                switch (GenericFallBackMethod)
-                {
-                    case FallBackMethod.Death:
-                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
-                        break;
-                    case FallBackMethod.CombatExit:
-                        SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
-                        if (!fightData.Success)
-                        {
-                            SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIDs()), combatData, fightData, playerAgents);
-                        }
-                        break;
-                    case FallBackMethod.ChestGadget:
-                        if (!fightData.Success)
-                        {
-                            SetSuccessByChestGadget(ChestID, agentData, fightData);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             }
         }
 

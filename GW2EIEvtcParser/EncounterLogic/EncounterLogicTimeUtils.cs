@@ -93,21 +93,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static void SetSuccessByDeath(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, List<int> idsToUse)
+        internal static void SetSuccessByDeath(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
         {
-            if (!idsToUse.Any())
+            if (!targets.Any())
             {
                 return;
             }
             int success = 0;
             long maxTime = long.MinValue;
-            foreach (int id in idsToUse)
+            foreach (AbstractSingleActor target in targets)
             {
-                AbstractSingleActor target = targets.FirstOrDefault(x => x.ID == id);
-                if (target == null)
-                {
-                    return;
-                }
                 DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
                 if (killed != null)
                 {
@@ -121,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     maxTime = Math.Max(time, maxTime);
                 }
             }
-            if ((all && success == idsToUse.Count) || (!all && success > 0))
+            if ((all && success == targets.Count) || (!all && success > 0))
             {
                 fightData.SetSuccess(true, maxTime);
             }

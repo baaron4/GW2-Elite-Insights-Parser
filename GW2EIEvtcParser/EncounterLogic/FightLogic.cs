@@ -15,6 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
 
         public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
+        protected enum FallBackMethod { None, Death, DeathOrCombatExit, ChestGadget, DeathOrChestGadget, CombatExitOrChestGadget, DeathOrCombatExitOrChestGadget }
+
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
@@ -43,6 +45,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
+        protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
 
         internal static Mechanic DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false);
@@ -330,7 +333,59 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
+            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        }
+
+        protected IReadOnlyList<AbstractSingleActor> GetSuccessCheckTargets()
+        {
+            return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
+        }
+
+        protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            switch (GenericFallBackMethod)
+            {
+                case FallBackMethod.Death:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    break;
+                case FallBackMethod.DeathOrCombatExit:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                    }
+                    break;
+                case FallBackMethod.ChestGadget:
+                    SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    break;
+                case FallBackMethod.DeathOrChestGadget:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    }
+                    break;
+                case FallBackMethod.CombatExitOrChestGadget:
+                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    }
+                    break;
+                case FallBackMethod.DeathOrCombatExitOrChestGadget:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                        if (!fightData.Success)
+                        {
+                            SetSuccessByChestGadget(ChestID, agentData, fightData);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)

@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, GetSuccessCheckIDs());
+            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

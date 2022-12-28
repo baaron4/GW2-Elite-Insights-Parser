@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (int)ArcDPSEnums.TargetID.PrototypeArsenite,
                     };
                 }
-                SetSuccessByDeath(Targets, combatData, fightData, playerAgents, true, idsToCheck);
+                SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)).ToList(), combatData, fightData, playerAgents, true);
             }
         }
 
