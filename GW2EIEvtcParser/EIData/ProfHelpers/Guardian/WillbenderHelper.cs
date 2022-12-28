@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.March2022Balance2),
             //
-            new BuffDamageModifier(62529, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
+            new BuffDamageModifier(RushingJustice, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
