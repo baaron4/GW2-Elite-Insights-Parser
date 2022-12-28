@@ -381,8 +381,8 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         }
         if (this.connectedFrom instanceof Array) {
             return {
-                x: this.target[0],
-                y: this.target[1]
+                x: this.connectedFrom[0],
+                y: this.connectedFrom[1]
             };
         } else {
             if (this.endmaster === null) {

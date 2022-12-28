@@ -788,6 +788,10 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/sHmksvO.png";
                 case ArcDPSEnums.TrashID.Saul:
                     return "https://i.imgur.com/ck2IsoS.png";
+                case ArcDPSEnums.TrashID.ShackledPrisoner:
+                    return "https://i.imgur.com/kxlMw7l.png";
+                case ArcDPSEnums.TrashID.DemonicBond:
+                    return "https://i.imgur.com/E4Jqwdn.png";
                 case ArcDPSEnums.TrashID.GamblerClones:
                     return "https://i.imgur.com/zMsBWEx.png";
                 case ArcDPSEnums.TrashID.BloodstoneFragment:
