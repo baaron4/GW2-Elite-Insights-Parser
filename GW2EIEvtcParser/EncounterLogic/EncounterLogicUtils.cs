@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker chestChecker)
         {
-            if (chestID == ArcDPSEnums.ChestID.Unknown)
+            if (chestID == ArcDPSEnums.ChestID.None)
             {
                 return false;
             }

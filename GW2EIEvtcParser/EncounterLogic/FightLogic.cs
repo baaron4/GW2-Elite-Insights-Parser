@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
 
-        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.Unknown;
+        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
 
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 

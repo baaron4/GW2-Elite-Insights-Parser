@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static void SetSuccessByChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, FightData fightData)
         {
-            if (chestID == ArcDPSEnums.ChestID.Unknown)
+            if (chestID == ArcDPSEnums.ChestID.None)
             {
                 return;
             }
