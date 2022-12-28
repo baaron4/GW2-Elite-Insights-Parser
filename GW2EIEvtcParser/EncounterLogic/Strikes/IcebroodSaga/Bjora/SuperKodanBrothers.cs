@@ -6,6 +6,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -39,10 +42,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new DamageCastFinder(58174, 58174), // Vengeful Aura Claw
             };
-        }
-        protected override void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
-        {
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, (int)ArcDPSEnums.TargetID.ClawOfTheFallen, (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -179,6 +178,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Super Kodan Brothers";
+        }
+
+        protected override List<int> GetSuccessCheckIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
+                (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
+            };
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()

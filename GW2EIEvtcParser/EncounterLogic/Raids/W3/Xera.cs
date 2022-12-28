@@ -6,6 +6,9 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -41,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
             });
             Extension = "xera";
-            GenericFallBackMethod = FallBackMethod.CombatExit;
+            GenericFallBackMethod = FallBackMethod.DeathOrCombatExit;
             Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
@@ -79,11 +82,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return;
             }
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        }
-
-        protected override List<int> GetSuccessCheckIds()
-        {
-            return new List<int> { (int)ArcDPSEnums.TargetID.Xera };
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

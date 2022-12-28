@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             BuffStack.Clear();
         }
 
-        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
+        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive)
         {
             var toAdd = new BuffStackItem(start, duration, src, stackID);
             // Find empty slot

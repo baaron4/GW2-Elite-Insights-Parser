@@ -932,11 +932,11 @@ namespace GW2EIEvtcParser
         {
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             //
-            Unknown = int.MaxValue,
+            None = int.MaxValue,
         };
         public static ChestID GetChestID(int id)
         {
-            return Enum.IsDefined(typeof(ChestID), id) ? (ChestID)id : ChestID.Unknown;
+            return Enum.IsDefined(typeof(ChestID), id) ? (ChestID)id : ChestID.None;
         }
 
         public enum MinionID : int

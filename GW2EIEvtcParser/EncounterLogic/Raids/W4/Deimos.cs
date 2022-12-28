@@ -7,6 +7,9 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -25,8 +28,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-            new FirstHitOnPlayerMechanic(37716, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
+            new HitOnPlayerMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new FirstHitOnPlayerMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
                 AbstractSingleActor actor = log.FindActor(ce.To);
                 if (actor == null)
                 {
@@ -36,22 +39,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 bool hitInDown = downs.Any(x => x.ContainsPoint(ce.Time));
                 return !hitInDown;
             }),
-            new EnemyCastStartMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, (ce,log) => ce.ActualDuration >= 2200),
-            new EnemyCastEndMechanic(37846, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0, (ce, log) => ce.ActualDuration < 2200),
-            new EnemyCastStartMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,(ce,log) => ce.ActualDuration >= 4400),
-            new EnemyCastEndMechanic(38272, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,(ce, log) => ce.ActualDuration < 4400),
-            new HitOnPlayerMechanic(new long[] {38208, 37929 }, "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
-            new HitOnPlayerMechanic(37980, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
-            new HitOnPlayerMechanic(38046, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
-            new HitOnPlayerMechanic(37982, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
-            new PlayerBuffApplyMechanic(37733, "Tear Instability", new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
-            new HitOnPlayerMechanic(37613, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0, (de,log) => de.HealthDamage > 0),
-            new PlayerBuffApplyMechanic(38187, "Weak Minded", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
-            new PlayerBuffApplyMechanic(37730, "Chosen by Eye of Janthir", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
-            new PlayerBuffApplyMechanic(38169, "Teleported", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
-            new EnemyBuffApplyMechanic(38224, "Unnatural Signet", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
+            new EnemyCastStartMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
+            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, (ce,log) => ce.ActualDuration >= 2200),
+            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0, (ce, log) => ce.ActualDuration < 2200),
+            new EnemyCastStartMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
+            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,(ce,log) => ce.ActualDuration >= 4400),
+            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,(ce, log) => ce.ActualDuration < 4400),
+            new HitOnPlayerMechanic(new long[] {Annihilate2, Annihilate1 }, "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new HitOnPlayerMechanic(DemonicShockWaveRight, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
+            new HitOnPlayerMechanic(DemonicShockWaveLeft, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
+            new HitOnPlayerMechanic(DemonicShockWaveCenter, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
+            new PlayerBuffApplyMechanic(TearInstability, "Tear Instability", new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
+            new HitOnPlayerMechanic(MindCrush, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0, (de,log) => de.HealthDamage > 0),
+            new PlayerBuffApplyMechanic(WeakMinded, "Weak Minded", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
+            new PlayerBuffApplyMechanic(DeimosSelectedByGreen, "Chosen by Eye of Janthir", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
+            new PlayerBuffApplyMechanic(GreenTeleport, "Teleported", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
+            new EnemyBuffApplyMechanic(UnnaturalSignet, "Unnatural Signet", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
             Extension = "dei";
             GenericFallBackMethod = FallBackMethod.None;
@@ -147,8 +150,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                     if (removal == null)
                     {
-                        res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
-                        res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
+                        res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
+                        res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
                     }
                 }
                 else if (bfe is BuffRemoveAllEvent)
@@ -156,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                     if (apply == null)
                     {
-                        res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
+                        res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
                     }
                 }
             }
@@ -234,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             gadgetAgents.Add(deimosStructBody.Agent);
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
+            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
             if (armDeimosDamageEvent != null)
             {
                 gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
@@ -326,7 +329,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == 762);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == Determined762);
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));
@@ -338,7 +341,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // legacy method
             if (firstAware == 0)
             {
-                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
+                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
                 if (armDeimosDamageEvent != null)
                 {
                     var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
@@ -504,7 +507,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:
-                    var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
+                    var mindCrush = cls.Where(x => x.SkillId == MindCrush).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
                         start = (int)c.Time;
@@ -516,7 +519,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
                         }
                     }
-                    var annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+                    var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1)).ToList();
                     foreach (AbstractCastEvent c in annihilate)
                     {
                         start = (int)c.Time;

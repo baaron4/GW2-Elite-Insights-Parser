@@ -4,6 +4,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -13,8 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new HitOnPlayerMechanic(37677, "Soldier's Aura", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
-            new HitOnPlayerMechanic(37788, "Jade Explosion", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
+            new HitOnPlayerMechanic(JadeSoldierAura, "Soldier's Aura", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
+            new HitOnPlayerMechanic(JadeSoldierExplosion, "Jade Explosion", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
             //new Mechanic(37779, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Square,Colors.Yellow), "Claim",0), //Buff remove only
             //new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
@@ -101,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                         }
                     }
-                    var explosion = cls.Where(x => x.SkillId == 37788).ToList();
+                    var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
                     {
                         int start = (int)c.Time;

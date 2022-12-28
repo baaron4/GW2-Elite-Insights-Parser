@@ -6,6 +6,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -13,6 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
 
         public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
+        protected enum FallBackMethod { None, Death, DeathOrCombatExit, ChestGadget, DeathOrChestGadget, CombatExitOrChestGadget, DeathOrCombatExitOrChestGadget }
+
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
@@ -31,6 +36,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
 
+        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
+
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
@@ -39,6 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
+        protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
 
         internal static Mechanic DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false);
@@ -60,12 +68,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();
-        }
-
-        // Only used for CSV files
-        public NPC GetLegacyTarget()
-        {
-            return Targets.OfType<NPC>().FirstOrDefault();
         }
 
         internal MechanicData GetMechanicData()
@@ -150,31 +152,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return target.Character;
         }
 
-        private static void RegroupTargetsByID(int id, AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
-        {
-            IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
-            if (agents.Count > 1)
-            {
-                AgentItem firstItem = agents.First();
-                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                var newTargetAgent = new AgentItem(firstItem);
-                newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                agentData.SwapMasters(new HashSet<AgentItem>(agents), newTargetAgent);
-                agentData.ReplaceAgentsFromID(newTargetAgent);
-                foreach (CombatItem c in combatItems)
-                {
-                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                    {
-                        c.OverrideSrcAgent(newTargetAgent.Agent);
-                    }
-                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                    {
-                        c.OverrideDstAgent(newTargetAgent.Agent);
-                    }
-                }
-            }
-        }
-
         protected abstract HashSet<int> GetUniqueNPCIDs();
 
         internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -230,91 +207,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>();
-        }
-
-        protected static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, List<double> thresholds)
-        {
-            var phases = new List<PhaseData>();
-            if (thresholds.Count == 0)
-            {
-                return phases;
-            }
-            long fightEnd = log.FightData.FightEnd;
-            long start = log.FightData.FightStart;
-            double offset = 100.0 / thresholds.Count;
-            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
-            for (int i = 0; i < thresholds.Count; i++)
-            {
-                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
-                if (evt == null)
-                {
-                    break;
-                }
-                var phase = new PhaseData(start, Math.Min(evt.Time, fightEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
-                phase.AddTarget(mainTarget);
-                phases.Add(phase);
-                start = Math.Max(evt.Time, log.FightData.FightStart);
-            }
-            if (phases.Count > 0 && phases.Count < thresholds.Count)
-            {
-                var lastPhase = new PhaseData(start, fightEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
-                lastPhase.AddTarget(mainTarget);
-                phases.Add(lastPhase);
-            }
-            return phases;
-        }
-
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
-        {
-            var phases = new List<PhaseData>();
-            long last = start;
-            var invuls = skillIDs.SelectMany(skillID => GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true)).ToList();
-            invuls.RemoveAll(x => x.Time < 0);
-            invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
-            for (int i = 0; i < invuls.Count; i++)
-            {
-                AbstractBuffEvent c = invuls[i];
-                if (c is BuffApplyEvent)
-                {
-                    long curEnd = Math.Min(c.Time, end);
-                    phases.Add(new PhaseData(last, curEnd));
-                    last = curEnd;
-                }
-                else
-                {
-                    long curEnd = Math.Min(c.Time, end);
-                    if (addSkipPhases)
-                    {
-                        phases.Add(new PhaseData(last, curEnd));
-                    }
-                    last = curEnd;
-                }
-            }
-            if (end - last > ParserHelper.PhaseTimeLimit)
-            {
-                phases.Add(new PhaseData(last, end));
-            }
-            return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
-        }
-
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
-        {
-            return GetPhasesByInvul(log, new[] { skillID }, mainTarget, addSkipPhases, beginWithStart, start, end);
-        }
-
-        protected static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
-        {
-            return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.FightData.FightStart, log.FightData.FightEnd);
-        }
-
-        protected static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
-        {
-            var phases = new List<PhaseData>();
-            phases.Add(new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
-            {
-                CanBeSubPhase = false
-            });
-            return phases;
         }
         
         internal void InvalidateEncounterID()
@@ -392,18 +284,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ErrorEvent>();
         }
 
-        protected static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
-        {
-            if (arcdpsVersion > ArcDPSBuilds.ProperConfusionDamageSimulation)
-            {
-                return new List<ErrorEvent>();
-            }
-            return new List<ErrorEvent>()
-            {
-                new ErrorEvent("Missing confusion damage")
-            };
-        }
-
         protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
         {
             foreach (AbstractSingleActor target in Targets)
@@ -420,47 +300,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<AbstractBuffEvent>();
         }
-
-        protected static void NegateDamageAgainstBarrier(CombatData combatData, List<AgentItem> agentItems)
-        {
-            var dmgEvts = new List<AbstractHealthDamageEvent>();
-            foreach (AgentItem agentItem in agentItems)
-            {
-                dmgEvts.AddRange(combatData.GetDamageTakenData(agentItem));
-            }
-            foreach (AbstractHealthDamageEvent de in dmgEvts)
-            {
-                if (de.ShieldDamage > 0)
-                {
-                    de.NegateShieldDamage();
-                }
-            }
-        }
-
-        /*protected static void AdjustTimeRefreshBuff(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long id)
-        {
-            if (buffsById.TryGetValue(id, out List<AbstractBuffEvent> buffList))
-            {
-                var agentsToSort = new HashSet<AgentItem>();
-                foreach (AbstractBuffEvent be in buffList)
-                {
-                    if (be is AbstractBuffRemoveEvent abre)
-                    {
-                        // to make sure remove events are before applications
-                        abre.OverrideTime(abre.Time - 1);
-                        agentsToSort.Add(abre.To);
-                    }
-                }
-                if (buffList.Count > 0)
-                {
-                    buffsById[id].Sort((x, y) => x.Time.CompareTo(y.Time));
-                }
-                foreach (AgentItem a in agentsToSort)
-                {
-                    buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
-                }
-            }
-        }*/
 
         internal virtual List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
         {
@@ -485,119 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.Normal;
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, int idFirst, params int[] ids)
-        {
-            var idsToUse = new List<int>
-            {
-                idFirst
-            };
-            idsToUse.AddRange(ids);
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, idsToUse);
-        }
-
-        protected void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all, List<int> idsToUse)
-        {
-            if (!idsToUse.Any())
-            {
-                return;
-            }
-            int success = 0;
-            long maxTime = long.MinValue;
-            foreach (int id in idsToUse)
-            {
-                AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == id);
-                if (target == null)
-                {
-                    return;
-                }
-                DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-                if (killed != null)
-                {
-                    long time = killed.Time;
-                    success++;
-                    AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                    if (lastDamageTaken != null)
-                    {
-                        time = Math.Min(lastDamageTaken.Time, time);
-                    }
-                    maxTime = Math.Max(time, maxTime);
-                }
-            }
-            if ((all && success == idsToUse.Count) || (!all && success > 0))
-            {
-                fightData.SetSuccess(true, maxTime);
-            }
-        }
-
-        protected static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            int playerDeadOrDCCount = 0;
-            foreach (AgentItem playerAgent in playerAgents)
-            {
-                var deads = new List<Segment>();
-                var downs = new List<Segment>();
-                var dcs = new List<Segment>();
-                playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
-                if (deads.Any(x => x.ContainsPoint(timeToCheck)))
-                {
-                    playerDeadOrDCCount++;
-                }
-                else if (dcs.Any(x => x.ContainsPoint(timeToCheck)))
-                {
-                    playerDeadOrDCCount++;
-                }
-            }
-            if (playerDeadOrDCCount == playerAgents.Count)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        protected static void SetSuccessByCombatExit(List<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            if (targets.Count == 0)
-            {
-                return;
-            }
-            var targetExits = new List<ExitCombatEvent>();
-            var lastTargetDamages = new List<AbstractHealthDamageEvent>();
-            foreach (AbstractSingleActor t in targets)
-            {
-                EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
-                ExitCombatEvent exitCombat;
-                if (enterCombat != null)
-                {
-                    exitCombat = combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time).LastOrDefault();
-                }
-                else
-                {
-                    exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault();
-                }
-                AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                if (exitCombat == null || lastDamage == null ||
-                    combatData.GetAnimatedCastData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant) ||
-                    combatData.GetDamageData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant && playerAgents.Contains(x.To)))
-                {
-                    return;
-                }
-                targetExits.Add(exitCombat);
-                lastTargetDamages.Add(lastDamage);
-            }
-            ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
-            AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
-            // Make sure the last damage has been done before last combat exit
-            if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + 150 >= lastDamageTaken.Time)
-            {
-                if (!AtLeastOnePlayerAlive(combatData, fightData, lastTargetExit.Time, playerAgents))
-                {
-                    return;
-                }
-                fightData.SetSuccess(true, lastDamageTaken.Time);
-            }
-        }
-
-        protected virtual List<int> GetSuccessCheckIds()
+        protected virtual List<int> GetSuccessCheckIDs()
         {
             return new List<int>
             {
@@ -607,38 +334,64 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
+            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
         }
 
-        protected static long GetGenericFightOffset(FightData fightData)
+        protected IReadOnlyList<AbstractSingleActor> GetSuccessCheckTargets()
         {
-            return fightData.LogStart;
-
+            return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
         }
 
-        internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit, int id)
+        protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AgentItem mainTarget = agentData.GetNPCsByID(id).FirstOrDefault();
-            if (mainTarget == null)
+            switch (GenericFallBackMethod)
             {
-                throw new MissingKeyActorsException("Main target not found");
+                case FallBackMethod.Death:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    break;
+                case FallBackMethod.DeathOrCombatExit:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                    }
+                    break;
+                case FallBackMethod.ChestGadget:
+                    SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    break;
+                case FallBackMethod.DeathOrChestGadget:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    }
+                    break;
+                case FallBackMethod.CombatExitOrChestGadget:
+                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByChestGadget(ChestID, agentData, fightData);
+                    }
+                    break;
+                case FallBackMethod.DeathOrCombatExitOrChestGadget:
+                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+                    if (!fightData.Success)
+                    {
+                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+                        if (!fightData.Success)
+                        {
+                            SetSuccessByChestGadget(ChestID, agentData, fightData);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
-            if (enterCombat != null)
-            {
-                CombatItem exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
-                if (exitCombat != null)
-                {
-                    return mainTarget.FirstAware;
-                }
-                return enterCombat.Time;
-            }
-            return mainTarget.FirstAware;
         }
 
         internal long GetEnterCombatTime(FightData fightData, AgentData agentData, List<CombatItem> combatData, long upperLimit)
         {
-            return GetEnterCombatTime(fightData, agentData, combatData, upperLimit, GenericTriggerID);
+            return EncounterLogicTimeUtils.GetEnterCombatTime(fightData, agentData, combatData, upperLimit, GenericTriggerID);
         }
 
         internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -655,38 +408,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
-        }
-
-        //
-        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
-        {
-            bool needStart = beginWithStart;
-            var main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
-            var filtered = new List<AbstractBuffEvent>();
-            for (int i = 0; i < main.Count; i++)
-            {
-                AbstractBuffEvent c = main[i];
-                if (needStart && c is BuffApplyEvent)
-                {
-                    needStart = false;
-                    filtered.Add(c);
-                }
-                else if (!needStart && c is BuffRemoveAllEvent)
-                {
-                    // consider only last remove event before another application
-                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1] is BuffApplyEvent))
-                    {
-                        needStart = true;
-                        filtered.Add(c);
-                    }
-                }
-            }
-            if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
-            {
-                AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-            }
-            return filtered;
         }
 
     }

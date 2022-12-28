@@ -5,6 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -106,22 +109,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
-            {
-                (int)ArcDPSEnums.TargetID.Ankka,
-            };
-        }
-
-        protected override List<int> GetTargetsIDs()
-        {
-            return new List<int>
-            {
-                (int)ArcDPSEnums.TargetID.Ankka,
-            };
-        }
-
-        protected override List<int> GetSuccessCheckIds()
-        {
-            return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.Ankka,
             };

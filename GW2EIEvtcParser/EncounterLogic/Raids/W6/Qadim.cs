@@ -9,6 +9,9 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -65,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "qadim";
             Icon = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
-            GenericFallBackMethod = FallBackMethod.CombatExit;
+            GenericFallBackMethod = FallBackMethod.DeathOrCombatExit;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }

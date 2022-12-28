@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start, stackID, true, 0);
+                    Add(oldValue + extension, src, start, stackID, true);
                 }
             }
         }

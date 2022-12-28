@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected abstract void Update(long timePassed);
 
-        public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive, uint overstackDuration);
+        public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive);
 
         public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID);
 

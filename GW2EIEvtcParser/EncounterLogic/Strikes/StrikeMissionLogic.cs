@@ -2,6 +2,9 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -13,11 +16,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Strike;
             EncounterID |= EncounterIDs.EncounterMasks.StrikeMask;
-        }
-
-        protected virtual void SetSuccessByDeath(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
-        {
-            SetSuccessByDeath(combatData, fightData, playerAgents, all, GetSuccessCheckIds());
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()

@@ -2,26 +2,20 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal abstract class RaidLogic : FightLogic
     {
-        protected enum FallBackMethod { None, Death, CombatExit }
-
-        protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
         protected RaidLogic(int triggerID) : base(triggerID)
         {
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Raid;
             EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
-        }
-
-        protected void SetSuccessByCombatExit(HashSet<int> targetIds, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            var targets = Targets.Where(x => targetIds.Contains(x.ID)).ToList();
-            SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -53,21 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                switch (GenericFallBackMethod)
-                {
-                    case FallBackMethod.Death:
-                        SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
-                        break;
-                    case FallBackMethod.CombatExit:
-                        SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());
-                        if (!fightData.Success)
-                        {
-                            SetSuccessByCombatExit(new HashSet<int>(GetSuccessCheckIds()), combatData, fightData, playerAgents);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             }
         }
 
