@@ -7,13 +7,17 @@ namespace GW2EIEvtcParser.EIData
 {
     public class BuffDamageModifierTarget : BuffDamageModifier
     {
-        private BuffsTracker _trackerPlayer { get; set; } = null;
-        private GainComputer _gainComputerPlayer { get; set; } = null;
+        private BuffsTracker _trackerSource { get; set; } = null;
+        private GainComputer _gainComputerSource { get; set; } = null;
 
-        protected double ComputeGainPlayer(int stack, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected bool IsSourceActivated(Dictionary<long, BuffsGraphModel> bgmsSource, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            double gain = _gainComputerPlayer.ComputeGain(1.0, stack);
-            return gain > 0.0 ? 1.0 : -1.0;
+            if (_gainComputerSource == null)
+            {
+                return true;
+            }
+            double gain = _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time));
+            return gain > 0.0 ? true : false;
         }
 
         internal BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
@@ -24,26 +28,26 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffDamageModifierTarget UsingPlayerTracking(long playerId, GainComputer gainComputerPlayer)
+        internal BuffDamageModifierTarget UsingSourceActivator(long activatorID, GainComputer gainComputerSource)
         {
-            _trackerPlayer = new BuffsTrackerSingle(playerId);
-            _gainComputerPlayer = gainComputerPlayer;
+            _trackerSource = new BuffsTrackerSingle(activatorID);
+            _gainComputerSource = gainComputerSource;
             return this;
         }
 
-        internal BuffDamageModifierTarget UsingPlayerTracking(long[] playerIds, GainComputer gainComputerPlayer)
+        internal BuffDamageModifierTarget UsingSourceActivator(long[] activatorIDs, GainComputer gainComputerSource)
         {
-            _trackerPlayer = new BuffsTrackerMulti(new List<long>(playerIds));
-            _gainComputerPlayer = gainComputerPlayer;
+            _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
+            _gainComputerSource = gainComputerSource;
             return this;
         }
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            Dictionary<long, BuffsGraphModel> bgmsP = actor.GetBuffGraphs(log);
-            if (_trackerPlayer != null)
+            Dictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
+            if (_trackerSource != null)
             {
-                if (!_trackerPlayer.Has(bgmsP) && _gainComputerPlayer != ByAbsence)
+                if (!_trackerSource.Has(bgmsSource) && _gainComputerSource != ByAbsence)
                 {
                     return new List<DamageModifierEvent>();
                 }
@@ -58,16 +62,10 @@ namespace GW2EIEvtcParser.EIData
                 }
                 AbstractSingleActor target = log.FindActor(evt.To);
                 Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
-                double gain;
-                if (_trackerPlayer != null)
+                if (IsSourceActivated(bgmsSource, evt, log))
                 {
-                    gain = ComputeGainPlayer(_trackerPlayer.GetStack(bgmsP, evt.Time), evt, log) < 0.0 ? -1.0 : ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log);
+                    res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
                 }
-                else
-                {
-                    gain = ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log);
-                }
-                res.Add(new DamageModifierEvent(evt, this, gain));
             }
             res.RemoveAll(x => x.DamageGain == -1.0);
             return res;

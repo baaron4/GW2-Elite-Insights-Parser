@@ -7,8 +7,10 @@ namespace GW2EIEvtcParser.EIData
 {
     public class BuffDamageModifier : DamageModifier
     {
+        internal delegate double DamageGainAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
         internal BuffsTracker Tracker { get; }
+        internal DamageGainAdjuster GainAdjuster { get; private set; }
 
         internal BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
         {
@@ -20,10 +22,26 @@ namespace GW2EIEvtcParser.EIData
             Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
-        protected double ComputeGain(int stack, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        internal DamageModifier UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
         {
+            GainAdjuster = gainAdjuster;
+            return this;
+        }
+
+        private double ComputeAdjustedGain(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        {
+            if (GainAdjuster != null)
+            {
+                return GainAdjuster(dl, log) * GainPerStack;
+            }
+            return GainPerStack;
+        }
+
+        protected double ComputeGain(Dictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        {
+            int stack = Tracker.GetStack(bgms, dl.Time);
             // When gain per stack is 0, we only count hits done under the buff or in its absence
-            double gain = GainComputer.ComputeGain(GainPerStack == 0.0 ? 1.0 : GainPerStack, stack);
+            double gain = GainComputer.ComputeGain(GainPerStack == 0.0 ? 1.0 : ComputeAdjustedGain(dl, log), stack);
             return gain > 0.0 ? (GainPerStack == 0.0 ? 0.0 : gain * dl.HealthDamage) : -1.0;
         }
 
@@ -42,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     continue;
                 }
-                res.Add(new DamageModifierEvent(evt, this, ComputeGain(Tracker.GetStack(bgms, evt.Time), evt, log)));
+                res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
             }
             res.RemoveAll(x => x.DamageGain == -1.0);
             return res;
