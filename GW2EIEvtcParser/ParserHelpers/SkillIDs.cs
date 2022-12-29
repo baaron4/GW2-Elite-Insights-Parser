@@ -1498,6 +1498,7 @@ namespace GW2EIEvtcParser
         public const long IcyCoilSkill = 62834;
         public const long PositiveFlow = 62836;
         public const long DeployJadeSphereEarth = 62837;
+        public const long ImmutableStoneEffect = 62844;
         public const long StimState = 62846;
         public const long UnseenSword = 62847;
         public const long FortifiedEarth = 62858;

@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Relentless Fire", RelentlessFire, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/70/Relentless_Fire.png"),
             new Buff("Shattering Ice", ShatteringIce, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/63/Shattering_Ice.png"),
             new Buff("Invigorating Air", InvigoratingAirEffect, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/1/12/Invigorating_Air.png"),
+            new Buff("Immutable Stone", ImmutableStoneEffect, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/3/33/Immutable_Stone.png"),
             new Buff("Fortified Earth", FortifiedEarth, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/84/Fortified_Earth.png"),
             new Buff("Elemental Celerity", ElementalCelerity, Source.Catalyst, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a5/Elemental_Celerity.png"),
             new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/e/e6/Elemental_Empowerment.png"),
