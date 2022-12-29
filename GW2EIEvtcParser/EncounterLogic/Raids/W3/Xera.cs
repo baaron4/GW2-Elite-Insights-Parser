@@ -187,7 +187,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             _xeraFirstPhaseEndTime = firstXera.LastAware;
             //
             var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
-            var test = maxHPUpdates.Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), x.DstAgent)).Where(x => x.Item1.Type == AgentItem.AgentType.Gadget && x.Item1.Name.Contains("Shard")).ToList();
             //
             var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneFragments)
