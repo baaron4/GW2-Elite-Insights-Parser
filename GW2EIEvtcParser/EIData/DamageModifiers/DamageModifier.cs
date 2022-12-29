@@ -254,10 +254,28 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> FightSpecificDamageModifiers = new List<DamageModifier>
         {
             new BuffDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/0/06/Violent_Currents.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(UnnaturalSignet,"Unnatural Signet", "100%", DamageSource.All, 100.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(UnnaturalSignet,"Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
+            {
+                AbstractSingleActor target = log.FindActor(dl.To);
+                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
+                {
+                    return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
+                }
+                return 1.0;
+            }),
             new BuffDamageModifier(EmpoweredStatueOfDeath,"Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/d/de/Empowered_%28Statue_of_Death%29.png", DamageModifierMode.PvE),
             new BuffDamageModifierTarget(Compromised, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/48/Compromised.png", DamageModifierMode.PvE),
-            new BuffDamageModifierTarget(ErraticEnergy, "Erratic Energy", "5% per stack", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/45/Unstable.png", DamageModifierMode.PvE),
+            new BuffDamageModifierTarget(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/45/Unstable.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
+            {
+                AbstractSingleActor target = log.FindActor(dl.To);
+                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
+                {
+                    return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
+                }
+                return 1.0;
+            }),
             new BuffDamageModifierTarget(FracturedEnemy, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
             new BuffDamageModifier(BloodFueled, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),
             new BuffDamageModifier(BloodFueledAbo, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/d/d3/Blood_Fueled.png", DamageModifierMode.PvE),

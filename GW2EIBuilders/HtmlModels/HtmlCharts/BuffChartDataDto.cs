@@ -100,21 +100,6 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
                     list.Add(graph);
                 }
             }
-            if (p.GetType() == typeof(Player))
-            {
-                foreach (AbstractSingleActor mainTarget in log.FightData.GetMainTargets(log))
-                {
-                    boonGraphData = mainTarget.GetBuffGraphs(log);
-                    foreach (BuffsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.Buff.Name == "Compromised" || x.Buff.Name == "Unnatural Signet" || x.Buff.Name == "Fractured - Enemy" || x.Buff.Name == "Erratic Energy"))
-                    {
-                        BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
-                        if (graph != null)
-                        {
-                            list.Add(graph);
-                        }
-                    }
-                }
-            }
             list.Reverse();
             return list;
         }
