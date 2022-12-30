@@ -1297,7 +1297,7 @@ namespace GW2EIEvtcParser
         public const long FacetOfLightTraited = 51690;
         public const long FacetOfNatureAssassin = 51692;
         public const long FacetOfDarknessTraited = 51695;
-        public const long TrueNature = 51696;
+        public const long TrueNatureDragon = 51696;
         public const long FacetOfNatureCentaur = 51699;
         public const long FacetOfStrengthTraited = 51700;
         public const long FacetOfNatureDemon = 51704;
@@ -1524,7 +1524,7 @@ namespace GW2EIEvtcParser
         public const long FixatedFear4 = 61566;
         public const long VirtuosoBlade4 = 62505;
         public const long LethalTempo = 62509;
-        public const long RushingJustice = 62529;
+        public const long RushingJusticeEffect = 62529;
         public const long ExitHarbingerShroud = 62540;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
@@ -1532,12 +1532,14 @@ namespace GW2EIEvtcParser
         public const long FlowingResolveSkill = 62603;
         public const long VirtuosoBlade5 = 62613;
         public const long CrashingCourage = 62615;
+        public const long RushingJusticeAnimation = 62624;
         public const long FlowingResolveEffect = 62632;
         public const long Repose = 62638;
         public const long VirtuosoBlade3 = 62644;
         public const long Blight = 62653;
         public const long VirtuosoBlade1 = 62658;
         public const long ElixirOfPromise = 62667;
+        public const long RushingJusticeSkill = 62668;
         public const long ShatteringIce = 62686;
         public const long UrnOfSaintViktorSkill = 62687;
         public const long SaintsShieldSkill = 62689;
@@ -1606,6 +1608,7 @@ namespace GW2EIEvtcParser
         public const long GraspingShadows = 63167;
         public const long RotWallowVenom = 63168;
         public const long MechCoreBarrierEngine = 63173;
+        public const long TwilightComboSecondProjectile = 63181;
         public const long FerociousSymbiosis = 63191;
         public const long UnnaturalTraversal = 63195;
         public const long ShroudedAlly = 63207;

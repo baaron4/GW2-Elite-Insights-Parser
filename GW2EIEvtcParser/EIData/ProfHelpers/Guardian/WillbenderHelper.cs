@@ -126,13 +126,13 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.March2022Balance2),
             //
-            new BuffDamageModifier(RushingJustice, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
+            new BuffDamageModifier(RushingJusticeEffect, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 //virtues
-                new Buff("Rushing Justice", RushingJustice, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png"),
+                new Buff("Rushing Justice", RushingJusticeEffect, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png"),
                 new Buff("Flowing Resolve", FlowingResolveEffect, Source.Willbender, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/be/Flowing_Resolve.png"),
                 new Buff("Crashing Courage", CrashingCourage, Source.Willbender, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/95/Crashing_Courage.png"),
                 //

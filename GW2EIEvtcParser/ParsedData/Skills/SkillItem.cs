@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.ParsedData
             {EarthWaterAttunement, "Earth Water Attunement" },
             {EarthAirAttunement, "Earth Air Attunement" },
 
-            {TrueNature, "True Nature - Dragon" }, // RENAME THIS TO TrueNatureDragon
+            {TrueNatureDragon, "True Nature - Dragon" },
             {TrueNatureDemon, "True Nature - Demon" },
             {TrueNatureDwarf, "True Nature - Dwarf" },
             {TrueNatureAssassin, "True Nature - Assassin" },
@@ -113,7 +113,8 @@ namespace GW2EIEvtcParser.ParsedData
             {WaterBlastCombo1, "Water Blast Combo" }, // Water Blast Combo
             {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
-            {MechCoreBarrierEngine, "Mech Core: Barrier Engine" }
+            {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
+            {RushingJusticeAnimation, "Rushing Justice - Animation" }
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -250,7 +251,8 @@ namespace GW2EIEvtcParser.ParsedData
             {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
-            {RushingJustice, "https://wiki.guildwars2.com/wiki/Rushing_Justice#/media/File:Rushing_Justice.png" }
+            {RushingJusticeAnimation, "https://wiki.guildwars2.com/wiki/Rushing_Justice#/media/File:Rushing_Justice.png" },
+            {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/wiki/Twilight_Combo#/media/File:Twilight_Combo.png" }
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
