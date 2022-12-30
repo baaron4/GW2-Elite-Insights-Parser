@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
             ExtensionIDS = new HashSet<long>()
             {
                 SignetOfInspirationSkill,
-                TrueNature,
+                TrueNatureDragon,
                 SandSquall
             };
             DurationToIDs = new Dictionary<long, HashSet<long>>
             {
                 {5000, new HashSet<long> { SignetOfInspirationSkill } }, // SoI
-                {3000, new HashSet<long> { TrueNature } }, // Treated TN
-                {2000, new HashSet<long> { TrueNature, SandSquall } }, // TN, SandSquall
+                {3000, new HashSet<long> { TrueNatureDragon } }, // Treated TN
+                {2000, new HashSet<long> { TrueNatureDragon, SandSquall } }, // TN, SandSquall
             };
             EssenceOfSpeed = 2000;
             ImbuedMelodies = 2000;
