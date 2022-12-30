@@ -34,50 +34,50 @@ namespace GW2EIEvtcParser.ParsedData
             {MirageCloakDodge, "Mirage Cloak" },
             {WeaponSwap, "Weapon Swap" },
             {SelflessDaring, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
-	        {14024, "Natural Healing"}, // The game does not map this one at all
-	        {26558, "Energy Expulsion"},
-            {29863, "Live Vicariously"}, // The game maps this name incorrectly to "Vigorous Recovery"
-	        {30313, "Escapist's Fortitude"}, // The game maps this to the wrong skill
+	        {NaturalHealing, "Natural Healing"}, // The game does not map this one at all
+	        {EnergyExpulsion, "Energy Expulsion"},
+            {LiveVicariously, "Live Vicariously"}, // The game maps this name incorrectly to "Vigorous Recovery"
+	        {EscapistsFortitude, "Escapist's Fortitude"}, // The game maps this to the wrong skill
             // Gorseval
             {GhastlyRampage,"Ghastly Rampage" },
-            {31759,"Protective Shadow" },
-            {31466,"Ghastly Rampage (Begin)" },
+            {ProtectiveShadow,"Protective Shadow" },
+            {GhastlyRampageBegin,"Ghastly Rampage (Begin)" },
             // Sabetha
-            {31372, "Shadow Step" },
+            {ShadowStepSabetha, "Shadow Step" },
             // Slothasor
             {TantrumSkill, "Tantrum Start" },
             {NarcolepsySkill, "Sleeping" },
-            {34340, "Fear Me!" },
+            {FearMeSlothasor, "Fear Me!" },
             // Matthias
-            { 34468, "Shield (Human)"},
-            { 34427, "Abomination Transformation"},
-            { 34510, "Shield (Abomination)"},
+            {ShieldHuman, "Shield (Human)"},
+            {AbominationTransformation, "Abomination Transformation"},
+            {ShieldAbomination, "Shield (Abomination)"},
             // Generic
             //{-5, "Phase out" },
             // Deimos
             //{-6, "Roleplay" },
             // Dhuum
-            {47396, "Major Soul Split" },
+            {MajorSoulSplit, "Major Soul Split" },
             // Keep Construct
-            {35048, "Magic Blast Charge" },
+            {MagicBlastCharge, "Magic Blast Charge" },
             // CA
-            {52325, "Conjured Slash" },
-            {52780, "Conjured Protection" },
+            {ConjuredSlash, "Conjured Slash" },
+            {ConjuredProtection, "Conjured Protection" },
             // Adina
-            {56035, "Double Rotating Earth Rays" },
-            {56381, "Triple Rotating Earth Rays" },
-            {56049, "Terraform" },
+            {DoubleRotatingEarthRays, "Double Rotating Earth Rays" },
+            {TripleRotatingEarthRays, "Triple Rotating Earth Rays" },
+            {Terraform, "Terraform" },
             // Sabir
-            {56349, "Regenerative Breakbar" },
+            {RegenerativeBreakbar, "Regenerative Breakbar" },
             // P.Qadim
-            {56296, "Ruinous Nova Charge" },
+            {RuinousNovaCharge, "Ruinous Nova Charge" },
             //{56036, "Magma Bomb" },
             {ForceOfRetaliationCast, "Force of Retaliation Cast" },
             {PeerlessQadimTPCenter, "Teleport Center" },
-            {56446, "Eat Pylon" },
-            {56329, "Big Magma Drop" },
+            {EatPylon, "Eat Pylon" },
+            {BigMagmaDrop, "Big Magma Drop" },
             // Voice and Claw
-            {58382, "Kodan Teleport" },
+            {KodanTeleport, "Kodan Teleport" },
             // Weaver attunements
             {DualFireAttunement, "Dual Fire Attunement" },
             {FireWaterAttunement, "Fire Water Attunement" },
@@ -99,22 +99,23 @@ namespace GW2EIEvtcParser.ParsedData
             {EarthWaterAttunement, "Earth Water Attunement" },
             {EarthAirAttunement, "Earth Air Attunement" },
 
-            {TrueNature, "True Nature - Dragon" },
-            {51714, "True Nature - Demon" },
-            {51675, "True Nature - Dwarf" },
-            {51667, "True Nature - Assassin" },
-            {51713, "True Nature - Centaur" },
+            {TrueNature, "True Nature - Dragon" }, // RENAME THIS TO TrueNatureDragon
+            {TrueNatureDemon, "True Nature - Demon" },
+            {TrueNatureDwarf, "True Nature - Dwarf" },
+            {TrueNatureAssassin, "True Nature - Assassin" },
+            {TrueNatureCentaur, "True Nature - Centaur" },
             {SoulStoneVenomSkill, "Soul Stone Venom" },
-            {49077, "Soul Stone Venom Strike" },
+            {SoulStoneVenomStrike, "Soul Stone Venom Strike" },
             {MantraOfSolace, "Mantra of Solace" },
-            {43260, "Desert Empowerment" },
+            {DesertEmpowerment, "Desert Empowerment" },
             {SigilOfWater, "Sigil of Water" },
             {GlyphOfUnityCA, "Glyph of Unity (CA)" },
-            {12836, "Water Blast Combo" }, // Water Blast Combo
-            {12825, "Water Blast Combo" }, // Water Blast Combo
+            {WaterBlastCombo1, "Water Blast Combo" }, // Water Blast Combo
+            {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" }
         };
+
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
@@ -125,12 +126,12 @@ namespace GW2EIEvtcParser.ParsedData
             {ArcDPSDodge20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png"},
             {MirageCloakDodge, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"},
             {WeaponSwap, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png"},
-            {49112, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
-            {49063, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
-            {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
-            {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
-            {52325, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
-            {52780, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
+            {ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png"},
+            {DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
+            {UnstableArtifact, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
+            {LightningJolt, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
+            {ConjuredSlash, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
+            {ConjuredProtection, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             {BoundingDodgerSkill, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"},
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"},
@@ -139,72 +140,72 @@ namespace GW2EIEvtcParser.ParsedData
             {LightningStrikeSigil, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
             {FlameBlastSigil, "https://wiki.guildwars2.com/images/5/56/Superior_Sigil_of_Fire.png" },
             {SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
-            {40015, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
-            {45128, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
-            {41258, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
-            {45022, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
-            {40787, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
+            {Chapter4ScorchedAftermath, "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png"},
+            {Chapter3AzureSun, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png"},
+            {Chapter1SearingSpell, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
+            {Chapter1DesertBloomHeal, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
+            {Chapter1DesertBloomSkill, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
             {FlameRush, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
-            {40635, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
-            {42898, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
-            {42986, "https://wiki.guildwars2.com/images/3/30/Chapter_1-_Unflinching_Charge.png"},
+            {Chapter2IgnitingBurst, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
+            {EpilogueAshesOfTheJust, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
+            {Chapter1UnflinchingCharge, "https://wiki.guildwars2.com/images/3/30/Chapter_1-_Unflinching_Charge.png"},
             {KingOfFires, "https://wiki.guildwars2.com/images/7/70/King_of_Fires.png"},
             {EarthenBlast, "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png"},
-            {40071, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            {46726, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
-            {54870, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
-            {41968,  "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png"},
+            {GarishPillar, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            {DesertShroud, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
+            {SandstormShroud, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            {Chapter2DaringChallenge,  "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png"},
             {FlameSurge, "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png" },
-            {42449,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png"},
-            {40988, "https://wiki.guildwars2.com/images/8/89/Chapter_4-_Stalwart_Stand.png"},
-            {44455, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"},
-            {43734, "https://wiki.guildwars2.com/images/6/68/Consuming_Bite.png"},
-            {45262,  "https://wiki.guildwars2.com/images/8/84/Narcotic_Spores.png"},
-            {41864, "https://wiki.guildwars2.com/images/c/c8/Crippling_Anguish.png" },
-            {43593, "https://wiki.guildwars2.com/images/b/bc/Kick_%28gazelle%29.png" },
-            {44051, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
-            {44733, "https://wiki.guildwars2.com/images/8/82/Headbutt_%28gazelle%29.png" },
-            {41836,  "https://wiki.guildwars2.com/images/7/73/Chapter_3-_Valiant_Bulwark.png"},
+            {Chapter3HeatedRebuke,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png"},
+            {Chapter4StalwartStand, "https://wiki.guildwars2.com/images/8/89/Chapter_4-_Stalwart_Stand.png"},
+            {EpilogueUnbrokenLines, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"},
+            {ConsumingBite, "https://wiki.guildwars2.com/images/6/68/Consuming_Bite.png"},
+            {NarcoticSpores,  "https://wiki.guildwars2.com/images/8/84/Narcotic_Spores.png"},
+            {CripplingAnguish, "https://wiki.guildwars2.com/images/c/c8/Crippling_Anguish.png" },
+            {KickGazelle, "https://wiki.guildwars2.com/images/b/bc/Kick_%28gazelle%29.png" },
+            {ChargeGazelle, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            {HeadbuttGazelle, "https://wiki.guildwars2.com/images/8/82/Headbutt_%28gazelle%29.png" },
+            {Chapter3ValiantBulwark,  "https://wiki.guildwars2.com/images/7/73/Chapter_3-_Valiant_Bulwark.png"},
             {SigilOfHydromancy, "https://wiki.guildwars2.com/images/3/33/Superior_Sigil_of_Hydromancy.png" },
-            {56911, "https://wiki.guildwars2.com/images/6/67/Pitfall.png" },
-            {40679, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
-            {42008, "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png" },
-            {42925, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"},
+            {Pitfall, "https://wiki.guildwars2.com/images/6/67/Pitfall.png" },
+            {Chapter2RadiantRecovery, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
+            {Chapter4ShiningRiver, "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png" },
+            {EpilogueEternalOasis, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"},
             {ThermalReleaseValve, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             {ShatteredAegis, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             {ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
             {SelflessDaring, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
-            {12538, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
+            {SignetOfRenewal, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
             {OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
-            {43558, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
-            {12836, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
-            {12825, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
+            {RuggedGrowth, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
+            {WaterBlastCombo1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
+            {WaterBlastCombo2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
             {MantraOfTruthDamage, "https://wiki.guildwars2.com/images/f/ff/Echo_of_Truth.png" }, // Echo of Truth
-            {54935, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
+            {ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" }, // Shredder Gyro damage
             {SoulStoneVenomSkill, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom
-            {49077, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom Strike
-            {20479, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
-            {31707, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
-            {31629, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {SoulStoneVenomStrike, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png" }, // Soul Stone Venom Strike
+            {SuperiorRuneOfTormenting, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
+            {CultivatedSynergyPlayer, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            {CultivatedSynergyPet, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
             {SigilOfWater, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
-            {31371, "https://wiki.guildwars2.com/images/a/a9/Solar_Beam.png" },
-            {12567, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
-            {29997, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
-            {29901, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
-            {46232, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
-            {40774, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
+            {SolarBeam, "https://wiki.guildwars2.com/images/a/a9/Solar_Beam.png" },
+            {SpiritOfNature, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
+            {HealingPrism, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
+            {LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
+            {BreakrazorsBastion, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png" },
+            {SandFlare, "https://wiki.guildwars2.com/images/f/f0/Sand_Flare.png" },
             {SandCascadeBarrier, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
             {AstralWispAttachment, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
-            {29863, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
-            {49103, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
-            {14024, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
-            {46299, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
-            {21776, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
-            {43260, "https://wiki.guildwars2.com/images/c/c3/Desert_Empowerment.png" },
-            {26997, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
-            {27101, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
-            {35417, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
-            {53471, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
+            {LiveVicariously, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
+            {SignetOfTheEther, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
+            {NaturalHealing, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
+            {PredatorsCunning, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
+            {AquaSurge, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            {DesertEmpowerment, "https://wiki.guildwars2.com/images/c/c3/Desert_Empowerment.png" },
+            {NaturalHarmony, "https://wiki.guildwars2.com/images/d/d9/Natural_Harmony.png" },
+            {ProjectTranquility, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png" },
+            {VentarisWill, "https://wiki.guildwars2.com/images/b/b6/Ventari%27s_Will.png" },
+            {FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             {DeathDropDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
@@ -248,8 +249,8 @@ namespace GW2EIEvtcParser.ParsedData
             {ArtillerySlash, "https://wiki.guildwars2.com/images/6/68/Artillery_Slash.png" },
             {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
-            {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" }
-
+            {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
+            {RushingJustice, "https://wiki.guildwars2.com/wiki/Rushing_Justice#/media/File:Rushing_Justice.png" }
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
