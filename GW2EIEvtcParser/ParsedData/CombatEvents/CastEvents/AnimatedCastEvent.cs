@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public Point3D EffectPosition { get; }
 
-        public bool HasEffectPosition { get; } = false;
+        public bool HasEffectPosition => EffectPosition != null;
 
         private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
         {
@@ -24,7 +24,6 @@ namespace GW2EIEvtcParser.ParsedData
                 byte[] xyBytes = BitConverter.GetBytes(startItem.DstAgent);
                 byte[] zBytes = BitConverter.GetBytes(startItem.OverstackValue);
                 EffectPosition = new Point3D(BitConverter.ToSingle(xyBytes, 0), BitConverter.ToSingle(xyBytes, 4), BitConverter.ToSingle(zBytes, 0));
-                HasEffectPosition = true;
             }
             //_effectHappenedDuration = startItem.Value;
         }
