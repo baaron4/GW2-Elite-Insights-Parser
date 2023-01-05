@@ -223,12 +223,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //
             var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
-            /*foreach (AgentItem gadget in chargedBloodStones)
+            foreach (AgentItem gadget in chargedBloodStones)
             {
+                if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
+                {
+                    continue;
+                }
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
-                needRefresh = true;
-            }*/
+                needsRefresh = true;
+            }
             if (_hasPreEvent && needsDummy)
             {
                 agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
@@ -322,7 +326,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
                     if (_xeraFirstPhaseEndTime != 0)
                     {
-                        replay.Trim(_xeraFirstPhaseEndTime + 12000, replay.TimeOffsets.end);
+                        long end = replay.TimeOffsets.end;
+                        AbstractHealthDamageEvent lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
+                        if (lastDamage != null)
+                        {
+                            end = lastDamage.Time;
+                        }
+                        replay.Trim(_xeraFirstPhaseEndTime + 12000, end);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
