@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -178,8 +179,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 _trashMobs.Add(new NPC(a));
             }
-#if DEBUG
-            var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == 0 && x.InstID != 0 && x.LastAware - x.FirstAware > 1000).ToList();
+#if DEBUG2
+            var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID)).ToList();
+            unknownAList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.LastAware - x.FirstAware > 1000));
             foreach (AgentItem a in unknownAList)
             {
                 _trashMobs.Add(new NPC(a));
@@ -273,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
         {
-            if (arcdpsVersion >= ParserHelper.ArcDPSBuilds.DirectX11Update)
+            if (arcdpsVersion >= ArcDPSBuilds.DirectX11Update)
             {
                 return new List<ErrorEvent>
                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
@@ -25,63 +26,6 @@ namespace GW2EIEvtcParser
         internal const long BuffSimulatorStackActiveDelayConstant = 50;
         internal const long WeaponSwapDelayConstant = 75;
         internal const long MinimumInCombatDuration = 2200;
-
-        internal static class GW2Builds
-        {
-            internal const ulong StartOfLife = ulong.MinValue;
-            //
-            internal const ulong May2018Balance = 88541;
-            internal const ulong July2018Balance = 90455;
-            internal const ulong August2018Balance = 92069;
-            internal const ulong October2018Balance = 92715;
-            internal const ulong December2018Balance = 94051;
-            internal const ulong March2019Balance = 95535;
-            internal const ulong April2019Balance = 96406;
-            internal const ulong July2019Balance = 97950;
-            internal const ulong October2019Balance = 99526;
-            internal const ulong February2020Balance = 102321;
-            internal const ulong May2021Balance = 115190;
-            internal const ulong May2021BalanceHotFix = 115728;
-            internal const ulong June2021Balance = 116210;
-            internal const ulong EODBeta1 = 118697;
-            internal const ulong EODBeta2 = 119939;
-            internal const ulong EODBeta3 = 121168;
-            internal const ulong EODBeta4 = 122479;
-            internal const ulong March2022Balance = 126520;
-            internal const ulong March2022Balance2 = 127285;
-            internal const ulong June2022Balance = 130910;
-            internal const ulong June2022BalanceHotFix = 131084;
-            internal const ulong August2022BalanceHotFix = 132359;
-            internal const ulong August2022Balance = 133322;
-            internal const ulong October2022Balance = 135242;
-            internal const ulong November2022Balance = 137943;
-            //
-            internal const ulong EndOfLife = ulong.MaxValue;
-        }
-
-        internal static class ArcDPSBuilds
-        {
-            internal const int StartOfLife = int.MinValue;
-            //
-            internal const int ProperConfusionDamageSimulation = 20210529;
-            internal const int ScoringSystemChange = 20210800; // was somewhere around there
-            internal const int DirectX11Update = 20210923;
-            internal const int InternalSkillIDsChange = 20220304;
-            internal const int BuffAttrFlatIncRemoved = 20220308;
-            internal const int FunctionalIDToGUIDEvents = 20220709;
-            //
-            internal const int EndOfLife = int.MaxValue;
-        }
-
-        public static class WeaponSetIDs
-        {
-            public const int FirstLandSet = 4;
-            public const int SecondLandSet = 5;
-            public const int FirstWaterSet = 0;
-            public const int SecondWaterSet = 1;
-            public const int TransformSet = 3;
-            public const int KitSet = 2;
-        }
 
         internal const int PhaseTimeLimit = 2000;
 
@@ -844,12 +788,18 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/sHmksvO.png";
                 case ArcDPSEnums.TrashID.Saul:
                     return "https://i.imgur.com/ck2IsoS.png";
+                case ArcDPSEnums.TrashID.ShackledPrisoner:
+                    return "https://i.imgur.com/kxlMw7l.png";
+                case ArcDPSEnums.TrashID.DemonicBond:
+                    return "https://i.imgur.com/E4Jqwdn.png";
                 case ArcDPSEnums.TrashID.GamblerClones:
                     return "https://i.imgur.com/zMsBWEx.png";
                 case ArcDPSEnums.TrashID.BloodstoneFragment:
                 case ArcDPSEnums.TrashID.ChargedBloodstone:
                     return "https://i.imgur.com/PZ2VNAN.png";
-                case ArcDPSEnums.TrashID.BloodstoneShard:
+                case ArcDPSEnums.TrashID.BloodstoneShardMainFight:
+                case ArcDPSEnums.TrashID.BloodstoneShardRift:
+                case ArcDPSEnums.TrashID.BloodstoneShardButton:
                 case ArcDPSEnums.TrashID.GamblerReal:
                     return "https://i.imgur.com/J6oMITN.png";
                 case ArcDPSEnums.TrashID.Pride:
@@ -903,7 +853,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/e10lZMa.png";
                 case ArcDPSEnums.TrashID.Jade:
                     return "https://i.imgur.com/ivtzbSP.png";
-                case ArcDPSEnums.TrashID.Zommoros:
+                case ArcDPSEnums.TrashID.AngryZommoros:
+                case ArcDPSEnums.TrashID.ChillZommoros:
                     return "https://i.imgur.com/BxbsRCI.png";
                 case ArcDPSEnums.TrashID.AncientInvokedHydra:
                     return "https://i.imgur.com/YABLiBz.png";
@@ -1395,6 +1346,104 @@ namespace GW2EIEvtcParser
             }
             //
             return "https://i.imgur.com/HuJHqRZ.png";
+        }
+
+
+        public static bool IsKnownMinionID(AgentItem minion, Spec spec)
+        {
+            if (minion.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            long id = minion.ID;
+            bool res = ProfHelper.IsKnownMinionID(id);
+            switch (spec)
+            {
+                //
+                case Spec.Elementalist:
+                case Spec.Tempest:
+                case Spec.Weaver:
+                case Spec.Catalyst:
+                    res |= ElementalistHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Necromancer:
+                case Spec.Scourge:
+                case Spec.Harbinger:
+                    res |= NecromancerHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Reaper:
+                    res |= NecromancerHelper.IsKnownMinionID(id);
+                    res |= ReaperHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Mesmer:
+                    res |= MesmerHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Chronomancer:
+                    res |= MesmerHelper.IsKnownMinionID(id);
+                    res |= ChronomancerHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Mirage:
+                    res |= MesmerHelper.IsKnownMinionID(id);
+                    res |= MirageHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Virtuoso:
+                    res |= MesmerHelper.IsKnownMinionID(id);
+                    res |= VirtuosoHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Thief:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Daredevil:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= DaredevilHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Deadeye:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= DeadeyeHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Specter:
+                    res |= ThiefHelper.IsKnownMinionID(id);
+                    res |= SpecterHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Engineer:
+                case Spec.Scrapper:
+                case Spec.Holosmith:
+                    res |= EngineerHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Mechanist:
+                    res |= EngineerHelper.IsKnownMinionID(id);
+                    res |= MechanistHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Ranger:
+                case Spec.Druid:
+                case Spec.Soulbeast:
+                case Spec.Untamed:
+                    res |= RangerHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Revenant:
+                case Spec.Herald:
+                case Spec.Vindicator:
+                    res |= RevenantHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Renegade:
+                    res |= RevenantHelper.IsKnownMinionID(id);
+                    res |= RenegadeHelper.IsKnownMinionID(id);
+                    break;
+                //
+                case Spec.Guardian:
+                case Spec.Dragonhunter:
+                case Spec.Firebrand:
+                case Spec.Willbender:
+                    res |= GuardianHelper.IsKnownMinionID(id);
+                    break;
+            }
+            return res;
         }
 
 

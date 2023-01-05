@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.Xera:
                     // some TC logs are registered as Xera
-                    if (agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
+                    if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
                     {
                         TriggerID = (int)ArcDPSEnums.TrashID.HauntingStatue;
                         Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
@@ -122,8 +122,8 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.Dhuum:
                     // some eyes logs are registered as Dhuum
-                    if (agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EyeOfFate).Count > 0 ||
-                        agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
+                    if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Count > 0 ||
+                        agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
                     {
                         TriggerID = (int)ArcDPSEnums.TargetID.EyeOfFate;
                         Logic = new StatueOfDarkness(TriggerID);

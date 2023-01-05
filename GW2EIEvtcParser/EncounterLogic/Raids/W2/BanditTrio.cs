@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Prisoner2);
+                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Prisoner2);
                 var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
@@ -92,19 +92,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (logStartNPCUpdate != null)
             {
                 startToUse = long.MaxValue;
-                AgentItem berg = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Berg).FirstOrDefault();
+                AgentItem berg = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Berg).FirstOrDefault();
                 if (berg == null)
                 {
                     throw new MissingKeyActorsException("Berg not found");
                 }
                 startToUse = Math.Min(berg.FirstAware, startToUse);
-                AgentItem zane = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Zane).FirstOrDefault();
+                AgentItem zane = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Zane).FirstOrDefault();
                 if (zane == null)
                 {
                     throw new MissingKeyActorsException("Zane not found");
                 }
                 startToUse = Math.Min(zane.FirstAware, startToUse);
-                AgentItem narella = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Narella).FirstOrDefault();
+                AgentItem narella = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Narella).FirstOrDefault();
                 if (narella == null)
                 {
                     throw new MissingKeyActorsException("Narella not found");

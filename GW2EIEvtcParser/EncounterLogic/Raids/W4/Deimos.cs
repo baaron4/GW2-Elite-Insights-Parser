@@ -18,6 +18,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private long _deimos10PercentTime = 0;
 
+        private bool _hasPreEvent = false;
+
+        private long _deimos100PercentTime = 0;
+
+        private const long PreEventConsiderationConstant = 5000;
+
         public Deimos(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -88,7 +94,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TrashID.Saul
+                (int)ArcDPSEnums.TrashID.Saul,
+                (int)ArcDPSEnums.TrashID.ShackledPrisoner
             };
         }
 
@@ -169,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Deimos not found");
                 }
-                AgentItem saul = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+                AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
                 if (saul == null)
                 {
                     throw new MissingKeyActorsException("Saul not found");
@@ -238,10 +245,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             return firstAware;
         }
 
+        private static AgentItem GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 1000980);
+            if (shackledPrisonerMaxHP != null)
+            {
+                AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
+                if (shackledPrisoner.ID > 0) // sanity check against unknown
+                {
+                    return shackledPrisoner;
+                }
+            }
+            return null;
+        }
+
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Deimos);
+            IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Deimos);
             long start = long.MinValue;
+            long genericStart = GetGenericFightOffset(fightData);
             foreach (AgentItem deimos in deimosAgents)
             {
                 // enter combat
@@ -249,10 +271,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (spawnProtectionRemove != null)
                 {
                     start = Math.Max(start, spawnProtectionRemove.Time);
-
+                    if (start - genericStart > PreEventConsiderationConstant)
+                    {
+                        AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+                        if (shackledPrisoner != null)
+                        {
+                            CombatItem firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
+                            CombatItem firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
+                            if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && firstHPUpdate.DstAgent == 10000) // sanity check
+                            {
+                                _hasPreEvent = true;
+                                _deimos100PercentTime = start - firstHPUpdate.Time;
+                                start = firstHPUpdate.Time;
+                            }
+                        }
+                    }
                 }
             }
-            return start >= 0 ? start : GetGenericFightOffset(fightData);
+            return start >= 0 ? start : genericStart;
         }
 
         internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
@@ -265,8 +301,39 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
+        private static bool HandleDemonicBonds(AgentData agentData,List<CombatItem> combatData)
+        {
+            var maxHPUpdates = combatData.Where(x => x.DstAgent == 239040 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).ToList();
+            var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem demonicBond in demonicBonds)
+            {
+                demonicBond.OverrideID(ArcDPSEnums.TrashID.DemonicBond);
+                demonicBond.OverrideType(AgentItem.AgentType.NPC);
+            }
+            return demonicBonds.Any();
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
+            bool needsDummy = !needsRefresh;
+            AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+            AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+            if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
+            {
+                shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
+                shackledPrisoner.OverrideType(AgentItem.AgentType.NPC);
+                needsRefresh = true;
+            }
+            if (_hasPreEvent && needsDummy)
+            {
+                agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+                needsRefresh = false; // AddCustomNPCAgent already refreshes
+            }
+            if (needsRefresh)
+            {
+                agentData.Refresh();
+            }
             ComputeFightTargets(agentData, combatData, extensions);
             // Find target
             AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
@@ -330,6 +397,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (requirePhases)
             {
+                if (_deimos100PercentTime > 0)
+                {
+                    var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
+                    if (Targets.Any(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond))
+                    {
+                        phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond));
+                    } 
+                    else
+                    {
+                        phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
+                    }
+                    phases.Add(phasePreEvent);
+                    var phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
+                    phase100to0.AddTarget(mainTarget);
+                    phases.Add(phase100to0);
+                }
                 phases = AddBossPhases(phases, log, mainTarget);
                 phases = AddAddPhases(phases, log, mainTarget);
                 phases = AddBurstPhases(phases, log, mainTarget);
@@ -345,7 +428,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (invulDei != null)
             {
-                var phase100to10 = new PhaseData(0, invulDei.Time, "100% - 10%");
+                var phase100to10 = new PhaseData(_deimos100PercentTime, invulDei.Time, "100% - 10%");
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
@@ -407,9 +490,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.Deimos,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
                 (int)ArcDPSEnums.TrashID.Thief,
                 (int)ArcDPSEnums.TrashID.Drunkard,
-                (int)ArcDPSEnums.TrashID.Gambler
+                (int)ArcDPSEnums.TrashID.Gambler,
+                (int)ArcDPSEnums.TrashID.DemonicBond
             };
         }
 
@@ -503,6 +588,56 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int delayOil = 3000;
                     replay.Decorations.Add(new CircleDecoration(true, start + delayOil, 200, (start, start + delayOil), "rgba(255,100, 0, 0.5)", new AgentConnector(target)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
+                    break;
+                case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
+                    AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Saul);
+                    if (Saul != null)
+                    {
+                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware - 1);
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.DemonicBond:
+                    replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
+                    var demonicCenter = new Point3D(-8092.57f, 4176.98f);
+                    replay.Decorations.Add(new LineDecoration(0, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(target), new PositionConnector(demonicCenter)));
+                    AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.ShackledPrisoner));
+                    if (shackledPrisoner != null)
+                    {
+                        float diffX = 0;
+                        float diffY = 0;
+                        if (replay.PolledPositions[0].X - demonicCenter.X > 0)
+                        {
+                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            {
+                                // top
+                                diffX = 55;
+                                diffY = 1080;
+                            } 
+                            else
+                            {
+                                // right
+                                diffX = 1115;
+                                diffY = -35;
+                            }
+                        } 
+                        else
+                        {
+                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            {
+                                // left 
+                                diffX = -1100;
+                                diffY = 40;
+                            }
+                            else
+                            {
+                                // bottom
+                                diffX = -38;
+                                diffY = -1130;
+                            }
+                        }
+                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ParserHelper.ServerDelayConstant) + new Point3D(diffX, diffY);
+                        replay.Decorations.Add(new LineDecoration(0, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
+                    }
                     break;
                 default:
                     break;

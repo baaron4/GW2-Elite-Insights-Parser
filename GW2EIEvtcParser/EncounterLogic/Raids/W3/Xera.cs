@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -16,6 +17,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private long _xeraSecondPhaseStartTime = 0;
         private long _xeraFirstPhaseEndTime = 0;
+        private bool _hasPreEvent = false;
+        private long _xeraFirstPhaseStart = 0;
 
         public Xera(int triggerID) : base(triggerID)
         {
@@ -93,11 +96,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases[0].AddTarget(mainTarget);
             if (requirePhases)
             {
+                if (_xeraFirstPhaseStart > 0)
+                {
+                    var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
+                    if (Targets.Any(x => x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardButton || x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardRift))
+                    {
+                        phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardButton || x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardRift));
+                    }
+                    else
+                    {
+                        phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
+                    }
+                    phases.Add(phasePreEvent);
+                    var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
+                    phase100to0.AddTarget(mainTarget);
+                    phases.Add(phase100to0);
+                }
                 AbstractBuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
                 // split happened
                 if (invulXera != null)
                 {
-                    var phase1 = new PhaseData(0, invulXera.Time, "Phase 1");
+                    var phase1 = new PhaseData(_xeraFirstPhaseStart, invulXera.Time, "Phase 1");
                     phase1.AddTarget(mainTarget);
                     phases.Add(phase1);
 
@@ -110,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
                         phase2.AddTarget(mainTarget);
-                        phase2.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.BloodstoneShard));
+                        phase2.AddTargets(Targets.Where(t => t.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardMainFight));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                         phases.Add(phase2);
                     }
@@ -133,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -142,6 +161,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
             if (enterCombat != null)
             {
+                AgentItem fakeXera = agentData.GetNPCsByID(ArcDPSEnums.TrashID.FakeXera).FirstOrDefault();
+                if (fakeXera != null)
+                {
+                    _hasPreEvent = true;
+                    long encounterStart = fakeXera.LastAware;
+                    _xeraFirstPhaseStart = enterCombat.Time - encounterStart;
+                    return encounterStart;
+                }
                 return enterCombat.Time;
             }
             return GetGenericFightOffset(fightData);
@@ -149,8 +176,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool needsRefresh = false;
+            bool needsDummy = true;
             // find target
-            AgentItem firstXera = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Xera).FirstOrDefault();
+            AgentItem firstXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
             if (firstXera == null)
             {
                 throw new MissingKeyActorsException("Xera not found");
@@ -164,28 +193,57 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
+                needsRefresh = true;
             }
             //
-            var bloodstoneShards = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
-            foreach (AgentItem gadget in bloodstoneShards)
+            var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneShardsMainFight)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
-                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShard);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardMainFight);
+                needsRefresh = true;
+            }
+            //
+            var bloodstoneShardsButton = maxHPUpdates.Where(x =>  x.DstAgent == 597600).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneShardsButton)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardButton);
+                needsRefresh = true;
+                needsDummy = false;
+            }
+            //
+            var bloodstoneShardsRift = maxHPUpdates.Where(x =>  x.DstAgent == 747000).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem gadget in bloodstoneShardsRift)
+            {
+                gadget.OverrideType(AgentItem.AgentType.NPC);
+                gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardRift);
+                needsRefresh = true;
+                needsDummy = false;
             }
             //
             var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
-            /*foreach (AgentItem gadget in chargedBloodStones)
+            foreach (AgentItem gadget in chargedBloodStones)
             {
+                if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
+                {
+                    continue;
+                }
                 gadget.OverrideType(AgentItem.AgentType.NPC);
                 gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
-
-            }*/
-            if (bloodstoneFragments.Any() || bloodstoneShards.Any() || chargedBloodStones.Any())
+                needsRefresh = true;
+            }
+            if (_hasPreEvent && needsDummy)
+            {
+                agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+                needsRefresh = false; // AddCustomNPCAgent already refreshes
+            }
+            if (needsRefresh)
             {
                 agentData.Refresh();
             }
             // find split
-            AgentItem secondXera = agentData.GetNPCsByID(16286).FirstOrDefault();
+            AgentItem secondXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera2).FirstOrDefault();
             if (secondXera != null)
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
@@ -229,7 +287,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int> {
                 (int)ArcDPSEnums.TargetID.Xera,
-                (int)ArcDPSEnums.TrashID.BloodstoneShard,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
+                (int)ArcDPSEnums.TrashID.BloodstoneShardMainFight,
+                (int)ArcDPSEnums.TrashID.BloodstoneShardRift,
+                (int)ArcDPSEnums.TrashID.BloodstoneShardButton,
                 (int)ArcDPSEnums.TrashID.ChargedBloodstone,
             };
         }
@@ -265,7 +326,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
                     if (_xeraFirstPhaseEndTime != 0)
                     {
-                        replay.Trim(_xeraFirstPhaseEndTime + 12000, replay.TimeOffsets.end);
+                        long end = replay.TimeOffsets.end;
+                        AbstractHealthDamageEvent lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
+                        if (lastDamage != null)
+                        {
+                            end = lastDamage.Time;
+                        }
+                        replay.Trim(_xeraFirstPhaseEndTime + 12000, end);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BloodstoneFragment:

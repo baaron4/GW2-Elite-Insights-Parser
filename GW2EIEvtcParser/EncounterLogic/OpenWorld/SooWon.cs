@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData,
             List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID((int)ArcDPSEnums.TargetID.SooWonOW);
+            IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW);
             if (!sooWons.Any())
             {
                 throw new MissingKeyActorsException("Soo-Won not found");
@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                 sooWon.OverrideID(ArcDPSEnums.TargetID.SooWonOW);
             }
 
-            IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID((int)ArcDPSEnums.TrashID.SooWonTail);
+            IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(ArcDPSEnums.TrashID.SooWonTail);
             foreach (AgentItem sooWonTail in sooWonTails)
             {
                 sooWonTail.OverrideType(AgentItem.AgentType.NPC);

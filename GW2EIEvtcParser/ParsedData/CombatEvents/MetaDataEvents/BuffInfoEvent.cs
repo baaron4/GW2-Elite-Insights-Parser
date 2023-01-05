@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -56,7 +57,7 @@ namespace GW2EIEvtcParser.ParsedData
             MaxStacks = evtcItem.SrcMasterInstid;
             DurationCap = evtcItem.OverstackValue;
             // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
-            if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 StackingTypeByte = evtcItem.Pad1;
                 StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);

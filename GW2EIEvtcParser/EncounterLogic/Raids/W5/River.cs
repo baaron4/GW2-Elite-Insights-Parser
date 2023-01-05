@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem enervator = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
+                AgentItem enervator = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
                 if (enervator != null)
                 {
                     startToUse = enervator.FirstAware;

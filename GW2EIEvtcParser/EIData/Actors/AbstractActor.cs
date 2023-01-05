@@ -43,6 +43,32 @@ namespace GW2EIEvtcParser.EIData
             Character = name[0];
             AgentItem = agent;
         }
+
+        public bool IsSpecy(int id)
+        {
+            return AgentItem.IsSpecy(id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.TrashID id)
+        {
+            return AgentItem.IsSpecy(id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.TargetID id)
+        {
+            return AgentItem.IsSpecy(id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.MinionID id)
+        {
+            return AgentItem.IsSpecy(id);
+        }
+
+        public bool IsSpecy(ArcDPSEnums.ChestID id)
+        {
+            return AgentItem.IsSpecy(id);
+        }
+
         // Getters
         // Damage logs
         public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);

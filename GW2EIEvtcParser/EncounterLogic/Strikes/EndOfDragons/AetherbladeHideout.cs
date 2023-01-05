@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // We remove extra Mai trins if present
-            IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.MaiTrinStrike);
+            IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(ArcDPSEnums.TargetID.MaiTrinStrike);
             if (maiTrins.Count > 1)
             {
                 for (int i = 1; i < maiTrins.Count; i++)
@@ -226,10 +226,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 agentData.Refresh();
             }
-            if (agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
+            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
             {
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
+                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
             var echoesOfScarlet = Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM || x.ID == (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM).ToList();

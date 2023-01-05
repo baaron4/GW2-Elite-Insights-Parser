@@ -6,6 +6,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -109,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PyreGuardian);
+            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(ArcDPSEnums.TrashID.PyreGuardian);
             // Lamps
             var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
@@ -179,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -222,13 +223,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phase.Name = "Qadim P" + (i) / 2;
                     var pyresFirstAware = new List<long>();
-                    var pyres = new List<int>
+                    var pyres = new List<ArcDPSEnums.TrashID>
                         {
-                            (int) ArcDPSEnums.TrashID.PyreGuardian,
-                            (int) ArcDPSEnums.TrashID.PyreGuardianProtect,
-                            (int) ArcDPSEnums.TrashID.PyreGuardianStab,
-                            (int) ArcDPSEnums.TrashID.PyreGuardianRetal,
-                            (int) ArcDPSEnums.TrashID.PyreGuardianResolution,
+                            ArcDPSEnums.TrashID.PyreGuardian,
+                            ArcDPSEnums.TrashID.PyreGuardianProtect,
+                            ArcDPSEnums.TrashID.PyreGuardianStab,
+                            ArcDPSEnums.TrashID.PyreGuardianRetal,
+                            ArcDPSEnums.TrashID.PyreGuardianResolution,
                         };
                     foreach (int pyreId in pyres)
                     {
@@ -296,7 +297,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.ReaperofFlesh,
                 ArcDPSEnums.TrashID.DestroyerTroll,
                 ArcDPSEnums.TrashID.IceElemental,
-                ArcDPSEnums.TrashID.Zommoros
+                ArcDPSEnums.TrashID.AngryZommoros
             };
         }
 

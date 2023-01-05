@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 // conflict with phase retreat (staff skill), ignore if staff is present
-                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID((int)MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
+                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID(MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
                 {
                     return false;
                 }

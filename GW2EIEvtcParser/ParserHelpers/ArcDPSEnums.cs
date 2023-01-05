@@ -1,6 +1,4 @@
 ﻿using System;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
@@ -8,6 +6,64 @@ namespace GW2EIEvtcParser
     {
 
         public const int ArcDPSPollingRate = 300;
+
+        internal static class GW2Builds
+        {
+            internal const ulong StartOfLife = ulong.MinValue;
+            //
+            internal const ulong May2018Balance = 88541;
+            internal const ulong July2018Balance = 90455;
+            internal const ulong August2018Balance = 92069;
+            internal const ulong October2018Balance = 92715;
+            internal const ulong December2018Balance = 94051;
+            internal const ulong March2019Balance = 95535;
+            internal const ulong April2019Balance = 96406;
+            internal const ulong July2019Balance = 97950;
+            internal const ulong October2019Balance = 99526;
+            internal const ulong February2020Balance = 102321;
+            internal const ulong May2021Balance = 115190;
+            internal const ulong May2021BalanceHotFix = 115728;
+            internal const ulong June2021Balance = 116210;
+            internal const ulong EODBeta1 = 118697;
+            internal const ulong EODBeta2 = 119939;
+            internal const ulong EODBeta3 = 121168;
+            internal const ulong EODBeta4 = 122479;
+            internal const ulong March2022Balance = 126520;
+            internal const ulong March2022Balance2 = 127285;
+            internal const ulong June2022Balance = 130910;
+            internal const ulong June2022BalanceHotFix = 131084;
+            internal const ulong August2022BalanceHotFix = 132359;
+            internal const ulong August2022Balance = 133322;
+            internal const ulong October2022Balance = 135242;
+            internal const ulong November2022Balance = 137943;
+            //
+            internal const ulong EndOfLife = ulong.MaxValue;
+        }
+
+        internal static class ArcDPSBuilds
+        {
+            internal const int StartOfLife = int.MinValue;
+            //
+            internal const int ProperConfusionDamageSimulation = 20210529;
+            internal const int ScoringSystemChange = 20210800; // was somewhere around there
+            internal const int DirectX11Update = 20210923;
+            internal const int InternalSkillIDsChange = 20220304;
+            internal const int BuffAttrFlatIncRemoved = 20220308;
+            internal const int FunctionalIDToGUIDEvents = 20220709;
+            //
+            internal const int EndOfLife = int.MaxValue;
+        }
+
+        public static class WeaponSetIDs
+        {
+            public const int FirstLandSet = 4;
+            public const int SecondLandSet = 5;
+            public const int FirstWaterSet = 0;
+            public const int SecondWaterSet = 1;
+            public const int TransformSet = 3;
+            public const int KitSet = 2;
+        }
+
         // Activation
         public enum Activation : byte
         {
@@ -277,7 +333,7 @@ namespace GW2EIEvtcParser
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {
             BuffAttribute res;
-            if (evtcVersion >= ParserHelper.ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 // Enum has shifted by -1
                 if (bt <= (byte)BuffAttribute.SiphonRec - 1)
@@ -368,7 +424,7 @@ namespace GW2EIEvtcParser
         private const int AiKeeperOfThePeak2 = -8;
         private const int MatthiasSacrifice = -9;
         private const int BloodstoneFragment = -10;
-        private const int BloodstoneShard = -11;
+        private const int BloodstoneShardMainFight = -11;
         private const int ChargedBloodstone = -12;
         private const int PyreGuardianResolution = -13;
         private const int CASword = -14;
@@ -387,6 +443,10 @@ namespace GW2EIEvtcParser
         private const int SpearAggressionRevulsion = -27;
         private const int DragonOrb = -28;
         private const int ChestOfSouls = -29;
+        private const int ShackledPrisoner = -30;
+        private const int DemonicBond = -31;
+        private const int BloodstoneShardRift = -32;
+        private const int BloodstoneShardButton = -33;
 
 
         //
@@ -474,7 +534,9 @@ namespace GW2EIEvtcParser
             HauntingStatue = 16247,
             //CastleFountain = 32951,
             // Xera
-            BloodstoneShard = ArcDPSEnums.BloodstoneShard,
+            BloodstoneShardMainFight = ArcDPSEnums.BloodstoneShardMainFight,
+            BloodstoneShardRift = ArcDPSEnums.BloodstoneShardRift,
+            BloodstoneShardButton = ArcDPSEnums.BloodstoneShardButton,
             ChargedBloodstone = ArcDPSEnums.ChargedBloodstone,
             BloodstoneFragment = ArcDPSEnums.BloodstoneFragment,
             XerasPhantasm = 16225,
@@ -485,6 +547,7 @@ namespace GW2EIEvtcParser
             WhiteMantleBattleMage1 = 16221,
             WhiteMantleBattleMage2 = 16226,
             ExquisiteConjunction = 16232,
+            FakeXera = 16289,
             // MO
             Jade = 17181,
             // Samarog
@@ -493,6 +556,8 @@ namespace GW2EIEvtcParser
             SpearAggressionRevulsion = ArcDPSEnums.SpearAggressionRevulsion,
             // Deimos
             Saul = 17126,
+            ShackledPrisoner = ArcDPSEnums.ShackledPrisoner,
+            DemonicBond = ArcDPSEnums.DemonicBond,
             Thief = 17206,
             Gambler = 17335,
             GamblerClones = 17161,
@@ -555,7 +620,8 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
-            Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            AngryZommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            ChillZommoros = 21118,
             // Adina
             HandOfErosion = ArcDPSEnums.HandOfErosion,
             HandOfEruption = ArcDPSEnums.HandOfEruption,
@@ -770,6 +836,7 @@ namespace GW2EIEvtcParser
             Escort = 16253, // McLeod the Silent
             KeepConstruct = 16235,
             Xera = 16246,
+            Xera2 = 16286,
             Cairn = 17194,
             MursaatOverseer = 17172,
             Samarog = 17188,
@@ -1045,16 +1112,6 @@ namespace GW2EIEvtcParser
         public static MinionID GetMinionID(int id)
         {
             return Enum.IsDefined(typeof(MinionID), id) ? (MinionID)id : MinionID.Unknown;
-        }
-
-        public static bool IsKnownMinionID(AgentItem minion, ParserHelper.Spec spec)
-        {
-            return ProfHelper.IsKnownMinionID(minion, spec);
-        }
-
-        public static bool IsKnownMinionID(AbstractSingleActor minion, ParserHelper.Spec spec)
-        {
-            return IsKnownMinionID(minion.AgentItem, spec);
         }
 
     }

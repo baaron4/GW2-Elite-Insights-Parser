@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -221,7 +222,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case ArcDPSEnums.StateChange.EffectIDToGUID:
-                    if (evtcVersion >= ParserHelper.ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                    if (evtcVersion >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                     {
                         switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
                         {

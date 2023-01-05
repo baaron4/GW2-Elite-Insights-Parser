@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
         {
-            if (arcdpsVersion > ParserHelper.ArcDPSBuilds.ProperConfusionDamageSimulation)
+            if (arcdpsVersion > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
             {
                 return new List<ErrorEvent>();
             }
@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => chestChecker(x));
             if (chest != null)
             {
-                chest.OverrideID((int)chestID);
+                chest.OverrideID(chestID);
                 return true;
             }
             return false;

@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Cairn not found");
