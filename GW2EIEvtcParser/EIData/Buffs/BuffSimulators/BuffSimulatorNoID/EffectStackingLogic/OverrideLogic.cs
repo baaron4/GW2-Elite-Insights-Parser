@@ -21,14 +21,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 return false;
             }
             BuffStackItem toRemove = stacks[0];
-            /*if (overridenStackID > 0)
-            {
-                toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
-            }
-            if (toRemove == null)
-            {
-                toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
-            }*/
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
             if (toRemove.Extensions.Count > 0)
             {

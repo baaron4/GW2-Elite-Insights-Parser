@@ -21,6 +21,20 @@ namespace GW2EIEvtcParser.EIData
             }
             return false;
         }
+        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+        {
+            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
+            {
+                return;
+            }
+            buffEvent.TryFindSrc(log);
+            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
+            {
+                list.Add(buffEvent);
+                return;
+            }
+            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
+        }
 
         private BuffRemoveSingleEvent _lastRemovedRegen = null;
         public void AddRegen(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
@@ -40,38 +54,9 @@ namespace GW2EIEvtcParser.EIData
                     bae.OverridenDurationInternal = (uint)_lastRemovedRegen.RemovedDuration;
                     bae.OverridenInstance = _lastRemovedRegen.BuffInstance;
                 }
-                if (bae.OverridenInstance == 0)
-                {
-                    int a = 0;
-                }
                 _lastRemovedRegen = null;
             }
             buffEvent.TryFindSrc(log);
-            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
-            {
-                list.Add(buffEvent);
-                return;
-            }
-            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
-        }
-
-        //private BuffApplyEvent _lastAddedBuff = null;
-        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
-        {
-            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
-            {
-                /*if (_lastAddedBuff != null && buffEvent is BuffRemoveSingleEvent brse && brse.Time - _lastAddedBuff.Time < ParserHelper.ServerDelayConstant)
-                {
-                    _lastAddedBuff.OverridenInstance = brse.BuffInstance;
-                    _lastAddedBuff = null;
-                }*/
-                return;
-            }
-            buffEvent.TryFindSrc(log);
-            /*if (buffEvent is BuffApplyEvent bae)
-            {
-                _lastAddedBuff = bae;
-            }*/
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
                 list.Add(buffEvent);
