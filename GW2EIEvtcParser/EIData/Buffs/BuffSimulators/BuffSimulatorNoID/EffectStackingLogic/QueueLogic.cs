@@ -19,7 +19,9 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 throw new InvalidDataException("Queue logic based must have a >1 capacity");
             }
-            BuffStackItem toRemove = null;
+            BuffStackItem first = stacks[0];
+            BuffStackItem toRemove = stacks.Where(x => x != first).MinBy(x => x.TotalDuration);
+            /*BuffStackItem toRemove = null;
             if (overridenStackID > 0)
             {
                 toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
@@ -28,7 +30,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 BuffStackItem first = stacks[0];
                 toRemove = stacks.Where(x => x != first).MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
-            }
+            }*/
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
             if (toRemove.Extensions.Any())
             {

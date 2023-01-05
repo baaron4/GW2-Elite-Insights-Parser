@@ -49,10 +49,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
             }
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-            if (toRemove.StackID == 2239)
-            {
-                int a = 0;
-            }
             if (toRemove.Extensions.Any())
             {
                 foreach ((AgentItem src, long value) in toRemove.Extensions)
@@ -65,18 +61,18 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return true;
         }
 
-        public override void Activate(List<BuffStackItem> stacks, uint id)
+        public override void Activate(List<BuffStackItem> stacks, uint stackID)
         {
-            BuffStackItem toActivate = stacks.FirstOrDefault(x => x.StackID == id);
+            BuffStackItem toActivate = stacks.FirstOrDefault(x => x.StackID == stackID);
             if (toActivate != null)
             {
                 _noSort = true;
                 stacks.Remove(toActivate);
                 stacks.Insert(0, toActivate);
-            }
-            else
-            {
-                int a = 0;
+                if (stacks.Count > 1 && stacks[1].TotalDuration < 50)
+                {
+                    stacks.Remove(stacks[1]);
+                }
             }
         }
     }

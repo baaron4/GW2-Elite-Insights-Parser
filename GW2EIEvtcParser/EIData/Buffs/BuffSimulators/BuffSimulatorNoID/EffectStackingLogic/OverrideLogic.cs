@@ -20,15 +20,15 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 return false;
             }
-            BuffStackItem toRemove = null;
-            if (overridenStackID > 0)
+            BuffStackItem toRemove = stacks[0];
+            /*if (overridenStackID > 0)
             {
                 toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
             }
             if (toRemove == null)
             {
                 toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
-            }
+            }*/
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
             if (toRemove.Extensions.Count > 0)
             {
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
                 }
             }
-            stacks.RemoveAt(0);
+            stacks.Remove(toRemove);
             Add(log, stacks, toAdd);
             return true;
         }

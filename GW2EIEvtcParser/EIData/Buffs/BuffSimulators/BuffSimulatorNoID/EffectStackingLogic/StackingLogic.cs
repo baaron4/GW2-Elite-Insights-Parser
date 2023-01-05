@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             Sort(log, stacks);
         }
 
-        public virtual void Activate(List<BuffStackItem> stacks, uint id)
+        public virtual void Activate(List<BuffStackItem> stacks, uint stackID)
         {
 
         }

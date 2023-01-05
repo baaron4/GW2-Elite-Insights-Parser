@@ -22,31 +22,29 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
-        private uint _lastRemovedDuration = 0;
-        private long _lastRemovedTime = int.MinValue;
-        private uint _lastRemovedStackID = 0;
+        private BuffRemoveSingleEvent _lastRemovedRegen = null;
         public void AddRegen(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
             {
                 if (buffEvent is BuffRemoveSingleEvent brse)
                 {
-                    _lastRemovedDuration = (uint)brse.RemovedDuration;
-                    _lastRemovedStackID = brse.BuffInstance;
-                    _lastRemovedTime = brse.Time;
+                    _lastRemovedRegen = brse;
                 }
                 return;
             }
-            if (buffEvent is BuffApplyEvent bae)
+            if (_lastRemovedRegen != null && buffEvent is BuffApplyEvent bae)
             {
-                if (bae.Time - _lastRemovedTime < ParserHelper.ServerDelayConstant)
+                if (bae.Time - _lastRemovedRegen.Time < ParserHelper.ServerDelayConstant)
                 {
-                    bae.OverridenDurationInternal = _lastRemovedDuration;
-                    bae.OverridenInstance = _lastRemovedStackID;
+                    bae.OverridenDurationInternal = (uint)_lastRemovedRegen.RemovedDuration;
+                    bae.OverridenInstance = _lastRemovedRegen.BuffInstance;
                 }
-                _lastRemovedDuration = 0;
-                _lastRemovedTime = int.MinValue;
-                _lastRemovedStackID = 0;
+                if (bae.OverridenInstance == 0)
+                {
+                    int a = 0;
+                }
+                _lastRemovedRegen = null;
             }
             buffEvent.TryFindSrc(log);
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
@@ -57,23 +55,23 @@ namespace GW2EIEvtcParser.EIData
             _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
         }
 
-        private BuffApplyEvent _lastAdded = null;
+        //private BuffApplyEvent _lastAddedBuff = null;
         public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent) 
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
             {
-                if (_lastAdded != null && buffEvent is BuffRemoveSingleEvent brse && brse.Time - _lastAdded.Time < ParserHelper.ServerDelayConstant)
+                /*if (_lastAddedBuff != null && buffEvent is BuffRemoveSingleEvent brse && brse.Time - _lastAddedBuff.Time < ParserHelper.ServerDelayConstant)
                 {
-                    _lastAdded.OverridenInstance = brse.BuffInstance;
-                    _lastAdded = null;
-                }
+                    _lastAddedBuff.OverridenInstance = brse.BuffInstance;
+                    _lastAddedBuff = null;
+                }*/
                 return;
             }
             buffEvent.TryFindSrc(log);
-            if (buffEvent is BuffApplyEvent bae)
+            /*if (buffEvent is BuffApplyEvent bae)
             {
-                _lastAdded = bae;
-            }
+                _lastAddedBuff = bae;
+            }*/
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
                 list.Add(buffEvent);
@@ -99,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
         }*/
 
 
-        public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
+            public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
         {
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
