@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -21,13 +22,58 @@ namespace GW2EIEvtcParser.EIData
             return false;
         }
 
+        private uint _lastRemovedDuration = 0;
+        private long _lastRemovedTime = int.MinValue;
+        private uint _lastRemovedStackID = 0;
+        public void AddRegen(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+        {
+            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
+            {
+                if (buffEvent is BuffRemoveSingleEvent brse)
+                {
+                    _lastRemovedDuration = (uint)brse.RemovedDuration;
+                    _lastRemovedStackID = brse.BuffInstance;
+                    _lastRemovedTime = brse.Time;
+                }
+                return;
+            }
+            if (buffEvent is BuffApplyEvent bae)
+            {
+                if (bae.Time - _lastRemovedTime < ParserHelper.ServerDelayConstant)
+                {
+                    bae.OverridenDurationInternal = _lastRemovedDuration;
+                    bae.OverridenInstance = _lastRemovedStackID;
+                }
+                _lastRemovedDuration = 0;
+                _lastRemovedTime = int.MinValue;
+                _lastRemovedStackID = 0;
+            }
+            buffEvent.TryFindSrc(log);
+            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
+            {
+                list.Add(buffEvent);
+                return;
+            }
+            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
+        }
+
+        private BuffApplyEvent _lastAdded = null;
         public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent) 
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
             {
+                if (_lastAdded != null && buffEvent is BuffRemoveSingleEvent brse && brse.Time - _lastAdded.Time < ParserHelper.ServerDelayConstant)
+                {
+                    _lastAdded.OverridenInstance = brse.BuffInstance;
+                    _lastAdded = null;
+                }
                 return;
             }
             buffEvent.TryFindSrc(log);
+            if (buffEvent is BuffApplyEvent bae)
+            {
+                _lastAdded = bae;
+            }
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
                 list.Add(buffEvent);

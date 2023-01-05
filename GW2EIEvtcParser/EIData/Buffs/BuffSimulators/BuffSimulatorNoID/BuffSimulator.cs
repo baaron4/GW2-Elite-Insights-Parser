@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,9 +56,8 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             BuffStack.Clear();
         }
 
-        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive)
+        private void Add(BuffStackItem toAdd, bool addedActive, long overridenDuration, uint overridenStackID)
         {
-            var toAdd = new BuffStackItem(start, duration, src, stackID);
             // Find empty slot
             if (!IsFull)
             {
@@ -66,40 +66,27 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             // Replace lowest value
             else
             {
-                if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult))
+                if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult, overridenDuration, overridenStackID))
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(toAdd.Src, toAdd.Duration, toAdd.Start));
                 }
             }
             if (addedActive)
             {
-                _logic.Activate(BuffStack, stackID);
+                _logic.Activate(BuffStack, toAdd);
             }
         }
 
-        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool atFirst, bool isExtension, uint stackID)
+        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
+        {
+            var toAdd = new BuffStackItem(start, duration, src, stackID);
+            Add(toAdd, addedActive, overridenDuration, overridenStackID);
+        }
+
+        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool addedActive, bool isExtension, uint stackID)
         {
             var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
-            // Find empty slot
-            if (!IsFull)
-            {
-                if (atFirst)
-                {
-                    BuffStack.Insert(0, toAdd);
-                }
-                else
-                {
-                    _logic.Add(Log, BuffStack, toAdd);
-                }
-            }
-            // Replace lowest value
-            else
-            {
-                if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult))
-                {
-                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, duration, time));
-                }
-            }
+            Add(toAdd, addedActive, 0, 0);
         }
 
         public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)

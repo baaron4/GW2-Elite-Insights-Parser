@@ -10,6 +10,10 @@ namespace GW2EIEvtcParser.ParsedData
         {
             BuffInstance = (uint)evtcItem.DstAgent;
         }
+        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
+        {
+            return BuffInstance != 0;
+        }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {

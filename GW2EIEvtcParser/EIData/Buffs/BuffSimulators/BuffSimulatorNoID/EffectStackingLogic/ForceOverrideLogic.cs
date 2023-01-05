@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -12,22 +13,22 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             // no sort
         }
 
-        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
+        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
         {
             if (!stacks.Any())
             {
                 return false;
             }
-            BuffStackItem stack = stacks[0];
-            wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
-            if (stack.Extensions.Count > 0)
+            BuffStackItem toRemove = stacks[0];
+            wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
+            if (toRemove.Extensions.Count > 0)
             {
-                foreach ((AgentItem src, long value) in stack.Extensions)
+                foreach ((AgentItem src, long value) in toRemove.Extensions)
                 {
-                    wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
+                    wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
                 }
             }
-            stacks[0] = stackItem;
+            stacks[0] = toAdd;
             return true;
         }
 

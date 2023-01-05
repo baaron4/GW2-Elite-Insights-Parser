@@ -185,7 +185,14 @@ namespace GW2EIEvtcParser.EIData
                     continue;
                 }
                 Buff buff = log.Buffs.BuffsByIds[buffID];
-                _buffMap.Add(log, buff, buffEvent);
+                if (buffID != SkillIDs.Regeneration)
+                {
+                    _buffMap.Add(log, buff, buffEvent);
+                }
+                else
+                {
+                    _buffMap.AddRegen(log, buff, buffEvent);
+                }
             }
             _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
         }

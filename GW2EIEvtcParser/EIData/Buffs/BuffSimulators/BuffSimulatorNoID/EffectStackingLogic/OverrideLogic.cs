@@ -14,23 +14,31 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             throw new InvalidOperationException("Do not use Sort for OverrideLogic");
         }
 
-        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
+        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
         {
             if (!stacks.Any())
             {
                 return false;
             }
-            BuffStackItem stack = stacks[0];
-            wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.Duration, stack.Start));
-            if (stack.Extensions.Count > 0)
+            BuffStackItem toRemove = null;
+            if (overridenStackID > 0)
             {
-                foreach ((AgentItem src, long value) in stack.Extensions)
+                toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
+            }
+            if (toRemove == null)
+            {
+                toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
+            }
+            wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
+            if (toRemove.Extensions.Count > 0)
+            {
+                foreach ((AgentItem src, long value) in toRemove.Extensions)
                 {
-                    wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
+                    wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
                 }
             }
             stacks.RemoveAt(0);
-            Add(log, stacks, stackItem);
+            Add(log, stacks, toAdd);
             return true;
         }
 

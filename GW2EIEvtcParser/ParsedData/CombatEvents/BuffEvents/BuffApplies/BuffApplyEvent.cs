@@ -9,6 +9,8 @@ namespace GW2EIEvtcParser.ParsedData
         public int AppliedDuration { get; }
 
         public uint OverridenDuration { get; }
+        internal uint OverridenDurationInternal { get; set; }
+        internal uint OverridenInstance { get; set; }
         private readonly bool _addedActive;
 
         internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
@@ -31,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss);
+            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == ArcDPSEnums.BuffStackType.StackingConditionalLoss, OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)
