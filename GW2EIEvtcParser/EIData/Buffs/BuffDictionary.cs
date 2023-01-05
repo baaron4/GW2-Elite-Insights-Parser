@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //private BuffApplyEvent _lastAddedBuff = null;
-        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent) 
+        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
             {
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
         }*/
 
 
-            public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
+        public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
         {
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
