@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
                 LifeLeechDps = (int)Math.Round(LifeLeechDamage / phaseDuration);
                 BarrierDps = (int)Math.Round(BarrierDamage / phaseDuration);
                 //
-                ActorDps = (int)Math.Round(Damage / phaseDuration);
+                ActorDps = (int)Math.Round(ActorDamage / phaseDuration);
                 ActorCondiDps = (int)Math.Round(ActorCondiDamage / phaseDuration);
                 ActorPowerDps = (int)Math.Round(ActorPowerDamage / phaseDuration);
                 ActorStrikeDps = (int)Math.Round(ActorStrikeDamage / phaseDuration);
