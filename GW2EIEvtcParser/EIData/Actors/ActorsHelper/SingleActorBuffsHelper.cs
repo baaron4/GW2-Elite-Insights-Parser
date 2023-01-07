@@ -177,15 +177,26 @@ namespace GW2EIEvtcParser.EIData
 #if DEBUG
             var test = log.CombatData.GetBuffData(Actor.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-            foreach (AbstractBuffEvent buffEvent in log.CombatData.GetBuffData(Actor.AgentItem))
+            var buffEventsDict = log.CombatData.GetBuffData(Actor.AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> buffEventPair in buffEventsDict)
             {
-                long buffID = buffEvent.BuffID;
+                long buffID = buffEventPair.Key;
                 if (!log.Buffs.BuffsByIds.ContainsKey(buffID))
                 {
                     continue;
                 }
-                Buff buff = log.Buffs.BuffsByIds[buffID];
-                _buffMap.Add(log, buff, buffEvent);
+                foreach (AbstractBuffEvent buffEvent in buffEventPair.Value)
+                {
+                    Buff buff = log.Buffs.BuffsByIds[buffID];
+                    if (buffID != SkillIDs.Regeneration)
+                    {
+                        _buffMap.Add(log, buff, buffEvent);
+                    }
+                    else
+                    {
+                        _buffMap.AddRegen(log, buff, buffEvent);
+                    }
+                }
             }
             _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
         }

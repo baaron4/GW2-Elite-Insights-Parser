@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return false;
         }
 
-        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes)
+        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
         {
             // no lowest value to find
             return false;
