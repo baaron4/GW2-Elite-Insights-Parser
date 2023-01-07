@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
-            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
+            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
             {
                 return;
             }
@@ -39,9 +39,9 @@ namespace GW2EIEvtcParser.EIData
         private BuffRemoveSingleEvent _lastRemovedRegen = null;
         public void AddRegen(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
-            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.HasStackIDs))
+            if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
             {
-                if (buffEvent is BuffRemoveSingleEvent brse)
+                if (buffEvent is BuffRemoveSingleEvent brse && log.CombatData.HasStackIDs && brse.RemovedDuration > ParserHelper.BuffSimulatorDelayConstant)
                 {
                     _lastRemovedRegen = brse;
                 }

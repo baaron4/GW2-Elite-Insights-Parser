@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal abstract void TryFindSrc(ParsedEvtcLog log);
 
-        internal abstract bool IsBuffSimulatorCompliant(bool hasStackIDs);
+        internal abstract bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator);
 
         //internal abstract int CompareTo(AbstractBuffEvent abe);
     }

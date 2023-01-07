@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
             _lastRemovedDuration = lastRemovedDuration;
             RemovedStacks = removedStacks;
         }
-        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
         {
             return BuffID != SkillIDs.NoBuff;
         }

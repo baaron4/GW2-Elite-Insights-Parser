@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 capacity = buffInfoEvent.MaxStacks;
             }
-            if (!log.CombatData.HasStackIDs || forceNoId)
+            if (!log.CombatData.UseBuffInstanceSimulator || forceNoId)
             {
 
                 switch (Type)

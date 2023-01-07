@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
         {
             return false; // don't consider manual remove events
         }

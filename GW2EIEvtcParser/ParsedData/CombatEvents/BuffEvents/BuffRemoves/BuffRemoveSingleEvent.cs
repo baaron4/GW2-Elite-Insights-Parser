@@ -27,13 +27,13 @@ namespace GW2EIEvtcParser.ParsedData
             _removedActive = removedActive;
         }
 
-        internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
+        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
         {
             if (BuffID == SkillIDs.NoBuff)
             {
                 return false;
             }
-            if (hasStackIDs)
+            if (useBuffInstanceSimulator)
             {
                 return true;
             }
