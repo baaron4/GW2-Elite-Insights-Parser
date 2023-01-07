@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
                 new Buff("Palm Strike",PalmStrike, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
-                new Buff("Pulmonary Impact",PulmonaryImpact, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
+                new Buff("Pulmonary Impact",PulmonaryImpactEffect, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1a/Palm_Strike.png"),
                 new Buff("Lotus Training", LotusTrainingEffect, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ea/Lotus_Training.png"),
                 new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a1/Unhindered_Combatant.png"),
                 new Buff("Bounding Dodger", BoundingDodgerEffect, Source.Daredevil, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),

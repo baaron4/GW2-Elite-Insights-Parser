@@ -599,7 +599,7 @@ namespace GW2EIEvtcParser
         public const long YourSoulIsMine = 30488;
         public const long SoulSpiral = 30504;
         public const long SelflessAmplification = 30509;
-        public const long PulmonaryImpact = 30510;
+        public const long PulmonaryImpactEffect = 30510;
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
         public const long FeelTheBurn = 30662;
@@ -607,6 +607,7 @@ namespace GW2EIEvtcParser
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
         public const long ContinuumShift = 30747;
+        public const long PulmonaryImpactSkill = 30770;
         public const long Rise = 30772;
         public const long HuntersMark = 30778;
         public const long WingsOfResolveSkill = 30783;

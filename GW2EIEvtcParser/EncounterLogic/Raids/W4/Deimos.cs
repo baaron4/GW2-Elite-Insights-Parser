@@ -400,14 +400,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_deimos100PercentTime > 0)
                 {
                     var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
-                    if (Targets.Any(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond))
-                    {
-                        phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond));
-                    } 
-                    else
-                    {
-                        phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
-                    }
+                    phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond));
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
                     phases.Add(phasePreEvent);
                     var phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
                     phase100to0.AddTarget(mainTarget);

@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.ParsedData
                         { FlameBlastSigil, GW2Builds.StartOfLife },
                         { FireAttunementSkill, GW2Builds.December2018Balance }, 
                         { Mug, GW2Builds.StartOfLife }, // Mug
-                        { 30770, 54485 }, // Pulmonary Impact
+                        { PulmonaryImpactSkill, 54485 }, // Pulmonary Impact
                         { 52370, GW2Builds.StartOfLife },
                         { LightningJolt, GW2Builds.StartOfLife },
                         { Sunspot, GW2Builds.December2018Balance },

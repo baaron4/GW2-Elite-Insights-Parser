@@ -99,14 +99,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_xeraFirstPhaseStart > 0)
                 {
                     var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
-                    if (Targets.Any(x => x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardButton || x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardRift))
-                    {
-                        phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardButton || x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardRift));
-                    }
-                    else
-                    {
-                        phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
-                    }
+                    phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardButton || x.ID == (int)ArcDPSEnums.TrashID.BloodstoneShardRift));
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
                     phases.Add(phasePreEvent);
                     var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                     phase100to0.AddTarget(mainTarget);
