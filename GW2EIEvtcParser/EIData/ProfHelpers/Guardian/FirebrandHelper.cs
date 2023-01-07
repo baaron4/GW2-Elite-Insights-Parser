@@ -39,9 +39,9 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Tome of Courage",TomeOfCourage,Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/54/Tome_of_Courage.png"),
                 new Buff("Tome of Resolve",TomeOfResolve, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png"),
                 new Buff("Quickfire",Quickfire, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
-                new Buff("Dormant Justice",DormantJustice, Source.Firebrand, BuffClassification.Other, "https://i.imgur.com/nSYuby8.png"),
-                new Buff("Dormant Courage",DormantCourage, Source.Firebrand, BuffClassification.Other, "https://i.imgur.com/nSYuby8.png"),
-                new Buff("Dormant Resolve",DormantResolve, Source.Firebrand, BuffClassification.Other, "https://i.imgur.com/nSYuby8.png"),
+                new Buff("Dormant Justice",DormantJustice, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/55/Dormant_Justice.png"),
+                new Buff("Dormant Courage",DormantCourage, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/71/Dormant_Courage.png"),
+                new Buff("Dormant Resolve",DormantResolve, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/df/Dormant_Resolve.png"),
         };
 
     }
