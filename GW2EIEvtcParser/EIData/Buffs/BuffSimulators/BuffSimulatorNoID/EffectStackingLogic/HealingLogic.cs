@@ -43,8 +43,8 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             if (overridenStackID > 0)
             {
                 toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
-            }
-            if (toRemove == null)
+            } 
+            else
             {
                 toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
             }
