@@ -253,7 +253,10 @@ namespace GW2EIEvtcParser.ParsedData
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             {RushingJusticeAnimation, "https://wiki.guildwars2.com/wiki/Rushing_Justice#/media/File:Rushing_Justice.png" },
-            {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/wiki/Twilight_Combo#/media/File:Twilight_Combo.png" }
+            {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/wiki/Twilight_Combo#/media/File:Twilight_Combo.png" },
+            {DormantCourage, "https://wiki.guildwars2.com/wiki/Dormant_Courage#/media/File:Dormant_Courage.png" },
+            {DormantJustice, "https://wiki.guildwars2.com/wiki/Dormant_Justice#/media/File:Dormant_Justice.png" },
+            {DormantResolve, "https://wiki.guildwars2.com/wiki/Dormant_Resolve#/media/File:Dormant_Resolve.png" }
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
