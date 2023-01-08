@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shift Signet",ShiftSignetEffect, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Shift_Signet.png"),
             new Buff("Superconducting Signet",SuperconductingSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/51/Superconducting_Signet.png"),
             new Buff("Overclock Signet",OverclockSignet, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c7/Overclock_Signet.png"),
+            new Buff("Mechanical Genius",MechanicalGenius, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b0/Mechanical_Genius.png"),
             //
             //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, "https://wiki.guildwars2.com/images/c/c4/Rectifier_Signet.png"),
             new Buff("Barrier Signet (J-Drive)",BarrierSignetJDrive, Source.Mechanist, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Barrier_Signet.png"),

@@ -1799,6 +1799,7 @@ namespace GW2EIEvtcParser
         public const long FixatedOldLionsCourt = 68562;
         public const long DormantCourage = 68585;
         public const long DormantJustice = 68607;
+        public const long MechanicalGenius = 68612;
         public const long DormantResolve = 68640;
     }
 
