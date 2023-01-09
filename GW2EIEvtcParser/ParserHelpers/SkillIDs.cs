@@ -295,6 +295,10 @@ namespace GW2EIEvtcParser
         public const long IllusionOfLife = 10346;
         public const long IllusionaryLeap = 10353;
         public const long Mirror = 10357;
+        public const long HealthfulRejuvenation = 10492;
+        public const long DamageBonus5 = 10493;
+        public const long SpeedBonus15 = 10495;
+        public const long DamageReduction5 = 10496;
         public const long LifeLeech = 10560;
         public const long LifeSiphon = 10563;
         public const long LocustSwarm = 10567;

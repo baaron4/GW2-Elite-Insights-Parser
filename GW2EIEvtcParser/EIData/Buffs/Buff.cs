@@ -879,6 +879,11 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png"),
                 //
                 new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                //
+                new Buff("15% Speed Bonus", SpeedBonus15, Source.Item, BuffStackType.Queue, 9, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png"),
+                new Buff("5% Damage Reduction", DamageReduction5, Source.Item, BuffStackType.Queue, 9, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/8/8b/Damage_Reduction_%28five_percent%29.png"),
+                new Buff("Healthful Rejuvenation", HealthfulRejuvenation, Source.Item, BuffStackType.Queue, 9, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/1/1c/Healthful_Rejuvenation.png"),
+                new Buff("5% Damage Bonus", DamageBonus5, Source.Item, BuffStackType.Queue, 9, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png"),
         };
 
         internal static readonly List<Buff> Writs = new List<Buff>
