@@ -110,21 +110,21 @@ namespace GW2EIEvtcParser.ParsedData
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.TrashID id)
         {
-            return GetNPCsByID((int)id);
+            return GetGadgetsByID((int)id);
         }
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.TargetID id)
         {
-            return GetNPCsByID((int)id);
+            return GetGadgetsByID((int)id);
         }
         public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.MinionID id)
         {
-            return GetNPCsByID((int)id);
+            return GetGadgetsByID((int)id);
         }
 
         public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.ChestID id)
         {
-            return GetNPCsByID((int)id);
+            return GetGadgetsByID((int)id);
         }
 
         public AgentItem GetAgentByInstID(ushort instid, long time)
