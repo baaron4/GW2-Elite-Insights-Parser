@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AgentItem chest = agentData.GetGadgetsByID((int)chestID).FirstOrDefault();
+            AgentItem chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
             if (chest != null)
             {
                 fightData.SetSuccess(true, chest.FirstAware);
