@@ -256,6 +256,19 @@ namespace GW2EIEvtcParser.ParsedData
                         case ArcDPSEnums.TrashID.VoidAmalgamate:
                             Logic = new HarvestTemple(id);
                             break;
+                        case ArcDPSEnums.TrashID.AncientInvokedHydra:
+                            Logic = new Qadim((int)ArcDPSEnums.TargetID.Qadim);
+                            break;
+                        case ArcDPSEnums.TrashID.VoidMelter:
+                            if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
+                            {
+                                Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
+                            } 
+                            else
+                            {
+                                Logic = new HarvestTemple(id);
+                            }
+                            break;
                         default:
                             // Unknown
                             Logic = new UnknownFightLogic(id);
