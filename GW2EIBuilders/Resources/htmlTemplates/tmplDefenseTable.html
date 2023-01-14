@@ -40,6 +40,14 @@
                         <img src="https://wiki.guildwars2.com/images/b/b2/Dodge.png" alt="Dodge"
                             class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" data-original-title="Condition Cleanse" >
+                        <img src="https://wiki.guildwars2.com/images/1/12/Healing_Spring.png" alt="Condition Cleanse"
+                            class="icon icon-hover">
+                    </th>
+                    <th class="stat-cell" data-original-title="Boon Strips" >
+                        <img src="https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" alt="Boon Strips"
+                            class="icon icon-hover">
+                    </th>
                     <th class="stat-cell" data-original-title="Times downed">
                         <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs"
                              class="icon icon-hover">
@@ -69,8 +77,10 @@
                     <td>{{row.def[5]}}</td>
                     <td>{{row.def[6]}}</td>
                     <td>{{row.def[7]}}</td>
-                    <td :data-original-title="row.def[9]">{{row.def[8]}}</td>
-                    <td :data-original-title="row.def[11]">{{row.def[10]}}</td>
+                    <td :data-original-title="row.def[9] + ' seconds'">{{row.def[8]}}</td>
+                    <td :data-original-title="row.def[11] + ' seconds'">{{row.def[10]}}</td>
+                    <td :data-original-title="row.def[13]">{{row.def[12]}}</td>
+                    <td :data-original-title="row.def[15]">{{row.def[14]}}</td>
                 </tr>
             </tbody>
             <tfoot>
@@ -91,6 +101,8 @@
                     <td>{{sum.def[7]}}</td>
                     <td>{{sum.def[8]}}</td>
                     <td>{{sum.def[10]}}</td>
+                    <td>{{sum.def[12]}}</td>
+                    <td>{{sum.def[14]}}</td>
                 </tr>
             </tfoot>
         </table>
@@ -133,7 +145,7 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.phase.defStats.length; i++) {
@@ -147,7 +159,7 @@
                         def: def
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     }
                     for (var j = 0; j < total.length; j++) {
                         total[j] += def[j];

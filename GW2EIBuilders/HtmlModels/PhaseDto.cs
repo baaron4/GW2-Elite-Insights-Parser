@@ -358,6 +358,10 @@ namespace GW2EIBuilders.HtmlModels
                     defenses.EvadedCount,
                     defenses.BlockedCount,
                     defenses.DodgeCount,
+                    defenses.ConditionCleanses,
+                    defenses.ConditionCleansesTime,
+                    defenses.BoonStrips,
+                    defenses.BoonStripsTime,
                 };
 
             if (defenses.DownDuration > 0)
