@@ -22,13 +22,8 @@ namespace GW2EIEvtcParser.EIData
                         {
                             continue;
                         }
-                        // discard removals done on actor's minion
-                        if (brae.To.Master != null && brae.To.GetFinalMaster() == actor.AgentItem)
-                        {
-                            continue;
-                        }
                         count++;
-                        time = Math.Max(time + brae.RemovedDuration, log.FightData.FightEnd);
+                        time = Math.Max(time + brae.RemovedDuration, log.FightData.FightDuration);
                     }
                 }
                 if (count > 0)

@@ -36,6 +36,20 @@ namespace GW2EIEvtcParser.EIData
                     BoonStrips -= item.count;
                     BoonStripsTime -= item.time;
                 }
+                // Remove everything from other, security check, no in game mechanics do such thing today
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p == actor)
+                    {
+                        continue;
+                    }
+                    FinalSupport other = actor.GetSupportStats(p, log, start, end);
+                    if (other.Removals.TryGetValue(boon.ID, out item))
+                    {
+                        BoonStrips -= item.count;
+                        BoonStripsTime -= item.time;
+                    }
+                }
             }
             foreach (Buff condition in log.Buffs.BuffsByClassification[BuffClassification.Condition])
             {
