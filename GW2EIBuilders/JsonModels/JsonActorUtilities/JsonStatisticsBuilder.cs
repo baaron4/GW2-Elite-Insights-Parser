@@ -9,115 +9,119 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
     /// </summary>
     internal static class JsonStatisticsBuilder
     {
-        public static JsonDefensesAll BuildJsonDefensesAll(FinalDefensesAll defenses)
+        public static JsonDefensesAll BuildJsonDefensesAll(FinalDefensesAll defStats)
         {
             var jsonDefensesAll = new JsonDefensesAll();
-            jsonDefensesAll.DamageTaken = defenses.DamageTaken;
-            jsonDefensesAll.BreakbarDamageTaken = defenses.BreakbarDamageTaken;
-            jsonDefensesAll.BlockedCount = defenses.BlockedCount;
-            jsonDefensesAll.DodgeCount = defenses.DodgeCount;
-            jsonDefensesAll.MissedCount = defenses.MissedCount;
-            jsonDefensesAll.EvadedCount = defenses.EvadedCount;
-            jsonDefensesAll.InvulnedCount = defenses.InvulnedCount;
-            jsonDefensesAll.DamageBarrier = defenses.DamageBarrier;
-            jsonDefensesAll.InterruptedCount = defenses.InterruptedCount;
-            jsonDefensesAll.DownCount = defenses.DownCount;
-            jsonDefensesAll.DownDuration = defenses.DownDuration;
-            jsonDefensesAll.DeadCount = defenses.DeadCount;
-            jsonDefensesAll.DeadDuration = defenses.DeadDuration;
-            jsonDefensesAll.DcCount = defenses.DcCount;
-            jsonDefensesAll.DcDuration = defenses.DcDuration;
+            jsonDefensesAll.DamageTaken = defStats.DamageTaken;
+            jsonDefensesAll.BreakbarDamageTaken = defStats.BreakbarDamageTaken;
+            jsonDefensesAll.BlockedCount = defStats.BlockedCount;
+            jsonDefensesAll.DodgeCount = defStats.DodgeCount;
+            jsonDefensesAll.MissedCount = defStats.MissedCount;
+            jsonDefensesAll.EvadedCount = defStats.EvadedCount;
+            jsonDefensesAll.InvulnedCount = defStats.InvulnedCount;
+            jsonDefensesAll.DamageBarrier = defStats.DamageBarrier;
+            jsonDefensesAll.InterruptedCount = defStats.InterruptedCount;
+            jsonDefensesAll.DownCount = defStats.DownCount;
+            jsonDefensesAll.DownDuration = defStats.DownDuration;
+            jsonDefensesAll.DeadCount = defStats.DeadCount;
+            jsonDefensesAll.DeadDuration = defStats.DeadDuration;
+            jsonDefensesAll.DcCount = defStats.DcCount;
+            jsonDefensesAll.DcDuration = defStats.DcDuration;
+            jsonDefensesAll.BoonStrips = defStats.BoonStrips;
+            jsonDefensesAll.BoonStripsTime = defStats.BoonStripsTime;
+            jsonDefensesAll.ConditionCleanses = defStats.ConditionCleanses;
+            jsonDefensesAll.ConditionCleansesTime = defStats.ConditionCleansesTime;
             return jsonDefensesAll;
         }
 
 
-        public static JsonDPS BuildJsonDPS(FinalDPS stats)
+        public static JsonDPS BuildJsonDPS(FinalDPS dpsStats)
         {
             var jsonDPS = new JsonDPS
             {
-                Dps = stats.Dps,
-                Damage = stats.Damage,
-                CondiDps = stats.CondiDps,
-                CondiDamage = stats.CondiDamage,
-                PowerDps = stats.PowerDps,
-                PowerDamage = stats.PowerDamage,
-                BreakbarDamage = stats.BreakbarDamage,
+                Dps = dpsStats.Dps,
+                Damage = dpsStats.Damage,
+                CondiDps = dpsStats.CondiDps,
+                CondiDamage = dpsStats.CondiDamage,
+                PowerDps = dpsStats.PowerDps,
+                PowerDamage = dpsStats.PowerDamage,
+                BreakbarDamage = dpsStats.BreakbarDamage,
 
-                ActorDps = stats.ActorDps,
-                ActorDamage = stats.ActorDamage,
-                ActorCondiDps = stats.ActorCondiDps,
-                ActorCondiDamage = stats.ActorCondiDamage,
-                ActorPowerDps = stats.ActorPowerDps,
-                ActorPowerDamage = stats.ActorPowerDamage,
-                ActorBreakbarDamage = stats.ActorBreakbarDamage
+                ActorDps = dpsStats.ActorDps,
+                ActorDamage = dpsStats.ActorDamage,
+                ActorCondiDps = dpsStats.ActorCondiDps,
+                ActorCondiDamage = dpsStats.ActorCondiDamage,
+                ActorPowerDps = dpsStats.ActorPowerDps,
+                ActorPowerDamage = dpsStats.ActorPowerDamage,
+                ActorBreakbarDamage = dpsStats.ActorBreakbarDamage
             };
 
             return jsonDPS;
         }
 
-        private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalOffensiveStats stats)
+        private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalOffensiveStats offStats)
         {
-            jsonGameplayStats.TotalDamageCount = stats.TotalDamageCount;
-            jsonGameplayStats.DirectDamageCount = stats.DirectDamageCount;
-            jsonGameplayStats.ConnectedDirectDamageCount = stats.ConnectedDirectDamageCount;
-            jsonGameplayStats.ConnectedDamageCount = stats.ConnectedDamageCount;
-            jsonGameplayStats.CritableDirectDamageCount = stats.CritableDirectDamageCount;
-            jsonGameplayStats.CriticalRate = stats.CriticalCount;
-            jsonGameplayStats.CriticalDmg = stats.CriticalDmg;
-            jsonGameplayStats.FlankingRate = stats.FlankingCount;
-            jsonGameplayStats.GlanceRate = stats.GlanceCount;
-            jsonGameplayStats.AgainstMovingRate = stats.AgainstMovingCount;
-            jsonGameplayStats.Missed = stats.Missed;
-            jsonGameplayStats.Blocked = stats.Blocked;
-            jsonGameplayStats.Evaded = stats.Evaded;
-            jsonGameplayStats.Interrupts = stats.Interrupts;
-            jsonGameplayStats.Invulned = stats.Invulned;
-            jsonGameplayStats.Killed = stats.Killed;
-            jsonGameplayStats.Downed = stats.Downed;
+            jsonGameplayStats.TotalDamageCount = offStats.TotalDamageCount;
+            jsonGameplayStats.DirectDamageCount = offStats.DirectDamageCount;
+            jsonGameplayStats.ConnectedDirectDamageCount = offStats.ConnectedDirectDamageCount;
+            jsonGameplayStats.ConnectedDamageCount = offStats.ConnectedDamageCount;
+            jsonGameplayStats.CritableDirectDamageCount = offStats.CritableDirectDamageCount;
+            jsonGameplayStats.CriticalRate = offStats.CriticalCount;
+            jsonGameplayStats.CriticalDmg = offStats.CriticalDmg;
+            jsonGameplayStats.FlankingRate = offStats.FlankingCount;
+            jsonGameplayStats.GlanceRate = offStats.GlanceCount;
+            jsonGameplayStats.AgainstMovingRate = offStats.AgainstMovingCount;
+            jsonGameplayStats.Missed = offStats.Missed;
+            jsonGameplayStats.Blocked = offStats.Blocked;
+            jsonGameplayStats.Evaded = offStats.Evaded;
+            jsonGameplayStats.Interrupts = offStats.Interrupts;
+            jsonGameplayStats.Invulned = offStats.Invulned;
+            jsonGameplayStats.Killed = offStats.Killed;
+            jsonGameplayStats.Downed = offStats.Downed;
         }
 
-        public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats stats)
+        public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats offStats)
         {
             var jsonGameplayStats = new JsonGameplayStats();
-            FillJsonGamePlayStats(jsonGameplayStats, stats);
+            FillJsonGamePlayStats(jsonGameplayStats, offStats);
             return jsonGameplayStats;
         }
 
-        public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStats stats, FinalOffensiveStats offStats)
+        public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStats gameStats, FinalOffensiveStats offStats)
         {
             var jsonGameplayStatsAll = new JsonGameplayStatsAll
             {
-                Wasted = stats.Wasted,
-                TimeWasted = stats.TimeWasted,
-                Saved = stats.Saved,
-                TimeSaved = stats.TimeSaved,
-                StackDist = stats.StackDist,
-                DistToCom = stats.DistToCom,
-                AvgBoons = stats.AvgBoons,
-                AvgActiveBoons = stats.AvgActiveBoons,
-                AvgConditions = stats.AvgConditions,
-                AvgActiveConditions = stats.AvgActiveConditions,
-                SwapCount = stats.SwapCount,
-                SkillCastUptime = stats.SkillCastUptime,
-                SkillCastUptimeNoAA = stats.SkillCastUptimeNoAA,
+                Wasted = gameStats.Wasted,
+                TimeWasted = gameStats.TimeWasted,
+                Saved = gameStats.Saved,
+                TimeSaved = gameStats.TimeSaved,
+                StackDist = gameStats.StackDist,
+                DistToCom = gameStats.DistToCom,
+                AvgBoons = gameStats.AvgBoons,
+                AvgActiveBoons = gameStats.AvgActiveBoons,
+                AvgConditions = gameStats.AvgConditions,
+                AvgActiveConditions = gameStats.AvgActiveConditions,
+                SwapCount = gameStats.SwapCount,
+                SkillCastUptime = gameStats.SkillCastUptime,
+                SkillCastUptimeNoAA = gameStats.SkillCastUptimeNoAA,
             };
             FillJsonGamePlayStats(jsonGameplayStatsAll, offStats);
             return jsonGameplayStatsAll;
         }
 
 
-        public static JsonPlayerSupport BuildJsonPlayerSupport(FinalToPlayersSupport stats)
+        public static JsonPlayerSupport BuildJsonPlayerSupport(FinalToPlayersSupport playerToPlayerStats)
         {
             var jsonPlayerSupport = new JsonPlayerSupport
             {
-                Resurrects = stats.Resurrects,
-                ResurrectTime = stats.ResurrectTime,
-                CondiCleanse = stats.CondiCleanse,
-                CondiCleanseTime = stats.CondiCleanseTime,
-                CondiCleanseSelf = stats.CondiCleanseSelf,
-                CondiCleanseTimeSelf = stats.CondiCleanseTimeSelf,
-                BoonStrips = stats.BoonStrips,
-                BoonStripsTime = stats.BoonStripsTime
+                Resurrects = playerToPlayerStats.Resurrects,
+                ResurrectTime = playerToPlayerStats.ResurrectTime,
+                CondiCleanse = playerToPlayerStats.CondiCleanse,
+                CondiCleanseTime = playerToPlayerStats.CondiCleanseTime,
+                CondiCleanseSelf = playerToPlayerStats.CondiCleanseSelf,
+                CondiCleanseTimeSelf = playerToPlayerStats.CondiCleanseTimeSelf,
+                BoonStrips = playerToPlayerStats.BoonStrips,
+                BoonStripsTime = playerToPlayerStats.BoonStripsTime
             };
             return jsonPlayerSupport;
         }

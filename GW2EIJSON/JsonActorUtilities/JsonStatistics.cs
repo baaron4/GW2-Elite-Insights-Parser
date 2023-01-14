@@ -87,8 +87,24 @@ namespace GW2EIJSON
             /// Time passed in disconnected state
             /// </summary>
             public long DcDuration { get; set; }
+            /// <summary>
+            /// Number of time boons were stripped
+            /// </summary>
+            public int BoonStrips { get; set; }
+            /// <summary>
+            /// Total duration of boons stripped
+            /// </summary>
+            public double BoonStripsTime { get; set; }
+            /// <summary>
+            /// Number of time conditions were cleansed
+            /// </summary>
+            public int ConditionCleanses { get; set; }
+            /// <summary>
+            /// Total duration of conditions cleansed
+            /// </summary>
+            public double ConditionCleansesTime { get; set; }
 
-            
+
             public JsonDefensesAll()
             {
 
@@ -371,32 +387,32 @@ namespace GW2EIJSON
             public double ResurrectTime { get; set; }
             
             /// <summary>
-            /// Number of time a condition was removed, self excluded
+            /// Number of time a condition was cleansed on a squad mate
             /// </summary>
             public long CondiCleanse { get; set; }
-            
+
             /// <summary>
-            /// Total time of condition removed, self excluded
+            /// Total duration of condition cleansed on a squad mate
             /// </summary>
             public double CondiCleanseTime { get; set; }
             
             /// <summary>
-            /// Number of time a condition was removed from self
+            /// Number of time a condition was cleansed from self
             /// </summary>
             public long CondiCleanseSelf { get; set; }
-            
+
             /// <summary>
-            /// Total time of condition removed from self
+            /// Total duration of condition cleansed from self
             /// </summary>
             public double CondiCleanseTimeSelf { get; set; }
-            
+
             /// <summary>
-            /// Number of time a boon was removed
+            /// Number of time a boon was stripped
             /// </summary>
             public long BoonStrips { get; set; }
-            
+
             /// <summary>
-            /// Total time of boons removed from self
+            /// Total duration of boons stripped from self
             /// </summary>
             public double BoonStripsTime { get; set; }
 
