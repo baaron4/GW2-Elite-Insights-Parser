@@ -469,6 +469,7 @@ namespace GW2EIEvtcParser
             //BlightedPaleTree = 15597,
             //BlightedTrahearne = 15597,
             //BlightedEir = 15597,
+            Glenna = 15014,
             // VG
             Seekers = 15426,
             RedGuardian = 15433,
@@ -494,7 +495,7 @@ namespace GW2EIEvtcParser
             // Trio
             BanditSaboteur = 16117,
             Warg = 7481,
-            CagedWarg = 16129,
+            VeteranTorturedWarg = 16129,
             BanditAssassin = 16067,
             BanditSapperTrio = 16074,
             BanditDeathsayer = 16076,
@@ -514,6 +515,10 @@ namespace GW2EIEvtcParser
             Storm = 16108,
             Tornado = 16068,
             MatthiasSacrificeCrystal = MatthiasSacrifice,
+            // Escort
+            WargBloodhound = 16222,
+            RadiantMcLeod = 16234,
+            CrimsonMcLeod = 16241,
             // KC
             Olson = 16244,
             Engul = 16274,
@@ -833,7 +838,7 @@ namespace GW2EIEvtcParser
             Zane = 16137,
             Narella = 16125,
             Matthias = 16115,
-            Escort = 16253, // McLeod the Silent
+            McLeodTheSilent = 16253,
             KeepConstruct = 16235,
             Xera = 16246,
             Xera2 = 16286,

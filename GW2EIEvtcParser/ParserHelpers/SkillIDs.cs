@@ -381,8 +381,8 @@ namespace GW2EIEvtcParser
         public const long FleshOfTheMaster = 13810;
         public const long LesserSpinalShivers = 13906;
         public const long LesserEnfeeble = 13907;
-        public const long OpeningStrike = 13980;
-        public const long WindbornNotes = 13988;
+        public const long WindbornNotes = 13980;
+        public const long OpeningStrike = 13988;
         public const long NaturalHealing = 14024;
         public const long Spotter = 14055;
         public const long EmpowerAllies = 14222;
@@ -687,6 +687,7 @@ namespace GW2EIEvtcParser
         public const long GhastlyRampage = 31834;
         public const long PylonAttunementGreen = 31852;
         public const long GreenGuardianUnstableMagicSpike = 31860;
+        public const long ClarionBond = 31865;
         public const long EnterCelestialAvatar = 31869;
         public const long SpectralImpact = 31875;
         public const long ProtectiveShadow = 31877;
@@ -851,7 +852,10 @@ namespace GW2EIEvtcParser
         public const long XerasBoon = 35025;
         public const long TwistingChaos = 35032;
         public const long MagicBlastCharge = 35048;
+        public const long GlennaCap = 35057;
+        public const long EscortToxicSpores = 35059;
         public const long PhantasmalBlades1 = 35064;
+        public const long EscortHealingCleanse = 35073;
         public const long GainingPower = 35075;
         public const long HerosReturn = 35076;
         public const long HailOfFury = 35077;
@@ -866,6 +870,7 @@ namespace GW2EIEvtcParser
         public const long TemporalShredOrb = 35128;
         public const long PhantasmalBlades2 = 35137;
         public const long Incoming = 35140;
+        public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
         public const long SpinningCut = 35452;
