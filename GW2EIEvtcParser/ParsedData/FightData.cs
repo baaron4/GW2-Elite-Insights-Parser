@@ -76,9 +76,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.Matthias:
                     Logic = new Matthias(id);
                     break;
-                /*case ParseEnum.TargetIDS.Escort:
-                    Logic = new Escort(id, agentData);
-                    break;*/
+                case ArcDPSEnums.TargetID.McLeodTheSilent:
+                    Logic = new Escort(id);
+                    break;
                 case ArcDPSEnums.TargetID.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
