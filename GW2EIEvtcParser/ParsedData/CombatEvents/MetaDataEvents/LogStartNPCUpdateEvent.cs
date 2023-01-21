@@ -6,9 +6,18 @@
 
         public long Time { get; }
 
-        internal LogStartNPCUpdateEvent(CombatItem evtcItem) : base(evtcItem)
+        public AgentItem TriggerAgent { get; } = ParserHelper._unknownAgent;
+
+        public bool TriggerIsGadget { get; }
+
+        internal LogStartNPCUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             AgentID = (ushort)evtcItem.SrcAgent;
+            if (evtcItem.DstAgent > 0)
+            {
+                TriggerIsGadget = evtcItem.IsFlanking > 0;
+                TriggerAgent = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
+            }
             Time = evtcItem.Time;
         }
 

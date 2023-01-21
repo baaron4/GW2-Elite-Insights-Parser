@@ -124,8 +124,7 @@ namespace GW2EIEvtcParser
         {
             return SrcIsAgent()
                 || DstIsAgent()
-                || IsStateChange == ArcDPSEnums.StateChange.Reward
-                || IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate;
+                || IsStateChange == ArcDPSEnums.StateChange.Reward;
         }
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -201,7 +200,8 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
                 || IsStateChange == ArcDPSEnums.StateChange.Effect
-                ;
+                || IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate;
+            ;
         }
 
         internal bool DstIsAgent(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
