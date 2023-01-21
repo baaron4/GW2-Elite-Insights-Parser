@@ -217,6 +217,7 @@ namespace GW2EIEvtcParser
         public const long PlateOfFireFlankSteak = 9765;
         public const long PlateOfTruffleSteak = 9769;
         public const long PlateOfOrrianSteakFrittes = 9773;
+        public const long BowlOfFancyPotatoeAndLeekSoup = 9805;
         public const long BowlCurryButternutSquashSoup = 9829;
         public const long PowerfulPotionOfUndeadSlaying = 9837;
         public const long PowerfulPotionOfCentaurSlaying = 9845;

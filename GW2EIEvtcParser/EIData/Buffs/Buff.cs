@@ -781,6 +781,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Plate of Truffle Steak",PlateOfTruffleSteak, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
                 new Buff("Bowl of Sweet and Spicy Butternut Squash Soup",BowlOfSweetAndSpicyButternutSquashSoup, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
                 new Buff("Bowl Curry Butternut Squash Soup",BowlCurryButternutSquashSoup, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/1/16/Bowl_of_Curry_Butternut_Squash_Soup.png"),
+                new Buff("Bowl of Fancy Potatoe and Leek Soup",BowlOfFancyPotatoeAndLeekSoup, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/e/e3/Bowl_of_Fancy_Potato_and_Leek_Soup.png"),
                 new Buff("Red-Lentil Saobosa",RedLentilSaobosa, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
                 new Buff("Super Veggie Pizza",SuperVeggiePizza, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/6/66/Super_Veggie_Pizza.png"),
                 new Buff("Rare Veggie Pizza",RareVeggiePizza, Source.Item, BuffClassification.Consumable, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
