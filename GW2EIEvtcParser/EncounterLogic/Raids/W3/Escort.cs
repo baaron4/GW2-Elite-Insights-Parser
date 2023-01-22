@@ -31,14 +31,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000001;
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal()
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/RZbs21b.png",
-                            (1099, 1114),
-                            (-5467, 8069, -2282, 11297),
-                            (-12288, -27648, 12288, 27648),
-                            (1920, 12160, 2944, 14464));
-        }*/
+            return new CombatReplayMap("https://i.imgur.com/lvuFGSJ.png",
+                            (1080, 676),
+                            (-2467, 14981, 9282, 22383));
+        }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
