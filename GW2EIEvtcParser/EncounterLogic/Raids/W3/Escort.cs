@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Escort : StrongholdOfTheFaithful
     {
+        private static readonly Point3D SiegeChestPosition = new Point3D(-3815.47f, 16688.5f, -5322.35f);
         private bool _hasPreEvent = false;
         public Escort(int triggerID) : base(triggerID)
         {
@@ -22,10 +23,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
             );
+            ChestID = ArcDPSEnums.ChestID.SiegeChest;
             Extension = "escort";
             Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.ChestGadget;
             EncounterID |= 0x000001;
         }
 
@@ -129,10 +131,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("McLeod not found");
             }
+            bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
             // to keep the pre event as we need targets
             if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
             {
                 agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+                needsRefresh = false;
+            }
+            if (needsRefresh)
+            {
+                agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             int curCrimson = 1;
