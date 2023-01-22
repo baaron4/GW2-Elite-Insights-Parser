@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.ParsedData
         private EncounterMode _encounterStatus = EncounterMode.NotSet;
         public bool IsCM => _encounterStatus == EncounterMode.CMNoName || _encounterStatus == EncounterMode.CM;
         // Constructors
-        internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end)
+        internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
         {
             LogStart = start;
             LogEnd = end;
@@ -77,7 +77,15 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new Matthias(id);
                     break;
                 case ArcDPSEnums.TargetID.McLeodTheSilent:
-                    Logic = new Escort(id);
+                    // No proper escort support by arc dps before that build, redirect to unknown
+                    if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+                    {
+                        Logic = new Escort(id);
+                    }  
+                    else
+                    {
+                        Logic = new UnknownFightLogic(id);
+                    }
                     break;
                 case ArcDPSEnums.TargetID.KeepConstruct:
                     Logic = new KeepConstruct(id);

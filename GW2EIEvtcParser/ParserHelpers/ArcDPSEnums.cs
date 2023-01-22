@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser
             internal const int InternalSkillIDsChange = 20220304;
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
+            internal const int NewLogStart = 20221111;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -447,6 +448,7 @@ namespace GW2EIEvtcParser
         private const int DemonicBond = -31;
         private const int BloodstoneShardRift = -32;
         private const int BloodstoneShardButton = -33;
+        private const int SiegeChest = -34;
 
 
         //
@@ -936,6 +938,7 @@ namespace GW2EIEvtcParser
         public enum ChestID : int
         {
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
+            SiegeChest = ArcDPSEnums.SiegeChest,
             //
             None = int.MaxValue,
         };
