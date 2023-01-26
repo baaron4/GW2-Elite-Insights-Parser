@@ -77,7 +77,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem enervator = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator).MinBy(x => x.FirstAware);
+                IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator);
+                if (!enervators.Any())
+                {
+                    throw new MissingKeyActorsException("Enervators not found");
+                }
+                AgentItem enervator = enervators.MinBy(x => x.FirstAware);
                 if (enervator != null)
                 {
                     startToUse = enervator.FirstAware;
