@@ -182,6 +182,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
                 || IsStateChange == ArcDPSEnums.StateChange.Tag
                 || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.Last90BeforeDown
                 || IsStateChange == ArcDPSEnums.StateChange.Effect
                 ;
         }

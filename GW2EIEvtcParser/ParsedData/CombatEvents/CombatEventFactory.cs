@@ -204,6 +204,11 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.BuffInitial:
                     buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
                     break;
+                case ArcDPSEnums.StateChange.Last90BeforeDown:
+                    var last90Evt = new Last90BeforeDownEvent(stateChangeEvent, agentData);
+                    statusEvents.Last90BeforeDownEvents.Add(last90Evt);
+                    Add(statusEvents.Last90BeforeDownEventsBySrc, last90Evt.Src, last90Evt);
+                    break;
                 case ArcDPSEnums.StateChange.Effect:
                     var effectEvt = new EffectEvent(stateChangeEvent, agentData);
                     statusEvents.EffectEvents.Add(effectEvt);

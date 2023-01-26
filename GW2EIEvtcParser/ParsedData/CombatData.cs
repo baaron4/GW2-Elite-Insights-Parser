@@ -706,6 +706,20 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
+        public IReadOnlyList<Last90BeforeDownEvent> GetLast90BeforeDownEvents()
+        {
+            return _statusEvents.Last90BeforeDownEvents;
+        }
+
+        public IReadOnlyList<Last90BeforeDownEvent> GetLast90BeforeDownEvents(AgentItem src)
+        {
+            if (_statusEvents.Last90BeforeDownEventsBySrc.TryGetValue(src, out List<Last90BeforeDownEvent> res))
+            {
+                return res;
+            }
+            return new List<Last90BeforeDownEvent>();
+        }
+
         public IReadOnlyList<AbstractBuffEvent> GetBuffData(long buffID)
         {
             if (_buffData.TryGetValue(buffID, out List<AbstractBuffEvent> res))

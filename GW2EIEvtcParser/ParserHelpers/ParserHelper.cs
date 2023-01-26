@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser
 
         internal static bool IsSupportedStateChange(ArcDPSEnums.StateChange state)
         {
-            return state != ArcDPSEnums.StateChange.Unknown && state != ArcDPSEnums.StateChange.ReplInfo && state != ArcDPSEnums.StateChange.StatReset && state != ArcDPSEnums.StateChange.APIDelayed && state != ArcDPSEnums.StateChange.TickRate && state != ArcDPSEnums.StateChange.Last90BeforeDown;
+            return state != ArcDPSEnums.StateChange.Unknown && state != ArcDPSEnums.StateChange.ReplInfo && state != ArcDPSEnums.StateChange.StatReset && state != ArcDPSEnums.StateChange.APIDelayed && state != ArcDPSEnums.StateChange.TickRate;
         }
 
         /*

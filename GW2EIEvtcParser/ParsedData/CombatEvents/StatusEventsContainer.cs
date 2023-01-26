@@ -27,6 +27,8 @@ namespace GW2EIEvtcParser.ParsedData
         public Dictionary<long, List<EffectEvent>> EffectEventsByEffectID { get; } = new Dictionary<long, List<EffectEvent>>();
         public Dictionary<long, List<EffectEvent>> EffectEventsByTrackingID { get; } = new Dictionary<long, List<EffectEvent>>();
         public Dictionary<AgentItem, List<TagEvent>> TagEvents { get; } = new Dictionary<AgentItem, List<TagEvent>>();
+        public Dictionary<AgentItem, List<Last90BeforeDownEvent>> Last90BeforeDownEventsBySrc { get; } = new Dictionary<AgentItem, List<Last90BeforeDownEvent>>();
+        public List<Last90BeforeDownEvent> Last90BeforeDownEvents { get; } = new List<Last90BeforeDownEvent>();
 
     }
 }
