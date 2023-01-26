@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -22,6 +23,8 @@ namespace GW2EIEvtcParser.EIData
         public int Invulned { get; }
         public int Killed { get; }
         public int Downed { get; }
+
+        public int DownContribution { get; }
 
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
@@ -107,7 +110,14 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Downed++;
                 }
-
+                if (dl.HasHit)
+                {
+                    IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
+                    if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                    {
+                        DownContribution += dl.HealthDamage;
+                    }
+                }
             }
         }
     }

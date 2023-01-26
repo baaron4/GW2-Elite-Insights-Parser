@@ -314,6 +314,7 @@ namespace GW2EIBuilders.HtmlModels
                     stats.AgainstMovingCount, // 14
                     stats.ConnectedDamageCount, // 15
                     stats.TotalDamageCount, // 16
+                    stats.DownContribution, // 17
                 };
             return data;
         }

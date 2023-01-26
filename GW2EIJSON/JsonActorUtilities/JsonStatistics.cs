@@ -284,8 +284,12 @@ namespace GW2EIJSON
             /// Number of times downed target
             /// </summary>
             public int Downed { get; set; }
+            /// <summary>
+            /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death
+            /// </summary>
+            public int DownContribution { get; set; }
 
-            
+
             public JsonGameplayStats()
             {
 

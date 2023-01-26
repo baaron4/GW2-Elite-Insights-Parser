@@ -78,6 +78,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             jsonGameplayStats.Invulned = offStats.Invulned;
             jsonGameplayStats.Killed = offStats.Killed;
             jsonGameplayStats.Downed = offStats.Downed;
+            jsonGameplayStats.DownContribution = offStats.DownContribution;
         }
 
         public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats offStats)
