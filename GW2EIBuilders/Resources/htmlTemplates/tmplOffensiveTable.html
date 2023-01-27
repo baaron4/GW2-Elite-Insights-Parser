@@ -84,7 +84,10 @@
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)' +
+                                    '<br>Total Critical Damage: ' + row.data[3] +
+                                    '<br>' + round2(100*row.data[3]/ row.data[18]) +'% of total damage' +
+                                    '<br>' + round2(100*row.data[3]/ row.data[19]) +'% of total direct damage'">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
@@ -129,7 +132,10 @@
                     <td class="text-left">{{row.name}}</td>
                     <td></td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)' +
+                                    '<br>Total Critical Damage: ' + row.data[3] +
+                                    '<br>' + round2(100*row.data[3]/ row.data[18]) +'% of total damage' +
+                                    '<br>' + round2(100*row.data[3]/ row.data[19]) +'% of total direct damage'">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
