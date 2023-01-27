@@ -62,9 +62,13 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
         private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalOffensiveStats offStats)
         {
             jsonGameplayStats.TotalDamageCount = offStats.TotalDamageCount;
+            jsonGameplayStats.TotalDmg = offStats.TotalDmg;
             jsonGameplayStats.DirectDamageCount = offStats.DirectDamageCount;
+            jsonGameplayStats.DirectDmg = offStats.DirectDmg;
             jsonGameplayStats.ConnectedDirectDamageCount = offStats.ConnectedDirectDamageCount;
+            jsonGameplayStats.ConnectedDirectDmg = offStats.ConnectedDirectDmg;
             jsonGameplayStats.ConnectedDamageCount = offStats.ConnectedDamageCount;
+            jsonGameplayStats.ConnectedDmg = offStats.ConnectedDmg;
             jsonGameplayStats.CritableDirectDamageCount = offStats.CritableDirectDamageCount;
             jsonGameplayStats.CriticalRate = offStats.CriticalCount;
             jsonGameplayStats.CriticalDmg = offStats.CriticalDmg;

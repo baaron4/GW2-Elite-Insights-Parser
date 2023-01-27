@@ -7,9 +7,13 @@ namespace GW2EIEvtcParser.EIData
     public class FinalOffensiveStats
     {
         public int TotalDamageCount { get; }
+        public int TotalDmg { get; }
         public int DirectDamageCount { get; }
+        public int DirectDmg { get; }
         public int ConnectedDamageCount { get; }
+        public int ConnectedDmg { get; }
         public int ConnectedDirectDamageCount { get; }
+        public int ConnectedDirectDmg { get; }
         public int CritableDirectDamageCount { get; }
         public int CriticalCount { get; }
         public int CriticalDmg { get; }
@@ -57,6 +61,7 @@ namespace GW2EIEvtcParser.EIData
                                 GlanceCount++;
                             }
                             ConnectedDirectDamageCount++;
+                            ConnectedDirectDmg += dl.HealthDamage;
                         }
 
                         if (dl.IsBlind)
@@ -74,6 +79,7 @@ namespace GW2EIEvtcParser.EIData
                         if (!dl.DoubleProcHit)
                         {
                             DirectDamageCount++;
+                            DirectDmg += dl.HealthDamage;
                         }
                     }
                     if (dl.IsAbsorbed)
@@ -83,11 +89,18 @@ namespace GW2EIEvtcParser.EIData
                     if (!dl.DoubleProcHit)
                     {
                         TotalDamageCount++;
+                        TotalDmg += dl.HealthDamage;
                     }
 
                     if (dl.HasHit)
                     {
                         ConnectedDamageCount++;
+                        ConnectedDmg += dl.HealthDamage;
+                        IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
+                        if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                        {
+                            DownContribution += dl.HealthDamage;
+                        }
                         if (dl.AgainstMoving)
                         {
                             AgainstMovingCount++;
@@ -109,14 +122,6 @@ namespace GW2EIEvtcParser.EIData
                 if (dl.HasDowned)
                 {
                     Downed++;
-                }
-                if (dl.HasHit)
-                {
-                    IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
-                    if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
-                    {
-                        DownContribution += dl.HealthDamage;
-                    }
                 }
             }
         }

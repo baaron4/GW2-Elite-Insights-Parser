@@ -315,6 +315,9 @@ namespace GW2EIBuilders.HtmlModels
                     stats.ConnectedDamageCount, // 15
                     stats.TotalDamageCount, // 16
                     stats.DownContribution, // 17
+                    stats.ConnectedDmg, // 18
+                    stats.ConnectedDirectDmg, // 19
+                    stats.TotalDmg, // 20
                 };
             return data;
         }

@@ -84,7 +84,7 @@
                     <td class="text-left">{{row.player.name}}</td>
                     <td>{{row.player.acc}}</td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Critical Damage: ' + row.data[3]">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
@@ -111,7 +111,7 @@
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
-                    <td v-if="wvw">
+                    <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[18]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
                     <td v-if="wvw">
@@ -129,7 +129,7 @@
                     <td class="text-left">{{row.name}}</td>
                     <td></td>
                     <td
-                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Damage Critical Damage: ' + row.data[3]">
+                        :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)<br>Total Critical Damage: ' + row.data[3]">
                         {{round2(100*row.data[2] / row.data[1])}}%
                     </td>
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
@@ -156,7 +156,7 @@
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
-                    <td v-if="wvw">
+                    <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[18]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
                     <td v-if="wvw">
