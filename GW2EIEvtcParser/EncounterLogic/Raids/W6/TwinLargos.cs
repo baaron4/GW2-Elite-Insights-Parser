@@ -206,13 +206,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Nikare));
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
             phases[0].AddTarget(nikare);
-            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Kenut));
             if (kenut != null)
             {
                 phases[0].AddTarget(kenut);
@@ -356,8 +356,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Nikare);
-            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Kenut);
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Nikare));
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Kenut));
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");

@@ -23,8 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerCastStartMechanic(47074, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0, (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
             new HitOnPlayerMechanic(47518, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
             new HitOnPlayerMechanic(48150, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
-            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfFate),
-            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.ID == (int) ArcDPSEnums.TargetID.EyeOfJudgement),
+            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfFate)),
+            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfJudgement)),
             //47857 <- teleport + fear skill? 
             }
             );
@@ -135,8 +135,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-            AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+            AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.EyeOfFate));
+            AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.EyeOfJudgement));
             if (eyeJudgement == null || eyeFate == null)
             {
                 throw new MissingKeyActorsException("Eyes not found");
@@ -153,8 +153,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfFate);
-                AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                AbstractSingleActor eyeFate = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.EyeOfFate));
+                AbstractSingleActor eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.EyeOfJudgement));
                 if (eyeJudgement == null || eyeFate == null)
                 {
                     throw new MissingKeyActorsException("Eyes not found");

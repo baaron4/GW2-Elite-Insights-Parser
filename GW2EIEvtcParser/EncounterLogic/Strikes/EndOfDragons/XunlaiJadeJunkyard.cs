@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
+            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Ankka));
             if (ankka == null)
             {
                 throw new MissingKeyActorsException("Ankka not found");
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
+                AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Ankka));
                 if (ankka == null)
                 {
                     throw new MissingKeyActorsException("Ankka not found");
@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Ankka);
+            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Ankka));
             if (ankka == null)
             {
                 throw new MissingKeyActorsException("Ankka not found");

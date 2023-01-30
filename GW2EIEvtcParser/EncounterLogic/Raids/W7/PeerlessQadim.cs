@@ -48,8 +48,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.Pylon1,
-                ArcDPSEnums.TrashID.Pylon2,
+                ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon,
+                ArcDPSEnums.TrashID.HostilePeerlessQadimPylon,
                 ArcDPSEnums.TrashID.EntropicDistortion,
                 ArcDPSEnums.TrashID.BigKillerTornado,
                 ArcDPSEnums.TrashID.EnergyOrb,
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
@@ -282,7 +282,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new PositionConnector(position)));
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
 
-                        foreach (NPC pylon in TrashMobs.Where(x => x.ID == 21962))
+                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
                         {
                             replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new AgentConnector(pylon)));
                             replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new AgentConnector(pylon)));
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                         }
@@ -321,9 +321,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (int)ArcDPSEnums.TrashID.Pylon1:
+                case (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
                     break;
-                case (int)ArcDPSEnums.TrashID.Pylon2:
+                case (int)ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
@@ -420,7 +420,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                 }
@@ -458,7 +458,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.PeerlessQadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");

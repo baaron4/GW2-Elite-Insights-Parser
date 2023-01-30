@@ -632,8 +632,8 @@ namespace GW2EIEvtcParser
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
             // Peerless Qadim
-            Pylon1 = 21996,
-            Pylon2 = 21962,
+            FriendlyPeerlessQadimPylon = 21996,
+            HostilePeerlessQadimPylon = 21962,
             EntropicDistortion = 21973,
             EnergyOrb = 21946,
             // Fraenir

@@ -150,19 +150,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
-                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianProtect)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianProtect))
                 {
                     target.OverrideName("Protect " + target.Character);
                 }
-                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianRetal)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianRetal))
                 {
                     target.OverrideName("Retal " + target.Character);
                 }
-                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianResolution)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianResolution))
                 {
                     target.OverrideName("Resolution " + target.Character);
                 }
-                if (target.ID == (int)ArcDPSEnums.TrashID.PyreGuardianStab)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianStab))
                 {
                     target.OverrideName("Stab " + target.Character);
                 }
@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Qadim));
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -542,7 +542,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Qadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -553,7 +553,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddPlatformsToCombatReplay(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.ID == (int)ArcDPSEnums.TargetID.Qadim);
+            Debug.Assert(target.IsSpecy(ArcDPSEnums.TargetID.Qadim));
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library

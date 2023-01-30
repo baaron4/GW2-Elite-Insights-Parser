@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Slothasor);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Slothasor));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Slothasor not found");
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
                 foreach (AgentItem mushroom in mushroomAgents)
                 {
-                    if (mushroom.ID != idToKeep)
+                    if (!mushroom.IsSpecy(idToKeep))
                     {
                         continue;
                     }

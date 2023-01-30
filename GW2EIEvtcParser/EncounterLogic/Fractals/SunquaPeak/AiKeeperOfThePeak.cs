@@ -223,8 +223,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names
-            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
             if (_hasElementalMode && _hasDarkMode)
@@ -240,7 +240,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int sorrowCount = 0;
                 foreach (AbstractSingleActor target in Targets)
                 {
-                    if (target.ID == (int)ArcDPSEnums.TrashID.SorrowDemon5)
+                    if (target.IsSpecy(ArcDPSEnums.TrashID.SorrowDemon5))
                     {
                         target.OverrideName(target.Character + " " + (++sorrowCount));
                     }
@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak);
+            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[0].AddTarget(elementalAi);
             }
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             if (darkAi == null)
             {
                 if (_hasDarkMode)
@@ -395,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.ID == (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2)).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);

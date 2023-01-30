@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Samarog));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Samarog not found");
@@ -121,11 +121,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curRigom = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.ID == (int)ArcDPSEnums.TrashID.Guldhem)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.Guldhem))
                 {
                     target.OverrideName(target.Character + " " + curGuldhem++);
                 }
-                if (target.ID == (int)ArcDPSEnums.TrashID.Rigom)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.Rigom))
                 {
                     target.OverrideName(target.Character + " " + curRigom++);
                 }
@@ -226,7 +226,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     fixationGuldhemStart = (int)c.Time;
                     long logTime = c.Time;
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Guldhem && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    guldhem = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.Guldhem) && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -247,7 +247,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     fixationRigomStart = (int)c.Time;
                     long logTime = c.Time;
-                    rigom = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Rigom && logTime >= x.FirstAware && logTime <= x.LastAware);
+                    rigom = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.Rigom) && logTime >= x.FirstAware && logTime <= x.LastAware);
                 }
                 else
                 {
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Samarog);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Samarog));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Samarog not found");

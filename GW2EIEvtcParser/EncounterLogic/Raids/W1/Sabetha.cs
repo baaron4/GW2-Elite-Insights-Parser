@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Sabetha);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Sabetha));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Sabetha not found");
@@ -122,13 +122,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     switch(phaseID)
                     {
                         case 2:
-                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Kernan));
+                            phase.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.Kernan)));
                             break;
                         case 3:
-                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Knuckles));
+                            phase.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.Knuckles)));
                             break;
                         case 4:
-                            phase.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.Karde));
+                            phase.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.Karde)));
                             break;
                         default:
                             break;

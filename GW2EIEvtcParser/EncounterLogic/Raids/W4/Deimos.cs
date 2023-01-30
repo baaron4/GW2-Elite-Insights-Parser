@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Deimos));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _deimos10PercentTime > 0)
             {
-                AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+                AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Deimos));
                 if (deimos == null)
                 {
                     throw new MissingKeyActorsException("Deimos not found");
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ComputeFightTargets(agentData, combatData, extensions);
             // Find target
-            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Deimos));
             if (deimos == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -376,10 +376,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             deimos.OverrideName("Deimos");
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.Thief) || target.IsSpecy(ArcDPSEnums.TrashID.Drunkard) || target.IsSpecy(ArcDPSEnums.TrashID.Gambler))
                 {
 
-                    string name = (target.ID == (int)ArcDPSEnums.TrashID.Thief ? "Thief" : (target.ID == (int)ArcDPSEnums.TrashID.Drunkard ? "Drunkard" : (target.ID == (int)ArcDPSEnums.TrashID.Gambler ? "Gambler" : "")));
+                    string name = (target.IsSpecy(ArcDPSEnums.TrashID.Thief) ? "Thief" : (target.IsSpecy(ArcDPSEnums.TrashID.Drunkard) ? "Drunkard" : (target.IsSpecy(ArcDPSEnums.TrashID.Gambler) ? "Gambler" : "")));
                     target.OverrideName(name);
                 }
             }
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Deimos));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");
@@ -400,8 +400,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_deimos100PercentTime > 0)
                 {
                     var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
-                    phasePreEvent.AddTargets(Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.DemonicBond));
-                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
+                    phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.DemonicBond)));
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.DummyTarget)));
                     phases.Add(phasePreEvent);
                     var phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
                     phase100to0.AddTarget(mainTarget);
@@ -442,7 +442,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.ID == (int)ArcDPSEnums.TrashID.Thief || target.ID == (int)ArcDPSEnums.TrashID.Drunkard || target.ID == (int)ArcDPSEnums.TrashID.Gambler)
+                if (target.IsSpecy(ArcDPSEnums.TrashID.Thief) || target.IsSpecy(ArcDPSEnums.TrashID.Drunkard) || target.IsSpecy(ArcDPSEnums.TrashID.Gambler))
                 {
                     var addPhase = new PhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.FightData.FightEnd), target.Character);
                     addPhase.AddTarget(target);
@@ -584,7 +584,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
-                    AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TrashID.Saul);
+                    AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.Saul));
                     if (Saul != null)
                     {
                         replay.Trim(replay.TimeOffsets.start, Saul.FirstAware - 1);
@@ -661,7 +661,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.Deimos);
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Deimos));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Deimos not found");

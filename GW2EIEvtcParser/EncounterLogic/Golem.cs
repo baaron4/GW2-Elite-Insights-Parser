@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Golem not found");
@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == GenericTriggerID);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Golem not found");

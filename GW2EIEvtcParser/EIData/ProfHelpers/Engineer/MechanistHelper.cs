@@ -22,11 +22,11 @@ namespace GW2EIEvtcParser.EIData
             // Need to check mech specy id for those
             new BuffDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, "https://wiki.guildwars2.com/images/b/b3/Force_Signet.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4).UsingChecker((x,log) =>
             {
-                return x.From == x.CreditedFrom || x.From.ID == (int)MinionID.JadeMech;
+                return x.From == x.CreditedFrom || x.From.IsSpecy(MinionID.JadeMech);
             }),
             new BuffDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, "https://wiki.guildwars2.com/images/5/51/Superconducting_Signet.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4).UsingChecker((x,log) =>
             {
-                return x.From == x.CreditedFrom || x.From.ID == (int)MinionID.JadeMech;
+                return x.From == x.CreditedFrom || x.From.IsSpecy(MinionID.JadeMech);
             }),
         };
 

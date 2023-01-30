@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(subPhase);
             }
             int purificationID = 0;
-            foreach (NPC voidAmal in Targets.Where(x => x.ID == (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate || x.ID == (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate))
+            foreach (NPC voidAmal in Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecy(ArcDPSEnums.TrashID.KillableVoidAmalgamate)))
             {
                 long end;
                 DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
@@ -221,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // no bouny chest detection, the reward is delayed
-            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon);
+            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
             if (soowon != null)
             {
                 AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();

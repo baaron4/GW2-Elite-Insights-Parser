@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int voiceAndClawCount = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw)
+                if (target.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw))
                 {
                     target.OverrideName(target.Character + " " + voiceAndClawCount++);
                 }
@@ -60,8 +60,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor voice = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.ClawOfTheFallen);
-            AbstractSingleActor claw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceOfTheFallen);
+            AbstractSingleActor voice = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ClawOfTheFallen));
+            AbstractSingleActor claw = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceOfTheFallen));
             if (voice == null || claw == null)
             {
                 throw new MissingKeyActorsException("Claw or Voice not found");
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(unmergedPhases);
             //
             int voiceAndClawCount = 0;
-            foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw))
+            foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw)))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 long phaseStart = 0;
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent teleport in teleports)
             {
                 long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
-                AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.VoiceAndClaw && x.FirstAware >= preTPPhaseStart);
+                AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
                 if (voiceAndClaw != null)
                 {
                     long oldEnd = preTPPhaseEnd;

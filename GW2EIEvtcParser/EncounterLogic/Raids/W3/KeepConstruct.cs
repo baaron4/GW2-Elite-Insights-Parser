@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long end = 0;
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KeepConstruct);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.KeepConstruct));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Keep Construct not found");

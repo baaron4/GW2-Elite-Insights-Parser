@@ -949,7 +949,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/C1mvNGZ.png";
                 case ArcDPSEnums.TrashID.ParalyzingWisp:
                     return "https://i.imgur.com/YBl8Pqo.png";
-                case ArcDPSEnums.TrashID.Pylon2:
+                case ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
                     return "https://i.imgur.com/b33vAEQ.png";
                 case ArcDPSEnums.TrashID.EntropicDistortion:
                     return "https://i.imgur.com/MIpP5pK.png";
@@ -978,7 +978,7 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.VigilTactician:
                 case ArcDPSEnums.TrashID.Prisoner1:
                 case ArcDPSEnums.TrashID.Prisoner2:
-                case ArcDPSEnums.TrashID.Pylon1:
+                case ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
                     return "https://i.imgur.com/0koP4xB.png";
                 case ArcDPSEnums.TrashID.FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
