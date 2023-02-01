@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.ParsedData
                             } 
                             else
                             {
-                                Logic = new HarvestTemple(id);
+                                Logic = new UnknownFightLogic(id);
                             }
                             break;
                         default:
