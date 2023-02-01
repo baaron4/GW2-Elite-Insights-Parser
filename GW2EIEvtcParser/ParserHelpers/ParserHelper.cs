@@ -983,6 +983,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.Prisoner2:
                 case ArcDPSEnums.TrashID.Pylon1:
                     return "https://i.imgur.com/0koP4xB.png";
+                case ArcDPSEnums.TrashID.Mine:
+                    return "https://i.imgur.com/A9AxMHG.png";
                 case ArcDPSEnums.TrashID.FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
                 case ArcDPSEnums.TrashID.Hands:

@@ -130,6 +130,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("McLeod not found");
             }
             bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            //
+            var mineAgents = combatData.Where(x => x.DstAgent == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+            foreach (AgentItem mine in mineAgents)
+            {
+                mine.OverrideID(ArcDPSEnums.TrashID.Mine);
+                mine.OverrideType(AgentItem.AgentType.NPC);
+            }
             // to keep the pre event as we need targets
             if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
             {
@@ -201,6 +208,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.WargBloodhound,
                 (int)ArcDPSEnums.TrashID.RadiantMcLeod,
                 (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
+            };
+        }
+
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>() { 
+                ArcDPSEnums.TrashID.MushroomCharger,
+                ArcDPSEnums.TrashID.MushroomKing,
+                ArcDPSEnums.TrashID.MushroomSpikeThrower,
+                ArcDPSEnums.TrashID.WhiteMantleBattleMage,
+                ArcDPSEnums.TrashID.WhiteMantleBattleCultist,
+                ArcDPSEnums.TrashID.WhiteMantleBattleKnight1,
+                ArcDPSEnums.TrashID.WhiteMantleBattleKnight2,
+                ArcDPSEnums.TrashID.WhiteMantleBattleCleric1,
+                ArcDPSEnums.TrashID.WhiteMantleBattleCleric2,
+                ArcDPSEnums.TrashID.WhiteMantleBattleSeeker1,
+                ArcDPSEnums.TrashID.WhiteMantleBattleSeeker2,
+                ArcDPSEnums.TrashID.Mine,
             };
         }
 

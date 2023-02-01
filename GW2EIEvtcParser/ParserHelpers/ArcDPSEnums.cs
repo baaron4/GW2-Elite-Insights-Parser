@@ -449,6 +449,7 @@ namespace GW2EIEvtcParser
         private const int BloodstoneShardRift = -32;
         private const int BloodstoneShardButton = -33;
         private const int SiegeChest = -34;
+        private const int Mine = -35;
 
 
         //
@@ -518,9 +519,21 @@ namespace GW2EIEvtcParser
             Tornado = 16068,
             MatthiasSacrificeCrystal = MatthiasSacrifice,
             // Escort
+            MushroomSpikeThrower = 16219,
+            MushroomKing = 16255,
+            MushroomCharger = 16224,
+            WhiteMantleBattleMage = 16229,
+            WhiteMantleBattleCultist = 16265,
+            WhiteMantleBattleKnight1 = 16242,
+            WhiteMantleBattleKnight2 = 16220,
+            WhiteMantleBattleCleric1 = 16272,
+            WhiteMantleBattleCleric2 = 16266,
+            WhiteMantleBattleSeeker1 = 16288,
+            WhiteMantleBattleSeeker2 = 16256,
             WargBloodhound = 16222,
             RadiantMcLeod = 16234,
             CrimsonMcLeod = 16241,
+            Mine = ArcDPSEnums.Mine,
             // KC
             Olson = 16244,
             Engul = 16274,
