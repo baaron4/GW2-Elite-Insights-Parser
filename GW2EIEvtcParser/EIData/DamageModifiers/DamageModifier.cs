@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidDataException("No known damage modifier that modifies every outgoing damage");
             } 
-            Tooltip += "<br>Applied on" + _srcType.DamageTypeToString();
+            Tooltip += "<br>Applied on " + _srcType.DamageTypeToString();
             Tooltip += "<br>Compared against " + _compareType.DamageTypeToString();
             if (!Multiplier)
             {
