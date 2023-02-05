@@ -177,10 +177,17 @@ namespace GW2EIEvtcParser.EIData
                         }
 
                     }
-                    x /= activePlayers;
-                    y /= activePlayers;
-                    z /= activePlayers;
-                    _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
+                    if (activePlayers == 0)
+                    {
+                        _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
+                    } 
+                    else
+                    {
+                        x /= activePlayers;
+                        y /= activePlayers;
+                        z /= activePlayers;
+                        _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
+                    }
                 }
             }
         }

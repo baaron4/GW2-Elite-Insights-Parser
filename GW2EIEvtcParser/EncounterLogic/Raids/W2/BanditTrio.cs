@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.BanditSaboteur,
                 ArcDPSEnums.TrashID.Warg,
-                ArcDPSEnums.TrashID.CagedWarg,
+                ArcDPSEnums.TrashID.VeteranTorturedWarg,
                 ArcDPSEnums.TrashID.BanditAssassin,
                 ArcDPSEnums.TrashID.BanditSapperTrio ,
                 ArcDPSEnums.TrashID.BanditDeathsayer,

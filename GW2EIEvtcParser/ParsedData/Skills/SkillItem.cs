@@ -115,7 +115,9 @@ namespace GW2EIEvtcParser.ParsedData
             {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
-            {RushingJusticeAnimation, "Rushing Justice - Animation" }
+            {RushingJusticeAnimation, "Rushing Justice - Animation" },
+
+            {GlennaCap, "Capture" }
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()

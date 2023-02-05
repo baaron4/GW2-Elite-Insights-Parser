@@ -481,6 +481,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Downpour (Matthias)",DownpourMatthias, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4a/Downpour.png"),
                 new Buff("Unstable",Unstable, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/45/Unstable.png"),      
                 //////////////////////////////////////////////
+                // Escort
+                new Buff("Toxic Spores (Escort)",EscortToxicSpores, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/3/34/Toxic_Spores.png"),
+                new Buff("Healing Cleanse (Escort)",EscortHealingCleanse, Source.FightSpecific, BuffClassification.Support, "https://wiki.guildwars2.com/images/8/82/Elasticity.png"),
+                new Buff("Surveilled (Escort)",EscortSurveilled, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/e/e6/Fear.png"),
                 // KC
                 new Buff("Compromised",Compromised, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/48/Compromised.png"),
                 new Buff("Xera's Boon",XerasBoon, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),

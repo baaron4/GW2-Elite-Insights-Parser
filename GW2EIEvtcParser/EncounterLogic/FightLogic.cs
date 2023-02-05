@@ -16,7 +16,14 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
 
         public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
-        protected enum FallBackMethod { None, Death, DeathOrCombatExit, ChestGadget, DeathOrChestGadget, CombatExitOrChestGadget, DeathOrCombatExitOrChestGadget }
+
+        [Flags]
+        protected enum FallBackMethod { 
+            None = 0,
+            Death = 1 << 1,
+            CombatExit = 1 << 2,
+            ChestGadget = 1 << 3
+        }
 
 
         private CombatReplayMap _map;
@@ -345,48 +352,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            switch (GenericFallBackMethod)
+            if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.ChestGadget) > 0)
             {
-                case FallBackMethod.Death:
-                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
-                    break;
-                case FallBackMethod.DeathOrCombatExit:
-                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
-                    if (!fightData.Success)
-                    {
-                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
-                    }
-                    break;
-                case FallBackMethod.ChestGadget:
-                    SetSuccessByChestGadget(ChestID, agentData, fightData);
-                    break;
-                case FallBackMethod.DeathOrChestGadget:
-                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
-                    if (!fightData.Success)
-                    {
-                        SetSuccessByChestGadget(ChestID, agentData, fightData);
-                    }
-                    break;
-                case FallBackMethod.CombatExitOrChestGadget:
-                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
-                    if (!fightData.Success)
-                    {
-                        SetSuccessByChestGadget(ChestID, agentData, fightData);
-                    }
-                    break;
-                case FallBackMethod.DeathOrCombatExitOrChestGadget:
-                    SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
-                    if (!fightData.Success)
-                    {
-                        SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
-                        if (!fightData.Success)
-                        {
-                            SetSuccessByChestGadget(ChestID, agentData, fightData);
-                        }
-                    }
-                    break;
-                default:
-                    break;
+                SetSuccessByChestGadget(ChestID, agentData, fightData);
+            }
+            if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.Death) > 0)
+            {
+                SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+            }
+            if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
+            {
+                SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
             }
         }
 

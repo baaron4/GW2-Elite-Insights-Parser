@@ -620,6 +620,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/tkPWMST.png";
                 case ArcDPSEnums.TargetID.Matthias:
                     return "https://i.imgur.com/3uMMmTS.png";
+                case ArcDPSEnums.TargetID.McLeodTheSilent:
+                    return "https://i.imgur.com/jGEmZn5.png";
                 case ArcDPSEnums.TargetID.KeepConstruct:
                     return "https://i.imgur.com/Kq0kL07.png";
                 case ArcDPSEnums.TargetID.Xera:
@@ -967,7 +969,8 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/73Uj4lG.png";
                 case ArcDPSEnums.TrashID.UnderworldReaper:
                     return "https://i.imgur.com/Tq6SYVe.png";
-                case ArcDPSEnums.TrashID.CagedWarg:
+                case ArcDPSEnums.TrashID.VeteranTorturedWarg:
+                    return "https://i.imgur.com/NklqOp3.png";
                 case ArcDPSEnums.TrashID.GreenSpirit1:
                 case ArcDPSEnums.TrashID.GreenSpirit2:
                 case ArcDPSEnums.TrashID.BanditSapper:
@@ -980,6 +983,8 @@ namespace GW2EIEvtcParser
                 case ArcDPSEnums.TrashID.Prisoner2:
                 case ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
                     return "https://i.imgur.com/0koP4xB.png";
+                case ArcDPSEnums.TrashID.Mine:
+                    return "https://i.imgur.com/A9AxMHG.png";
                 case ArcDPSEnums.TrashID.FleshWurm:
                     return "https://i.imgur.com/o3vX9Zc.png";
                 case ArcDPSEnums.TrashID.Hands:
@@ -1002,8 +1007,16 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/OP8aYhI.png";
                 case ArcDPSEnums.TrashID.RiverOfSouls:
                     return "https://i.imgur.com/4pXEnaX.png";
+                case ArcDPSEnums.TrashID.WargBloodhound:
+                    return "https://i.imgur.com/AATY8BJ.png";
+                case ArcDPSEnums.TrashID.CrimsonMcLeod:
+                    return "https://i.imgur.com/dLNMI85.png";
+                case ArcDPSEnums.TrashID.RadiantMcLeod:
+                    return "https://i.imgur.com/ZlPTU4a.png";
                 case ArcDPSEnums.TrashID.DhuumDesmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                case ArcDPSEnums.TrashID.Glenna:
+                    return "https://i.imgur.com/qOPm38P.png";
                 case ArcDPSEnums.TrashID.VoidStormseer:
                 case ArcDPSEnums.TrashID.VoidStormseer2:
                 case ArcDPSEnums.TrashID.VoidStormseer3:

@@ -856,7 +856,7 @@ namespace GW2EIEvtcParser
                 throw new EvtcAgentException("No players found");
             }
 
-            _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime);
+            _fightData = new FightData(_id, _agentData, _parserSettings, _logStartTime, _logEndTime, _evtcVersion);
 
             operation.UpdateProgressWithCancellationCheck("Linking minions to their masters");
             foreach (CombatItem c in _combatItems)

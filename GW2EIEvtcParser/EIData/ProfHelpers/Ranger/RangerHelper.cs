@@ -132,6 +132,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Sharpening Stones",SharpeningStonesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Sharpening_Stone.png"),
                 new Buff("Sharpen Spines",SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/95/Sharpen_Spines.png"),
                 new Buff("Guard!",GuardEffect, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7f/%22Guard%21%22.png"),
+                new Buff("Clarion Bond",ClarionBond, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d7/Clarion_Bond.png"),
                 //traits
                 new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/b0/Spotter.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
                 new Buff("Opening Strike",OpeningStrike, Source.Ranger, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png"),
