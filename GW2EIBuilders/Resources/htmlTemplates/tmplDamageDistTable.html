@@ -136,7 +136,7 @@
                         {{(!getSkill(row[0], row[1]).condi && row[6] && row[15]) ? round2(row[2]/(0.001 * row[15])) : ''}}
                     </td>
                     <td
-                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' connected hit(s) <br> Damage: ' + row[13] : false">
+                        :data-original-title="(!getSkill(row[0], row[1]).condi && row[6]) ? row[7] +' out of ' + row[6] + ' connected hit(s) <br> Damage: ' + row[13] + '<br>' + round2(row[13]*100/row[2]) + '% of skill damage' : false">
                         {{(!getSkill(row[0], row[1]).condi && row[6]) ? round2(row[7]*100/row[6]) + '%' : ''}}
                     </td>
                     <td
