@@ -20,9 +20,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         [Flags]
         protected enum FallBackMethod { 
             None = 0,
-            Death = 1 << 1,
-            CombatExit = 1 << 2,
-            ChestGadget = 1 << 3
+            Death = 1 << 0,
+            CombatExit = 1 << 1,
+            ChestGadget = 1 << 2
         }
 
 

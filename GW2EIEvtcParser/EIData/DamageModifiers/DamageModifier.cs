@@ -68,52 +68,12 @@ namespace GW2EIEvtcParser.EIData
                     Tooltip += "<br>No Minions";
                     break;
             }
-            switch (_srcType)
+            if (_srcType == DamageType.All)
             {
-                case DamageType.All:
-                    Tooltip += "<br>All Damage";
-                    throw new InvalidDataException("No known damage modifier that modifies every outgoing damage");
-                case DamageType.Power:
-                    Tooltip += "<br>Power Damage";
-                    break;
-                case DamageType.Strike:
-                    Tooltip += "<br>Strike Damage";
-                    break;
-                case DamageType.StrikeAndCondition:
-                    Tooltip += "<br>Strike and Condition Damage";
-                    break;
-                case DamageType.StrikeAndConditionAndLifeLeech:
-                    Tooltip += "<br>Strike, Condition and Life Leech Damage";
-                    break;
-                case DamageType.Condition:
-                    Tooltip += "<br>Condition Damage";
-                    break;
-                default:
-                    throw new NotImplementedException("Not implemented damage type " + _srcType);
-            }
-            switch (_compareType)
-            {
-                case DamageType.All:
-                    Tooltip += "<br>Compared against All Damage";
-                    break;
-                case DamageType.Power:
-                    Tooltip += "<br>Compared against Power Damage";
-                    break;
-                case DamageType.Strike:
-                    Tooltip += "<br>Compared against Strike Damage";
-                    break;
-                case DamageType.StrikeAndCondition:
-                    Tooltip += "<br>Compared against Strike and Condition Damage";
-                    break;
-                case DamageType.StrikeAndConditionAndLifeLeech:
-                    Tooltip += "<br>Compared against Strike, Condition and Life Leech Damage";
-                    break;
-                case DamageType.Condition:
-                    Tooltip += "<br>Compared against Condition Damage";
-                    break;
-                default:
-                    throw new NotImplementedException("Not implemented damage type " + _compareType);
-            }
+                throw new InvalidDataException("No known damage modifier that modifies every outgoing damage");
+            } 
+            Tooltip += "<br>" + _srcType.DamageTypeToString();
+            Tooltip += "<br>Compared against " + _compareType.DamageTypeToString();
             if (!Multiplier)
             {
                 Tooltip += "<br>Non multiplier";

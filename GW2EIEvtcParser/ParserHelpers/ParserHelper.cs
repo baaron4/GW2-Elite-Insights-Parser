@@ -63,7 +63,64 @@ namespace GW2EIEvtcParser
             Unknown
         };
 
-        public enum DamageType { All, Power, Strike, Condition, StrikeAndCondition, StrikeAndConditionAndLifeLeech };
+        [Flags]
+        public enum DamageType
+        {
+            All = 0,
+            Power = 1 << 0,
+            Strike = 1 << 1,
+            Condition = 1 << 2,
+            StrikeAndCondition = Strike | Condition, // Common
+            LifeLeech = 1 << 3,
+            StrikeAndConditionAndLifeLeech = Strike | Condition | LifeLeech, // Common
+        };
+        public static string DamageTypeToString(this DamageType damageType)
+        {
+            if (damageType == DamageType.All)
+            {
+                return "All Damage";
+            }
+            string str = "";
+            bool addComa = false;
+            if ((damageType & DamageType.Power) > 0)
+            {
+                if (addComa)
+                {
+                    str += ", ";
+                }
+                str += "Power";
+                addComa = true;
+            }
+            if ((damageType & DamageType.Strike) > 0)
+            {
+                if (addComa)
+                {
+                    str += ", ";
+                }
+                str += "Strike";
+                addComa = true;
+            }
+            if ((damageType & DamageType.Condition) > 0)
+            {
+                if (addComa)
+                {
+                    str += ", ";
+                }
+                str += "Condition";
+                addComa = true;
+            }
+            if ((damageType & DamageType.LifeLeech) > 0)
+            {
+                if (addComa)
+                {
+                    str += ", ";
+                }
+                str += "Life Leech";
+                addComa = true;
+            }
+            str += " Damage";
+            return str;
+        }
         public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : AbstractTimeCombatEvent
