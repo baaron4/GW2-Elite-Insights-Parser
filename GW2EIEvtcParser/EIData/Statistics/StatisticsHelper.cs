@@ -74,6 +74,33 @@ namespace GW2EIEvtcParser.EIData
 
             }
 
+            foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
+            {
+                if (skillIDs.Contains(nourishment.ID))
+                {
+                    _presentNourishments.Add(nourishment);
+                }
+
+            }
+
+            foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
+            {
+                if (skillIDs.Contains(enhancement.ID))
+                {
+                    _presentEnhancements.Add(enhancement);
+                }
+
+            }
+
+            foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
+            {
+                if (skillIDs.Contains(otherConsumable.ID))
+                {
+                    _presentOtherConsumables.Add(otherConsumable);
+                }
+
+            }
+
             // All class specific boons
             var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
@@ -98,6 +125,9 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
         public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
         public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
+        public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
+        public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
+        public IReadOnlyList<Buff> PresentOtherConsumables => _presentOtherConsumables;
 
         public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
         {
@@ -121,6 +151,9 @@ namespace GW2EIEvtcParser.EIData
         private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
         private readonly List<Buff> _presentDebuffs = new List<Buff>();//Used only for Debuff tables
         private readonly List<Buff> _presentGearbuffs = new List<Buff>();//Used only for Gear Buff tables
+        private readonly List<Buff> _presentNourishments = new List<Buff>();
+        private readonly List<Buff> _presentEnhancements = new List<Buff>();
+        private readonly List<Buff> _presentOtherConsumables = new List<Buff>();
         private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer  = new Dictionary<Player, HashSet<Buff>>();
 
 
