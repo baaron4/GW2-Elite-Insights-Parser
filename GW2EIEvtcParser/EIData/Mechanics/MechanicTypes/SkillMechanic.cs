@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
-            return _triggerCondition != null ? _triggerCondition(c, log) : true;
+            return _triggerCondition == null || _triggerCondition(c, log);
         }
 
         public SkillMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)

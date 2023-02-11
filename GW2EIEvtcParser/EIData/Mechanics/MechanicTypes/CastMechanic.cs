@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected bool Keep(AbstractCastEvent c, ParsedEvtcLog log)
         {
-            return _triggerCondition != null ? _triggerCondition(c, log) : true;
+            return _triggerCondition == null || _triggerCondition(c, log);
         }
 
         protected virtual long GetTime(AbstractCastEvent evt)

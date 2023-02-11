@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected override bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
-            return c.From == ParserHelper._unknownAgent || !base.Keep(c, log) || GetFirstHit(c.From, log) != c ? false : true;
+            return c.From != ParserHelper._unknownAgent && base.Keep(c, log) && GetFirstHit(c.From, log) == c;
         }
 
         private readonly Dictionary<AgentItem, AbstractHealthDamageEvent> _firstHits = new Dictionary<AgentItem, AbstractHealthDamageEvent>();
