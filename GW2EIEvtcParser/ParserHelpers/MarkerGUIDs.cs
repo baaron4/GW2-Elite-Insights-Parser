@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
-    public class MarkerGUIDs
+    public static class MarkerGUIDs
     {
         // Commander Tag
         public const string RedCommanderTag = "4242F370667CE54EB3BF22BE8D06F986";
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// HashSet containing the types of Commander Tag GUIDs.
         /// </summary>
-        public static HashSet<string> CommanderTagMarkersGUIDs { get; set; } = new HashSet<string>()
+        public static IReadOnlyCollection<string> CommanderTagMarkersGUIDs { get; set; } = new HashSet<string>()
         {
             RedCommanderTag,
             OrangeCommanderTag,
