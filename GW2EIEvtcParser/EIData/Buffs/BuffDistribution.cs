@@ -81,11 +81,11 @@ namespace GW2EIEvtcParser.EIData
 
         public List<AbstractSingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
         {
+            var actors = new List<AbstractSingleActor>();
             if (!_distribution.ContainsKey(buffID))
             {
-                return new List<AbstractSingleActor>();
+                return actors;
             }
-            var actors = new List<AbstractSingleActor>();
             foreach (AgentItem agent in _distribution[buffID].Keys)
             {
                 actors.Add(log.FindActor(agent));
