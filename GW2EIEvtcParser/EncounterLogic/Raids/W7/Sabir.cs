@@ -211,7 +211,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Sabir not found");
             }
             CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(target));
-            return enterCombat != null ? enterCombat.Time : GetGenericFightOffset(fightData);
+            if (enterCombat == null)
+            {
+                CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+                if (logStartNPCUpdate == null)
+                {
+                    return GetGenericFightOffset(fightData);
+                } 
+                else
+                {
+                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamage() && x.Value > 0);
+                    if (firstDamageEvent != null)
+                    {
+                        return logStartNPCUpdate.Time;
+                    } else
+                    {
+                        return fightData.LogEnd;
+                    }
+                }
+            }
+            return enterCombat.Time;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
