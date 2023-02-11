@@ -7,11 +7,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected override bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
-            if (!c.HasHit)
-            {
-                return false;
-            }
-            return base.Keep(c, log);
+            return !c.HasHit ? false : base.Keep(c, log);
         }
 
         public HitByEnemyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)

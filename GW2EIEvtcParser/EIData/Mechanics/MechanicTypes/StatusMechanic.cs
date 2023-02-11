@@ -14,11 +14,7 @@ namespace GW2EIEvtcParser.EIData
         private readonly StatusChecker _triggerCondition = null;
         protected bool Keep(T c, ParsedEvtcLog log)
         {
-            if (_triggerCondition != null)
-            {
-                return _triggerCondition(c, log);
-            }
-            return true;
+            return _triggerCondition != null ? _triggerCondition(c, log) : true;
         }
 
         private readonly StatusGetter _getter = null;

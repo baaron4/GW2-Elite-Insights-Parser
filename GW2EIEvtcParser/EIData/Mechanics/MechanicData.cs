@@ -46,10 +46,9 @@ namespace GW2EIEvtcParser.EIData
 
         private void ComputeMechanics(ParsedEvtcLog log)
         {
-            var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
-                mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
+                mech.CheckMechanic(log, _mechanicLogs, new Dictionary<int, AbstractSingleActor>());
             }
         }
 
@@ -84,11 +83,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
         {
             ProcessMechanics(log);
-            if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
-            {
-                return list;
-            }
-            return new List<MechanicEvent>();
+            return _mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list) ? list : new List<MechanicEvent>();
         }
 
         private void ComputeMechanicData(long start, long end)

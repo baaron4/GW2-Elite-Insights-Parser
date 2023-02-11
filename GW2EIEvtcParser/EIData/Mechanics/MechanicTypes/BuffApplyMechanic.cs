@@ -11,11 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected bool Keep(BuffApplyEvent c, ParsedEvtcLog log)
         {
-            if (_triggerCondition != null)
-            {
-                return _triggerCondition(c, log);
-            }
-            return true;
+            return _triggerCondition != null ? _triggerCondition(c, log) : true;
         }
 
         public BuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
