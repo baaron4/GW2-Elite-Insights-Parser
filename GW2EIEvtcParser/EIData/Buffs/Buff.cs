@@ -169,19 +169,24 @@ namespace GW2EIEvtcParser.EIData
 
         internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)
         {
-            switch (combatData.GetBuildEvent().Build)
+            ulong gw2Build = combatData.GetBuildEvent().Build;
+            if (gw2Build >= GW2Builds.EODBeta2)
             {
-                case GW2Builds.March2019Balance:
-                    return new BuffSourceFinder20190305(boonIds);
-                case GW2Builds.October2019Balance:
-                    return new BuffSourceFinder20191001(boonIds);
-                case GW2Builds.May2021Balance:
-                    return new BuffSourceFinder20210511(boonIds);
-                case GW2Builds.EODBeta2:
-                    return new BuffSourceFinder20210921(boonIds);
-                default:
-                    return new BuffSourceFinder20181211(boonIds);
+                return new BuffSourceFinder20210921(boonIds);
             }
+            if (gw2Build >= GW2Builds.May2021Balance)
+            {
+                return new BuffSourceFinder20210511(boonIds);
+            }
+            if (gw2Build >= GW2Builds.October2019Balance)
+            {
+                return new BuffSourceFinder20191001(boonIds);
+            }
+            if (gw2Build >= GW2Builds.March2019Balance)
+            {
+                return new BuffSourceFinder20190305(boonIds);
+            }
+            return new BuffSourceFinder20181211(boonIds);
         }
 
         public bool Available(CombatData combatData)
