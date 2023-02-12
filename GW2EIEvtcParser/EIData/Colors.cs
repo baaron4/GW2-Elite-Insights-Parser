@@ -22,11 +22,7 @@ namespace GW2EIEvtcParser.EIData
 
         public string ToString(bool withAlpha)
         {
-            if (withAlpha)
-            {
-                return "rgba(" + _r + ", " + _g + ", " + _b + ", " + _a + "}";
-            }
-            return "rgb(" + _r + ", " + _g + ", " + _b + "}";
+            return withAlpha ? "rgba(" + _r + ", " + _g + ", " + _b + ", " + _a + "}" : "rgb(" + _r + ", " + _g + ", " + _b + "}";
         }
     }
 

@@ -30,11 +30,7 @@ namespace GW2EIEvtcParser.EIData
 
         private double ComputeAdjustedGain(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            if (GainAdjuster != null)
-            {
-                return GainAdjuster(dl, log) * GainPerStack;
-            }
-            return GainPerStack;
+            return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
         }
 
         protected double ComputeGain(Dictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
