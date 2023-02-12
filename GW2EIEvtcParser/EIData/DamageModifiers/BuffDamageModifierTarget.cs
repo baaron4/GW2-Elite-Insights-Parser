@@ -12,12 +12,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected bool IsSourceActivated(Dictionary<long, BuffsGraphModel> bgmsSource, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
-            if (_gainComputerSource == null)
-            {
-                return true;
-            }
-            double gain = _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time));
-            return gain > 0.0;
+            return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time)) > 0.0;
         }
 
         internal BuffDamageModifierTarget(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
