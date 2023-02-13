@@ -27,8 +27,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
         {
-            var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
-            BuffStack.Add(toAdd);
+            BuffStack.Add(new BuffStackItemID(start, duration, src, addedActive, stackID));
         }
 
         protected override void Update(long timePassed)

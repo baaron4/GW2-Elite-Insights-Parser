@@ -15,12 +15,9 @@ namespace GW2EIEvtcParser.EIData
 
         public bool TryGetValue(long buffID, out List<AbstractBuffEvent> list)
         {
-            if (_dict.TryGetValue(buffID, out list))
-            {
-                return true;
-            }
-            return false;
+            return _dict.TryGetValue(buffID, out list);
         }
+
         public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))

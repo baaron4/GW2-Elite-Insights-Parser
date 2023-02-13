@@ -13,11 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override int GetStack(Dictionary<long, BuffsGraphModel> bgms, long time)
         {
-            if (bgms.TryGetValue(_id, out BuffsGraphModel bgm))
-            {
-                return bgm.GetStackCount(time);
-            }
-            return 0;
+            return bgms.TryGetValue(_id, out BuffsGraphModel bgm) ? bgm.GetStackCount(time) : 0;
         }
 
         public override bool Has(Dictionary<long, BuffsGraphModel> bgms)

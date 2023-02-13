@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
         /// Checks if the player has a Commander Tag GUID.
         /// </summary>
         /// <param name="log"></param>
-        /// <returns><see langword="true"/> if has a GUID, otherwise <see langword="false"/></returns>
+        /// <returns><see langword="true"/> if a GUID was found, otherwise <see langword="false"/></returns>
         public bool IsCommander(ParsedEvtcLog log)
         {
             IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
                     MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
                     if (marker != null)
                     {
-                        return MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID) ? true : false;
+                        return MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID);
                     }
                     else if (tagEvent.TagID != 0)
                     {
