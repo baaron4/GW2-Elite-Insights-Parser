@@ -25,17 +25,29 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
-            return _healthUpdates ?? Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            if (_healthUpdates == null)
+            {
+                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            }
+            return _healthUpdates;
         }
 
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
-            return _breakbarPercentUpdates ?? Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            if (_breakbarPercentUpdates == null)
+            {
+                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            }
+            return _breakbarPercentUpdates;
         }
 
         public IReadOnlyList<Segment> GetBarrierUpdates(ParsedEvtcLog log)
         {
-            return _barrierUpdates ?? Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            if (_barrierUpdates == null)
+            {
+                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+            }
+            return _barrierUpdates;
         }
 
 
