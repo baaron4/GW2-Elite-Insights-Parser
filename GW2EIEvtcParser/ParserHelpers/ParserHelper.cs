@@ -696,7 +696,7 @@ namespace GW2EIEvtcParser
                     return "https://i.imgur.com/jAiRplg.png";
                 case ArcDPSEnums.TargetID.BrokenKing:
                     return "https://i.imgur.com/FNgUmvL.png";
-                case ArcDPSEnums.TargetID.SoulEater:
+                case ArcDPSEnums.TargetID.EaterOfSouls:
                     return "https://i.imgur.com/Sd6Az8M.png";
                 case ArcDPSEnums.TargetID.EyeOfFate:
                 case ArcDPSEnums.TargetID.EyeOfJudgement:
