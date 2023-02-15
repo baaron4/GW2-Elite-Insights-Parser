@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -56,11 +57,25 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            AgentItem eaterOfSouls = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EaterOfSouls).FirstOrDefault();
+            if (eaterOfSouls == null)
+            {
+                throw new MissingKeyActorsException("Eater of Souls not found");
+            }
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                startToUse = logStartNPCUpdate.Time;
+                var peasants = new List<AgentItem>(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant1));
+                peasants.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant2));
+                if (peasants.Any())
+                {
+                    startToUse = peasants.Max(x => x.LastAware);
+                } 
+                else
+                {
+                    startToUse = logStartNPCUpdate.Time;
+                }
             }
             return startToUse;
         }
@@ -72,7 +87,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.SoulEater:
+                case (int)ArcDPSEnums.TargetID.EaterOfSouls:
                     var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
