@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap("https://i.imgur.com/lvuFGSJ.png",
                             (1080, 676),
-                            (-2467, 14981, 9282, 22383));
+                            (-6081.86, 13624.72, 8956.86, 23099.28));
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)

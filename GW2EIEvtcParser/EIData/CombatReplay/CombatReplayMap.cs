@@ -39,19 +39,6 @@ namespace GW2EIEvtcParser.EIData
             _rectInMap = rectInMap;
         }
 
-        internal static (double TopX, double TopY, double bottomX, double bottomY) ComputeSimpleMapRect(double width, double height, double offsetX, double offsetY, double centerXPercent, double centerYPercent, double scale)
-        {
-            double centerOffsetX = centerXPercent * width;
-            double centerOffsetY = centerYPercent * height;
-            double fixedX = offsetX + centerOffsetX;
-            double fixedY = offsetY + centerOffsetY;
-            double topX = fixedX - centerOffsetX * scale;
-            double topY = fixedY - centerOffsetY * scale;
-            double bottomX = topX + width * scale;
-            double bottomY = topY + height * scale;
-            return (topX, topY, bottomX, bottomY);
-        }
-
         /*/internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
         {
             _maps.Add(new MapItem()
@@ -149,6 +136,42 @@ namespace GW2EIEvtcParser.EIData
         {
             float ratio = (float)(_rectInMap.bottomX - _rectInMap.topX) / GetPixelMapSize().width;
             return (float)Math.Round(1.0f / ratio, 3);
+        }
+
+        internal CombatReplayMap Translate(double x, double y)
+        {
+            _rectInMap.bottomX -= x;
+            _rectInMap.topX -= x;
+            _rectInMap.bottomY -= y;
+            _rectInMap.topY -= y;
+            return this;
+        }
+
+        internal CombatReplayMap Scale(double scale)
+        {
+            double centerX = (_rectInMap.bottomX + _rectInMap.topX) / 2.0;
+            double halfWidth = scale *(_rectInMap.bottomX - centerX);
+            double centerY = (_rectInMap.bottomY + _rectInMap.topY) / 2.0;
+            double halfHeigth = scale * (_rectInMap.bottomY - centerY);
+            _rectInMap.bottomX = centerX + halfWidth;
+            _rectInMap.bottomY = centerY + halfHeigth;
+            _rectInMap.topX = centerX - halfWidth;
+            _rectInMap.topY = centerY - halfHeigth;
+            return this;
+        }
+
+        internal CombatReplayMap AdjustForAspectRatio()
+        {
+            double ratio = (double)_urlPixelSize.width / _urlPixelSize.height;
+            double centerY = (_rectInMap.bottomY + _rectInMap.topY) / 2.0;
+            double halfHeigth = (_rectInMap.bottomY - centerY);
+            double centerX = (_rectInMap.bottomX + _rectInMap.topX) / 2.0;
+            double halfWidth = ratio * halfHeigth;
+            _rectInMap.bottomX = centerX + halfWidth;
+            _rectInMap.bottomY = centerY + halfHeigth;
+            _rectInMap.topX = centerX - halfWidth;
+            _rectInMap.topY = centerY - halfHeigth;
+            return this;
         }
 
     }

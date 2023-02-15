@@ -12,10 +12,6 @@ namespace GW2EIEvtcParser.EIData
 {
     public class Player : AbstractPlayer
     {
-        // Fields
-
-        private int _isCommander = -1;
-
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
@@ -70,52 +66,32 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        /// <summary>
+        /// Checks if the player has a Commander Tag GUID.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns><see langword="true"/> if a GUID was found, otherwise <see langword="false"/></returns>
         public bool IsCommander(ParsedEvtcLog log)
         {
-            if (_isCommander == -1)
+            IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
+
+            if (tagEvents.Count > 0)
             {
-                IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
                 foreach (TagEvent tagEvent in tagEvents)
                 {
                     MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
                     if (marker != null)
                     {
-                        switch (marker.ContentGUID)
-                        {
-                            case MarkerGUIDs.BlueCommanderTag:
-                            case MarkerGUIDs.CyanCommanderTag:
-                            case MarkerGUIDs.GreenCommanderTag:
-                            case MarkerGUIDs.OrangeCommanderTag:
-                            case MarkerGUIDs.PinkCommanderTag:
-                            case MarkerGUIDs.PurpleCommanderTag:
-                            case MarkerGUIDs.RedCommanderTag:
-                            case MarkerGUIDs.WhiteCommanderTag:
-                            case MarkerGUIDs.YellowCommanderTag:
-                            case MarkerGUIDs.BlueCatmanderTag:
-                            case MarkerGUIDs.CyanCatmanderTag:
-                            case MarkerGUIDs.GreenCatmanderTag:
-                            case MarkerGUIDs.OrangeCatmanderTag:
-                            case MarkerGUIDs.PinkCatmanderTag:
-                            case MarkerGUIDs.PurpleCatmanderTag:
-                            case MarkerGUIDs.RedCatmanderTag:
-                            case MarkerGUIDs.WhiteCatmanderTag:
-                            case MarkerGUIDs.YellowCatmanderTag:
-                                _isCommander = 1;
-                                return true;
-                            default:
-                                _isCommander = 0;
-                                break;
-                        }
+                        return MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID);
                     }
                     else if (tagEvent.TagID != 0)
                     {
-                        _isCommander = 1;
                         return true;
                     }
                 }
-                _isCommander = 0;
-            }            
-            return _isCommander == 1;
+            }
+                       
+            return false;
         }
 
         public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)

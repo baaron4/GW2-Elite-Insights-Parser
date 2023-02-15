@@ -1,7 +1,11 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all =
 [
     [ "BlockedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac13b1dad85a76462662b862e18cfc319", null ],
+    [ "BoonStrips", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a7c1d780fcc3da9d33d1fbae851710c75", null ],
+    [ "BoonStripsTime", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae5e1dbcb71643b5489a3998803a1a27c", null ],
     [ "BreakbarDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a93cdf7072fcd876b2aaaa3210b7fd77b", null ],
+    [ "ConditionCleanses", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#afc6f2e5b1583d528e6d1b9e6d2cc7de0", null ],
+    [ "ConditionCleansesTime", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae39a49e163ffa4824d006a925836d45e", null ],
     [ "DamageBarrier", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a5acc96075c84c66a785b2d1bb3048f3c", null ],
     [ "DamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a26a2858c3c6e5a82bd57c03b7dded58e", null ],
     [ "DcCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ab4906a1cefcf4aa1854724bc07f95c9c", null ],
