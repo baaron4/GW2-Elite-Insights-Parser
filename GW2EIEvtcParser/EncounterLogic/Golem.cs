@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     ExitCombatEvent exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                     long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
-                    var phase = new PhaseData(ece.Time, Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase))
+                    var phase = new PhaseData(Math.Max(ece.Time, log.FightData.FightStart), Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase))
                     {
                         CanBeSubPhase = false
                     };
