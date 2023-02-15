@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
-        protected int GenericTriggerID { get; }
+        internal int GenericTriggerID { get; }
 
         public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
@@ -380,6 +380,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
             }
             return startToUse;
+        }
+
+        internal virtual FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            return this;
         }
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

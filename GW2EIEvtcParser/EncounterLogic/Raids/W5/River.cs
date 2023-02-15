@@ -129,6 +129,32 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
         }
 
+        internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            // Handle potentially wrongly associated logs
+            if (logStartNPCUpdate != null)
+            {
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(brokenKing) && evt.Value > 0)))
+                {
+                    return new StatueOfIce((int)ArcDPSEnums.TargetID.BrokenKing);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(soulEater) && evt.Value > 0)))
+                {
+                    return new StatueOfDeath((int)ArcDPSEnums.TargetID.EaterOfSouls);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfFate) && evt.Value > 0)))
+                {
+                    return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfJudgement) && evt.Value > 0)))
+                {
+                    return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                }
+            }
+            return base.AdjustLogic(agentData, combatData);
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
