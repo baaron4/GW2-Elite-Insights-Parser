@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser
 {
@@ -1418,6 +1419,103 @@ namespace GW2EIEvtcParser
             return "https://i.imgur.com/HuJHqRZ.png";
         }
 
+        public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesStrings { get; private set; } = new Dictionary<BuffAttribute, string>()
+        {
+            { BuffAttribute.Power, "Power" },
+            { BuffAttribute.Precision, "Precision" },
+            { BuffAttribute.Toughness, "Toughness" },
+            { BuffAttribute.DefensePercent, "Defense" },
+            { BuffAttribute.Vitality, "Vitality" },
+            { BuffAttribute.VitalityPercent, "Vitality" },
+            { BuffAttribute.Ferocity, "Ferocity" },
+            { BuffAttribute.Healing, "Healing Power" },
+            { BuffAttribute.Condition, "Condition Damage" },
+            { BuffAttribute.Concentration, "Concentration" },
+            { BuffAttribute.Expertise, "Expertise" },
+            { BuffAttribute.FishingPower, "Fishing Power" },
+            { BuffAttribute.Armor, "Armor" },
+            { BuffAttribute.Agony, "Agony" },
+            { BuffAttribute.StatInc, "Stat Increase" },
+            { BuffAttribute.FlatInc, "Flat Increase" },
+            { BuffAttribute.PhysInc, "Outgoing Strike Damage" },
+            { BuffAttribute.CondInc, "Outgoing Condition Damage" },
+            { BuffAttribute.SiphonInc, "Outgoing Life Leech Damage" },
+            { BuffAttribute.SiphonRec, "Incoming Life Leech Damage" },
+            { BuffAttribute.CondRec, "Incoming Condition Damage" },
+            { BuffAttribute.CondRec2, "Incoming Condition Damage (Mult)" },
+            { BuffAttribute.PhysRec, "Incoming Strike Damage" },
+            { BuffAttribute.PhysRec2, "Incoming Strike Damage (Mult)" },
+            { BuffAttribute.AttackSpeed, "Attack Speed" },
+            { BuffAttribute.ConditionDurationInc, "Outgoing Condition Duration" },
+            { BuffAttribute.BoonDurationInc, "Outgoing Boon Duration" },
+            { BuffAttribute.DamageFormulaSquaredLevel, "Damage Formula" },
+            { BuffAttribute.DamageFormula, "Damage Formula" },
+            { BuffAttribute.GlancingBlow, "Glancing Blow" },
+            { BuffAttribute.CriticalChance, "Critical Chance" },
+            { BuffAttribute.StrikeDamageToHP, "Strike Damage to Health" },
+            { BuffAttribute.ConditionDamageToHP, "Condition Damage to Health" },
+            { BuffAttribute.SkillActivationDamageFormula, "Damage Formula on Skill Activation" },
+            { BuffAttribute.MovementActivationDamageFormula, "Damage Formula based on Movement" },
+            { BuffAttribute.EnduranceRegeneration, "Endurance Regeneration" },
+            { BuffAttribute.HealingEffectivenessRec, "Incoming Healing Effectiveness" },
+            { BuffAttribute.HealingEffectivenessRec2, "Incoming Healing Effectiveness" },
+            { BuffAttribute.HealingEffectivenessConvInc, "Outgoing Healing Effectiveness" },
+            { BuffAttribute.HealingEffectivenessFlatInc, "Outgoing Healing Effectiveness" },
+            { BuffAttribute.HealingOutputFormula, "Healing Formula" },
+            { BuffAttribute.ExperienceFromKills, "Experience From Kills" },
+            { BuffAttribute.ExperienceFromAll, "Experience From All" },
+            { BuffAttribute.GoldFind, "GoldFind" },
+            { BuffAttribute.MovementSpeed, "Movement Speed" },
+            { BuffAttribute.MovementSpeedStacking, "Movement Speed (Stacking)" },
+            { BuffAttribute.MovementSpeedStacking2, "Movement Speed (Stacking)" },
+            { BuffAttribute.MaximumHP, "Maximum Health" },
+            { BuffAttribute.KarmaBonus, "Karma Bonus" },
+            { BuffAttribute.SkillRechargeSpeedIncrease, "Skill Recharge Speed Increase" },
+            { BuffAttribute.MagicFind, "Magic Find" },
+            { BuffAttribute.WXP, "WXP" },
+            { BuffAttribute.Unknown, "Unknown" },
+        };
+
+        public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesPercent { get; private set; } = new Dictionary<BuffAttribute, string>()
+        {
+            { BuffAttribute.FlatInc, "%" },
+            { BuffAttribute.PhysInc, "%" },
+            { BuffAttribute.CondInc, "%" },
+            { BuffAttribute.CondRec, "%" },
+            { BuffAttribute.CondRec2, "%" },
+            { BuffAttribute.PhysRec, "%" },
+            { BuffAttribute.PhysRec2, "%" },
+            { BuffAttribute.AttackSpeed, "%" },
+            { BuffAttribute.ConditionDurationInc, "%" },
+            { BuffAttribute.BoonDurationInc, "%" },
+            { BuffAttribute.GlancingBlow, "%" },
+            { BuffAttribute.CriticalChance, "%" },
+            { BuffAttribute.StrikeDamageToHP, "%" },
+            { BuffAttribute.ConditionDamageToHP, "%" },
+            { BuffAttribute.EnduranceRegeneration, "%" },
+            { BuffAttribute.HealingEffectivenessRec, "%" },
+            { BuffAttribute.HealingEffectivenessRec2, "%" },
+            { BuffAttribute.SiphonInc, "%" },
+            { BuffAttribute.SiphonRec, "%" },
+            { BuffAttribute.HealingEffectivenessConvInc , "%" },
+            { BuffAttribute.HealingEffectivenessFlatInc , "%" },
+            { BuffAttribute.ExperienceFromKills, "%" },
+            { BuffAttribute.ExperienceFromAll, "%" },
+            { BuffAttribute.GoldFind, "%" },
+            { BuffAttribute.MovementSpeed, "%" },
+            { BuffAttribute.MovementSpeedStacking, "%" },
+            { BuffAttribute.MovementSpeedStacking2, "%" },
+            { BuffAttribute.MaximumHP, "%" },
+            { BuffAttribute.KarmaBonus, "%" },
+            { BuffAttribute.SkillRechargeSpeedIncrease, "%" },
+            { BuffAttribute.MagicFind, "%" },
+            { BuffAttribute.WXP, "%" },
+            { BuffAttribute.DefensePercent, "%" },
+            { BuffAttribute.VitalityPercent, "%" },
+            { BuffAttribute.MovementActivationDamageFormula, " adds" },
+            { BuffAttribute.SkillActivationDamageFormula, " replaces" },
+            { BuffAttribute.Unknown, "Unknown" },
+        };
 
         public static bool IsKnownMinionID(AgentItem minion, Spec spec)
         {
