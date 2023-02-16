@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ArcDPSEnums.BuffAttribute;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -9,112 +10,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         private static string GetAttributeString(ArcDPSEnums.BuffAttribute attribute)
         {
-            switch (attribute)
-            {
-                case Power:
-                    return "Power";
-                case Precision:
-                    return "Precision";
-                case Toughness:
-                    return "Toughness";
-                case DefensePercent:
-                    return "Defense";
-                case Vitality:
-                case VitalityPercent:
-                    return "Vitality";
-                case Ferocity:
-                    return "Ferocity";
-                case Healing:
-                    return "Healing Power";
-                case Condition:
-                    return "Condition Damage";
-                case Concentration:
-                    return "Concentration";
-                case Expertise:
-                    return "Expertise";
-                case FishingPower:
-                    return "Fishing Power";
-                case Armor:
-                    return "Armor";
-                case Agony:
-                    return "Agony";
-                case StatInc:
-                    return "Stat Increase";
-                case FlatInc:
-                    return "Flat Increase";
-                case PhysInc:
-                    return "Outgoing Strike Damage";
-                case CondInc:
-                    return "Outgoing Condition Damage";
-                case SiphonInc:
-                    return "Outgoing Life Leech Damage";
-                case SiphonRec:
-                    return "Incoming Life Leech Damage";
-                case CondRec:
-                    return "Incoming Condition Damage";
-                case CondRec2:
-                    return "Incoming Condition Damage (Mult)";
-                case PhysRec:
-                    return "Incoming Strike Damage";
-                case PhysRec2:
-                    return "Incoming Strike Damage (Mult)";
-                case AttackSpeed:
-                    return "Attack Speed";
-                case ConditionDurationInc:
-                    return "Outgoing Condition Duration";
-                case BoonDurationInc:
-                    return "Outgoing Boon Duration";
-                case DamageFormulaSquaredLevel:
-                case DamageFormula:
-                    return "Damage Formula";
-                case GlancingBlow:
-                    return "Glancing Blow";
-                case CriticalChance:
-                    return "Critical Chance";
-                case StrikeDamageToHP:
-                    return "Strike Damage to Health";
-                case ConditionDamageToHP:
-                    return "Condition Damage to Health";
-                case SkillActivationDamageFormula:
-                    return "Damage Formula on Skill Activation";
-                case MovementActivationDamageFormula:
-                    return "Damage Formula based on Movement";
-                case EnduranceRegeneration:
-                    return "Endurance Regeneration";
-                case HealingEffectivenessRec:
-                case HealingEffectivenessRec2:
-                    return "Incoming Healing Effectiveness";
-                case HealingEffectivenessConvInc:
-                case HealingEffectivenessFlatInc:
-                    return "Outgoing Healing Effectiveness";
-                case HealingOutputFormula:
-                    return "Healing Formula";
-                case ExperienceFromKills:
-                    return "Experience From Kills";
-                case ExperienceFromAll:
-                    return "Experience From All";
-                case GoldFind:
-                    return "Gold Find";
-                case MovementSpeed:
-                    return "Movement Speed";
-                case MovementSpeedStacking:
-                case MovementSpeedStacking2:
-                    return "Movement Speed (Stacking)";
-                case MaximumHP:
-                    return "Maximum Health";
-                case KarmaBonus:
-                    return "Karma Bonus";
-                case SkillRechargeSpeedIncrease:
-                    return "Skill Recharge Speed Increase";
-                case MagicFind:
-                    return "Magic Find";
-                case WXP:
-                    return "WXP";
-                case Unknown:
-                    return "Unknown";
-                default:
-                    return "";
-            }
+            return BuffAttributesStrings.TryGetValue(attribute, out string output) ? output : "";
         }
 
         private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute, int type)
@@ -141,53 +37,9 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return "%";
             }
-            switch (attribute1)
-            {
-                case FlatInc:
-                case PhysInc:
-                case CondInc:
-                case CondRec:
-                case CondRec2:
-                case PhysRec:
-                case PhysRec2:
-                case AttackSpeed:
-                case ConditionDurationInc:
-                case BoonDurationInc:
-                case GlancingBlow:
-                case CriticalChance:
-                case StrikeDamageToHP:
-                case ConditionDamageToHP:
-                case EnduranceRegeneration:
-                case HealingEffectivenessRec:
-                case HealingEffectivenessRec2:
-                case SiphonInc:
-                case SiphonRec:
-                case HealingEffectivenessConvInc:
-                case HealingEffectivenessFlatInc:
-                case ExperienceFromKills:
-                case ExperienceFromAll:
-                case GoldFind:
-                case MovementSpeed:
-                case MovementSpeedStacking:
-                case MovementSpeedStacking2:
-                case MaximumHP:
-                case KarmaBonus:
-                case SkillRechargeSpeedIncrease:
-                case MagicFind:
-                case WXP:
-                case DefensePercent:
-                case VitalityPercent:
-                    return "%";
-                case MovementActivationDamageFormula:
-                    return " adds";
-                case SkillActivationDamageFormula:
-                    return " replaces";
-                case Unknown:
-                    return "Unknown";
-                default:
-                    return "";
-            }
+            return BuffAttributesPercent.TryGetValue(attribute1, out string value) ? value : "";
         }
+
         // Effect type
         public int Type { get; }
         // Effect attributes
