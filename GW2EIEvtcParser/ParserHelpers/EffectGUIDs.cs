@@ -16,8 +16,10 @@ namespace GW2EIEvtcParser
         public const string MesmerCryOfFrustration = "52F65A4D9970954BA849CB57A46A65A8";
         public const string MesmerDiversion = "916D8385083F144EBAA5BEEDE21FD47A";
         public const string MesmerDistortion = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
-        public const string MesmerMantraOfResolve = "593E668A006AB24D84999AED68F2E4C4";
-        public const string MesmerMantraOfConcentration = "5B488D552E316045AD99C4A98EEDDB1E";
+        public const string MesmerMantraOfResolveAndPowerCleanse = "593E668A006AB24D84999AED68F2E4C4";
+        public const string MesmerMantraOfConcentrationAndPowerBreak = "5B488D552E316045AD99C4A98EEDDB1E";
+        public const string MesmerPowerReturn = "F53E2CE3B06B934085D46FA59468477B";
+        public const string MesmerPowerCleanse = "F53E2CE3B06B934085D46FA59468477B";
         public const string ChronomancerSeizeTheMomentShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
