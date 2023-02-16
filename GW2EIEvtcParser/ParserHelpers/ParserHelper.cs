@@ -397,17 +397,16 @@ namespace GW2EIEvtcParser
             }
 
             TargetID target = GetTargetID(id);
-            TrashID trash = GetTrashID(id);
-            MinionID minion = GetMinionID(id);
-
             if (target != TargetID.Unknown)
             {
                 return ParserIcons.TargetNPCIcons.TryGetValue(target, out string targetIcon) ? targetIcon : ParserIcons.GenericEnemyIcon;
             }
+            TrashID trash = GetTrashID(id);
             if (trash != TrashID.Unknown)
             {
                 return ParserIcons.TrashNPCIcons.TryGetValue(trash, out string trashIcon) ? trashIcon : ParserIcons.GenericEnemyIcon;
             }
+            MinionID minion = GetMinionID(id);
             if (minion != MinionID.Unknown)
             {
                 return ParserIcons.MinionNPCIcons.TryGetValue(minion, out string minionIcon) ? minionIcon : ParserIcons.GenericEnemyIcon;

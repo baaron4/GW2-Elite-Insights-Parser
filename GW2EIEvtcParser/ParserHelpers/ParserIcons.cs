@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
 {
-    public static class ParserIcons
+    internal static class ParserIcons
     {
         /// <summary>
         /// Default icon in case of unknown profession.
@@ -389,7 +389,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
         /// </summary>
-        public static IReadOnlyDictionary<Spec, string> HighResProfIcons { get; private set; } = new Dictionary<Spec, string>()
+        internal static IReadOnlyDictionary<Spec, string> HighResProfIcons { get; private set; } = new Dictionary<Spec, string>()
         {
             { Spec.Untamed, HighResUntamed },
             { Spec.Soulbeast, HighResSoulbeast },
@@ -432,7 +432,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their base resolution profession icon.
         /// </summary>
-        public static IReadOnlyDictionary<Spec, string> BaseResProfIcons { get; private set; } = new Dictionary<Spec, string>()
+        internal static IReadOnlyDictionary<Spec, string> BaseResProfIcons { get; private set; } = new Dictionary<Spec, string>()
         {
             { Spec.Untamed, BaseResUntamed },
             { Spec.Soulbeast, BaseResSoulbeast },
@@ -475,7 +475,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Dictionary matching a <see cref="ArcDPSEnums.TargetID"/> to their icon.
         /// </summary>
-        public static IReadOnlyDictionary<ArcDPSEnums.TargetID, string> TargetNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TargetID, string>()
+        internal static IReadOnlyDictionary<ArcDPSEnums.TargetID, string> TargetNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TargetID, string>()
         {
             { ArcDPSEnums.TargetID.WorldVersusWorld, TargetWorldVersusWorld },
             { ArcDPSEnums.TargetID.Mordremoth, TargetMordremoth },
@@ -563,7 +563,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Dictionary matching a <see cref="ArcDPSEnums.TrashID"/> to their icon.
         /// </summary>
-        public static IReadOnlyDictionary<ArcDPSEnums.TrashID, string> TrashNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TrashID, string>()
+        internal static IReadOnlyDictionary<ArcDPSEnums.TrashID, string> TrashNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TrashID, string>()
         {
             { ArcDPSEnums.TrashID.Canach, TrashCanach },
             { ArcDPSEnums.TrashID.Braham, TrashBraham },
@@ -788,7 +788,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Dictionary matching a <see cref="ArcDPSEnums.MinionID"/> to their icon.
         /// </summary>
-        public static IReadOnlyDictionary<ArcDPSEnums.MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
+        internal static IReadOnlyDictionary<ArcDPSEnums.MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
         {
             { ArcDPSEnums.MinionID.RuneJaggedHorror, MinionRuneJaggedHorror },
             { ArcDPSEnums.MinionID.RuneMarkIGolem, MinionRuneMarkIGolem },
