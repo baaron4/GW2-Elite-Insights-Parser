@@ -260,10 +260,6 @@ namespace GW2EIEvtcParser.ParsedData
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             {RushingJusticeAnimation, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
-            {PowerReturn, "https://wiki.guildwars2.com/images/e/eb/Power_Return.png" },
-            {PowerCleanse, "https://wiki.guildwars2.com/images/f/f5/Power_Cleanse.png" },
-            {PowerBreak, "https://wiki.guildwars2.com/images/b/b2/Power_Break.png" },
-            {PowerLock, "https://wiki.guildwars2.com/images/e/e7/Power_Lock.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
