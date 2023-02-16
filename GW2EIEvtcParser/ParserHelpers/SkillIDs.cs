@@ -1812,6 +1812,7 @@ namespace GW2EIEvtcParser
         public const long DormantJustice = 68607;
         public const long MechanicalGenius = 68612;
         public const long DormantResolve = 68640;
+        public const long Banished = 68668;
     }
 
 }
