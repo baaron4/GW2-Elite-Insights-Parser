@@ -82,7 +82,10 @@ namespace GW2EIEvtcParser.EIData
                     MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
                     if (marker != null)
                     {
-                        return MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID);
+                        if (MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID))
+                        {
+                            return true;
+                        }
                     }
                     else if (tagEvent.TagID != 0)
                     {
