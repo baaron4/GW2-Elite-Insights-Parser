@@ -608,6 +608,8 @@ namespace GW2EIEvtcParser
             OrbSpider = 19801,
             GreenSpirit1 = 19587,
             GreenSpirit2 = 19571,
+            AscalonianPeasant1 = 19810,
+            AscalonianPeasant2 = 19758,
             // Skeletons are the same as Spirit hordes
             // Dhuum
             Messenger = 19807,
@@ -865,7 +867,7 @@ namespace GW2EIEvtcParser
             SoullessHorror = 19767,
             Desmina = 19828,
             BrokenKing = 19691,
-            SoulEater = 19536,
+            EaterOfSouls = 19536,
             EyeOfJudgement = 19651,
             EyeOfFate = 19844,
             Dhuum = 19450,

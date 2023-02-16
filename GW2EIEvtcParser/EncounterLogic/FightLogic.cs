@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
         public bool Targetless { get; protected set; } = false;
-        protected int GenericTriggerID { get; }
+        internal int GenericTriggerID { get; }
 
         public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
 
         internal static Mechanic DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false);
-        internal static Mechanic DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a), (evt, log) => !log.CombatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < 20)).UsingShowOnTable(false);
+        internal static Mechanic DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a)).UsingShowOnTable(false);
         internal static Mechanic AliveMechanic = new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a)).UsingShowOnTable(false);
         internal static Mechanic RespawnMechanic = new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a)).UsingShowOnTable(false);
         internal static Mechanic DespawnMechanic = new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a)).UsingShowOnTable(false);
@@ -380,6 +380,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
             }
             return startToUse;
+        }
+
+        internal virtual FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            return this;
         }
 
         internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

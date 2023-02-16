@@ -1257,6 +1257,7 @@ namespace GW2EIEvtcParser
         public const long FrozenWind = 47776;
         public const long Hamstrung = 47856;
         public const long OneTrackMind = 47929;
+        public const long BrokenKingFirstCast = 47981;
         public const long DhuumDamagingShackles = 48042;
         public const long MortalCoilRiver = 48154;
         public const long FractalProdigy = 48191;

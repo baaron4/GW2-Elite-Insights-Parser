@@ -217,14 +217,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (logStartNPCUpdate == null)
                 {
                     return GetGenericFightOffset(fightData);
-                } 
+                }
                 else
                 {
                     CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamage() && x.Value > 0);
                     if (firstDamageEvent != null)
                     {
                         return logStartNPCUpdate.Time;
-                    } else
+                    }
+                    else
                     {
                         return fightData.LogEnd;
                     }
