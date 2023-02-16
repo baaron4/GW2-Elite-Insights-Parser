@@ -497,7 +497,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.SoullessHorror, TargetDesmina },
             { ArcDPSEnums.TargetID.Desmina, TargetDesmina },
             { ArcDPSEnums.TargetID.BrokenKing, TargetBrokenKing },
-            { ArcDPSEnums.TargetID.SoulEater, TargetEaterOfSouls },
+            { ArcDPSEnums.TargetID.EaterOfSouls, TargetEaterOfSouls },
             { ArcDPSEnums.TargetID.EyeOfFate, TargetEyes },
             { ArcDPSEnums.TargetID.EyeOfJudgement, TargetEyes },
             { ArcDPSEnums.TargetID.Dhuum, TargetDhuum },
