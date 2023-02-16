@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -45,14 +46,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(Surrender, "Surrender", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
             Extension = "matt";
-            Icon = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+            Icon = EncounterIconMatthias;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
+            return new CombatReplayMap(CombatReplayMatthias,
                             (880, 880),
                             (-7248, 4585, -4625, 7207)/*,
                             (-12288, -27648, 12288, 27648),

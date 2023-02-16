@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -56,14 +57,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnEnemySpeciesMechanic((int)ArcDPSEnums.TrashID.KeepConstructCore, "Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
             });
             Extension = "kc";
-            Icon = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+            Icon = EncounterIconKeepConstruct;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/dEwDsOJ.png",
+            return new CombatReplayMap(CombatReplayKeepConstruct,
                             (987, 1000),
                             (-5467, 8069, -2282, 11297)/*,
                             (-12288, -27648, 12288, 27648),

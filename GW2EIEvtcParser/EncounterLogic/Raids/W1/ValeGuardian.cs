@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -37,14 +38,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
             });
             Extension = "vg";
-            Icon = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+            Icon = EncounterIconValeGuardian;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
+            return new CombatReplayMap(,
                             (889, 889),
                             (-6365, -22213, -3150, -18999)/*,
                             (-15360, -36864, 15360, 39936),

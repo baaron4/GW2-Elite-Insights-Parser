@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,14 +28,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(FixatedNightmare, "Fixated", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Fixate", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
-            Icon = "https://i.imgur.com/ar5ELOI.png";
+            Icon = EncounterIconSiax;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/UzaQHW9.png",
+            return new CombatReplayMap(CombatReplaySiax,
                             (476, 548),
                             (663, -4127, 3515, -997)/*,
                             (-6144, -6144, 9216, 9216),

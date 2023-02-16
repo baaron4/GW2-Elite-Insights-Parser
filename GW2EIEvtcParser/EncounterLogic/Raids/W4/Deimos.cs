@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -58,14 +59,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "dei";
             GenericFallBackMethod = FallBackMethod.None;
-            Icon = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+            Icon = EncounterIconDeimos;
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/FFs9cFq.png",
+            return new CombatReplayMap(CombatReplayDeimos,
                             (765, 1000),
                             (-9542, 1932, -7004, 5250)/*,
                             (-27648, -9216, 27648, 12288),

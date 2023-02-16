@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,14 +28,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new SpawnMechanic((int)ArcDPSEnums.TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
-            Icon = "https://i.imgur.com/aFlYs1I.png";
+            Icon = EncounterIconArtsariiv;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
+            return new CombatReplayMap(CombatReplayArtsariiv,
                             (914, 914),
                             (8991, 112, 11731, 2812)/*,
                             (-24576, -24576, 24576, 24576),

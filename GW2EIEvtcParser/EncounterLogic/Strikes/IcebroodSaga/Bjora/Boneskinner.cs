@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -12,22 +14,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 // TODO find this
                 //new HitOnPlayerMechanic(58811, "Grasp", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Grasp","Grasp (hit by claw AoE)", "Grasp",4000),
-                new HitOnPlayerMechanic(58851, "Charge", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "H.Charge","Hit by Charge", "Charge hit",0),
-                new HitOnPlayerMechanic(58546, "Death Wind", new MechanicPlotlySetting(Symbols.Star,Colors.Red), "Launched","Launched by Death Wind", "Launched",0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new EnemyCastEndMechanic(58851, "Charge", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "D.Torch","Destroyed a Torch", "Destroyed a Torch",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-                new EnemyCastEndMechanic(58546, "Death Wind", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "D.Wind","Death Wind (extinguished torches)", "Death Wind",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-                new EnemyCastEndMechanic(58809, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "D.Darkness","Douse in Darkness (extinguished torches)", "Douse in Darkness",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new HitOnPlayerMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "H.Charge","Hit by Charge", "Charge hit",0),
+                new HitOnPlayerMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Star,Colors.Red), "Launched","Launched by Death Wind", "Launched",0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new EnemyCastEndMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "D.Torch","Destroyed a Torch", "Destroyed a Torch",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new EnemyCastEndMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "D.Wind","Death Wind (extinguished torches)", "Death Wind",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new EnemyCastEndMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "D.Darkness","Douse in Darkness (extinguished torches)", "Douse in Darkness",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
             }
             );
             Extension = "boneskin";
-            Icon = "https://i.imgur.com/meYwQmA.png";
+            Icon = EncounterIconBoneskinner;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
+            return new CombatReplayMap(CombatReplayBoneskinner,
                             (905, 789),
                             (-1013, -1600, 2221, 1416)/*,
                             (-0, -0, 0, 0),

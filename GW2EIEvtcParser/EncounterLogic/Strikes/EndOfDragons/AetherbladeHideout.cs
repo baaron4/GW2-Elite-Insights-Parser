@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -31,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
             }
             );
-            Icon = "https://i.imgur.com/UZmW8Sd.png";
+            Icon = EncounterIconAetherbladeHideout;
             Extension = "aetherhide";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
@@ -39,7 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/Qhnhrvp.png",
+            return new CombatReplayMap(CombatReplayAetherbladeHideout,
                             (838, 639),
                             (1165, 540, 4194, 2850)/*,
                             (-15360, -36864, 15360, 39936),

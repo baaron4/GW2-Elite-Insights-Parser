@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -18,30 +19,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerBuffApplyMechanic(Waterlogged, "Waterlogged", new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
-            new HitOnPlayerMechanic(52876, "Vapor Rush", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
-            new HitOnPlayerMechanic(52812, "Tidal Pool", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
-            new EnemyCastStartMechanic(51977, "Aquatic Barrage Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Breakbar", "Breakbar",0),
-            new EnemyCastEndMechanic(51977, "Aquatic Barrage End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
-            new HitOnPlayerMechanic(53018, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
-            new HitOnPlayerMechanic(53130, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
+            new HitOnPlayerMechanic(VaporRush, "Vapor Rush", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
+            new HitOnPlayerMechanic(TidalPool2, "Tidal Pool", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
+            new EnemyCastStartMechanic(AquaticBarrage, "Aquatic Barrage Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Breakbar", "Breakbar",0),
+            new EnemyCastEndMechanic(AquaticBarrage, "Aquatic Barrage End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
+            new HitOnPlayerMechanic(SeaSwell, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
+            new HitOnPlayerMechanic(Geyser, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
             new PlayerBuffApplyMechanic(TidalPool, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
             new HitOnPlayerMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
-            new HitOnPlayerMechanic(52130, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
-            new HitOnPlayerMechanic(51965, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            new HitOnPlayerMechanic(AquaticVortex, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
+            new HitOnPlayerMechanic(VaporJet, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
             new EnemyBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
             new PlayerBuffApplyMechanic(AquaticAuraKenut, "Aquatic Aura Kenut", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
             new PlayerBuffApplyMechanic(AquaticAuraNikare, "Aquatic Aura Nikare", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
-            new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
+            new HitOnPlayerMechanic(CycloneBurst, "Cyclone Burst", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
             });
             Extension = "twinlargos";
-            Icon = "https://i.imgur.com/6O5MT7v.png";
+            Icon = EncounterIconTwinLargos;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/O8wIWds.png",
+            return new CombatReplayMap(CombatReplayTwinLargos,
                             (765, 1000),
                             (10846, -3878, 18086, 5622)/*,
                             (-21504, -21504, 24576, 24576),

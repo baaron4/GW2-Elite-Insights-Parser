@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -45,14 +46,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             //  new Mechanic(SpearImpact, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.StarSquare,Color.Red), "CC Target", casted without dmg odd
             });
             Extension = "sam";
-            Icon = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+            Icon = EncounterIconSamarog;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/znpsqsI.png",
+            return new CombatReplayMap(CombatReplaySamarog,
                             (1000, 959),
                             (-6526, 1218, -2423, 5146)/*,
                             (-27648, -9216, 27648, 12288),

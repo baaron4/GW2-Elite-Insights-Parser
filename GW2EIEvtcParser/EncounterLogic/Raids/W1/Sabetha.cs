@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -53,14 +54,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
             });
             Extension = "sab";
-            Icon = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+            Icon = EncounterIconSabetha;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/HXjxqlu.png",
+            return new CombatReplayMap(CombatReplaySabetha,
                             (1000, 990),
                             (-8587, -162, -1601, 6753)/*,
                             (-15360, -36864, 15360, 39936),
@@ -97,21 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (phase.Targets.Count > 0)
                     {
                         AbstractSingleActor phaseTar = phase.Targets[0];
-                        switch (phaseTar.ID)
-                        {
-                            case (int)ArcDPSEnums.TrashID.Kernan:
-                                phase.Name = "Kernan";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.Knuckles:
-                                phase.Name = "Knuckles";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.Karde:
-                                phase.Name = "Karde";
-                                break;
-                            default:
-                                phase.Name = "Unknown";
-                                break;
-                        }
+                        phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
                     }
                 }
                 else
@@ -267,5 +254,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.Knuckles,
             };
         }
+
+        private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
+        {
+            { (int)ArcDPSEnums.TrashID.Kernan, "Kernan" },
+            { (int)ArcDPSEnums.TrashID.Karde, "Karde" },
+            { (int)ArcDPSEnums.TrashID.Knuckles, "Knuckles" }
+        };
     }
 }

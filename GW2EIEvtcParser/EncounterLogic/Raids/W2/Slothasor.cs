@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -34,14 +35,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffApplyMechanic(SlipperySlubling, "Slippery Slubling", new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb","Slippery Slubling", "Slippery Slubling",0),
             });
             Extension = "sloth";
-            Icon = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+            Icon = EncounterIconSlothasor;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/pChxnuf.png",
+            return new CombatReplayMap(CombatReplaySlothasor,
                             (654, 1000),
                             (5822, -3491, 9549, 2205)/*,
                             (-12288, -27648, 12288, 27648),
