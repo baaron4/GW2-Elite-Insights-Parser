@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Shield of Wrath",ShieldOfWrathEffect, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png"),
                 new Buff("Binding Blade (Self)",BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
                 new Buff("Binding Blade",BindingBlade, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png"),
-                new Buff("Banished",Banished, Source.Guardian, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d4/Banish.png"),
+                new Buff("Banished",Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d4/Banish.png"),
                 //signets
                 new Buff("Signet of Resolve",SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png"),
                 new Buff("Signet of Resolve (Shared)", SignetOfResolveShared, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/7/75/Signet_of_Resolve.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
