@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Extension = "instance";
             Mode = ParseMode.FullInstance;
-            Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            Icon = InstanceIconGeneric;
             EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
             EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
         }
@@ -125,71 +126,75 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 1062:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SpiritVale;
-                    Icon = "https://i.imgur.com/DcuOUHQ.png";
+                    Icon = InstanceIconSpiritVale;
                     Extension = "sprtvale";
                     return "Spirit Vale";
                 case 1149:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SalvationPass;
-                    Icon = "https://i.imgur.com/ihpaEpv.png";
+                    Icon = InstanceIconSalvationPass;
                     Extension = "salvpass";
                     return "Salvation Pass";
                 case 1156:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
-                    Icon = "https://i.imgur.com/i1sOswI.png";
+                    Icon = InstanceIconStrongholdOfTheFaithful;
                     Extension = "strgldfaith";
                     return "Stronghold Of The Faithful";
                 case 1188:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.BastionOfThePenitent;
-                    Icon = "https://i.imgur.com/UA9F5cy.png";
+                    Icon = InstanceIconBastionOfThePenitent;
                     Extension = "bstpen";
                     return "Bastion Of The Penitent";
                 case 1264:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.HallOfChains;
-                    Icon = "https://i.imgur.com/GjUeL1x.png";
+                    Icon = InstanceIconHallOfChains;
                     Extension = "hallchains";
                     return "Hall Of Chains";
                 case 1303:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.MythwrightGambit;
-                    Icon = "https://i.imgur.com/1dSCf2T.png";
+                    Icon = InstanceIconMythwrightGambit;
                     Extension = "mythgamb";
                     return "Mythwright Gambit";
                 case 1323:
                     EncounterCategoryInformation.Category = FightCategory.Raid;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
-                    Icon = "https://i.imgur.com/3YGv1wH.png";
+                    Icon = InstanceIconTheKeyOfAhdashim;
                     Extension = "keyadash";
                     return "The Key Of Ahdashim";
                 // Fractals
                 case 960:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.CaptainMaiTrinBossFractal;
+                    Icon = InstanceIconCaptainMaiTrin;
                     Extension = "captnmai";
                     return "Captain Mai Trin Boss Fractal";
                 case 1177:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
+                    Icon = InstanceIconNightmare;
                     Extension = "nightmare";
                     return "Nightmare";
                 case 1205:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
+                    Icon = InstanceIconShatteredObservatory;
                     Extension = "shatrdobs";
                     return "Shattered Observatory";
                 case 1290:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.Deepstone;
+                    Icon = InstanceIconDeepstone;
                     Extension = "deepstone";
                     return "Deepstone";
                 case 1384:
                     EncounterCategoryInformation.Category = FightCategory.Fractal;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
+                    Icon = InstanceIconSunquaPeak;
                     Extension = "snqpeak";
-                    Icon = "https://i.imgur.com/3mlCdI9.png";
                     return "Sunqua Peak";
             }
             return base.GetLogicName(combatData, agentData);

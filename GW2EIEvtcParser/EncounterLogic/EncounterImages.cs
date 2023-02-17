@@ -2,6 +2,13 @@
 {
     internal static class EncounterImages
     {
+        #region GENERICS
+
+        internal const string EncounterIconGeneric = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+        internal const string InstanceIconGeneric = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+
+        #endregion GENERICS
+
         #region FRACTALS
 
         // Encounters Icons
@@ -12,6 +19,13 @@
         internal const string EncounterIconArtsariiv = "https://i.imgur.com/aFlYs1I.png";
         internal const string EncounterIconArkk = "https://i.imgur.com/glLH8n8.png";
         internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
+
+        // Instances
+        internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
+        internal const string InstanceIconShatteredObservatory = "https://i.imgur.com/isCGTCO.jpg";
+        internal const string InstanceIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
+        internal const string InstanceIconDeepstone = "https://i.imgur.com/3fACTgN.jpg";
+        internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
 
         // Combat Replay Maps
         internal const string CombatReplayMAMA = "https://i.imgur.com/lFGNKuf.png";
@@ -53,6 +67,15 @@
         internal const string EncounterIconAdina = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
         internal const string EncounterIconSabir = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
         internal const string EncounterIconPeerlessQadim = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
+
+        // Instances Icons
+        internal const string InstanceIconSpiritVale = "https://i.imgur.com/DcuOUHQ.png";
+        internal const string InstanceIconSalvationPass = "https://i.imgur.com/ihpaEpv.png";
+        internal const string InstanceIconStrongholdOfTheFaithful = "https://i.imgur.com/i1sOswI.png";
+        internal const string InstanceIconBastionOfThePenitent = "https://i.imgur.com/UA9F5cy.png";
+        internal const string InstanceIconHallOfChains = "https://i.imgur.com/GjUeL1x.png";
+        internal const string InstanceIconMythwrightGambit = "https://i.imgur.com/1dSCf2T.png";
+        internal const string InstanceIconTheKeyOfAhdashim = "https://i.imgur.com/3YGv1wH.png";
 
         // Combat Replay Maps
         internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
@@ -116,6 +139,21 @@
 
         #endregion STRIKES
 
+        #region GOLEM
+
+        // Encounters Icons
+        internal const string EncounterIconMassiveGolem = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+        internal const string EncounterIconVitalGolem = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+        internal const string EncounterIconAvgGolem = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+        internal const string EncounterIconStdGolem = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+        internal const string EncounterIconCondiPowerMedGolem = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+        internal const string EncounterIconLGolem = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+
+        // Combat Replay Maps
+        internal const string CombatReplayGolem = "https://i.imgur.com/gmnSuz7.png";
+
+        #endregion GOLEM
+
         #region OPEN WORLD
 
         // Encounters Icons
@@ -135,5 +173,27 @@
         internal const string CombatReplayMordremoth = "https://i.imgur.com/HHDVDPb.png";
 
         #endregion STORY
+
+        #region WVW
+
+        // Encounters Icons
+        internal const string EncounterIconWvW = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
+
+        // Instance Icons
+        internal const string InstanceIconEternalBattlegrounds = "https://wiki.guildwars2.com/images/thumb/7/7b/Eternal_Battlegrounds_loading_screen.jpg/240px-Eternal_Battlegrounds_loading_screen.jpg";
+        internal const string InstanceIconBlueBorderlands = "https://wiki.guildwars2.com/images/thumb/b/be/Blue_Borderlands_loading_screen.jpg/240px-Blue_Borderlands_loading_screen.jpg";
+        internal const string InstanceIconGreenBorderlands = "https://wiki.guildwars2.com/images/thumb/3/3c/Green_Borderlands_loading_screen.jpg/240px-Green_Borderlands_loading_screen.jpg";
+        internal const string InstanceIconRedBorderlands = "https://wiki.guildwars2.com/images/thumb/8/88/Red_Borderlands_loading_screen.jpg/240px-Red_Borderlands_loading_screen.jpg";
+        internal const string InstanceIconEdgeOfTheMists = "https://wiki.guildwars2.com/images/thumb/6/6c/Edge_of_the_Mists_loading_screen.jpg/240px-Edge_of_the_Mists_loading_screen.jpg";
+
+        // Combat Replay Maps
+        internal const string CombatReplayEternalBattlegrounds = "https://i.imgur.com/gmnSuz7.png";
+        internal const string CombatReplayAlpineBorderlands = "https://i.imgur.com/nVu2ivF.png";
+        internal const string CombatReplayDesertBorderlands = "https://i.imgur.com/R5p9fqw.png";
+        internal const string CombatReplayObsidianSanctum = "";
+        internal const string CombatReplayEdgeOfTheMists = "https://i.imgur.com/iEpKYL0.jpg";
+        internal const string CombatReplayArmisticeBastion = "";
+
+        #endregion WVW
     }
 }
