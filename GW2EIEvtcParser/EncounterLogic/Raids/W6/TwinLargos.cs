@@ -62,8 +62,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(52779, 52779), // Nikare Aquatic Aura
-                new DamageCastFinder(52005, 52005), // Kenut Aquatic Aura
+                new DamageCastFinder(NikareAquaticAura , NikareAquaticAura ), // Nikare Aquatic Aura
+                new DamageCastFinder(KenutAquaticAura , KenutAquaticAura ), // Kenut Aquatic Aura
             };
         }
 

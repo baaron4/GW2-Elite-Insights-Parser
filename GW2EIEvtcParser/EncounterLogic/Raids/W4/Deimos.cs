@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(37872, 37872), // Demonic Aura
+                new DamageCastFinder(DemonicAura, DemonicAura ), // Demonic Aura
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()

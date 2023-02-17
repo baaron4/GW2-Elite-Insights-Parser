@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(38258, 38258), // brutal aura
+                new DamageCastFinder(BrutalAura , BrutalAura ), // Brutal aura
             };
         }
 

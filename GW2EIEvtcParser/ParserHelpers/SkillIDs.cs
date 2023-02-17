@@ -839,6 +839,7 @@ namespace GW2EIEvtcParser
         public const long GravityWellXera = 34921;
         public const long StatueFixated2 = 34925;
         public const long CreepingPursuit = 34927;
+        public const long ConstructAura = 34946;
         public const long SoothingWaters = 34955;
         public const long InterventionSAK = 34956;
         public const long ChaoticHaze = 34963;
@@ -951,13 +952,16 @@ namespace GW2EIEvtcParser
         public const long InevitableBetrayalFailBig = 37851;
         public const long FixatedSamarog = 37868;
         public const long FormUpAndAdvance = 37871;
+        public const long DemonicAura = 37872;
         public const long SoulSwarm = 37892;
         public const long EffigyPulse = 37901;
         public const long GravityWave = 37910;
         public const long Annihilate1 = 37929;
+        public const long PunishementAura = 37952;
         public const long InevitableBetrayalBig = 37966;
         public const long DemonicShockWaveRight = 37980;
         public const long DemonicShockWaveCenter = 37982;
+        public const long CosmicAura = 37989;
         public const long SamarogShockwave = 37996;
         public const long BrutalizeKill = 38013;
         public const long DemonicShockWaveLeft = 38046;
@@ -982,6 +986,7 @@ namespace GW2EIEvtcParser
         public const long BrutalizeEffect = 38226;
         public const long ImpalingStab = 38231;
         public const long InevitableBetrayalSmall = 38247;
+        public const long BrutalAura = 38258;
         public const long InevitableBetrayalFailSmall = 38260;
         public const long UnseenBurdenDeimos = 38266;
         public const long BoonThief = 38272;
@@ -1260,6 +1265,7 @@ namespace GW2EIEvtcParser
         public const long WurmSpit = 47756;
         public const long EnergyThresholdRiver = 47758;
         public const long FrozenWind = 47776;
+        public const long ChillingAura = 47837;
         public const long Hamstrung = 47856;
         public const long QuadSlashSecondSet = 47915;
         public const long OneTrackMind = 47929;
@@ -1273,6 +1279,7 @@ namespace GW2EIEvtcParser
         public const long FractalProdigy = 48191;
         public const long Exposed48209 = 48209;
         public const long GreaterDeathMark = 48210;
+        public const long DeathlyAura = 48238;
         public const long Bombshell = 48272;
         public const long MortalCoilDhuum = 48281;
         public const long MistlockInstabilityFractalVindicators = 48296;
@@ -1292,6 +1299,7 @@ namespace GW2EIEvtcParser
         public const long HowlingDeath = 48662;
         public const long HastenedDemise = 48773;
         public const long LightCarrier = 48779;
+        public const long HungeringAura = 48794;
         public const long EnergyThresholdDhuum = 48848;
         public const long ExposeDefenses = 48894;
         public const long SoulStoneVenomSkill = 49052;
@@ -1351,6 +1359,7 @@ namespace GW2EIEvtcParser
         public const long AquaticBarrage = 51977;
         public const long PatriarchCCJumpInAir = 51984;
         public const long CycloneBurst = 51999;
+        public const long KenutAquaticAura = 52005;
         public const long PowerOfTheLamp = 52035;
         public const long EnragedWywern = 52040;
         public const long Summon = 52054;
@@ -1392,6 +1401,7 @@ namespace GW2EIEvtcParser
         public const long FireBreath = 52726;
         public const long WingBuffet = 52734;
         public const long ConjuredShield = 52754;
+        public const long NikareAquaticAura = 52779;
         public const long ConjuredProtectionSAK = 52780;
         public const long TidalPool2 = 52812;
         public const long FlameWave = 52814;
@@ -1604,6 +1614,7 @@ namespace GW2EIEvtcParser
         public const long EssenceOfResilienceTier1 = 58623;
         public const long PowerOfVigilanceTier3 = 58712;
         public const long EssenceOfVigilanceTier2 = 58721;
+        public const long UnnaturalAura = 58736;
         public const long IceShockWaveFraenir = 58740;
         public const long EssenceOfVigilanceTier1 = 58786;
         public const long EssenceOfValorTier3 = 58792;
