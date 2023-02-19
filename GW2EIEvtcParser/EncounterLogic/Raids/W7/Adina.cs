@@ -302,16 +302,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 var splitPhasesMap = new List<string>()
                 {
-                        "https://i.imgur.com/gJ55jKy.png",
-                        "https://i.imgur.com/c2Oz5bj.png",
-                        "https://i.imgur.com/P4SGbrc.png",
+                        CombatReplayAdinaSplitPhase1,
+                        CombatReplayAdinaSplitPhase2,
+                        CombatReplayAdinaSplitPhase3,
                 };
                 var mainPhasesMap = new List<string>()
                 {
-                        "https://i.imgur.com/IQn2RJV.png",
-                        "https://i.imgur.com/3pO7eCB.png",
-                        "https://i.imgur.com/ZFw590w.png",
-                        "https://i.imgur.com/2P7UE8q.png"
+                        CombatReplayAdinaMainPhase1,
+                        CombatReplayAdinaMainPhase2,
+                        CombatReplayAdinaMainPhase3,
+                        CombatReplayAdinaMainPhase4
                 };
                 var crMaps = new List<string>();
                 int mainPhaseIndex = 0;
@@ -349,7 +349,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap(CombatReplayAdina,
+            return new CombatReplayMap(CombatReplayAdinaMainPhase1,
                             (866, 1000),
                             (13840, -2698, 15971, -248)/*,
                             (-21504, -21504, 24576, 24576),

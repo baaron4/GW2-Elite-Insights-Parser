@@ -101,7 +101,13 @@
         internal const string CombatReplayConjuredAmalgamate = "https://i.imgur.com/lgzr1xD.png";
         internal const string CombatReplayTwinLargos = "https://i.imgur.com/O8wIWds.png";
         internal const string CombatReplayQadim = "https://i.imgur.com/f4jfgiX.png";
-        internal const string CombatReplayAdina = "https://i.imgur.com/IQn2RJV.png";
+        internal const string CombatReplayAdinaMainPhase1 = "https://i.imgur.com/IQn2RJV.png";
+        internal const string CombatReplayAdinaMainPhase2 = "https://i.imgur.com/3pO7eCB.png";
+        internal const string CombatReplayAdinaMainPhase3 = "https://i.imgur.com/ZFw590w.png";
+        internal const string CombatReplayAdinaMainPhase4 = "https://i.imgur.com/2P7UE8q.png";
+        internal const string CombatReplayAdinaSplitPhase1 = "https://i.imgur.com/gJ55jKy.png";
+        internal const string CombatReplayAdinaSplitPhase2 = "https://i.imgur.com/c2Oz5bj.png";
+        internal const string CombatReplayAdinaSplitPhase3 = "https://i.imgur.com/P4SGbrc.png";
         internal const string CombatReplaySabir = "https://i.imgur.com/wesgoc6.png";
         internal const string CombatReplayPeerlessQadim = "https://i.imgur.com/Q5R4R6q.png";
 
