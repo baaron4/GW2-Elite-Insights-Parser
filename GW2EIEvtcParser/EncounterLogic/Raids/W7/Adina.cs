@@ -296,7 +296,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(mainPhases);
             phases.AddRange(splitPhases);
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));       
+            //
+            return phases;
+        }
+
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            var map = new CombatReplayMap(CombatReplayAdinaMainPhase1,
+                            (866, 1000),
+                            (13840, -2698, 15971, -248)/*,
+                            (-21504, -21504, 24576, 24576),
+                            (33530, 34050, 35450, 35970)*/);
             //
             try
             {
@@ -316,6 +327,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var crMaps = new List<string>();
                 int mainPhaseIndex = 0;
                 int splitPhaseIndex = 0;
+                var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
+                var mainPhases = phases.Where(x => x.Name.Contains("Phase")).ToList();
                 for (int i = 1; i < phases.Count; i++)
                 {
                     PhaseData phaseData = phases[i];
@@ -336,24 +349,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         crMaps.Add(splitPhasesMap[splitPhaseIndex++]);
                     }
                 }
-                GetCombatReplayMap(log).MatchMapsToPhases(crMaps, phases, log.FightData.FightEnd);
-            } 
-            catch(Exception)
+                map.MatchMapsToPhases(crMaps, phases, log.FightData.FightEnd);
+            }
+            catch (Exception)
             {
                 log.UpdateProgressWithCancellationCheck("Failed to associate Adina Combat Replay maps");
             }
-            
             //
-            return phases;
-        }
-
-        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
-        {
-            return new CombatReplayMap(CombatReplayAdinaMainPhase1,
-                            (866, 1000),
-                            (13840, -2698, 15971, -248)/*,
-                            (-21504, -21504, 24576, 24576),
-                            (33530, 34050, 35450, 35970)*/);
+            return map;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
