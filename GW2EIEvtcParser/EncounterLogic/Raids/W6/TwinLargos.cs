@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
-            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, TidalPool, p, true, true);
+            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, TidalPoolEffect, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in waterToDrop)
             {

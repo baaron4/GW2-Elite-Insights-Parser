@@ -598,7 +598,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Fixation", Fixation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
                 // Twin Largos
                 new Buff("Aquatic Detainment", AquaticDetainmentEffect , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
-                new Buff("Tidal Pool", TidalPool , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
+                new Buff("Tidal Pool", TidalPoolEffect , Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png"),
                 new Buff("Aquatic Aura (Kenut)",AquaticAuraKenut , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/44/Expose_Weakness.png"),
                 new Buff("Aquatic Aura (Nikare)",AquaticAuraNikare , Source.FightSpecific, BuffStackType.Stacking, 80, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fd/Fractured_%28effect%29.png"),
                 new Buff("Waterlogged",Waterlogged , Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/8/89/Waterlogged.png"),
