@@ -1403,7 +1403,7 @@ namespace GW2EIEvtcParser
         public const long ConjuredShield = 52754;
         public const long NikareAquaticAura = 52779;
         public const long ConjuredProtectionSAK = 52780;
-        public const long TidalPool2 = 52812;
+        public const long TidalPoolSkill = 52812;
         public const long FlameWave = 52814;
         public const long FireWave = 52820;
         public const long MythwrightSurge = 52863;
@@ -1417,12 +1417,12 @@ namespace GW2EIEvtcParser
         public const long ConjuredProtection = 52973;
         public const long Shielded = 53003;
         public const long Fireball = 53013;
-        public const long SeaSwell = 53083;
+        public const long SeaSwell = 53018;
         public const long FracturedEnemy = 53030;
         public const long ShieldedLavaElemental = 53048;
         public const long Teleport = 53051;
         public const long LockedOn = 53075;
-        public const long TidalPool = 53097;
+        public const long TidalPoolEffect = 53097;
         public const long Geyser = 53130;
         public const long PatriarchCC = 53132;
         public const long FieryDance3 = 53153;
