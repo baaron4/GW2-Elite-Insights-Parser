@@ -363,7 +363,9 @@ namespace GW2EIEvtcParser.EIData
         }
         private void SetConsumablesList(ParsedEvtcLog log)
         {
-            IReadOnlyList<Buff> consumableList = log.Buffs.BuffsByClassification[BuffClassification.Consumable];
+            var consumableList = new List<Buff>(log.Buffs.BuffsByClassification[BuffClassification.Nourishment]);
+            consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.Enhancement]);
+            consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.OtherConsumable]);
             _consumeList = new List<Consumable>();
             foreach (Buff consumable in consumableList)
             {

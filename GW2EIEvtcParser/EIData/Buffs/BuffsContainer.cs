@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.EIData
                 Utilities,
                 Potions,
                 Writs,
+                OtherConsumables,
                 FightSpecific,
                 FractalInstabilities,
                 //
@@ -103,10 +104,11 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
-                    string name = buffInfoEvent.Category == BuffCategory.Enhancement ? "Utility" : "Food";
+                    string name = buffInfoEvent.Category == BuffCategory.Enhancement ? "Enhancement" : "Nourishment";
+                    BuffClassification classification = buffInfoEvent.Category == BuffCategory.Enhancement ? BuffClassification.Enhancement : BuffClassification.Nourishment;
                     string link = buffInfoEvent.Category == BuffCategory.Enhancement ? "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png" : "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
                     operation.UpdateProgressWithCancellationCheck("Creating consumable " + name + " " + buffInfoEvent.BuffID);
-                    currentBuffs.Add(CreateCustomConsumable(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks));
+                    currentBuffs.Add(CreateCustomBuff(name, buffInfoEvent.BuffID, link, buffInfoEvent.MaxStacks, classification));
                 }
             }
             //
