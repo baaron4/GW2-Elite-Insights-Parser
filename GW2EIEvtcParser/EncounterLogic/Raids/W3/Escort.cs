@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using GW2EIEvtcParser.Exceptions;
 using System;
 using GW2EIEvtcParser.Extensions;
@@ -25,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             );
             ChestID = ArcDPSEnums.ChestID.SiegeChest;
             Extension = "escort";
-            Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
+            Icon = EncounterIconEscort;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             GenericFallBackMethod = FallBackMethod.ChestGadget;
             EncounterID |= 0x000001;
@@ -33,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/lvuFGSJ.png",
+            return new CombatReplayMap(CombatReplayEscort,
                             (1080, 676),
                             (-6081.86, 13624.72, 8956.86, 23099.28));
         }

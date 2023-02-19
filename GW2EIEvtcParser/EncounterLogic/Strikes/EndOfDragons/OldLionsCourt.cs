@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
-            Icon = "https://i.imgur.com/Q2g9aLD.png";
+            Icon = EncounterIconOldLionsCourt;
             Extension = "lioncourt";
             EncounterCategoryInformation.InSubCategoryOrder = 4;
             EncounterID |= 0x000005;
@@ -29,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/s1R1CRq.png",
+            return new CombatReplayMap(CombatReplayOldLionsCourt,
                             (1008, 1008),
                             (-1420, 3010, 1580, 6010));
         }

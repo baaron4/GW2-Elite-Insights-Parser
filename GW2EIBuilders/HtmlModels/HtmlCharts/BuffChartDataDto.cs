@@ -92,6 +92,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             BuildBoonGraphData(list, log.StatisticsHelper.PresentDefbuffs, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentDebuffs, boonGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentGearbuffs, boonGraphData, phase, usedBuffs);
+            var footList = new List<BuffChartDataDto>();
+            BuildBoonGraphData(footList, log.StatisticsHelper.PresentNourishements, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(footList, log.StatisticsHelper.PresentEnhancements, boonGraphData, phase, usedBuffs);
+            BuildBoonGraphData(footList, log.StatisticsHelper.PresentOtherConsumables, boonGraphData, phase, usedBuffs);
             foreach (BuffsGraphModel bgm in boonGraphData.Values)
             {
                 BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
@@ -100,6 +104,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
                     list.Add(graph);
                 }
             }
+            list.AddRange(footList);
             list.Reverse();
             return list;
         }

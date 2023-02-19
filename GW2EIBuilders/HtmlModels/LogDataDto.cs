@@ -28,6 +28,9 @@ namespace GW2EIBuilders.HtmlModels
         public List<long> DefBuffs { get; } = new List<long>();
         public List<long> Debuffs { get; } = new List<long>();
         public List<long> GearBuffs { get; } = new List<long>();
+        public List<long> Nourishements { get; } = new List<long>();
+        public List<long> Enhancements { get; } = new List<long>();
+        public List<long> OtherConsumables { get; } = new List<long>();
         public List<object[]> InstanceBuffs { get; } = new List<object[]>();
         public List<long> DmgModifiersItem { get; } = new List<long>();
         public List<long> DmgModifiersCommon { get; } = new List<long>();
@@ -278,6 +281,21 @@ namespace GW2EIBuilders.HtmlModels
             {
                 logData.GearBuffs.Add(gearBuff.ID);
                 usedBuffs[gearBuff.ID] = gearBuff;
+            }
+            foreach (Buff nourishment in statistics.PresentNourishements)
+            {
+                logData.Nourishements.Add(nourishment.ID);
+                usedBuffs[nourishment.ID] = nourishment;
+            }
+            foreach (Buff enhancement in statistics.PresentEnhancements)
+            {
+                logData.Enhancements.Add(enhancement.ID);
+                usedBuffs[enhancement.ID] = enhancement;
+            }
+            foreach (Buff otherConsumables in statistics.PresentOtherConsumables)
+            {
+                logData.OtherConsumables.Add(otherConsumables.ID);
+                usedBuffs[otherConsumables.ID] = otherConsumables;
             }
             foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
             {

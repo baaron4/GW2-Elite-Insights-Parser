@@ -3,9 +3,11 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -15,22 +17,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(58811, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Icequake","Icequake", "Icequake",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new HitOnPlayerMechanic(58740, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Ice Shock Wave","Ice Shock Wave", "Ice Shock Wave",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new PlayerBuffApplyMechanic(58376, "Frozen", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Frozen","Frozen", "Frozen",500),
-                new PlayerBuffRemoveMechanic(58376, "Unfrozen", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Unfrozen","Unfrozen", "Unfrozen",500),
-                new PlayerBuffApplyMechanic(58276, "Snowblind", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Snowblind","Snowblind", "Snowblind",500),
+                new HitOnPlayerMechanic(Icequake, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Icequake","Icequake", "Icequake",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new HitOnPlayerMechanic(IceShockWaveFraenir, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Ice Shock Wave","Ice Shock Wave", "Ice Shock Wave",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerBuffApplyMechanic(Frozen, "Frozen", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Frozen","Frozen", "Frozen",500),
+                new PlayerBuffRemoveMechanic(Frozen, "Unfrozen", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Unfrozen","Unfrozen", "Unfrozen",500),
+                new PlayerBuffApplyMechanic(Snowblind, "Snowblind", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Snowblind","Snowblind", "Snowblind",500),
             }
             );
             Extension = "fraenir";
-            Icon = "https://wiki.guildwars2.com/images/thumb/6/67/Fraenir_of_Jormag.jpg/208px-Fraenir_of_Jormag.jpg";
+            Icon = EncounterIconFraenirOfJormag;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
+            return new CombatReplayMap(CombatReplayFraenirOfJormag,
                             (905, 789),
                             (-833, -1780, 2401, 1606)/*,
                             (-0, -0, 0, 0),
@@ -41,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58219, 58219), // Frostbite Aura
+                new DamageCastFinder(FrostbiteAuraFraenir, FrostbiteAuraFraenir), // Frostbite Aura
             };
         }
 
