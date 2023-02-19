@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -23,14 +24,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             );
             Extension = "supkodbros";
-            Icon = "https://i.imgur.com/lNXXbnC.png";
+            Icon = EncounterIconKodanBrothers;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/kLjZ7eU.png",
+            return new CombatReplayMap(CombatReplayKodanBrothers,
                             (905, 789),
                             (-1013, -1600, 2221, 1416)/*,
                             (-0, -0, 0, 0),
@@ -40,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(58174, 58174), // Vengeful Aura Claw
+                new DamageCastFinder(VengefulAuraClaw, VengefulAuraClaw), // Vengeful Aura Claw
             };
         }
 

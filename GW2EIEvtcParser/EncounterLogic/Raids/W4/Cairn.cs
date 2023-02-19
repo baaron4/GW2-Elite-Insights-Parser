@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -39,14 +40,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             // 25% -  0%: 37642
             });
             Extension = "cairn";
-            Icon = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+            Icon = EncounterIconCairn;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
+            return new CombatReplayMap(CombatReplayCairn,
                             (607, 607),
                             (12981, 642, 15725, 3386)/*,
                             (-27648, -9216, 27648, 12288),
@@ -57,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(37989, 37989), // Cosmic Aura
+                new DamageCastFinder(CosmicAura, CosmicAura), // Cosmic Aura
             };
         }
 

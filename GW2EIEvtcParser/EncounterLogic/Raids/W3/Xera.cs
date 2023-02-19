@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -45,14 +46,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "xera";
             GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
-            Icon = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+            Icon = EncounterIconXera;
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/mGOHGwN.png",
+            return new CombatReplayMap(CombatReplayXera,
                             (1000, 897),
                             (-5992, -5992, 69, -522)/*,
                             (-12288, -27648, 12288, 27648),

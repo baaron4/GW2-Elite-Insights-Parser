@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -18,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Mordremoth(int triggerID) : base(triggerID)
         {
             Extension = "mordr";
-            Icon = "https://i.imgur.com/4pNive1.png";
+            Icon = EncounterIconMordremoth;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000201;
         }
@@ -33,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/HHDVDPb.png",
+            return new CombatReplayMap(CombatReplayMordremoth,
                             (899, 1172),
                             (-9059, 10171, -6183, 13149));
         }

@@ -44,12 +44,11 @@ namespace GW2EIEvtcParser.ParsedData
         private EncounterMode _encounterStatus = EncounterMode.NotSet;
         public bool IsCM => _encounterStatus == EncounterMode.CMNoName || _encounterStatus == EncounterMode.CM;
         // Constructors
-        internal FightData(int id, AgentData agentData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
+        internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
         {
             LogStart = start;
             LogEnd = end;
             FightEnd = end - start;
-            TriggerID = id;
             switch (ArcDPSEnums.GetTargetID(id))
             {
                 case ArcDPSEnums.TargetID.Mordremoth:
@@ -94,7 +93,6 @@ namespace GW2EIEvtcParser.ParsedData
                     // some TC logs are registered as Xera
                     if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
                     {
-                        TriggerID = (int)ArcDPSEnums.TrashID.HauntingStatue;
                         Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                         break;
                     }
@@ -121,7 +119,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.BrokenKing:
                     Logic = new StatueOfIce(id);
                     break;
-                case ArcDPSEnums.TargetID.SoulEater:
+                case ArcDPSEnums.TargetID.EaterOfSouls:
                     Logic = new StatueOfDeath(id);
                     break;
                 case ArcDPSEnums.TargetID.EyeOfFate:
@@ -133,8 +131,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Count > 0 ||
                         agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
                     {
-                        TriggerID = (int)ArcDPSEnums.TargetID.EyeOfFate;
-                        Logic = new StatueOfDarkness(TriggerID);
+                        Logic = new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
                         break;
                     }
                     Logic = new Dhuum(id);
@@ -143,8 +140,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA:
                 case ArcDPSEnums.TargetID.CALeftArm_CHINA:
                 case ArcDPSEnums.TargetID.CARightArm_CHINA:
-                    Logic = new ConjuredAmalgamate(id);
-                    TriggerID = (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
+                    Logic = new ConjuredAmalgamate((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
                     break;
                 case ArcDPSEnums.TargetID.Kenut:
                 case ArcDPSEnums.TargetID.Nikare:
@@ -284,6 +280,8 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
             }
+            Logic = Logic.AdjustLogic(agentData, combatData);
+            TriggerID = Logic.GenericTriggerID;
         }
 
         internal void SetFightName(CombatData combatData, AgentData agentData)

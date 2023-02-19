@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -34,14 +35,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
             Extension = "skorv";
-            Icon = "https://i.imgur.com/B1nhJ9m.png";
+            Icon = EncounterIconSkorvald;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/EhblRgb.png",
+            return new CombatReplayMap(CombatReplaySkorvald,
                             (987, 1000),
                             (-22267, 14955, -17227, 20735)/*,
                             (-24576, -24576, 24576, 24576),

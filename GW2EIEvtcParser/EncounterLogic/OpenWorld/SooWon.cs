@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
 {
@@ -36,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             new EnemyBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0, (bae, log) => bae.To.IsSpecy(ArcDPSEnums.TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
             });
             Extension = "soowon";
-            Icon = "https://i.imgur.com/lcZGgBC.png";
+            Icon = EncounterIconSooWon;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000401;
         }

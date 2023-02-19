@@ -2,9 +2,11 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -14,16 +16,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(60354, "Icy Echoes", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech","Tight stacking damage", "Icy Echoes",0),
-                new HitOnPlayerMechanic(60006, "Detonate", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.","Hit by Detonation", "Detonate",50),
-                new HitOnPlayerMechanic(60545, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.","Soaked damage", "Lethal Coalescence",50),
-                new HitOnPlayerMechanic(60171, "Flame Wall", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall","Stood in Flame Wall", "Flame Wall",50),
-                new HitOnPlayerMechanic(60308, "Call Assassins", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.","Hit by Assassins", "Call Assassins",50),
-                new HitOnPlayerMechanic(60132, "Charge!", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!","Hit by Charge", "Charge!",50),
+                new HitOnPlayerMechanic(IcyEchoes, "Icy Echoes", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech","Tight stacking damage", "Icy Echoes",0),
+                new HitOnPlayerMechanic(Detonate, "Detonate", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.","Hit by Detonation", "Detonate",50),
+                new HitOnPlayerMechanic(LethalCoalescence, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.","Soaked damage", "Lethal Coalescence",50),
+                new HitOnPlayerMechanic(FlameWall, "Flame Wall", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall","Stood in Flame Wall", "Flame Wall",50),
+                new HitOnPlayerMechanic(CallAssassins, "Call Assassins", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.","Hit by Assassins", "Call Assassins",50),
+                new HitOnPlayerMechanic(Charge, "Charge!", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!","Hit by Charge", "Charge!",50),
             }
             );
             Extension = "coldwar";
-            Icon = "https://i.imgur.com/r9b2oww.png";
+            Icon = EncounterIconColdWar;
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Drizzlewood;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000006;
@@ -31,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
+            return new CombatReplayMap(CombatReplayColdWar,
                             (729, 581),
                             (-32118, -11470, -28924, -8274),
                             (-0, -0, 0, 0),

@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,28 +18,28 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(59159, "Chains of Frost Hit", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "H.Chains","Hit by Chains of Frost", "Chains of Frost",50),
-                new HitOnPlayerMechanic(59441, "Lethal Coalescence Soaked", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "S.Lethal.Coal.","Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence",50),
-                new HitOnPlayerMechanic(59102, "Spreading Ice (Own)", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "S.Ice","Hit by own spreading ice", "Spreading Ice (Own)",50),
-                new HitOnPlayerMechanic(59468, "Spreading Ice (Others)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange), "S.Ice.O","Hit by other's spreading ice", "Spreading Ice (Others)",50),
-                new HitOnPlayerMechanic(59076, "Icy Slice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "I.Slice","Hit by Icy Slice", "Icy Slice",50),
-                new HitOnPlayerMechanic(59255, "Ice Tempest", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "I.Tornado","Hit by Ice Tornadoes", "Ice Tempest",50),
+                new HitOnPlayerMechanic(ChainsOfFrostHit, "Chains of Frost Hit", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "H.Chains","Hit by Chains of Frost", "Chains of Frost",50),
+                new HitOnPlayerMechanic(LethalCoalescenceSoaked, "Lethal Coalescence Soaked", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "S.Lethal.Coal.","Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence",50),
+                new HitOnPlayerMechanic(SpreadingIceOwn, "Spreading Ice (Own)", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "S.Ice","Hit by own spreading ice", "Spreading Ice (Own)",50),
+                new HitOnPlayerMechanic(SpreadingIceOthers, "Spreading Ice (Others)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange), "S.Ice.O","Hit by other's spreading ice", "Spreading Ice (Others)",50),
+                new HitOnPlayerMechanic(IcySlice, "Icy Slice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "I.Slice","Hit by Icy Slice", "Icy Slice",50),
+                new HitOnPlayerMechanic(IceTempest, "Ice Tempest", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "I.Tornado","Hit by Ice Tornadoes", "Ice Tempest",50),
                 new PlayerBuffApplyMechanic(ChainsOfFrostApplication, "Chains of Frost", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "F.Chains","Selected for Chains of Frost", "Chains of Frost",500),
                 new PlayerBuffRemoveMechanic(WhisperTeleportBack, "Teleport Back", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "TP In","Teleported back to the arena", "Teleport Back",500),
                 new PlayerBuffRemoveMechanic(WhisperTeleportOut, "Teleport Out", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue), "TP Out","Teleported outside of the arena", "Teleport Out",500),
-                new EnemyCastStartMechanic(59102, "Spreading Ice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.DarkRed), "S.Ice.C","Cast Spreading Ice", "Cast Spreading Ice",0),
-                new EnemyCastStartMechanic(59159, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "F.Chains.C","Cast Chains of Frost", "Cast Chains of Frost",0),
+                new EnemyCastStartMechanic(SpreadingIceOwn, "Spreading Ice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.DarkRed), "S.Ice.C","Cast Spreading Ice", "Cast Spreading Ice",0),
+                new EnemyCastStartMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "F.Chains.C","Cast Chains of Frost", "Cast Chains of Frost",0),
             }
             );
             Extension = "woj";
-            Icon = "https://i.imgur.com/8GLwgfL.png";
+            Icon = EncounterIconWhisperOfJormag;
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000005;
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/sXvx6AL.png",
+            return new CombatReplayMap(CombatReplayWhisperOfJormag,
                             (729, 581),
                             (-32118, -11470, -28924, -8274),
                             (-0, -0, 0, 0),
@@ -48,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(59202, 59202), // Frostbite Aura
+                new DamageCastFinder(FrostbiteAuraWhisperOfJormag, FrostbiteAuraWhisperOfJormag), // Frostbite Aura
             };
         }
 

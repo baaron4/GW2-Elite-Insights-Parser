@@ -393,6 +393,11 @@ img.icon-xxl {
     height: 196px;
 }
 
+img.encounter-icon {
+    width: 128px;
+    object-fit: contain;
+}
+
 
 img.icon-lg {
     width: 64px;

@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -20,22 +21,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(48272, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-                new HitOnPlayerMechanic(47258, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new HitOnPlayerMechanic(Bombshell, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+                new HitOnPlayerMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             }
             );
             GenericFallBackMethod = FallBackMethod.ChestGadget;
             ChestID = ArcDPSEnums.ChestID.ChestOfSouls;
             Extension = "river";
             Targetless = true;
-            Icon = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
+            Icon = EncounterIconRiver;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/BMqQKqb.png",
+            return new CombatReplayMap(CombatReplayRiver,
                             (1000, 387),
                             (-12201, -4866, 7742, 2851)/*,
                             (-21504, -12288, 24576, 12288),
@@ -127,6 +128,32 @@ namespace GW2EIEvtcParser.EncounterLogic
             FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
             ComputeFightTargets(agentData, combatData, extensions);
+        }
+
+        internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            // Handle potentially wrongly associated logs
+            if (logStartNPCUpdate != null)
+            {
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(brokenKing) && evt.Value > 0)))
+                {
+                    return new StatueOfIce((int)ArcDPSEnums.TargetID.BrokenKing);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(soulEater) && evt.Value > 0)))
+                {
+                    return new StatueOfDeath((int)ArcDPSEnums.TargetID.EaterOfSouls);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfFate) && evt.Value > 0)))
+                {
+                    return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
+                }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfJudgement) && evt.Value > 0)))
+                {
+                    return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                }
+            }
+            return base.AdjustLogic(agentData, combatData);
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
