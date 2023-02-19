@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -15,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public UnknownFightLogic(int triggerID) : base(triggerID)
         {
             Extension = "boss";
-            Icon = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            Icon = EncounterIconGeneric;
             EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
             EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
         }

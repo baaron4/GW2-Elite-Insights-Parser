@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -24,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.None;
-            Icon = "https://i.imgur.com/UZZQUdf.png";
+            Icon = EncounterIconBanditTrio;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000002;
         }
@@ -49,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/dDvhEOP.png",
+            return new CombatReplayMap(CombatReplayBanditTrio,
                             (1000, 913),
                             (-2900, -12251, 2561, -7265)/*,
                             (-12288, -27648, 12288, 27648),

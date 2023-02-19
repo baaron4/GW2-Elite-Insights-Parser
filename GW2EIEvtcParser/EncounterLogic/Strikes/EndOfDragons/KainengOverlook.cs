@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -34,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
             }
             );
-            Icon = "https://i.imgur.com/7OutZup.png";
+            Icon = EncounterIconKainengOverlook;
             Extension = "kaiover";
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
@@ -42,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/53ECM20.png",
+            return new CombatReplayMap(CombatReplayKainengOverlook,
                             (1803, 1918),
                             (-24798, -18014, -18164,-10932)/*,
                             (-15360, -36864, 15360, 39936),

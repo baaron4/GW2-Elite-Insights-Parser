@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -30,14 +31,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(38184, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
             });
             Extension = "mo";
-            Icon = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+            Icon = EncounterIconMursaatOverseer;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
+            return new CombatReplayMap(CombatReplayMursaatOverseer,
                             (889, 889),
                             (1360, 2701, 3911, 5258)/*,
                             (-27648, -9216, 27648, 12288),
@@ -55,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(37952, 37952), // Punishement Aura
+                new DamageCastFinder(PunishementAura, PunishementAura ), // PunishementAura
             };
         }
 

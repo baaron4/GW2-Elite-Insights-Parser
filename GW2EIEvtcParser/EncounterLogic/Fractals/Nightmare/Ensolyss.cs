@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -25,14 +26,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(TormentingBlast, "Tormenting Blast", new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
             });
             Extension = "ensol";
-            Icon = "https://i.imgur.com/pqRYRGi.png";
+            Icon = EncounterIconEnsolyss;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
+            return new CombatReplayMap(CombatReplayEnsolyss,
                             (366, 366),
                             (252, 1, 2892, 2881)/*,
                             (-6144, -6144, 9216, 9216),

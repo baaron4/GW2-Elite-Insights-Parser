@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,19 +28,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(RedBallShot, "Red Ball Shot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball","Small Red Bullets", "Bullet",0),
             new HitOnPlayerMechanic(Extraction, "Extraction", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull","Extraction (Knight Pull Circle)", "Knight Pull",0),
             new HitOnPlayerMechanic(HomingGrenades, "Homing Grenades", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades","Homing Grenades", "Homing Grenades",0),
-            new HitOnPlayerMechanic(new long[] {CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
+            new HitOnPlayerMechanic(new long[] { CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
             new HitOnPlayerMechanic(KnightsGaze, "Knight's Daze", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze","Knight's Daze", "Daze", 0),
 
             });
             Extension = "mama";
-            Icon = "https://i.imgur.com/9URW7wh.png";
+            Icon = EncounterIconMAMA;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
+            return new CombatReplayMap(CombatReplayMAMA,
                             (664, 407),
                             (1653, 4555, 5733, 7195)/*,
                             (-6144, -6144, 9216, 9216),
@@ -80,21 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (phase.Targets.Count > 0)
                     {
                         AbstractSingleActor phaseTar = phase.Targets[0];
-                        switch (phaseTar.ID)
-                        {
-                            case (int)ArcDPSEnums.TrashID.GreenKnight:
-                                phase.Name = "Green Knight";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.RedKnight:
-                                phase.Name = "Red Knight";
-                                break;
-                            case (int)ArcDPSEnums.TrashID.BlueKnight:
-                                phase.Name = "Blue Knight";
-                                break;
-                            default:
-                                phase.Name = "Unknown";
-                                break;
-                        }
+                        phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
                     }
                 }
                 else
@@ -124,5 +111,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.TwistedHorror
             };
         }
+
+        private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
+        {
+            { (int)ArcDPSEnums.TrashID.GreenKnight, "Green Knight" },
+            { (int)ArcDPSEnums.TrashID.RedKnight, "Red Knight" },
+            { (int)ArcDPSEnums.TrashID.BlueKnight, "Blue Knight" }
+        };
     }
 }

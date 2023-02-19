@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -44,14 +45,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(SpinningCut, "Spinning Cut", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightPurple), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
-            Icon = "https://i.imgur.com/glLH8n8.png";
+            Icon = EncounterIconArkk;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000003;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
+            return new CombatReplayMap(CombatReplayArkk,
                             (914, 914),
                             (-19231, -18137, -16591, -15677)/*,
                             (-24576, -24576, 24576, 24576),

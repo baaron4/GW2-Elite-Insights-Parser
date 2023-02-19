@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -31,14 +32,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
             }
             );
-            Icon = "https://i.imgur.com/gZRqzlr.png";
+            Icon = EncounterIconHarvestTemple;
             Extension = "harvsttmpl";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
         }
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/WCygAeH.png",
+            return new CombatReplayMap(CombatReplayHarvestTemple,
                             (788, 788),
                             (-812,-21820,2037,-18971)/*,
                             (-15360, -36864, 15360, 39936),

@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -22,8 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(48172, "Hateful Ephemera", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
-            new HitOnPlayerMechanic(48121, "Arcing Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
+            new HitOnPlayerMechanic(HatefulEphemera, "Hateful Ephemera", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
+            new HitOnPlayerMechanic(ArcingAfflictionHit, "Arcing Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerBuffApplyMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
             new PlayerBuffRemoveMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) =>
             {
@@ -64,14 +65,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
             });
             Extension = "dhuum";
-            Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+            Icon = EncounterIconDhuum;
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000006;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return new CombatReplayMap("https://i.imgur.com/7tEZYPd.png",
+            return new CombatReplayMap(CombatReplayDhuum,
                             (1000, 899),
                             (13524, -1334, 18039, 2735)/*,
                             (-21504, -12288, 24576, 12288),
@@ -82,7 +83,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48238, 48238), // Deathly Aura
+                new DamageCastFinder(DeathlyAura , DeathlyAura ), // Deathly Aura
             };
         }
 

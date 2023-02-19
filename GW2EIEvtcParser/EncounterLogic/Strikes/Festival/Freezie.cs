@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -15,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Freezie(int triggerID) : base(triggerID)
         {
             Extension = "freezie";
-            Icon = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
+            Icon = EncounterIconFreezie;
             EncounterID |= 0x000001;
         }
 
