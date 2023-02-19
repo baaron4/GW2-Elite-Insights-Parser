@@ -1512,8 +1512,8 @@ namespace GW2EIEvtcParser
         public const long KineticAbundance = 56609;
         public const long BatteringBlitz = 56616;
         public const long DiamondPalisade = 56636;
-        public const long BoulderBarrage = 56648;
         public const long UnbridledTempest = 56643;
+        public const long BoulderBarrage = 56648;
         public const long PoisonedPower = 56655;
         public const long BrandstormLightning = 56656;
         public const long TimeSink = 56873;
