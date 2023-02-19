@@ -1647,6 +1647,7 @@ namespace GW2EIEvtcParser
         public const long Detonate = 60006;
         public const long EssenceOfResilienceTier4 = 60057;
         public const long EssenceOfValorTier4 = 60062;
+        public const long Charge = 60132;
         public const long FlameWall = 60171;
         public const long EssenceOfVigilanceTier4 = 60173;
         public const long PowerOfResilienceTier4 = 60312;
@@ -1655,7 +1656,6 @@ namespace GW2EIEvtcParser
         public const long LethalCoalescence = 60545;
         public const long Enraged4_200 = 60674;
         public const long Enraged_300 = 61006;
-        public const long Charge = 61132;
         public const long Enraged2_100 = 61138;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt = 61177;
