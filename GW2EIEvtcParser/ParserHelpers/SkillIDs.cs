@@ -1362,7 +1362,7 @@ namespace GW2EIEvtcParser
         public const long KenutAquaticAura = 52005;
         public const long PowerOfTheLamp = 52035;
         public const long EnragedWywern = 52040;
-        public const long Summon = 52054;
+        public const long SummonDestroyer = 52054;
         public const long AugmentedPower = 52074;
         public const long ResistanceLavaElemental = 52075;
         public const long JunkAbsorption = 52086;
@@ -1375,7 +1375,7 @@ namespace GW2EIEvtcParser
         public const long AquaticAuraKenut = 52211;
         public const long FracturedAllied = 52213;
         public const long Claw = 52221;
-        public const long FireWave2 = 52224;
+        public const long FireWaveDestroyer = 52224;
         public const long ShatteringImpact = 52242;
         public const long CAInvul = 52255;
         public const long QadimRiposte = 52265;
@@ -1405,7 +1405,7 @@ namespace GW2EIEvtcParser
         public const long ConjuredProtectionSAK = 52780;
         public const long TidalPoolSkill = 52812;
         public const long FlameWave = 52814;
-        public const long FireWave = 52820;
+        public const long FireWaveQadim = 52820;
         public const long MythwrightSurge = 52863;
         public const long FieryDance2 = 52864;
         public const long VaporRush = 52876;
@@ -1420,7 +1420,7 @@ namespace GW2EIEvtcParser
         public const long SeaSwell = 53018;
         public const long FracturedEnemy = 53030;
         public const long ShieldedLavaElemental = 53048;
-        public const long Teleport = 53051;
+        public const long TeleportHydra = 53051;
         public const long LockedOn = 53075;
         public const long TidalPoolEffect = 53097;
         public const long Geyser = 53130;
