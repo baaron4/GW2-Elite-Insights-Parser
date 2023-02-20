@@ -29,9 +29,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(FlameRush,FlameRush).WithBuilds(GW2Builds.February2023Balance),
             new DamageCastFinder(FlameSurge,FlameSurge).WithBuilds(GW2Builds.February2023Balance),
             //
-            new EXTHealingCastFinder(RestoringReprieve, RestoringReprieve).WithBuilds(GW2Builds.February2023Balance),
-            new EXTHealingCastFinder(RejuvenatingRespite, RejuvenatingRespite).WithBuilds(GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).UsingEnable((combatData) => !combatData.HasEXTHealing).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
             //   
             new DamageCastFinder(EchoOfTrue,EchoOfTrue).WithBuilds(GW2Builds.February2023Balance),
             new DamageCastFinder(VoiceOfTruth,VoiceOfTruth).WithBuilds(GW2Builds.February2023Balance),
