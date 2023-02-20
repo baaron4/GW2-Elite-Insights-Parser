@@ -86,10 +86,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new ErrorEvent("Missing confusion damage")
             };
         }
-        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
         {
             bool needStart = beginWithStart;
-            var main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var main = combatData.GetBuffData(buffID).Where(x => x.To == target && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
@@ -115,6 +115,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
+        }
+
+        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        {
+            return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
         }
 
         internal static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)

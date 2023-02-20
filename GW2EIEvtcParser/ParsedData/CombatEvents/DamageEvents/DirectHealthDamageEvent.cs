@@ -24,5 +24,16 @@
         {
             return false;
         }
+
+
+        internal override void MakeIntoAbsorbed()
+        {
+            HasHit = false;
+            HasCrit = false;
+            HasGlanced = false;
+            IsAbsorbed = true;
+            HealthDamage = 0;
+            ShieldDamage = 0;
+        }
     }
 }

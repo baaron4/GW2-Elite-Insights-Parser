@@ -68,6 +68,37 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+        {
+            AbstractSingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Samarog));
+            if (samarog == null)
+            {
+                throw new MissingKeyActorsException("Samarog not found");
+            }
+            IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
+            var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
+            var fanaticalResilienceSegments = new List<Segment>();
+            for (int i = 0; i < fanaticalResilienceTimes.Count; i +=2)
+            {
+                var start = fanaticalResilienceTimes[i];
+                var end = long.MaxValue;
+                if (i + 1 < fanaticalResilienceTimes.Count)
+                {
+                    end = fanaticalResilienceTimes[i + 1];
+                }
+                fanaticalResilienceSegments.Add(new Segment(start, end, 1));
+            }
+            foreach (AbstractHealthDamageEvent healthDamageEvent in damageTaken)
+            {
+                // Can't have been absorbed if not 0 damages
+                if (healthDamageEvent.HasHit && healthDamageEvent.HealthDamage == 0 && fanaticalResilienceSegments.Any(x => healthDamageEvent.Time >= x.Start && healthDamageEvent.Time <= x.End))
+                {
+                    healthDamageEvent.MakeIntoAbsorbed();
+                }
+            }
+            return new List<AbstractHealthDamageEvent>();
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

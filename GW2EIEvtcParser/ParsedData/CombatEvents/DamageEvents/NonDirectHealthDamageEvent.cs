@@ -32,5 +32,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return _isCondi == 1;
         }
+
+        internal override void MakeIntoAbsorbed()
+        {
+            HasHit = false;
+            IsAbsorbed = true;
+            HealthDamage = 0;
+            ShieldDamage = 0;
+        }
     }
 }

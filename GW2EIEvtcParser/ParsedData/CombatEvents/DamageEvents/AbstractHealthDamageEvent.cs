@@ -29,5 +29,7 @@ namespace GW2EIEvtcParser.ParsedData
             HealthDamage = Math.Max(HealthDamage - ShieldDamage, 0);
         }
 
+        internal abstract void MakeIntoAbsorbed();
+
     }
 }
