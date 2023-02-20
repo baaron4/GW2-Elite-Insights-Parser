@@ -39,6 +39,10 @@ namespace GW2EIEvtcParser
         public const long MirageCloakDodge = -17;
         public const long NumberOfActiveCombatMinions = -18;
         public const long NumberOfClones = -19;
+        public const long RestoringReprieveOrRejunevatingRespite = -20;
+        public const long OpeningPassageOrClarifiedConclusion = -21;
+        public const long PotentHasteOrOverwhelmingCelerity = -22;
+        public const long PortentOfFreedomOrUnhinderedDelivery = -23;
         public const long VirtuosoBlades = -25;
         ////////////////
         internal const long ArcDPSDodge = 65001;
@@ -272,10 +276,14 @@ namespace GW2EIEvtcParser
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
         public const long Blink = 10200;
+        public const long MantraOfDistraction = 10204;
+        public const long PowerLock = 10206;
         public const long MantraOfResolve = 10207;
+        public const long PowerCleanse = 10209;
         public const long MantraOfPain = 10211;
         public const long PowerSpike = 10212;
         public const long MantraOfRecovery = 10213;
+        public const long PowerReturn = 10214;
         public const long Reflection = 10225;
         public const long SignetOfDomination = 10231;
         public const long SignetOfMidnightEffect = 10233;
@@ -283,6 +291,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfInspirationEffect = 10235;
         public const long SignetOfInspirationSkill = 10236;
         public const long MantraOfConcentration = 10237;
+        public const long PowerBreak = 10238;
         public const long DistortionEffect = 10243;
         public const long SignetOfIllusions = 10246;
         public const long HideInShadows = 10269;
@@ -1056,6 +1065,7 @@ namespace GW2EIEvtcParser
         public const long BearStance = 40045;
         public const long ChargeGazelle = 44051;
         public const long Supportive = 40069;
+        public const long PortentOfFreedom = 40114;
         public const long PrimordialStanceSkill = 40183;
         public const long ChaosVortex = 40184;
         public const long Stout = 40272;
@@ -1084,7 +1094,9 @@ namespace GW2EIEvtcParser
         public const long DualWaterAttunement = 41166;
         public const long SpectrumShieldSkill = 41218;
         public const long Chapter1SearingSpell = 41258;
+        public const long UnhinderedDelivery = 41328;
         public const long Mercy = 41372;
+        public const long RestoringReprieve = 41475;
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
@@ -1096,12 +1108,14 @@ namespace GW2EIEvtcParser
         public const long AshesOfTheJust = 41957;
         public const long AttackersInsight = 41963;
         public const long Chapter2DaringChallenge = 41968;
+        public const long OverwhelmingCelerity = 41988;
         public const long Chapter4ShiningRiver = 42008;
         public const long WeaversProwess = 42061;
         public const long PrimordialStanceEffect = 42086;
         public const long OneWolfPackSkill = 42145;
         public const long Afterburner = 42210;
         public const long DualAirAttunement = 42264;
+        public const long EchoOfTrue = 42360;
         public const long ElementsOfRage = 42416;
         public const long MagebaneTether = 42428;
         public const long Chapter3HeatedRebuke = 42449;
@@ -1111,12 +1125,16 @@ namespace GW2EIEvtcParser
         public const long HiddenKiller = 42720;
         public const long Kneeling = 42869;
         public const long FireMinorAttunement = 42811;
+        public const long OpeningPassage = 42864;
         public const long KallasFervor = 42883;
         public const long EpilogueAshesOfTheJust = 42898;
+        public const long FlameSurge = 42924;
         public const long EpilogueEternalOasis = 42925;
         public const long EnterPhotonForge = 42938;
         public const long EnterBeastMode = 42944;
         public const long WeaveSelf = 42951;
+        public const long RejuvenatingRespite = 42960;
+        public const long PotentHaste = 42983;
         public const long Chapter1UnflinchingCharge = 42986;
         public const long ExitBeastMode = 43014;
         public const long WovenAir = 43038;
@@ -1156,9 +1174,11 @@ namespace GW2EIEvtcParser
         public const long SigilOfSeverance = 43930;
         public const long OverheatSkill = 43937;
         public const long FullCounter = 43949;
+        public const long VoiceOfTruth = 44008;
         public const long MantraOfTruthCast = 44080;
         public const long OneWolfPackEffect = 44139;
         public const long PlagueSignetShroud = 44164;
+        public const long ClarifiedConclusion = 44248;
         public const long LegendaryRenegadeStanceEffect = 44272;
         public const long Riptide = 44405;
         public const long LasersEdge = 44414;
@@ -1183,6 +1203,7 @@ namespace GW2EIEvtcParser
         public const long SoulcleavesSummit = 45026;
         public const long MoaStanceEffect = 45038;
         public const long IllusionaryAmbush = 45046;
+        public const long FlameRush = 45082;
         public const long StoneResonanceEffect = 45097;
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
@@ -1213,8 +1234,8 @@ namespace GW2EIEvtcParser
         public const long SignetOfResolveShared = 46554;
         public const long SignetOfResolvePI = 46554;
         public const long Malnourished = 46587;
-        public const long FlameSurge = 46616;
-        public const long FlameRush = 46618;
+        public const long FlameSurgeOld = 46616;
+        public const long FlameRushOld = 46618;
         public const long MantraOfFlameDamage = 46618;
         public const long Diminished = 46668;
         public const long PlagueSending = 46832;
@@ -1985,6 +2006,7 @@ namespace GW2EIEvtcParser
         public const long DormantJustice = 68607;
         public const long MechanicalGenius = 68612;
         public const long DormantResolve = 68640;
+        public const long Banished = 68668;
     }
 
 }

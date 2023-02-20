@@ -116,6 +116,16 @@ namespace GW2EIEvtcParser.ParsedData
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
             {RushingJusticeAnimation, "Rushing Justice - Animation" },
+            //
+            {PowerReturn, "Power Return" },
+            {PowerCleanse, "Power Cleanse" },
+            {PowerBreak, "Power Break" },
+            {PowerLock, "Power Lock" },
+            //
+            {RestoringReprieveOrRejunevatingRespite, "Restoring Reprieve or Rejunevating Respite" },
+            {OpeningPassageOrClarifiedConclusion, "Opening Passage or Clarified Conclusion" },
+            {PotentHasteOrOverwhelmingCelerity, "Potent Haste or Overwhelming Celerity" },
+            {PortentOfFreedomOrUnhinderedDelivery, "Portent of Freedom or Unhindered Delivery" },
 
             {GlennaCap, "Capture" }
         };
@@ -149,7 +159,7 @@ namespace GW2EIEvtcParser.ParsedData
             {Chapter1SearingSpell, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png"},
             {Chapter1DesertBloomHeal, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
             {Chapter1DesertBloomSkill, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png"},
-            {FlameRush, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
+            {FlameRushOld, "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png"},
             {Chapter2IgnitingBurst, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png"},
             {EpilogueAshesOfTheJust, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"},
             {Chapter1UnflinchingCharge, "https://wiki.guildwars2.com/images/3/30/Chapter_1-_Unflinching_Charge.png"},
@@ -159,7 +169,7 @@ namespace GW2EIEvtcParser.ParsedData
             {DesertShroud, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
             {SandstormShroud, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
             {Chapter2DaringChallenge,  "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png"},
-            {FlameSurge, "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png" },
+            {FlameSurgeOld, "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png" },
             {Chapter3HeatedRebuke,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png"},
             {Chapter4StalwartStand, "https://wiki.guildwars2.com/images/8/89/Chapter_4-_Stalwart_Stand.png"},
             {EpilogueUnbrokenLines, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"},
@@ -256,6 +266,12 @@ namespace GW2EIEvtcParser.ParsedData
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             {RushingJusticeAnimation, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
+            //   
+            {RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
+            {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
+            {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
+            {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
+
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
