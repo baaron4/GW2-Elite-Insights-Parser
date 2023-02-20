@@ -637,6 +637,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
+                    EffectGUIDEvent orbExploded = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleOrbExplosion);
+                    if (orbExploded != null)
+                    {
+                        IReadOnlyList<EffectEvent> orbEffects = log.CombatData.GetEffectEventsByEffectID(orbExploded.ContentID);
+                        knownEffectsIDs.Add(orbExploded.ContentID);
+                        foreach (EffectEvent orbEffect in orbEffects)
+                        {
+                            int duration = 3000;
+                            int start = (int)orbEffect.Time;
+                            int end = start + duration;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 2500, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 2500, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
+                        }
+                    }
+                    //
                     BreakbarStateEvent breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
                     if (breakbar != null)
                     {
