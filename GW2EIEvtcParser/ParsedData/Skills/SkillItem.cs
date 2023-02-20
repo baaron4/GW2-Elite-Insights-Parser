@@ -266,6 +266,11 @@ namespace GW2EIEvtcParser.ParsedData
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             {RushingJusticeAnimation, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
+            //   
+            {RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
+            {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
+            {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
+            {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
 
         };
 
