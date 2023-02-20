@@ -640,7 +640,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent orbExploded = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleOrbExplosion);
                     if (orbExploded != null)
                     {
-                        IReadOnlyList<EffectEvent> orbEffects = log.CombatData.GetEffectEventsByEffectID(orbExploded.ContentID);
+                        IReadOnlyList<EffectEvent> orbEffects = log.CombatData.GetEffectEventsByEffectID(orbExploded.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
                         knownEffectsIDs.Add(orbExploded.ContentID);
                         foreach (EffectEvent orbEffect in orbEffects)
                         {
