@@ -33,10 +33,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(new long[] {InevitableBetrayalFailSmall, InevitableBetrayalFailBig}, "Inevitable Betrayal", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl","Inevitable Betrayal (failed Green)", "Failed Green",0),
             new HitOnPlayerMechanic(EffigyPulse, "Effigy Pulse", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
             new HitOnPlayerMechanic(SpearImpact, "Spear Impact", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
-            new PlayerBuffApplyMechanic(BrutalizeEffect, "Brutalize", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlz","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize",0),
+            new PlayerBuffApplyMechanic(BrutalizeEffect, "Brutalized", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)", "Brutalized",0),
             new EnemyCastEndMechanic(BrutalizeCast, "Brutalize (Jump End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal),"CC","Brutalize (Breakbar)", "Breakbar",0),
             new SkillOnPlayerMechanic(BrutalizeKill, "Brutalize (Killed)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Brutalize (Failed CC)", "CC Fail",0, (de, log) => de.HasKilled),
-            new EnemyBuffRemoveMechanic(BrutalizeEffect, "Brutalize (End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC End","Ended Brutalize", "CC Ended",0),
+            new EnemyBuffRemoveMechanic(FanaticalResilience, "Brutalize (End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC End","Ended Brutalize", "CC Ended",0),
             //new PlayerBoonRemoveMechanic(38199, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Ended Brutalize (Breakbar broken)", "CCEnded",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.Manual)),
             //new Mechanic(38199, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,"rgb(110,160,0)"), "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),
             new PlayerBuffApplyMechanic(SoulSwarm, "Soul Swarm", new MechanicPlotlySetting(Symbols.XThinOpen,Colors.Teal),"Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Samarog:
-                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, BrutalizeEffect, target, true, true);
+                    List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, FanaticalResilience, target, true, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
                     {

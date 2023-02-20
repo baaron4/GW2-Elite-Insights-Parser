@@ -539,6 +539,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Inevitable Betrayal (Big)",InevitableBetrayalBig, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Feeding_Frenzy_%28GW1%29.png"),
                 new Buff("Inevitable Betrayal (Small)",InevitableBetrayalSmall, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Feeding_Frenzy_%28GW1%29.png"),
                 new Buff("Soul Swarm",SoulSwarm, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png"),
+                new Buff("Fanatical Resilience",FanaticalResilience, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e3/Burrowed.png"),
+                new Buff("Brutalized",BrutalizeEffect, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e3/Burrowed.png"),
                 // Deimos
                 new Buff("Unnatural Signet",UnnaturalSignet, Source.FightSpecific, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
                 new Buff("Weak Minded",WeakMinded, Source.FightSpecific, BuffClassification.Debuff, "https://wiki.guildwars2.com/images/3/38/Unseen_Burden_%28Deimos%29.png"),

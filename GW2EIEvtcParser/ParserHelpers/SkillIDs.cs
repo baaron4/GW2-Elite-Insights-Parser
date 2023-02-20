@@ -988,11 +988,12 @@ namespace GW2EIEvtcParser
         public const long SharedAgony25 = 38170;
         public const long SpearReturn = 38180;
         public const long WeakMinded = 38187;
+        public const long BrutalizeEffect = 38199;
         public const long Annihilate2 = 38208;
         public const long SharedAgony75 = 38209;
         public const long FixatedGuldhem = 38223;
         public const long UnnaturalSignet = 38224;
-        public const long BrutalizeEffect = 38226;
+        public const long FanaticalResilience = 38226;
         public const long ImpalingStab = 38231;
         public const long InevitableBetrayalSmall = 38247;
         public const long BrutalAura = 38258;
