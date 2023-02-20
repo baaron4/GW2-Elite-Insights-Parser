@@ -58,7 +58,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
             {
-                if (actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
                 {
                     continue;
                 }
