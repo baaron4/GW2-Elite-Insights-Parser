@@ -647,8 +647,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3000;
                             int start = (int)orbEffect.Time;
                             int end = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(true, end, 2500, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 2500, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
+                            // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
+                            int radius = 2700;
+                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
                         }
                     }
                     //
