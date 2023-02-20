@@ -717,6 +717,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
                         }
                     }
+                    EffectGUIDEvent greenFailed = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleFailedGreen);
+                    if (greenFailed != null)
+                    {
+                        IReadOnlyList<EffectEvent> failedGreenEffects = log.CombatData.GetEffectEventsByEffectID(greenFailed.ContentID);
+                        knownEffectsIDs.Add(greenFailed.ContentID);
+                        foreach (EffectEvent failedGreen in failedGreenEffects)
+                        {
+                            int duration = 5000;
+                            int start = (int)failedGreen.Time - duration;
+                            int end = (int)failedGreen.Time;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(failedGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
                 case (int)ArcDPSEnums.TrashID.VoidWarforged2:

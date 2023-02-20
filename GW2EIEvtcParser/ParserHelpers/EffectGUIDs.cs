@@ -103,5 +103,6 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
+        public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
     }
 }
