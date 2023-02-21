@@ -293,22 +293,10 @@ It is possible to filter the table by:
 
 ## JSON Overview 
 
-The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html)
+The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html).
 
 # Contributors
-## Developers
-- baaron4
-- EliphasNUIT
-- cordbleibaum
-- QuiCM
-- amgine
-- Linus
-- Sejsel
-- Flomix
-- Stonos
-- Hobinjk
 
-## Other stuffs
-- Linus (arena maps/ icons for combat replay)
+Thank you to all our [contributors](https://github.com/baaron4/GW2-Elite-Insights-Parser/graphs/contributors).
 
-
+Special thanks to Linus for creating SVG images for the Combat Replay arenas.
