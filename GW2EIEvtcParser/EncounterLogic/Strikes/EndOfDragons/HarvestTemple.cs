@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(CrystalBarrage, "Crystal Barrage", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
                 new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
                 new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new HitOnPlayerMechanic(ScreamOfZhaitan, "Scream of Zhaitan", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new HitOnPlayerMechanic(ScreamOfZhaitanNM, "Scream of Zhaitan", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
                 new HitOnPlayerMechanic(HydroBurst, "Hydro Burst", new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Whirlpool", "Whirlpool", 150),
                 new HitOnPlayerMechanic(new long[] {TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
                 new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
@@ -466,7 +466,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         needRedirect = true;
                         var zhaiAttacks = new HashSet<long>()
                         {
-                            ScreamOfZhaitan,
+                            ScreamOfZhaitanNM,
                             SlamZhaitan,
                             PutridDeluge
                         };
@@ -637,23 +637,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent orbExploded = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleOrbExplosion);
-                    if (orbExploded != null)
-                    {
-                        IReadOnlyList<EffectEvent> orbEffects = log.CombatData.GetEffectEventsByEffectID(orbExploded.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(orbExploded.ContentID);
-                        foreach (EffectEvent orbEffect in orbEffects)
-                        {
-                            int duration = 3000;
-                            int start = (int)orbEffect.Time;
-                            int end = start + duration;
-                            // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
-                            int radius = 2700;
-                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position)));
-                        }
-                    }
-                    //
                     BreakbarStateEvent breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
                     if (breakbar != null)
                     {
@@ -732,20 +715,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = (int)greenEffect.Time;
                             replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                        }
-                    }
-                    EffectGUIDEvent greenFailed = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleFailedGreen);
-                    if (greenFailed != null)
-                    {
-                        IReadOnlyList<EffectEvent> failedGreenEffects = log.CombatData.GetEffectEventsByEffectID(greenFailed.ContentID);
-                        knownEffectsIDs.Add(greenFailed.ContentID);
-                        foreach (EffectEvent failedGreen in failedGreenEffects)
-                        {
-                            int duration = 5000;
-                            int start = (int)failedGreen.Time - duration;
-                            int end = (int)failedGreen.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(failedGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
                         }
                     }
                     break;
