@@ -1862,6 +1862,7 @@ namespace GW2EIEvtcParser
         public const long NightmareEpoch2 = 63691;
         public const long VoidPoolKralkatorrik = 63746;
         public const long Stomp = 63767;
+        public const long ChargedShot = 63772;
         public const long DeathsEmbraceEffect = 63785;
         public const long StormOfSwords1 = 63838;
         public const long VitalityEqualizer1 = 63840;
@@ -1923,6 +1924,7 @@ namespace GW2EIEvtcParser
         public const long BowlOfKimchiTofuStew = 65197;
         public const long IceSpike = 65230;
         public const long MaiTrinSomething = 65238;
+        public const long ShatterEarth2 = 65241;
         public const long BoomingCommandOverlap = 65243;
         public const long DestructiveAura = 65250;
         public const long HydroBurst = 65252;
