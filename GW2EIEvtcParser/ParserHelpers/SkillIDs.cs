@@ -2005,6 +2005,7 @@ namespace GW2EIEvtcParser
         public const long DragonsEndContributor9 = 67046;
         public const long EqualizationMatrix = 67047;
         public const long VitalityEqualizerCM = 67081;
+        public const long ShatterEarth = 67104;
         public const long DeathsEmbrace2Effect = 67120;
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
