@@ -219,7 +219,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 {
                     if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                     {
-                        if (personalBuffs.TryGetValue(player.Spec.ToString(), out HashSet<long> list) && !list.Contains(pair.Key))
+                        if (personalBuffs.TryGetValue(player.Spec.ToString(), out HashSet<long> list))
                         {
                             list.Add(pair.Key);
                         }
