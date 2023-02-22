@@ -14,10 +14,7 @@ namespace GW2EIEvtcParser.EIData
             return _triggerCondition == null || _triggerCondition(c, log);
         }
 
-        protected virtual long GetTime(AbstractCastEvent evt)
-        {
-            return evt.Time;
-        }
+        protected abstract long GetTime(AbstractCastEvent evt);
 
         public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CastChecker condition = null) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
