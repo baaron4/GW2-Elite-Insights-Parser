@@ -36,8 +36,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
                 new HitOnPlayerMechanic(BrandedArtillery, "Branded Artillery", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", 150),
                 // Purification 2
-                new HitOnPlayerMechanic(SwarmOfMordremoth2, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Goop.H", "Hit by goop left by heart", "Heart Goop", 150),
-                new HitOnPlayerMechanic(SwarmOfMordremoth, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", 150),
+                new HitOnPlayerMechanic(SwarmOfMordremoth, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Goop.H", "Hit by goop left by heart", "Heart Goop", 150),
+                new HitOnPlayerMechanic(SwarmOfMordremoth2, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", 150),
                 // Mordremoth
                 new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
                 new HitOnPlayerMechanic(Kick, "Kick", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150),
