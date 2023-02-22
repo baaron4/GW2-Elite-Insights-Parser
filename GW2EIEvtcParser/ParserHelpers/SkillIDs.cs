@@ -1683,7 +1683,7 @@ namespace GW2EIEvtcParser
         public const long Enraged_300 = 61006;
         public const long Enraged2_100 = 61138;
         public const long ElementalManipulationWater1 = 61172;
-        public const long TorrentialBolt = 61177;
+        public const long TorrentialBolt2 = 61177;
         public const long Terrorstorm = 61184;
         public const long CallOfStorms = 61190;
         public const long ElementalManipulationAir3 = 61196;
@@ -1706,6 +1706,7 @@ namespace GW2EIEvtcParser
         public const long CallAssassins = 61308;
         public const long FocusedWrath = 61344;
         public const long CallMeteorHit = 61348;
+        public const long TorrentialBolt1 = 61349;
         public const long TidalBarrier = 61402;
         public const long CacophonousMind = 61435;
         public const long CallMeteorSummon = 61439;
