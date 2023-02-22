@@ -3,16 +3,16 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
-                    <th class="sub-cell">Sub</th>
-                    <th class="prof-cell"></th>
-                    <th class="text-left">Name</th>
-                    <th class="stat-cell" v-for="modifier in modifiers" :data-original-title="modifier.name + '<br>' + modifier.tooltip">
+                    <th class="sub-cell" @click="sortBy('Sub')">Sub</th>
+                    <th class="prof-cell" @click="sortBy('Prof')"></th>
+                    <th class="text-left" @click="sortBy('Name')">Name</th>
+                    <th class="stat-cell" v-for="(modifier, index) in modifiers" @click="sortBy('Modifier', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
                         <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in (mode ? tableDataTarget.rows : tableData.rows)"
+                <tr v-for="row in sortData((mode ? tableDataTarget.rows : tableData.rows))"
                     :class="{active: row.player.id === playerindex}">
                     <td>{{row.player.group}}</td>
                     <td :data-original-title="row.player.profession">
@@ -52,7 +52,8 @@
                 cacheTarget: new Map(),
                 sortdata: {
                     order: "asc",
-                    index: 1
+                    index: 0,
+                    key: "Prof"
                 }
             };
         },
@@ -64,14 +65,14 @@
                 return logData.phases[this.phaseindex];
             },
             indicesToUse: function () {
-                var res = [];
+                let res = [];
                 if (this.playerindices !== null) {
-                    for (var i = 0; i < this.playerindices.length; i++) {
+                    for (let i = 0; i < this.playerindices.length; i++) {
                         res.push(this.playerindices[i]);
                     }
                     return res;
                 }
-                for (var i = 0; i < logData.players.length; i++) {
+                for (let i = 0; i < logData.players.length; i++) {
                     res.push(i);
                 }
                 return res;
@@ -80,17 +81,17 @@
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var rows = [];
-                var sums = [];
-                var groups = [];
-                var total = {
+                let rows = [];
+                let sums = [];
+                let groups = [];
+                let total = {
                     name: "Total",
                     data: []
                 };
-                var j;
-                for (var i = 0; i < this.indicesToUse.length; i++) {
-                    var index = this.indicesToUse[i];
-                    var player = logData.players[index];
+                let j;
+                for (let i = 0; i < this.indicesToUse.length; i++) {
+                    let index = this.indicesToUse[i];
+                    let player = logData.players[index];
                     if (player.isFake) {
                         continue;
                     }
@@ -100,8 +101,8 @@
                             data: []
                         };
                     }
-                    var dmgModifier = this.modifiersdata[index].data;
-                    var data = [];
+                    let dmgModifier = this.modifiersdata[index].data;
+                    let data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
                         if (!player.notInSquad) {
@@ -111,7 +112,7 @@
                             if (!total.data[j]) {
                                 total.data[j] = [0, 0, 0, 0];
                             }
-                            for (var k = 0; k < data[j].length; k++) {
+                            for (let k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -123,13 +124,13 @@
                         data: data
                     });
                 }
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                var res = {
+                let res = {
                     rows: rows,
                     sums: sums
                 };
@@ -137,22 +138,22 @@
                 return res;
             },
             tableDataTarget: function () {
-                var cacheID = this.phaseindex + '-';
+                let cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var rows = [];
-                var sums = [];
-                var groups = [];
-                var total = {
+                let rows = [];
+                let sums = [];
+                let groups = [];
+                let total = {
                     name: "Total",
                     data: []
                 };
-                var j;
-                for (var i = 0; i < this.indicesToUse.length; i++) {
-                    var index = this.indicesToUse[i];
-                    var player = logData.players[index];
+                let j;
+                for (let i = 0; i < this.indicesToUse.length; i++) {
+                    let index = this.indicesToUse[i];
+                    let player = logData.players[index];
                     if (player.isFake) {
                         continue;
                     }
@@ -162,7 +163,7 @@
                             data: []
                         };
                     }
-                    var data = [];
+                    let data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = [0, 0, 0, 0];
                         if (!player.notInSquad) {
@@ -174,20 +175,20 @@
                             }
                         }
                     }
-                    var dmgModifier = this.modifiersdata[index].dataTarget;
+                    let dmgModifier = this.modifiersdata[index].dataTarget;
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var modifier = dmgModifier[this.activetargets[j]];
-                        for (var k = 0; k < this.modifiers.length; k++) {
-                            var targetData = modifier[k];
-                            var curData = data[k];
-                            for (var l = 0; l < targetData.length; l++) {
+                        let modifier = dmgModifier[this.activetargets[j]];
+                        for (let k = 0; k < this.modifiers.length; k++) {
+                            let targetData = modifier[k];
+                            let curData = data[k];
+                            for (let l = 0; l < targetData.length; l++) {
                                 curData[l] += targetData[l];
                             }
                         }
                     }
                     if (!player.notInSquad) {
                         for (j = 0; j < this.modifiers.length; j++) {
-                            for (var k = 0; k < data[j].length; k++) {
+                            for (let k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -199,13 +200,13 @@
                         data: data
                     });
                 }
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                var res = {
+                let res = {
                     rows: rows,
                     sums: sums
                 };
@@ -214,22 +215,52 @@
             }
         },
         methods: {
+            sortBy: function(key, index) {
+                let oldKey = this.sortdata.key;
+                this.sortdata.key = key;
+                if (oldKey !== key) {
+                    this.sortdata.order = "asc";
+                } else {
+                    this.sortdata.order = this.sortdata.order === "asc" ? "desc" : "asc";
+                }
+                this.sortdata.index = index || 0;
+            },
+            sortData: function(rows) {
+                let order = this.sortdata.order === "asc" ? 1 : -1;
+                switch (this.sortdata.key) {
+                    case "Sub":
+                        rows.sort((x,y) => order * (x.player.group - y.player.group));
+                        break;
+                    case "Prof":
+                        rows.sort((x,y) => order * x.player.profession.localeCompare(y.player.profession));
+                        break;
+                    case "Name":
+                        rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
+                        break;
+                    case "Modifier":
+                        let index = this.sortdata.index;
+                        let modifier = this.modifiers[index];
+                        rows.sort((x,y) => order * this.getCellValue(x.data[index], modifier).localeCompare(this.getCellValue(y.data[index], modifier)));
+                        break;
+                }
+                return rows;
+            },
             getTooltip: function (item, mod) {
                 if (item[0] === 0) {
                     return null;
                 }
-                var hits = item[0] + " out of " + item[1] + " hits";
-                var percent;
+                let hits = item[0] + " out of " + item[1] + " hits";
+                let percent;
                 if (mod.skillBased) {
                     percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
                 } else {
                     percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
                 }
-                var res = hits + "<br>" + percent;
+                let res = hits + "<br>" + percent;
                 if (item[2] === 0) {
                     return res;
                 }
-                var gain;
+                let gain;
                 if (mod.nonMultiplier) {
                     gain = "Damage Done: ";
                 } else {
@@ -251,7 +282,7 @@
                 if (mod.nonMultiplier) {
                     return 'Tooltip';
                 }
-                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
+                let damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
                 if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease)) {
                     return "-";
                 }
@@ -259,13 +290,13 @@
             }
         },
         mounted() {
-            refreshTable(this.tableid, this.sortdata);
+            //refreshTable(this.tableid, this.sortdata);
         },
         updated() {
-            refreshTable(this.tableid, this.sortdata);
+            //refreshTable(this.tableid, this.sortdata);
         },
         activated() {
-            refreshTable(this.tableid, this.sortdata);
+            //refreshTable(this.tableid, this.sortdata);
         },
     });
 </script>
