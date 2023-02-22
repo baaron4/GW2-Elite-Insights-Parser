@@ -100,6 +100,8 @@ namespace GW2EIEvtcParser
         public const string HarvestTemplePrimordusSmallJaw = "EDA1C033B296404BA403E106F6F258C0";
         public const string HarvestTemplePrimordusGeneralJawAttack = "160CBAE34F4A2941885EB3F3CD6BB0C3";
         public const string HarvestTemplePrimordusBigJaw = "4D8CA1836969BD4BBF345719576ACAAF";
+        public const string HarvestTempleKralkatorrikBeamIndicator = "4ACBA11BFAC6B940BF6FD11CB332FFB8"; // This is the effect for the AoE indicator, the actual puddles are a different effect
+        public const string HarvestTempleKralkatorrikBeamAoe = "8B55EBC6025EB3429D464EDA5710E419"; // This is the effect for the actual circular puddles
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";

@@ -738,7 +738,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
-                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 230000, 238000);
+                    EffectGUIDEvent kralkBeam = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator);
+                    if (kralkBeam != null)
+                    {
+                        IReadOnlyList<EffectEvent> kralkBeamEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeam.ContentID);
+                        knownEffectsIDs.Add(kralkBeam.ContentID);
+                        foreach (EffectEvent effect in kralkBeamEffects)
+                        {
+                            int indicatorDuration = 2000;
+                            int aoeDuration = 5000;
+                            int indicatorStart = (int)effect.Time;
+                            int aoeStart = indicatorStart + indicatorDuration;
+                            int aoeEnd = aoeStart + aoeDuration;
+                            replay.Decorations.Add(new RectangleDecoration(true, aoeStart, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent kralkBeamAoe = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe);
+                    if (kralkBeamAoe != null)
+                    {
+                        IReadOnlyList<EffectEvent> kralkBeamAoeEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeamAoe.ContentID);
+                        knownEffectsIDs.Add(kralkBeamAoe.ContentID);
+                        foreach (EffectEvent effect in kralkBeamAoeEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = (int)effect.Time + 5000;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 350, (start, end), "rgba(0, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
                     EffectGUIDEvent green = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen);
