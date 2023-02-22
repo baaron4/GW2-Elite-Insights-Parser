@@ -1953,7 +1953,8 @@ namespace GW2EIEvtcParser
         public const long PowerOfTheVoid = 65601;
         public const long EnforcerRushingJustice = 65608;
         public const long ExtremeVulnerability = 65662;
-        public const long TargettedExpulsionCM = 65680;
+        public const long HarvestTempleTargetedExpulsionCM = 65680;
+        public const long FrostMeteor = 65687;
         public const long JawsOfDestruction = 65704;
         public const long DamageImmunitySooWonBite = 65716;
         public const long TargetOrder5 = 65717;
@@ -1967,7 +1968,7 @@ namespace GW2EIEvtcParser
         public const long FlameBreath = 65959;
         public const long GiantSmash = 66013;
         public const long Blast = 66014;
-        public const long TargettedExpulsionNM = 66025;
+        public const long HarvestTempleTargetedExpulsionNM = 66025;
         public const long NightmareEpoch1 = 66059;
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRush1 = 66090;
