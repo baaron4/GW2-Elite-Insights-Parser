@@ -749,7 +749,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int aoeDuration = 5000;
                             int indicatorStart = (int)effect.Time;
                             int aoeStart = indicatorStart + indicatorDuration;
-                            int aoeEnd = aoeStart + aoeDuration;
+                            int aoeEnd = Math.Min(aoeStart + aoeDuration, (int)target.LastAware);
                             replay.Decorations.Add(new RectangleDecoration(true, aoeStart, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new RectangleDecoration(true, 0, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
@@ -762,7 +762,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in kralkBeamAoeEffects)
                         {
                             int start = (int)effect.Time;
-                            int end = (int)effect.Time + 5000;
+                            int end = Math.Min((int)effect.Time + 5000, (int)target.LastAware);
                             replay.Decorations.Add(new CircleDecoration(true, 0, 350, (start, end), "rgba(0, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
