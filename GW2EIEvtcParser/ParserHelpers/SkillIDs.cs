@@ -1852,7 +1852,7 @@ namespace GW2EIEvtcParser
         public const long DeployJadeSphereAir2 = 63459;
         public const long DeployJadeSphereWater2 = 63461;
         public const long DeployJadeSphereEarth2 = 63472;
-        public const long SwarmOfMordremoth = 63544;
+        public const long SwarmOfMordremoth_PoolOfUndeath = 63544;
         public const long StormOfSwords2 = 63550;
         public const long SniperShot = 63551;
         public const long BiteOW = 63571;
@@ -1861,6 +1861,7 @@ namespace GW2EIEvtcParser
         public const long Stormfall = 63607;
         public const long EnergyTransfer = 63621;
         public const long NightmareEpoch2 = 63691;
+        public const long Slash2 = 63701;
         public const long VoidPoolKralkatorrik = 63746;
         public const long Stomp = 63767;
         public const long ChargedShot = 63772;
@@ -1870,6 +1871,7 @@ namespace GW2EIEvtcParser
         public const long LightningOfJormag = 63881;
         public const long VoidPool = 63910;
         public const long DragonsEndContributor10 = 63928;
+        public const long VoidBeam = 63956;
         public const long AbominationSwipe = 64396;
         public const long JadeBusterCannon = 64016;
         public const long LeyBreach = 64044;
@@ -1911,6 +1913,7 @@ namespace GW2EIEvtcParser
         public const long SlamZhaitan = 64932;
         public const long ExposedEODStrike = 64936;
         public const long DragonSlashWave = 64952;
+        public const long ShareTheVoid3 = 64973;
         public const long Thrash2 = 64998;
         public const long TargetOrder4 = 64999;
         public const long Drown1 = 65004;
@@ -1920,9 +1923,11 @@ namespace GW2EIEvtcParser
         public const long TormentingWave = 65031;
         public const long JadeTechOffensiveOvercharge = 65070;
         public const long TargetOrder2 = 65088;
+        public const long ShareTheVoid4 = 65112;
         public const long ThrowIce = 65119;
         public const long PutridDeluge = 65132;
         public const long GravityCrush = 65180;
+        public const long TailSlam = 65192;
         public const long BowlOfKimchiTofuStew = 65197;
         public const long IceSpike = 65230;
         public const long MaiTrinSomething = 65238;
@@ -1948,7 +1953,6 @@ namespace GW2EIEvtcParser
         public const long ExplosiveLeap2 = 65576;
         public const long VoidRepulsion2 = 65577;
         public const long VoidPoolSooWon = 65578;
-        public const long VoidExplosion3 = 65585;
         public const long VoidCorruption = 65590;
         public const long VoidExplosion2 = 65595;
         public const long PowerOfTheVoid = 65601;
@@ -2012,6 +2016,7 @@ namespace GW2EIEvtcParser
         public const long VitalityEqualizerCM = 67081;
         public const long ShatterEarth = 67104;
         public const long DeathsEmbrace2Effect = 67120;
+        public const long ShareTheVoid2 = 67148;
         public const long DeathsEmbraceSkill = 67160;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long DragonsEndContributor6 = 67352;
@@ -2022,8 +2027,9 @@ namespace GW2EIEvtcParser
         public const long BreathOfJormag3 = 67607;
         public const long Whip = 67617;
         public const long VampiricCloud = 67644;
-        public const long SwarmOfMordremoth2 = 67688;
-        public const long SwarmOfMordremoth3 = 67703;
+        public const long RollingFlame = 67646;
+        public const long SwarmOfMordremoth = 67688;
+        public const long SwarmOfMordremoth_CorruptedWaters = 67703;
         public const long VoidPool2 = 67739;
         public const long OldExposed = 67763;
         public const long GraspOfJormag = 67772;
