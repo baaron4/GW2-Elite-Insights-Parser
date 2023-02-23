@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(KingsWrath, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
-            new HitOnPlayerMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
+            new PlayerDstHitMechanic(KingsWrath, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
+            new PlayerDstHitMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
             new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
             }
             );

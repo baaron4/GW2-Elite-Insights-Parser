@@ -39,9 +39,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
         public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
+        public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
         protected List<NPC> _trashMobs { get; } = new List<NPC>();
         protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _hostiles { get; } = new List<AbstractSingleActor>();
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
 
@@ -206,10 +208,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             _nonPlayerFriendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            FinalizeComputeFightTargets();
+        }
+
+        protected void FinalizeComputeFightTargets()
+        {
             //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
             NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
+            _hostiles.AddRange(_targets);
+            _hostiles.AddRange(_trashMobs);
         }
 
         internal virtual List<InstantCastFinder> GetInstantCastFinders()

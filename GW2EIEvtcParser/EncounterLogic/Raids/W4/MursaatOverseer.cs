@@ -17,8 +17,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new HitOnPlayerMechanic(JadeSoldierAura, "Soldier's Aura", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
-            new HitOnPlayerMechanic(JadeSoldierExplosion, "Jade Explosion", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
+            new PlayerDstHitMechanic(JadeSoldierAura, "Soldier's Aura", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade","Jade Soldier's Aura hit", "Jade Aura",0),
+            new PlayerDstHitMechanic(JadeSoldierExplosion, "Jade Explosion", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl","Jade Soldier's Death Explosion", "Jade Explosion",0),
             //new Mechanic(37779, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Square,Colors.Yellow), "Claim",0), //Buff remove only
             //new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
