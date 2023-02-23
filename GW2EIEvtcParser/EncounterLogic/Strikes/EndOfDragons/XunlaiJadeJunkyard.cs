@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 //new HitOnPlayerMechanic(DeathsHand2, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Sctn.AoE.H", "Hit by in between Sections AoE", "Section AoE Hit", 150),
                 new HitOnPlayerMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Yellow), "Krait.H", "Hit by Kraits", "Krait Hit", 150),
                 new HitOnPlayerMechanic(WaveOfTorment, "Wave of Torment", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightPurple), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
-                new EnemyBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150)
+                new EnemyDstBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150)
             }
             );
             Icon = EncounterIconXunlaiJadeJunkyard;

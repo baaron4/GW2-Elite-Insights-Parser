@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new HitOnPlayerMechanic(SpreadingIceOthers, "Spreading Ice (Others)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange), "S.Ice.O","Hit by other's spreading ice", "Spreading Ice (Others)",50),
                 new HitOnPlayerMechanic(IcySlice, "Icy Slice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "I.Slice","Hit by Icy Slice", "Icy Slice",50),
                 new HitOnPlayerMechanic(IceTempest, "Ice Tempest", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "I.Tornado","Hit by Ice Tornadoes", "Ice Tempest",50),
-                new PlayerBuffApplyMechanic(ChainsOfFrostApplication, "Chains of Frost", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "F.Chains","Selected for Chains of Frost", "Chains of Frost",500),
-                new PlayerBuffRemoveMechanic(WhisperTeleportBack, "Teleport Back", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "TP In","Teleported back to the arena", "Teleport Back",500),
-                new PlayerBuffRemoveMechanic(WhisperTeleportOut, "Teleport Out", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue), "TP Out","Teleported outside of the arena", "Teleport Out",500),
+                new PlayerDstBuffApplyMechanic(ChainsOfFrostApplication, "Chains of Frost", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "F.Chains","Selected for Chains of Frost", "Chains of Frost",500),
+                new PlayerDstBuffRemoveMechanic(WhisperTeleportBack, "Teleport Back", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "TP In","Teleported back to the arena", "Teleport Back",500),
+                new PlayerDstBuffRemoveMechanic(WhisperTeleportOut, "Teleport Out", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue), "TP Out","Teleported outside of the arena", "Teleport Out",500),
                 new EnemyCastStartMechanic(SpreadingIceOwn, "Spreading Ice", new MechanicPlotlySetting(Symbols.Hexagram,Colors.DarkRed), "S.Ice.C","Cast Spreading Ice", "Cast Spreading Ice",0),
                 new EnemyCastStartMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "F.Chains.C","Cast Chains of Frost", "Cast Chains of Frost",0),
             }

@@ -28,10 +28,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
             new PlayerCastStartMechanic(ConjuredSlash, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
             new PlayerCastStartMechanic(ConjuredProtectionSAK, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
-            new PlayerBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
-            new PlayerBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
-            new EnemyBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
-            new EnemyBuffApplyMechanic(Shielded, "Shielded", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
+            new PlayerDstBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
+            new PlayerDstBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
+            new EnemyDstBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
+            new EnemyDstBuffApplyMechanic(Shielded, "Shielded", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
             });
             _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
             Extension = "ca";
