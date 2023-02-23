@@ -14,7 +14,7 @@ using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static GW2EIEvtcParser.ParserHelper;
 
-//recommend CTRL+M+O to collapse all
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIEvtcParser
 {
     public class EvtcParser

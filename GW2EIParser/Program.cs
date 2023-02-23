@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GW2EIBuilders;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIParser
 {
     internal static class Program
