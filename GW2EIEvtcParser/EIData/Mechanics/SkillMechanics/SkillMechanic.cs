@@ -13,12 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
         {
-            return SkillInIDs(c) && (_triggerCondition == null || _triggerCondition(c, log));
-        }
-
-        protected virtual bool SkillInIDs(AbstractHealthDamageEvent c)
-        {
-            return MechanicIDs.Contains(c.SkillId);
+            return (_triggerCondition == null || _triggerCondition(c, log));
         }
 
         public SkillMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
@@ -31,40 +26,27 @@ namespace GW2EIEvtcParser.EIData
             _triggerCondition = condition;
         }
 
-        protected abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(ParsedEvtcLog log, AbstractSingleActor actor);
+        protected abstract AgentItem GetAgentItem(AbstractHealthDamageEvent ahde);
 
-        protected void PlayerChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
-        {
-            foreach (Player p in log.PlayerList)
-            {
-                foreach (AbstractHealthDamageEvent c in GetDamageEvents(log, p))
-                {
-                    if (Keep(c, log))
-                    {
-                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, p));
-                    }
-                }
-            }
-        }
+        protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
-        protected void EnemyChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (AbstractSingleActor actor in log.FightData.Logic.Hostiles)
+            foreach (long skillID in MechanicIDs)
             {
-                foreach (AbstractHealthDamageEvent c in GetDamageEvents(log, actor))
+                foreach (AbstractHealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
                 {
                     AbstractSingleActor amp = null;
-                    if (Keep(c, log))
+                    if (Keep(ahde, log))
                     {
-                        amp = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
+                        amp = GetActor(log, GetAgentItem(ahde), regroupedMobs);
                     }
                     if (amp != null)
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                        mechanicLogs[this].Add(new MechanicEvent(ahde.Time, this, amp));
                     }
                 }
             }
-            
         }
 
     }

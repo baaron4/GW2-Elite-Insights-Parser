@@ -15,9 +15,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        protected override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(ParsedEvtcLog log, AbstractSingleActor actor)
+        protected override AgentItem GetAgentItem(AbstractHealthDamageEvent ahde)
         {
-            return actor.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
+            return ahde.From;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
             new PlayerDstHitMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
             new PlayerDstHitMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-            new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000, (de, log) => de.To.IsSpecy(ArcDPSEnums.TrashID.KeepConstructCore))
+            new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000, (de, log) => de.To.IsSpecy(ArcDPSEnums.TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
             });
             Extension = "kc";
             Icon = EncounterIconKeepConstruct;
