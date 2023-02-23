@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -8,8 +9,16 @@ namespace GW2EIEvtcParser.EIData
     internal class PlayerSrcAllHitsMechanic : SkillMechanic
     {
 
+        private bool Minions { get; set; } = false;
+
         public PlayerSrcAllHitsMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(0, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
+        }
+
+        public PlayerSrcAllHitsMechanic WithMinions(bool minions)
+        {
+            Minions = minions;
+            return this;
         }
 
         protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
@@ -26,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (AbstractHealthDamageEvent ahde in p.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (AbstractHealthDamageEvent ahde in (Minions ? p.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd) : p.GetJustActorDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd)))
                 {
                     if (Keep(ahde, log))
                     {
