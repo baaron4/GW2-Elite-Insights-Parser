@@ -4,17 +4,20 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class EnemyDstBuffApplyMechanic : BuffApplyMechanic
+    internal class EnemyDstBuffApplyMechanic : EnemyBuffApplyMechanic
     {
 
         public EnemyDstBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicID , inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
-            IsEnemyMechanic = true;
         }
 
         public EnemyDstBuffApplyMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
         {
-            IsEnemyMechanic = true;
+        }
+
+        protected override AgentItem GetAgentItem(BuffApplyEvent ba)
+        {
+            return ba.To;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)

@@ -16,9 +16,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        protected override void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, Player p)
+        protected override void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, AbstractSingleActor actor)
         {
-            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, actor));
             mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, log.PlayerList.FirstOrDefault(x => x.AgentItem == ba.CreditedBy)));
         }
     }

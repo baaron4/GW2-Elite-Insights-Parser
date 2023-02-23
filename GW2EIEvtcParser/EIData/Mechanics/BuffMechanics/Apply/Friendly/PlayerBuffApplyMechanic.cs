@@ -14,27 +14,27 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        protected abstract AgentItem GetAgentItem(BuffApplyEvent ba);
-
-        protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, Player p)
+        protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, p));
+            return MechanicHelper.FindPlayerActor(log, agentItem);
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (Player p in log.PlayerList)
+            foreach (long mechanicID in MechanicIDs)
             {
-                foreach (long mechanicID in MechanicIDs)
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
                 {
-                    foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
+                    AbstractSingleActor amp = null;
+                    if (c is BuffApplyEvent ba && Keep(ba, log))
                     {
-                        if (c is BuffApplyEvent ba && p.AgentItem == GetAgentItem(ba) && Keep(ba, log))
-                        {
-                            AddMechanic(log, mechanicLogs, ba, p);
-                        }
+                        amp = MechanicHelper.FindPlayerActor(log, GetAgentItem(ba));
                     }
-                }             
+                    if (amp != null)
+                    {
+                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
+                    }
+                }
             }
         }
     }
