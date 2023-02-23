@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class EnemyDstBuffRemoveMechanic : BuffRemoveMechanic
+    internal class EnemyDstBuffRemoveMechanic : EnemyBuffRemoveMechanic
     {
 
         public EnemyDstBuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffRemoveChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
@@ -17,23 +17,9 @@ namespace GW2EIEvtcParser.EIData
             IsEnemyMechanic = true;
         }
 
-        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        protected override AgentItem GetAgentItem(BuffRemoveAllEvent rae)
         {
-            foreach (long mechanicID in MechanicIDs)
-            {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
-                {
-                    AbstractSingleActor amp = null;
-                    if (c is BuffRemoveAllEvent rea && Keep(rea, log))
-                    {
-                        amp = MechanicHelper.FindEnemyActor(log, rea.To, regroupedMobs);
-                    }
-                    if (amp != null)
-                    {
-                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, amp));
-                    }
-                }
-            }
+            return rae.To;
         }
     }
 }
