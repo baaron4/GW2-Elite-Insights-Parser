@@ -14,22 +14,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            foreach (Player p in log.PlayerList)
-            {
-                foreach (long mechanicID in MechanicIDs)
-                {
-                    foreach (AbstractCastEvent c in log.CombatData.GetAnimatedCastData(mechanicID))
-                    {
-                        if (c.Caster == p.AgentItem && Keep(c, log))
-                        {
-                            mechanicLogs[this].Add(new MechanicEvent(GetTime(c), this, p));
-
-                        }
-                    }
-                }
-            }
+            return MechanicHelper.FindPlayerActor(log, agentItem);
         }
     }
 }
