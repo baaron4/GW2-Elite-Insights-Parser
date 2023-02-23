@@ -919,6 +919,8 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Offset time");
             OffsetEvtcData();
             operation.UpdateProgressWithCancellationCheck("Offset of " + (_fightData.FightStartOffset) + " ms added");
+            operation.UpdateProgressWithCancellationCheck("Adding environment agent");
+            _agentData.AddCustomNPCAgent(_fightData.LogStart, _fightData.LogEnd, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
             // Removal of players present before the fight but not during
             var agentsToRemove = new HashSet<AgentItem>();
             foreach (Player p in _playerList)
