@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -36,8 +37,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                IReadOnlyList<AbstractHealthDamageEvent> damageEvents = p.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
-                foreach (AbstractHealthDamageEvent c in damageEvents)
+                foreach (AbstractHealthDamageEvent c in GetDamageEvents(log, p))
                 {
                     if (Keep(c, log))
                     {
