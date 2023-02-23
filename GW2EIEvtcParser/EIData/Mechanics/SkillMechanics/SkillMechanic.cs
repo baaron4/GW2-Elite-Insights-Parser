@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                     AbstractSingleActor amp = null;
                     if (Keep(c, log))
                     {
-                        amp = EnemyMechanicHelper.FindActor(log, actor.AgentItem, regroupedMobs);
+                        amp = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
                     }
                     if (amp != null)
                     {

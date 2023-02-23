@@ -5,13 +5,13 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal static class EnemyMechanicHelper
+    internal static class MechanicHelper
     {
-        public static AbstractSingleActor FindActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, AbstractSingleActor> regroupedMobs)
+        public static AbstractSingleActor FindEnemyActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             if (log.FightData.Logic.TargetAgents.Contains(a))
             {
-                return log.FightData.Logic.Targets.First(x => x.AgentItem == a);
+                return log.FindActor(a, true);
             }
             // We regroup trash mobs by their ID
             if (log.FightData.Logic.TrashMobAgents.Contains(a))
@@ -22,6 +22,15 @@ namespace GW2EIEvtcParser.EIData
                     regroupedMobs.Add(amp.ID, amp);
                 }
                 return amp;
+            }
+            return null;
+        }
+
+        public static AbstractSingleActor FindPlayerActor(ParsedEvtcLog log, AgentItem a)
+        {
+            if (log.PlayerAgents.Contains(a))
+            {
+                return log.FindActor(a);
             }
             return null;
         }

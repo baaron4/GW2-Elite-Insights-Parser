@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
                         } 
                         else
                         {
-                            AbstractSingleActor actor = EnemyMechanicHelper.FindActor(log, agentItem, regroupedMobs);
+                            AbstractSingleActor actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
                             if (actor != null && Keep(effectEvent, log))
                             {
                                 mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, actor));

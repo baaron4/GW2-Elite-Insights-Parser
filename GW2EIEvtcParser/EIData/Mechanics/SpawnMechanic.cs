@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
-                    AbstractSingleActor amp = EnemyMechanicHelper.FindActor(log, a, regroupedMobs);
+                    AbstractSingleActor amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
                     if (amp != null)
                     {
                         mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
