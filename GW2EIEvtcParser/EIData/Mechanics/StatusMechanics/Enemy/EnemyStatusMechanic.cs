@@ -14,9 +14,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
-            var list = new List<AbstractSingleActor>(log.FightData.Logic.Targets);
-            list.AddRange(log.FightData.Logic.TrashMobs);
-            foreach (AbstractSingleActor actor in list)
+            foreach (AbstractSingleActor actor in log.FightData.Logic.Hostiles)
             {
                 foreach (T c in GetEvents(log, actor.AgentItem))
                 {
