@@ -1589,12 +1589,19 @@ namespace GW2EIEvtcParser
         public const long BowlOfFruitSaladWithCilantroGarnish = 57401;
         public const long CilantroAndCuredMeatFlatbread = 57409;
         public const long IceFrail2 = 57463;
+        public const long Frostbite = 57468;
         public const long IceShockWave2 = 57472;
+        public const long SpinningIce4 = 57507;
         public const long IceArmSwing = 57516;
+        public const long Snowball = 57569;
         public const long FrostbiteAuraIcebroodConstruct = 57593;
+        public const long FrostbiteAura = 57596;
         public const long IceCrystal = 57663;
         public const long IceFrail1 = 57678;
         public const long IceShatter = 57690;
+        public const long SpinningIce3 = 57713;
+        public const long ShatterArmShiverpeaksPass = 57729;
+        public const long SpinningIce1 = 57757;
         public const long IceShockWave3 = 57779;
         public const long CloveAndVeggieFlatbread = -1;
         public const long MintPearCuredMeatFlatbread = -1;
@@ -1617,6 +1624,7 @@ namespace GW2EIEvtcParser
         public const long PlateOfBeefCarpaccioWithSalsaGarnish = -1;
         public const long PeppercornSpicedEggsBenedict = -1;
         public const long DeatlyIceShockWave = 57832;
+        public const long SpinningIce2 = 57839;
         public const long IceShockWave1 = 57948;
         public const long Hypothermia = 57969;
         public const long SoldiersFocus = 58102;
