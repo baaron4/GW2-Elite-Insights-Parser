@@ -1941,6 +1941,7 @@ namespace GW2EIEvtcParser
         public const long LightningOfJormag = 63881;
         public const long VoidPool = 63910;
         public const long DragonsEndContributor10 = 63928;
+        public const long DeathsEmbrace2Skill = 64386;
         public const long AbominationSwipe = 64396;
         public const long JadeBusterCannon = 64016;
         public const long LeyBreach = 64044;
@@ -1950,6 +1951,8 @@ namespace GW2EIEvtcParser
         public const long TormentOfTheVoid = 64150;
         public const long GraspOfTheVoid = 64161;
         public const long Hallucinations = 64179;
+        public const long EmbalmingBarrage = 64236;
+        public const long ConsumingHatred = 64239;
         public const long DragonsEndContributor3 = 64250;
         public const long TargetedExpulsion = 64277;
         public const long SharedDestructionLi = 64300;
@@ -2030,6 +2033,7 @@ namespace GW2EIEvtcParser
         public const long VoidExplosion2 = 65595;
         public const long PowerOfTheVoid = 65601;
         public const long EnforcerRushingJustice = 65608;
+        public const long HallucinatingShot = 65649;
         public const long ExtremeVulnerability = 65662;
         public const long TargettedExpulsionCM = 65680;
         public const long JawsOfDestruction = 65704;
@@ -2052,8 +2056,10 @@ namespace GW2EIEvtcParser
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRush1 = 66090;
         public const long FixatedAnkkaKainengOverlook = 66140;
+        public const long TerrifyingApparition = 66156;
         public const long DragonsEndContributor2 = 66185;
         public const long BreathOfJormag2 = 66216;
+        public const long SanctuaryAnkka1 = 66241;
         public const long SooWonSpearPhaseInvul = 66242;
         public const long GraspingHorror = 66246;
         public const long JadeTechDefensiveOvercharge = 66303;
@@ -2098,6 +2104,7 @@ namespace GW2EIEvtcParser
         public const long FocusedDestruction2 = 67295;
         public const long DragonsEndContributor6 = 67352;
         public const long Slice = 67438;
+        public const long EmbalmingShot = 67443;
         public const long WispForm = 67446;
         public const long NecroticRitual = 67447;
         public const long CripplingStrike = 67500;
@@ -2117,9 +2124,13 @@ namespace GW2EIEvtcParser
         public const long DragonSlashWaveCM = 67825;
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
+        public const long WaveOfTorment2 = 67839;
         public const long MagneticBomb = 67856;
+        public const long ImminentDeath1 = 67859;
         public const long TormentingWaveCM = 67866;
         public const long PhotonSaturation = 67872;
+        public const long ImminnetDeath2 = 67931;
+        public const long SanctuaryAnkka2 = 67941;
         public const long DragonSlashRush2CM = 67943;
         public const long FocusedDestruction = 67954;
         public const long Infirmity = 67965;
