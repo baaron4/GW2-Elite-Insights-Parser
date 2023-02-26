@@ -727,6 +727,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
+                    EffectGUIDEvent meteor = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField);
+                    if (meteor != null) 
+                    {
+                        IReadOnlyList<EffectEvent> meteorEffects = log.CombatData.GetEffectEventsByEffectID(meteor.ContentID);
+                        knownEffectsIDs.Add(iceShard.ContentID);
+                        foreach (EffectEvent effect in meteorEffects)
+                        {
+                            int indicatorDuration = 1500;
+                            int spreadDuration = 3000;
+                            int lingerDuration = 9500;
+                            int start = (int)effect.Time;
+                            int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
+                            // meteor impact
+                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start-indicatorDuration, start), "rgba(69, 182, 254, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start-indicatorDuration, start), "rgba(69, 182, 254, 0.2)", new PositionConnector(effect.Position)));
+                            // ice field
+                            replay.Decorations.Add(new CircleDecoration(true, start+spreadDuration, 1200, (start, fieldEnd), "rgba(229, 243, 253, 0.1)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, fieldEnd), "rgba(229, 243, 253, 0.1)", new PositionConnector(effect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
                     (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
