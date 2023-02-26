@@ -104,6 +104,7 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleKralkatorrikBeamAoe = "8B55EBC6025EB3429D464EDA5710E419"; // This is the effect for the actual circular puddles
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
+        public const string HarvestTempleRedPuddle = "FF0A7D32AD894E45993BE5ED748BF484";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
