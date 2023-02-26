@@ -740,11 +740,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)effect.Time;
                             int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
                             // meteor impact
-                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start-indicatorDuration, start), "rgba(69, 182, 254, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start-indicatorDuration, start), "rgba(69, 182, 254, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                             // ice field
-                            replay.Decorations.Add(new CircleDecoration(true, start+spreadDuration, 1200, (start, fieldEnd), "rgba(229, 243, 253, 0.1)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, fieldEnd), "rgba(229, 243, 253, 0.1)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, start+spreadDuration, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;
