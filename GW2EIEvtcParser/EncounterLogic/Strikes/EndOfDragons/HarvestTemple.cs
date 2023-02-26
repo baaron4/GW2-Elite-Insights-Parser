@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new HitOnPlayerMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new HitOnPlayerMechanic(new [] { VoidPool, VoidPool2, VoidPoolKralkatorrik, VoidPoolSooWon }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Pool.H", "Hit by Void Pool", "Void Pool", 150),
-                new HitOnPlayerMechanic(ShareTheVoid, "Share The Void", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Green.H", "Hit by Green explosion", "Green Explosion", 150),
+                new SkillOnPlayerMechanic(ShareTheVoid, "Share The Void", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Green.H", "Hit by Green explosion", "Green Explosion", 150),
                 new SkillOnPlayerMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150, (@event, log) => @event.HasHit || @event.DoubleProcHit),
                 // Jormag
                 new HitOnPlayerMechanic(new [] { BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
