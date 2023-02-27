@@ -541,34 +541,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             var knownEffectsIDs = new HashSet<long>();
-            var dragons = new List<int>
-            {
-                (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
-            };
-            if (dragons.Contains(target.ID))
-            {
-                EffectGUIDEvent redPuddle = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddle);
-                if (redPuddle != null)
-                {
-                    var redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID)
-                        .Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                    knownEffectsIDs.Add(redPuddle.ContentID);
-                    foreach (EffectEvent effect in redPuddleEffects)
-                    {
-                        int inactiveDuration = 1500;
-                        int start = (int)effect.Time;
-                        int puddleEnd = Math.Min((int)target.LastAware, start + 300000); // puddles stay alive for 5 minutes
-                        replay.Decorations.Add(new CircleDecoration(true, start + inactiveDuration, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
-                    }
-                }
-            }
-
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
@@ -841,6 +813,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = (int)failedGreen.Time;
                             replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(failedGreen.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
+                        }
+                    }
+                    EffectGUIDEvent redPuddle = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddle);
+                    if (redPuddle != null)
+                    {
+                        var redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID);
+                        knownEffectsIDs.Add(redPuddle.ContentID);
+                        foreach (EffectEvent effect in redPuddleEffects)
+                        {
+                            int inactiveDuration = 1500;
+                            int start = (int)effect.Time;
+                            AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+                            if (dragonVoid == null)
+                            {
+                                continue;
+                            }
+                            int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + 300000); // puddles stay alive for 5 minutes
+                            replay.Decorations.Add(new CircleDecoration(true, start + inactiveDuration, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;
