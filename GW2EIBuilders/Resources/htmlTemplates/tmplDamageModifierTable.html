@@ -65,14 +65,14 @@
                 return logData.phases[this.phaseindex];
             },
             indicesToUse: function () {
-                let res = [];
+                var res = [];
                 if (this.playerindices !== null) {
-                    for (let i = 0; i < this.playerindices.length; i++) {
+                    for (var i = 0; i < this.playerindices.length; i++) {
                         res.push(this.playerindices[i]);
                     }
                     return res;
                 }
-                for (let i = 0; i < logData.players.length; i++) {
+                for (var i = 0; i < logData.players.length; i++) {
                     res.push(i);
                 }
                 return res;
@@ -81,17 +81,17 @@
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                let rows = [];
-                let sums = [];
-                let groups = [];
-                let total = {
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
                     name: "Total",
                     data: []
                 };
-                let j;
-                for (let i = 0; i < this.indicesToUse.length; i++) {
-                    let index = this.indicesToUse[i];
-                    let player = logData.players[index];
+                var j;
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
                     if (player.isFake) {
                         continue;
                     }
@@ -101,8 +101,8 @@
                             data: []
                         };
                     }
-                    let dmgModifier = this.modifiersdata[index].data;
-                    let data = [];
+                    var dmgModifier = this.modifiersdata[index].data;
+                    var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
                         if (!player.notInSquad) {
@@ -112,7 +112,7 @@
                             if (!total.data[j]) {
                                 total.data[j] = [0, 0, 0, 0];
                             }
-                            for (let k = 0; k < data[j].length; k++) {
+                            for (var k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -124,13 +124,13 @@
                         data: data
                     });
                 }
-                for (let i = 0; i < groups.length; i++) {
+                for (var i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                let res = {
+                var res = {
                     rows: rows,
                     sums: sums
                 };
@@ -138,22 +138,22 @@
                 return res;
             },
             tableDataTarget: function () {
-                let cacheID = this.phaseindex + '-';
+                var cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                let rows = [];
-                let sums = [];
-                let groups = [];
-                let total = {
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
                     name: "Total",
                     data: []
                 };
-                let j;
-                for (let i = 0; i < this.indicesToUse.length; i++) {
-                    let index = this.indicesToUse[i];
-                    let player = logData.players[index];
+                var j;
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
                     if (player.isFake) {
                         continue;
                     }
@@ -163,7 +163,7 @@
                             data: []
                         };
                     }
-                    let data = [];
+                    var data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = [0, 0, 0, 0];
                         if (!player.notInSquad) {
@@ -175,20 +175,20 @@
                             }
                         }
                     }
-                    let dmgModifier = this.modifiersdata[index].dataTarget;
+                    var dmgModifier = this.modifiersdata[index].dataTarget;
                     for (j = 0; j < this.activetargets.length; j++) {
-                        let modifier = dmgModifier[this.activetargets[j]];
-                        for (let k = 0; k < this.modifiers.length; k++) {
-                            let targetData = modifier[k];
-                            let curData = data[k];
-                            for (let l = 0; l < targetData.length; l++) {
+                        var modifier = dmgModifier[this.activetargets[j]];
+                        for (var k = 0; k < this.modifiers.length; k++) {
+                            var targetData = modifier[k];
+                            var curData = data[k];
+                            for (var l = 0; l < targetData.length; l++) {
                                 curData[l] += targetData[l];
                             }
                         }
                     }
                     if (!player.notInSquad) {
                         for (j = 0; j < this.modifiers.length; j++) {
-                            for (let k = 0; k < data[j].length; k++) {
+                            for (var k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -200,13 +200,13 @@
                         data: data
                     });
                 }
-                for (let i = 0; i < groups.length; i++) {
+                for (var i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                let res = {
+                var res = {
                     rows: rows,
                     sums: sums
                 };
@@ -216,7 +216,7 @@
         },
         methods: {
             sortBy: function(key, index) {
-                let oldKey = this.sortdata.key;
+                var oldKey = this.sortdata.key;
                 this.sortdata.key = key;
                 if (oldKey !== key) {
                     this.sortdata.order = "asc";
@@ -226,7 +226,7 @@
                 this.sortdata.index = index || 0;
             },
             sortData: function(rows) {
-                let order = this.sortdata.order === "asc" ? 1 : -1;
+                var order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
                         rows.sort((x,y) => order * (x.player.group - y.player.group));
@@ -238,8 +238,8 @@
                         rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
                         break;
                     case "Modifier":
-                        let index = this.sortdata.index;
-                        let modifier = this.modifiers[index];
+                        var index = this.sortdata.index;
+                        var modifier = this.modifiers[index];
                         rows.sort((x,y) => order * this.getCellValue(x.data[index], modifier).localeCompare(this.getCellValue(y.data[index], modifier)));
                         break;
                 }
@@ -249,18 +249,18 @@
                 if (item[0] === 0) {
                     return null;
                 }
-                let hits = item[0] + " out of " + item[1] + " hits";
-                let percent;
+                var hits = item[0] + " out of " + item[1] + " hits";
+                var percent;
                 if (mod.skillBased) {
                     percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
                 } else {
                     percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
                 }
-                let res = hits + "<br>" + percent;
+                var res = hits + "<br>" + percent;
                 if (item[2] === 0) {
                     return res;
                 }
-                let gain;
+                var gain;
                 if (mod.nonMultiplier) {
                     gain = "Damage Done: ";
                 } else {
@@ -282,21 +282,12 @@
                 if (mod.nonMultiplier) {
                     return 'Tooltip';
                 }
-                let damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
+                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
                 if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease)) {
                     return "-";
                 }
                 return damageIncrease + '%';
             }
-        },
-        mounted() {
-            //refreshTable(this.tableid, this.sortdata);
-        },
-        updated() {
-            //refreshTable(this.tableid, this.sortdata);
-        },
-        activated() {
-            //refreshTable(this.tableid, this.sortdata);
         },
     });
 </script>
