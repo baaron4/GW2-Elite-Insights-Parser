@@ -2207,7 +2207,7 @@ namespace GW2EIEvtcParser
         public const long TriBolt = 68318;
         public const long NakedSingularity = 68319;
         public const long TidalTorment = 68330;
-        public const long TidalTorment2 = 68332;
+        public const long TidalTormentCM = 68332;
         public const long DualHorizon = 68336;
         public const long NoxiousVaporBlade = 68346;
         public const long GravitationalWave = 68352;
@@ -2223,8 +2223,8 @@ namespace GW2EIEvtcParser
         public const long Rupture = 68420;
         public const long NoxiousReturn2 = 68425;
         public const long DualHorizon2 = 68435;
-        public const long NakedSingularity2 = 68442;
-        public const long ErgoShear = 68468;
+        public const long NakedSingularityCM = 68442;
+        public const long ErgoShearCM = 68468;
         public const long KineticImpact = 68480;
         public const long BoilingAether = 68483;
         public const long BoilingAether2 = 68493;
@@ -2240,7 +2240,7 @@ namespace GW2EIEvtcParser
         public const long PerniciousVortex2 = 68539;
         public const long Rupture2 = 68540;
         public const long Relapse = 68544;
-        public const long ErgoShear2 = 68546;
+        public const long ErgoShear = 68546;
         public const long GravityHammer2 = 68556;
         public const long FixatedOldLionsCourt = 68562;
         public const long BoilingAether3 = 68580;
