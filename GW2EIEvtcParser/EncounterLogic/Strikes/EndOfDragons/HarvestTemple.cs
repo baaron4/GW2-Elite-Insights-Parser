@@ -909,12 +909,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int duration = 7000;
                     int start = (int)redSelectedEffect.Time;
-                    int end = start + duration;
                     AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(redSelectedEffect.Time);
                     if (dragonVoid == null)
                     {
                         continue;
                     }
+                    int end = Math.Min((int)dragonVoid.LastAware, start + duration);
                     replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
                     replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
                 }
