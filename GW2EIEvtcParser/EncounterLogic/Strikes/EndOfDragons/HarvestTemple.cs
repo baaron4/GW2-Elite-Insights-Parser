@@ -19,16 +19,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                // General
                 new PlayerBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new HitOnPlayerMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
-                new HitOnPlayerMechanic(new long[] {BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(new [] { VoidPool, VoidPool2, VoidPoolKralkatorrik, VoidPoolSooWon }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Pool.H", "Hit by Void Pool", "Void Pool", 150),
+                new SkillOnPlayerMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150, (@event, log) => @event.HasHit || @event.DoubleProcHit),
+                // Jormag
+                new HitOnPlayerMechanic(new [] { BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new HitOnPlayerMechanic(FrostMeteor, "Frost Meteor", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
+                // Primordus
                 new HitOnPlayerMechanic(LavaSlam, "Lava Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
+                new HitOnPlayerMechanic(JawsOfDestruction, "Jaws of Destruction", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Jaws.H", "Hit by Primordus Jaws", "Primordus Jaws", 150),
+                // Kralkatorrik 
                 new HitOnPlayerMechanic(CrystalBarrage, "Crystal Barrage", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
                 new HitOnPlayerMechanic(BrandingBeam, "Branding Beam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik Beam", "Kralkatorrik Beam", 150),
+                new HitOnPlayerMechanic(BrandedArtillery, "Branded Artillery", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", 150),
+                // Purification 2
+                new HitOnPlayerMechanic(SwarmOfMordremoth_PoolOfUndeath, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Goop.H", "Hit by goop left by heart", "Heart Goop", 150),
+                new HitOnPlayerMechanic(SwarmOfMordremoth, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", 150),
+                // Mordremoth
                 new HitOnPlayerMechanic(Shockwave, "Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new HitOnPlayerMechanic(ScreamOfZhaitanNM, "Scream of Zhaitan", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new HitOnPlayerMechanic(Kick, "Kick", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150),
+                new HitOnPlayerMechanic(PoisonRoar, "Poison Roar", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth Poison", "Mordremoth Poison", 150),
+                // Zhaitan
+                new HitOnPlayerMechanic(new []{ ScreamOfZhaitanNM, ScreamOfZhaitanCM }, "Scream of Zhaitan", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new HitOnPlayerMechanic(PutridDeluge, "Putrid Deluge", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkGreen), "Z.Poison.H", "Hit by Zhaitan Poison", "Zhaitan Poison", 150),
+                // Saltspray
                 new HitOnPlayerMechanic(HydroBurst, "Hydro Burst", new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Whirlpool", "Whirlpool", 150),
-                new HitOnPlayerMechanic(new long[] {TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new HitOnPlayerMechanic(SwarmOfMordremoth_CorruptedWaters, "Swarm of Mordremoth", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightBlue), "Prjtile.H", "Hit by Heart Projectile", "Heart Projectile", 150),
+                // Soo Won
+                new HitOnPlayerMechanic(new [] { TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
                 new HitOnPlayerMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
             }
             );
@@ -679,6 +699,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
+                    EffectGUIDEvent meteor = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField);
+                    if (meteor != null) 
+                    {
+                        IReadOnlyList<EffectEvent> meteorEffects = log.CombatData.GetEffectEventsByEffectID(meteor.ContentID);
+                        knownEffectsIDs.Add(iceShard.ContentID);
+                        foreach (EffectEvent effect in meteorEffects)
+                        {
+                            int indicatorDuration = 1500;
+                            int spreadDuration = 3000;
+                            int lingerDuration = 9500;
+                            int start = (int)effect.Time;
+                            int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
+                            // meteor impact
+                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            // ice field
+                            replay.Decorations.Add(new CircleDecoration(true, start+spreadDuration, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
                     (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
@@ -717,7 +757,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
-                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 230000, 238000);
+                    EffectGUIDEvent kralkBeam = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator);
+                    if (kralkBeam != null)
+                    {
+                        IReadOnlyList<EffectEvent> kralkBeamEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeam.ContentID);
+                        knownEffectsIDs.Add(kralkBeam.ContentID);
+                        foreach (EffectEvent effect in kralkBeamEffects)
+                        {
+                            int indicatorDuration = 2000;
+                            int aoeDuration = 5000;
+                            int indicatorStart = (int)effect.Time;
+                            int aoeStart = indicatorStart + indicatorDuration;
+                            int aoeEnd = Math.Min(aoeStart + aoeDuration, (int)target.LastAware);
+                            replay.Decorations.Add(new RectangleDecoration(true, aoeStart, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent kralkBeamAoe = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe);
+                    if (kralkBeamAoe != null)
+                    {
+                        IReadOnlyList<EffectEvent> kralkBeamAoeEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeamAoe.ContentID);
+                        knownEffectsIDs.Add(kralkBeamAoe.ContentID);
+                        foreach (EffectEvent effect in kralkBeamAoeEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = Math.Min((int)effect.Time + 5000, (int)target.LastAware);
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 350, (start, end), "rgba(0, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
                     EffectGUIDEvent green = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen);
@@ -746,6 +813,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = (int)failedGreen.Time;
                             replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(failedGreen.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
+                        }
+                    }
+                    EffectGUIDEvent redPuddle = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddle);
+                    if (redPuddle != null)
+                    {
+                        var redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID);
+                        knownEffectsIDs.Add(redPuddle.ContentID);
+                        foreach (EffectEvent effect in redPuddleEffects)
+                        {
+                            int inactiveDuration = 1500;
+                            int start = (int)effect.Time;
+                            AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+                            if (dragonVoid == null)
+                            {
+                                continue;
+                            }
+                            int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + 300000); // puddles stay alive for 5 minutes
+                            replay.Decorations.Add(new CircleDecoration(true, start + inactiveDuration, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;
@@ -812,25 +898,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 knownEffectsIDs.Add(redSelected.ContentID);
                 foreach (EffectEvent redSelectedEffect in redSelectedEffects)
                 {
-                    int duration = 6500;
+                    int duration = 7000;
                     int start = (int)redSelectedEffect.Time;
-                    int end = start + duration;
                     AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(redSelectedEffect.Time);
                     if (dragonVoid == null)
                     {
                         continue;
                     }
-                    int puddleEnd = Math.Min((int)dragonVoid.LastAware, end + 300000); // puddles stay alive for 5 minutes
-                    int effectEnd = Math.Min(puddleEnd, end);
-                    replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, effectEnd), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
-                    Point3D pos = p.GetCurrentPosition(log, end);
-                    if (pos == null)
-                    {
-                        continue;
-                    }
-                    replay.Decorations.Add(new CircleDecoration(true, end + 1500, 400, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (end, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(pos)));
+                    int end = Math.Min((int)dragonVoid.LastAware, start + duration);
+                    replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
                 }
             }
         }
