@@ -659,7 +659,8 @@ namespace GW2EIEvtcParser
             if (combatItem.IsExtension)
             {
                 // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
-                if (combatItem.Pad == 0)
+                // Can't be ExtensionCombat
+                if (combatItem.Pad == 0 && combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
                 {
                     AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
                     if (handler != null)
