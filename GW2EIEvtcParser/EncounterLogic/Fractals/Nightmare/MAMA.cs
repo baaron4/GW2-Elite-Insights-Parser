@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -20,17 +22,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             new HitOnPlayerMechanic(new long[]{ Blastwave1, Blastwave2 }, "Blastwave", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB","Blastwave (Spinning Knockback)", "KB Spin",0),
             new HitOnPlayerMechanic(TantrumMAMA, "Tantrum", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum","Tantrum (Double hit or Slams)", "Dual Spin/Slams",700),
             new HitOnPlayerMechanic(Leap, "Leap", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump","Leap (<33% only)", "Leap",0),
-            new HitOnPlayerMechanic(Shoot, "Shoot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot","Toxic Shoot (Green Bullets)", "Toxic Shoot",0),
+            new HitOnPlayerMechanic(ShootGreenBalls, "Shoot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot","Toxic Shoot (Green Bullets)", "Toxic Shoot",0),
             new HitOnPlayerMechanic(ExplosiveImpact, "Explosive Impact", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump","Explosive Impact (Knight Jump)", "Knight Jump",0),
             new HitOnPlayerMechanic(SweepingStrikes, "Sweeping Strikes", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Sweep","Swings (Many rapid front spins)", "Sweeping Strikes",200),
-            new HitOnPlayerMechanic(NigthmareMiasmaMAMA, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Poison Puddle)", "Poison Goo",700),
-            new HitOnPlayerMechanic(GrenadeBarrare, "Grenade Barrage", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage","Grenade Barrage (many projectiles in all directions)", "Ball Barrage",0),
-            new HitOnPlayerMechanic(RedBallShot, "Red Ball Shot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball","Small Red Bullets", "Bullet",0),
+            new HitOnPlayerMechanic(NightmareMiasmaMAMA, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Poison Puddle)", "Poison Goo",700),
+            new HitOnPlayerMechanic(new long[] { GrenadeBarrage, GrenadeBarrage2 }, "Grenade Barrage", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage","Grenade Barrage (Red Bullets with AoEs)", "Ball Barrage",0),
+            new HitOnPlayerMechanic(new long[] { ShootRedBalls, ShootRedBalls2 }, "Red Ball Shot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball","Shoot (Direct Red Bullets)", "Bullet",0),
             new HitOnPlayerMechanic(Extraction, "Extraction", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull","Extraction (Knight Pull Circle)", "Knight Pull",0),
-            new HitOnPlayerMechanic(HomingGrenades, "Homing Grenades", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades","Homing Grenades", "Homing Grenades",0),
+            new HitOnPlayerMechanic(new long[] { HomingGrenades, HomingGrenades2 }, "Homing Grenades", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades","Homing Grenades", "Homing Grenades",0),
             new HitOnPlayerMechanic(new long[] { CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
             new HitOnPlayerMechanic(KnightsGaze, "Knight's Daze", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze","Knight's Daze", "Daze", 0),
-
+            new SkillOnPlayerMechanic(new long[] { NightmareDevastation1, NightmareDevastation3, NightmareDevastation4 }, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", 0),
             });
             Extension = "mama";
             Icon = EncounterIconMAMA;
@@ -118,5 +120,135 @@ namespace GW2EIEvtcParser.EncounterLogic
             { (int)ArcDPSEnums.TrashID.RedKnight, "Red Knight" },
             { (int)ArcDPSEnums.TrashID.BlueKnight, "Blue Knight" }
         };
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyCollection<Buff> buffs = target.GetTrackedBuffs(log);
+            Dictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.MAMA:
+                    // AoE Knockback
+                    var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
+                    foreach (AbstractCastEvent c in blastwave)
+                    {
+                        int endTime = GetEndTime(buffsUptime, c);
+                        int hitTime = (int)c.Time + 2800;
+
+                        replay.Decorations.Add(new CircleDecoration(true, hitTime, 550, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 545, 550, ((int)c.Time, endTime), "rgba(255, 0, 0, 1)", new AgentConnector(target)));
+                    }
+
+                    // Leap with shockwaves
+                    var leap = casts.Where(x => x.SkillId == Leap).ToList();
+                    foreach (AbstractCastEvent c in leap)
+                    {
+                        int start = (int)c.Time;
+                        int delay = c.ExpectedDuration;
+                        int duration = 2680;
+                        int radius = 1200;
+                        int impactRadius = 40;
+
+                        // Find position at the end of the leap time
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= c.ExpectedEndTime + 1000);
+                        var position = new Point3D(targetPosition.X, targetPosition.Y);
+
+                        // Find if stun is present
+                        BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
+                        if (models != null)
+                        {
+                            // Find if the segment duration of the stun is between the start and end of the cast event
+                            Segment segment = models.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < (int)c.Time + c.ExpectedDuration);
+                            if (segment == null)
+                            {
+                                // If the segment is null, display the shockwaves, otherwise the jump is interrupted before the waves spawn
+                                // 3 rounds of decorations for the 3 waves
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
+                                    replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
+                                    replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
+                                    delay += 120;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.BlueKnight:
+                case (int)ArcDPSEnums.TrashID.RedKnight:
+                case (int)ArcDPSEnums.TrashID.GreenKnight:
+                    // Knockback AoE
+                    var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
+                    foreach (AbstractCastEvent c in explosiveImpact)
+                    {
+                        int endTime = GetEndTime(buffsUptime, c);
+
+                        replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 600, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
+
+                    // Pull AoE
+                    var extraction = casts.Where(x => x.SkillId == Extraction).ToList();
+                    foreach (AbstractCastEvent c in extraction)
+                    {
+                        int endTime = GetEndTime(buffsUptime, c);
+
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 3000, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            var knownEffectsIDs = new HashSet<long>();
+            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
+            if (sickness != null)
+            {
+                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
+                knownEffectsIDs.Add(sickness.ContentID);
+                
+                foreach (EffectEvent sicknessEffect in sicknessEffects)
+                {
+                    int duration = 4000;
+                    int start = (int)sicknessEffect.Time;
+                    int end = start + duration;
+                    int effectEnd = start + duration;
+                    Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                    if (facing == null)
+                    {
+                        continue;
+                    }
+                    replay.Decorations.Add(new PieDecoration(true, 0, 600, RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) * 360 / 10, 360 / 10, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the end time of a cast if the target is stunned.
+        /// </summary>
+        /// <param name="buffsUptime">Dictionary of the buffs applications and durations.</param>
+        /// <param name="cast">Cast event</param>
+        /// <returns></returns>
+        private static int GetEndTime(Dictionary<long, BuffsGraphModel> buffsUptime, AbstractCastEvent cast)
+        {
+            // Find if stun is present
+            BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
+            if (models != null)
+            {
+                // Find if the segment duration of the stun is between the start and end of the cast event
+                Segment segment = models.BuffChart.FirstOrDefault(x => x.Start > cast.Time && x.Start < (int)cast.Time + cast.ExpectedDuration);
+                if (segment != null)
+                {
+                    // End time of the animation when the stun applies
+                    return (int)segment.Start;
+                }
+            }
+            return (int)cast.EndTime;
+        }
     }
 }
