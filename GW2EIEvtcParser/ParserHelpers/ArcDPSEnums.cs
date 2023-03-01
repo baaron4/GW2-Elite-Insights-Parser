@@ -748,6 +748,7 @@ namespace GW2EIEvtcParser
             FractalVindicator = 19684,
             FractalAvenger = 15960,
             // MAMA
+            Arkk = 16902,
             GreenKnight = 16906,
             RedKnight = 16974,
             BlueKnight = 16899,
