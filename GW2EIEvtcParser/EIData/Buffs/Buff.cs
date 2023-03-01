@@ -755,9 +755,12 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Void Shell", VoidShell, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/6/65/Windfall.png" ),
                 // Old Lion's Court
                 new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/66/Fixated.png"),
-                new Buff("ErgoShear", ErgoShear, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a2/Ergo_Shear.png"),
+                new Buff("Ergo Shear", ErgoShear, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a2/Ergo_Shear.png"),
+                new Buff("Ergo Shear CM", ErgoShearCM, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a2/Ergo_Shear.png"),
                 new Buff("Tidal Torment", TidalTorment, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c2/Tidal_Torment.png"),
+                new Buff("Tidal Torment CM", TidalTormentCM, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/c/c2/Tidal_Torment.png"),
                 new Buff("Naked Singularity", NakedSingularity, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
+                new Buff("Naked Singularity CM", NakedSingularityCM, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other,"https://i.imgur.com/nSYuby8.png"),
                 new Buff("Ley-Woven Shielding", LeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/2b/Ley_Energy_Shield.png"),
                 new Buff("Malfunctioning Ley-Woven Shielding", MalfunctioningLeyWovenShielding, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png"),
                 new Buff("Power Transfer", PowerTransfer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/88/Spirit_Energy_Tracker.png"),

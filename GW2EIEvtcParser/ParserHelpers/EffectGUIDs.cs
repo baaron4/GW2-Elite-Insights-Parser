@@ -96,12 +96,17 @@ namespace GW2EIEvtcParser
         public const string HarvestTemplePurificationFireBalls = "D49EB86EB17A0D4793768B19978C1B2C";
         public const string HarvestTemplePurificationBeeLaunch = "73FE43AEE78ADC4B9527DF683481984F";
         public const string HarvestTemplePurificationPoisonTrail = "CCBA0AD77B52774DA48EE37AED9108F4";
+        public const string HarvestTemplePurificationWaterProjectiles = "F8F9628F58DA09438574D66424399151";
         public const string HarvestTempleJormagIceShards = "2B9395E6BDE51E4C90AD3A9CA78FBCE7";
+        public const string HarvestTempleJormagFrostMeteorIceField = "40C38381C43B184A885960714F9388D5";
         public const string HarvestTemplePrimordusSmallJaw = "EDA1C033B296404BA403E106F6F258C0";
         public const string HarvestTemplePrimordusGeneralJawAttack = "160CBAE34F4A2941885EB3F3CD6BB0C3";
         public const string HarvestTemplePrimordusBigJaw = "4D8CA1836969BD4BBF345719576ACAAF";
+        public const string HarvestTempleKralkatorrikBeamIndicator = "4ACBA11BFAC6B940BF6FD11CB332FFB8"; // This is the effect for the AoE indicator, the actual puddles are a different effect
+        public const string HarvestTempleKralkatorrikBeamAoe = "8B55EBC6025EB3429D464EDA5710E419"; // This is the effect for the actual circular puddles
         public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
+        public const string HarvestTempleRedPuddle = "FF0A7D32AD894E45993BE5ED748BF484";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
