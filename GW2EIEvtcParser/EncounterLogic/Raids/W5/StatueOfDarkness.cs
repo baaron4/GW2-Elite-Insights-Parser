@@ -19,13 +19,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
-            new PlayerBuffApplyMechanic(LightCarrier, "Light Carrier", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
+            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
+            new PlayerDstBuffApplyMechanic(LightCarrier, "Light Carrier", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
             new PlayerCastStartMechanic(Flare, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0, (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-            new HitOnPlayerMechanic(PiercingShadow, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
-            new HitOnPlayerMechanic(DeepAbyss, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
-            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfFate)),
-            new PlayerBuffApplyToMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfJudgement)),
+            new PlayerDstHitMechanic(PiercingShadow, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
+            new PlayerDstHitMechanic(DeepAbyss, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
+            new PlayerSrcBuffApplyMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied hard CC on Eye of Fate", "Hard CC Fate",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfFate)),
+            new PlayerSrcBuffApplyMechanic(new long[] { Daze, Stun, Fear }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied hard CC on Eye of Judgement", "Daze Judge",50, (ba, log) => ba.To.IsSpecy(ArcDPSEnums.TargetID.EyeOfJudgement)),
             //47857 <- teleport + fear skill? 
             }
             );

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIJSON
 {
     /// <summary>

@@ -140,12 +140,7 @@ namespace GW2EIEvtcParser
                 {
                     AddToDictionary(p);
                 }
-                foreach (AbstractSingleActor npc in FightData.Logic.Targets)
-                {
-                    AddToDictionary(npc);
-                }
-
-                foreach (NPC npc in FightData.Logic.TrashMobs)
+                foreach (AbstractSingleActor npc in FightData.Logic.Hostiles)
                 {
                     AddToDictionary(npc);
                 }

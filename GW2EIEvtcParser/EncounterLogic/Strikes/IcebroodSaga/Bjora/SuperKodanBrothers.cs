@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
-                new EnemyBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
+                new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
+                new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
             }
             );
             Extension = "supkodbros";

@@ -451,7 +451,9 @@ namespace GW2EIEvtcParser
         private const int BloodstoneShardButton = -33;
         private const int SiegeChest = -34;
         private const int Mine = -35;
+        private const int Environment = -36;
 
+        public const int NonIdentifiedAgent = 0;
 
         //
 
@@ -833,6 +835,8 @@ namespace GW2EIEvtcParser
             VoidThornheart1 = 24406,
             VoidThornheart2 = 23688,
             VoidWorm = 23701,
+            //
+            Environment = ArcDPSEnums.Environment,
             //
             Unknown = int.MaxValue,
         };

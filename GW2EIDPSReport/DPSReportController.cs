@@ -9,6 +9,7 @@ using GW2EIDPSReport.DPSReportJsons;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIDPSReport
 {
     public static class DPSReportController

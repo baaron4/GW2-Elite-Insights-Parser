@@ -30,9 +30,7 @@ namespace GW2EIBuilders.HtmlModels
         private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
-            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>();
-            fromNonFriendliesSet.UnionWith(log.FightData.Logic.TrashMobs);
-            fromNonFriendliesSet.UnionWith(log.FightData.Logic.Targets);
+            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(log.FightData.Logic.Hostiles);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
