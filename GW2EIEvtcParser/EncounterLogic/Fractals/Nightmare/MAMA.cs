@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -127,6 +128,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyCollection<Buff> buffs = target.GetTrackedBuffs(log);
             Dictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
 
+            EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
+
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.MAMA:
@@ -148,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = c.ExpectedDuration;
                         int duration = 2680;
-                        int radius = 1200;
+                        int radius = 1300;
                         int impactRadius = 40;
 
                         // Find position at the end of the leap time
@@ -173,6 +176,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     delay += 120;
                                 }
                             }
+                        }
+                    }
+
+                    // Nightmare Miasma AoE
+                    if (miasma != null)
+                    {
+                        var miasmaEffects = log.CombatData.GetEffectEventsByEffectID(miasma.ContentID).ToList();
+                        foreach (EffectEvent miasmaEffect in miasmaEffects)
+                        {
+                            int durationFirstAoe = 300;
+                            int durationSecondAoe = 2000;
+                            int growingFirstAoe = (int)miasmaEffect.Time + durationFirstAoe;
+                            int growingSecondAoe = (int)miasmaEffect.Time + durationSecondAoe;
+                            int startFirstAoe = (int)miasmaEffect.Time;
+                            int startSecondAoe = (int)miasmaEffect.Time + durationFirstAoe;
+                            int endFirstAndSecondAoe = startFirstAoe + durationFirstAoe + durationSecondAoe;
+                            int safeTime = endFirstAndSecondAoe + 1000;
+                            int dangerTime = 77000;
+
+                            replay.Decorations.Add(new CircleDecoration(true, growingFirstAoe, 540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, growingSecondAoe, 540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (endFirstAndSecondAoe, safeTime), "rgba(250, 120, 0, 0.6)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.8)", new PositionConnector(miasmaEffect.Position)));
                         }
                     }
                     break;
@@ -233,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// </summary>
         /// <param name="buffsUptime">Dictionary of the buffs applications and durations.</param>
         /// <param name="cast">Cast event</param>
-        /// <returns></returns>
+        /// <returns><see cref="int"/> representing the time end of the animation.</returns>
         private static int GetEndTime(Dictionary<long, BuffsGraphModel> buffsUptime, AbstractCastEvent cast)
         {
             // Find if stun is present
