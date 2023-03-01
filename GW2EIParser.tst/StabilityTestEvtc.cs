@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIParser.tst
 {
     [TestFixture]
