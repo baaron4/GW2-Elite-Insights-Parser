@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
         {
             if (_buffGraphs == null)
             {
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
             return buffPresence;
         }
 
-        public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
             if (_buffGraphs == null)
             {
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            Dictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
                 return bgm.IsPresent(time);
@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Dictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffsDictionary == null)
             {
@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EIData
             return value[0];
         }
 
-        public Dictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffsDictionary == null)
             {

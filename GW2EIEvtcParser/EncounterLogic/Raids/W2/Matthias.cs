@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long fightStart = log.FightData.FightStart + ParserHelper.ServerDelayConstant;
                 foreach (Player p in log.PlayerList)
                 {
-                    Dictionary<long, BuffsGraphModel> graphs = p.GetBuffGraphs(log);
+                    IReadOnlyDictionary<long, BuffsGraphModel> graphs = p.GetBuffGraphs(log);
                     if (graphs.TryGetValue(BloodstoneBisque, out BuffsGraphModel graph))
                     {
                         if (!graph.BuffChart.Any(x => x.Value == 0 && x.IntersectSegment(fightStart, fightEnd)))

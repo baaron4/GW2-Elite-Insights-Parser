@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         private BuffsTracker _trackerSource { get; set; } = null;
         private GainComputer _gainComputerSource { get; set; } = null;
 
-        protected bool IsSourceActivated(Dictionary<long, BuffsGraphModel> bgmsSource, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected bool IsSourceActivated(IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
             return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time)) > 0.0;
         }
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            Dictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
             if (_trackerSource != null)
             {
                 if (!_trackerSource.Has(bgmsSource) && _gainComputerSource != ByAbsence)
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                     continue;
                 }
                 AbstractSingleActor target = log.FindActor(evt.To);
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (IsSourceActivated(bgmsSource, evt, log))
                 {
                     res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
