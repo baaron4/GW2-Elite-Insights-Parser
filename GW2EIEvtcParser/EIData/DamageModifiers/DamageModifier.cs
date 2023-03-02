@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(UnnaturalSignet,"Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
             {
                 AbstractSingleActor target = log.FindActor(dl.To);
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
                 {
                     return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/45/Unstable.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
             {
                 AbstractSingleActor target = log.FindActor(dl.To);
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
                 {
                     return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));

@@ -185,6 +185,37 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
         ctx.restore();
     }
 }
+
+class FacingPieMechanicDrawable extends FacingMechanicDrawable {
+    constructor(start, end, connectedTo, facingData, openingAngle, radius, color) {
+        super(start, end, connectedTo, facingData);
+        this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
+        this.radius = radius;
+        this.color = color;
+        this.dx = Math.cos(this.halfOpeningAngle) * this.radius;
+        this.dy = Math.sin(this.halfOpeningAngle) * this.radius;
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        var ctx = animator.mainContext;
+        const angle = ToRadians(rot);
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+        ctx.beginPath();     
+        ctx.lineTo(this.dx, this.dy);
+        ctx.arc(0, 0, this.radius, this.halfOpeningAngle, this.halfOpeningAngle);
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+}
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, connectedTo) {
@@ -335,10 +366,10 @@ class PieMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.direction = ToRadians(-direction); // positive mathematical direction, reversed since JS has downwards increasing y axis
-        this.openingAngle = ToRadians(0.5 * openingAngle);
+        this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
-        this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
-        this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
+        this.dx = Math.cos(this.direction - this.halfOpeningAngle) * this.radius;
+        this.dy = Math.sin(this.direction - this.halfOpeningAngle) * this.radius;
     }
 
     draw() {
@@ -351,7 +382,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
         ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
-        ctx.arc(pos.x, pos.y, percent * this.radius, this.direction - this.openingAngle, this.direction + this.openingAngle);
+        ctx.arc(pos.x, pos.y, percent * this.radius, this.direction - this.halfOpeningAngle, this.direction + this.halfOpeningAngle);
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;

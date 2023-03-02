@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
             return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
         }
 
-        protected double ComputeGain(Dictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
             int stack = Tracker.GetStack(bgms, dl.Time);
             // When gain per stack is 0, we only count hits done under the buff or in its absence
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
-            Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
             {
                 return new List<DamageModifierEvent>();

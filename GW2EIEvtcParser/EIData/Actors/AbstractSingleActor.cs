@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.GetBuffDistribution(log, start, end);
         }
    
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetBuffPresence(log, start, end);
         }
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
             return _buffHelper.GetBuffGraphs(log);
         }
