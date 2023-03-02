@@ -261,6 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var knownEffectsIDs = new HashSet<long>();
             EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
+
             if (sickness != null)
             {
                 var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
@@ -268,16 +269,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                 foreach (EffectEvent sicknessEffect in sicknessEffects)
                 {
-                    int duration = 4000;
-                    int start = (int)sicknessEffect.Time;
-                    int end = start + duration;
-                    int effectEnd = start + duration;
-                    Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                    if (facing == null)
+                    if (replay.Rotations.Count > 0)
                     {
-                        continue;
+                        int duration = 4000;
+                        int radius = 600;
+                        int effectStart = (int)sicknessEffect.Time;
+                        int effectEnd = effectStart + duration;
+                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, 360 / 10, "rgba(250, 120, 0, 0.2)"));
                     }
-                    replay.Decorations.Add(new PieDecoration(true, 0, 600, RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) * 360 / 10, 360 / 10, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                 }
             }
         }
