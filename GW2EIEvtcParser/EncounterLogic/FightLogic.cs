@@ -134,6 +134,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return InstanceBuffs;
         }
 
+        internal virtual int GetTriggerID()
+        {
+            return GenericTriggerID;
+        }
+
         protected virtual List<int> GetTargetsIDs()
         {
             return new List<int>

@@ -104,6 +104,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override int GetTriggerID()
+        {
+            return (int)ArcDPSEnums.TrashID.HauntingStatue;
+        }
+
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Twisted Castle";

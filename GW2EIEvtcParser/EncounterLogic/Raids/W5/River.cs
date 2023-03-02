@@ -221,7 +221,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
         }
-
+        internal override int GetTriggerID()
+        {
+            return (int)ArcDPSEnums.TargetID.Desmina;
+        }
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "River of Souls";
