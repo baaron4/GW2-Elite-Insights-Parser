@@ -228,6 +228,11 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
+                    if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
+                    {
+                        Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
+                        break;
+                    }
                     Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
                     break;
                 //
@@ -281,7 +286,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
             }
             Logic = Logic.AdjustLogic(agentData, combatData);
-            TriggerID = Logic.GenericTriggerID;
+            TriggerID = Logic.GetTriggerID();
         }
 
         internal void SetFightName(CombatData combatData, AgentData agentData)
