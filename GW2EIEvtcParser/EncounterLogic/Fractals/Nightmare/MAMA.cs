@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             IReadOnlyCollection<Buff> buffs = target.GetTrackedBuffs(log);
-            Dictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
 
             switch (target.ID)
             {
@@ -153,30 +153,42 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = c.ExpectedDuration;
                         int duration = 2680;
-                        int radius = 1300;
-                        int impactRadius = 40;
+                        int shockwaveRadius = 1300;
+                        int impactRadius = (int)target.HitboxWidth / 2 + 100;
 
                         // Find position at the end of the leap time
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= c.ExpectedEndTime + 1000);
                         var position = new Point3D(targetPosition.X, targetPosition.Y);
 
-                        // Find if stun is present
+                        // Find the models that contains a stun
                         BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
+                        // If a stun is present, check the time segment
                         if (models != null)
                         {
-                            // Find if the segment duration of the stun is between the start and end of the cast event
+                            // Check the models and find the segment of time in case a stun is applied during the cast of the jump 
                             Segment segment = models.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < (int)c.Time + c.ExpectedDuration);
+                            // If the segment doesn't exist, the jump hasn't been interrupted and the waves can be displayed
                             if (segment == null)
                             {
-                                // If the segment is null, display the shockwaves, otherwise the jump is interrupted before the waves spawn
+                                replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
+                                replay.Decorations.Add(new CircleDecoration(true, (int)c.Time + delay, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
                                 // 3 rounds of decorations for the 3 waves
                                 for (int i = 0; i < 3; i++)
                                 {
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
+                                    replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, shockwaveRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
                                     delay += 120;
                                 }
+                            }
+                        }
+                        else // MAMA never gets stunned
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(true, (int)c.Time + delay, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
+                            // 3 rounds of decorations for the 3 waves
+                            for (int i = 0; i < 3; i++)
+                            {
+                                replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, shockwaveRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
+                                delay += 120;
                             }
                         }
                     }
@@ -276,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="buffsUptime">Dictionary of the buffs applications and durations.</param>
         /// <param name="cast">Cast event</param>
         /// <returns><see cref="int"/> representing the time end of the animation.</returns>
-        private static int GetEndTime(Dictionary<long, BuffsGraphModel> buffsUptime, AbstractCastEvent cast)
+        private static int GetEndTime(IReadOnlyDictionary<long, BuffsGraphModel> buffsUptime, AbstractCastEvent cast)
         {
             // Find if stun is present
             BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
