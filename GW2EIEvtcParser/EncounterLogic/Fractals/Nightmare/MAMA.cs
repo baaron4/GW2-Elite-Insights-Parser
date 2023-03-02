@@ -128,11 +128,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyCollection<Buff> buffs = target.GetTrackedBuffs(log);
             Dictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
 
-            EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
-
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.MAMA:
+                    // Effects Indicators
+                    EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
+                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
+
                     // AoE Knockback
                     var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
                     foreach (AbstractCastEvent c in blastwave)
@@ -201,6 +203,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.8)", new PositionConnector(miasmaEffect.Position)));
                         }
                     }
+
+                    // Arkk's Shield
+                    if (shield != null)
+                    {
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
+                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        {
+                            int duration = 6000;
+                            int start = (int)shieldEffect.Time;
+                            int effectEnd = start + duration;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(0, 0, 255, 0.2)", new PositionConnector(shieldEffect.Position)));
+                        }
+                    }
+
                     break;
                 case (int)ArcDPSEnums.TrashID.BlueKnight:
                 case (int)ArcDPSEnums.TrashID.RedKnight:

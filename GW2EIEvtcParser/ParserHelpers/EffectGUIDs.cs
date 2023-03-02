@@ -86,6 +86,7 @@ namespace GW2EIEvtcParser
         public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
         public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
+        public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
