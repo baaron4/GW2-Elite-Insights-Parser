@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser
         // Thief
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal
-        public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEEA7DF7";
+        public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
         public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
         public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
