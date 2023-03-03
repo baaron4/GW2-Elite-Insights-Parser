@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // only invul lost, missing buff apply event
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.Time >= startToUse);
                 // verify that first enter combat matches the moment invul is lost
-                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < ParserHelper.ServerDelayConstant)
+                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < 100)
                 {
                     return invulLost.Time + 1;
                 }
