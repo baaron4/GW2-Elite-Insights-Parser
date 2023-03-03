@@ -28,8 +28,8 @@
         internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
 
         // Combat Replay Maps
-        internal const string CombatReplayMAMA = "https://i.imgur.com/lFGNKuf.png";
-        internal const string CombatReplaySiax = "https://i.imgur.com/UzaQHW9.png";
+        internal const string CombatReplayMAMA = "https://i.imgur.com/Iz41x7M.png";
+        internal const string CombatReplaySiax = "https://i.imgur.com/9uhjltE.png";
         internal const string CombatReplayEnsolyss = "https://i.imgur.com/kjelZ4t.png";
         internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
         internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
