@@ -125,75 +125,52 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            IReadOnlyCollection<Buff> buffs = target.GetTrackedBuffs(log);
-            IReadOnlyDictionary<long, BuffsGraphModel> buffsUptime = target.GetBuffGraphs(log);
 
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.MAMA:
-                    // Effects Indicators
-                    EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
-                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
-
                     // AoE Knockback
                     var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
                     foreach (AbstractCastEvent c in blastwave)
                     {
-                        int endTime = GetEndTime(buffsUptime, c);
-                        int hitTime = (int)c.Time + 2800;
+                        int hitTime = (int)c.ExpectedEndTime;
+                        int endTime = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
                         replay.Decorations.Add(new CircleDecoration(true, hitTime, 550, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 545, 550, ((int)c.Time, endTime), "rgba(255, 0, 0, 1)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 550, ((int)c.Time, endTime), "rgba(255, 0, 0, 2)", new AgentConnector(target)));
                     }
 
                     // Leap with shockwaves
                     var leap = casts.Where(x => x.SkillId == Leap).ToList();
                     foreach (AbstractCastEvent c in leap)
                     {
-                        int start = (int)c.Time;
-                        int delay = c.ExpectedDuration;
-                        int duration = 2680;
-                        int shockwaveRadius = 1300;
-                        int impactRadius = (int)target.HitboxWidth / 2 + 100;
-
+                        int attackStart = (int)c.Time;
+                        int hitTime = (int)c.ExpectedEndTime;
                         // Find position at the end of the leap time
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= c.ExpectedEndTime + 1000);
-                        var position = new Point3D(targetPosition.X, targetPosition.Y);
-
-                        // Find the models that contains a stun
-                        BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
-                        // If a stun is present, check the time segment
-                        if (models != null)
+                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= hitTime + 1000);
+                        if (targetPosition == null)
                         {
-                            // Check the models and find the segment of time in case a stun is applied during the cast of the jump 
-                            Segment segment = models.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < (int)c.Time + c.ExpectedDuration);
-                            // If the segment doesn't exist, the jump hasn't been interrupted and the waves can be displayed
-                            if (segment == null)
-                            {
-                                replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
-                                replay.Decorations.Add(new CircleDecoration(true, (int)c.Time + delay, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
-                                // 3 rounds of decorations for the 3 waves
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, shockwaveRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
-                                    delay += 120;
-                                }
-                            }
+                            continue;
                         }
-                        else // MAMA never gets stunned
+                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
+                        int impactRadius = (int)target.HitboxWidth / 2 + 100;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)));
+                        replay.Decorations.Add(new CircleDecoration(true, hitTime, impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)));
+                        // 3 rounds of decorations for the 3 waves
+                        if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(true, (int)c.Time + delay, impactRadius, (start, start + delay), "rgba(255, 120, 0, 0.2)", new PositionConnector(position)));
-                            // 3 rounds of decorations for the 3 waves
+                            int shockwaveRadius = 1300;
+                            int duration = 2680;
                             for (int i = 0; i < 3; i++)
                             {
-                                replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, shockwaveRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
-                                delay += 120;
+                                int shockWaveStart = hitTime + i * 120;
+                                replay.Decorations.Add(new CircleDecoration(false, shockWaveStart + duration, shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)));
                             }
                         }
                     }
 
                     // Nightmare Miasma AoE
+                    EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
                     if (miasma != null)
                     {
                         var miasmaEffects = log.CombatData.GetEffectEventsByEffectID(miasma.ContentID).ToList();
@@ -209,14 +186,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int safeTime = endFirstAndSecondAoe + 1000;
                             int dangerTime = 77000;
 
-                            replay.Decorations.Add(new CircleDecoration(true, growingFirstAoe, 540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, growingSecondAoe, 540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (endFirstAndSecondAoe, safeTime), "rgba(250, 120, 0, 0.6)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.8)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, growingFirstAoe, 540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, growingSecondAoe, 540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, safeTime, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
                         }
                     }
 
                     // Arkk's Shield
+                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
                     if (shield != null)
                     {
                         var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
@@ -237,72 +216,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
                     foreach (AbstractCastEvent c in explosiveImpact)
                     {
-                        int endTime = GetEndTime(buffsUptime, c);
+                        int hitTime = (int)c.ExpectedEndTime;
+                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 600, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, hitTime, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
 
                     // Pull AoE
                     var extraction = casts.Where(x => x.SkillId == Extraction).ToList();
                     foreach (AbstractCastEvent c in extraction)
                     {
-                        int endTime = GetEndTime(buffsUptime, c);
+                        int hitTime = (int)c.ExpectedEndTime;
+                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 3000, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, hitTime, 300, 3000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 3000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 default:
                     break;
             }
-        }
-
-        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
-        {
-            var knownEffectsIDs = new HashSet<long>();
-            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
-
-            if (sickness != null)
-            {
-                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
-                knownEffectsIDs.Add(sickness.ContentID);
-
-                foreach (EffectEvent sicknessEffect in sicknessEffects)
-                {
-                    if (replay.Rotations.Count > 0)
-                    {
-                        int duration = 4000;
-                        int radius = 600;
-                        int effectStart = (int)sicknessEffect.Time;
-                        int effectEnd = effectStart + duration;
-                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, 360 / 10, "rgba(250, 120, 0, 0.2)"));
-                        replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 100), new AgentConnector(p), replay.PolledRotations, radius, 360 / 10, "rgba(250, 120, 0, 0.6)"));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Finds the end time of a cast if the target is stunned.
-        /// </summary>
-        /// <param name="buffsUptime">Dictionary of the buffs applications and durations.</param>
-        /// <param name="cast">Cast event</param>
-        /// <returns><see cref="int"/> representing the time end of the animation.</returns>
-        private static int GetEndTime(IReadOnlyDictionary<long, BuffsGraphModel> buffsUptime, AbstractCastEvent cast)
-        {
-            // Find if stun is present
-            BuffsGraphModel models = buffsUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
-            if (models != null)
-            {
-                // Find if the segment duration of the stun is between the start and end of the cast event
-                Segment segment = models.BuffChart.FirstOrDefault(x => x.Start > cast.Time && x.Start < (int)cast.Time + cast.ExpectedDuration);
-                if (segment != null)
-                {
-                    // End time of the animation when the stun applies
-                    return (int)segment.Start;
-                }
-            }
-            return (int)cast.EndTime;
         }
     }
 }

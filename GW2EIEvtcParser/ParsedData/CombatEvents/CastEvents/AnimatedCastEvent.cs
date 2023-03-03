@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -131,6 +132,19 @@ namespace GW2EIEvtcParser.ParsedData
             Acceleration = 0;
             Status = AnimationStatus.Full;
             SavedDuration = 0;
+        }
+
+        public override long GetInterruptedByStunTime(ParsedEvtcLog log)
+        {
+            if (log.FindActor(Caster).GetBuffGraphs(log).TryGetValue(SkillIDs.Stun, out BuffsGraphModel bgm))
+            {
+                Segment segment = bgm.BuffChart.FirstOrDefault(x => x.Start > Time && x.Start < ExpectedEndTime);
+                if (segment != null)
+                {
+                    return (int)segment.Start;
+                }
+            }
+            return EndTime;
         }
     }
 }

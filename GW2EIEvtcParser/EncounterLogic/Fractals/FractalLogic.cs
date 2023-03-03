@@ -120,5 +120,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            var knownEffectsIDs = new HashSet<long>();
+            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
+
+            if (sickness != null)
+            {
+                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
+                knownEffectsIDs.Add(sickness.ContentID);
+
+                foreach (EffectEvent sicknessEffect in sicknessEffects)
+                {
+                    if (replay.Rotations.Count > 0)
+                    {
+                        int duration = 4000;
+                        int radius = 600;
+                        int openingAngle = 36;
+                        int effectStart = (int)sicknessEffect.Time;
+                        int effectEnd = effectStart + duration;
+                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                        replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.4)"));
+                    }
+                }
+            }
+        }
+
     }
 }
