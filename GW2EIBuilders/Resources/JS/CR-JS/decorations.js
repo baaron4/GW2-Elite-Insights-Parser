@@ -229,7 +229,11 @@ class FormMechanicDrawable extends MechanicDrawable {
             return 1.0;
         }
         var time = animator.reactiveDataStatus.time;
-        return Math.min((time - this.start) / (this.growing - this.start), 1.0);
+        var value = Math.min((time - this.start) / (Math.abs(this.growing) - this.start), 1.0);
+        if (this.growing < 0) {
+            value = 1 - value;
+        }
+        return value;
     }
 }
 
@@ -274,8 +278,14 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
-        ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
+
+        if (this.growing < 0) {    
+            ctx.arc(pos.x, pos.y, this.outerRadius , 2 * Math.PI, 0, false);
+            ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
+        }  else {
+            ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
+            ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
+        }
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
