@@ -201,10 +201,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
                         foreach (EffectEvent shieldEffect in shieldEffects)
                         {
-                            int duration = 6000;
+                            int duration = 6200;
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(0, 0, 255, 0.2)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, -effectEnd, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                         }
                     }
 
