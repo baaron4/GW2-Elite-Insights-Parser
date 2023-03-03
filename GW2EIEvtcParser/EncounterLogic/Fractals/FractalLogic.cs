@@ -139,8 +139,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 36;
                         int effectStart = (int)sicknessEffect.Time;
                         int effectEnd = effectStart + duration;
-                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
-                        replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.4)"));
+                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.2)"));
+                        replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.4)"));
                     }
                 }
             }
