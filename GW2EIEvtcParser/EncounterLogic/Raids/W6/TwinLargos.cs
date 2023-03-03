@@ -241,13 +241,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.Nikare:
                     //CC
-                    var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
@@ -258,13 +258,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
                     //CC
-                    var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 800;
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
-                    var shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 1200;
                         replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
                     }
-                    var boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
                     {
                         int start = (int)c.Time;

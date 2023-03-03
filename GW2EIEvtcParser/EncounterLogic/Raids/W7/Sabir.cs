@@ -74,16 +74,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
+            var wallopingWinds = cls.Where(x => x.SkillId == WallopingWind).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
-                AbstractCastEvent wallopinbWind = wallopingWinds[i];
-                end = wallopinbWind.Time;
+                AbstractCastEvent wallopingWind = wallopingWinds[i];
+                end = wallopingWind.Time;
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopinbWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
                 {
                     break;
@@ -166,13 +166,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var furyOfTheStorm = cls.Where(x => x.SkillId == 56372).ToList();
+                    var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
-                    var unbridledTempest = cls.Where(x => x.SkillId == 56643).ToList();
+                    var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
                     foreach (AbstractCastEvent c in unbridledTempest)
                     {
                         int start = (int)c.Time;

@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
-                if (c.IsDamage(extensions) && c.SkillID == 52370)
+                if (c.IsDamage(extensions) && c.SkillID == ConjuredSlash2)
                 {
                     c.OverrideSrcAgent(sword.Agent);
                 }
@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52255, ca, true, false));
+            phases.AddRange(GetPhasesByInvul(log, CAInvul, ca, true, false));
             for (int i = 1; i < phases.Count; i++)
             {
                 string name;
@@ -343,7 +343,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;

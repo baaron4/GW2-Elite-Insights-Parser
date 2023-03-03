@@ -149,14 +149,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Ai not found");
             }
             _china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
-            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569 && x.SrcMatchesAgent(aiAgent));
-            _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == 61358 : x.SkillID == 61356) && x.SrcMatchesAgent(aiAgent));
+            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
+            _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == AiHasDarkModeCN : x.SkillID == AiHasDarkMode) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
                 {
-                    long darkModeStart = combatData.FirstOrDefault(x => (_china ? x.SkillID == 61279 : x.SkillID == 61277) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
+                    long darkModeStart = combatData.FirstOrDefault(x => (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomNPCAgent(lastAwareTime + 1, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
@@ -345,14 +345,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (requirePhases)
                 {
                     // sub phases
-                    long fearToSorrowSkillID = _china ? 61571 : 61606;
+                    long fearToSorrowSkillID = _china ? EmpathicManipulationSorrowCN : EmpathicManipulationSorrow;
                     AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
                     if (fearToSorrow != null)
                     {
                         var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
                         fearPhase.AddTarget(darkAi);
                         phases.Add(fearPhase);
-                        long sorrowToGuiltSkillID = _china ? 61361 : 61602;
+                        long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
                         AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
                         if (sorrowToGuilt != null)
                         {

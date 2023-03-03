@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.BrokenKing:
-                    var Cone = cls.Where(x => x.SkillId == 48066).ToList();
+                    var Cone = cls.Where(x => x.SkillId == KingsWrath).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48218, 48218), // Biting Aura
+                new DamageCastFinder(BitingAura, BitingAura), // Biting Aura
             };
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

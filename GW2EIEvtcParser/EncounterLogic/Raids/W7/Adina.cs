@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Adina:
-                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == 56035).ToList();
+                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == DoubleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in doubleQuantumQuakes)
                     {
                         int start = (int)c.Time;
@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == 56381).ToList();
+                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == TripleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in tripleQuantumQuakes)
                     {
                         int start = (int)c.Time;
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     }
                     //
-                    var terraforms = cls.Where(x => x.SkillId == 56049).ToList();
+                    var terraforms = cls.Where(x => x.SkillId == Terraform).ToList();
                     foreach (AbstractCastEvent c in terraforms)
                     {
                         int start = (int)c.Time;
@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var boulderBarrages = cls.Where(x => x.SkillId == 56648).ToList();
+                    var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
                     foreach (AbstractCastEvent c in boulderBarrages)
                     {
                         int start = (int)c.Time;
@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhaseEnds.Add(pair.Key);
                 }
             }
-            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
+            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             if (mainPhaseEnds.Any())
             {
