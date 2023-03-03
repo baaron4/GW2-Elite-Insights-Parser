@@ -35,7 +35,7 @@ namespace GW2EIJSON
         /// </summary>
         public uint Toughness { get; set; }
         /// <summary>
-        /// Height of the hitbox
+        /// Height of the hitbox, please not that the center of the box on the feet of the agent
         /// </summary>
         public uint HitboxHeight { get; set; }
         /// <summary>
