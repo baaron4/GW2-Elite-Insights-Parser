@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem brokenKing = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EaterOfSouls).FirstOrDefault();
+            AgentItem brokenKing = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.BrokenKing).FirstOrDefault();
             if (brokenKing == null)
             {
                 throw new MissingKeyActorsException("Broken King not found");
