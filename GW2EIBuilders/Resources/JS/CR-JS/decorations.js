@@ -189,11 +189,10 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
 class FacingPieMechanicDrawable extends FacingMechanicDrawable {
     constructor(start, end, connectedTo, facingData, openingAngle, radius, color) {
         super(start, end, connectedTo, facingData);
+        this.openingAngle = ToRadians(openingAngle);
         this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
         this.color = color;
-        this.dx = Math.cos(this.halfOpeningAngle) * this.radius;
-        this.dy = Math.sin(this.halfOpeningAngle) * this.radius;
     }
 
     draw() {
@@ -206,10 +205,10 @@ class FacingPieMechanicDrawable extends FacingMechanicDrawable {
         const angle = ToRadians(rot);
         ctx.save();
         ctx.translate(pos.x, pos.y);
-        ctx.rotate(angle);
-        ctx.beginPath();     
-        ctx.lineTo(this.dx, this.dy);
-        ctx.arc(0, 0, this.radius, this.halfOpeningAngle, this.halfOpeningAngle);
+        ctx.rotate(angle + this.halfOpeningAngle);
+        ctx.beginPath();         
+        ctx.arc(0, 0, this.radius, -this.openingAngle, 0, false);
+        ctx.arc(0, 0, 0, 0, this.openingAngle, true);
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();
