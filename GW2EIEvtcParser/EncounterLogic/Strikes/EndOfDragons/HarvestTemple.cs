@@ -820,7 +820,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent redPuddle = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddle);
                     if (redPuddle != null)
                     {
-                        var redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID);
+                        IReadOnlyList<EffectEvent> redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID);
                         knownEffectsIDs.Add(redPuddle.ContentID);
                         foreach (EffectEvent effect in redPuddleEffects)
                         {

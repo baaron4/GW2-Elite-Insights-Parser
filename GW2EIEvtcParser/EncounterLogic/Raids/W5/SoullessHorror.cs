@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ChillingAura , ChillingAura ), // Chilling Aura
+                new DamageCastFinder(ChillingAura, ChillingAura), // Chilling Aura
             };
         }
 
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     //
-                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    var howling = cls.Where(x => x.SkillId == HowlingDeath).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
                         start = (int)c.Time;
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
                     foreach (AbstractCastEvent c in vortex)
                     {
                         start = (int)c.Time;
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
                         }
                     }
-                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    var deathBloom = cls.Where(x => x.SkillId == DeathBloom).ToList();
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         start = (int)c.Time;
@@ -220,8 +220,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
 
                     }
-                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet).ToList();
+                    var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet).ToList();
                     foreach (AbstractCastEvent c in quad1)
                     {
                         start = (int)c.Time;

@@ -645,7 +645,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Kinetic Abundance", KineticAbundance, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png"),
                 new Buff("Enfeebled Force", EnfeebledForce, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png"),
                 new Buff("Backlashing Beam", BacklashingBeam, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/04/Xera%27s_Boon.png"),
-                new Buff("Clutched by Chaos", ClutchedbyChaos, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
+                new Buff("Clutched by Chaos", ClutchedByChaos, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png"),
                 new Buff("Cleansed Conductor", CleansedConductor, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png"),
                 new Buff("Poisoned Power", PoisonedPower, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png"),
                 new Buff("Incorporeal", Incorporeal, Source.FightSpecific, BuffClassification.Other,"https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png"),

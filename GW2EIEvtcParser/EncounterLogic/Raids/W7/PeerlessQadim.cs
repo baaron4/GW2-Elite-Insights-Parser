@@ -185,12 +185,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
-                    var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
-                    var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop).ToList();
+                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
-                    var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
-                    var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
-                    var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();
+                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
+                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
+                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
