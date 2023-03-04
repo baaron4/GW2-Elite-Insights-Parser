@@ -306,7 +306,6 @@ namespace GW2EIEvtcParser.ParsedData
         public bool AA { get; }
 
         public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
-        public bool IsInstantTransformation => NecromancerHelper.IsShroudTransform(ID) || EngineerHelper.IsEngineerKit(ID) || HolosmithHelper.IsPhotonForgeTransform(ID) || DruidHelper.IsCelestialAvatarTransform(ID) || SpecterHelper.IsShroudTransform(ID) || BladeswornHelper.IsGunsaberForm(ID) || FirebrandHelper.IsFirebrandTome(ID);
         public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
         public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
         public string Name { get; }

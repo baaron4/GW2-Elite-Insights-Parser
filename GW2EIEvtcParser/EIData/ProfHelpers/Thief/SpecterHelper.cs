@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterShadowShroud, ShadowShroud), // Shadow Shroud Enter
-            new BuffLossCastFinder(ExitShadowShroud, ShadowShroud), // Shadow Shroud Exit
+            new BuffGainCastFinder(EnterShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Enter
+            new BuffLossCastFinder(ExitShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Exit
         };
 
         private static readonly HashSet<long> _shroudTransform = new HashSet<long>

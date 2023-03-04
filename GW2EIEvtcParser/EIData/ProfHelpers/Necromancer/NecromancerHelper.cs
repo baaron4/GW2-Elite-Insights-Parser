@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterDeathShroud, DeathShroud), // Death shroud
-            new BuffLossCastFinder(ExitDeathShroud, DeathShroud), // Death shroud
+            new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
+            new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
             new DamageCastFinder(SpitefulSpirit, SpitefulSpirit), // Spiteful Spirit
             new DamageCastFinder(LesserEnfeeble, LesserEnfeeble), // Lesser Enfeeble
             new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers), // Lesser Spinal Shivers

@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud), // Harbinger shroud
-            new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud), // Harbinger shroud
+            new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true), // Harbinger shroud
+            new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true), // Harbinger shroud
         };
 
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -17,6 +19,8 @@ namespace GW2EIEvtcParser.EIData
         public long SkillID { get; }
 
         public bool NotAccurate { get; private set; } = false;
+
+        protected bool BeforeWeaponSwap { get; set; } = false;
 
         protected long ICD { get; private set; } = DefaultICD;
 
@@ -53,10 +57,29 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
+        {
+            BeforeWeaponSwap = beforeWeaponSwap;
+            return this;
+        }
+
         protected InstantCastFinder UsingEnableInternal(InstantCastEnableChecker checker)
         {
             _enableConditionInternal = checker;
             return this;
+        }
+
+        protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
+        {
+            if (BeforeWeaponSwap)
+            {
+                var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2).ToList();
+                if (wepSwaps.Any())
+                {
+                    return wepSwaps[0].Time - 1;
+                }
+            }
+            return evt.Time;
         }
 
 

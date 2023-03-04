@@ -40,12 +40,12 @@ namespace GW2EIEvtcParser.EIData
             //
             new EffectCastFinderByDst(PotentHasteOrOverwhelmingCelerity, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
             //
-            new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance),
-            new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance),
-            new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance),
-            new BuffLossCastFinder(StowTome, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance),
-            new BuffLossCastFinder(StowTome, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance),
-            new BuffLossCastFinder(StowTome, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance),
+            new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
         };
 
         private static readonly HashSet<long> _firebrandTomes = new HashSet<long>

@@ -34,25 +34,17 @@ namespace GW2EIEvtcParser.Extensions
                 {
                     continue;
                 }
-                foreach (EXTAbstractHealingEvent de in pair.Value)
+                foreach (EXTAbstractHealingEvent he in pair.Value)
                 {
-                    if (de.Time - lastTime < ICD)
+                    if (he.Time - lastTime < ICD)
                     {
-                        lastTime = de.Time;
+                        lastTime = he.Time;
                         continue;
                     }
-                    if (_triggerCondition != null)
+                    if (_triggerCondition == null || _triggerCondition(he, combatData, agentData, skillData))
                     {
-                        if (_triggerCondition(de, combatData, agentData, skillData))
-                        {
-                            lastTime = de.Time;
-                            res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.From));
-                        }
-                    }
-                    else
-                    {
-                        lastTime = de.Time;
-                        res.Add(new InstantCastEvent(de.Time, skillData.Get(SkillID), de.From));
+                        lastTime = he.Time;
+                        res.Add(new InstantCastEvent(GetTime(he, he.From,combatData), skillData.Get(SkillID), he.From));
                     }
                 }
             }
