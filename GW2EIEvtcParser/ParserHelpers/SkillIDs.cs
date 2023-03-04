@@ -1103,7 +1103,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfTheLocustShroud = 40283;
         public const long MirageCloak = 40408;
         public const long VultureStanceSkill = 40498;
-        public const long TomeOfJustice = 40530;
+        public const long TomeOfJusticeEffect = 40530;
         public const long SignetOfUndeathShroud = 40583;
         public const long SightBeyondSightEffect = 40616;
         public const long SymbolOfVengeance = 40624;
@@ -1126,11 +1126,13 @@ namespace GW2EIEvtcParser
         public const long Chapter1SearingSpell = 41258;
         public const long UnhinderedDelivery = 41328;
         public const long Mercy = 41372;
+        public const long StowTome = 41380;
         public const long RestoringReprieve = 41475;
         public const long TomeOfResolveOpen = 41493;
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
+        public const long TomeOfResolveSkill = 41780;
         public const long DolyakStanceEffect = 41815;
         public const long Chapter3ValiantBulwark = 41836;
         public const long LegendaryRenegadeStanceSkill = 41858;
@@ -1145,6 +1147,7 @@ namespace GW2EIEvtcParser
         public const long PrimordialStanceEffect = 42086;
         public const long OneWolfPackSkill = 42145;
         public const long Afterburner = 42210;
+        public const long TomeOfCourageSkill = 42259;
         public const long DualAirAttunement = 42264;
         public const long EchoOfTrue = 42360;
         public const long TomeOfCourageOpen = 42404;
@@ -1190,7 +1193,7 @@ namespace GW2EIEvtcParser
         public const long SignetOfCouragePI = 43487;
         public const long WovenWater = 43499;
         public const long Charrzooka = 43503;
-        public const long TomeOfCourage = 43508;
+        public const long TomeOfCourageEffect = 43508;
         public const long RuggedGrowth = 43558;
         public const long MoltenArmor = 43586;
         public const long KickGazelle = 43593;
@@ -1218,6 +1221,7 @@ namespace GW2EIEvtcParser
         public const long GarishPillar = 44428;
         public const long UnstoppableUnion = 44439;
         public const long EpilogueUnbrokenLines = 44455;
+        public const long TomeOfJusticeSkill = 44364;
         public const long AssassinsSignetActive = 44597;
         public const long UnravelSkill = 44612;
         public const long Disenchantment = 44633;
@@ -1259,7 +1263,7 @@ namespace GW2EIEvtcParser
         public const long BreakrazorBastion = 46232;
         public const long RedLentilSaobosa = 46273;
         public const long GriffonStance = 46280;
-        public const long TomeOfResolve = 46298;
+        public const long TomeOfResolveEffect = 46298;
         public const long PredatorsCunning = 46299;
         public const long DeadeyesGaze = 46333;
         public const long CoolingVapor = 46444;
