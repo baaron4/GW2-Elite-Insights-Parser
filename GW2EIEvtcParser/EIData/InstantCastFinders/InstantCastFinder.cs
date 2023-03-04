@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
                 var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2).ToList();
                 if (wepSwaps.Any())
                 {
-                    return wepSwaps[0].Time - 1;
+                    return Math.Min(wepSwaps[0].Time - 1, evt.Time);
                 }
             }
             return evt.Time;
