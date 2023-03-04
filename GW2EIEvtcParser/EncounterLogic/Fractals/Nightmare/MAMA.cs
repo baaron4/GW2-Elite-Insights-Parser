@@ -232,8 +232,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int hitTime = (int)c.ExpectedEndTime;
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.Decorations.Add(new DoughnutDecoration(true, hitTime, 300, 3000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 3000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, hitTime, 300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 default:
