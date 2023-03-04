@@ -838,12 +838,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidAmalgamate:
-                    EffectGUIDEvent voidPool = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleVoidPoolCM);
+                    EffectGUIDEvent voidPool = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleVoidPool);
                     if (voidPool != null)
                     {
-                        var poolEffects = log.CombatData.GetEffectEventsByEffectID(voidPool.ContentID).Where(x => x.Src.Agent == target.AgentItem.Agent).ToList();
+                        var poolEffects = log.CombatData.GetEffectEventsByEffectID(voidPool.ContentID).Where(x => x.Src == target.AgentItem).ToList();
                         // sort pool effects by time so that we can grow each effect
                         poolEffects.Sort((a, b) => a.Time.CompareTo(b.Time));
+                        if (!poolEffects.Any())
+                        {
+                            break;
+                        }
                         knownEffectsIDs.Add(voidPool.ContentID);
                         var radius = 100.0;
                         var radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
