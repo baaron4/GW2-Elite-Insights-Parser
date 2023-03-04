@@ -1454,7 +1454,7 @@ namespace GW2EIEvtcParser
         public const long SeismicStomp = 52330;
         public const long FlameSlash = 52333;
         public const long FlameSlash2 = 52334;
-        public const long ConjuredSlash2 = 52370;
+        public const long ConjuredSlashPlayer = 52370;
         public const long AquaticDomain = 52374;
         public const long FieryDance4 = 52383;
         public const long UnbearableFlames = 52408;

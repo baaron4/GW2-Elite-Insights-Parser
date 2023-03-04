@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
-                if (c.IsDamage(extensions) && c.SkillID == ConjuredSlash2)
+                if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
                 {
                     c.OverrideSrcAgent(sword.Agent);
                 }
