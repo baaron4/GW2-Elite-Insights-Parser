@@ -1127,6 +1127,7 @@ namespace GW2EIEvtcParser
         public const long UnhinderedDelivery = 41328;
         public const long Mercy = 41372;
         public const long RestoringReprieve = 41475;
+        public const long TomeOfResolveOpen = 41493;
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
@@ -1146,6 +1147,7 @@ namespace GW2EIEvtcParser
         public const long Afterburner = 42210;
         public const long DualAirAttunement = 42264;
         public const long EchoOfTrue = 42360;
+        public const long TomeOfCourageOpen = 42404;
         public const long ElementsOfRage = 42416;
         public const long MagebaneTether = 42428;
         public const long Chapter3HeatedRebuke = 42449;
@@ -1210,6 +1212,7 @@ namespace GW2EIEvtcParser
         public const long PlagueSignetShroud = 44164;
         public const long ClarifiedConclusion = 44248;
         public const long LegendaryRenegadeStanceEffect = 44272;
+        public const long TomeOfJusticeOpen = 44291;
         public const long Riptide = 44405;
         public const long LasersEdge = 44414;
         public const long GarishPillar = 44428;
