@@ -845,16 +845,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // sort pool effects by time so that we can grow each effect
                         poolEffects.Sort((a, b) => a.Time.CompareTo(b.Time));
                         knownEffectsIDs.Add(voidPool.ContentID);
-                        var radius = 100;
-                        const int radiusIncrement = 35;
+                        var radius = 100.0;
+                        var radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
                         for (int i = 0; i < poolEffects.Count-1; i++)
                         {
                             EffectEvent curEffect = poolEffects[i];
                             EffectEvent nextEffect = poolEffects[i + 1];
                             int start = (int)curEffect.Time;
                             int end = (int)nextEffect.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, end), "rgba(255, 0, 0, 0.5)", new PositionConnector(curEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, (int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(false, 0, (int)radius, (start, end), "rgba(255, 0, 0, 0.5)", new PositionConnector(curEffect.Position)));
                             radius += radiusIncrement;
                         }
                         // last pool effect ends slightly differently depending on phase
@@ -901,8 +901,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 break;
                         }
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)));
-                        replay.Decorations.Add(new CircleDecoration(false, 0, radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, (int)radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, (int)radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
