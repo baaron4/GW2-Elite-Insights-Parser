@@ -209,7 +209,8 @@ namespace GW2EIEvtcParser
             Effect = 45,
             EffectIDToGUID = 46,
             LogStartNPCUpdate = 47,
-            ExtensionCombat = 48,
+            Idle = 48,
+            ExtensionCombat = 49,
             Unknown
         };
 
