@@ -127,6 +127,40 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
+            {
+                return bgm.GetBuffStatus(time);
+            }
+            else
+            {
+                return new Segment(long.MinValue, long.MaxValue, 0);
+            }
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
+            {
+                return bgm.GetBuffStatus(start, end);
+            }
+            else
+            {
+                return new List<Segment>();
+            }
+        }
+
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
             if (_buffStats == null)
