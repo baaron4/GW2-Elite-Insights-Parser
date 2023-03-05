@@ -453,7 +453,7 @@ namespace GW2EIParser
                                         System.Diagnostics.Process.Start(path);
                                     }
                                 }
-                                if (operation.OutLocation != null && Directory.Exists(operation.OutLocation))
+                                if (operation.OpenableFiles.Count < operation.GeneratedFiles.Count && operation.OutLocation != null && Directory.Exists(operation.OutLocation))
                                 {
                                     System.Diagnostics.Process.Start(operation.OutLocation);
                                 }
