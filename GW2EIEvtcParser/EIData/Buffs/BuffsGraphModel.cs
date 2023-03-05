@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using GW2EIEvtcParser.EIData.BuffSimulators;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -22,16 +24,34 @@ namespace GW2EIEvtcParser.EIData
             FuseSegments();
         }
 
-        public int GetStackCount(long time)
+        public Segment GetBuffStatus(long time)
         {
             foreach (Segment seg in BuffChart)
             {
                 if (seg.ContainsPoint(time))
                 {
-                    return (int)seg.Value;
+                    return seg;
                 }
             }
-            return 0;
+            return new Segment(long.MinValue, long.MaxValue, 0);
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(long start, long end)
+        {
+            var res = new List<Segment>();
+            foreach (Segment seg in BuffChart)
+            {
+                if (seg.IntersectSegment(start, end))
+                {
+                    res.Add(seg);
+                }
+            }
+            return res;
+        }
+
+        public int GetStackCount(long time)
+        {
+            return (int)GetBuffStatus(time).Value;
         }
 
 

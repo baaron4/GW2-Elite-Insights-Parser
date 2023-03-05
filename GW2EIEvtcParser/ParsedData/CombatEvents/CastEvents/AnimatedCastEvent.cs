@@ -136,13 +136,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         public override long GetInterruptedByStunTime(ParsedEvtcLog log)
         {
-            if (log.FindActor(Caster).GetBuffGraphs(log).TryGetValue(SkillIDs.Stun, out BuffsGraphModel bgm))
+            Segment stunStatus = log.FindActor(Caster).GetBuffStatus(log, SkillIDs.Stun, Time, ExpectedEndTime).FirstOrDefault(x => x.Value > 0);
+            if (stunStatus != null)
             {
-                Segment segment = bgm.BuffChart.FirstOrDefault(x => x.Start > Time && x.Start < ExpectedEndTime);
-                if (segment != null)
-                {
-                    return (int)segment.Start;
-                }
+                return (int)stunStatus.Start;
             }
             return EndTime;
         }

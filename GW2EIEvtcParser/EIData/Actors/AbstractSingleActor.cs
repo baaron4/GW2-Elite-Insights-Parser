@@ -279,6 +279,16 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.HasBuff(log, buffId, time);
         }
 
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        {
+            return _buffHelper.GetBuffStatus(log, buffId, start, end);
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+        {
+            return _buffHelper.GetBuffStatus(log, buffId, time);
+        }
+
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetBuffs(type, log, start, end);

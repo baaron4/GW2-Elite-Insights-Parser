@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.ParsedData
             Master = master;
         }
 
-        public AgentItem GetMainAgentWhenAttackTarget(ParsedEvtcLog log, long time)
+        internal AgentItem GetMainAgentWhenAttackTarget(ParsedEvtcLog log, long time)
         {
             IReadOnlyList<AttackTargetEvent> atEvents = log.CombatData.GetAttackTargetEventsByAttackTarget(this);
             if (atEvents.Any()) // agent is attack target
@@ -280,6 +280,18 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.HasBuff(log, buffId, time);
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetBuffStatus(log, buffId, time);
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetBuffStatus(log, buffId, start, end);
         }
 
         /// <summary>
