@@ -218,9 +218,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
                     foreach (AbstractCastEvent c in explosiveImpact)
                     {
+                        int duration = 3000;
                         int hitTime = (int)c.ExpectedEndTime;
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
+                        int windUpDuration = (int)c.Time - (attackEnd - duration);
+                        int windUpStart = (int)c.Time - windUpDuration;
 
+                        // Wind Up - Knight in air
+                        replay.Decorations.Add(new CircleDecoration(true, -(int)c.Time, 600, (windUpStart, (int)c.Time), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, (windUpStart, (int)c.Time), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        // Hit - Knight falling
                         replay.Decorations.Add(new CircleDecoration(true, hitTime, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
