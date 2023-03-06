@@ -13,6 +13,6 @@ using System.Runtime.InteropServices;
 #if !DEBUG
 [assembly: AssemblyVersion("2.52.0.0")]
 #else
-[assembly: AssemblyVersion("2.51.*")]
+[assembly: AssemblyVersion("2.52.*")]
 #endif
 //[assembly: AssemblyFileVersion("1.8.10.34877")]
