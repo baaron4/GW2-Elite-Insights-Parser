@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -8,6 +9,8 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Collections;
+using System.IO;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -20,11 +23,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(VileSpit, "Vile Spit", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit","Vile Spit (green goo)", "Poison Spit",0),
             new PlayerDstHitMechanic(TailLashSiax, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
             new SpawnMechanic((int)ArcDPSEnums.TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
-            new PlayerDstHitMechanic(new long[] {CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
-            new EnemyCastStartMechanic(CausticExplosion1Siax, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase","Phase Start", "Phase", 0),
-            new EnemyCastEndMechanic(CausticExplosion1Siax, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0, (ce,log) => ce.ActualDuration >= 20649), //
-            new EnemyCastStartMechanic(CausticExplosion2Siax, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC","Breakbar Start", "Breakbar", 0),
-            new EnemyCastEndMechanic(CausticExplosion2Siax, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC Fail","Failed to CC in time", "CC Fail", 0, (ce,log) => ce.ActualDuration >= 15232),
+            new PlayerDstHitMechanic(new long[] { CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
+            new EnemyCastStartMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase","Phase Start", "Phase", 0),
+            new EnemyCastEndMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0, (ce,log) => ce.ActualDuration >= 20649), //
+            new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC","Breakbar Start", "Breakbar", 0),
+            new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC Fail","Failed to CC in time", "CC Fail", 0, (ce,log) => ce.ActualDuration >= 15232),
             new PlayerDstBuffApplyMechanic(FixatedNightmare, "Fixated", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Fixate", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
@@ -46,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.SiaxHallucination,
+                ArcDPSEnums.TrashID.VolatileHallucinationSiax,
                 ArcDPSEnums.TrashID.NightmareHallucinationSiax
             };
         }
@@ -88,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                        (int) ArcDPSEnums.TrashID.EchoOfTheUnclean,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
-                    phase.Name = "Caustic Explosion " + (i/2);
+                    phase.Name = "Caustic Explosion " + (i / 2);
                 }
                 else
                 {
@@ -99,5 +102,148 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.Siax:
+                    // Siax's Breakbar
+                    var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar).ToList();
+                    foreach (AbstractCastEvent c in causticExplosionBreakbar)
+                    {
+                        int duration = 15000;
+                        int start = (int)c.Time;
+                        int expectedHitTime = (int)c.Time + duration;
+                        int attackEnd = (int)c.Time + duration;
+                        int stunTime = attackEnd;
+                        int detTime = attackEnd;
+
+                        IReadOnlyDictionary<long, BuffsGraphModel> bgmUptime = target.GetBuffGraphs(log);
+
+                        BuffsGraphModel bgmStun = bgmUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
+                        if (bgmStun != null)
+                        {
+                            Segment segment = bgmStun.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
+                            if (segment != null)
+                            {
+                                stunTime = (int)segment.Start;
+                            }
+                        }
+                        BuffsGraphModel bgmDet = bgmUptime.TryGetValue(Determined762, out BuffsGraphModel value2) ? value2 : null;
+                        if (bgmDet != null)
+                        {
+                            Segment segment = bgmDet.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
+                            if (segment != null)
+                            {
+                                detTime = (int)segment.Start;
+                            }
+                        }
+
+                        int stunOrInvulnTime = Math.Min(stunTime, detTime);
+
+                        if (stunOrInvulnTime > 0)
+                        {
+                            attackEnd = Math.Min(stunOrInvulnTime, attackEnd);
+                        }
+
+                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    }
+                    // Tail Swipe
+                    var tailLash = casts.Where(x => x.SkillId == TailLashSiax).ToList();
+                    foreach (AbstractCastEvent c in tailLash)
+                    {
+                        int duration = 1500;
+                        int openingAngle = 144;
+                        int radius = 600;
+                        replay.Decorations.Add(new FacingPieDecoration(((int)c.Time, (int)c.Time + duration), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                    }
+                    // 66% and 33% phases
+                    var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33).ToList();
+                    foreach (AbstractCastEvent c in causticExplosionPhases)
+                    {
+                        int duration = 20000;
+                        int start = (int)c.Time;
+                        int expectedHitTime = (int)c.Time + duration;
+                        int attackEnd = (int)c.Time + duration;
+                        int stunTime = attackEnd;
+                        int detTime = attackEnd;
+
+                        IReadOnlyDictionary<long, BuffsGraphModel> bgmUptime = target.GetBuffGraphs(log);
+
+                        BuffsGraphModel bgmStun = bgmUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
+                        if (bgmStun != null)
+                        {
+                            Segment segment = bgmStun.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
+                            if (segment != null)
+                            {
+                                stunTime = (int)segment.Start;
+                            }
+                        }
+                        BuffsGraphModel bgmDet = bgmUptime.TryGetValue(Determined762, out BuffsGraphModel value2) ? value2 : null;
+                        if (bgmDet != null)
+                        {
+                            Segment segment = bgmDet.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
+                            if (segment != null)
+                            {
+                                detTime = (int)segment.Start;
+                            }
+                        }
+
+                        int stunOrInvulnTime = Math.Min(stunTime, detTime);
+
+                        if (stunOrInvulnTime > 0)
+                        {
+                            attackEnd = Math.Min(stunOrInvulnTime, attackEnd);
+                        }
+
+                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    }
+                    // Poison AoE
+                    var vileSpit = casts.Where(x => x.SkillId == VileSpit).ToList();
+                    EffectGUIDEvent poisonField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VileSpitSiax);
+                    if (vileSpit != null && poisonField != null)
+                    {
+                        var poisonEffects = log.CombatData.GetEffectEventsByEffectID(poisonField.ContentID).ToList();
+                        int duration = 16000;
+                        foreach (EffectEvent effect in poisonEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Nightmare Hallucinations Spawn Event
+                    var spawnNightmares = casts.Where(x => x.SkillId == SpawnNightmareHallucinationsSiax).ToList();
+                    EffectGUIDEvent spawnField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareHallucinationsSpawn);
+                    if (spawnNightmares != null && spawnField != null)
+                    {
+                        var spawnEffects = log.CombatData.GetEffectEventsByEffectID(spawnField.ContentID).ToList();
+                        int duration = 3000;
+                        foreach (EffectEvent effect in spawnEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.EchoOfTheUnclean:
+                    var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
+                    foreach (AbstractCastEvent c in causticExplosionEcho)
+                    {
+                        // Duration is the same as Siax's explosion but starts 2 seconds later
+                        int duration = 20000;
+                        int start = (int)c.Time + 18000;
+                        int attackEnd = (int)c.Time + duration;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.VolatileHallucinationSiax:
+                    break;
+                case (int)ArcDPSEnums.TrashID.NightmareHallucinationSiax:
+                    break;
+                default: break;
+            }
+        }
     }
 }

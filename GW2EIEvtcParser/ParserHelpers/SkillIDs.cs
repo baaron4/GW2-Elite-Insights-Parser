@@ -92,6 +92,7 @@ namespace GW2EIEvtcParser
         public const long Bandage = 1175;
         public const long Quickness = 1187;
         public const long GraspingVinesDamage = 1290;
+        public const long LifeBlast = 2064;
         public const long CrashingWaves = 2654;
         public const long Determined3892 = 3892;
         public const long WaterTrident = 5510;
@@ -459,6 +460,9 @@ namespace GW2EIEvtcParser
         public const long ToxicSharpeningStone = 21826;
         public const long ToxicMaintenanceOil = 21827;
         public const long ToxicFocusingCrystal = 21828;
+        public const long PoisonCloud = 21838;
+        public const long SummonMinions1 = 21861;
+        public const long SummonMinions2 = 21862;
         public const long NetTurretDamageUW = 22137;
         public const long SigilOfMomentum = 22144;
         public const long MistlockInstabilityImpairedImmunity = 22221;
@@ -904,11 +908,12 @@ namespace GW2EIEvtcParser
         public const long CallOfTheWild = 36781;
         public const long Unblockable = 36781;
         public const long HomingGrenades = 36887;
+        public const long VolatileExpulsionSiax = 36894;
         public const long Extraction = 36903;
         public const long NightmareBullet2 = 36919;
         public const long TormentingBlast = 36926;
         public const long Lunge2 = 36927;
-        public const long CausticExplosion2Siax = 36929;
+        public const long CausticExplosionSiaxBreakbar = 36929;
         public const long NigthmareMiasmaEnsolyss2 = 36944;
         public const long Upswing2 = 36962;
         public const long CascadeOfTorment2 = 36984;
@@ -918,6 +923,7 @@ namespace GW2EIEvtcParser
         public const long CausticGrasp = 37045;
         public const long ToxicSickness = 37030;
         public const long NightmareDevastation2 = 37050;
+        public const long CausticBarrage2 = 37078;
         public const long NightmareBomb = 37083;
         public const long SweepingStrikes = 37085;
         public const long CausticExplosionEnsolyss = 37096;
@@ -936,11 +942,13 @@ namespace GW2EIEvtcParser
         public const long NightmareBullet5 = 37304;
         public const long KnightsGaze = 37315;
         public const long NightmareBullet4 = 37316;
-        public const long CausticExplosion1Siax = 37320;
+        public const long CausticExplosionSiaxPhase66 = 37320;
+        public const long CausticExplosionSiaxPhase33 = 37342;
         public const long NightmareDevastation3 = 37357;
         public const long TantrumMAMA = 37391;
-        public const long RampageEnsolyss = 37434;
         public const long Blastwave1 = 37408;
+        public const long SpawnNightmareHallucinationsSiax = 37401;
+        public const long RampageEnsolyss = 37434;
         public const long ShootGreenBalls = 37437;
         public const long ShootRedBalls2 = 37450;
         public const long NigthmareMiasmaEnsolyss1 = 37466;
@@ -950,8 +958,10 @@ namespace GW2EIEvtcParser
         public const long TailLashSiax = 37488;
         public const long NightmareDevastation4 = 37492;
         public const long NightmareBomb2 = 37495;
+        public const long CausticBarrage = 37497;
         public const long DeterminationEnsolyss = 37498;
         public const long NightmareDevastation1 = 37523;
+        public const long CausticExplosionSiaxEcho = 37544;
         public const long Shoot3 = 37555;
         public const long NightmareBullet3 = 37557;
         public const long Leap = 37577;
