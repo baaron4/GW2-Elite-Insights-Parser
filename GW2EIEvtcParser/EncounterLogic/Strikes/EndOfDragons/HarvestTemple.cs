@@ -73,11 +73,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             List<PhaseData> phases = GetInitialPhase(log);
             var subPhasesData = new List<(long start, long end, string name, NPC target, bool canBeSubPhase)>();
+            var giants = new List<NPC>();
             foreach (NPC target in Targets)
             {
                 long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
                 switch (target.ID)
                 {
+                    case (int)ArcDPSEnums.TrashID.VoidGiant:
+                        giants.Add(target);
+                        break;
                     case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                     case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
                     case (int)ArcDPSEnums.TrashID.VoidObliterator:
@@ -133,6 +137,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
+
+            if (giants.Count > 0)
+            {
+                long start = log.FightData.FightEnd;
+                long end = log.FightData.FightStart;
+                foreach (NPC giant in giants)
+                {
+                    start = Math.Min(start, giant.FirstAware);
+                    end = Math.Max(end, giant.LastAware);
+                }
+                var subPhase = new PhaseData(start, end, "Giants");
+                subPhase.AddTargets(giants);
+                phases.Add(subPhase);
+            }
+
             foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
             {
                 var subPhase = new PhaseData(start, end, name);
@@ -203,7 +222,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidGoliath,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
                 (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
-                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate
+                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate,
+                (int)ArcDPSEnums.TrashID.VoidGiant
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -223,7 +243,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.VoidBrandbomber,
                 ArcDPSEnums.TrashID.VoidBurster,
                 ArcDPSEnums.TrashID.VoidColdsteel,
-                ArcDPSEnums.TrashID.VoidGiant,
                 ArcDPSEnums.TrashID.VoidMelter,
                 ArcDPSEnums.TrashID.VoidRotswarmer,
                 ArcDPSEnums.TrashID.VoidSaltsprayDragon,
