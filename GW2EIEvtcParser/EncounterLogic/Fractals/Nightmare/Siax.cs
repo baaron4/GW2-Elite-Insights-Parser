@@ -116,15 +116,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int expectedHitTime = (int)c.Time + duration;
                         int attackEnd = (int)c.Time + duration;
 
-                        Segment detSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (detSegment != null)
-                        {
-                            attackEnd = Math.Min((int)detSegment.Start, attackEnd);
-                        }
                         Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
                         if (stunSegment != null)
                         {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd);
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of stun
+                        }
+                        Segment detSegment = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (detSegment != null)
+                        {
+                            attackEnd = Math.Min((int)detSegment.Start, attackEnd); // Start of determinated
                         }
 
                         replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
@@ -148,15 +148,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int expectedHitTime = (int)c.Time + duration;
                         int attackEnd = (int)c.Time + duration;
 
-                        Segment detSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        Segment detSegment = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
                         if (detSegment != null)
                         {
-                            attackEnd = Math.Min((int)detSegment.Start, attackEnd);
-                        }
-                        Segment stunSegment =  target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd);
+                            attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
                         }
 
                         replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
@@ -183,6 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 3000;
                         foreach (EffectEvent effect in spawnEffects)
                         {
+                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
