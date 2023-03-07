@@ -115,35 +115,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int expectedHitTime = (int)c.Time + duration;
                         int attackEnd = (int)c.Time + duration;
-                        int stunTime = attackEnd;
-                        int detTime = attackEnd;
 
-                        IReadOnlyDictionary<long, BuffsGraphModel> bgmUptime = target.GetBuffGraphs(log);
-
-                        BuffsGraphModel bgmStun = bgmUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
-                        if (bgmStun != null)
+                        Segment detSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (detSegment != null)
                         {
-                            Segment segment = bgmStun.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
-                            if (segment != null)
-                            {
-                                stunTime = (int)segment.Start;
-                            }
+                            attackEnd = Math.Min((int)detSegment.Start, attackEnd);
                         }
-                        BuffsGraphModel bgmDet = bgmUptime.TryGetValue(Determined762, out BuffsGraphModel value2) ? value2 : null;
-                        if (bgmDet != null)
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
                         {
-                            Segment segment = bgmDet.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
-                            if (segment != null)
-                            {
-                                detTime = (int)segment.Start;
-                            }
-                        }
-
-                        int stunOrInvulnTime = Math.Min(stunTime, detTime);
-
-                        if (stunOrInvulnTime > 0)
-                        {
-                            attackEnd = Math.Min(stunOrInvulnTime, attackEnd);
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd);
                         }
 
                         replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
@@ -166,35 +147,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int expectedHitTime = (int)c.Time + duration;
                         int attackEnd = (int)c.Time + duration;
-                        int stunTime = attackEnd;
-                        int detTime = attackEnd;
 
-                        IReadOnlyDictionary<long, BuffsGraphModel> bgmUptime = target.GetBuffGraphs(log);
-
-                        BuffsGraphModel bgmStun = bgmUptime.TryGetValue(Stun, out BuffsGraphModel value) ? value : null;
-                        if (bgmStun != null)
+                        Segment detSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (detSegment != null)
                         {
-                            Segment segment = bgmStun.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
-                            if (segment != null)
-                            {
-                                stunTime = (int)segment.Start;
-                            }
+                            attackEnd = Math.Min((int)detSegment.Start, attackEnd);
                         }
-                        BuffsGraphModel bgmDet = bgmUptime.TryGetValue(Determined762, out BuffsGraphModel value2) ? value2 : null;
-                        if (bgmDet != null)
+                        Segment stunSegment =  target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
                         {
-                            Segment segment = bgmDet.BuffChart.FirstOrDefault(x => x.Start > c.Time && x.Start < c.Time + duration);
-                            if (segment != null)
-                            {
-                                detTime = (int)segment.Start;
-                            }
-                        }
-
-                        int stunOrInvulnTime = Math.Min(stunTime, detTime);
-
-                        if (stunOrInvulnTime > 0)
-                        {
-                            attackEnd = Math.Min(stunOrInvulnTime, attackEnd);
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd);
                         }
 
                         replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
