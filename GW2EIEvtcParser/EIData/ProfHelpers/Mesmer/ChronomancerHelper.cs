@@ -80,6 +80,7 @@ namespace GW2EIEvtcParser.EIData
         {
                 new Buff("Time Echo",TimeEcho, Source.Chronomancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
                 new Buff("Time Anchored",TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
+                new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
         };
 
         private static HashSet<long> NonCloneMinions = new HashSet<long>()
