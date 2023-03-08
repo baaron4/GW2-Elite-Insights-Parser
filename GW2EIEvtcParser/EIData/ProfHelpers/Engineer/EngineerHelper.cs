@@ -128,8 +128,14 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Explosive Entrance",ExplosiveEntranceEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Explosive Temper",ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
                 new Buff("Big Boomer",BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
-                new Buff("Med Kit",MedKitEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
+                new Buff("Med Kit",MedKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
                 new Buff("Med Kit Bonus",MedKitBonus, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
+                new Buff("Grenade Kit",GrenadeKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Grenade_Kit.png"),
+                new Buff("Bomb Kit",BombKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/50/Bomb_Kit.png"),
+                new Buff("Elixir Gun",ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fe/Elixir_Gun.png"),
+                new Buff("Flamethrower",FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ad/Flamethrower.png"),
+                new Buff("Tool Kit",ToolKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/2a/Tool_Kit.png"),
+                new Buff("Elite Mortar",EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0c/Elite_Mortar_Kit.png"),
 
         };
 

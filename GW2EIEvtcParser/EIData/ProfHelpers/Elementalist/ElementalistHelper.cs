@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             // Arcane
             new BuffDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png", DamageModifierMode.All),
 
-            new BuffDamageModifierTarget(new long[] { Stun, Daze, KnockDown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e1/Stormsoul.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.December2018Balance),
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/e/e1/Stormsoul.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.December2018Balance),
         };
 
 
@@ -95,6 +95,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Conjure Frost Bow", ConjureFrostBow, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png"),
                 new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png"),
                 new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png"),
+                new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
+                new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 // Summons
                 new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/af/Glyph_of_Lesser_Elementals_%28air%29.png"),
                 new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/84/Glyph_of_Elementals_%28air%29.png"),
