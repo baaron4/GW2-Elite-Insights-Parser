@@ -758,7 +758,7 @@ namespace GW2EIEvtcParser
             BlueKnight = 16899,
             TwistedHorror = 17009,
             // Siax
-            SiaxHallucination = 17002,
+            VolatileHallucinationSiax = 17002,
             EchoOfTheUnclean = 17068,
             NightmareHallucinationSiax = 16911,
             // Ensolyss
