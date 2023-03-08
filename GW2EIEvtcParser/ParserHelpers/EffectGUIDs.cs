@@ -92,6 +92,8 @@ namespace GW2EIEvtcParser
         public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
         public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
         public const string VileSpitSiax = "BC17A48E8DD2FF44864AA48A732BDC36";
+        public const string CausticBarrageIndicator = "C910F1B11A21014AA99F24DBDFBF13FB";
+        public const string CausticBarragePoisonCloud = "CAF4E62C2C5CC04499657C2A6A78087B";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";

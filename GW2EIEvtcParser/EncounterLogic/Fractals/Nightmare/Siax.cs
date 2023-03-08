@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Poison AoE
                     var vileSpit = casts.Where(x => x.SkillId == VileSpit).ToList();
                     EffectGUIDEvent poisonField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VileSpitSiax);
-                    if (vileSpit != null && poisonField != null)
+                    if (vileSpit.Count > 0 && poisonField != null)
                     {
                         var poisonEffects = log.CombatData.GetEffectEventsByEffectID(poisonField.ContentID).ToList();
                         int duration = 16000;
@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Nightmare Hallucinations Spawn Event
                     var spawnNightmares = casts.Where(x => x.SkillId == SpawnNightmareHallucinationsSiax).ToList();
                     EffectGUIDEvent spawnField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareHallucinationsSpawn);
-                    if (spawnNightmares != null && spawnField != null)
+                    if (spawnNightmares.Count > 0 && spawnField != null)
                     {
                         var spawnEffects = log.CombatData.GetEffectEventsByEffectID(spawnField.ContentID).ToList();
                         int duration = 3000;
@@ -180,6 +180,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Caustic Barrage
+                    EffectGUIDEvent causticBarrage = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CausticBarrageIndicator);
+                    if (causticBarrage != null)
+                    {
+                        var barrageEffects = log.CombatData.GetEffectEventsByEffectID(causticBarrage.ContentID).ToList();
+                        int duration = 500;
+                        foreach (EffectEvent effect in barrageEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;
