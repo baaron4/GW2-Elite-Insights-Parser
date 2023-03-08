@@ -154,8 +154,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
                         }
 
-                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
                     // Poison AoE
                     var vileSpit = casts.Where(x => x.SkillId == VileSpit).ToList();
@@ -192,6 +192,86 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Volatile Hallucinations Explosions
+                    EffectGUIDEvent volatileExpulsion = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VolatileExpulsionIndicator);
+                    if (volatileExpulsion != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(volatileExpulsion.ContentID).ToList();
+                        int duration = 200;
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Cascade Of Torment
+                    EffectGUIDEvent cot0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0);
+                    EffectGUIDEvent cot1 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1);
+                    EffectGUIDEvent cot2 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2);
+                    EffectGUIDEvent cot3 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3);
+                    EffectGUIDEvent cot4 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4);
+                    EffectGUIDEvent cot5 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5);
+                    int cotDuration = 1000;
+                    // Ring 0
+                    if (cot0 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot0.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + cotDuration, 150, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 1
+                    if (cot1 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot1.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 150, 250, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 2
+                    if (cot2 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot2.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 250, 350, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 3
+                    if (cot3 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot3.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 350, 450, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 4
+                    if (cot4 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot4.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 450, 550, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 5
+                    if (cot5 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot5.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 550, 650, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;

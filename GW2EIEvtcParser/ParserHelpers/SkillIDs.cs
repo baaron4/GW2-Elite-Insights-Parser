@@ -2223,7 +2223,7 @@ namespace GW2EIEvtcParser
         public const long DeathsEmbrace2Effect = 67120;
         public const long ShareTheVoid2 = 67148;
         public const long DeathsEmbraceSkill = 67160;
-        public const long ToxicBUllet3 = 67163;
+        public const long ToxicBullet3 = 67163;
         public const long PlateOfImperialPalaceSpecial = 67265;
         public const long FocusedDestruction2 = 67295;
         public const long VolatileExpulsion1 = 67327;
