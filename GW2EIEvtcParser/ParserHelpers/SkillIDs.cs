@@ -92,7 +92,9 @@ namespace GW2EIEvtcParser
         public const long Bandage = 1175;
         public const long Quickness = 1187;
         public const long GraspingVinesDamage = 1290;
+        public const long Freeze1 = 1870;
         public const long CrashingWaves = 2654;
+        public const long Freeze2 = 3138;
         public const long Determined3892 = 3892;
         public const long WaterTrident = 5510;
         public const long CleansingFire = 5535;
@@ -171,7 +173,7 @@ namespace GW2EIEvtcParser
         public const long RocketTurretDamage = 6108;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
-        public const long KnockDown = 6892;
+        public const long Knockdown = 6892;
         public const long LeapOfFaith = 9080;
         public const long ShieldOfWrathSkill = 9082;
         public const long SymbolOfPunishment = 9090;
@@ -429,6 +431,7 @@ namespace GW2EIEvtcParser
         public const long MajorBorderlandsBloodlust = 14773;
         public const long SuperiorBorderlandsBloodlust = 14774;
         public const long SpectralWalkEffectOld = 15083;
+        public const long Petrified1 = 15090;
         public const long OmnomberryGhost = 15259;
         public const long PowerfulPotionOfHalloweenSlaying = 15279;
         public const long Agony = 15773;
@@ -528,6 +531,7 @@ namespace GW2EIEvtcParser
         public const long ResistTheDarkness = 26693;
         public const long Slow = 26766;
         public const long AssassinsPresence = 26854;
+        public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
         public const long Resistance = 26980;
         public const long FacetOfElementsSkill = 27014;
@@ -665,6 +669,7 @@ namespace GW2EIEvtcParser
         public const long MagicStorm = 31419;
         public const long Determined31450 = 31450;
         public const long MagicAuraRedGuardian = 31462;
+        public const long TemporalStasis = 31465;
         public const long GhastlyRampageBegin = 31466;
         public const long SapperBomb = 31473;
         public const long HauntingAura = 31483;
@@ -1516,6 +1521,7 @@ namespace GW2EIEvtcParser
         public const long Geyser = 53130;
         public const long PatriarchCC = 53132;
         public const long FieryDance3 = 53153;
+        public const long Petrified2 = 53180;
         public const long SoulPastry = 53222;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;

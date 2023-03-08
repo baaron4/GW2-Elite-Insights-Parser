@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }),
             //         
-            new BuffDamageModifierTarget(new long[] { Stun, Daze, KnockDown, Fear, Taunt }, "Heavy Light", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/a/a3/Heavy_Light.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Heavy Light", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, "https://wiki.guildwars2.com/images/a/a3/Heavy_Light.png", DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
