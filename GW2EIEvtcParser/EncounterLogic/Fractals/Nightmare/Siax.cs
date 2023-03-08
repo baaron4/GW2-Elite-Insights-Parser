@@ -158,9 +158,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
                     // Poison AoE
-                    var vileSpit = casts.Where(x => x.SkillId == VileSpit).ToList();
                     EffectGUIDEvent poisonField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VileSpitSiax);
-                    if (vileSpit.Count > 0 && poisonField != null)
+                    if (poisonField != null)
                     {
                         var poisonEffects = log.CombatData.GetEffectEventsByEffectID(poisonField.ContentID).ToList();
                         int duration = 16000;
@@ -170,9 +169,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Nightmare Hallucinations Spawn Event
-                    var spawnNightmares = casts.Where(x => x.SkillId == SpawnNightmareHallucinationsSiax).ToList();
                     EffectGUIDEvent spawnField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareHallucinationsSpawn);
-                    if (spawnNightmares.Count > 0 && spawnField != null)
+                    if (spawnField != null)
                     {
                         var spawnEffects = log.CombatData.GetEffectEventsByEffectID(spawnField.ContentID).ToList();
                         int duration = 3000;
