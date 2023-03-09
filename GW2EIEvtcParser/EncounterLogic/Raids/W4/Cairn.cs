@@ -96,6 +96,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
+            if (displacementEffectGUID != null)
+            {
+                IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEventsByEffectID(displacementEffectGUID.ContentID);
+                foreach (EffectEvent displacement in displacementEffects)
+                {
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, (int)displacement.Time + 3000, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -132,16 +146,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                    }
-                    EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
-                    if (displacementEffectGUID != null)
-                    {
-                        IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEventsByEffectID(displacementEffectGUID.ContentID);
-                        foreach (EffectEvent displacement in displacementEffects)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, (int)displacement.Time + 3000, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
-                        }
                     }
                     EffectGUIDEvent dashGreenEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDashGreen);
                     if (dashGreenEffectGUID != null)
