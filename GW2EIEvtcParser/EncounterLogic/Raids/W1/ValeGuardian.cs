@@ -142,6 +142,38 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
+            if (distributedMagicGUIDEvent != null)
+            {
+                int distributedMagicDuration = 6700;
+                IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
+                //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
+                foreach (EffectEvent distributedMagic in distributedMagicEvents)
+                {
+                    int start = (int)distributedMagic.Time;
+                    int expectedEnd = start + distributedMagicDuration;
+                    int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
+                }
+            }
+            EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
+            if (magicSpikeGUIDEvent != null)
+            {
+                IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
+                //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
+                foreach (EffectEvent magicSpike in magicSpikeEvents)
+                {
+                    int start = (int)magicSpike.Time;
+                    int end = start + 2000;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -158,23 +190,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    int distributedMagicDuration = 6700;
-                    EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
-                    if (distributedMagicGUIDEvent != null)
+                    if (!log.CombatData.HasEffectData)
                     {
-                        IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
-                        //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
-                        foreach (EffectEvent distributedMagic in distributedMagicEvents)
-                        {
-                            int start = (int)distributedMagic.Time;
-                            int expectedEnd = start + distributedMagicDuration;
-                            int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
-                        }
-                    } 
-                    else
-                    {
+                        int distributedMagicDuration = 6700;
                         int impactDuration = 110;
                         int arenaRadius = 1600;
                         var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen).ToList();
@@ -204,20 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, 0, arenaRadius, 271, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f))));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
                         }
-                    }
-                    EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
-                    if (magicSpikeGUIDEvent != null)
-                    {
-                        IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
-                        //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
-                        foreach (EffectEvent magicSpike in magicSpikeEvents)
-                        {
-                            int start = (int)magicSpike.Time;
-                            int end = start + 2000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, end, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
-                        }
-                    }
+                    } 
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     break;
