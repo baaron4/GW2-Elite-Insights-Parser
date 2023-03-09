@@ -302,6 +302,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecy(TargetID.Qadim)), log, EnvironmentDecorations);
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -310,7 +315,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.Qadim:
                     //CC
-                    AddPlatformsToCombatReplay(target, log, replay);
                     var breakbar = cls.Where(x => x.SkillId == QadimCC).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
@@ -551,10 +555,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        private static void AddPlatformsToCombatReplay(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.IsSpecy(ArcDPSEnums.TargetID.Qadim));
+            Debug.Assert(qadim.IsSpecy(ArcDPSEnums.TargetID.Qadim));
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library
@@ -647,7 +651,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 PhaseData lastPhase = phases[6];
 
-                List<ParametricPoint3D> qadimMovement = replay.Positions;
+                IReadOnlyList<ParametricPoint3D> qadimMovement = qadim.GetCombatReplayNonPolledPositions(log);
 
                 ParametricPoint3D lastMove = qadimMovement.FirstOrDefault(
                     pt =>
@@ -928,7 +932,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < platformCount; i++)
             {
                 platforms[i] = new MovingPlatformDecoration(platformImageUrl, 2247, 2247, (int.MinValue, int.MaxValue));
-                replay.Decorations.Add(platforms[i]);
+                decorations.Add(platforms[i]);
             }
 
             // Add movement "keyframes" on a movement end and on the start of the next one.

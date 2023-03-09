@@ -293,6 +293,12 @@ namespace GW2EIEvtcParser.ParsedData
         {
             FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
         }
+
+        public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            return Logic.GetEnvironmentCombatReplayDecorations(log);
+        }
+
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 
