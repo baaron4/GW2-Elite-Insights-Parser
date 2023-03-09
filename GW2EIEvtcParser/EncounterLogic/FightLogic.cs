@@ -45,6 +45,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _hostiles { get; } = new List<AbstractSingleActor>();
 
+        protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
+
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
 
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
@@ -339,6 +341,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+        }
+
+        internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+
+        }
+
+        internal IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            if (EnvironmentDecorations == null)
+            {
+                EnvironmentDecorations = new List<GenericDecoration>();
+                ComputeEnvironmentCombatReplayDecorations(log);
+            }
+            return EnvironmentDecorations;
         }
 
         internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

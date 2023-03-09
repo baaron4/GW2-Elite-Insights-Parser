@@ -324,6 +324,15 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Positions;
+        }
+
         public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
@@ -331,6 +340,24 @@ namespace GW2EIEvtcParser.EIData
                 InitCombatReplay(log);
             }
             return CombatReplay.PolledPositions;
+        }
+
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledRotations(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Rotations;
+        }
+
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledRotations(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.PolledRotations;
         }
 
         protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
