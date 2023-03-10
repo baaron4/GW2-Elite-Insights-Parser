@@ -122,13 +122,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            var knownEffectsIDs = new HashSet<long>();
             EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
 
             if (sickness != null)
             {
                 var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
-                knownEffectsIDs.Add(sickness.ContentID);
 
                 foreach (EffectEvent sicknessEffect in sicknessEffects)
                 {
@@ -141,6 +139,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int effectEnd = effectStart + duration;
                         replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.2)"));
                         replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.4)"));
+                    }
+                }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            EffectGUIDEvent fluxBombSmall = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SmallFluxBomb);
+            if (fluxBombSmall != null)
+            {
+                var fluxBombEffects = log.CombatData.GetEffectEventsByEffectID(fluxBombSmall.ContentID).ToList();
+                foreach (EffectEvent fluxEffect in fluxBombEffects)
+                {
+                    int duration = 5000;
+                    int start = (int)fluxEffect.Time;
+                    int effectEnd = start + duration;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
+                    EnvironmentDecorations.Add(new DoughnutDecoration(false, 0, 119, 121, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(fluxEffect.Position)));
+
+                    int pulseDuration = 1000;
+                    int pulse = start + pulseDuration;
+                    int previousPulse = start;
+                    for (int pulses = 0; pulses < 5; pulses++)
+                    {
+                        EnvironmentDecorations.Add(new CircleDecoration(true, pulse, 120, (previousPulse, pulse), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
+                        previousPulse = pulse;
+                        pulse += pulseDuration;
                     }
                 }
             }
