@@ -635,7 +635,6 @@ canvas {
 }
 
 .animation-control {
-    transform: translate(0,-65px);
     z-index: 3;
 }
 
