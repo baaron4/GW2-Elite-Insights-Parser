@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool IsSpecy(int id)
         {
-            return ID == id;
+            return !IsPlayer && ID == id;
         }
 
         public bool IsSpecy(ArcDPSEnums.TrashID id)

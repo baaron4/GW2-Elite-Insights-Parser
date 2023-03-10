@@ -20,10 +20,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 // General
+                new PlayerDstEffectMechanic(EffectGUIDs.HarvestTempleSpread, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.HarvestTempleRedPuddleSelect, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPool, VoidPool2, VoidPoolKralkatorrik, VoidPoolSooWon }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Pool.H", "Hit by Void Pool", "Void Pool", 150),
                 new PlayerDstSkillMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150, (@event, log) => @event.HasHit || @event.DoubleProcHit),
+                new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0, (de, log) => (de.To.IsSpecy(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || de.To.IsSpecy(ArcDPSEnums.TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
                 // Jormag
                 new PlayerDstHitMechanic(new [] { BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
                 new PlayerDstHitMechanic(FrostMeteor, "Frost Meteor", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
@@ -71,11 +74,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             List<PhaseData> phases = GetInitialPhase(log);
             var subPhasesData = new List<(long start, long end, string name, NPC target, bool canBeSubPhase)>();
+            var giants = new List<NPC>();
             foreach (NPC target in Targets)
             {
                 long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
                 switch (target.ID)
                 {
+                    case (int)ArcDPSEnums.TrashID.VoidGiant:
+                        giants.Add(target);
+                        break;
                     case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
                     case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
                     case (int)ArcDPSEnums.TrashID.VoidObliterator:
@@ -131,6 +138,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
+
+            if (giants.Count > 0)
+            {
+                long start = log.FightData.FightEnd;
+                long end = log.FightData.FightStart;
+                foreach (NPC giant in giants)
+                {
+                    start = Math.Min(start, giant.FirstAware);
+                    end = Math.Max(end, giant.LastAware);
+                }
+                var subPhase = new PhaseData(start, end, "Giants");
+                subPhase.AddTargets(giants);
+                phases.Add(subPhase);
+            }
+
             foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
             {
                 var subPhase = new PhaseData(start, end, name);
@@ -201,7 +223,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidGoliath,
                 (int)ArcDPSEnums.TrashID.VoidTimeCaster,
                 (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
-                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate
+                (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate,
+                (int)ArcDPSEnums.TrashID.VoidGiant
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -221,7 +244,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.VoidBrandbomber,
                 ArcDPSEnums.TrashID.VoidBurster,
                 ArcDPSEnums.TrashID.VoidColdsteel,
-                ArcDPSEnums.TrashID.VoidGiant,
                 ArcDPSEnums.TrashID.VoidMelter,
                 ArcDPSEnums.TrashID.VoidRotswarmer,
                 ArcDPSEnums.TrashID.VoidSaltsprayDragon,
