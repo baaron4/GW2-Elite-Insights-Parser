@@ -150,6 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 var subPhase = new PhaseData(start, end, "Giants");
                 subPhase.AddTargets(giants);
+                subPhase.OverrideEndTime(log);
                 phases.Add(subPhase);
             }
 
