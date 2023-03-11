@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (EffectEvent effectEvent in effects)
                     {
                         AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
-                        if (agentItem.IsSpecy(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
+                        if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
                         {
                             mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, log.FindActor(agentItem, true)));
                         } 

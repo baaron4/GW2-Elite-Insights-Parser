@@ -100,8 +100,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_xeraFirstPhaseStart > 0)
                 {
                     var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
-                    phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardButton) || x.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardRift)));
-                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.DummyTarget)));
+                    phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardButton) || x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardRift)));
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget)));
                     phases.Add(phasePreEvent);
                     var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                     phase100to0.AddTarget(mainTarget);
@@ -117,14 +117,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
                     var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                    glidingPhase.AddTargets(Targets.Where(t => t.IsSpecy(ArcDPSEnums.TrashID.ChargedBloodstone)));
+                    glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.ChargedBloodstone)));
                     phases.Add(glidingPhase);
 
                     if (_xeraSecondPhaseStartTime > 0)
                     {
                         var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
                         phase2.AddTarget(mainTarget);
-                        phase2.AddTargets(Targets.Where(t => t.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardMainFight)));
+                        phase2.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardMainFight)));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                         phases.Add(phase2);
                     }
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Xera));
+        private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {

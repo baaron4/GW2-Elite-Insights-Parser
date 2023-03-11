@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Cairn));
+            AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn));
             if (cairn == null)
             {
                 throw new MissingKeyActorsException("Cairn not found");

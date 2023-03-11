@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPool, VoidPool2, VoidPoolKralkatorrik, VoidPoolSooWon }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Pool.H", "Hit by Void Pool", "Void Pool", 150),
                 new PlayerDstSkillMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150, (@event, log) => @event.HasHit || @event.DoubleProcHit),
-                new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0, (de, log) => (de.To.IsSpecy(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || de.To.IsSpecy(ArcDPSEnums.TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
+                new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0, (de, log) => (de.To.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || de.To.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
                 // Jormag
                 new PlayerDstHitMechanic(new [] { BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
                 new PlayerDstHitMechanic(FrostMeteor, "Frost Meteor", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(subPhase);
             }
             int purificationID = 0;
-            foreach (NPC voidAmal in Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecy(ArcDPSEnums.TrashID.KillableVoidAmalgamate)))
+            foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)))
             {
                 long end;
                 DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // no bouny chest detection, the reward is delayed
-            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
+            AbstractSingleActor soowon = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
             if (soowon != null)
             {
                 AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
@@ -922,7 +922,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (phaseTarget.GetCurrentHealthPercent(log, target.FirstAware) > 50)
                                 {
                                     // Soo-Won 1
-                                    AbstractSingleActor killableHeart = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.KillableVoidAmalgamate));
+                                    AbstractSingleActor killableHeart = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate));
                                     if (killableHeart != null)
                                     {
                                         lastEnd = (int)(killableHeart.FirstAware + 1000);

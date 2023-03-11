@@ -348,29 +348,29 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetCurrentPosition(log, time);
         }
 
-        public bool IsSpecy(int id)
+        public bool IsSpecies(int id)
         {
             return !IsPlayer && ID == id;
         }
 
-        public bool IsSpecy(ArcDPSEnums.TrashID id)
+        public bool IsSpecies(ArcDPSEnums.TrashID id)
         {
-            return IsSpecy((int)id);
+            return IsSpecies((int)id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.TargetID id)
+        public bool IsSpecies(ArcDPSEnums.TargetID id)
         {
-            return IsSpecy((int)id);
+            return IsSpecies((int)id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.MinionID id)
+        public bool IsSpecies(ArcDPSEnums.MinionID id)
         {
-            return IsSpecy((int)id);
+            return IsSpecies((int)id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.ChestID id)
+        public bool IsSpecies(ArcDPSEnums.ChestID id)
         {
-            return IsSpecy((int)id);
+            return IsSpecies((int)id);
         }
     }
 }

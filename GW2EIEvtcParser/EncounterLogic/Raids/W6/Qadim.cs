@@ -61,11 +61,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(Claw, "Claw", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new PlayerDstHitMechanic(Swap, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerDstBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
-            new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecy(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-            new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecy(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-            new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecy(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-            new EnemyStatusMechanic<DeadEvent>("Retal Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0, (log, a) => a.IsSpecy(TrashID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-            new EnemyStatusMechanic<DeadEvent>("Resolution Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0, (log, a) => a.IsSpecy(TrashID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+            new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+            new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+            new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+            new EnemyStatusMechanic<DeadEvent>("Retal Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+            new EnemyStatusMechanic<DeadEvent>("Resolution Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             });
             Extension = "qadim";
             Icon = EncounterIconQadim;
@@ -151,19 +151,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianProtect))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianProtect))
                 {
                     target.OverrideName("Protect " + target.Character);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianRetal))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianRetal))
                 {
                     target.OverrideName("Retal " + target.Character);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianResolution))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianResolution))
                 {
                     target.OverrideName("Resolution " + target.Character);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.PyreGuardianStab))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianStab))
                 {
                     target.OverrideName("Stab " + target.Character);
                 }
@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -304,7 +304,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecy(TargetID.Qadim)), log, EnvironmentDecorations);
+            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -547,7 +547,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -558,7 +558,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(qadim.IsSpecy(ArcDPSEnums.TargetID.Qadim));
+            Debug.Assert(qadim.IsSpecies(ArcDPSEnums.TargetID.Qadim));
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library

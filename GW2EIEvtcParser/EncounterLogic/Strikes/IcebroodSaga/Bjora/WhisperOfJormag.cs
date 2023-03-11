@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor woj = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.WhisperOfJormag));
+            AbstractSingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag));
             if (woj == null)
             {
                 throw new MissingKeyActorsException("Whisper of Jormag not found");

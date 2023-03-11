@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.SoullessHorror));
+                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
                 if (mainTarget == null)
                 {
                     throw new MissingKeyActorsException("Soulless Horror not found");
@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.SoullessHorror));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Soulless Horror not found");

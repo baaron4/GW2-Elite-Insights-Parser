@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser
         private const int Mine = -35;
         private const int Environment = -36;
 
-        public const int NonIdentifiedAgent = 0;
+        public const int NonIdentifiedSpecies = 0;
 
         //
 

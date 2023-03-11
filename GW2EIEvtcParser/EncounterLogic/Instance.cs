@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _trashMobs.AddRange(logic.TrashMobs);
                 _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
             }
-            _targets.RemoveAll(x => x.IsSpecy(ArcDPSEnums.TargetID.DummyTarget));
+            _targets.RemoveAll(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget));
             AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.Instance, true);
             ComputeFightTargets(agentData, combatData, extensions);
             _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);

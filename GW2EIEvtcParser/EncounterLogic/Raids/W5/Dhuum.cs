@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Dhuum));
+            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
             if (dhuum == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -404,7 +404,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Dhuum));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -489,7 +489,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Dhuum));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");

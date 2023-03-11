@@ -215,9 +215,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
-                AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CALeftArm));
-                AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CARightArm));
+                AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+                AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+                AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
                 if (target == null)
                 {
                     throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ca = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            AbstractSingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
             if (ca == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phase.Name = name;
             }
-            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CALeftArm));
+            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -316,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CARightArm));
+            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");

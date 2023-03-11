@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -100,10 +100,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             int count = 0;
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly1) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly2) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly3) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly4))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly4))
                 {
                     target.OverrideName(target.Character + " " + (++count));
                 }
@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");

@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(new long[] {SharedDestructionLi, SharedDestructionLiCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
                 new PlayerDstHitMechanic(new long[] { EnforcerRushingJustice, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                 new PlayerDstHitMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.IsSpecy(ArcDPSEnums.TrashID.TheMindblade) || evt.CreditedBy.IsSpecy(ArcDPSEnums.TrashID.TheMindbladeCM)),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.IsSpecy(ArcDPSEnums.TrashID.TheEnforcer) || evt.CreditedBy.IsSpecy(ArcDPSEnums.TrashID.TheEnforcerCM)),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150, (evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindblade) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindbladeCM)),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150, (evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcer) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcerCM)),
                 new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new PlayerDstHitMechanic(new long[]{StormOfSwords1, StormOfSwords2, StormOfSwords3 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new PlayerDstHitMechanic(JadeBusterCannon, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private AbstractSingleActor GetMinisterLi(FightData fightData)
         {
-            return Targets.FirstOrDefault(x => x.IsSpecy(fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
+            return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -148,11 +148,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ParserHelper.ServerDelayConstant);
             phases.AddRange(subPhases);
             //
-            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecy(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
-            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.IsSpecy(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
-            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.IsSpecy(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
-            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.IsSpecy(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
-            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.IsSpecy(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
+            AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
+            AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
+            AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
+            AbstractSingleActor sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
+            AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
             AddSplitPhase(phases, new List<AbstractSingleActor>() { enforcer, mindblade, ritualist }, ministerLi, log, 1);
             AddSplitPhase(phases, new List<AbstractSingleActor>() { mechRider, sniper }, ministerLi, log, 2);
             return phases;
@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.MinisterLiCM));
+            AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
             return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }

@@ -102,15 +102,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private AbstractSingleActor Vermillion()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeVermilion));
+            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion));
         }
         private AbstractSingleActor Indigo()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeIndigo));
+            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo));
         }
         private AbstractSingleActor Arsenite()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PrototypeArsenite));
+            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite));
         }
 
         private static List<PhaseData> GetSubPhases(AbstractSingleActor target, ParsedEvtcLog log, string phaseName)

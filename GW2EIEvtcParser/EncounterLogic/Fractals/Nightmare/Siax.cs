@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Siax));
+            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Siax));
             if (siax == null)
             {
                 throw new MissingKeyActorsException("Siax not found");

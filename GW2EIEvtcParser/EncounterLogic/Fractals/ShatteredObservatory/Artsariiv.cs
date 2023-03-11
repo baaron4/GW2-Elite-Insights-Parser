@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Artsariiv));
+            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Artsariiv));
             if (artsariiv == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");
@@ -125,22 +125,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             int count = 0;
             foreach (NPC trashMob in _trashMobs)
             {
-                if (trashMob.IsSpecy(ArcDPSEnums.TrashID.SmallArtsariiv))
+                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.SmallArtsariiv))
                 {
                     trashMob.OverrideName("Small " + trashMob.Character);
                 }
-                if (trashMob.IsSpecy(ArcDPSEnums.TrashID.MediumArtsariiv))
+                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.MediumArtsariiv))
                 {
                     trashMob.OverrideName("Medium " + trashMob.Character);
                 }
-                if (trashMob.IsSpecy(ArcDPSEnums.TrashID.BigArtsariiv))
+                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.BigArtsariiv))
                 {
                     trashMob.OverrideName("Big " + trashMob.Character);
                 }
             }
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.CloneArtsariiv))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
                 {
                     target.OverrideName("Clone " + target.Character + " " + (++count));
                 }
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Artsariiv));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Artsariiv));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");

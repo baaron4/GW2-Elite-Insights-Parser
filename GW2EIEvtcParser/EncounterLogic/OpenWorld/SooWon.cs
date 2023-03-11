@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", 0, (bre, log) => !bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
             new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", 0, (bre, log) => bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
             new EnemyDstBuffApplyMechanic(DamageImmunitySooWonBite, "Damage Immunity", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
-            new EnemyDstBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0, (bae, log) => bae.To.IsSpecy(ArcDPSEnums.TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0, (bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
             });
             Extension = "soowon";
             Icon = EncounterIconSooWon;
@@ -56,8 +56,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.SooWonOW));
-            AbstractSingleActor tailTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.SooWonTail));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
+            AbstractSingleActor tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Soo-Won not found");
@@ -166,8 +166,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 5:
                         phase.Name = "First Champions";
                         phase.AddTargets(Targets.Where(x =>
-                            x.IsSpecy(ArcDPSEnums.TrashID.VoidGiant2) ||
-                            x.IsSpecy(ArcDPSEnums.TrashID.VoidTimeCaster2)));
+                            x.IsSpecies(ArcDPSEnums.TrashID.VoidGiant2) ||
+                            x.IsSpecies(ArcDPSEnums.TrashID.VoidTimeCaster2)));
                         break;
                     case 6:
                         phase.Name = "60% - 40%";
@@ -190,9 +190,9 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
                     case 10:
                         phase.Name = "Second Champions";
                         phase.AddTargets(Targets.Where(x =>
-                            x.IsSpecy(ArcDPSEnums.TrashID.VoidBrandstalker) ||
-                            x.IsSpecy(ArcDPSEnums.TrashID.VoidColdsteel2) ||
-                            x.IsSpecy(ArcDPSEnums.TrashID.VoidObliterator2)));
+                            x.IsSpecies(ArcDPSEnums.TrashID.VoidBrandstalker) ||
+                            x.IsSpecies(ArcDPSEnums.TrashID.VoidColdsteel2) ||
+                            x.IsSpecies(ArcDPSEnums.TrashID.VoidObliterator2)));
                         break;
                     case 11:
                         phase.Name = "20% - 0%";
