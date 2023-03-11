@@ -392,6 +392,7 @@ namespace GW2EIEvtcParser
         public const long DaggerStorm = 13134;
         public const long Infiltration = 13135;
         public const long PersistingFlames = 13342;
+        public const long ArcaneLightning = 13423;
         public const long SelflessDaring = 13594;
         public const long LesserSymbolOfProtection = 13684;
         public const long StrengthinNumbers = 13796;

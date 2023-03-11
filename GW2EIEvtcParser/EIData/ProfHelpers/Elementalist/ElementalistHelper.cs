@@ -89,6 +89,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Tornado",Tornado, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/40/Tornado.png"),
                 new Buff("Whirlpool",Whirlpool, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/41/Whirlpool.png"),
                 new Buff("Electrified Tornado",ElectrifiedTornado, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/29/Chain_Lightning.png"),
+                new Buff("Arcane Lightning",ArcaneLightning, Source.Elementalist, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/04/Elemental_Surge.png"),
                 //conjures
                 new Buff("Conjure Earth Shield", ConjureEarthShield, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png"),
                 new Buff("Conjure Flame Axe", ConjureFlameAxe, Source.Elementalist, BuffClassification.Support, "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png"),
