@@ -100,6 +100,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        private static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplay replay, EffectGUIDEvent cascadeOfTormentEffect, int cotDuration, int innerRadius, int outerRadius)        {
+            if (cascadeOfTormentEffect != null)
+            {
+                var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cascadeOfTormentEffect.ContentID).ToList();
+                foreach (EffectEvent effect in expulsionEffects)
+                {
+                    int endTime = (int)effect.Time + cotDuration;
+                    if (innerRadius == 0)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                    } 
+                    else
+                    {
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                    }
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -205,79 +226,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Cascade Of Torment
-                    EffectGUIDEvent cot0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0);
-                    EffectGUIDEvent cot1 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1);
-                    EffectGUIDEvent cot2 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2);
-                    EffectGUIDEvent cot3 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3);
-                    EffectGUIDEvent cot4 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4);
-                    EffectGUIDEvent cot5 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5);
                     int cotDuration = 1000;
-                    // Ring 0
-                    if (cot0 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot0.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Ring 1
-                    if (cot1 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot1.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Ring 2
-                    if (cot2 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot2.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Ring 3
-                    if (cot3 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot3.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Ring 4
-                    if (cot4 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot4.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Ring 5
-                    if (cot5 != null)
-                    {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot5.ContentID).ToList();
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            int endTime = (int)effect.Time + cotDuration;
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                        }
-                    }
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0), cotDuration, 0, 150);
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1), cotDuration, 150, 250);
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2), cotDuration, 250, 350);
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3), cotDuration, 350, 450);
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4), cotDuration, 450, 550);
+                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5), cotDuration, 550, 650);
                     break;
                 case (int)ArcDPSEnums.TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
