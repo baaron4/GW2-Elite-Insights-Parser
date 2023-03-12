@@ -128,6 +128,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, Point3D point, int attackEnd, int start, int end, int growing)
+        {
+            if (attackEnd >= end) // If the attack started
+            {
+                Point3D flipPoint = -1 * point;
+                // Frontal
+                replay.Decorations.Add(new PieDecoration(true, growing, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                if (end == growing) // If the attack went off
+                {
+                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                }
+                // Retro
+                replay.Decorations.Add(new PieDecoration(true, growing, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                if (end == growing) // If the attack went off
+                {
+                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -138,29 +160,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                     IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
                     Segment percent66treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 66);
                     Segment percent15treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 15);
-                    // The effects are applied multiple times, we only need 1
-                    bool doughnut100_66Added = false;
-                    bool doughnut66_15Added = false;
-                    bool doughnut15_0Added = false;
                     bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                     // Arkk's Shield
                     EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
                     if (shield != null)
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
+                        EffectEvent shieldEffect = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).FirstOrDefault();
 
-                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        if (shieldEffect != null)
                         {
+                            shield15_0Added = true;
                             // The position check is necessary because with very high dps you can skip spawning the middle bubble, position is roughly X 1573 Y 1467
                             // In that case, we need to use the other set of decorations
-                            if (percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572 && !shield15_0Added)
+                            if (percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
                             {
                                 int effectEnd = (int)target.LastAware;
                                 replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                                shield15_0Added = true;
                             }
-                            else if (!shield15_0Added)
+                            else
                             {
                                 int duration = 5000;
                                 int start = (int)shieldEffect.Time;
@@ -182,69 +200,62 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
 
-                    // Miasma Doughnuts
-                    EffectGUIDEvent doughnut100_66 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut100_66);
-                    EffectGUIDEvent doughnut66_15 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut66_15);
-                    EffectGUIDEvent doughnut15_0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut15_0);
-
                     // 100% to 66% Doughnut
+                    EffectGUIDEvent doughnut100_66 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut100_66);
                     if (doughnut100_66 != null)
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut100_66.ContentID).ToList();
-                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut100_66.ContentID).FirstOrDefault();
+                        if (miasmaEffect != null)
                         {
-                            if (!doughnut100_66Added && percent66treshhold != null)
+                            if (percent66treshhold != null)
                             {
-                                int start = (int)shieldEffect.Time;
+                                int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent66treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                doughnut100_66Added = true;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
-                            else if (!doughnut100_66Added) // Wipe before 66%
+                            else // Wipe before 66%
                             {
-                                int start = (int)shieldEffect.Time;
+                                int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                doughnut100_66Added = true;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
                     // 66% to 15% Doughnut
+                    EffectGUIDEvent doughnut66_15 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut66_15);
                     if (doughnut66_15 != null)
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut66_15.ContentID).ToList();
-                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut66_15.ContentID).FirstOrDefault();
+                        if (miasmaEffect != null)
                         {
                             // Check if the Arkk's shield attack has been skipped with high dps
-                            if (!doughnut66_15Added && shield15_0Added && percent15treshhold != null)
+                            if (shield15_0Added && percent15treshhold != null)
                             {
-                                int start = (int)shieldEffect.Time;
+                                int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent15treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                doughnut66_15Added = true;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
-                            else if (!doughnut66_15Added) // Wipe before 15%
+                            else // Wipe before 15%
                             {
-                                int start = (int)shieldEffect.Time;
+                                int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                doughnut66_15Added = true;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
                     // 15% to 0% Doughnut
+                    EffectGUIDEvent doughnut15_0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut15_0);
                     if (doughnut15_0 != null)
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut15_0.ContentID).ToList();
-                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut15_0.ContentID).FirstOrDefault();
+                        if (miasmaEffect != null)
                         {
                             // If Arkk's shield has been skipped at 15% this decoration should never be added
-                            if (!doughnut15_0Added && shield15_0Added)
+                            if (shield15_0Added)
                             {
-                                int start = (int)shieldEffect.Time;
+                                int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                doughnut15_0Added = true;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -330,7 +341,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         // Shockwave
-                        replay.Decorations.Add(new CircleDecoration(false, endTimeWave, 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.8)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(false, endTimeWave, 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)));
                     }
 
                     // 66% & 33% Breakbars
@@ -348,121 +359,39 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
                         }
-
-                        // Initial facing point
-                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
-                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
-
-                        // Calculated other quarters from initial point
-                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
-                        var behindPoint = new Point3D(facingDirection.X * -1, facingDirection.Y * -1);
-                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
-                        var rightPoint = new Point3D(facingDirection.Y, facingDirection.X * -1);
-
-                        // Quarter attack hit times
-                        int startFirstQuarter = start + 1500;
-                        int endFirstQuarter = startFirstQuarter + durationQuarter;
-                        int endSecondQuarter = endFirstQuarter + durationQuarter;
-                        int endThirdQuarter = endSecondQuarter + durationQuarter;
-                        int endFourthQuarter = endThirdQuarter + durationQuarter;
-
-                        // Timers for growing animation
-                        int growingFirstQuarter = startFirstQuarter + durationQuarter;
-                        int growingSecondQuarter = endFirstQuarter + durationQuarter;
-                        int growingThirdQuarter = endSecondQuarter + durationQuarter;
-                        int growingFourthQuarter = endThirdQuarter + durationQuarter;
-
-                        // If the explosion end is after the start of a quarter, pick the minimum ending
-
-                        endFirstQuarter = Math.Min(endFirstQuarter, attackEnd);
-                        endSecondQuarter = Math.Min(endSecondQuarter, attackEnd);
-                        endThirdQuarter = Math.Min(endThirdQuarter, attackEnd);
-                        endFourthQuarter = Math.Min(endFourthQuarter, attackEnd);
-
-
                         // Circle going in
                         replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         if (attackEnd == expectedHitEnd)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         }
-
+                        // Initial facing point
+                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        // Calculated other quarters from initial point
+                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
+                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
                         // First quarters
-                        if (attackEnd >= endFirstQuarter) // If the attack started
-                        {
-                            // Frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 1200, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                            // Retro
-                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 1200, behindPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
-
+                        int startFirstQuarter = start + 1500;
+                        int endFirstQuarter = Math.Min(startFirstQuarter + durationQuarter, attackEnd);
+                        int growingFirstQuarter = startFirstQuarter + durationQuarter;
+                        AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startFirstQuarter, endFirstQuarter, growingFirstQuarter);
                         // Second quarters
-                        if (attackEnd >= endSecondQuarter) // If the attack started
-                        {
-                            // Left of frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 1200, leftPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                            // Right of frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 1200, rightPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
-
+                        int startSecondQuarter = endFirstQuarter;
+                        int endSecondQuarter = Math.Min(startSecondQuarter + durationQuarter, attackEnd);
+                        int growingSecondQuarter = startSecondQuarter + durationQuarter;
+                        AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startSecondQuarter, endSecondQuarter, growingSecondQuarter);
                         // Third quarters
-                        if (attackEnd >= endThirdQuarter) // If the attack started
-                        {
-                            // Frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingThirdQuarter, 1200, frontalPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endThirdQuarter == growingThirdQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endThirdQuarter, endThirdQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                            // Retro
-                            replay.Decorations.Add(new PieDecoration(true, growingThirdQuarter, 1200, behindPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endThirdQuarter == growingThirdQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endThirdQuarter, endThirdQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
-
+                        int startThirdQuarter = endSecondQuarter;
+                        int endThirdQuarter = Math.Min(startThirdQuarter + durationQuarter, attackEnd);
+                        int growingThirdQuarter = startThirdQuarter + durationQuarter;
+                        AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startThirdQuarter, endThirdQuarter, growingThirdQuarter);
                         // Fourth quarters
-                        if (attackEnd >= endFourthQuarter) // If the attack started
-                        {
-                            // Left of frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingFourthQuarter, 1200, leftPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endFourthQuarter == growingFourthQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endFourthQuarter, endFourthQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                            // Right of frontal
-                            replay.Decorations.Add(new PieDecoration(true, growingFourthQuarter, 1200, rightPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endFourthQuarter == growingFourthQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endFourthQuarter, endFourthQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
+                        int startFourthQuarter = endThirdQuarter;
+                        int endFourthQuarter = Math.Min(startFourthQuarter + durationQuarter, attackEnd);
+                        int growingFourthQuarter = startFourthQuarter + durationQuarter;
+                        AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startFourthQuarter, endFourthQuarter, growingFourthQuarter);
                     }
 
                     // Lunge (Dash)
@@ -530,7 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 2000;
                     int start = (int)waveEffect.Time;
                     int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(false, effectEnd, 1150, (start, effectEnd), "rgba(255, 200, 0, 0.8)", new PositionConnector(waveEffect.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(false, effectEnd, 1150, (start, effectEnd), "rgba(255, 200, 0, 0.4)", new PositionConnector(waveEffect.Position)));
                 }
             }
         }
