@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser
         public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
         public const string VileSpitSiax = "BC17A48E8DD2FF44864AA48A732BDC36";
         public const string CausticBarrageIndicator = "C910F1B11A21014AA99F24DBDFBF13FB";
-        public const string CausticBarragePoisonCloud = "CAF4E62C2C5CC04499657C2A6A78087B";
+        public const string CausticBarrageHitEffect = "CAF4E62C2C5CC04499657C2A6A78087B";
         public const string VolatileExpulsionIndicator = "F22E201EAF24DD42A43D297B2E83CC66";
         public const string CascadeOfTormentRing0 = "EFF32973C7921F41AA3FD65745E06506";
         public const string CascadeOfTormentRing1 = "D919AC7D1B2ABD438F809B3B9DCE9226";
@@ -102,6 +102,10 @@ namespace GW2EIEvtcParser
         public const string CascadeOfTormentRing3 = "55FC7E1387EA2241B6538CAAB6017497";
         public const string CascadeOfTormentRing4 = "8CFFD69B25B7E844856A7D06D11332D5";
         public const string CascadeOfTormentRing5 = "D427C86A0E120F4A860F4570B354396D";
+        public const string EnsolyssMiasmaDoughnut100_66 = "16B9D11838F68A4C8E477ED62F956226";
+        public const string EnsolyssMiasmaDoughnut66_15 = "3AE042F82A10B84DB7487B0C0F4D2AB1";
+        public const string EnsolyssMiasmaDoughnut15_0 = "AB294EC140644E48BC739B8E303D2762";
+        public const string EnsolyssNightmareAltarShockwave = "AA31A20BDC52324B945FD660D60429EB";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
