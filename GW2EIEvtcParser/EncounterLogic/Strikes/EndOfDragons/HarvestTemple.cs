@@ -934,6 +934,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, 0, (int)radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)));
                     }
                     break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                    EffectGUIDEvent sooWonClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSooWonClaw);
+                    if (sooWonClaw != null)
+                    {
+                        IReadOnlyList<EffectEvent> sooWonClawEffects = log.CombatData.GetEffectEventsByEffectID(sooWonClaw.ContentID);
+                        knownEffectsIDs.Add(sooWonClaw.ContentID);
+                        foreach (EffectEvent effect in sooWonClawEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 2300;
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
                 case (int)ArcDPSEnums.TrashID.VoidWarforged2:
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
