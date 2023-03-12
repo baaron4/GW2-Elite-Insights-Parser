@@ -112,6 +112,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        private static void AddTormentingBlassDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
+        {
+            int startQuarter = start + quarterAoE;
+            int endQuarter = start + quarterHit;
+            int growingQuarter = start + quarterHit;
+            if (attackEnd >= endQuarter) // If the attack started
+            {
+                replay.Decorations.Add(new PieDecoration(true, growingQuarter, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                if (endQuarter == growingQuarter) // If the attack went off
+                {
+                    replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -276,34 +292,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
                         var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
 
-                        int startFirstQuarter = start + firstQuarterAoe;
-                        int endFirstQuarter = start + firstQuarterHit;
-                        int startSecondQuarter = start + secondQuarterAoe;
-                        int endSecondQuarter = start + secondQuarterHit;
-
-                        int growingFirstQuarter = start + firstQuarterHit;
-                        int growingSecondQuarter = start + secondQuarterHit;
-
-                        // Frontal
-                        if (attackEnd >= endFirstQuarter) // If the attack started
-                        {
-                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 700, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 700, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 700, frontalPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
-                        // Left of frontal
-                        if (attackEnd >= endSecondQuarter) // If the attack started
-                        {
-                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 700, leftPoint, 90, (startSecondQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                            replay.Decorations.Add(new PieDecoration(true, 0, 700, leftPoint, 90, (startSecondQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
-                            {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 700, leftPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                            }
-                        }
+                        AddTormentingBlassDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
+                        AddTormentingBlassDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
                     }
 
                     // Caustic Grasp (AoE Pull)
