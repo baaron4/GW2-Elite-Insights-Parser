@@ -55,6 +55,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new [] { TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
                 new PlayerDstHitMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
                 new PlayerDstHitMechanic(VoidPoolSooWon, "Void Pool", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
+                new PlayerDstHitMechanic(TailSlam, "Tail Slam", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
+                new PlayerDstHitMechanic(TormentOfTheVoid, "Torment of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0)
             }
@@ -948,6 +950,63 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 2300;
                             replay.Decorations.Add(new PieDecoration(true, 0, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    } 
+                    EffectGUIDEvent bouncingOrbClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator);
+                    if (bouncingOrbClaw != null)
+                    {
+                        IReadOnlyList<EffectEvent> bouncingOrbClawEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbClaw.ContentID);
+                        knownEffectsIDs.Add(bouncingOrbClaw.ContentID);
+                        foreach (EffectEvent effect in bouncingOrbClawEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 550;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent bouncingOrbTail = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidTailIndicator);
+                    if (bouncingOrbTail != null)
+                    {
+                        IReadOnlyList<EffectEvent> bouncingOrbTailEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbTail.ContentID);
+                        knownEffectsIDs.Add(bouncingOrbTail.ContentID);
+                        foreach (EffectEvent effect in bouncingOrbTailEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 1600;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent tailSlam = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTailSlamIndicator);
+                    if (tailSlam != null)
+                    {
+                        IReadOnlyList<EffectEvent> tailSlamEffects = log.CombatData.GetEffectEventsByEffectID(tailSlam.ContentID);
+                        knownEffectsIDs.Add(tailSlam.ContentID);
+                        foreach (EffectEvent effect in tailSlamEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 1600;
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, end, 3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent tsunami = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTsunami1);
+                    if (tsunami != null)
+                    {
+                        IReadOnlyList<EffectEvent> tsunamiEffects = log.CombatData.GetEffectEventsByEffectID(tsunami.ContentID);
+                        knownEffectsIDs.Add(tsunami.ContentID);
+                        foreach (EffectEvent effect in tsunamiEffects)
+                        {
+                            // AoE indicator
+                            int indicatorEnd = (int)effect.Time;
+                            int indicatorStart = indicatorEnd - 1600;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 235, (indicatorStart, indicatorEnd), "rgba(250, 0, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, indicatorEnd, 235, (indicatorStart, indicatorEnd), "rgba(250, 0, 0, 0.2)", new PositionConnector(effect.Position)));
+                            // Expanding wave - radius and duration are estimates, can't seem to line up the decoration with actual hits
+                            int waveStart = (int)effect.Time;
+                            int waveEnd = waveStart + 4500;
+                            replay.Decorations.Add(new CircleDecoration(false, waveEnd, 2000, (waveStart, waveEnd), "rgba(0, 0, 250, 0.5)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;
