@@ -2042,7 +2042,7 @@ namespace GW2EIEvtcParser
         public const long StormOfSwords1 = 63838;
         public const long VitalityEqualizer1 = 63840;
         public const long LightningOfJormag = 63881;
-        public const long VoidPool = 63910;
+        public const long VoidPoolCM = 63910;
         public const long DragonsEndContributor10 = 63928;
         public const long VoidBeam = 63956;
         public const long DeathsEmbrace2Skill = 64386;
@@ -2263,7 +2263,7 @@ namespace GW2EIEvtcParser
         public const long SwarmOfMordremoth = 67688;
         public const long SwarmOfMordremoth_CorruptedWaters = 67703;
         public const long JadeLaserShot2 = 67691;
-        public const long VoidPool2 = 67739;
+        public const long VoidPoolNM = 67739;
         public const long OldExposed = 67763;
         public const long GraspOfJormag = 67772;
         public const long ToxicBullet2 = 67822;
