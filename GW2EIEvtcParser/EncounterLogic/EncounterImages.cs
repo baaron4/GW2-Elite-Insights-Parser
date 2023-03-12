@@ -193,7 +193,7 @@
         internal const string InstanceIconEdgeOfTheMists = "https://wiki.guildwars2.com/images/thumb/6/6c/Edge_of_the_Mists_loading_screen.jpg/240px-Edge_of_the_Mists_loading_screen.jpg";
 
         // Combat Replay Maps
-        internal const string CombatReplayEternalBattlegrounds = "https://i.imgur.com/gmnSuz7.png";
+        internal const string CombatReplayEternalBattlegrounds = "https://i.imgur.com/t0khtQd.png";
         internal const string CombatReplayAlpineBorderlands = "https://i.imgur.com/nVu2ivF.png";
         internal const string CombatReplayDesertBorderlands = "https://i.imgur.com/R5p9fqw.png";
         internal const string CombatReplayObsidianSanctum = "";
