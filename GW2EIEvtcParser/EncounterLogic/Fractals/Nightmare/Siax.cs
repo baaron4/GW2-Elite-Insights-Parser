@@ -100,27 +100,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplay replay, EffectGUIDEvent cascadeOfTormentEffect, int cotDuration, int innerRadius, int outerRadius)        {
-            if (cascadeOfTormentEffect != null)
-            {
-                var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cascadeOfTormentEffect.ContentID).ToList();
-                foreach (EffectEvent effect in expulsionEffects)
-                {
-                    int endTime = (int)effect.Time + cotDuration;
-                    if (innerRadius == 0)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                    } 
-                    else
-                    {
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
-                    }
-                }
-            }
-        }
-
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
