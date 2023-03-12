@@ -55,6 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new [] { TsunamiSlam1, TsunamiSlam2 }, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
                 new PlayerDstHitMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
                 new PlayerDstHitMechanic(VoidPoolSooWon, "Void Pool", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
+                new PlayerDstHitMechanic(TormentOfTheVoid, "Torment of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0)
             }
@@ -948,6 +949,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 2300;
                             replay.Decorations.Add(new PieDecoration(true, 0, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    } 
+                    EffectGUIDEvent bouncingOrbClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator);
+                    if (bouncingOrbClaw != null)
+                    {
+                        IReadOnlyList<EffectEvent> bouncingOrbClawEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbClaw.ContentID);
+                        knownEffectsIDs.Add(bouncingOrbClaw.ContentID);
+                        foreach (EffectEvent effect in bouncingOrbClawEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 550;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent bouncingOrbTail = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidTailIndicator);
+                    if (bouncingOrbTail != null)
+                    {
+                        IReadOnlyList<EffectEvent> bouncingOrbTailEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbTail.ContentID);
+                        knownEffectsIDs.Add(bouncingOrbTail.ContentID);
+                        foreach (EffectEvent effect in bouncingOrbTailEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = start + 1600;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;

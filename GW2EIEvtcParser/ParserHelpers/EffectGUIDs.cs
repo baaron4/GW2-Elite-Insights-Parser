@@ -133,5 +133,7 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
         public const string HarvestTempleVoidPool = "912F68E45158C14E9A30D6011B7B0C7F";
         public const string HarvestTempleSooWonClaw = "CB877C57D1423240BACDF8D6B52A440F";
+        public const string HarvestTempleTormentOfTheVoidClawIndicator = "3F24896D3EF8D5459B399DAC8D0AD150"; // AoE indicator for bouncing orbs after Soo-Won's Claw Slap attack
+        public const string HarvestTempleTormentOfTheVoidTailIndicator = "C1A523D71A841048897211B1020B8D95"; // AoE indicator for bouncing orbs after Soo-Won's Tail Slam attack
     }
 }
