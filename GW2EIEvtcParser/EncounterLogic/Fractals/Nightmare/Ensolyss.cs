@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
             phases[0].AddTarget(enso);
             if (!requirePhases)
             {
