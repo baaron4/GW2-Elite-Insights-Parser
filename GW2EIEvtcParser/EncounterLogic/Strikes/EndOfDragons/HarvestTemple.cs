@@ -953,6 +953,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                    EffectGUIDEvent zhaitanPoisonImpact = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact);
+                    if (zhaitanPoisonImpact != null)
+                    {
+                        IReadOnlyList<EffectEvent> zhaitanPoisonImpactEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonImpact.ContentID);
+                        knownEffectsIDs.Add(zhaitanPoisonImpact.ContentID);
+                        foreach (EffectEvent effect in zhaitanPoisonImpactEffects)
+                        {
+                            int end = (int)effect.Time;
+                            int start = end - 2000;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent zhaitanPoisonAoE = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE);
+                    if (zhaitanPoisonAoE != null)
+                    {
+                        IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonAoE.ContentID);
+                        knownEffectsIDs.Add(zhaitanPoisonAoE.ContentID);
+                        foreach (EffectEvent effect in zhaitanPoisonAoeEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = (int)Math.Min(target.LastAware, start + 10000);
+                            replay.Decorations.Add(new CircleDecoration(false, 0, 200, (start, end), "rgba(200, 0, 0, 0.5)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     EffectGUIDEvent sooWonClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSooWonClaw);
                     if (sooWonClaw != null)
