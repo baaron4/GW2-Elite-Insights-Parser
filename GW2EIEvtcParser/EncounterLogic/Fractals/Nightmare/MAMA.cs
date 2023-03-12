@@ -10,7 +10,6 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -210,6 +209,80 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
 
+                    // Cascade Of Torment
+                    EffectGUIDEvent cot0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0);
+                    EffectGUIDEvent cot1 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1);
+                    EffectGUIDEvent cot2 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2);
+                    EffectGUIDEvent cot3 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3);
+                    EffectGUIDEvent cot4 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4);
+                    EffectGUIDEvent cot5 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5);
+                    int cotDuration = 1000;
+                    // Ring 0
+                    if (cot0 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot0.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 1
+                    if (cot1 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot1.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 2
+                    if (cot2 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot2.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 3
+                    if (cot3 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot3.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 4
+                    if (cot4 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot4.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    // Ring 5
+                    if (cot5 != null)
+                    {
+                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot5.ContentID).ToList();
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.BlueKnight:
                 case (int)ArcDPSEnums.TrashID.RedKnight:

@@ -764,6 +764,7 @@ namespace GW2EIEvtcParser
             // Ensolyss
             NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
             NightmareHallucination2 = 17033, // (small adds, last phase)
+            NightmareAltar = 35791,
             // Skorvald
             FluxAnomaly4 = 17673,
             FluxAnomaly3 = 17851,

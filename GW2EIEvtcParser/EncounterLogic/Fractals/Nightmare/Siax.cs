@@ -218,8 +218,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot0.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + cotDuration, 150, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 150, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
                     // Ring 1
@@ -228,8 +229,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot1.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 150, 250, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 150, 250, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4", new PositionConnector(effect.Position)));
                         }
                     }
                     // Ring 2
@@ -238,8 +240,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot2.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 250, 350, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 250, 350, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
                     // Ring 3
@@ -248,8 +251,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot3.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 350, 450, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 350, 450, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
                     // Ring 4
@@ -258,8 +262,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot4.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 450, 550, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 450, 550, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
                     // Ring 5
@@ -268,8 +273,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(cot5.ContentID).ToList();
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, (int)effect.Time + cotDuration, 550, 650, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, ((int)effect.Time, (int)effect.Time + cotDuration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            int endTime = (int)effect.Time + cotDuration;
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 550, 650, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
                     break;

@@ -1,8 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -12,8 +21,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstHitMechanic(new long[] { Lunge1, Lunge2 }, "Lunge", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge","Lunge (KB charge over arena)", "Charge",150),
-            new PlayerDstHitMechanic(new long[] { Upswing1, Upswing2 }, "Upswing", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Smash 1","High damage Jump hit", "First Smash",0),
+            new PlayerDstHitMechanic(new long[] { LungeEnsolyss, LungeNightmareHallucination }, "Lunge", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge","Lunge (KB charge over arena)", "Charge",150),
+            new PlayerDstHitMechanic(UpswingEnsolyss, "Upswing", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Smash 1","High damage Jump hit", "First Smash",0),
+            new PlayerDstHitMechanic(UpswingHallucination, "Upswing", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
             new PlayerDstHitMechanic(new long[] { NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 }, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Goo)", "Miasma",0),
             new EnemyCastStartMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","After Phase CC", "Breakbar", 0),
             new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","After Phase CC Failed", "CC Fail", 0, (ce,log) => ce.ActualDuration >= 15260),
@@ -45,13 +55,494 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
+        protected override List<int> GetTargetsIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TargetID.Ensolyss,
+                //(int)ArcDPSEnums.TrashID.NightmareAltar,
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.NightmareHallucination1,
-                ArcDPSEnums.TrashID.NightmareHallucination2
+                ArcDPSEnums.TrashID.NightmareHallucination2,
+                //ArcDPSEnums.TrashID.NightmareAltar,
             };
+        }
+
+        //internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        //{
+        //    IReadOnlyList<AgentItem> altars = agentData.GetGadgetsByID(ArcDPSEnums.TrashID.NightmareAltar);
+        //    foreach (AgentItem altar in altars)
+        //    {
+        //        altar.OverrideType(AgentItem.AgentType.NPC);
+        //    }
+        //    agentData.Refresh();
+        //    base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+        //}
+
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+            phases[0].AddTarget(enso);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            phases.AddRange(GetPhasesByInvul(log, Determined762, enso, true, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i % 2 == 0)
+                {
+                    phase.Name = "Nightmare Altars";
+                    phase.AddTarget(enso);
+                }
+                else
+                {
+                    phase.Name = "Phase " + (i + 1) / 2;
+                    phase.AddTarget(enso);
+                }
+            }
+            return phases;
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.Ensolyss:
+                    IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
+                    Segment percent66treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 66);
+                    Segment percent15treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 15);
+                    // The effects are applied multiple times, we only need 1
+                    bool doughnut100_66Added = false;
+                    bool doughnut66_15Added = false;
+                    bool doughnut15_0Added = false;
+                    bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
+
+                    // Arkk's Shield
+                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
+                    if (shield != null)
+                    {
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
+
+                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        {
+                            // The position check is necessary because with very high dps you can skip spawning the middle bubble, position is roughly X 1573 Y 1467
+                            // In that case, we need to use the other set of decorations
+                            if (percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572 && !shield15_0Added)
+                            {
+                                int effectEnd = (int)target.LastAware;
+                                replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                shield15_0Added = true;
+                            }
+                            else if (!shield15_0Added)
+                            {
+                                int duration = 5000;
+                                int start = (int)shieldEffect.Time;
+                                int expectedHitEnd = start + duration;
+                                int attackEnd = start + duration;
+                                Segment stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrDefault(x => x.Value > 0);
+
+                                // Modify the attackEnd if:
+                                // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase
+                                // Ensolyss reaches 15% while stunned (stunSegment.End < percent15treshhold.Start)
+                                if (percent15treshhold != null && stunSegment != null && percent15treshhold.Start < attackEnd && stunSegment.End < percent15treshhold.Start)
+                                {
+                                    attackEnd = (int)percent15treshhold.Start;
+                                }
+                                replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                            }
+                        }
+                    }
+
+                    // Miasma Doughnuts
+                    EffectGUIDEvent doughnut100_66 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut100_66);
+                    EffectGUIDEvent doughnut66_15 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut66_15);
+                    EffectGUIDEvent doughnut15_0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut15_0);
+
+                    // 100% to 66% Doughnut
+                    if (doughnut100_66 != null)
+                    {
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut100_66.ContentID).ToList();
+                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        {
+                            if (!doughnut100_66Added && percent66treshhold != null)
+                            {
+                                int start = (int)shieldEffect.Time;
+                                int effectEnd = (int)percent66treshhold.Start;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                doughnut100_66Added = true;
+                            }
+                            else if (!doughnut100_66Added) // Wipe before 66%
+                            {
+                                int start = (int)shieldEffect.Time;
+                                int effectEnd = (int)target.LastAware;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                doughnut100_66Added = true;
+                            }
+                        }
+                    }
+                    // 66% to 15% Doughnut
+                    if (doughnut66_15 != null)
+                    {
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut66_15.ContentID).ToList();
+                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        {
+                            // Check if the Arkk's shield attack has been skipped with high dps
+                            if (!doughnut66_15Added && shield15_0Added && percent15treshhold != null)
+                            {
+                                int start = (int)shieldEffect.Time;
+                                int effectEnd = (int)percent15treshhold.Start;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                doughnut66_15Added = true;
+                            }
+                            else if (!doughnut66_15Added) // Wipe before 15%
+                            {
+                                int start = (int)shieldEffect.Time;
+                                int effectEnd = (int)target.LastAware;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                doughnut66_15Added = true;
+                            }
+                        }
+                    }
+                    // 15% to 0% Doughnut
+                    if (doughnut15_0 != null)
+                    {
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(doughnut15_0.ContentID).ToList();
+                        foreach (EffectEvent shieldEffect in shieldEffects)
+                        {
+                            // If Arkk's shield has been skipped at 15% this decoration should never be added
+                            if (!doughnut15_0Added && shield15_0Added)
+                            {
+                                int start = (int)shieldEffect.Time;
+                                int effectEnd = (int)target.LastAware;
+                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                doughnut15_0Added = true;
+                            }
+                        }
+                    }
+
+                    // Tail Lash
+                    var tailLash = casts.Where(x => x.SkillId == TailLashEnsolyss).ToList();
+                    foreach (AbstractCastEvent c in tailLash)
+                    {
+                        int duration = 1550;
+                        int openingAngle = 144;
+                        int radius = 600;
+                        int start = (int)c.Time;
+                        int attackEnd = (int)c.Time + duration;
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
+                        {
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
+                        }
+                        replay.Decorations.Add(new FacingPieDecoration((start, attackEnd), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                    }
+
+                    // Tormenting Blast (Quarter attacks)
+                    var tormentingBlast = casts.Where(x => x.SkillId == TormentingBlast).ToList();
+                    foreach (AbstractCastEvent c in tormentingBlast)
+                    {
+                        int firstQuarterAoe = 400;
+                        int secondQuarterAoe = 900;
+                        int firstQuarterHit = 1635;
+                        int secondQuarterHit = 1900;
+                        int duration = 1900;
+                        int start = (int)c.Time;
+                        int attackEnd = start + duration;
+
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
+                        {
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
+                        }
+
+                        // Facing point
+                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+
+                        // Calculated points
+                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
+                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+
+                        int startFirstQuarter = start + firstQuarterAoe;
+                        int endFirstQuarter = start + firstQuarterHit;
+                        int startSecondQuarter = start + secondQuarterAoe;
+                        int endSecondQuarter = start + secondQuarterHit;
+
+                        int growingFirstQuarter = start + firstQuarterHit;
+                        int growingSecondQuarter = start + secondQuarterHit;
+
+                        // Frontal
+                        if (attackEnd >= endFirstQuarter) // If the attack started
+                        {
+                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 700, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 700, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 700, frontalPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+                        // Left of frontal
+                        if (attackEnd >= endSecondQuarter) // If the attack started
+                        {
+                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 700, leftPoint, 90, (startSecondQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 700, leftPoint, 90, (startSecondQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 700, leftPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+                    }
+
+                    // Caustic Grasp (AoE Pull)
+                    var causticGrasp = casts.Where(x => x.SkillId == CausticGrasp).ToList();
+                    foreach (AbstractCastEvent c in causticGrasp)
+                    {
+                        int duration = 1500;
+                        int start = (int)c.Time;
+                        int expectedHitEnd = start + duration;
+                        int attackEnd = start + duration;
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
+                        {
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
+                        }
+                        replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
+
+                    // Upswing
+                    var upswingEnso = casts.Where(x => x.SkillId == UpswingEnsolyss).ToList();
+                    foreach (AbstractCastEvent c in upswingEnso)
+                    {
+                        int duration = 1333;
+                        int start = (int)c.Time;
+                        int expectedHitEnd = start + duration;
+                        int attackEnd = start + duration;
+                        int endTimeWave = start + 3100;
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
+                        {
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
+                        }
+                        replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        // Shockwave
+                        replay.Decorations.Add(new CircleDecoration(false, endTimeWave, 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.8)", new AgentConnector(target)));
+                    }
+
+                    // 66% & 33% Breakbars
+                    var causticExplosion = casts.Where(x => x.SkillId == CausticExplosionEnsolyss).ToList();
+                    foreach (AbstractCastEvent c in causticExplosion)
+                    {
+                        int duration = 15000;
+                        int start = (int)c.Time;
+                        int expectedHitEnd = start + duration;
+                        int attackEnd = start + duration;
+                        int durationQuarter = 3000;
+
+                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+                        if (stunSegment != null)
+                        {
+                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
+                        }
+
+                        // Initial facing point
+                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+
+                        // Calculated other quarters from initial point
+                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
+                        var behindPoint = new Point3D(facingDirection.X * -1, facingDirection.Y * -1);
+                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+                        var rightPoint = new Point3D(facingDirection.Y, facingDirection.X * -1);
+
+                        // Quarter attack hit times
+                        int startFirstQuarter = start + 1500;
+                        int endFirstQuarter = startFirstQuarter + durationQuarter;
+                        int endSecondQuarter = endFirstQuarter + durationQuarter;
+                        int endThirdQuarter = endSecondQuarter + durationQuarter;
+                        int endFourthQuarter = endThirdQuarter + durationQuarter;
+
+                        // Timers for growing animation
+                        int growingFirstQuarter = startFirstQuarter + durationQuarter;
+                        int growingSecondQuarter = endFirstQuarter + durationQuarter;
+                        int growingThirdQuarter = endSecondQuarter + durationQuarter;
+                        int growingFourthQuarter = endThirdQuarter + durationQuarter;
+
+                        // If the explosion end is after the start of a quarter, pick the minimum ending
+
+                        endFirstQuarter = Math.Min(endFirstQuarter, attackEnd);
+                        endSecondQuarter = Math.Min(endSecondQuarter, attackEnd);
+                        endThirdQuarter = Math.Min(endThirdQuarter, attackEnd);
+                        endFourthQuarter = Math.Min(endFourthQuarter, attackEnd);
+
+
+                        // Circle going in
+                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        if (attackEnd == expectedHitEnd)
+                        {
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        }
+
+                        // First quarters
+                        if (attackEnd >= endFirstQuarter) // If the attack started
+                        {
+                            // Frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 1200, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                            // Retro
+                            replay.Decorations.Add(new PieDecoration(true, growingFirstQuarter, 1200, behindPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (startFirstQuarter, endFirstQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endFirstQuarter == growingFirstQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endFirstQuarter, endFirstQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+
+                        // Second quarters
+                        if (attackEnd >= endSecondQuarter) // If the attack started
+                        {
+                            // Left of frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 1200, leftPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                            // Right of frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingSecondQuarter, 1200, rightPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endFirstQuarter, endSecondQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endSecondQuarter == growingSecondQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endSecondQuarter, endSecondQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+
+                        // Third quarters
+                        if (attackEnd >= endThirdQuarter) // If the attack started
+                        {
+                            // Frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingThirdQuarter, 1200, frontalPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endThirdQuarter == growingThirdQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, frontalPoint, 90, (endThirdQuarter, endThirdQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                            // Retro
+                            replay.Decorations.Add(new PieDecoration(true, growingThirdQuarter, 1200, behindPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endSecondQuarter, endThirdQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endThirdQuarter == growingThirdQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, behindPoint, 90, (endThirdQuarter, endThirdQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+
+                        // Fourth quarters
+                        if (attackEnd >= endFourthQuarter) // If the attack started
+                        {
+                            // Left of frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingFourthQuarter, 1200, leftPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endFourthQuarter == growingFourthQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, leftPoint, 90, (endFourthQuarter, endFourthQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                            // Right of frontal
+                            replay.Decorations.Add(new PieDecoration(true, growingFourthQuarter, 1200, rightPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endThirdQuarter, endFourthQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                            if (endFourthQuarter == growingFourthQuarter) // If the attack went off
+                            {
+                                replay.Decorations.Add(new PieDecoration(true, 0, 1200, rightPoint, 90, (endFourthQuarter, endFourthQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                            }
+                        }
+                    }
+
+                    // Lunge (Dash)
+                    var lungeEnso = casts.Where(x => x.SkillId == LungeEnsolyss).ToList();
+                    foreach (AbstractCastEvent c in lungeEnso)
+                    {
+                        int startLine = (int)c.Time;
+                        int lineEffectEnd = (int)c.Time + 1000;
+                        replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                    }
+
+                    break;
+                case (int)ArcDPSEnums.TrashID.NightmareHallucination1:
+                    // Lunge (Dash)
+                    var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination).ToList();
+                    foreach (AbstractCastEvent c in lungeHallu)
+                    {
+                        int startLine = (int)c.Time;
+                        int lineEffectEnd = (int)c.Time + 1000;
+                        replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                    }
+
+                    // Upswing
+                    var upswingHallu = casts.Where(x => x.SkillId == UpswingHallucination).ToList();
+                    foreach (AbstractCastEvent c in upswingHallu)
+                    {
+                        int start = (int)c.Time;
+                        int endTime = (int)c.Time + 1333;
+                        replay.Decorations.Add(new CircleDecoration(true, endTime, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.NightmareHallucination2:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Caustic Barrage
+            //EffectGUIDEvent causticBarrage = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CausticBarrageHitEffect);
+            //if (causticBarrage != null)
+            //{
+            //    var barrageEffects = log.CombatData.GetEffectEventsByEffectID(causticBarrage.ContentID).ToList();
+            //    foreach (EffectEvent barrageEffect in barrageEffects)
+            //    {
+            //        int duration = 500;
+            //        int start = (int)barrageEffect.Time;
+            //        int effectEnd = start + duration;
+            //        EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(barrageEffect.Position)));
+            //    }
+            //}
+
+            // Altar Shockwave
+            EffectGUIDEvent altarWave = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssNightmareAltarShockwave);
+            if (altarWave != null)
+            {
+                var waveEffects = log.CombatData.GetEffectEventsByEffectID(altarWave.ContentID).ToList();
+                foreach (EffectEvent waveEffect in waveEffects)
+                {
+                    int duration = 2000;
+                    int start = (int)waveEffect.Time;
+                    int effectEnd = start + duration;
+                    EnvironmentDecorations.Add(new CircleDecoration(false, effectEnd, 1150, (start, effectEnd), "rgba(255, 200, 0, 0.8)", new PositionConnector(waveEffect.Position)));
+                }
+            }
         }
     }
 }
