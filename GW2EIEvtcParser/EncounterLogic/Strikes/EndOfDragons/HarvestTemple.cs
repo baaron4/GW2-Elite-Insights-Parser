@@ -938,6 +938,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, 0, (int)radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)));
                     }
                     break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                    EffectGUIDEvent mordremothPoison = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact);
+                    if (mordremothPoison != null)
+                    {
+                        IReadOnlyList<EffectEvent> mordremothPoisonEffects = log.CombatData.GetEffectEventsByEffectID(mordremothPoison.ContentID);
+                        knownEffectsIDs.Add(mordremothPoison.ContentID);
+                        foreach (EffectEvent effect in mordremothPoisonEffects)
+                        {
+                            int end = (int)effect.Time;
+                            int start = end - 2000;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     EffectGUIDEvent sooWonClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSooWonClaw);
                     if (sooWonClaw != null)
