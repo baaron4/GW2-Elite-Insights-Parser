@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(ClawSlap, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
                 new PlayerDstHitMechanic(VoidPoolSooWon, "Void Pool", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
                 new PlayerDstHitMechanic(TailSlam, "Tail Slam", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
-                new PlayerDstHitMechanic(TormentOfTheVoid, "Torment of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
+                new PlayerDstHitMechanic(TormentOfTheVoid, "Torment of the Void", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkMagenta), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0)
             }
@@ -936,6 +936,49 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         replay.Decorations.Add(new CircleDecoration(true, 0, (int)radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)));
                         replay.Decorations.Add(new CircleDecoration(false, 0, (int)radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)));
+                    }
+                    break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                    EffectGUIDEvent mordremothPoison = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact);
+                    if (mordremothPoison != null)
+                    {
+                        IReadOnlyList<EffectEvent> mordremothPoisonEffects = log.CombatData.GetEffectEventsByEffectID(mordremothPoison.ContentID);
+                        knownEffectsIDs.Add(mordremothPoison.ContentID);
+                        foreach (EffectEvent effect in mordremothPoisonEffects)
+                        {
+                            int end = (int)effect.Time;
+                            int start = end - 2000;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                    EffectGUIDEvent zhaitanPoisonImpact = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact);
+                    if (zhaitanPoisonImpact != null)
+                    {
+                        IReadOnlyList<EffectEvent> zhaitanPoisonImpactEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonImpact.ContentID);
+                        knownEffectsIDs.Add(zhaitanPoisonImpact.ContentID);
+                        foreach (EffectEvent effect in zhaitanPoisonImpactEffects)
+                        {
+                            int end = (int)effect.Time;
+                            int start = end - 2000;
+                            replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
+                    }
+                    EffectGUIDEvent zhaitanPoisonAoE = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE);
+                    if (zhaitanPoisonAoE != null)
+                    {
+                        IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonAoE.ContentID);
+                        knownEffectsIDs.Add(zhaitanPoisonAoE.ContentID);
+                        foreach (EffectEvent effect in zhaitanPoisonAoeEffects)
+                        {
+                            int start = (int)effect.Time;
+                            int end = (int)Math.Min(target.LastAware, start + 10000);
+                            replay.Decorations.Add(new CircleDecoration(false, 0, 200, (start, end), "rgba(200, 0, 0, 0.5)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                        }
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
