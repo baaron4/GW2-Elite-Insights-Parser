@@ -166,36 +166,38 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
                     if (shield != null)
                     {
-                        EffectEvent shieldEffect = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).FirstOrDefault();
-
-                        if (shieldEffect != null)
+                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
+                        foreach (EffectEvent shieldEffect in shieldEffects)
                         {
-                            shield15_0Added = true;
-                            // The position check is necessary because with very high dps you can skip spawning the middle bubble, position is roughly X 1573 Y 1467
-                            // In that case, we need to use the other set of decorations
-                            if (percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
+                            if (shieldEffect != null)
                             {
-                                int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                            }
-                            else
-                            {
-                                int duration = 5000;
-                                int start = (int)shieldEffect.Time;
-                                int expectedHitEnd = start + duration;
-                                int attackEnd = start + duration;
-                                Segment stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrDefault(x => x.Value > 0);
-
-                                // Modify the attackEnd if:
-                                // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase
-                                // Ensolyss reaches 15% while stunned (stunSegment.End < percent15treshhold.Start)
-                                if (percent15treshhold != null && stunSegment != null && percent15treshhold.Start < attackEnd && stunSegment.End < percent15treshhold.Start)
+                                // The position check is necessary because with very high dps you can skip spawning the middle bubble, position is roughly X 1573 Y 1467
+                                // In that case, we need to use the other set of decorations
+                                if (!shield15_0Added && percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
                                 {
-                                    attackEnd = (int)percent15treshhold.Start;
+                                    int effectEnd = (int)target.LastAware;
+                                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    shield15_0Added = true;
                                 }
-                                replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                                replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                else if (!shield15_0Added)
+                                {
+                                    int duration = 5000;
+                                    int start = (int)shieldEffect.Time;
+                                    int expectedHitEnd = start + duration;
+                                    int attackEnd = start + duration;
+                                    Segment stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrDefault(x => x.Value > 0);
+
+                                    // Modify the attackEnd if:
+                                    // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase
+                                    // Ensolyss reaches 15% while stunned (stunSegment.End < percent15treshhold.Start)
+                                    if (percent15treshhold != null && stunSegment != null && percent15treshhold.Start < attackEnd && stunSegment.End < percent15treshhold.Start)
+                                    {
+                                        attackEnd = (int)percent15treshhold.Start;
+                                    }
+                                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                }
                             }
                         }
                     }
