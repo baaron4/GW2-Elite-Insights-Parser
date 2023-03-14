@@ -49,7 +49,7 @@ namespace GW2EIParser.tst
             var parser = new EvtcParser(parserSettings, apiController);
 
             var fInfo = new FileInfo(location);
-            ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, true);
+            ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, false);
             if (failureReason != null)
             {
                 failureReason.Throw();

@@ -262,12 +262,12 @@ namespace GW2EIParser
                 $"{fName}.log"
                 );
                 operation.GeneratedFiles.Add(outputFile);
-                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
                     operation.WriteLogMessages(sw);
                 }
+                operation.OutLocation = saveDirectory.FullName;
             }
         }
 
@@ -284,6 +284,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
+            operation.OutLocation = saveDirectory.FullName;
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 operation.UpdateProgressWithCancellationCheck("Creating HTML");
@@ -293,7 +294,6 @@ namespace GW2EIParser
                 );
                 operation.GeneratedFiles.Add(outputFile);
                 operation.OpenableFiles.Add(outputFile);
-                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -318,7 +318,6 @@ namespace GW2EIParser
                 );
                 operation.GeneratedFiles.Add(outputFile);
                 operation.OpenableFiles.Add(outputFile);
-                operation.OutLocation = saveDirectory.FullName;
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -337,7 +336,6 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.json"
                     );
-                    operation.OutLocation = saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {
@@ -369,7 +367,6 @@ namespace GW2EIParser
                         saveDirectory.FullName,
                         $"{fName}.xml"
                     );
-                    operation.OutLocation = saveDirectory.FullName;
                     Stream str;
                     if (Properties.Settings.Default.CompressRaw)
                     {

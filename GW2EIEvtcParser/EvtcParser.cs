@@ -14,7 +14,7 @@ using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static GW2EIEvtcParser.ParserHelper;
 
-//recommend CTRL+M+O to collapse all
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIEvtcParser
 {
     public class EvtcParser
@@ -659,7 +659,8 @@ namespace GW2EIEvtcParser
             if (combatItem.IsExtension)
             {
                 // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
-                if (combatItem.Pad == 0)
+                // Can't be ExtensionCombat
+                if (combatItem.Pad == 0 && combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
                 {
                     AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
                     if (handler != null)
@@ -919,6 +920,8 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Offset time");
             OffsetEvtcData();
             operation.UpdateProgressWithCancellationCheck("Offset of " + (_fightData.FightStartOffset) + " ms added");
+            operation.UpdateProgressWithCancellationCheck("Adding environment agent");
+            _agentData.AddCustomNPCAgent(_fightData.LogStart, _fightData.LogEnd, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
             // Removal of players present before the fight but not during
             var agentsToRemove = new HashSet<AgentItem>();
             foreach (Player p in _playerList)

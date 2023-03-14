@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
             {
-                if (pair.Key.IsSpecy(ArcDPSEnums.TargetID.WorldVersusWorld))
+                if (pair.Key.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))
                 {
                     continue;
                 }

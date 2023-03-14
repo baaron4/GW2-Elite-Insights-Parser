@@ -17,14 +17,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new SkillOnPlayerMechanic(DireDrafts, "Dire Drafts", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500, (de, log) => de.HasDowned || de.HasKilled),
-                new SkillOnPlayerMechanic(UnbridledTempest, "Unbridled Tempest", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Pink), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0, (de, log) => de.HasDowned || de.HasKilled),
-                new SkillOnPlayerMechanic(FuryOfTheStorm, "Fury of the Storm", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0, (de, log) => de.HasDowned || de.HasKilled ),
-                new HitOnPlayerMechanic(DynamicDeterrent, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstSkillMechanic(DireDrafts, "Dire Drafts", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500, (de, log) => de.HasDowned || de.HasKilled),
+                new PlayerDstSkillMechanic(UnbridledTempest, "Unbridled Tempest", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Pink), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0, (de, log) => de.HasDowned || de.HasKilled),
+                new PlayerDstSkillMechanic(FuryOfTheStorm, "Fury of the Storm", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0, (de, log) => de.HasDowned || de.HasKilled ),
+                new PlayerDstHitMechanic(DynamicDeterrent, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
                 new EnemyCastStartMechanic(RegenerativeBreakbar, "Regenerative Breakbar", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Reg.Breakbar","Regenerating Breakbar", "Regenerative Breakbar", 0),
-                new EnemyBuffRemoveMechanic(IonShield, "Regenerative Breakbar Broken", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Reg.Breakbar Brkn", "Regenerative Breakbar Broken", "Regenerative Breakbar Broken", 2000),
-                new EnemyBuffApplyMechanic(RepulsionField, "Rotating Breakbar", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Rot.Breakbar","Rotating Breakbar", "Rotating Breakbar", 0),
-                new EnemyBuffRemoveMechanic(RepulsionField, "Rotating Breakbar Broken", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Rot.Breakbar Brkn","Rotating Breakbar Broken", "Rotating Breakbar Broken", 0),
+                new EnemyDstBuffRemoveMechanic(IonShield, "Regenerative Breakbar Broken", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Reg.Breakbar Brkn", "Regenerative Breakbar Broken", "Regenerative Breakbar Broken", 2000),
+                new EnemyDstBuffApplyMechanic(RepulsionField, "Rotating Breakbar", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Rot.Breakbar","Rotating Breakbar", "Rotating Breakbar", 0),
+                new EnemyDstBuffRemoveMechanic(RepulsionField, "Rotating Breakbar Broken", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Rot.Breakbar Brkn","Rotating Breakbar Broken", "Rotating Breakbar Broken", 0),
             });
             // rotating cc 56403
             // interesting stuff 56372 (big AoE?)
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Sabir));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Sabir not found");
@@ -74,16 +74,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
+            var wallopingWinds = cls.Where(x => x.SkillId == WallopingWind).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
-                AbstractCastEvent wallopinbWind = wallopingWinds[i];
-                end = wallopinbWind.Time;
+                AbstractCastEvent wallopingWind = wallopingWinds[i];
+                end = wallopingWind.Time;
                 var phase = new PhaseData(start, end, "Phase " + (i + 1));
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopinbWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
+                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == 56620 || x.SkillId == 56629 || x.SkillId == 56307));
                 if (nextAttack == null)
                 {
                     break;
@@ -166,13 +166,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var furyOfTheStorm = cls.Where(x => x.SkillId == 56372).ToList();
+                    var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
-                    var unbridledTempest = cls.Where(x => x.SkillId == 56643).ToList();
+                    var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
                     foreach (AbstractCastEvent c in unbridledTempest)
                     {
                         int start = (int)c.Time;
@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Sabir));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Sabir not found");

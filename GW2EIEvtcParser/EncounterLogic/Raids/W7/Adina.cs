@@ -19,13 +19,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new PlayerBuffApplyMechanic(RadiantBlindness, "Radiant Blindness", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
-                new PlayerBuffApplyMechanic(ErodingCurse, "Eroding Curse", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
-                new HitOnPlayerMechanic(BoulderBarrage, "Boulder Barrage", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-                new HitOnPlayerMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new HitOnPlayerMechanic(Stalagmites, "Stalagmites", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
-                new HitOnPlayerMechanic(DiamondPalisadeEye, "Diamond Palisade", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
-                new SkillOnPlayerMechanic(new long[] { DoubleRotatingEarthRays, TripleRotatingEarthRays }, "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0, (de, log) => de.HasKilled),
+                new PlayerDstBuffApplyMechanic(RadiantBlindness, "Radiant Blindness", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
+                new PlayerDstBuffApplyMechanic(ErodingCurse, "Eroding Curse", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
+                new PlayerDstHitMechanic(BoulderBarrage, "Boulder Barrage", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+                new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(Stalagmites, "Stalagmites", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
+                new PlayerDstHitMechanic(DiamondPalisadeEye, "Diamond Palisade", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
+                new PlayerDstSkillMechanic(new long[] { DoubleRotatingEarthRays, TripleRotatingEarthRays }, "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0, (de, log) => de.HasKilled),
             });
             Extension = "adina";
             Icon = EncounterIconAdina;
@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Adina:
-                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == 56035).ToList();
+                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == DoubleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in doubleQuantumQuakes)
                     {
                         int start = (int)c.Time;
@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == 56381).ToList();
+                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == TripleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in tripleQuantumQuakes)
                     {
                         int start = (int)c.Time;
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     }
                     //
-                    var terraforms = cls.Where(x => x.SkillId == 56049).ToList();
+                    var terraforms = cls.Where(x => x.SkillId == Terraform).ToList();
                     foreach (AbstractCastEvent c in terraforms)
                     {
                         int start = (int)c.Time;
@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var boulderBarrages = cls.Where(x => x.SkillId == 56648).ToList();
+                    var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
                     foreach (AbstractCastEvent c in boulderBarrages)
                     {
                         int start = (int)c.Time;
@@ -208,7 +208,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Adina));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Adina not found");
@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhaseEnds.Add(pair.Key);
                 }
             }
-            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == 56648 && x.Time < 6000);
+            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             if (mainPhaseEnds.Any())
             {
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Adina));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Adina not found");

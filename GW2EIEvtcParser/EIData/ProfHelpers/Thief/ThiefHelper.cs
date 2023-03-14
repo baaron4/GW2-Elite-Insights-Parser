@@ -55,6 +55,8 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Spider Venom",SpiderVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
                 new Buff("Soul Stone Venom",SoulStoneVenomEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d6/Soul_Stone_Venom.png"),
                 new Buff("Basilisk Venom", BasiliskVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Buff("Petrified 1", Petrified1, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
+                new Buff("Petrified 2", Petrified2, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Infiltration",Infiltration, Source.Thief, BuffClassification.Other,"https://wiki.guildwars2.com/images/2/25/Shadowstep.png"),
                 //transforms
                 new Buff("Dagger Storm",DaggerStorm, Source.Thief, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png"),

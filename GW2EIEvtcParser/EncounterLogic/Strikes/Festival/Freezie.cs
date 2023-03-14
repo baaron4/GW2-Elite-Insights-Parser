@@ -23,8 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Freezie));
-            AbstractSingleActor heartTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.FreeziesFrozenHeart));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Freezie));
+            AbstractSingleActor heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.FreeziesFrozenHeart));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Freezie not found");

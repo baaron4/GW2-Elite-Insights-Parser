@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
         {
-            if (!c.IsExtension && c.Pad != 0)
+            if (c.IsStateChange != ArcDPSEnums.StateChange.Extension || c.Pad != 0)
             {
                 return null;
             }

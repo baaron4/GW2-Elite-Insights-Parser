@@ -19,20 +19,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(GreenGuardianUnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
-            new HitOnPlayerMechanic(UnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
-            new HitOnPlayerMechanic(new long[] {DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen }, "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
+            new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
+            new PlayerDstHitMechanic(UnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
+            new PlayerDstHitMechanic(new long[] {DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen }, "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
             new EnemyCastStartMechanic(DistributedMagicBlue, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
             new EnemyCastStartMechanic(DistributedMagicRed, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
             new EnemyCastStartMechanic(DistributedMagicGreen, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
-            new HitOnPlayerMechanic(MagicPulse, "Magic Pulse", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Seeker","Magic Pulse (Hit by Seeker)", "Seeker",0),
-            new PlayerBuffApplyMechanic(PylonAttunementRed, "Pylon Attunement: Red", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R","Pylon Attunement: Red", "Red Attuned",0),
-            new PlayerBuffApplyMechanic(PylonAttunementBlue, "Pylon Attunement: Blue", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B","Pylon Attunement: Blue", "Blue Attuned",0),
-            new PlayerBuffApplyMechanic(PylonAttunementGreen, "Pylon Attunement: Green", new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G","Pylon Attunement: Green", "Green Attuned",0),
-            new EnemyBuffRemoveMechanic(BluePylonPower, "Blue Pylon Power", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Invuln Strip","Blue Guard Invuln was stripped", "Blue Invuln Strip",0),
-            new HitOnPlayerMechanic(UnstablePylonRed, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "Floor R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
-            new HitOnPlayerMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
-            new HitOnPlayerMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
+            new PlayerDstHitMechanic(MagicPulse, "Magic Pulse", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Seeker","Magic Pulse (Hit by Seeker)", "Seeker",0),
+            new PlayerDstBuffApplyMechanic(PylonAttunementRed, "Pylon Attunement: Red", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R","Pylon Attunement: Red", "Red Attuned",0),
+            new PlayerDstBuffApplyMechanic(PylonAttunementBlue, "Pylon Attunement: Blue", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B","Pylon Attunement: Blue", "Blue Attuned",0),
+            new PlayerDstBuffApplyMechanic(PylonAttunementGreen, "Pylon Attunement: Green", new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G","Pylon Attunement: Green", "Green Attuned",0),
+            new EnemyDstBuffRemoveMechanic(BluePylonPower, "Blue Pylon Power", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Invuln Strip","Blue Guard Invuln was stripped", "Blue Invuln Strip",0),
+            new PlayerDstHitMechanic(UnstablePylonRed, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "Floor R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
+            new PlayerDstHitMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
+            new PlayerDstHitMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new EnemyCastStartMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Magic Storm (Breakbar)","Breakbar",0),
             new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, (c, log) => c.ActualDuration <= 8544),
             new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ValeGuardian));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Vale Guardian not found");
@@ -119,15 +119,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curGreen = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.RedGuardian))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.RedGuardian))
                 {
                     target.OverrideName(target.Character + " " + curRed++);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.BlueGuardian))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.BlueGuardian))
                 {
                     target.OverrideName(target.Character + " " + curBlue++);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.GreenGuardian))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.GreenGuardian))
                 {
                     target.OverrideName(target.Character + " " + curGreen++);
                 }
@@ -140,6 +140,38 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                ArcDPSEnums.TrashID.Seekers
             };
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
+            if (distributedMagicGUIDEvent != null)
+            {
+                int distributedMagicDuration = 6700;
+                IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
+                //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
+                foreach (EffectEvent distributedMagic in distributedMagicEvents)
+                {
+                    int start = (int)distributedMagic.Time;
+                    int expectedEnd = start + distributedMagicDuration;
+                    int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
+                }
+            }
+            EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
+            if (magicSpikeGUIDEvent != null)
+            {
+                IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
+                //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
+                foreach (EffectEvent magicSpike in magicSpikeEvents)
+                {
+                    int start = (int)magicSpike.Time;
+                    int end = start + 2000;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -158,23 +190,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    int distributedMagicDuration = 6700;
-                    EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
-                    if (distributedMagicGUIDEvent != null)
+                    if (!log.CombatData.HasEffectData)
                     {
-                        IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
-                        //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
-                        foreach (EffectEvent distributedMagic in distributedMagicEvents)
-                        {
-                            int start = (int)distributedMagic.Time;
-                            int expectedEnd = start + distributedMagicDuration;
-                            int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
-                        }
-                    } 
-                    else
-                    {
+                        int distributedMagicDuration = 6700;
                         int impactDuration = 110;
                         int arenaRadius = 1600;
                         var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen).ToList();
@@ -204,20 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, 0, arenaRadius, 271, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", new PositionConnector(new Point3D(-4749.838867f, -20607.296875f))));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
                         }
-                    }
-                    EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
-                    if (magicSpikeGUIDEvent != null)
-                    {
-                        IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
-                        //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
-                        foreach (EffectEvent magicSpike in magicSpikeEvents)
-                        {
-                            int start = (int)magicSpike.Time;
-                            int end = start + 2000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, end, 90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position)));
-                        }
-                    }
+                    } 
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     break;

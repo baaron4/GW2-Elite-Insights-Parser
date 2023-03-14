@@ -19,19 +19,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(JunkAbsorption, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
-            new HitOnPlayerMechanic(new long[] {JunkFall1, JunkFall2 }, "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new HitOnPlayerMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.HealthDamage > 0),
-            new HitOnPlayerMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.HealthDamage > 0),
-            new HitOnPlayerMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(JunkAbsorption, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new PlayerDstHitMechanic(new long[] {JunkFall1, JunkFall2 }, "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new PlayerDstHitMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
             new PlayerCastStartMechanic(ConjuredSlash, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
             new PlayerCastStartMechanic(ConjuredProtectionSAK, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
-            new PlayerBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
-            new PlayerBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
-            new EnemyBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
-            new EnemyBuffApplyMechanic(Shielded, "Shielded", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
+            new PlayerDstBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
+            new PlayerDstBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
+            new EnemyDstBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
+            new EnemyDstBuffApplyMechanic(Shielded, "Shielded", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
             });
             _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
             Extension = "ca";
@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (CombatItem c in combatData)
             {
-                if (c.IsDamage(extensions) && c.SkillID == 52370)
+                if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
                 {
                     c.OverrideSrcAgent(sword.Agent);
                 }
@@ -215,9 +215,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
-                AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CALeftArm));
-                AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CARightArm));
+                AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+                AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+                AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
                 if (target == null)
                 {
                     throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ca = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            AbstractSingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
             if (ca == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52255, ca, true, false));
+            phases.AddRange(GetPhasesByInvul(log, CAInvul, ca, true, false));
             for (int i = 1; i < phases.Count; i++)
             {
                 string name;
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phase.Name = name;
             }
-            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CALeftArm));
+            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -316,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.CARightArm));
+            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -343,7 +343,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");

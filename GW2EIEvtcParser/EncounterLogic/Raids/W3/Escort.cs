@@ -65,8 +65,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i % 2 == 0)
                 {
                     phase.Name = "McLeod Split " + (i) / 2;
-                    AbstractSingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
-                    AbstractSingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
+                    AbstractSingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
+                    AbstractSingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
                     phase.AddTarget(whiteMcLeod); 
                     phase.AddTarget(redMcLeod);
                     phase.OverrideTimes(log);
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            IReadOnlyList<AbstractSingleActor> wargs = Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.WargBloodhound)).ToList();
+            IReadOnlyList<AbstractSingleActor> wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound)).ToList();
             if (_hasPreEvent)
             {
                 var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware).ToList();
@@ -154,15 +154,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curWarg = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.WargBloodhound))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound))
                 {
                     target.OverrideName(target.Character + " " + curWarg++);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.CrimsonMcLeod))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod))
                 {
                     target.OverrideName("Crimson " + target.Character + " " + curCrimson++);
                 }
-                if (target.IsSpecy(ArcDPSEnums.TrashID.RadiantMcLeod))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod))
                 {
                     target.OverrideName("Radiant " + target.Character + " " + curRadiant++);
                 }

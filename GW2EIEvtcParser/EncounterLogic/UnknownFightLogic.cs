@@ -54,9 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _targets.Add(new NPC(agentItem));
             }
             //
-            TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
-            NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
-            TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
+            FinalizeComputeFightTargets();
         }
     }
 }

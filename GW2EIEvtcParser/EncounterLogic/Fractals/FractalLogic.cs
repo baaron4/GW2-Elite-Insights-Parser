@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced5;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(FluxBombEffect, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
-            new HitOnPlayerMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new PlayerDstBuffApplyMechanic(FluxBombEffect, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
+            new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
             new SpawnMechanic((int)ArcDPSEnums.TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
             EncounterCategoryInformation.Category = FightCategory.Fractal;
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // check reward
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -112,12 +112,63 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // only invul lost, missing buff apply event
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.Time >= startToUse);
                 // verify that first enter combat matches the moment invul is lost
-                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < ParserHelper.ServerDelayConstant)
+                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < 100)
                 {
                     return invulLost.Time + 1;
                 }
             }
             return startToUse;
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
+
+            if (sickness != null)
+            {
+                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
+
+                foreach (EffectEvent sicknessEffect in sicknessEffects)
+                {
+                    if (replay.Rotations.Count > 0)
+                    {
+                        int duration = 4000;
+                        int radius = 600;
+                        int openingAngle = 36;
+                        int effectStart = (int)sicknessEffect.Time;
+                        int effectEnd = effectStart + duration;
+                        replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.2)"));
+                        replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.4)"));
+                    }
+                }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            EffectGUIDEvent fluxBombSmall = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SmallFluxBomb);
+            if (fluxBombSmall != null)
+            {
+                var fluxBombEffects = log.CombatData.GetEffectEventsByEffectID(fluxBombSmall.ContentID).ToList();
+                foreach (EffectEvent fluxEffect in fluxBombEffects)
+                {
+                    int duration = 5000;
+                    int start = (int)fluxEffect.Time;
+                    int effectEnd = start + duration;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
+                    EnvironmentDecorations.Add(new DoughnutDecoration(false, 0, 119, 121, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(fluxEffect.Position)));
+
+                    int pulseDuration = 1000;
+                    int pulse = start + pulseDuration;
+                    int previousPulse = start;
+                    for (int pulses = 0; pulses < 5; pulses++)
+                    {
+                        EnvironmentDecorations.Add(new CircleDecoration(true, pulse, 120, (previousPulse, pulse), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
+                        previousPulse = pulse;
+                        pulse += pulseDuration;
+                    }
+                }
+            }
         }
 
     }

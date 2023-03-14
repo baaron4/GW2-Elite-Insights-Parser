@@ -11,9 +11,9 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(OverheatSkill, OverheatEffect), // Overheat
-            new BuffGainCastFinder(EnterPhotonForge, PhotonForge), // Photon Forge
-            new BuffLossCastFinder(ExitPhotonForge, PhotonForge), // Deactivate Photon Forge - red or blue irrevelant
+            new BuffGainCastFinder(EnterPhotonForge, PhotonForge).UsingBeforeWeaponSwap(true), // Photon Forge
+            new BuffLossCastFinder(ExitPhotonForge, PhotonForge).UsingBeforeWeaponSwap(true), // Deactivate Photon Forge - red or blue irrevelant
+            new BuffGainCastFinder(OverheatSkill, OverheatEffect).UsingBeforeWeaponSwap(true), // Overheat
             new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldEffect), // Spectrum Shield
             new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve), // Thermal Release Valve
             new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Holosmith),

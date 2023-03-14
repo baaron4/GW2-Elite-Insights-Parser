@@ -16,12 +16,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(DeatlyIceShockWave, "Deadly Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.Red),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
-                new HitOnPlayerMechanic(IceArmSwing, "Ice Arm Swing",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
-                new HitOnPlayerMechanic(new long[] { IceShockWave1, IceShockWave2, IceShockWave3 }, "Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
-                new HitOnPlayerMechanic(IceShatter, "Ice Shatter",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Pink),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
-                new HitOnPlayerMechanic(IceCrystal, "Ice Crystal",new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
-                new HitOnPlayerMechanic(new long[] { IceFrail1, IceFrail2 }, "Ice Flail",new MechanicPlotlySetting(Symbols.Square,Colors.Pink),"I.Flail","Ice Flail", "Ice Flail", 50),
+                new PlayerDstHitMechanic(DeatlyIceShockWave, "Deadly Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.Red),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
+                new PlayerDstHitMechanic(IceArmSwing, "Ice Arm Swing",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
+                new PlayerDstHitMechanic(new long[] { IceShockWave1, IceShockWave2, IceShockWave3 }, "Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
+                new PlayerDstHitMechanic(IceShatter, "Ice Shatter",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Pink),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
+                new PlayerDstHitMechanic(IceCrystal, "Ice Crystal",new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
+                new PlayerDstHitMechanic(new long[] { IceFrail1, IceFrail2 }, "Ice Flail",new MechanicPlotlySetting(Symbols.Square,Colors.Pink),"I.Flail","Ice Flail", "Ice Flail", 50),
             }
             );
             Extension = "icebrood";
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.IcebroodConstruct));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstruct));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Icebrood Construct not found");

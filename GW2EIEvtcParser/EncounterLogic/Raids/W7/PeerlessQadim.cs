@@ -19,25 +19,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             
             MechanicList.AddRange(new List<Mechanic>()
             {
-                new HitOnPlayerMechanic(PylonDebrisField, "Pylon Debris Field", new MechanicPlotlySetting(Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
-                new HitOnPlayerMechanic(EnergizedAffliction, "Energized Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new HitOnPlayerMechanic(ForceOfRetaliation, "Force of Retaliation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new HitOnPlayerMechanic(ExponentialRepercussionPylon, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
-                new HitOnPlayerMechanic(ExponentialRepercussionQadimShield, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkPurple), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
-                new HitOnPlayerMechanic(ForceOfHavoc, "Force of Havoc", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
-                new HitOnPlayerMechanic(ChaosCalled, "Chaos Called", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
-                new HitOnPlayerMechanic(RainOfChaos, "Rain of Chaos", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
-                new HitOnPlayerMechanic(BrandstormLightning, "Brandstorm Lightning", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
-                new HitOnPlayerMechanic(ResidualImpactMagmaField, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
-                new HitOnPlayerMechanic(ResidualImpactSmallMagmaField, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
-                new HitOnPlayerMechanic(BatteringBlitz, "Battering Blitz", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
-                new HitOnPlayerMechanic(CausticChaosProjectile, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
-                new HitByEnemyMechanic(ShowerOfChaos, "Shower of Chaos", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
-                new HitByEnemyMechanic(EclipsedBacklash, "Eclipsed Backlash", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
-                new PlayerBuffApplyMechanic(FixatedQadimThePeerless, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
-                new PlayerBuffApplyMechanic(CriticalMass, "Critical Mass", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
-                new HitOnPlayerMechanic(CausticChaosExplosion, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
-                new PlayerBuffApplyMechanic(SappingSurge, "Sapping Surge", new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new PlayerDstHitMechanic(PylonDebrisField, "Pylon Debris Field", new MechanicPlotlySetting(Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
+                new PlayerDstHitMechanic(EnergizedAffliction, "Energized Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
+                new PlayerDstHitMechanic(ForceOfRetaliation, "Force of Retaliation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(ExponentialRepercussionPylon, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
+                new PlayerDstHitMechanic(ExponentialRepercussionQadimShield, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkPurple), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
+                new PlayerDstHitMechanic(ForceOfHavoc, "Force of Havoc", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
+                new PlayerDstHitMechanic(ChaosCalled, "Chaos Called", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),
+                new PlayerDstHitMechanic(RainOfChaos, "Rain of Chaos", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", 0),
+                new PlayerDstHitMechanic(BrandstormLightning, "Brandstorm Lightning", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", 0),
+                new PlayerDstHitMechanic(ResidualImpactMagmaField, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", 500),
+                new PlayerDstHitMechanic(ResidualImpactSmallMagmaField, "Residual Impact", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", 500),
+                new PlayerDstHitMechanic(BatteringBlitz, "Battering Blitz", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
+                new PlayerDstHitMechanic(CausticChaosProjectile, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
+                new EnemySrcHitMechanic(ShowerOfChaos, "Shower of Chaos", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
+                new EnemySrcHitMechanic(EclipsedBacklash, "Eclipsed Backlash", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
+                new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
+                new PlayerDstBuffApplyMechanic(CriticalMass, "Critical Mass", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
+                new PlayerDstHitMechanic(CausticChaosExplosion, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
+                new PlayerDstBuffApplyMechanic(SappingSurge, "Sapping Surge", new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
             });
             Extension = "prlqadim";
             Icon = EncounterIconPeerlessQadim;
@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");
@@ -185,12 +185,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
-                    var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
-                    var forceOfHavoc = cls.Where(x => x.SkillId == 56017).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop).ToList();
+                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
-                    var etherStrikes = cls.Where(x => x.SkillId == 56012 || x.SkillId == 56653).ToList();
-                    var causticChaos = cls.Where(x => x.SkillId == 56332).ToList();
-                    var expoReperc = cls.Where(x => x.SkillId == 56223).ToList();
+                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
+                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
+                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new PositionConnector(position)));
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
 
-                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
+                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
                         {
                             replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new AgentConnector(pylon)));
                             replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new AgentConnector(pylon)));
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
+                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                         }
@@ -421,7 +421,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (c is BuffApplyEvent)
                 {
-                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
                 }
@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.PeerlessQadim));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Peerless Qadim not found");

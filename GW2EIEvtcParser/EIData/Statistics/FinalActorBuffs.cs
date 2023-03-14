@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
             var activeBuffs = new Dictionary<long, FinalActorBuffs>();
 
             BuffDistribution selfBuffs = actor.GetBuffDistribution(log, start, end);
-            Dictionary<long, long> buffPresence = actor.GetBuffPresence(log, start, end);
+            IReadOnlyDictionary<long, long> buffPresence = actor.GetBuffPresence(log, start, end);
 
             long phaseDuration = end - start;
             long playerActiveDuration = actor.GetActiveDuration(log, start, end);

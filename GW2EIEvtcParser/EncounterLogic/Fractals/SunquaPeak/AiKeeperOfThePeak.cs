@@ -24,46 +24,46 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 // General
-                new HitOnPlayerMechanic(ElementalWhirl, "Elemental Whirl", new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.","Elemental Whirl", "Elemental Whirl",0),
+                new PlayerDstHitMechanic(ElementalWhirl, "Elemental Whirl", new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.","Elemental Whirl", "Elemental Whirl",0),
                 // Air
-            new HitOnPlayerMechanic(new long[] { ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3 }, "Elemental Manipulation (Air)", new MechanicPlotlySetting(Symbols.Square,Colors.Magenta), "Ar.Mnp.","Elemental Manipulation (Air)", "Elemental Manipulation (Air)",0),
-            new HitOnPlayerMechanic(new long[] { FulgorSphere1, FulgorSphere2 }, "Fulgor Sphere", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
-            new HitOnPlayerMechanic(VolatileWind, "Volatile Wind", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
-            new HitOnPlayerMechanic(WindBurst, "Wind Burst", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
-            new HitOnPlayerMechanic(WindBurst, "Wind Burst Launch", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0,(de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new HitOnPlayerMechanic(CallOfStorms , "Call of Storms", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs","Call of Storms", "Call of Storms",0),
-            new EnemyBuffApplyMechanic(WhirlwindShield, "Whirlwind Shield",new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Magenta), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
+            new PlayerDstHitMechanic(new long[] { ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3 }, "Elemental Manipulation (Air)", new MechanicPlotlySetting(Symbols.Square,Colors.Magenta), "Ar.Mnp.","Elemental Manipulation (Air)", "Elemental Manipulation (Air)",0),
+            new PlayerDstHitMechanic(new long[] { FulgorSphere1, FulgorSphere2 }, "Fulgor Sphere", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
+            new PlayerDstHitMechanic(VolatileWind, "Volatile Wind", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
+            new PlayerDstHitMechanic(WindBurst, "Wind Burst", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
+            new PlayerDstHitMechanic(WindBurst, "Wind Burst Launch", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0,(de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(CallOfStorms , "Call of Storms", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs","Call of Storms", "Call of Storms",0),
+            new EnemyDstBuffApplyMechanic(WhirlwindShield, "Whirlwind Shield",new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Magenta), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
             // Fire
-            new HitOnPlayerMechanic(new long[] { ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3 }, "Elemental Manipulation (Fire)", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Fr.Mnp.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
-            new HitOnPlayerMechanic(new long[] { RoilingFlames1, RoilingFlames2 }, "Roiling Flames", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
-            new HitOnPlayerMechanic(VolatileFire, "Volatile Fire", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Vlt.Fr.","Volatile Fire", "Volatile Fire",0),
-            new SkillOnPlayerMechanic(CallMeteorHit, "Call Meteor", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Mtr.H","Hit by Meteor", "Meteor Hit",1000, (evt, log) => evt.HasDowned || evt.HasKilled),
-            new HitOnPlayerMechanic(FlameBurst, "Flame Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Flm.Brst.","Flame Burst", "Flame Burst",0),
-            new HitOnPlayerMechanic(FirestormAi, "Firestorm", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Fr.Strm","Firestorm", "Firestorm",0),
+            new PlayerDstHitMechanic(new long[] { ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3 }, "Elemental Manipulation (Fire)", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Fr.Mnp.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
+            new PlayerDstHitMechanic(new long[] { RoilingFlames1, RoilingFlames2 }, "Roiling Flames", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
+            new PlayerDstHitMechanic(VolatileFire, "Volatile Fire", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Vlt.Fr.","Volatile Fire", "Volatile Fire",0),
+            new PlayerDstSkillMechanic(CallMeteorHit, "Call Meteor", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Mtr.H","Hit by Meteor", "Meteor Hit",1000, (evt, log) => evt.HasDowned || evt.HasKilled),
+            new PlayerDstHitMechanic(FlameBurst, "Flame Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Flm.Brst.","Flame Burst", "Flame Burst",0),
+            new PlayerDstHitMechanic(FirestormAi, "Firestorm", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Fr.Strm","Firestorm", "Firestorm",0),
             new EnemyCastStartMechanic(CallMeteorSummon, "Call Meteor", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Orange), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", 0),
             // Water
-            new HitOnPlayerMechanic(new long[] { ElementalManipulationWater1, ElementalManipulationWater2, 61556 }, "Elemental Manipulation (Water)", new MechanicPlotlySetting(Symbols.Square,Colors.LightBlue), "Wtr.Mnp.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
-            new HitOnPlayerMechanic(new long[] { 61556, TorrentialBolt }, "Torrential Bolt", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Tr.Blt.","Torrential Bolt", "Torrential Bolt",0),
-            new HitOnPlayerMechanic(VolatileWater, "Volatile Water", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
-            new HitOnPlayerMechanic(AquaticBurst, "Aquatic Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
-            new EnemyBuffApplyMechanic(TidalBarrier, "Tidal Barrier", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
-            new PlayerBuffApplyMechanic(TidalBargain, "Tidal Bargain", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0),
-            new PlayerBuffRemoveMechanic(TidalBargain, "Tidal Bargain Downed", new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerDstHitMechanic(new long[] { ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3 }, "Elemental Manipulation (Water)", new MechanicPlotlySetting(Symbols.Square,Colors.LightBlue), "Wtr.Mnp.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
+            new PlayerDstHitMechanic(new long[] { TorrentialBolt1, TorrentialBolt2 }, "Torrential Bolt", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Tr.Blt.","Torrential Bolt", "Torrential Bolt",0),
+            new PlayerDstHitMechanic(VolatileWater, "Volatile Water", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
+            new PlayerDstHitMechanic(AquaticBurst, "Aquatic Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
+            new EnemyDstBuffApplyMechanic(TidalBarrier, "Tidal Barrier", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
+            new PlayerDstBuffApplyMechanic(TidalBargain, "Tidal Bargain", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0),
+            new PlayerDstBuffRemoveMechanic(TidalBargain, "Tidal Bargain Downed", new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             // Dark
-            new HitOnPlayerMechanic(new long[] { EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9 }, 
+            new PlayerDstHitMechanic(new long[] { EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9 }, 
                 "Empathic Manipulation", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Emp.Mnp.","Empathic Manipulation", "Empathic Manipulation",0),
-            new HitOnPlayerMechanic(new long[] { FocusedWrath, FocusedWrath2 }, "Focused Wrath", new MechanicPlotlySetting(Symbols.Circle,Colors.LightPurple), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
-            new HitOnPlayerMechanic(NegativeBurst, "Negative Burst", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.","Negative Burst", "Negative Burst",500),
-            new HitOnPlayerMechanic(Terrorstorm, "Terrorstorm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm","Terrorstorm", "Terrorstorm",0),
-            new PlayerBuffApplyMechanic(CrushingGuilt, "Crushing Guilt", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
-            new PlayerBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerDstHitMechanic(new long[] { FocusedWrath, FocusedWrath2 }, "Focused Wrath", new MechanicPlotlySetting(Symbols.Circle,Colors.LightPurple), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
+            new PlayerDstHitMechanic(NegativeBurst, "Negative Burst", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.","Negative Burst", "Negative Burst",500),
+            new PlayerDstHitMechanic(Terrorstorm, "Terrorstorm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm","Terrorstorm", "Terrorstorm",0),
+            new PlayerDstBuffApplyMechanic(CrushingGuilt, "Crushing Guilt", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
+            new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0, (evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             new EnemyCastStartMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
             new EnemyCastEndMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt)", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
             new EnemyCastEndMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0, (evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
-            new EnemyBuffApplyMechanic(CacophonousMind, "Cacophonous Mind", new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.","Cacophonous Mind", "Cacophonous Mind",0),
+            new EnemyDstBuffApplyMechanic(CacophonousMind, "Cacophonous Mind", new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.","Cacophonous Mind", "Cacophonous Mind",0),
             });
             Extension = "ai";
             Icon = EncounterIconAi;
@@ -149,14 +149,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Ai not found");
             }
             _china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
-            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == 53569 && x.SrcMatchesAgent(aiAgent));
-            _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == 61358 : x.SkillID == 61356) && x.SrcMatchesAgent(aiAgent));
+            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
+            _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == AiHasDarkModeCN : x.SkillID == AiHasDarkMode) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
                 {
-                    long darkModeStart = combatData.FirstOrDefault(x => (_china ? x.SkillID == 61279 : x.SkillID == 61277) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
+                    long darkModeStart = combatData.FirstOrDefault(x => (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
                     long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomNPCAgent(lastAwareTime + 1, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
@@ -225,8 +225,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names
-            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
+            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
             if (_hasElementalMode && _hasDarkMode)
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int sorrowCount = 0;
                 foreach (AbstractSingleActor target in Targets)
                 {
-                    if (target.IsSpecy(ArcDPSEnums.TrashID.SorrowDemon5))
+                    if (target.IsSpecies(ArcDPSEnums.TrashID.SorrowDemon5))
                     {
                         target.OverrideName(target.Character + " " + (++sorrowCount));
                     }
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
+            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[0].AddTarget(elementalAi);
             }
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             if (darkAi == null)
             {
                 if (_hasDarkMode)
@@ -345,14 +345,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (requirePhases)
                 {
                     // sub phases
-                    long fearToSorrowSkillID = _china ? 61571 : 61606;
+                    long fearToSorrowSkillID = _china ? EmpathicManipulationSorrowCN : EmpathicManipulationSorrow;
                     AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
                     if (fearToSorrow != null)
                     {
                         var fearPhase = new PhaseData(darkStart + 1, fearToSorrow.Time, "Fear");
                         fearPhase.AddTarget(darkAi);
                         phases.Add(fearPhase);
-                        long sorrowToGuiltSkillID = _china ? 61361 : 61602;
+                        long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
                         AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
                         if (sorrowToGuilt != null)
                         {
@@ -397,7 +397,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.IsSpecy(ArcDPSEnums.TargetID.AiKeeperOfThePeak2)).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2)).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);

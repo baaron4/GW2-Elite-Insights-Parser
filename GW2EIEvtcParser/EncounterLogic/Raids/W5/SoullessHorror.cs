@@ -19,17 +19,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(InnerVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
-            new HitOnPlayerMechanic(OuterVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
-            new HitOnPlayerMechanic(SoulRift, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
-            new HitOnPlayerMechanic(QuadSlashFirstSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
-            new HitOnPlayerMechanic(QuadSlashSecondSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
-            new HitOnPlayerMechanic(SpinningSlash, "Spinning Slash", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.DarkRed), "Scythe","Spinning Slash (hit by Scythe)", "Scythe",0),
-            new HitOnPlayerMechanic(DeathBloom, "Death Bloom", new MechanicPlotlySetting(Symbols.Octagon,Colors.LightOrange), "8Slice","Death Bloom (8 Slices)", "8 Slices",0),
-            new PlayerBuffApplyMechanic(FixatedSH, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated (Special Action Key)", "Fixated",0),
-            new PlayerBuffApplyMechanic(Necrosis, "Necrosis", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
-            new HitOnPlayerMechanic(CorruptTheLiving, "Corrupt the Living", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
-            new HitOnPlayerMechanic(WurmSpit, "Wurm Spit", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
+            new PlayerDstHitMechanic(InnerVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
+            new PlayerDstHitMechanic(OuterVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
+            new PlayerDstHitMechanic(SoulRift, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
+            new PlayerDstHitMechanic(QuadSlashFirstSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
+            new PlayerDstHitMechanic(QuadSlashSecondSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
+            new PlayerDstHitMechanic(SpinningSlash, "Spinning Slash", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.DarkRed), "Scythe","Spinning Slash (hit by Scythe)", "Scythe",0),
+            new PlayerDstHitMechanic(DeathBloom, "Death Bloom", new MechanicPlotlySetting(Symbols.Octagon,Colors.LightOrange), "8Slice","Death Bloom (8 Slices)", "8 Slices",0),
+            new PlayerDstBuffApplyMechanic(FixatedSH, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated (Special Action Key)", "Fixated",0),
+            new PlayerDstBuffApplyMechanic(Necrosis, "Necrosis", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Necrosis","Necrosis (Tanking Debuff)", "Necrosis Debuff",50),
+            new PlayerDstHitMechanic(CorruptTheLiving, "Corrupt the Living", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
+            new PlayerDstHitMechanic(WurmSpit, "Wurm Spit", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ChillingAura , ChillingAura ), // Chilling Aura
+                new DamageCastFinder(ChillingAura, ChillingAura), // Chilling Aura
             };
         }
 
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.SoullessHorror));
+                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
                 if (mainTarget == null)
                 {
                     throw new MissingKeyActorsException("Soulless Horror not found");
@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.SoullessHorror));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Soulless Horror not found");
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     //
-                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    var howling = cls.Where(x => x.SkillId == HowlingDeath).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
                         start = (int)c.Time;
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
                     foreach (AbstractCastEvent c in vortex)
                     {
                         start = (int)c.Time;
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
                         }
                     }
-                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    var deathBloom = cls.Where(x => x.SkillId == DeathBloom).ToList();
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         start = (int)c.Time;
@@ -220,8 +220,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
 
                     }
-                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet).ToList();
+                    var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet).ToList();
                     foreach (AbstractCastEvent c in quad1)
                     {
                         start = (int)c.Time;

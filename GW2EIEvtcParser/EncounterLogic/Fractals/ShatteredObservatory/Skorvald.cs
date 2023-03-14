@@ -19,20 +19,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(new long[]{ CombustionRush1, CombustionRush2, CombustionRush3 }, "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
-            new HitOnPlayerMechanic(new long[] { PunishingKick1, PunishingKick2 }, "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
-            new HitOnPlayerMechanic(new long[] { CranialCascade1,CranialCascade2 }, "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
-            new HitOnPlayerMechanic(new long[] { RadiantFury1, RadiantFury2 }, "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
-            new HitOnPlayerMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
-            new HitOnPlayerMechanic(new long[] {HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
-            new HitOnPlayerMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
-            new HitOnPlayerMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            //new HitOnPlayerMechanic(39228, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new PlayerBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new PlayerBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
-            new HitOnPlayerMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
-            new HitOnPlayerMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
-            new HitOnPlayerMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
+            new PlayerDstHitMechanic(new long[]{ CombustionRush1, CombustionRush2, CombustionRush3 }, "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
+            new PlayerDstHitMechanic(new long[] { PunishingKick1, PunishingKick2 }, "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
+            new PlayerDstHitMechanic(new long[] { CranialCascade1,CranialCascade2 }, "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
+            new PlayerDstHitMechanic(new long[] { RadiantFury1, RadiantFury2 }, "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
+            new PlayerDstHitMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
+            new PlayerDstHitMechanic(new long[] {HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
+            new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
+            new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
+            //new HitOnPlayerMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
+            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerDstBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
+            new PlayerDstHitMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
+            new PlayerDstHitMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
+            new PlayerDstHitMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
             Extension = "skorv";
             Icon = EncounterIconSkorvald;
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -100,10 +100,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             int count = 0;
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly1) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly2) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly3) || 
-                    target.IsSpecy(ArcDPSEnums.TrashID.FluxAnomaly4))
+                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) || 
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly4))
                 {
                     target.OverrideName(target.Character + " " + (++count));
                 }
@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");

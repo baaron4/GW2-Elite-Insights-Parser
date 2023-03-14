@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber sheath
-            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2), // Gunsaber                 
+            new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true), // Gunsaber sheath
+            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true), // Gunsaber                 
             new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2), // Unseen Sword
         };
 

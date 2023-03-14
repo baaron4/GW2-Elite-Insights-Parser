@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -12,11 +13,17 @@ namespace GW2EIEvtcParser.EIData
         public WeaponSwapCastFinder(long skillID, long swappedTo) : base(skillID)
         {
             _swappedTo = swappedTo;
+            BeforeWeaponSwap = true;
         }
         internal WeaponSwapCastFinder UsingChecker(WeaponSwapCastChecker checker)
         {
             _triggerCondition = checker;
             return this;
+        }
+
+        internal override InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
+        {
+            throw new InvalidOperationException("Invalid WeaponSwapCastFinder usage, always before swap");
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -37,18 +44,10 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = swap.Time;
                         continue;
                     }
-                    if (_triggerCondition != null)
-                    {
-                        if (_triggerCondition(swap, combatData, agentData, skillData))
-                        {
-                            lastTime = swap.Time;
-                            res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
-                        }
-                    }
-                    else
+                    if (_triggerCondition == null || _triggerCondition(swap, combatData, agentData, skillData))
                     {
                         lastTime = swap.Time;
-                        res.Add(new InstantCastEvent(swap.Time, skillData.Get(SkillID), swap.Caster));
+                        res.Add(new InstantCastEvent(GetTime(swap, swap.Caster, combatData), skillData.Get(SkillID), swap.Caster));
                     }
                 }
             }

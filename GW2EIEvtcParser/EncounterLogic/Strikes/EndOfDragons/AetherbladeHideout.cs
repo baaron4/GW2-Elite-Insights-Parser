@@ -20,16 +20,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(NightmareFusilladeMain, "Nightmare Fusillade", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Cone", "Hit by Cone attack", "Cone", 150),
-                new HitOnPlayerMechanic(NightmareFusilladeSide, "Nightmare Fusillade Side", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Cone.S", "Hit by Side Cone attack", "Side Cone", 150),
-                new HitOnPlayerMechanic(new long[] {TormentingWave, TormentingWaveCM }, "Tormenting Wave", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
-                new HitOnPlayerMechanic(new long[] {LeyBreach, LeyBreachCM }, "Ley Breach", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
-                new HitOnPlayerMechanic(KaleidoscopicChaos, "Kaleidoscopic Chaos", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Orange), "Circle.H", "Hit by Yellow Circle", "Yellow Circle Hit", 150),
-                new PlayerBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
-                new PlayerBuffApplyMechanic(new long[] {SharedDestructionMaiTrin, SharedDestructionMaiTrinCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
-                new PlayerBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Green.D", "Received Green debuff", "Green Debuff", 150),
-                new SkillOnPlayerMechanic(FocusedDestruction, "Focused Destruction", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Green.Dwn", "Downed by Green", "Green Downed", 150, (evt, log) => evt.HasDowned),
-                new PlayerBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
+                new PlayerDstHitMechanic(NightmareFusilladeMain, "Nightmare Fusillade", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Cone", "Hit by Cone attack", "Cone", 150),
+                new PlayerDstHitMechanic(NightmareFusilladeSide, "Nightmare Fusillade Side", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Cone.S", "Hit by Side Cone attack", "Side Cone", 150),
+                new PlayerDstHitMechanic(new long[] {TormentingWave, TormentingWaveCM }, "Tormenting Wave", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
+                new PlayerDstHitMechanic(new long[] {LeyBreach, LeyBreachCM }, "Ley Breach", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
+                new PlayerDstHitMechanic(KaleidoscopicChaos, "Kaleidoscopic Chaos", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Orange), "Circle.H", "Hit by Yellow Circle", "Yellow Circle Hit", 150),
+                new PlayerDstBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
+                new PlayerDstBuffApplyMechanic(new long[] {SharedDestructionMaiTrin, SharedDestructionMaiTrinCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerDstBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Green.D", "Received Green debuff", "Green Debuff", 150),
+                new PlayerDstSkillMechanic(FocusedDestruction, "Focused Destruction", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Green.Dwn", "Downed by Green", "Green Downed", 150, (evt, log) => evt.HasDowned),
+                new PlayerDstBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
             }
             );
             Icon = EncounterIconAetherbladeHideout;
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)
         {
-            return Targets.FirstOrDefault(x => x.IsSpecy(fightData.IsCM ? (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM : (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM));
+            return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM : (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM));
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
                 if (echoOfScarlet != null)
                 {
-                    AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.MaiTrinStrike));
+                    AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
                     if (maiTrin == null)
                     {
                         throw new MissingKeyActorsException("Mai Trin not found");
@@ -138,13 +138,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
         {
-            return Targets.Where(x => (x.IsSpecy(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecy(ArcDPSEnums.TrashID.ScarletPhantomHP2)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
+            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP2)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.MaiTrinStrike));
+            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
             if (maiTrin == null)
             {
                 throw new MissingKeyActorsException("Mai Trin not found");
@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
-            var echoesOfScarlet = Targets.Where(x => x.IsSpecy(ArcDPSEnums.TargetID.EchoOfScarletBriarNM) || x.IsSpecy(ArcDPSEnums.TargetID.EchoOfScarletBriarCM)).ToList();
+            var echoesOfScarlet = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarNM) || x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarCM)).ToList();
             foreach (AbstractSingleActor echoOfScarlet in echoesOfScarlet)
             {
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.MaiTrinStrike));
+            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
             if (maiTrin == null)
             {
                 throw new MissingKeyActorsException("Mai Trin not found");

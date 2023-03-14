@@ -26,22 +26,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new HitOnPlayerMechanic(TemporalShredOrb, "Temporal Shred", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-            new HitOnPlayerMechanic(TemporalShredAoE, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
-            new PlayerBuffApplyMechanic(BloodstoneProtection, "Bloodstone Protection", new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
+            new PlayerDstHitMechanic(TemporalShredOrb, "Temporal Shred", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
+            new PlayerDstHitMechanic(TemporalShredAoE, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new PlayerDstBuffApplyMechanic(BloodstoneProtection, "Bloodstone Protection", new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
             new EnemyCastStartMechanic(SummonFragments, "Summon Fragment Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0, (ce,log) => ce.ActualDuration > 11940),
             new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 11940),
-            new PlayerBuffApplyMechanic(Derangement, "Derangement", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
-            new PlayerBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
-            new PlayerBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
-            new PlayerBuffApplyMechanic(TwistingChaos, "Twisting Chaos", new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
-            new PlayerBuffApplyMechanic(InterventionSAK, "Intervention SAK", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
-            new PlayerBuffApplyMechanic(GravityWellXera, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
-            new PlayerBuffApplyMechanic(HerosDeparture, "Hero's Depature", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Hero's Departure (Teleport to Platform)","TP",0),
-            new PlayerBuffApplyMechanic(HerosReturn, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
-            /*new Mechanic(35000, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
-            //new Mechanic(35034, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 
+            new PlayerDstBuffApplyMechanic(Derangement, "Derangement", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
+            new PlayerDstBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
+            new PlayerDstBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
+            new PlayerDstBuffApplyMechanic(TwistingChaos, "Twisting Chaos", new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
+            new PlayerDstBuffApplyMechanic(InterventionSAK, "Intervention SAK", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
+            new PlayerDstBuffApplyMechanic(GravityWellXera, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
+            new PlayerDstBuffApplyMechanic(HerosDeparture, "Hero's Depature", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Hero's Departure (Teleport to Platform)","TP",0),
+            new PlayerDstBuffApplyMechanic(HerosReturn, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
+            /*new Mechanic(Intervention, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
+            //new Mechanic(Disruption, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
             });
             Extension = "xera";
@@ -100,8 +100,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_xeraFirstPhaseStart > 0)
                 {
                     var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
-                    phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardButton) || x.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardRift)));
-                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.DummyTarget)));
+                    phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardButton) || x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardRift)));
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget)));
                     phases.Add(phasePreEvent);
                     var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                     phase100to0.AddTarget(mainTarget);
@@ -117,14 +117,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
                     var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                    glidingPhase.AddTargets(Targets.Where(t => t.IsSpecy(ArcDPSEnums.TrashID.ChargedBloodstone)));
+                    glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.ChargedBloodstone)));
                     phases.Add(glidingPhase);
 
                     if (_xeraSecondPhaseStartTime > 0)
                     {
                         var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
                         phase2.AddTarget(mainTarget);
-                        phase2.AddTargets(Targets.Where(t => t.IsSpecy(ArcDPSEnums.TrashID.BloodstoneShardMainFight)));
+                        phase2.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardMainFight)));
                         //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                         phases.Add(phase2);
                     }
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Xera));
+        private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {

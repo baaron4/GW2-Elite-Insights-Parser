@@ -18,12 +18,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(SpectralImpact, "Spectral Impact", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerBuffApplyMechanic(GhastlyPrison, "Ghastly Prison", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg","Ghastly Prison (Egged)", "Egged",500),
-            new PlayerBuffApplyMechanic(SpectralDarkness, "Spectral Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
-            new EnemyBuffApplyMechanic(SpiritedFusion, "Spirited Fusion", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
-            new HitOnPlayerMechanic(SpiritKick, "Kick", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick","Kicked by small add", "Spirit Kick",0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerBuffApplyMechanic(Vulnerability, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black","Hit by Black Goo","Black Goo",3000, (ba,log) => ba.AppliedDuration == 10000),
+            new PlayerDstHitMechanic(SpectralImpact, "Spectral Impact", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstBuffApplyMechanic(GhastlyPrison, "Ghastly Prison", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg","Ghastly Prison (Egged)", "Egged",500),
+            new PlayerDstBuffApplyMechanic(SpectralDarkness, "Spectral Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
+            new EnemyDstBuffApplyMechanic(SpiritedFusion, "Spirited Fusion", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
+            new PlayerDstHitMechanic(SpiritKick, "Kick", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick","Kicked by small add", "Spirit Kick",0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstBuffApplyMechanic(Vulnerability, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black","Hit by Black Goo","Black Goo",3000, (ba,log) => ba.AppliedDuration == 10000),
             new EnemyCastStartMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0, (ce,log) => ce.ActualDuration > 21985),
             new EnemyCastEndMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 21985),
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Gorseval));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Gorseval));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Gorseval not found");

@@ -28,12 +28,12 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
             new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
-            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecy(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecy(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecy(MinionID.VentariTablet)),
-            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecy(MinionID.VentariTablet)),
-            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecy(MinionID.VentariTablet)),
-            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecy(MinionID.VentariTablet)),
+            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
         };
 
 
@@ -98,6 +98,7 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png"),
                 new Buff("Tranquil", Tranquil, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Project_Tranquility.png"),
                 new Buff("Impossible Odds", ImpossibleOddsEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png"),
+                new Buff("Jade", Jade, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Legendary Centaur Stance",LegendaryCentaurStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Legendary_Centaur_Stance.png"),
                 new Buff("Legendary Dwarf Stance",LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b2/Legendary_Dwarf_Stance.png"),
                 new Buff("Legendary Demon Stance",LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d1/Legendary_Demon_Stance.png"),

@@ -18,10 +18,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new PlayerBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
-            new HitOnPlayerMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
-            new HitOnPlayerMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
-            new HitOnPlayerMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
+            new PlayerDstHitMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
+            new PlayerDstHitMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
+            new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.None;
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (prisonerDeaths.Count == 0)
                 {
-                    AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Narella));
+                    AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella));
                     if (narella == null)
                     {
                         throw new MissingKeyActorsException("Narella not found");
@@ -160,17 +160,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor berg = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Berg));
+            AbstractSingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Berg));
             if (berg == null)
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
-            AbstractSingleActor zane = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Zane));
+            AbstractSingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Zane));
             if (zane == null)
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
-            AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Narella));
+            AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella));
             if (narella == null)
             {
                 throw new MissingKeyActorsException("Narella not found");

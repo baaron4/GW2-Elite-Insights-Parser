@@ -21,8 +21,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(Bombshell, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-                new HitOnPlayerMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(Bombshell, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+                new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             }
             );
             GenericFallBackMethod = FallBackMethod.ChestGadget;
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                     }
-                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == 48272).ToList();
+                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == Bombshell).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
@@ -221,7 +221,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
         }
-
+        internal override int GetTriggerID()
+        {
+            return (int)ArcDPSEnums.TargetID.Desmina;
+        }
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "River of Souls";

@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
-                new EnemyBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
+                new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
+                new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
             }
             );
             Extension = "supkodbros";
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int voiceAndClawCount = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw))
+                if (target.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw))
                 {
                     target.OverrideName(target.Character + " " + voiceAndClawCount++);
                 }
@@ -61,8 +61,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor voice = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.ClawOfTheFallen));
-            AbstractSingleActor claw = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceOfTheFallen));
+            AbstractSingleActor voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
+            AbstractSingleActor claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
             if (voice == null || claw == null)
             {
                 throw new MissingKeyActorsException("Claw or Voice not found");
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases.AddRange(unmergedPhases);
             //
             int voiceAndClawCount = 0;
-            foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw)))
+            foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)))
             {
                 EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
                 long phaseStart = 0;
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractCastEvent teleport in teleports)
             {
                 long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
-                AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
+                AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
                 if (voiceAndClaw != null)
                 {
                     long oldEnd = preTPPhaseEnd;

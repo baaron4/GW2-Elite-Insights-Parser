@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
-            new PlayerBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
+            new PlayerDstHitMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
+            new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
             }
             );
             Extension = "souleater";
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.EaterOfSouls:
-                    var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == Imbibe).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         start = (int)c.Time;
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    var vomit = cls.Where(x => x.SkillId == 47303).ToList();
+                    var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();
                     foreach (AbstractCastEvent c in vomit)
                     {
                         start = (int)c.Time + 2100;
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
-                    var pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
+                    var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls).ToList();
                     foreach (AbstractCastEvent c in pseudoDeath)
                     {
                         start = (int)c.Time;
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenSpirit1:
                 case (int)ArcDPSEnums.TrashID.GreenSpirit2:
-                    var green = cls.Where(x => x.SkillId == 47153).ToList();
+                    var green = cls.Where(x => x.SkillId == GreensEaterofSouls).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
                         int gstart = (int)c.Time + 667;

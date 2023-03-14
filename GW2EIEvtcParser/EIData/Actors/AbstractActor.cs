@@ -44,29 +44,29 @@ namespace GW2EIEvtcParser.EIData
             AgentItem = agent;
         }
 
-        public bool IsSpecy(int id)
+        public bool IsSpecies(int id)
         {
-            return AgentItem.IsSpecy(id);
+            return AgentItem.IsSpecies(id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.TrashID id)
+        public bool IsSpecies(ArcDPSEnums.TrashID id)
         {
-            return AgentItem.IsSpecy(id);
+            return AgentItem.IsSpecies(id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.TargetID id)
+        public bool IsSpecies(ArcDPSEnums.TargetID id)
         {
-            return AgentItem.IsSpecy(id);
+            return AgentItem.IsSpecies(id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.MinionID id)
+        public bool IsSpecies(ArcDPSEnums.MinionID id)
         {
-            return AgentItem.IsSpecy(id);
+            return AgentItem.IsSpecies(id);
         }
 
-        public bool IsSpecy(ArcDPSEnums.ChestID id)
+        public bool IsSpecies(ArcDPSEnums.ChestID id)
         {
-            return AgentItem.IsSpecy(id);
+            return AgentItem.IsSpecies(id);
         }
 
         // Getters

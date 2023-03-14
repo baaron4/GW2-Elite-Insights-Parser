@@ -17,11 +17,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new HitOnPlayerMechanic(Icequake, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Icequake","Icequake", "Icequake",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new HitOnPlayerMechanic(IceShockWaveFraenir, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Ice Shock Wave","Ice Shock Wave", "Ice Shock Wave",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new PlayerBuffApplyMechanic(Frozen, "Frozen", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Frozen","Frozen", "Frozen",500),
-                new PlayerBuffRemoveMechanic(Frozen, "Unfrozen", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Unfrozen","Unfrozen", "Unfrozen",500),
-                new PlayerBuffApplyMechanic(Snowblind, "Snowblind", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Snowblind","Snowblind", "Snowblind",500),
+                new PlayerDstHitMechanic(Icequake, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Icequake","Icequake", "Icequake",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(IceShockWaveFraenir, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Ice Shock Wave","Ice Shock Wave", "Ice Shock Wave",4000, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstBuffApplyMechanic(Frozen, "Frozen", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Frozen","Frozen", "Frozen",500),
+                new PlayerDstBuffRemoveMechanic(Frozen, "Unfrozen", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Unfrozen","Unfrozen", "Unfrozen",500),
+                new PlayerDstBuffApplyMechanic(Snowblind, "Snowblind", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Snowblind","Snowblind", "Snowblind",500),
             }
             );
             Extension = "fraenir";
@@ -50,13 +50,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.FraenirOfJormag));
+            AbstractSingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.FraenirOfJormag));
             if (fraenir == null)
             {
                 throw new MissingKeyActorsException("Fraenir of Jormag not found");
             }
             phases[0].AddTarget(fraenir);
-            AbstractSingleActor icebrood = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
+            AbstractSingleActor icebrood = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
             if (icebrood != null)
             {
                 phases[0].AddTarget(icebrood);

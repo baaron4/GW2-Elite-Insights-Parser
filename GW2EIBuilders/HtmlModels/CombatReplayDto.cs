@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -30,9 +31,7 @@ namespace GW2EIBuilders.HtmlModels
         private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
         {
             var actors = new List<object>();
-            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>();
-            fromNonFriendliesSet.UnionWith(log.FightData.Logic.TrashMobs);
-            fromNonFriendliesSet.UnionWith(log.FightData.Logic.Targets);
+            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(log.FightData.Logic.Hostiles);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
@@ -67,6 +66,10 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     actors.Add(a.GetCombatReplayDescription(map, log));
                 }
+            }
+            foreach (GenericDecoration a in log.FightData.GetEnvironmentCombatReplayDecorations(log))
+            {
+                actors.Add(a.GetCombatReplayDescription(map, log));
             }
             return actors;
         }

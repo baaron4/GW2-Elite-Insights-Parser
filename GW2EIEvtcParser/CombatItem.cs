@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser
         public byte Pad3 { get; }
         public byte Pad4 { get; }
 
-        public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension;
+        public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension || IsStateChange == ArcDPSEnums.StateChange.ExtensionCombat;
 
         // Constructor
         internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,

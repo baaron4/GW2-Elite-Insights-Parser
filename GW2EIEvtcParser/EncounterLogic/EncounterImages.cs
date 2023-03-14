@@ -28,8 +28,8 @@
         internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
 
         // Combat Replay Maps
-        internal const string CombatReplayMAMA = "https://i.imgur.com/lFGNKuf.png";
-        internal const string CombatReplaySiax = "https://i.imgur.com/UzaQHW9.png";
+        internal const string CombatReplayMAMA = "https://i.imgur.com/Iz41x7M.png";
+        internal const string CombatReplaySiax = "https://i.imgur.com/inUshuM.png";
         internal const string CombatReplayEnsolyss = "https://i.imgur.com/kjelZ4t.png";
         internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
         internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
@@ -193,7 +193,7 @@
         internal const string InstanceIconEdgeOfTheMists = "https://wiki.guildwars2.com/images/thumb/6/6c/Edge_of_the_Mists_loading_screen.jpg/240px-Edge_of_the_Mists_loading_screen.jpg";
 
         // Combat Replay Maps
-        internal const string CombatReplayEternalBattlegrounds = "https://i.imgur.com/gmnSuz7.png";
+        internal const string CombatReplayEternalBattlegrounds = "https://i.imgur.com/t0khtQd.png";
         internal const string CombatReplayAlpineBorderlands = "https://i.imgur.com/nVu2ivF.png";
         internal const string CombatReplayDesertBorderlands = "https://i.imgur.com/R5p9fqw.png";
         internal const string CombatReplayObsidianSanctum = "";

@@ -18,21 +18,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerBuffApplyMechanic(Waterlogged, "Waterlogged", new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
-            new HitOnPlayerMechanic(VaporRush, "Vapor Rush", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
-            new HitOnPlayerMechanic(TidalPoolSkill, "Tidal Pool", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
+            new PlayerDstBuffApplyMechanic(Waterlogged, "Waterlogged", new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff","Waterlogged (stacking water debuff)", "Waterlogged",0),
+            new PlayerDstHitMechanic(VaporRush, "Vapor Rush", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
+            new PlayerDstHitMechanic(TidalPoolSkill, "Tidal Pool", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool","Tidal Pool", "Tidal Pool",0),
             new EnemyCastStartMechanic(AquaticBarrage, "Aquatic Barrage Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Breakbar", "Breakbar",0),
             new EnemyCastEndMechanic(AquaticBarrage, "Aquatic Barrage End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
-            new HitOnPlayerMechanic(SeaSwell, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
-            new HitOnPlayerMechanic(Geyser, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
-            new PlayerBuffApplyMechanic(TidalPoolEffect, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
-            new HitOnPlayerMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
-            new HitOnPlayerMechanic(AquaticVortex, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
-            new HitOnPlayerMechanic(VaporJet, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
-            new EnemyBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
-            new PlayerBuffApplyMechanic(AquaticAuraKenut, "Aquatic Aura Kenut", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
-            new PlayerBuffApplyMechanic(AquaticAuraNikare, "Aquatic Aura Nikare", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
-            new HitOnPlayerMechanic(CycloneBurst, "Cyclone Burst", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
+            new PlayerDstHitMechanic(SeaSwell, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
+            new PlayerDstHitMechanic(Geyser, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
+            new PlayerDstBuffApplyMechanic(TidalPoolEffect, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
+            new PlayerDstHitMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
+            new PlayerDstHitMechanic(AquaticVortex, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
+            new PlayerDstHitMechanic(VaporJet, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
+            new EnemyDstBuffApplyMechanic(EnragedTwinLargos, "Enraged", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage","Enraged", "Enrage",0),
+            new PlayerDstBuffApplyMechanic(AquaticAuraKenut, "Aquatic Aura Kenut", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
+            new PlayerDstBuffApplyMechanic(AquaticAuraNikare, "Aquatic Aura Nikare", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
+            new PlayerDstHitMechanic(CycloneBurst, "Cyclone Burst", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
             });
             Extension = "twinlargos";
             Icon = EncounterIconTwinLargos;
@@ -207,13 +207,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Nikare));
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
             phases[0].AddTarget(nikare);
-            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Kenut));
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
             if (kenut != null)
             {
                 phases[0].AddTarget(kenut);
@@ -241,13 +241,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.Nikare:
                     //CC
-                    var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
@@ -258,13 +258,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
                     //CC
-                    var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 800;
                         replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
-                    var shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 1200;
                         replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
                     }
-                    var boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
                     {
                         int start = (int)c.Time;
@@ -357,8 +357,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Nikare));
-            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecy(ArcDPSEnums.TargetID.Kenut));
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");

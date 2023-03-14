@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.GetBuffDistribution(log, start, end);
         }
    
-        public Dictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetBuffPresence(log, start, end);
         }
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
             return _buffHelper.GetBuffGraphs(log);
         }
@@ -277,6 +277,16 @@ namespace GW2EIEvtcParser.EIData
         public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
         {
             return _buffHelper.HasBuff(log, buffId, time);
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        {
+            return _buffHelper.GetBuffStatus(log, buffId, start, end);
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+        {
+            return _buffHelper.GetBuffStatus(log, buffId, time);
         }
 
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
@@ -314,6 +324,15 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Positions;
+        }
+
         public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
@@ -321,6 +340,24 @@ namespace GW2EIEvtcParser.EIData
                 InitCombatReplay(log);
             }
             return CombatReplay.PolledPositions;
+        }
+
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledRotations(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Rotations;
+        }
+
+        public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledRotations(ParsedEvtcLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.PolledRotations;
         }
 
         protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
@@ -417,7 +454,7 @@ namespace GW2EIEvtcParser.EIData
                     CastEvents.Add(wepSwap);
                 }
             }
-            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => !x.Skill.IsSwap).ThenBy(x => !x.Skill.IsInstantTransformation).ToList();
+            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => !x.Skill.IsSwap).ToList();
         }
 
         // DPS Stats

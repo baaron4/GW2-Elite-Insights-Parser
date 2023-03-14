@@ -185,6 +185,36 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
         ctx.restore();
     }
 }
+
+class FacingPieMechanicDrawable extends FacingMechanicDrawable {
+    constructor(start, end, connectedTo, facingData, openingAngle, radius, color) {
+        super(start, end, connectedTo, facingData);
+        this.openingAngle = ToRadians(openingAngle);
+        this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
+        this.radius = radius;
+        this.color = color;
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        var ctx = animator.mainContext;
+        const angle = ToRadians(rot);
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle + this.halfOpeningAngle);
+        ctx.beginPath();         
+        ctx.arc(0, 0, this.radius, -this.openingAngle, 0, false);
+        ctx.arc(0, 0, 0, 0, this.openingAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+}
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, connectedTo) {
@@ -199,7 +229,11 @@ class FormMechanicDrawable extends MechanicDrawable {
             return 1.0;
         }
         var time = animator.reactiveDataStatus.time;
-        return Math.min((time - this.start) / (this.growing - this.start), 1.0);
+        var value = Math.min((time - this.start) / (Math.abs(this.growing) - this.start), 1.0);
+        if (this.growing < 0) {
+            value = 1 - value;
+        }
+        return value;
     }
 }
 
@@ -244,8 +278,14 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
-        ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
+
+        if (this.growing < 0) {    
+            ctx.arc(pos.x, pos.y, this.outerRadius , 2 * Math.PI, 0, false);
+            ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
+        }  else {
+            ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
+            ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
+        }
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
@@ -335,10 +375,10 @@ class PieMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.direction = ToRadians(-direction); // positive mathematical direction, reversed since JS has downwards increasing y axis
-        this.openingAngle = ToRadians(0.5 * openingAngle);
+        this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
-        this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
-        this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
+        this.dx = Math.cos(this.direction - this.halfOpeningAngle) * this.radius;
+        this.dy = Math.sin(this.direction - this.halfOpeningAngle) * this.radius;
     }
 
     draw() {
@@ -351,7 +391,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
         ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
-        ctx.arc(pos.x, pos.y, percent * this.radius, this.direction - this.openingAngle, this.direction + this.openingAngle);
+        ctx.arc(pos.x, pos.y, percent * this.radius, this.direction - this.halfOpeningAngle, this.direction + this.halfOpeningAngle);
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;

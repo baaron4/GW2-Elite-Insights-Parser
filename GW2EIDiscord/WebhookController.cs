@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Webhook;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIDiscord
 {
     public static class WebhookController

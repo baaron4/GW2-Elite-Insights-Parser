@@ -1,4 +1,7 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿using System.Linq;
+using GW2EIEvtcParser.EIData;
+
+namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     {
@@ -32,6 +35,11 @@
         {
             Skill = skill;
             Caster = caster;
+        }
+
+        public virtual long GetInterruptedByStunTime(ParsedEvtcLog log)
+        {
+            return EndTime;
         }
     }
 }

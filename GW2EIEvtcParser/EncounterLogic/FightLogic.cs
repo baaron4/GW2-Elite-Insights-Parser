@@ -39,9 +39,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         public IReadOnlyList<NPC> TrashMobs => _trashMobs;
         public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
+        public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
         protected List<NPC> _trashMobs { get; } = new List<NPC>();
         protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _hostiles { get; } = new List<AbstractSingleActor>();
+
+        protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
 
@@ -132,6 +136,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return InstanceBuffs;
         }
 
+        internal virtual int GetTriggerID()
+        {
+            return GenericTriggerID;
+        }
+
         protected virtual List<int> GetTargetsIDs()
         {
             return new List<int>
@@ -151,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
             if (target == null)
             {
                 return "UNKNOWN";
@@ -206,10 +215,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             _nonPlayerFriendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            FinalizeComputeFightTargets();
+        }
+
+        protected void FinalizeComputeFightTargets()
+        {
             //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
             NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
+            _hostiles.AddRange(_targets);
+            _hostiles.AddRange(_trashMobs);
         }
 
         internal virtual List<InstantCastFinder> GetInstantCastFinders()
@@ -271,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecy(GenericTriggerID));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
@@ -325,6 +341,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+        }
+
+        internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+
+        }
+
+        internal IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            if (EnvironmentDecorations == null)
+            {
+                EnvironmentDecorations = new List<GenericDecoration>();
+                ComputeEnvironmentCombatReplayDecorations(log);
+            }
+            return EnvironmentDecorations;
         }
 
         internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

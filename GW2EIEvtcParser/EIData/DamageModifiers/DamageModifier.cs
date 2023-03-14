@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(NumberOfBoons, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png", DamageModifierMode.All),
             new BuffDamageModifierTarget(Chilled, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png", DamageModifierMode.All),
             new BuffDamageModifier(Fury, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All),
-            new BuffDamageModifierTarget(new long[] { Stun, KnockDown }, "Impact Sigil", "7% on stunned or knocked-down target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(new long[] { Stun, Knockdown }, "Impact Sigil", "7% on stunned or knocked-down target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png", DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> CommonDamageModifiers = new List<DamageModifier>
         {
@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(Exposed31589, "Exposed (Condition)", "20%", DamageSource.All, 20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", DamageModifierMode.All).WithBuilds(GW2Builds.March2022Balance2),
             new BuffDamageModifierTarget(OldExposed, "Old Exposed (Strike)", "30%", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", DamageModifierMode.All).WithBuilds(GW2Builds.March2022Balance2),
             new BuffDamageModifierTarget(OldExposed, "Old Exposed (Condition)", "100%", DamageSource.All, 100.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/6/6b/Exposed.png", DamageModifierMode.All).WithBuilds(GW2Builds.March2022Balance2),
-            new BuffDamageModifierTarget(Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All).UsingChecker((evt, log) => !evt.To.HasBuff(log, Resistance, evt.Time) && (!evt.To.IsSpecy(ArcDPSEnums.TargetID.Sabir) || !evt.To.HasBuff(log, IonShield, evt.Time))), // Ion shield disabled vulnerability, so we check the presence of the buff when hitting Sabir
+            new BuffDamageModifierTarget(Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png", DamageModifierMode.All).UsingChecker((evt, log) => !evt.To.HasBuff(log, Resistance, evt.Time) && (!evt.To.IsSpecies(ArcDPSEnums.TargetID.Sabir) || !evt.To.HasBuff(log, IonShield, evt.Time))), // Ion shield disabled vulnerability, so we check the presence of the buff when hitting Sabir
             new BuffDamageModifier(FrostSpirit, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png", DamageModifierMode.All).WithBuilds(88541 ,GW2Builds.June2022Balance),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (no ICD)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.May2021Balance),
             new DamageLogDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", DamageSource.NoPets, 0, DamageType.Power, DamageType.All, Source.Common,"https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png", ((x, log) => x.SkillId == SoulcleavesSummit), BySkill, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(UnnaturalSignet,"Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
             {
                 AbstractSingleActor target = log.FindActor(dl.To);
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
                 {
                     return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, "https://wiki.guildwars2.com/images/4/45/Unstable.png", DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
             {
                 AbstractSingleActor target = log.FindActor(dl.To);
-                Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
                 {
                     return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));

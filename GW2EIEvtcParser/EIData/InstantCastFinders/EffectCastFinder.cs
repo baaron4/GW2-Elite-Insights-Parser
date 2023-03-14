@@ -51,18 +51,11 @@ namespace GW2EIEvtcParser.EIData
                             lastTime = effectEvent.Time;
                             continue;
                         }
-                        if (_triggerCondition != null)
-                        {
-                            if (_triggerCondition(effectEvent, combatData, agentData, skillData))
-                            {
-                                lastTime = effectEvent.Time;
-                                res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
-                            }
-                        }
-                        else
+                        if (_triggerCondition == null || _triggerCondition(effectEvent, combatData, agentData, skillData))
                         {
                             lastTime = effectEvent.Time;
-                            res.Add(new InstantCastEvent(effectEvent.Time, skillData.Get(SkillID), GetAgent(effectEvent)));
+                            AgentItem caster = GetAgent(effectEvent);
+                            res.Add(new InstantCastEvent(GetTime(effectEvent, caster, combatData), skillData.Get(SkillID), caster));
                         }
                     }
                 }

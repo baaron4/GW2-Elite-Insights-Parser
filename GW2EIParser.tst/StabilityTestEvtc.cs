@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIParser.Exceptions;
@@ -10,16 +12,33 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIParser.tst
 {
+
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private static bool Loop(List<string> failed, List<string> messages, string file)
+        internal class EVTCTestItem
+        {
+            public string File { get; }
+            public bool Failed { get; private set; }
+            public string FailedMessage { get; private set; }
+            public EVTCTestItem(string file)
+            {
+                File = file;
+            }
+            public void SetFailure(string message)
+            {
+                Failed = true;
+                FailedMessage = message;
+            }
+        }
+        private static bool Loop(EVTCTestItem evtcTestItem)
         {
             try
             {
-                ParsedEvtcLog log = TestHelper.ParseLog(file, TestHelper.APIController);
+                ParsedEvtcLog log = TestHelper.ParseLog(evtcTestItem.File, TestHelper.APIController);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
@@ -28,8 +47,7 @@ namespace GW2EIParser.tst
             {
                 if (canc.InnerException == null || !(canc.InnerException is EIException))
                 {
-                    failed.Add(file);
-                    messages.Add(canc.Message);
+                    evtcTestItem.SetFailure(canc.Message);
                     return false;
                 }
                 return true;
@@ -38,8 +56,7 @@ namespace GW2EIParser.tst
             {
                 if (!(ex is EIException))
                 {
-                    failed.Add(file);
-                    messages.Add(ex.Message);
+                    evtcTestItem.SetFailure(ex.Message);
                     return false;
                 }
                 return true;
@@ -51,7 +68,7 @@ namespace GW2EIParser.tst
             return true;
         }
 
-        private static void GenerateCrashData(List<string> failed, List<string> messages, string type, bool copy)
+        private static void GenerateCrashData(List<EVTCTestItem> evtcTestItems, string type, bool copy)
         {
             string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
 
@@ -63,17 +80,18 @@ namespace GW2EIParser.tst
                 File.Delete(logName);
             }
 
-            var failedList = failed.ToList();
-            var messagesList = messages.ToList();
             var dict = new Dictionary<string, string>();
-            for (int i = 0; i < failedList.Count; i++)
+            foreach (EVTCTestItem evtcTestItem in evtcTestItems)
             {
-                string evtcName = failedList[i].Split('\\').Last();
-                if (copy)
+                if (evtcTestItem.Failed)
                 {
-                    File.Copy(failedList[i], testLocation + "Logs/" + evtcName, true);
+                    string evtcName = evtcTestItem.File.Split('\\').Last();
+                    if (copy)
+                    {
+                        File.Copy(evtcTestItem.File, testLocation + "Logs/" + evtcName, true);
+                    }
+                    dict[evtcName] = evtcTestItem.FailedMessage;
                 }
-                dict[evtcName] = messagesList[i];
             }
 
             using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
@@ -96,6 +114,34 @@ namespace GW2EIParser.tst
             }
         }
 
+
+        private static List<List<EVTCTestItem>> GetSplitList(IReadOnlyList<EVTCTestItem> logFiles)
+        {
+            int splitCount = Math.Max(Environment.ProcessorCount / 2, 1);
+            var splitLogFiles = new List<List<EVTCTestItem>>();
+            var sizeSortedLogFiles = new List<EVTCTestItem>(logFiles);
+            for (int i = 0; i < splitCount; i++)
+            {
+                splitLogFiles.Add(new List<EVTCTestItem>());
+            }
+            sizeSortedLogFiles.Sort((x, y) =>
+            {
+                var fInfoX = new FileInfo(x.File);
+                long xValue = fInfoX.Exists ? fInfoX.Length : 0;
+                var fInfoY = new FileInfo(y.File);
+                long yValue = fInfoY.Exists ? fInfoY.Length : 0;
+                return xValue.CompareTo(yValue);
+            });
+
+            int index = 0;
+            foreach (EVTCTestItem file in sizeSortedLogFiles)
+            {
+                splitLogFiles[index].Add(file);
+                index = (index + 1) % splitCount;
+            }
+            return splitLogFiles;
+        }
+
         [Test]
         public void TestEvtc()
         {
@@ -106,15 +152,12 @@ namespace GW2EIParser.tst
                 Directory.CreateDirectory(testLocation);
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-            var failed = new List<string>();
-            var messages = new List<string>();
-            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
-            toCheck.ForEach(file => Loop(failed, messages, file));
+            GenerateCrashData(toCheck, "evtc", true);
 
-            GenerateCrashData(failed, messages, "evtc", true);
-
-            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
+            Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
         }
 
         [Test]
@@ -126,14 +169,12 @@ namespace GW2EIParser.tst
                 Directory.CreateDirectory(testLocation);
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-            var failed = new List<string>();
-            var messages = new List<string>();
-            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
-            toCheck.ForEach(file => Loop(failed, messages, file));
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-            GenerateCrashData(failed, messages, "evtczip", true);
+            GenerateCrashData(toCheck, "evtczip", true);
 
-            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
+            Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
         }
 
         [Test]
@@ -146,14 +187,12 @@ namespace GW2EIParser.tst
             }
             Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-            var failed = new List<string>();
-            var messages = new List<string>();
-            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
-            toCheck.ForEach(file => Loop(failed, messages, file));
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-            GenerateCrashData(failed, messages, "zevtc", true);
+            GenerateCrashData(toCheck, "zevtc", true);
 
-            Assert.IsTrue(failed.Count == 0, "Check Crashes folder");
+            Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
         }
 
         [Test]
@@ -164,41 +203,39 @@ namespace GW2EIParser.tst
             {
                 Directory.CreateDirectory(testLocation);
             }
-            var failed = new List<string>();
             int failedCount = 0;
-            var messages = new List<string>();
-            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
+            var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            foreach (EVTCTestItem evtcTestItem in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(evtcTestItem))
                 {
-                    File.Delete(file);
+                    File.Delete(evtcTestItem.File);
                 }
             }
-            GenerateCrashData(failed, messages, "zevtc_remaining", false);
-            failedCount += failed.Count;
+            GenerateCrashData(toCheck, "zevtc_remaining", false);
+            failedCount += toCheck.Count(x => x.Failed);
 
-            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
+            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            foreach (EVTCTestItem evtcTestItem in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(evtcTestItem))
                 {
-                    File.Delete(file);
+                    File.Delete(evtcTestItem.File);
                 }
             }
-            GenerateCrashData(failed, messages, "evtc_remaining", false);
-            failedCount += failed.Count;
+            GenerateCrashData(toCheck, "evtc_remaining", false);
+            failedCount += toCheck.Count(x => x.Failed);
 
-            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).ToList();
-            foreach (string file in toCheck)
+            toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+            foreach (EVTCTestItem evtcTestItem in toCheck)
             {
-                if (Loop(failed, messages, file))
+                if (Loop(evtcTestItem))
                 {
-                    File.Delete(file);
+                    File.Delete(evtcTestItem.File);
                 }
             }
-            GenerateCrashData(failed, messages, "evtczip_remaining", false);
-            failedCount += failed.Count;
+            GenerateCrashData(toCheck, "evtczip_remaining", false);
+            failedCount += toCheck.Count(x => x.Failed);
 
             Assert.IsTrue(failedCount == 0, "Check Crashes folder");
         }

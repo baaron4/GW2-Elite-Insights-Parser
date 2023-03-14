@@ -209,6 +209,8 @@ namespace GW2EIEvtcParser
             Effect = 45,
             EffectIDToGUID = 46,
             LogStartNPCUpdate = 47,
+            Idle = 48,
+            ExtensionCombat = 49,
             Unknown
         };
 
@@ -451,7 +453,9 @@ namespace GW2EIEvtcParser
         private const int BloodstoneShardButton = -33;
         private const int SiegeChest = -34;
         private const int Mine = -35;
+        private const int Environment = -36;
 
+        public const int NonIdentifiedSpecies = 0;
 
         //
 
@@ -748,17 +752,19 @@ namespace GW2EIEvtcParser
             FractalVindicator = 19684,
             FractalAvenger = 15960,
             // MAMA
+            Arkk = 16902,
             GreenKnight = 16906,
             RedKnight = 16974,
             BlueKnight = 16899,
             TwistedHorror = 17009,
             // Siax
-            SiaxHallucination = 17002,
+            VolatileHallucinationSiax = 17002,
             EchoOfTheUnclean = 17068,
             NightmareHallucinationSiax = 16911,
             // Ensolyss
             NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
             NightmareHallucination2 = 17033, // (small adds, last phase)
+            NightmareAltar = 35791,
             // Skorvald
             FluxAnomaly4 = 17673,
             FluxAnomaly3 = 17851,
@@ -833,6 +839,8 @@ namespace GW2EIEvtcParser
             VoidThornheart1 = 24406,
             VoidThornheart2 = 23688,
             VoidWorm = 23701,
+            //
+            Environment = ArcDPSEnums.Environment,
             //
             Unknown = int.MaxValue,
         };

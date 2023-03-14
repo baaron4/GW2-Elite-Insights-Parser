@@ -18,9 +18,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new HitOnPlayerMechanic(KingsWrath, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
-            new HitOnPlayerMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
-            new PlayerBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
+            new PlayerDstHitMechanic(KingsWrath, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
+            new PlayerDstHitMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
+            new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
             }
             );
             Extension = "brokenking";
@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem brokenKing = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EaterOfSouls).FirstOrDefault();
+            AgentItem brokenKing = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.BrokenKing).FirstOrDefault();
             if (brokenKing == null)
             {
                 throw new MissingKeyActorsException("Broken King not found");
@@ -85,7 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.BrokenKing:
-                    var Cone = cls.Where(x => x.SkillId == 48066).ToList();
+                    var Cone = cls.Where(x => x.SkillId == KingsWrath).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(48218, 48218), // Biting Aura
+                new DamageCastFinder(BitingAura, BitingAura), // Biting Aura
             };
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

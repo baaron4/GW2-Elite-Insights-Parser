@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.IO.Compression;
 
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders
 {
     public class HTMLBuilder

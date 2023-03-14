@@ -92,7 +92,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonPlayer.TargetPowerDamage1S = targetPowerDamage1S;
                 jsonPlayer.TargetConditionDamage1S = targetConditionDamage1S;
                 jsonPlayer.TargetBreakbarDamage1S = targetBreakbarDamage1S;
-                Dictionary<long, BuffsGraphModel> buffGraphs = player.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = player.GetBuffGraphs(log);
                 if (buffGraphs.TryGetValue(SkillIDs.NumberOfClones, out BuffsGraphModel states))
                 {
                     jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states);

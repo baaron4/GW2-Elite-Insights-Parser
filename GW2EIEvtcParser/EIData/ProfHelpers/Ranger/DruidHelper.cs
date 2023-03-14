@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar), // Celestial Avatar
-            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar), // Release Celestial Avatar
+            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Celestial Avatar
+            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Release Celestial Avatar
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingEnable((combatData) => !combatData.HasEffectData), // Disable this one when effect events are present
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Druid)
