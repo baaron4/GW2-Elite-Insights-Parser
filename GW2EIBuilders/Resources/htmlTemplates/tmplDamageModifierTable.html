@@ -3,10 +3,10 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
-                    <th class="sub-cell" @click="sortBy('Sub')">Sub</th>
-                    <th class="prof-cell" @click="sortBy('Prof')"></th>
-                    <th class="text-left" @click="sortBy('Name')">Name</th>
-                    <th class="stat-cell" v-for="(modifier, index) in modifiers" @click="sortBy('Modifier', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
+                    <th class="sub-cell" :class="getHeaderClass('Sub')" @click="sortBy('Sub')">Sub</th>
+                    <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
+                    <th class="stat-cell" v-for="(modifier, index) in modifiers" :class="getHeaderClass('Data', index)" @click="sortBy('Data', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
                         <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                     </th>
                 </tr>
@@ -14,13 +14,13 @@
             <tbody>
                 <tr v-for="row in sortData((mode ? tableDataTarget.rows : tableData.rows))"
                     :class="{active: row.player.id === playerindex}">
-                    <td>{{row.player.group}}</td>
-                    <td :data-original-title="row.player.profession">
+                    <td :class="getBodyClass('Sub')">{{row.player.group}}</td>
+                    <td :class="getBodyClass('Prof')":data-original-title="row.player.profession">
                         <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
                             style="display:none">{{row.player.profession}}</span>
                     </td>
-                    <td class="text-left">{{row.player.name}}</td>
-                    <td v-for="(modifier, index) in modifiers" :class="{approximate: modifier.approximate}"
+                    <td :class="getBodyClass('Name')"class="text-left">{{row.player.name}}</td>
+                    <td v-for="(modifier, index) in modifiers" :class="getBodyClass('Data', index, modifier.approximate)"
                         :data-original-title="getTooltip(row.data[index], modifier)">
                         {{getCellValue(row.data[index], modifier)}}
                     </td>
@@ -44,7 +44,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [numberComponent],
+        mixins: [numberComponent, sortedTableComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -52,7 +52,7 @@
                 cacheTarget: new Map(),
                 sortdata: {
                     order: "asc",
-                    index: 0,
+                    index: -1,
                     key: "Prof"
                 }
             };
@@ -216,14 +216,15 @@
         },
         methods: {
             sortBy: function(key, index) {
-                var oldKey = this.sortdata.key;
-                this.sortdata.key = key;
-                if (oldKey !== key) {
-                    this.sortdata.order = "asc";
-                } else {
-                    this.sortdata.order = this.sortdata.order === "asc" ? "desc" : "asc";
-                }
-                this.sortdata.index = index || 0;
+                this.sortByBase(this.sortdata, key, index);
+            },
+            getHeaderClass: function(key, index) {
+                return this.getHeaderClassBase(this.sortdata, key, index);
+            },
+            getBodyClass: function(key, index, approximate) {
+                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                classes.approximate = !!approximate;
+                return classes;
             },
             sortData: function(rows) {
                 var order = this.sortdata.order === "asc" ? 1 : -1;
@@ -237,10 +238,13 @@
                     case "Name":
                         rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
                         break;
-                    case "Modifier":
+                    case "Data":
                         var index = this.sortdata.index;
                         var modifier = this.modifiers[index];
                         rows.sort((x,y) => order * this.getCellValue(x.data[index], modifier).localeCompare(this.getCellValue(y.data[index], modifier)));
+                        break;
+                    default:
+                        return null;
                         break;
                 }
                 return rows;
