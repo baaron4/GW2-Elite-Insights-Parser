@@ -4,13 +4,13 @@
             <thead>
                 <tr>
                     <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
-                    <th class="text-left cr-dps-table-name" :class="getHeaderClass('Name')" @click="sortBy('Name')">
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
                         Name
                     </th>
-                    <th class="cr-dps-table-dps" :class="getHeaderClass('All')" @click="sortBy('All')">
+                    <th :class="getHeaderClass('All')" @click="sortBy('All')">
                         All
                     </th>
-                    <th class="cr-dps-table-dps" v-if="!targetless" v-for="(col, index) in tableData.cols"
+                    <th v-if="!targetless" v-for="(col, index) in tableData.cols"
                         :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
                         <span :title="col.name">
                             {{col.name}}
@@ -26,7 +26,7 @@
                             {{row.player.profession}}
                         </span>
                     </td>
-                    <td class="text-left cr-dps-table-name" :class="getBodyClass('Name')">
+                    <td class="text-left" :class="getBodyClass('Name')">
                         <span :title="row.player.name">
                             {{row.player.name}}
                         </span>
