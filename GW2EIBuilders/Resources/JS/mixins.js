@@ -126,3 +126,33 @@ var timeRefreshComponent = {
         },
     },
 };
+
+var sortedTableComponent = {
+    methods:  {       
+        sortByBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            if (sortdata.key !== key || index !== sortdata.index) {
+                sortdata.order = "asc";
+            } else {
+                sortdata.order = sortdata.order === "asc" ? "desc" : "asc";
+            }
+            sortdata.key = key;
+            sortdata.index = index;
+        },
+        getHeaderClassBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            if (sortdata.key === key && sortdata.index === index) {
+                if (sortdata.order === "asc") {
+                    return {"sorted_asc" : true};
+                } else {
+                    return {"sorted_desc": true};
+                }
+            };
+            return {'sorted': true};
+        },
+        getBodyClassBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            return {'sorted': sortdata.key === key && sortdata.index === index};
+        },
+    }
+};

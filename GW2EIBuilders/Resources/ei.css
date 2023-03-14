@@ -733,6 +733,46 @@ th.cr-dps-table-dps {
     max-width: 105px;
 }
 
+thead .sorted, thead .sorted_asc, thead .sorted_desc {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+}
+
+thead .sorted:before, thead .sorted_asc:before, thead .sorted_desc:before {
+    top: 5px;
+    right: 0.85em;
+    content: "\2191";
+    position: absolute;
+    display: block;
+}
+thead .sorted:before, thead .sorted_desc:before {
+    opacity: 0.3;
+}
+thead .sorted_asc:before {
+    opacity: 1.0;
+}
+
+thead .sorted:after, thead .sorted_asc:after, thead .sorted_desc:after {
+    top: 5px;
+    right: 0.5em;
+    content: "\2193";
+    position: absolute;
+    display: block;
+}
+thead .sorted:after, thead .sorted_asc:after {
+    opacity: 0.3;
+}
+thead .sorted_desc:after {
+    opacity: 1.0;
+}
+
+
+
+td.sorted {
+    background-color: rgba(39, 128, 227, 0.05);
+}
+
 td.cr-dps-table-dps {
     min-width: 120px;
     max-width: 120px;
