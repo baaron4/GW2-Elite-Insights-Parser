@@ -6,7 +6,7 @@
                     <th class="sub-cell">Sub</th>
                     <th class="prof-cell"></th>
                     <th class="text-left">Name</th>
-                    <th>Account</th>
+                    <th class="text-left" >Account</th>
                     <th class="damage-cell" data-original-title="Healed">
                         <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png"
                             alt="Healed" class="icon icon-hover">
@@ -44,7 +44,7 @@
                             style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td class="text-left">{{row.player.name}}</td>
-                    <td>{{row.player.acc}}</td>
+                    <td class="text-left" >{{row.player.acc}}</td>
                     <td v-for="(value, id) in row.incomingHeal">
                         {{value}}
                     </td>
