@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 start = c.EndTime;
                 phases.Add(phase);
             }
-            if (fightEnd - start > 3000)
+            if (fightEnd - start > ParserHelper.PhaseTimeLimit)
             {
                 var lastPhase = new PhaseData(start, fightEnd, "Final");
                 lastPhase.AddTarget(mainTarget);
