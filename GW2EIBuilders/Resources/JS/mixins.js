@@ -7,27 +7,27 @@ var numberComponent = {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         },
         round: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             return Math.round(value);
         },
         round1: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 10;
             return Math.round(mul * value) / mul;
         },
         round2: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 100;
             return Math.round(mul * value) / mul;
         },
         round3: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 1000;
