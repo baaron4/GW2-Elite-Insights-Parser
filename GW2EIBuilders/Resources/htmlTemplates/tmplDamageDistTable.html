@@ -295,7 +295,7 @@
                     case "Skill":
                         rows.sort((x,y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
                         break;
-                    case "Damage":
+                    case "Data":
                         var sortFunc = x => {
                             var value = this.sortdata.sortFunc(x);
                             if (value === 0) {
