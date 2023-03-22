@@ -830,6 +830,10 @@ namespace GW2EIEvtcParser.EIData
                 new Buff("Bowl of Kimchi Tofu Stew", BowlOfKimchiTofuStew, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/2/22/Bowl_of_Kimchi_Tofu_Stew.png"),
                 new Buff("Meaty Asparagus Skewer", MeatyAsparagusSkewer, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/d/d6/Meaty_Asparagus_Skewer.png"),
                 new Buff("Bloodstone Bisque", BloodstoneBisque, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/1/14/Bowl_of_Bloodstone_Bisque.png"),
+                new Buff("Plate of Spicy Moa Wings", PlateOfSpicyMoaWings, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/f/ff/Plate_of_Spicy_Moa_Wings.png"),
+                new Buff("Steak with Winterberry Sauce", SteakWithWinterberrySauce, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/5/50/Steak_with_Winterberry_Sauce.png"),
+                new Buff("Feast of Delectable Birthday Cake", FeastOfDelectableBirthdayCake, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/9/93/Feast_of_Delectable_Birthday_Cake.png"),
+                new Buff("Jerk Poultry and Nopal Flatbread Sandwich", JerkPoultryAndNopallFlatbreadSandwich, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/3/3c/Jerk_Poultry_and_Nopal_Flatbread_Sandwich.png"),
         };
 
         internal static readonly List<Buff> Utilities = new List<Buff>
@@ -961,7 +965,6 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> AscendedFood = new List<Buff>
         {
                 // Ascended Food
-                // Feasts with yet unknown IDs are also added with ID of -1, the IDs can be added later on demand
                 new Buff("Bowl of Fruit Salad with Cilantro Garnish", BowlOfFruitSaladWithCilantroGarnish, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png"),
                 new Buff("Bowl of Fruit Salad with Mint Garnish", BowlOfFruitSaladWithMintGarnish, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png"),
                 new Buff("Bowl of Fruit Salad with Orange-Clove Syrup", BowlOfFruitSaladWithOrangeCloveSyrup, Source.Item, BuffClassification.Nourishment, "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png"),

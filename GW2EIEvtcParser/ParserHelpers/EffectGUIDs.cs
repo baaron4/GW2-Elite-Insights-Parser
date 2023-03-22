@@ -106,6 +106,11 @@ namespace GW2EIEvtcParser
         public const string EnsolyssMiasmaDoughnut66_15 = "3AE042F82A10B84DB7487B0C0F4D2AB1";
         public const string EnsolyssMiasmaDoughnut15_0 = "AB294EC140644E48BC739B8E303D2762";
         public const string EnsolyssNightmareAltarShockwave = "AA31A20BDC52324B945FD660D60429EB";
+        // Shattered Observatory Fractal
+        public const string SolarBolt = "FA097ABEFB8CEF4B89EB12825EEE1FB9";
+        public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
+        public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
+        public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";

@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -20,19 +21,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstHitMechanic(new long[]{ CombustionRush1, CombustionRush2, CombustionRush3 }, "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
-            new PlayerDstHitMechanic(new long[] { PunishingKick1, PunishingKick2 }, "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
-            new PlayerDstHitMechanic(new long[] { CranialCascade1,CranialCascade2 }, "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
-            new PlayerDstHitMechanic(new long[] { RadiantFury1, RadiantFury2 }, "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
+            new PlayerDstHitMechanic(new long[] { PunishingKickAnomaly, PunishingKickSkorvald }, "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
+            new PlayerDstHitMechanic(new long[] { CranialCascadeAnomaly,CranialCascade2 }, "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
+            new PlayerDstHitMechanic(new long[] { RadiantFurySkorvald, RadiantFury2 }, "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
             new PlayerDstHitMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
-            new PlayerDstHitMechanic(new long[] {HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
+            new PlayerDstHitMechanic(new long[] { HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
             new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
             new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            //new HitOnPlayerMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new PlayerDstBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstHitMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
             new PlayerDstHitMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
             new PlayerDstHitMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
+            new PlayerDstBuffApplyMechanic(SkorvaldsIre, "Skorvald Fixate", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire",  "Skorvald's Fixate", 0),
             });
             Extension = "skorv";
             Icon = EncounterIconSkorvald;
@@ -100,9 +101,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             int count = 0;
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) || 
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) || 
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) || 
+                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) ||
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) ||
+                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) ||
                     target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly4))
                 {
                     target.OverrideName(target.Character + " " + (++count));
@@ -152,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     SolarBoltCM,
                     SupernovaCM,
                 };
-                if(combatData.GetSkills().Intersect(cmSkills).Any()) 
+                if (combatData.GetSkills().Intersect(cmSkills).Any())
                 {
                     return FightData.EncounterMode.CM;
                 }
@@ -206,6 +207,370 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.SolarBloom
             };
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.Skorvald:
+                    // Horizon Strike
+                    var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4).ToList();
+                    foreach (AbstractCastEvent c in horizonStrike)
+                    {
+                        int start = (int)c.Time + 100;
+                        int duration = 3900;
+                        int radius = 1200;
+                        int angle = 70;
+                        int shiftingAngle = 45;
+                        int sliceSpawnInterval = 750;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D facingDirection = GetFacingPoint3D(log, target, c, duration);
+                        double degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        (float, float) xy = (facingDirection.X, facingDirection.Y);
+
+                        // Horizon Strike starting at Skorvald's facing point
+                        if (c.SkillId == HorizonStrikeSkorvald4)
+                        {
+                            for (int i = 0; i < 4; i++)
+                            {
+                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, xy, radius, angle);
+                                start += sliceSpawnInterval;
+                                attackEnd += sliceSpawnInterval;
+                                degree -= shiftingAngle;
+                                xy = DegreeToRadiansTrigonometricF(degree);
+                            }
+                        }
+                        // Starting at Skorvald's 90° of facing point
+                        if (c.SkillId == HorizonStrikeSkorvald2)
+                        {
+                            degree -= 90;
+                            xy = DegreeToRadiansTrigonometricF(degree);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, xy, radius, angle);
+                                start += sliceSpawnInterval;
+                                attackEnd += sliceSpawnInterval;
+                                degree += shiftingAngle;
+                                xy = DegreeToRadiansTrigonometricF(degree);
+                            }
+                        }
+                    }
+
+                    // Crimson Dawn
+                    IReadOnlyList<long> skillIds = new List<long>() { CrimsonDawnSkorvaldCM1, CrimsonDawnSkorvaldCM2, CrimsonDawnSkorvaldCM3, CrimsonDawnSkorvaldCM4 };
+                    var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId)).ToList();
+                    foreach (AbstractCastEvent c in crimsonDawn)
+                    {
+                        int radius = 1200;
+                        int angle = 295;
+                        int start = (int)c.Time;
+                        int duration = 3000;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D facingDirection = GetFacingPoint3D(log, target, c, duration);
+                        double degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        (float, float) xy = (facingDirection.X, facingDirection.Y);
+
+                        if (c.SkillId == CrimsonDawnSkorvaldCM2)
+                        {
+                            degree += 90;
+                            xy = DegreeToRadiansTrigonometricF(degree);
+                        }
+                        if (c.SkillId == CrimsonDawnSkorvaldCM1)
+                        {
+                            degree += 270;
+                            xy = DegreeToRadiansTrigonometricF(degree);
+                        }
+
+                        var point = new Point3D(xy.Item1, xy.Item2);
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, point, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, point, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    }
+
+                    // Punishing Kick
+                    var punishingKick = casts.Where(x => x.SkillId == PunishingKickSkorvald).ToList();
+                    foreach (AbstractCastEvent c in punishingKick)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1850;
+                        int translation = 150;
+                        int cascadeCount = 4;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
+                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+
+                        // Frontal
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
+                    }
+
+                    // Solar Bolt
+                    EffectGUIDEvent solarBolt = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SolarBolt);
+                    if (solarBolt != null)
+                    {
+                        var solarBoltEffects = log.CombatData.GetEffectEventsByEffectID(solarBolt.ContentID).ToList();
+                        foreach (EffectEvent solarBoltEffect in solarBoltEffects)
+                        {
+                            int aoeRadius = 100;
+                            int aoeTimeout = 12000;
+                            int start = (int)solarBoltEffect.Time;
+                            int attackEnd = start + aoeTimeout;
+                            replay.Decorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(solarBoltEffect.Position)));
+                        }
+                    }
+
+                    // Radiant Fury
+                    var radiantFury = casts.Where(x => x.SkillId == RadiantFurySkorvald).ToList();
+                    foreach (AbstractCastEvent c in radiantFury)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 2700;
+                        int expectedHitTime = start + duration;
+                        int attackEnd = start + duration;
+                        int endWave = attackEnd + 900;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        if (expectedHitTime <= attackEnd)
+                        {
+                            // Shockwave
+                            AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
+                        }
+                    }
+
+                    // Supernova - Phase Oneshot
+                    var supernova = casts.Where(x => x.SkillId == SupernovaCM).ToList();
+                    foreach (AbstractCastEvent c in supernova)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 75000;
+                        int expectedHitTime = start + duration;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+
+                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    }
+
+                    // Solar Cyclone
+                    var solarCyclone = casts.Where(x => x.SkillId == SolarCyclone).ToList();
+                    foreach (AbstractCastEvent c in solarCyclone)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 17900;
+                        int interval = 300;
+                        int attackEnd = start + duration;
+
+                        EffectGUIDEvent kick = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.KickGroundEffect);
+                        if (kick != null)
+                        {
+                            IEnumerable<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID).ToList().Where(x => x.Time >= start && x.Time < start + duration);
+                            foreach (EffectEvent kickEffect in kickEffects)
+                            {
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z), 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                                start += interval;
+                                attackEnd += interval;
+                            }
+                        }
+                    }
+
+                    // Cranial Cascade
+                    var cranialCascadeSkorvald = casts.Where(x => x.SkillId == CranialCascadeSkorvald).ToList();
+                    foreach (AbstractCastEvent c in cranialCascadeSkorvald)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1750;
+                        int angle = 35;
+                        int cascadeCount = 4;
+                        int translation = 150;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
+                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+
+                        // Frontal
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
+                        // Left
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation - angle, translation, cascadeCount);
+                        // Right
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.FluxAnomaly1:
+                case (int)ArcDPSEnums.TrashID.FluxAnomaly2:
+                case (int)ArcDPSEnums.TrashID.FluxAnomaly3:
+                case (int)ArcDPSEnums.TrashID.FluxAnomaly4:
+                    // Solar Stomp
+                    var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
+                    foreach (AbstractCastEvent c in solarStomp)
+                    {
+                        int radius = 280;
+                        int castTime = 2250;
+                        int start = (int)c.Time;
+                        int attackEnd = start + castTime;
+                        int endWave = attackEnd + castTime;
+
+                        // Stomp
+                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        // Shockwave
+                        AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
+                    }
+
+                    // Punishing Kick
+                    var punishingKickAnomaly = casts.Where(x => x.SkillId == PunishingKickAnomaly).ToList();
+                    foreach (AbstractCastEvent c in punishingKickAnomaly)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1850;
+                        int translation = 150;
+                        int cascadeCount = 4;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
+                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+
+                        // Frontal
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
+                    }
+
+                    // Cranial Cascade
+                    var cranialCascadeAnomaly = casts.Where(x => x.SkillId == CranialCascadeAnomaly).ToList();
+                    foreach (AbstractCastEvent c in cranialCascadeAnomaly)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1750;
+                        int angle = 35;
+                        int cascadeCount = 4;
+                        int translation = 150;
+                        int attackEnd = start + duration;
+                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
+                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+
+                        Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
+                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+
+                        // Left
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation - angle, translation, cascadeCount);
+                        // Right
+                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
+                    }
+
+                    // Mist Smash
+                    var mistSmash = casts.Where(x => x.SkillId == MistSmash).ToList();
+                    foreach (AbstractCastEvent c in mistSmash)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1933;
+                        int radius = 160;
+                        int attackEnd = start + duration;
+                        int waveEnd = attackEnd + 2250;
+
+                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        // Nightmare Discharge Shockwave
+                        replay.Decorations.Add(new CircleDecoration(false, waveEnd, 1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.SolarBloom:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Mist Bomb - Both for Skorvald and Flux Anomalies
+            EffectGUIDEvent mistBomb = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.MistBomb);
+            if (mistBomb != null)
+            {
+                var mistBombEffects = log.CombatData.GetEffectEventsByEffectID(mistBomb.ContentID).ToList();
+                foreach (EffectEvent mistBombEffect in mistBombEffects)
+                {
+                    int aoeRadius = 130;
+                    int aoeTimeout = 300;
+                    int start = (int)mistBombEffect.Time;
+                    int attackEnd = start + aoeTimeout;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
+                }
+            }
+        }
+
+        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, (float, float) xy, int radius, int angle)
+        {
+            var front = new Point3D(xy.Item1, xy.Item2);
+            Point3D flip = front * -1;
+
+            // Indicator
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, front, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, flip, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            // Attack hit
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, front, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, flip, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+        }
+
+        private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
+        {
+            replay.Decorations.Add(new CircleDecoration(false, attackEnd, radius, (start, attackEnd), "rgba(120, 0, 0, 0.6)", new AgentConnector(target)));
+        }
+
+        private static int GetAttackEndByStunTime(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration, int attackEnd)
+        {
+            Segment stun = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+            return stun != null ? (int)Math.Min(stun.Start, attackEnd) : attackEnd;
+        }
+
+        private static int GetAttackEndByDeterminedTime(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration, int attackEnd)
+        {
+            Segment det = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
+            return det != null ? (int)Math.Min(det.Start, attackEnd) : attackEnd;
+        }
+
+        private static Point3D GetFacingPoint3D(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration)
+        {
+            IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+            ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + duration); // 200 for turning delay event
+            if (facingDirection != null)
+            {
+                return new Point3D(facingDirection.X, facingDirection.Y);
+            }
+            // Last facing direction polled
+            ParametricPoint3D lastDirection = list.LastOrDefault(x => x.Time < c.Time);
+            if (lastDirection != null)
+            {
+                return new Point3D(lastDirection.X, lastDirection.Y);
+            }
+            return new Point3D(0, 0);
+        }
+
+        private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float rotation, int translation, int cascadeCount)
+        {
+            replay.Decorations.Add(new RotatedRectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+
+            for (int i = 0; i < cascadeCount; i++)
+            {
+                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                attackEnd += 300;
+                translation += 300;
+            }
         }
     }
 }
