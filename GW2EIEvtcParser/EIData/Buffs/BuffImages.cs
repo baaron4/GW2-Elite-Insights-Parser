@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.EIData.Buffs
+﻿namespace GW2EIEvtcParser.EIData.Buffs
 {
+    /// <summary>
+    /// Class containing URL <see cref="string"/> for buff icons.
+    /// </summary>
     internal static class BuffImages
     {
         #region Boons
