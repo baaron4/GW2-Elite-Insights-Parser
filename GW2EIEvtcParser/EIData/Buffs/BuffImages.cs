@@ -90,19 +90,27 @@
 
         #region Gear
         // Sigils
-        internal const string SigilConcentration = "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png";
-        internal const string SigilCorruption = "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png";
-        internal const string SigilLife = "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png";
-        internal const string SigilPerception = "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png";
-        internal const string SigilBloodlust = "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png";
-        internal const string SigilBounty = "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png";
-        internal const string SigilBenevolence = "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png";
-        internal const string SigilMomentum = "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png";
-        internal const string SigilStars = "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png";
-        internal const string SigilSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
-        internal const string SigilDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
+        internal const string SuperiorSigilOfConcentration = "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png";
+        internal const string MinorSigilOfCorruption = "https://wiki.guildwars2.com/images/5/50/Minor_Sigil_of_Corruption.png";
+        internal const string MajorSigilOfCorruption = "https://wiki.guildwars2.com/images/d/dd/Major_Sigil_of_Corruption.png";
+        internal const string SuperiorSigilOfCorruption = "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png";
+        internal const string MajorSigilOfLife = "https://wiki.guildwars2.com/images/2/2e/Major_Sigil_of_Life.png";
+        internal const string SuperiorSigilOfLife = "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png";
+        internal const string MajorSigilOfPerception = "https://wiki.guildwars2.com/images/c/cf/Major_Sigil_of_Perception.png";
+        internal const string SuperiorSigilOfPerception = "https://wiki.guildwars2.com/images/c/cc/Superior_Sigil_of_Perception.png";
+        internal const string MinorSigilOfBloodlust = "https://wiki.guildwars2.com/images/2/23/Minor_Sigil_of_Bloodlust.png";
+        internal const string MajorSigilOfBloodlust = "https://wiki.guildwars2.com/images/a/ac/Major_Sigil_of_Bloodlust.png";
+        internal const string SuperiorSigilOfBloodlust = "https://wiki.guildwars2.com/images/f/fb/Superior_Sigil_of_Bloodlust.png";
+        internal const string SuperiorSigilOfBounty = "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png";
+        internal const string MinorSigilOfBenevolence = "https://wiki.guildwars2.com/images/f/ff/Minor_Sigil_of_Benevolence.png";
+        internal const string MajorSigilOfBenevolence = "https://wiki.guildwars2.com/images/c/c8/Major_Sigil_of_Benevolence.png";
+        internal const string SuperiorSigilOfBenevolence = "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png";
+        internal const string SuperiorSigilOfMomentum = "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png";
+        internal const string SuperiorSigilOfStars = "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png";
+        internal const string SuperiorSigilOfSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
+        internal const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
         // Runes
-        internal const string RuneMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
+        internal const string SuperiorRuneOfTheMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
         #endregion Gear
 
         #region Fractal
