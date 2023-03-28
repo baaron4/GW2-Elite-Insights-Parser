@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal class RotatedRectangleDecoration : RectangleDecoration
     {
@@ -20,7 +22,7 @@
 
         public RotatedRectangleDecoration(bool fill, int growing, int width, int height, float rotation, int translation, int spinAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, width, height, lifespan, color, connector)
         {
-            Rotation = rotation;
+            Rotation = (float)Math.Round(rotation, ParserHelper.CombatReplayDataDigit);
             RadialTranslation = translation;
             SpinAngle = spinAngle;
         }

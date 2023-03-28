@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public PieDecoration(bool fill, int growing, int radius, float direction, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
         {
-            Direction = direction;
+            Direction = (float)Math.Round(direction, ParserHelper.CombatReplayDataDigit);
             OpeningAngle = openingAngle;
         }
 

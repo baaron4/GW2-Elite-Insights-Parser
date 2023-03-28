@@ -231,33 +231,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
                         Point3D facingDirection = GetFacingPoint3D(log, target, c, duration);
-                        double degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
-                        (float, float) xy = (facingDirection.X, facingDirection.Y);
+                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
 
                         // Horizon Strike starting at Skorvald's facing point
                         if (c.SkillId == HorizonStrikeSkorvald4)
                         {
                             for (int i = 0; i < 4; i++)
                             {
-                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, xy, radius, angle);
+                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, degree, radius, angle);
                                 start += sliceSpawnInterval;
                                 attackEnd += sliceSpawnInterval;
                                 degree -= shiftingAngle;
-                                xy = DegreeToRadiansTrigonometricF(degree);
                             }
                         }
                         // Starting at Skorvald's 90° of facing point
                         if (c.SkillId == HorizonStrikeSkorvald2)
                         {
                             degree -= 90;
-                            xy = DegreeToRadiansTrigonometricF(degree);
                             for (int i = 0; i < 4; i++)
                             {
-                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, xy, radius, angle);
+                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, degree, radius, angle);
                                 start += sliceSpawnInterval;
                                 attackEnd += sliceSpawnInterval;
                                 degree += shiftingAngle;
-                                xy = DegreeToRadiansTrigonometricF(degree);
                             }
                         }
                     }
@@ -276,23 +272,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
                         Point3D facingDirection = GetFacingPoint3D(log, target, c, duration);
-                        double degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
-                        (float, float) xy = (facingDirection.X, facingDirection.Y);
+                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
 
                         if (c.SkillId == CrimsonDawnSkorvaldCM2)
                         {
                             degree += 90;
-                            xy = DegreeToRadiansTrigonometricF(degree);
                         }
                         if (c.SkillId == CrimsonDawnSkorvaldCM1)
                         {
                             degree += 270;
-                            xy = DegreeToRadiansTrigonometricF(degree);
                         }
-
-                        var point = new Point3D(xy.Item1, xy.Item2);
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, point, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, point, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
 
                     // Punishing Kick
@@ -363,24 +354,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Solar Cyclone
-                    var solarCyclone = casts.Where(x => x.SkillId == SolarCyclone).ToList();
-                    foreach (AbstractCastEvent c in solarCyclone)
+                    EffectGUIDEvent kick = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.KickGroundEffect);
+                    if (kick != null)
                     {
-                        int start = (int)c.Time;
-                        int duration = 17900;
-                        int interval = 300;
-                        int attackEnd = start + duration;
-
-                        EffectGUIDEvent kick = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.KickGroundEffect);
-                        if (kick != null)
+                        IReadOnlyList<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID);
+                        foreach (EffectEvent kickEffect in kickEffects)
                         {
-                            IEnumerable<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID).ToList().Where(x => x.Time >= start && x.Time < start + duration);
-                            foreach (EffectEvent kickEffect in kickEffects)
-                            {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z) - 90, 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
-                                start += interval;
-                                attackEnd += interval;
-                            }
+                            int start = (int)kickEffect.Time;
+                            int end = start + 300;
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z) - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
                         }
                     }
 
@@ -531,10 +513,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, (float, float) xy, int radius, int angle)
+        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)
         {
-            var front = new Point3D(xy.Item1, xy.Item2);
-            Point3D flip = front * -1;
+            float front = degree;
+            float flip = degree + 180;
 
             // Indicator
             replay.Decorations.Add(new PieDecoration(true, 0, radius, front, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
