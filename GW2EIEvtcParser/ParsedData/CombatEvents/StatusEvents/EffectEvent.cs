@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.ParsedData
             float[] orientationFloats = new float[2];
             Buffer.BlockCopy(orientationBytes, 0, orientationFloats, 0, orientationBytes.Length);
 
-            return new Point3D(orientationFloats[0], orientationFloats[1], BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
+            return new Point3D(orientationFloats[0], orientationFloats[1], -BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
         }
 
         private static ushort ReadDuration(CombatItem evtcItem)

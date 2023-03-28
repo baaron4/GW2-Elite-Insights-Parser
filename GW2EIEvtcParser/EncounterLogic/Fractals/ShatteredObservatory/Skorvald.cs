@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             IEnumerable<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID).ToList().Where(x => x.Time >= start && x.Time < start + duration);
                             foreach (EffectEvent kickEffect in kickEffects)
                             {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(- kickEffect.Orientation.Z) - 90, 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z) - 90, 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
                                 start += interval;
                                 attackEnd += interval;
                             }
