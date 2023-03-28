@@ -309,8 +309,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Life", SuperiorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfLife),
             new Buff("Major Sigil of Perception", MajorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfPerception),
             new Buff("Superior Sigil of Perception", SuperiorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfPerception),
-            new Buff("Minor Sigil of Bloodlust", MinorBorderlandsBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBloodlust),
-            new Buff("Major Sigil of Bloodlust", MajorBorderlandsBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBloodlust),
+            new Buff("Minor Sigil of Bloodlust", MinorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBloodlust),
+            new Buff("Major Sigil of Bloodlust", MajorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBloodlust),
             new Buff("Superior Sigil of Bloodlust", SuperiorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBloodlust),
             new Buff("Superior Sigil of Bounty", SuperiorSigilOfBounty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBounty),
             new Buff("Minor Sigil of Benevolence", MinorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBenevolence),
@@ -322,6 +322,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
             // Runes
             new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk, 93543, GW2Builds.EndOfLife),
+            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffStackType.CappedDuration, 2, BuffClassification.Gear, BuffImages.ConsumeRation),
         };
 
         internal static readonly List<Buff> FractalInstabilities = new List<Buff>()

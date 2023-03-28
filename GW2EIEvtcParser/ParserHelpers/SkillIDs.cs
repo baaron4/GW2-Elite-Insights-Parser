@@ -1052,6 +1052,7 @@
         public const long PlateOfJerkPoultry = 32662;
         public const long PowerHeartsAndMinds = 32762;
         public const long WritOfAccuracy = 32805;
+        public const long HealingGlyph = 32862;
         public const long WritOfStudiedMalice = 32927;
         public const long UnhinderedCombatant = 32931;
         public const long MistlockInstabilitySocialAwkwardness = 32942;
