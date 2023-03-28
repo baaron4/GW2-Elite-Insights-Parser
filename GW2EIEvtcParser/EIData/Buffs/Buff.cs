@@ -201,26 +201,17 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Boons = new List<Buff>
         {
             new Buff("Might", Might, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Boon, BuffImages.Might),
-            new Buff("Fury", Fury, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Fury/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Quickness", Quickness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Quickness/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Alacrity", Alacrity, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Alacrity/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Protection", Protection, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Protection/*, 0 , GW2Builds.May2021Balance*/),
+            new Buff("Fury", Fury, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Fury),
+            new Buff("Quickness", Quickness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Quickness),
+            new Buff("Alacrity", Alacrity, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Alacrity),
+            new Buff("Protection", Protection, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Protection),
             new Buff("Regeneration", Regeneration, Source.Common, BuffStackType.Regeneration, 5, BuffClassification.Boon, BuffImages.Regeneration),
-            new Buff("Vigor", Vigor, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Vigor/*, 0, GW2Builds.May2021Balance*/),
+            new Buff("Vigor", Vigor, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Vigor),
             new Buff("Aegis", Aegis, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Aegis),
             new Buff("Stability", Stability, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Boon, BuffImages.Stability),
-            new Buff("Swiftness", Swiftness, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Swiftness/*, 0, GW2Builds.May2021Balance*/),
+            new Buff("Swiftness", Swiftness, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Swiftness),
             new Buff("Retaliation", Retaliation, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Retaliation, 0, GW2Builds.May2021Balance),
-            new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance/*, 0, GW2Builds.May2021Balance*/),
-            //
-            /*new Buff("Fury", 725, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/46/Fury.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Quickness", 1187, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/b/b4/Quickness.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Alacrity", 30328, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4c/Alacrity.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Protection", 717, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Vigor", 726, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/f/f4/Vigor.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Swiftness", 719, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Resolution", 873, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/0/06/Resolution.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Resistance", 26980, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Boon, "https://wiki.guildwars2.com/images/4/4b/Resistance.png", GW2Builds.May2021Balance, ulong.MaxValue),*/
+            new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance),
             new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution, GW2Builds.May2021Balance, GW2Builds.EndOfLife),
             //
             new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
@@ -233,22 +224,15 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Confusion", Confusion, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Confusion),
             new Buff("Poison", Poison, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Poison),
             new Buff("Torment", Torment, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Torment),
-            new Buff("Blind", Blind, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Blind/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Chilled", Chilled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Chilled/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Crippled", Crippled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Crippled/*, 0, GW2Builds.May2021Balance*/),
+            new Buff("Blind", Blind, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Blind),
+            new Buff("Chilled", Chilled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Chilled),
+            new Buff("Crippled", Crippled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Crippled),
             new Buff("Fear", Fear, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Fear),
-            new Buff("Immobile", Immobile, Source.Common, BuffStackType.Queue, 3, BuffClassification.Condition, BuffImages.Immobile/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Slow", Slow, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Slow/*, 0, GW2Builds.May2021Balance*/),
-            new Buff("Weakness", Weakness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Weakness/*, 0, GW2Builds.May2021Balance*/),
+            new Buff("Immobile", Immobile, Source.Common, BuffStackType.Queue, 3, BuffClassification.Condition, BuffImages.Immobile),
+            new Buff("Slow", Slow, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Slow),
+            new Buff("Weakness", Weakness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Weakness),
             new Buff("Taunt", Taunt, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Taunt),
             new Buff("Vulnerability", Vulnerability, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Condition, BuffImages.Vulnerability),
-            //          
-            /* new Buff("Blind", 720, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/33/Blinded.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Chilled", 722, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/a/a6/Chilled.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Crippled", 721, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/fb/Crippled.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Immobile", 727, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/3/32/Immobile.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Slow", 26766, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f5/Slow.png", GW2Builds.May2021Balance, ulong.MaxValue),
-            new Buff("Weakness", 742, Source.Common, BuffStackType.CappedDuration, 0, BuffNature.Condition, "https://wiki.guildwars2.com/images/f/f9/Weakness.png", GW2Builds.May2021Balance, ulong.MaxValue),*/
             //
             new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.ConditionDuration),
         };
@@ -284,7 +268,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
             new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
-            //Auras
+            // Auras
             new Buff("Chaos Aura", ChaosAura, Source.Common, BuffClassification.Support, BuffImages.ChaosAura),
             new Buff("Fire Aura", FireAura, Source.Common, BuffClassification.Support, BuffImages.FireAura),
             new Buff("Frost Aura", FrostAura, Source.Common, BuffClassification.Support, BuffImages.FrostAura),
@@ -292,7 +276,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Magnetic Aura", MagneticAura, Source.Common, BuffClassification.Support, BuffImages.MagneticAura),
             new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
             new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
-            //race
+            // Race
             new Buff("Take Root", TakeRootEffect, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
             new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
             new Buff("Become the Raven", BecomeTheRaven, Source.Common, BuffClassification.Other, BuffImages.BecomeRaven),
