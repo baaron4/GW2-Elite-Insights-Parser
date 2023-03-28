@@ -322,6 +322,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
             // Runes
             new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk, 93543, GW2Builds.EndOfLife),
+            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear, BuffStackType.CappedDuration, 5, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
             new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffStackType.CappedDuration, 2, BuffClassification.Gear, BuffImages.ConsumeRation),
         };
 

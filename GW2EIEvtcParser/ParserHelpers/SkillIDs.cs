@@ -1574,6 +1574,7 @@
         public const long AshesOfTheJust = 41957;
         public const long AttackersInsight = 41963;
         public const long Chapter2DaringChallenge = 41968;
+        public const long SuperiorRuneOfTheCavalier = 41983;
         public const long OverwhelmingCelerity = 41988;
         public const long Chapter4ShiningRiver = 42008;
         public const long WeaversProwess = 42061;
