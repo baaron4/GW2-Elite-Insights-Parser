@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             IEnumerable<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID).ToList().Where(x => x.Time >= start && x.Time < start + duration);
                             foreach (EffectEvent kickEffect in kickEffects)
                             {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z), 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(- kickEffect.Orientation.Z) - 90, 0, (start, start + interval), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
                                 start += interval;
                                 attackEnd += interval;
                             }
@@ -438,8 +438,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int translation = 150;
                         int cascadeCount = 4;
                         int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
                         Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
                         float rotation = Point3D.GetRotationFromFacing(frontalPoint);
@@ -458,8 +456,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascadeCount = 4;
                         int translation = 150;
                         int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
                         Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
                         float rotation = Point3D.GetRotationFromFacing(frontalPoint);
@@ -484,6 +480,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         // Nightmare Discharge Shockwave
                         replay.Decorations.Add(new CircleDecoration(false, waveEnd, 1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                    }
+
+                    // Wave of Mutilation
+                    var waveOfMutilation = casts.Where(x => x.SkillId == WaveOfMutilation).ToList();
+                    foreach (AbstractCastEvent c in waveOfMutilation)
+                    {
+                        int start = (int)c.Time;
+                        int duration = 1850;
+                        int angle = 18;
+                        int translation = 150;
+                        int cascadeCount = 4;
+                        int attackEnd = start + duration;
+
+                        Point3D frontalPoint = GetFacingPoint3D(log, target, c, duration);
+                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+
+                        float startingDegree = rotation - angle * 2;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            AddKickIndicatorDecoration(replay, target, start, attackEnd, startingDegree, translation, cascadeCount);
+                            startingDegree += angle;
+                        }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.SolarBloom:
