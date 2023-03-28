@@ -805,6 +805,7 @@
         public const long MushroomKingsBlessing = 23488;
         public const long Reflection2 = 24014;
         public const long SigilOfWater = 24241;
+        public const long Critical = 24278;
         public const long StoneHeart = 24304;
         public const long LightningRod = 24305;
         public const long RousingResilience = 24383;

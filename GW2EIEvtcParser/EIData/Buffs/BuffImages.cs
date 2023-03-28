@@ -113,6 +113,7 @@
         internal const string SuperiorRuneOfTheMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
         internal const string SuperiorRuneOfTheCavalier = "https://wiki.guildwars2.com/images/9/94/Superior_Rune_of_the_Cavalier.png";
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
+        internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
         #endregion Gear
 
         #region Fractal
