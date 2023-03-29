@@ -305,6 +305,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfCorruption),
             new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfCorruption),
             new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCorruption),
+            new Buff("Superior Sigil of Cruelty", SuperiorSigilOfCruelty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCruelty),
             new Buff("Major Sigil of Life", MajorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfLife),
             new Buff("Superior Sigil of Life", SuperiorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfLife),
             new Buff("Major Sigil of Perception", MajorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfPerception),
@@ -320,6 +321,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of the Stars", SuperiorSigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfStars),
             new Buff("Superior Sigil of Severance", SuperiorSigilOfSeverance, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfSeverance),
             new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
+            new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfVision),
+            new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
+            new Buff("Leech (Sigil / Runes)", LeechEffect, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - 93543) and Vampirism (Builds StartOfLife - 93543)
             // Runes
             new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk, 93543, GW2Builds.EndOfLife),
             new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),

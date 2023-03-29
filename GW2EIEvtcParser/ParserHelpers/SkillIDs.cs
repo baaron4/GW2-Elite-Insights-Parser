@@ -223,6 +223,9 @@
         public const long SuperiorSigilOfBenevolence = 9398;
         public const long MajorSigilOfBenevolence = 9399;
         public const long MinorSigilOfBenevolence = 9400;
+        public const long LeechEffect = 9416;
+        public const long MajorSigilOfLeeching = 9417;
+        public const long SuperiorSigilOfVision = 9422;
         public const long SigilOfHydromancy = 9428;
         public const long SigilOfEarth = 9433;
         public const long SigilOfDoom = 9441;
@@ -825,6 +828,7 @@
         public const long WaterElementalSummoned = 25493;
         public const long AirElementalSummoned = 25496;
         public const long LightAura = 25518;
+        public const long SuperiorSigilOfCruelty = 25526;
         public const long SharpeningSkull = 25630;
         public const long LumpOfCrystallizedNougat = 25631;
         public const long FlaskOfPumpkinOil = 25632;

@@ -94,6 +94,7 @@
         internal const string MinorSigilOfCorruption = "https://wiki.guildwars2.com/images/5/50/Minor_Sigil_of_Corruption.png";
         internal const string MajorSigilOfCorruption = "https://wiki.guildwars2.com/images/d/dd/Major_Sigil_of_Corruption.png";
         internal const string SuperiorSigilOfCorruption = "https://wiki.guildwars2.com/images/1/18/Superior_Sigil_of_Corruption.png";
+        internal const string SuperiorSigilOfCruelty = "https://wiki.guildwars2.com/images/2/26/Superior_Sigil_of_Cruelty.png";
         internal const string MajorSigilOfLife = "https://wiki.guildwars2.com/images/2/2e/Major_Sigil_of_Life.png";
         internal const string SuperiorSigilOfLife = "https://wiki.guildwars2.com/images/a/a7/Superior_Sigil_of_Life.png";
         internal const string MajorSigilOfPerception = "https://wiki.guildwars2.com/images/c/cf/Major_Sigil_of_Perception.png";
@@ -109,11 +110,13 @@
         internal const string SuperiorSigilOfStars = "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png";
         internal const string SuperiorSigilOfSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
         internal const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
+        internal const string SuperiorSigilOfVision = "https://wiki.guildwars2.com/images/4/4f/Superior_Sigil_of_Vision.png";
         // Runes
         internal const string SuperiorRuneOfTheMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
         internal const string SuperiorRuneOfTheCavalier = "https://wiki.guildwars2.com/images/9/94/Superior_Rune_of_the_Cavalier.png";
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
         internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
+        internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
         #endregion Gear
 
         #region Fractal
