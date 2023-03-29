@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.Extensions
             SymbolOfProtection, 
             SymbolOfSpears,
             SymbolOfLight,
-            BlueberryPieAndSliceOFRainbowCake,
+            BlueberryPieAndSliceOfRainbowCake,
             StrawberryPieAndCupcake, 
             CherryPie, 
             BlackberryPie,
