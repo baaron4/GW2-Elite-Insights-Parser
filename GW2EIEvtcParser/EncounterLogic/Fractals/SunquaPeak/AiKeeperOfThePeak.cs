@@ -408,5 +408,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Ai not found");
             }
         }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
+
+            if (dwd.Any() && log.FightData.Success)
+            {
+                int counter = 0;
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    {
+                        counter++;
+                    }
+                }
+                // The achievement requires 5 players alive, if the instance has only 4 players inside, you cannot get it.
+                if (counter == 5)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
+                }
+            }
+        }
     }
 }
