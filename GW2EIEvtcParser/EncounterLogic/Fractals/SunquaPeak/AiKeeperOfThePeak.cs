@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Reflection;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -413,6 +414,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
             IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
+            IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
 
             if (dwd.Any() && log.FightData.Success)
             {
@@ -428,6 +430,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (counter == 5)
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
+                }
+            }
+
+            if (energyDispersal.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
+                        break;
+                    }
                 }
             }
         }
