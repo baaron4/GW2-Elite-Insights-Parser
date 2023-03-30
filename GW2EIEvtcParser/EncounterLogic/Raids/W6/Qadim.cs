@@ -959,5 +959,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> takingTurns = log.CombatData.GetBuffData(AchievementEligibilityTakingTurns);
+            IReadOnlyList<AbstractBuffEvent> manipulateTheManipulator = log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator);
+
+            if (log.FightData.Success)
+            {
+                if (takingTurns.Any()) { CheckInstanceBuff(log, AchievementEligibilityTakingTurns); }
+                if (manipulateTheManipulator.Any()) { CheckInstanceBuff(log, AchievementEligibilityManipulateTheManipulator); }
+            }
+        }
+
+        private void CheckInstanceBuff(ParsedEvtcLog log, long achievement)
+        {
+            foreach (Player p in log.PlayerList)
+            {
+                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
+                    break;
+                }
+            }
+        }
     }
 }
