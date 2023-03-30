@@ -18,7 +18,20 @@ namespace GW2EIEvtcParser.EIData
             return _dict.TryGetValue(buffID, out list);
         }
 
-        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+        private static void AddToList(List<AbstractBuffEvent> list, AbstractBuffEvent buffEvent)
+        {
+            AbstractBuffEvent last = list.Last();
+            // Essence of speed issue for Soulbeast
+            if (last is BuffExtensionEvent beeLast && buffEvent is BuffExtensionEvent beeCurrent 
+                && beeCurrent.BuffInstance == beeLast.BuffInstance && buffEvent.Time == last.Time
+                && Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+            {
+                list.Remove(last);
+            }
+            list.Add(buffEvent);
+        }
+
+            public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
             {
@@ -27,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
             buffEvent.TryFindSrc(log);
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
-                list.Add(buffEvent);
+                AddToList(list, buffEvent);
                 return;
             }
             _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
@@ -56,7 +69,7 @@ namespace GW2EIEvtcParser.EIData
             buffEvent.TryFindSrc(log);
             if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
-                list.Add(buffEvent);
+                AddToList(list, buffEvent);
                 return;
             }
             _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };

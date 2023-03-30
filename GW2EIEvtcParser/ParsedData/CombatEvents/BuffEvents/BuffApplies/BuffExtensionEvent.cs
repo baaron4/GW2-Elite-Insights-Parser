@@ -5,14 +5,15 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class BuffExtensionEvent : AbstractBuffApplyEvent
     {
-        private readonly long _oldValue;
-        private readonly long _durationChange;
+        public long OldDuration => NewDuration - ExtendedDuration;
+        public long ExtendedDuration { get; }
+        public long NewDuration { get; }
         private bool _sourceFinderRan = false;
 
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            _oldValue = evtcItem.OverstackValue - evtcItem.Value;
-            _durationChange = evtcItem.Value;
+            NewDuration = evtcItem.OverstackValue;
+            ExtendedDuration = evtcItem.Value;
         }
 
         internal override void TryFindSrc(ParsedEvtcLog log)
@@ -20,13 +21,13 @@ namespace GW2EIEvtcParser.ParsedData
             if (!_sourceFinderRan && By == ParserHelper._unknownAgent)
             {
                 _sourceFinderRan = true;
-                By = log.Buffs.TryFindSrc(To, Time, _durationChange, log, BuffID);
+                By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID);
             }
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Extend(_durationChange, _oldValue, CreditedBy, Time, BuffInstance);
+            simulator.Extend(ExtendedDuration, OldDuration, CreditedBy, Time, BuffInstance);
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)
