@@ -67,35 +67,35 @@
             </thead>
             <tbody>
                 <tr v-for="row in barrierdist.distribution">
-                    <td class="text-left" :data-original-title="row[1]">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon">
-                        {{getSkill(row[0],row[1]).name}}
+                    <td class="text-left" :data-original-title="getSkillID(row)">
+                        <img :src="getSkill(row).icon" class="icon">
+                        {{getSkill(row).name}}
                     </td>
-                    <td>{{ round3(100*row[2]/barrierdist.contributedBarrier) }}%</td>
-                    <td :data-original-title="round2(row[2]/phase.durationS) +' hps'">
-                        {{ row[2] }}
+                    <td>{{ round3(100*getBarrierOutput(row)/barrierdist.contributedBarrier) }}%</td>
+                    <td :data-original-title="round2(getBarrierOutput(row)/phase.durationS) +' hps'">
+                        {{ getBarrierOutput(row) }}
                     </td>
-                    <td>{{ Math.max(row[3],0) }}</td>
-                    <td>{{ round(row[2]/row[8]) }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td :class="{higherOrEqual: (!getSkill(row[0], row[1]).condi && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{ (!getSkill(row[0], row[1]).condi && row[5]) ? row[5] : ''}}
+                    <td>{{ getMinBarrier(row) }}</td>
+                    <td>{{ round(getBarrierOutput(row)/getBarrierHits(row)) }}</td>
+                    <td>{{ getMaxBarrier(row) }}</td>
+                    <td :class="{higherOrEqual: (!getSkill(row).condi && getCast(row)) && showInequality(row}" v-if="actor !== null">
+                        {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
                     </td>
                     <td>
-                        {{ row[8] }}
+                        {{ getBarrierHits(row) }}
                     </td>
-                    <td :class="{lowerOrEqual: (!getSkill(row[0], row[1]).condi && row[8] && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[5]) ? round2(row[8]/row[5]) : ''}}
+                    <td :class="{lowerOrEqual: (!getSkill(row).condi && getBarrierHits(row) && getCast(row)) && showInequality(row)}" v-if="actor !== null">
+                        {{(!getSkill(row).condi && getBarrierHits(row) && getCast(row)) ? round2(getBarrierHits(row)/getCast(row)) : ''}}
                     </td>
                     <td v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[9]) ? round2(row[2]/(0.001 * row[9])) : ''}}
+                        {{(!getSkill(row).condi && getBarrierHits(row) && getCastDuration(row)) ? round2(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td v-if="actor !== null"
-                        :data-original-title="row[6] ? round2(100.0 * row[6]/phase.durationS) + '% of the phase' : false">
-                        {{ row[6] ? row[6] + 's' : ''}}</td>
+                        :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}</td>
                     <td v-if="actor !== null"
-                        :data-original-title="row[7] ? round2(100.0 * row[7]/phase.durationS) + '% of the phase' : false">
-                        {{ row[7] ? row[7] + 's' : ''}}</td>
+                        :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}</td>
                 </tr>
             </tbody>
             <tfoot class="text-dark">
@@ -153,12 +153,42 @@
             refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
-        methods: {
-            getSkill: function (isBoon, id) {
-                return findSkill(isBoon, id);
+        methods: {        
+            getSkillID: function (data) {
+                return data[1];
             },
-            showInequality: function (skillData, castDuration) {
-                return castDuration === 0 && skillData.notAccurate;
+            getSkillIsBuff: function (data) {
+                return data[0]
+            },
+            getSkill: function (data) {
+                return findSkill(this.getSkillIsBuff(data), this.getSkillID(data));
+            },
+            getBarrierOutput: function(data) {
+                return data[2];
+            },
+            getMinBarrier: function(data) {
+                return data[3];
+            },
+            getMaxBarrier: function(data) {
+                return data[4];
+            },
+            getCast: function(data) {
+                return data[5];
+            },
+            getCastTimeWasted: function(data) {
+                return data[6];
+            },
+            getCastTimeSaved: function(data) {
+                return data[7];
+            },
+            getBarrierHits: function(data) {
+                return data[8];
+            },
+            getCastDuration: function(data) {
+                return data[9];
+            },
+            showInequality: function (data) {
+                return this.getCastDuration(data) === 0 && this.getSkill(data).notAccurate;
             },
         },
         computed: {

@@ -70,39 +70,39 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in healingdist.distribution" :class="{hybridH: getSkill(row[0], row[1]).healingMode === 2, conversionH: getSkill(row[0], row[1]).healingMode === 1}">
-                    <td class="text-left" :data-original-title="row[1]">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon">
-                        {{getSkill(row[0],row[1]).name}}
+                <tr v-for="row in healingdist.distribution" :class="{hybridH: getSkill(row).healingMode === 2, conversionH: getSkill(row).healingMode === 1}">
+                    <td class="text-left" :data-original-title="getSkillID(row)">
+                        <img :src="getSkill(row).icon" class="icon">
+                        {{getSkill(row).name}}
                     </td>
-                    <td>{{ round3(100*row[2]/healingdist.contributedHealing) }}%</td>
-                    <td :data-original-title="round2(row[2]/phase.durationS) +' hps'">
-                        {{ row[2] }}
+                    <td>{{ round3(100*getHealingOutput(row)/healingdist.contributedHealing) }}%</td>
+                    <td :data-original-title="round2(getHealingOutput(row)/phase.durationS) +' hps'">
+                        {{ getHealingOutput(row) }}
                     </td>
-                    <td :data-original-title="round2(row[10]/phase.durationS) +' hps'">
-                        {{ row[10] }}
+                    <td :data-original-title="round2(getDownedHealingOutput(row)/phase.durationS) +' hps'">
+                        {{ getDownedHealingOutput(row) }}
                     </td>
-                    <td>{{ Math.max(row[3],0) }}</td>
-                    <td>{{ round(row[2]/row[8]) }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td :class="{higherOrEqual: (!getSkill(row[0], row[1]).condi && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{ (!getSkill(row[0], row[1]).condi && row[5]) ? row[5] : ''}}
+                    <td>{{ getMinHealing(row) }}</td>
+                    <td>{{ round(getHealingOutput(row)/getHealingHits(row)) }}</td>
+                    <td>{{ getMaxHealing(row) }}</td>
+                    <td :class="{higherOrEqual: (!getSkill(row).condi && getCast(row)) && showInequality(row)}" v-if="actor !== null">
+                        {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
                     </td>
                     <td>
-                        {{ row[8] }}
+                        {{ getHealingHits(row) }}
                     </td>
-                    <td :class="{lowerOrEqual: (!getSkill(row[0], row[1]).condi && row[8] && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[5]) ? round2(row[8]/row[5]) : ''}}
+                    <td :class="{lowerOrEqual: (!getSkill(row).condi && getHealingHits(row) && getCast(row)) && showInequality(row)}" v-if="actor !== null">
+                        {{(!getSkill(row).condi && getHealingHits(row) && getCast(row)) ? round2(getHealingHits(row)/getCast(row)) : ''}}
                     </td>
                     <td v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[9]) ? round2(row[2]/(0.001 * row[9])) : ''}}
+                        {{(!getSkill(row).condi && getHealingHits(row) && getCastDuration(row)) ? round2(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td v-if="actor !== null"
-                        :data-original-title="row[6] ? round2(100.0 * row[6]/phase.durationS) + '% of the phase' : false">
-                        {{ row[6] ? row[6] + 's' : ''}}</td>
+                        :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}</td>
                     <td v-if="actor !== null"
-                        :data-original-title="row[7] ? round2(100.0 * row[7]/phase.durationS) + '% of the phase' : false">
-                        {{ row[7] ? row[7] + 's' : ''}}</td>
+                        :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}</td>
                 </tr>
             </tbody>
             <tfoot class="text-dark">
@@ -174,12 +174,45 @@
             refreshTable(this.tableid, this.sortdata);
             this.divElement =  $("#" + this.tableid);
         },
-        methods: {
-            getSkill: function (isBoon, id) {
-                return findSkill(isBoon, id);
+        methods: {        
+            getSkillID: function (data) {
+                return data[1];
             },
-            showInequality: function (skillData, castDuration) {
-                return castDuration === 0 && skillData.notAccurate;
+            getSkillIsBuff: function (data) {
+                return data[0]
+            },
+            getSkill: function (data) {
+                return findSkill(this.getSkillIsBuff(data), this.getSkillID(data));
+            },
+            getHealingOutput: function(data) {
+                return data[2];
+            },
+            getDownedHealingOutput: function(data) {
+                return data[10];
+            },
+            getMinHealing: function(data) {
+                return data[3];
+            },
+            getMaxHealing: function(data) {
+                return data[4];
+            },
+            getCast: function(data) {
+                return data[5];
+            },
+            getCastTimeWasted: function(data) {
+                return data[6];
+            },
+            getCastTimeSaved: function(data) {
+                return data[7];
+            },
+            getHealingHits: function(data) {
+                return data[8];
+            },
+            getCastDuration: function(data) {
+                return data[9];
+            },
+            showInequality: function (data) {
+                return this.getCastDuration(data) === 0 && this.getSkill(data).notAccurate;
             },
         },
         computed: {
