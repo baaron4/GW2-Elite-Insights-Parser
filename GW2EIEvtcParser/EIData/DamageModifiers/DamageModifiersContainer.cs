@@ -17,10 +17,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var AllDamageModifiers = new List<List<DamageModifier>>
             {
-                DamageModifier.ItemDamageModifiers,
-                DamageModifier.GearDamageModifiers,
-                DamageModifier.CommonDamageModifiers,
-                DamageModifier.FightSpecificDamageModifiers,
+                CommonDamageModifiers.ItemDamageModifiers,
+                CommonDamageModifiers.GearDamageModifiers,
+                CommonDamageModifiers.SharedDamageModifiers,
+                CommonDamageModifiers.FightSpecificDamageModifiers,
                 //
                 RevenantHelper.DamageMods,
                 HeraldHelper.DamageMods,

@@ -1,0 +1,147 @@
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData.Buffs;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
+
+namespace GW2EIEvtcParser.EIData
+{
+    internal static class CommonBuffs
+    {
+
+        internal static readonly List<Buff> Boons = new List<Buff>
+        {
+            new Buff("Might", Might, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Boon, BuffImages.Might),
+            new Buff("Fury", Fury, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Fury),
+            new Buff("Quickness", Quickness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Quickness),
+            new Buff("Alacrity", Alacrity, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Alacrity),
+            new Buff("Protection", Protection, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Protection),
+            new Buff("Regeneration", Regeneration, Source.Common, BuffStackType.Regeneration, 5, BuffClassification.Boon, BuffImages.Regeneration),
+            new Buff("Vigor", Vigor, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Vigor),
+            new Buff("Aegis", Aegis, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Aegis),
+            new Buff("Stability", Stability, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Boon, BuffImages.Stability),
+            new Buff("Swiftness", Swiftness, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Swiftness),
+            new Buff("Retaliation", Retaliation, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Retaliation, 0, GW2Builds.May2021Balance),
+            new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance),
+            new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution, GW2Builds.May2021Balance, GW2Builds.EndOfLife),
+            //
+            new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
+        };
+
+        internal static readonly List<Buff> Conditions = new List<Buff>
+        {
+            new Buff("Bleeding", Bleeding, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Bleeding),
+            new Buff("Burning", Burning, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Burning),
+            new Buff("Confusion", Confusion, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Confusion),
+            new Buff("Poison", Poison, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Poison),
+            new Buff("Torment", Torment, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Torment),
+            new Buff("Blind", Blind, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Blind),
+            new Buff("Chilled", Chilled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Chilled),
+            new Buff("Crippled", Crippled, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Crippled),
+            new Buff("Fear", Fear, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Fear),
+            new Buff("Immobile", Immobile, Source.Common, BuffStackType.Queue, 3, BuffClassification.Condition, BuffImages.Immobile),
+            new Buff("Slow", Slow, Source.Common, BuffStackType.Queue, 9, BuffClassification.Condition, BuffImages.Slow),
+            new Buff("Weakness", Weakness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Weakness),
+            new Buff("Taunt", Taunt, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Taunt),
+            new Buff("Vulnerability", Vulnerability, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Condition, BuffImages.Vulnerability),
+            //
+            new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.ConditionDuration),
+        };
+
+        internal static readonly List<Buff> Commons = new List<Buff>
+        {
+            new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
+            new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
+            new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
+            new Buff("Exhaustion", Exhaustion, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.Exhaustion),
+            new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
+            new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Stealth),
+            new Buff("Revealed", Revealed, Source.Common, BuffClassification.Support, BuffImages.Revealed),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed, 0, GW2Builds.June2021Balance),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed, GW2Builds.June2021Balance, GW2Builds.EndOfLife),
+            new Buff("Determined (762)", Determined762, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Determined (788)", Determined788, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Resurrection", Resurrection, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Determined (895)", Determined895, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Determined (3892)", Determined3892, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Determined (31450)", Determined31450, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Determined (52271)", Determined52271, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Invulnerability (757)", Invulnerability757, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Invulnerability (56227)", Invulnerability56227, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Invulnerability (801)", Invulnerability801, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Spawn Protection?", SpawnProtection, Source.Common, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Stun", Stun, Source.Common, BuffClassification.Other, BuffImages.Stun),
+            new Buff("Daze", Daze, Source.Common, BuffClassification.Other, BuffImages.Daze),
+            new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other, BuffImages.Exposed),
+            new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
+            new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
+            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable, GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
+            new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
+            new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
+            // Auras
+            new Buff("Chaos Aura", ChaosAura, Source.Common, BuffClassification.Support, BuffImages.ChaosAura),
+            new Buff("Fire Aura", FireAura, Source.Common, BuffClassification.Support, BuffImages.FireAura),
+            new Buff("Frost Aura", FrostAura, Source.Common, BuffClassification.Support, BuffImages.FrostAura),
+            new Buff("Light Aura", LightAura, Source.Common, BuffClassification.Support, BuffImages.LightAura),
+            new Buff("Magnetic Aura", MagneticAura, Source.Common, BuffClassification.Support, BuffImages.MagneticAura),
+            new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
+            new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            // Race
+            new Buff("Take Root", TakeRootEffect, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
+            new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
+            new Buff("Become the Raven", BecomeTheRaven, Source.Common, BuffClassification.Other, BuffImages.BecomeRaven),
+            new Buff("Become the Snow Leopard", BecomeTheSnowLeopard, Source.Common, BuffClassification.Other, BuffImages.BecomeLeopard),
+            new Buff("Become the Wolf", BecomeTheWolf, Source.Common, BuffClassification.Other, BuffImages.BecomeWolf),
+            new Buff("Avatar of Melandru", AvatarOfMelandru, Source.Common, BuffClassification.Other, BuffImages.AvatarOfMelandru),
+            new Buff("Power Suit", PowerSuit, Source.Common, BuffClassification.Other, BuffImages.PowerSuit),
+            new Buff("Reaper of Grenth", ReaperOfGrenth, Source.Common, BuffClassification.Other, BuffImages.ReaperOfGrenth),
+            new Buff("Charrzooka", Charrzooka, Source.Common, BuffClassification.Other, BuffImages.Charrzooka),
+            //
+            new Buff("Guild Item Research", GuildItemResearch, Source.Common, BuffClassification.Other, BuffImages.GuildMagicFind),
+            //
+            new Buff("Crystalline Heart", CrystallineHeart, Source.Common, BuffClassification.Other, BuffImages.CrystallineHeart),
+            // WvW
+            new Buff("Minor Borderlands Bloodlust", MinorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
+            new Buff("Major Borderlands Bloodlust", MajorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
+            new Buff("Superior Borderlands Bloodlust", SuperiorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
+            new Buff("Blessing of Elements", BlessingOfElements, Source.Common, BuffClassification.Support, BuffImages.BlessingElements),
+            new Buff("Flame's Embrace", FlamesEmbrace, Source.Common, BuffClassification.Support, BuffImages.FlamesEmbrace),
+        };
+
+        internal static readonly List<Buff> Gear = new List<Buff>
+        {
+            // Sigils
+            new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration, 0, 93543),
+            new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfCorruption),
+            new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfCorruption),
+            new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCorruption),
+            new Buff("Superior Sigil of Cruelty", SuperiorSigilOfCruelty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCruelty),
+            new Buff("Major Sigil of Life", MajorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfLife),
+            new Buff("Superior Sigil of Life", SuperiorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfLife),
+            new Buff("Major Sigil of Perception", MajorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfPerception),
+            new Buff("Superior Sigil of Perception", SuperiorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfPerception),
+            new Buff("Minor Sigil of Bloodlust", MinorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBloodlust),
+            new Buff("Major Sigil of Bloodlust", MajorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBloodlust),
+            new Buff("Superior Sigil of Bloodlust", SuperiorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBloodlust),
+            new Buff("Superior Sigil of Bounty", SuperiorSigilOfBounty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBounty),
+            new Buff("Minor Sigil of Benevolence", MinorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBenevolence),
+            new Buff("Major Sigil of Benevolence", MajorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBenevolence),
+            new Buff("Superior Sigil of Benevolence", SuperiorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBenevolence),
+            new Buff("Superior Sigil of Momentum", SuperiorSigilOfMomentum, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfMomentum),
+            new Buff("Superior Sigil of the Stars", SuperiorSigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfStars),
+            new Buff("Superior Sigil of Severance", SuperiorSigilOfSeverance, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfSeverance),
+            new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
+            new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfVision),
+            new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
+            new Buff("Leech (Sigil / Runes)", LeechEffect, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - 93543) and Vampirism (Builds StartOfLife - 93543)
+            // Runes
+            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk, 93543, GW2Builds.EndOfLife),
+            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
+            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation),
+            new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical),
+        };
+
+    }
+}
