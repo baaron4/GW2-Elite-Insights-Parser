@@ -75,34 +75,44 @@
                         <img :src="getSkill(row).icon" class="icon">
                         {{getSkill(row).name}}
                     </td>
-                    <td>{{ round3(100*getHealingOutput(row)/healingdist.contributedHealing) }}%</td>
+                    <td>
+                        {{ round3(100*getHealingOutput(row)/healingdist.contributedHealing) }}%
+                    </td>
                     <td :data-original-title="round2(getHealingOutput(row)/phase.durationS) +' hps'">
                         {{ getHealingOutput(row) }}
                     </td>
                     <td :data-original-title="round2(getDownedHealingOutput(row)/phase.durationS) +' hps'">
                         {{ getDownedHealingOutput(row) }}
                     </td>
-                    <td>{{ getMinHealing(row) }}</td>
-                    <td>{{ round(getHealingOutput(row)/getHealingHits(row)) }}</td>
-                    <td>{{ getMaxHealing(row) }}</td>
+                    <td>
+                        {{ getMinHealing(row) }}
+                    </td>
+                    <td>
+                        {{ round(getHealingOutput(row)/getConnectedHits(row)) }}
+                    </td>
+                    <td>
+                        {{ getMaxHealing(row) }}
+                    </td>
                     <td :class="{higherOrEqual: (!getSkill(row).condi && getCast(row)) && showInequality(row)}" v-if="actor !== null">
                         {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
                     </td>
                     <td>
-                        {{ getHealingHits(row) }}
+                        {{ getConnectedHits(row) }}
                     </td>
-                    <td :class="{lowerOrEqual: (!getSkill(row).condi && getHealingHits(row) && getCast(row)) && showInequality(row)}" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getHealingHits(row) && getCast(row)) ? round2(getHealingHits(row)/getCast(row)) : ''}}
+                    <td :class="{lowerOrEqual: (!getSkill(row).condi && getConnectedHits(row) && getCast(row)) && showInequality(row)}" v-if="actor !== null">
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td v-if="actor !== null">
-                        {{(!getSkill(row).condi && getHealingHits(row) && getCastDuration(row)) ? round2(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
-                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}</td>
+                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
+                    </td>
                     <td v-if="actor !== null"
                         :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
-                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}</td>
+                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
+                    </td>
                 </tr>
             </tbody>
             <tfoot class="text-dark">
@@ -151,29 +161,13 @@
             return {
                 sortdata: {
                     order: "desc",
-                    index: 2
+                    index: 1,
+                    key: 'Data',
+                    sortFunc: row => this.getBarrierOutput(row),
                 },
-                divElement: null
             };
         },
-        mixins: [numberComponent],
-        mounted() {
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
-        beforeUpdate() {
-            this.divElement
-                .DataTable()
-                .destroy();
-        },
-        updated() {      
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
-        activated() {             
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
+        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent],
         methods: {        
             getSkillID: function (data) {
                 return data[1];
@@ -205,7 +199,7 @@
             getCastTimeSaved: function(data) {
                 return data[7];
             },
-            getHealingHits: function(data) {
+            getConnectedHits: function(data) {
                 return data[8];
             },
             getCastDuration: function(data) {

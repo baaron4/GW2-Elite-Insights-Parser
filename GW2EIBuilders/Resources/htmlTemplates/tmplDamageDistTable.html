@@ -260,62 +260,11 @@
                     index: 1,
                     key: 'Data',
                     sortFunc: row => this.getDamage(row),
-                },
-                divElement: null
+                }
             };
         },
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent],
         methods: {      
-            sortBy: function(key, index, func) {
-                this.sortByBase(this.sortdata, key, index);
-                this.sortdata.sortFunc = func ? func : null;
-            },
-            getHeaderClass: function(key, index) {
-                return this.getHeaderClassBase(this.sortdata, key, index);
-            },
-            getBodyClass: function(key, index) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
-                return classes;
-            },     
-            getCastBodyClass: function(key, index, data) {
-                var res = this.getBodyClass(key, index);
-                var innacurate = {higherOrEqual: (!this.getSkill(data).condi && this.getCast(data)) && this.showInequality(data)};
-                Object.assign(res, innacurate);
-                return res;
-            },
-            getHitsPerCastBodyClass: function(key, index, data) {
-                var res = this.getBodyClass(key, index);
-                var innacurate = {lowerOrEqual: (!this.getSkill(data).condi && this.getConnectedHits(data) && this.getCast(data)) && this.showInequality(data)};
-                Object.assign(res, innacurate);
-                return res;
-            },
-            sortData: function(rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
-                switch (this.sortdata.key) {
-                    case "Skill":
-                        rows.sort((x,y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
-                        break;
-                    case "Data":
-                        var sortFunc = x => {
-                            var value = this.sortdata.sortFunc(x);
-                            if (value === 0) {
-                                if (order > 0) {
-                                    value = 1e15;
-                                } else {
-                                    value = -1e15;
-                                }
-                            }
-                            return value;
-                        };
-                        rows.sort((x,y) => order * (sortFunc(x) - sortFunc(y)));
-                        break;
-                    default:
-                        return null;
-                        break;
-                }
-                return rows;
-            },
-            
             getSkillID: function (data) {
                 return data[1];
             },
