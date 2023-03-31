@@ -1,83 +1,115 @@
 <template>
     <div>
-        <div class="scrollable-cr-dps-table scrollable-x" style="max-width: 650px !important;" >
-            <table class="table table-sm table-striped table-hover"cellspacing="0" width="100%"
-                :id="tableid">
-                <thead>
-                    <tr>
-                        <th class="cr-dps-table-icon-col"></th>
-                        <th class="text-left cr-dps-table-name">
-                            Name
-                        </th>
-                        <th class="cr-dps-table-dps">
-                            All
-                        </th>
-                        <th class="cr-dps-table-dps" v-if="!targetless" v-for="col in tableData.cols">
-                            <span :title="col.name">
-                                {{col.name}}
-                            </span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="scrollable-y" style="max-height: 331px !important;">
-                    <tr v-for="row in tableData.rows" :class="{active: row.player.uniqueID === playerid}">
-                        <td class="cr-dps-table-icon-col" :data-original-title="row.player.profession">
-                            <img :src="row.player.icon" :alt="row.player.profession" class="icon">
-                            <span style="display:none">
-                                {{row.player.profession}}
-                            </span>
-                        </td>
-                        <td class="text-left cr-dps-table-name">
-                            <span :title="row.player.name">
-                                {{row.player.name}}
-                            </span>
-                        </td>
-                        <td class="cr-dps-table-dps">
-                            {{tableRound(row.dps[row.dps.length - 1])}}
-                        </td>
-                        <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{tableRound(row.dps[id])}}
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr v-for="sum in tableData.sums">
-                        <td class="cr-dps-table-icon-col"></td>
-                        <td class="text-left cr-dps-table-name">
-                            {{sum.name}}
-                        </td>
-                        <td class="cr-dps-table-dps">
-                            {{tableRound(sum.dps[sum.dps.length - 1])}}
-                        </td>
-                        <td class="cr-dps-table-dps" v-if="!targetless" v-for="(col, id) in tableData.cols">
-                            {{tableRound(sum.dps[id])}}
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
+                        Name
+                    </th>
+                    <th :class="getHeaderClass('All')" @click="sortBy('All')">
+                        All
+                    </th>
+                    <th v-if="!targetless" v-for="(col, index) in tableData.cols"
+                        :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
+                        <span :title="col.name">
+                            {{col.name}}
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}">
+                    <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon">
+                        <span style="display:none">
+                            {{row.player.profession}}
+                        </span>
+                    </td>
+                    <td class="text-left" :class="getBodyClass('Name')">
+                        <span :title="row.player.name">
+                            {{row.player.name}}
+                        </span>
+                    </td>
+                    <td :class="getBodyClass('All')">
+                        {{tableRound(row.dps[row.dps.length - 1])}}
+                    </td>
+                    <td v-if="!targetless" v-for="(col, index) in tableData.cols"
+                        :class="getBodyClass('Target', index)">
+                        {{tableRound(row.dps[index])}}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr v-for="sum in tableData.sums">
+                    <td></td>
+                    <td>
+                        {{sum.name}}
+                    </td>
+                    <td>
+                        {{tableRound(sum.dps[sum.dps.length - 1])}}
+                    </td>
+                    <td v-if="!targetless" v-for="(col, index) in tableData.cols">
+                        {{tableRound(sum.dps[index])}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
 
     </div>
 </template>
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent, numberComponent],
+        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent],
         props: ["playerid", "graphdata"],
-        template: `${template}`, 
+        template: `${template}`,
         data: function () {
             return {
                 targetless: logData.targetless,
                 sortdata: {
                     order: "desc",
-                    index: 2
+                    index: -1,
+                    key: "All"
                 }
             };
         },
         methods: {
             tableRound: function (value) {
                 return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
-            }
+            },
+            sortBy: function (key, index) {
+                this.sortByBase(this.sortdata, key, index);
+            },
+            getHeaderClass: function (key, index) {
+                return this.getHeaderClassBase(this.sortdata, key, index);
+            },
+            getBodyClass: function (key, index) {
+                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                return classes;
+            },
+            sortData: function (rows) {
+                var order = this.sortdata.order === "asc" ? 1 : -1;
+                switch (this.sortdata.key) {
+                    case "Prof":
+                        rows.sort((x, y) => order * x.player.profession.localeCompare(y.player.profession));
+                        break;
+                    case "Name":
+                        rows.sort((x, y) => order * x.player.name.localeCompare(y.player.name));
+                        break;
+                    case "All":
+                        rows.sort((x, y) => order * (x.dps[x.dps.length - 1] - y.dps[y.dps.length - 1]));
+                        break;
+                    case "Target":
+                        var index = this.sortdata.index;
+                        rows.sort((x, y) => order * (x.dps[index] - y.dps[index]));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
         },
         created() {
             var i, cacheID;
@@ -97,17 +129,8 @@
                 computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
             }
         },
-        mounted() {
-            refreshTable(this.tableid, this.sortdata);
-        },
-        updated() {
-            updateTable(this.tableid);
-        },
-        activated() {
-            refreshTable(this.tableid, this.sortdata);
-        },
         computed: {
-            tableid: function() {
+            tableid: function () {
                 return "combat-replay-dps-table";
             },
             phase: function () {

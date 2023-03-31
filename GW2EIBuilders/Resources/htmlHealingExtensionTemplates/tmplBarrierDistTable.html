@@ -17,85 +17,117 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
-                    <th class="text-left">Skill</th>
-                    <th class="damage-dist-cell" data-original-title="% Barrier">
+                    <th class="text-left" :class="getHeaderClass('Skill')" @click="sortBy('Skill')">
+                        Skill
+                    </th>
+                    <th class="damage-dist-cell" 
+                        :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0, x => getBarrierOutput(x))"
+                        data-original-title="% Barrier">
                         % <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                         class="icon">
                     </th>
-                    <th class="damage-dist-cell" data-original-title="Barrier">
+                    <th class="damage-dist-cell" 
+                        :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1, x => getBarrierOutput(x))"
+                        data-original-title="Barrier">
                         <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                             class="icon icon-hover">
                     </th>
-                    <th class="damage-dist-cell" data-original-title="Minimum Barrier">
+                    <th class="damage-dist-cell" 
+                        :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2, x => getMinBarrier(x))" 
+                        data-original-title="Minimum Barrier">
                         Min <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                         class="icon">
                     </th>
-                    <th class="damage-dist-cell" data-original-title="Average Barrier">
+                    <th class="damage-dist-cell" 
+                        :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3, x => round(getBarrierOutput(x)/getConnectedHits(x)))" 
+                        data-original-title="Average Barrier">
                         Avg <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                         class="icon">
                     </th>
-                    <th class="damage-dist-cell" data-original-title="Maximum Barrier">
+                    <th class="damage-dist-cell"
+                        :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4, x => getMaxBarrier(x))" 
+                        data-original-title="Maximum Barrier">
                         Max <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                         class="icon">
                     </th>
-                    <th class="damage-dist-cell" v-if="actor !== null">
+                    <th class="damage-dist-cell" v-if="actor !== null"
+                        :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5, x => getCast(x))">
                         Cast
                     </th>
-                    <th class="damage-dist-cell">
+                    <th class="damage-dist-cell"
+                        :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getConnectedHits(x))" >
                         Hits
                     </th>
-                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Hits per Cast">
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7, x => round2(getConnectedHits(x)/getCast(x)))"
+                        data-original-title="Hits per Cast">
                         <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png"
                             alt="Hits per Cast" class="icon icon-hover">
                     </th>
-                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Barrier divided by time spent in animation">
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8, x => round2(getBarrierOutput(row)/(0.001 * getCastDuration(row))))"
+                        data-original-title="Barrier divided by time spent in animation">
                         <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
                             class="icon">
                         /
                         <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                             class="icon">
                     </th>
-                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time wasted interupting skill casts">
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9, x => getCastTimeWasted(x))"
+                        data-original-title="Time wasted interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
                             class="icon icon-hover">
                     </th>
-                    <th class="damage-dist-cell" v-if="actor !== null" data-original-title="Time saved(in seconds) interupting skill casts">
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 10)" @click="sortBy('Data', 10, x => getCastTimeSaved(x))"
+                        data-original-title="Time saved(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
                             class="icon icon-hover">
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in barrierdist.distribution">
-                    <td class="text-left" :data-original-title="row[1]">
-                        <img :src="getSkill(row[0], row[1]).icon" class="icon">
-                        {{getSkill(row[0],row[1]).name}}
+                <tr v-for="row in sortData(barrierdist.distribution)">
+                    <td class="text-left" :class="getBodyClass('Skill')" :data-original-title="getSkillID(row)">
+                        <img :src="getSkill(row).icon" class="icon">
+                        {{getSkill(row).name}}
                     </td>
-                    <td>{{ round3(100*row[2]/barrierdist.contributedBarrier) }}%</td>
-                    <td :data-original-title="round2(row[2]/phase.durationS) +' hps'">
-                        {{ row[2] }}
+                    <td :class="getBodyClass('Data', 0)">
+                        {{ round3(100*getBarrierOutput(row)/barrierdist.contributedBarrier) }}%
                     </td>
-                    <td>{{ Math.max(row[3],0) }}</td>
-                    <td>{{ round(row[2]/row[8]) }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td :class="{higherOrEqual: (!getSkill(row[0], row[1]).condi && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{ (!getSkill(row[0], row[1]).condi && row[5]) ? row[5] : ''}}
+                    <td :class="getBodyClass('Data', 1)" :data-original-title="round2(getBarrierOutput(row)/phase.durationS) +' hps'">
+                        {{ getBarrierOutput(row) }}
                     </td>
-                    <td>
-                        {{ row[8] }}
+                    <td :class="getBodyClass('Data', 2)">
+                        {{ getMinBarrier(row) }}
                     </td>
-                    <td :class="{lowerOrEqual: (!getSkill(row[0], row[1]).condi && row[8] && row[5]) && showInequality(getSkill(row[0], row[1]),row[9])}" v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[5]) ? round2(row[8]/row[5]) : ''}}
+                    <td :class="getBodyClass('Data', 3)">
+                        {{ round(getBarrierOutput(row)/getConnectedHits(row)) }}
                     </td>
-                    <td v-if="actor !== null">
-                        {{(!getSkill(row[0], row[1]).condi && row[8] && row[9]) ? round2(row[2]/(0.001 * row[9])) : ''}}
+                    <td :class="getBodyClass('Data', 4)">
+                        {{ getMaxBarrier(row) }}
                     </td>
-                    <td v-if="actor !== null"
-                        :data-original-title="row[6] ? round2(100.0 * row[6]/phase.durationS) + '% of the phase' : false">
-                        {{ row[6] ? row[6] + 's' : ''}}</td>
-                    <td v-if="actor !== null"
-                        :data-original-title="row[7] ? round2(100.0 * row[7]/phase.durationS) + '% of the phase' : false">
-                        {{ row[7] ? row[7] + 's' : ''}}</td>
+                    <td :class="getCastBodyClass('Data', 5, row)" v-if="actor !== null">
+                        {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
+                    </td>
+                    <td :class="getBodyClass('Data', 6)">
+                        {{ getConnectedHits(row) }}
+                    </td>
+                    <td :class="getHitsPerCastBodyClass('Data', 7, row)" v-if="actor !== null">
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
+                    </td>
+                    <td :class="getBodyClass('Data', 8)" v-if="actor !== null">
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
+                    </td>
+                    <td :class="getBodyClass('Data', 9)" v-if="actor !== null"
+                        :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
+                    </td>
+                    <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
+                        :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
+                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
+                    </td>
                 </tr>
             </tbody>
             <tfoot class="text-dark">
@@ -130,35 +162,49 @@
             return {
                 sortdata: {
                     order: "desc",
-                    index: 2
-                },
-                divElement: null
+                    index: 1,
+                    key: 'Data',
+                    sortFunc: row => this.getBarrierOutput(row),
+                }
             };
         },
-        mixins: [numberComponent],
-        mounted() {
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
-        beforeUpdate() {
-            this.divElement
-                .DataTable()
-                .destroy();
-        },
-        updated() {      
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
-        activated() {             
-            refreshTable(this.tableid, this.sortdata);
-            this.divElement =  $("#" + this.tableid);
-        },
-        methods: {
-            getSkill: function (isBoon, id) {
-                return findSkill(isBoon, id);
+        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent],
+        methods: {        
+            getSkillID: function (data) {
+                return data[1];
             },
-            showInequality: function (skillData, castDuration) {
-                return castDuration === 0 && skillData.notAccurate;
+            getSkillIsBuff: function (data) {
+                return data[0]
+            },
+            getSkill: function (data) {
+                return findSkill(this.getSkillIsBuff(data), this.getSkillID(data));
+            },
+            getBarrierOutput: function(data) {
+                return data[2];
+            },
+            getMinBarrier: function(data) {
+                return data[3];
+            },
+            getMaxBarrier: function(data) {
+                return data[4];
+            },
+            getCast: function(data) {
+                return data[5];
+            },
+            getCastTimeWasted: function(data) {
+                return data[6];
+            },
+            getCastTimeSaved: function(data) {
+                return data[7];
+            },
+            getConnectedHits: function(data) {
+                return data[8];
+            },
+            getCastDuration: function(data) {
+                return data[9];
+            },
+            showInequality: function (data) {
+                return this.getCastDuration(data) === 0 && this.getSkill(data).notAccurate;
             },
         },
         computed: {

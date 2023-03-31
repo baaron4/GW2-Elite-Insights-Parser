@@ -3,73 +3,99 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
-                    <th class="sub-cell">Sub</th>
-                    <th class="prof-cell"></th>
-                    <th class="text-left">Name</th>
-                    <th>Account</th>
-                    <th class="stat-cell" data-original-title="Time wasted(in seconds) interupting skill casts">
+                    <th class="sub-cell" :class="getHeaderClass('Sub')" @click="sortBy('Sub')">
+                        Sub
+                    </th>
+                    <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')">
+
+                    </th>
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
+                        Name
+                    </th>
+                    <th class="text-left" :class="getHeaderClass('Account')" @click="sortBy('Account')">
+                        Account
+                    </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)"
+                        data-original-title="Time wasted(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
-                            
                             class="icon icon-hover">
                     </th>
-                    <th class="stat-cell" data-original-title="Time saved(in seconds) interupting skill casts">
+                    <th class="stat-cell" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)"
+                        data-original-title="Time saved(in seconds) interupting skill casts">
                         <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
-                            
                             class="icon icon-hover">
                     </th>
-                    <th class="stat-cell" data-original-title="Times weapon swapped">
+                    <th class="stat-cell" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)"
+                        data-original-title="Times weapon swapped">
                         <img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap"
-                             class="icon icon-hover">
+                            class="icon icon-hover">
                     </th>
-                    <th class="stat-cell" data-original-title="% of time in combat spent in animation">
-                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Animation"
-                             class="icon">
+                    <th class="stat-cell" :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7)"
+                        data-original-title="% of time in combat spent in animation">
+                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Animation" class="icon">
                         /
                         <img src="https://wiki.guildwars2.com/images/9/92/Arena_Proprietor.png" alt="Combat"
-                             class="icon">
+                            class="icon">
                     </th>
-                    <th class="stat-cell" data-original-title="% of time in combat spent in animation, excluding auto attack skills">
-                        (<img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Animation"
-                             class="icon"> - <img src="https://wiki.guildwars2.com/images/a/a1/Hammer_Marker_Yellow.png" alt="Auto attack"
-                             class="icon">)
+                    <th class="stat-cell" :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)"
+                        data-original-title="% of time in combat spent in animation, excluding auto attack skills">
+                        (<img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Animation" class="icon">
+                        - <img src="https://wiki.guildwars2.com/images/a/a1/Hammer_Marker_Yellow.png" alt="Auto attack"
+                            class="icon">)
                         /
                         <img src="https://wiki.guildwars2.com/images/9/92/Arena_Proprietor.png" alt="Combat"
-                             class="icon">
+                            class="icon">
                     </th>
-                    <th class="stat-cell" data-original-title="Average Distance to the center of the squad">
+                    <th class="stat-cell" :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5)"
+                        data-original-title="Average Distance to the center of the squad">
                         <img src="https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png" alt="Stack Center"
                             class="icon icon-hover">
                     </th>
-                    <th class="stat-cell" v-if="hasCommander" data-original-title="Average Distance to the commander">
+                    <th class="stat-cell" v-if="hasCommander" :class="getHeaderClass('Data', 6)"
+                        @click="sortBy('Data', 6)" data-original-title="Average Distance to the commander">
                         <img src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
-                            alt="Stack Commander" 
-                            class="icon icon-hover">
+                            alt="Stack Commander" class="icon icon-hover">
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in tableData.rows"
-                    :class="{active: row.player.id === playerindex}">
-                    <td>{{row.player.group}}</td>
-                    <td :data-original-title="row.player.profession">
+                <tr v-for="row in sortData(tableData.rows)" :class="{active: row.player.id === playerindex}">
+                    <td :class="getBodyClass('Sub')">
+                        {{row.player.group}}
+                    </td>
+                    <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
                         <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
                             style="display:none">{{row.player.profession}}</span>
                     </td>
-                    <td class="text-left">{{row.player.name}}</td>
-                    <td>{{row.player.acc}}</td>                
-                    <td
+                    <td :class="getBodyClass('Name')" class="text-left">
+                        {{row.player.name}}
+                    </td>
+                    <td :class="getBodyClass('Account')" class="text-left">
+                        {{row.player.acc}}
+                    </td>
+                    <td :class="getBodyClass('Data', 0)"
                         :data-original-title="row.commons[1] + ' cancels <br>' + round2(100.0 * row.commons[0] / phase.durationS) + '% of the phase'">
                         {{row.commons[0]}}
                     </td>
-                    <td
+                    <td :class="getBodyClass('Data', 2)"
                         :data-original-title="row.commons[3] + ' cancels <br>' + round2(100.0 * row.commons[2] / phase.durationS) + '% of the phase'">
                         {{row.commons[2]}}
                     </td>
-                    <td>{{row.commons[4]}}</td>
-                    <td>{{row.commons[7]}}%</td>
-                    <td>{{row.commons[8]}}%</td>
-                    <td>{{row.commons[5]}}</td>
-                    <td v-if="hasCommander">{{row.commons[6]}}</td>
+                    <td :class="getBodyClass('Data', 4)">
+                        {{row.commons[4]}}
+                    </td>
+                    <td :class="getBodyClass('Data', 7)">
+                        {{row.commons[7]}}%
+                    </td>
+                    <td :class="getBodyClass('Data', 8)">
+                        {{row.commons[8]}}%
+                    </td>
+                    <td :class="getBodyClass('Data', 5)">
+                        {{row.commons[5]}}
+                    </td>
+                    <td :class="getBodyClass('Data', 6)" v-if="hasCommander">
+                        {{row.commons[6]}}
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -95,28 +121,57 @@
     Vue.component("gameplay-stats-component", {
         props: ["playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent],
+        mixins: [numberComponent, sortedTableComponent],
         data: function () {
             return {
                 hasCommander: logData.hasCommander,
                 cache: new Map(),
                 sortdata: {
                     order: "desc",
-                    index: 1
+                    index: -1,
+                    key: "Prof"
                 }
             };
         },
-        mounted() {
-            refreshTable(this.tableid, this.sortdata);
-        },
-        updated() {
-            refreshTable(this.tableid, this.sortdata);
-        },
-        activated() {
-            refreshTable(this.tableid, this.sortdata);
+        methods: {
+            sortBy: function (key, index) {
+                this.sortByBase(this.sortdata, key, index);
+            },
+            getHeaderClass: function (key, index) {
+                return this.getHeaderClassBase(this.sortdata, key, index);
+            },
+            getBodyClass: function (key, index) {
+                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                return classes;
+            },
+            sortData: function (rows) {
+                var order = this.sortdata.order === "asc" ? 1 : -1;
+                switch (this.sortdata.key) {
+                    case "Sub":
+                        rows.sort((x, y) => order * (x.player.group - y.player.group));
+                        break;
+                    case "Prof":
+                        rows.sort((x, y) => order * x.player.profession.localeCompare(y.player.profession));
+                        break;
+                    case "Name":
+                        rows.sort((x, y) => order * x.player.name.localeCompare(y.player.name));
+                        break;
+                    case "Account":
+                        rows.sort((x, y) => order * x.player.acc.localeCompare(y.player.acc));
+                        break;
+                    case "Data":
+                        var index = this.sortdata.index;
+                        rows.sort((x, y) => order * (x.commons[index] - y.commons[index]));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
         },
         computed: {
-            tableid: function() {
+            tableid: function () {
                 return "gameplay-table";
             },
             phase: function () {

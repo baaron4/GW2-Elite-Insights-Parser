@@ -418,28 +418,6 @@ th:hover img.icon-hover,
     filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
 }
 
-table.dataTable.table-sm > thead > tr > th {
-    padding-right: 10px;
-}
-
-table.dataTable.table-sm .sorting:before,
-table.dataTable.table-sm .sorting_asc:before,
-table.dataTable.table-sm .sorting_desc:before {
-    right: 0.3em;
-}
-
-table.dataTable thead .sorting:before,
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:before,
-table.dataTable thead .sorting_asc_disabled:before,
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:before,
-table.dataTable thead .sorting_desc_disabled:after {
-    right: 0.3em;
-    display: none;
-}
-
 .sub-cell { 
     width: 20px ;
 }
@@ -458,12 +436,6 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .damage-dist-cell {
     width: 100px;
-}
-
-table.dataTable thead .sorting_asc:before,
-table.dataTable thead .sorting_desc:after {
-    right: 0.3em;
-    display: block;
 }
 
 .sub-tabs {
@@ -720,43 +692,45 @@ input[type=range].slider {
     cursor: pointer;
   }
 
-.scrollable-cr-dps-table table tbody { display:block; }
-.scrollable-cr-dps-table thead { display:block; }
-.scrollable-cr-dps-table tfoot { display:block; }
 
-/* 25px due to datatable sort stuff */
-th.cr-dps-table-dps {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 105px;
-    max-width: 105px;
+thead .sorted, thead .sorted_asc, thead .sorted_desc {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
 }
 
-td.cr-dps-table-dps {
-    min-width: 120px;
-    max-width: 120px;
+thead .sorted:before, thead .sorted_asc:before, thead .sorted_desc:before {
+    top: 5px;
+    right: 0.85em;
+    content: "\2191";
+    position: absolute;
+    display: block;
+}
+thead .sorted:before, thead .sorted_desc:before {
+    opacity: 0.3;
+}
+thead .sorted_asc:before {
+    opacity: 1.0;
 }
 
-th.cr-dps-table-name{
-    min-width: 85px;
-    max-width: 85px;
+thead .sorted:after, thead .sorted_asc:after, thead .sorted_desc:after {
+    top: 5px;
+    right: 0.5em;
+    content: "\2193";
+    position: absolute;
+    display: block;
 }
-td.cr-dps-table-name{
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 100px;
-    max-width: 100px;
+thead .sorted:after, thead .sorted_asc:after {
+    opacity: 0.3;
+}
+thead .sorted_desc:after {
+    opacity: 1.0;
 }
 
-th.cr-dps-table-icon-col{
-    min-width: 8px;
-    max-width: 8px;
-}
-td.cr-dps-table-icon-col {   
-    min-width: 23px;
-    max-width: 23px;
+
+
+td.sorted {
+    background-color: rgba(39, 128, 227, 0.05);
 }
 
 td.lowerOrEqual::before {

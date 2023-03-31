@@ -5,29 +5,29 @@
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
-                    <th class="sub-cell">Sub</th>
-                    <th class="prof-cell"></th>
-                    <th>Name</th>
-                    <th class="stat-cell" v-for="buff in buffs"
+                    <th class="sub-cell" :class="getHeaderClass('Sub')" @click="sortBy('Sub')">Sub</th>
+                    <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
+                    <th class="stat-cell" v-for="(buff, index) in buffs" :class="getHeaderClass('Data', index)" @click="sortBy('Data', index)"
                         :data-original-title="buff.name + (buff.description ? '<br> ' + buff.description : '')">
                         <img :src="buff.icon" :alt="buff.name" class="icon icon-hover">
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-show="!row.player.notInSquad || !hidecustom" v-for="row in playerdata" :class="{active: row.player.group && row.player.id === playerindex}">
-                    <td>{{ row.player.group ? row.player.group : '-' }}</td>
-                    <td :data-original-title="row.player.profession ? row.player.profession : row.player.name">
+                <tr v-show="!row.player.notInSquad || !hidecustom" v-for="row in sortData(playerdata)" :class="{active: row.player.group && row.player.id === playerindex}">
+                    <td :class="getBodyClass('Sub')">{{ row.player.group ? row.player.group : '-' }}</td>
+                    <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession ? row.player.profession : row.player.name">
                         <img :src="row.player.icon"
                             :alt="row.player.profession ? row.player.profession : row.player.name" class="icon">
                         <span style="display:none">
                             {{ row.player.profession ? row.player.profession : row.player.name}}
                         </span>
                     </td>
-                    <td class="text-left" :data-original-title="getAvgTooltip(row.data.avg)">
+                    <td class="text-left" :class="getBodyClass('Name')" :data-original-title="getAvgTooltip(row.data.avg)">
                         {{ row.player.name }}
                     </td>
-                    <td v-for=" (buff, index) in buffs"
+                    <td v-for=" (buff, index) in buffs"  :class="getBodyClass('Data', index)"
                         :data-original-title="getCellTooltip(buff, row.data.data[index])">
                         {{ getCellValue(buff, row.data.data[index]) }}
                     </td>
@@ -54,16 +54,56 @@
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent],
+        mixins: [numberComponent, sortedTableComponent],
         data: function () {
             return {             
                 sortdata: {
                     order: "asc",
-                    index: 0
+                    index: -1,
+                    key: "Sub",
                 }
             };
         },
         methods: {
+            sortBy: function(key, index) {
+                this.sortByBase(this.sortdata, key, index);
+            },
+            getHeaderClass: function(key, index) {
+                return this.getHeaderClassBase(this.sortdata, key, index);
+            },
+            getBodyClass: function(key, index) {
+                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                return classes;
+            },
+            sortData: function(rows) {
+                var order = this.sortdata.order === "asc" ? 1 : -1;
+                switch (this.sortdata.key) {
+                    case "Sub":
+                        rows.sort((x,y) => order * (x.player.group - y.player.group));
+                        break;
+                    case "Prof":
+                        rows.sort((x,y) => order * x.player.profession.localeCompare(y.player.profession));
+                        break;
+                    case "Name":
+                        rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
+                        break;
+                    case "Data":
+                        var index = this.sortdata.index;
+                        function getValue(rowValue) {
+                            var value = rowValue.data.data[index];
+                            if (value instanceof Array) {
+                                return value[0];
+                            }
+                            return value;
+                        }
+                        rows.sort((x,y) => order * (getValue(x) - getValue(y)));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
             getAvgTooltip: function (avg) {
                 if (avg) {
                     return (
@@ -133,15 +173,6 @@
                         <li>Extended is "extended by unknown source + extended by known source other than yourself". Not included in generation. This value is just here to indicate if you are a good seed.</li>
                         </ul>`
             }
-        },
-        mounted() {
-            refreshTable(this.tableid, this.sortdata);
-        },
-        updated() {
-            refreshTable(this.tableid, this.sortdata);
-        },
-        activated() {
-            refreshTable(this.tableid, this.sortdata);
         }
     });
 </script>

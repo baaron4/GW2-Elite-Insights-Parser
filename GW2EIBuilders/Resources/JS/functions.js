@@ -693,56 +693,6 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function _initTable (id, cell, order, orderCallBack) {
-    var table = $(id);
-    if (!table.length) {
-        return;
-    }
-    var data = {
-        order: [
-            [cell, order]
-        ]
-    };
-    if ($.fn.dataTable.isDataTable(id)) {
-        table.DataTable().destroy();
-    }
-    table.DataTable(data);
-    if (orderCallBack) {
-        table.DataTable().on('order.dt', orderCallBack);
-    }
-    //}
-};
-
-function initializeTable(tableid, sortdata) {
-    _initTable(
-        "#" + tableid,
-        sortdata.index,
-        sortdata.order,
-        function () {
-            var order = $("#" + tableid)
-                .DataTable()
-                .order();
-                sortdata.order = order[0][1];
-                sortdata.index = order[0][0];
-        }
-    );
-}
-
-function updateTable(tableid) {
-    var divID = "#" + tableid;
-    var table = $(divID);
-    if ($.fn.dataTable.isDataTable(divID)) {
-        table.DataTable().rows().invalidate('dom');
-        table.DataTable().draw();
-    }
-    //}
-};
-
-function refreshTable(tableid, sortdata) {
-    initializeTable(tableid, sortdata);
-    updateTable(tableid);
-};
-
 /*function getActorGraphLayout(images, boonYs, stackingBoons) {
     var layout = {
         barmode: 'stack',

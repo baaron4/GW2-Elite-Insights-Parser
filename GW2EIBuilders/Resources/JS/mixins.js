@@ -7,27 +7,27 @@ var numberComponent = {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         },
         round: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             return Math.round(value);
         },
         round1: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 10;
             return Math.round(mul * value) / mul;
         },
         round2: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 100;
             return Math.round(mul * value) / mul;
         },
         round3: function (value) {
-            if (isNaN(value)) {
+            if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
             var mul = 1000;
@@ -125,4 +125,88 @@ var timeRefreshComponent = {
             return this.time;
         },
     },
+};
+
+var sortedTableComponent = {
+    methods:  {       
+        sortByBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            if (sortdata.key !== key || index !== sortdata.index) {
+                sortdata.order = "asc";
+            } else {
+                sortdata.order = sortdata.order === "asc" ? "desc" : "asc";
+            }
+            sortdata.key = key;
+            sortdata.index = index;
+        },
+        getHeaderClassBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            if (sortdata.key === key && sortdata.index === index) {
+                if (sortdata.order === "asc") {
+                    return {"sorted_asc" : true};
+                } else {
+                    return {"sorted_desc": true};
+                }
+            };
+            return {'sorted': true};
+        },
+        getBodyClassBase: function(sortdata, key, index) {
+            index = index >= 0 ? index : -1;
+            return {'sorted': sortdata.key === key && sortdata.index === index};
+        },
+    }
+};
+
+var sortedDistributionComponent = {
+    methods: {    
+        sortBy: function(key, index, func) {
+            this.sortByBase(this.sortdata, key, index);
+            this.sortdata.sortFunc = func ? func : null;
+        },
+        getHeaderClass: function(key, index) {
+            return this.getHeaderClassBase(this.sortdata, key, index);
+        },
+        getBodyClass: function(key, index) {
+            var classes = this.getBodyClassBase(this.sortdata, key, index);
+            return classes;
+        },     
+        getCastBodyClass: function(key, index, data) {
+            var res = this.getBodyClass(key, index);
+            var innacurate = {higherOrEqual: (!this.getSkill(data).condi && this.getCast(data)) && this.showInequality(data)};
+            Object.assign(res, innacurate);
+            return res;
+        },
+        getHitsPerCastBodyClass: function(key, index, data) {
+            var res = this.getBodyClass(key, index);
+            var innacurate = {lowerOrEqual: (!this.getSkill(data).condi && this.getConnectedHits(data) && this.getCast(data)) && this.showInequality(data)};
+            Object.assign(res, innacurate);
+            return res;
+        },
+        sortData: function(rows) {
+            var order = this.sortdata.order === "asc" ? 1 : -1;
+            switch (this.sortdata.key) {
+                case "Skill":
+                    rows.sort((x,y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    break;
+                case "Data":
+                    var sortFunc = x => {
+                        var value = this.sortdata.sortFunc(x);
+                        if (value === 0) {
+                            if (order > 0) {
+                                value = 1e15;
+                            } else {
+                                value = -1e15;
+                            }
+                        }
+                        return value;
+                    };
+                    rows.sort((x,y) => order * (sortFunc(x) - sortFunc(y)));
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+            return rows;
+        },
+    }
 };

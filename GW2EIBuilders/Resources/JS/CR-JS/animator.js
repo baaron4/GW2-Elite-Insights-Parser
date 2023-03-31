@@ -231,7 +231,7 @@ class Animator {
         try {
             const cleanedString = value.replace(",", ".");
             const parsedTime = parseFloat(cleanedString);
-            if (isNaN(parsedTime)) {
+            if (isNaN(parsedTime) || !isFinite(parsedTime)) {
                 return;
             }
             const ms = Math.round(parsedTime * 1000.0);

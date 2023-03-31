@@ -85,11 +85,7 @@
                         if (rows.has(targetDistribution[1])) {
                             var row = rows.get(targetDistribution[1]);
                             row[2] += targetDistribution[2];
-                            if (row[3] < 0) {
-                                row[3] = targetDistribution[3];
-                            } else if (targetDistribution[3] >= 0) {
-                                row[3] = Math.min(targetDistribution[3], row[3]);
-                            }
+                            row[3] = Math.min(targetDistribution[3], row[3]);
                             row[4] = Math.max(targetDistribution[4], row[4]);
                             // skip 5 6 7
                             row[8] += targetDistribution[8];
