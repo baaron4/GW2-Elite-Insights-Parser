@@ -5,8 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -415,32 +416,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.SetInstanceBuffs(log);
             IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
             IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
+            List<PhaseData> phases = GetPhases(log, true);
+            PhaseData darkPhase = phases.Find(x => x.Name == "Dark Phase");
 
-            if (dwd.Any() && log.FightData.Success)
+            if (log.FightData.Success && darkPhase != null)
             {
-                int counter = 0;
-                foreach (Player p in log.PlayerList)
+                if (dwd.Any())
                 {
-                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    int counter = 0;
+                    foreach (Player p in log.PlayerList)
                     {
-                        counter++;
+                        if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            counter++;
+                        }
+                    }
+                    // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
+                    if (counter == 5)
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
                     }
                 }
-                // The achievement requires 5 players alive, if the instance has only 4 players inside, you cannot get it.
-                if (counter == 5)
+                if (energyDispersal.Any())
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
-                }
-            }
-
-            if (energyDispersal.Any() && log.FightData.Success)
-            {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    foreach (Player p in log.PlayerList)
                     {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
-                        break;
+                        if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
+                            break;
+                        }
                     }
                 }
             }

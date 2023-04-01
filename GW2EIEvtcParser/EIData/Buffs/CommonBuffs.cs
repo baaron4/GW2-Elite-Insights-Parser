@@ -80,6 +80,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
             new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
+            new Buff("Revive Sickness", ReviveSickness, Source.Common, BuffClassification.Other, BuffImages.ReviveSickness),
             // Auras
             new Buff("Chaos Aura", ChaosAura, Source.Common, BuffClassification.Support, BuffImages.ChaosAura),
             new Buff("Fire Aura", FireAura, Source.Common, BuffClassification.Support, BuffImages.FireAura),

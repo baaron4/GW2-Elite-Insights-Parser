@@ -1275,6 +1275,7 @@
         public const long RadiantAttunementOrb = 35109;
         public const long MagicBlast = 35119;
         public const long TemporalShredOrb = 35128;
+        public const long ReviveSickness = 35133;
         public const long PhantasmalBlades2 = 35137;
         public const long TormentingDredge = 35139;
         public const long Incoming = 35140;
@@ -1286,7 +1287,7 @@
         public const long SpinningCut = 35452;
         public const long PullCharge = 35761;
         public const long WhirlingDevastation = 35940;
-        public const long AchievementEligibilityFastSiege = 35982;
+        public const long AchievementEligibilityFastSiege = 34982;
         public const long Enraged2_200 = 36078;
         public const long MistlockInstabilityToxicTrail = 36204;
         public const long MistlockInstabilityMistsConvergence = 36224;
@@ -2023,7 +2024,7 @@
         public const long SappingSurge = 56118;
         public const long ViolentCurrents = 56123;
         public const long ForceOfRetaliation = 56134;
-        public const long Stalagmites = 56141;
+        public const long StalagmitesDetonation = 56141;
         public const long ChaosCalled = 56145;
         public const long AchievementEligibilityPowerSurge = 56171;
         public const long RepulsionField = 56172;
@@ -2079,6 +2080,7 @@
         public const long DiamondPalisade = 56636;
         public const long UnbridledTempest = 56643;
         public const long BoulderBarrage = 56648;
+        public const long AdinaStalagmitesSpawn = 56649;
         public const long EtherStrikes2 = 56653;
         public const long PoisonedPower = 56655;
         public const long BrandstormLightning = 56656;
@@ -2759,6 +2761,7 @@
         public const long VoidPoolNM = 67739;
         public const long OldExposed = 67763;
         public const long GraspOfJormag = 67772;
+        public const long MaiTrinCMBeamsTargetBlue = 67820;
         public const long ToxicBullet2 = 67822;
         public const long DragonSlashRush1CM = 67824;
         public const long DragonSlashWaveCM = 67825;
@@ -2769,9 +2772,12 @@
         public const long MagneticBomb = 67856;
         public const long ImminentDeath1 = 67859;
         public const long TormentingWaveCM = 67866;
+        public const long MaiTrinCMBeamsTargetRed = 67868;
+        public const long MaiTrinCMBeamsTargetGreen = 67871;
         public const long PhotonSaturation = 67872;
         public const long AchievementEligibilityLeapsAbound = 67882;
         public const long ImminnetDeath2 = 67931;
+        public const long FailSafeActivated = 67936;
         public const long SanctuaryAnkka2 = 67941;
         public const long DragonSlashRush2CM = 67943;
         public const long AchievementEligibilityTriangulation = 67949;

@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -465,6 +466,45 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Peerless Qadim not found");
             }
             return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> powerSurge = log.CombatData.GetBuffData(AchievementEligibilityPowerSurge);
+            bool hasPowerSurgeBeenAdded = false;
+
+            if (log.FightData.Success)
+            {
+                if (powerSurge.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityPowerSurge, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
+                            hasPowerSurgeBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasPowerSurgeBeenAdded && CustomCheckPowerSurgeEligibility(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
+                }
+            }
+        }
+
+        private static bool CustomCheckPowerSurgeEligibility(ParsedEvtcLog log)
+        {
+            IReadOnlyList<AgentItem> anomalies = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TrashID.EntropicDistortion);
+            
+            foreach (AgentItem anomaly in anomalies)
+            {
+                // If == 0, true, else false.
+                return GetFilteredList(log.CombatData, SappingSurge, log.FindActor(anomaly), true, true).Count == 0;
+            }
+            return false;
         }
     }
 }

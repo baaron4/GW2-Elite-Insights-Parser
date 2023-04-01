@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -247,6 +248,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> environmentallyFriendly = log.CombatData.GetBuffData(EnvironmentallyFriendly);
+            if (environmentallyFriendly.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, EnvironmentallyFriendly, log.FightData.FightEnd - ServerDelayConstant))
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[EnvironmentallyFriendly], 1));
+                        break;
+                    }
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -236,6 +237,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TrashID.Glenna
             };
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> loveIsBunny = log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny);
+            IReadOnlyList<AbstractBuffEvent> fastSiege = log.CombatData.GetBuffData(AchievementEligibilityFastSiege);
+
+            if (log.FightData.Success)
+            {
+                if (loveIsBunny.Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
+                if (fastSiege.Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
+            }
+        }
+
+        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
+        {
+            foreach (Player p in log.PlayerList)
+            {
+                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
+                    break;
+                }
+            }
         }
     }
 }

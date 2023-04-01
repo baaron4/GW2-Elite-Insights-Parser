@@ -454,7 +454,7 @@ namespace GW2EIEvtcParser
         private const int SiegeChest = -34;
         private const int Mine = -35;
         private const int Environment = -36;
-
+        private const int FerrousBomb = -37;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -701,6 +701,7 @@ namespace GW2EIEvtcParser
             ScarletPhantomHP = 24431,
             ScarletPhantomHP2 = 25262,
             ScarletPhantom2 = 24396,
+            FerrousBomb = ArcDPSEnums.FerrousBomb,
             // Xunlai Jade Junkyard
             Ankka = 24634,
             AnkkaHallucination1 = 24258,

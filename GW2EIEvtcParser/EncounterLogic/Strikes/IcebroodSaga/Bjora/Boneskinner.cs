@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -54,6 +59,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.PrioryScholar,
                 ArcDPSEnums.TrashID.AberrantWisp,
             };
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> holdOntoTheLight = log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight);
+
+            if (holdOntoTheLight.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, AchievementEligibilityHoldOntoTheLight, log.FightData.FightEnd - ServerDelayConstant))
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityHoldOntoTheLight], 1));
+                        break;
+                    }
+                }
+            }
         }
     }
 }

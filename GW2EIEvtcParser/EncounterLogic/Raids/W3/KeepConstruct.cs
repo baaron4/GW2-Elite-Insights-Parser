@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -442,6 +443,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Decorations.Add(new LineDecoration(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));
                     }
+                }
+            }
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> downDownDowned = log.CombatData.GetBuffData(AchievementEligibilityDownDownDowned);
+            bool hasBeenAdded = false;
+
+            if (log.FightData.Success)
+            {
+                if (downDownDowned.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityDownDownDowned, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
+                            hasBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (GetEncounterMode(log.CombatData, log.AgentData, log.FightData) == FightData.EncounterMode.CM && !hasBeenAdded)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
                 }
             }
         }

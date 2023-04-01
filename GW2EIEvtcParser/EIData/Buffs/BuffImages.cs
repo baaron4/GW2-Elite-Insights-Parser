@@ -60,6 +60,7 @@
         internal const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";
         internal const string SpeedMushroom = "https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png";
         internal const string AchillesBane = "https://wiki.guildwars2.com/images/5/55/Achilles_Bane.png";
+        internal const string ReviveSickness = "https://wiki.guildwars2.com/images/9/91/Revive_Sickness.png";
         // Auras
         internal const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
         internal const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
@@ -344,6 +345,9 @@
         internal const string LeyEnergyShield = "https://wiki.guildwars2.com/images/2/2b/Ley_Energy_Shield.png";
         internal const string SpiritEnergyTracker = "https://wiki.guildwars2.com/images/8/88/Spirit_Energy_Tracker.png";
         internal const string ChargingEnergies = "https://wiki.guildwars2.com/images/d/d1/Charging_Energies_%28attack_effect%29.png";
+        internal const string SynergeticLightAttunementGreen = "https://wiki.guildwars2.com/images/c/c0/Synergetic_Light_Attunement.png";
+        internal const string StaticLightAttunementRed = "https://wiki.guildwars2.com/images/b/b5/Static_Light_Attunement.png";
+        internal const string DynamicLightAttunementBlue = "https://wiki.guildwars2.com/images/3/3c/Dynamic_Light_Attunement.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
