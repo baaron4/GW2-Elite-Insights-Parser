@@ -242,13 +242,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> loveIsBunny = log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny);
-            IReadOnlyList<AbstractBuffEvent> fastSiege = log.CombatData.GetBuffData(AchievementEligibilityFastSiege);
 
             if (log.FightData.Success)
             {
-                if (loveIsBunny.Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
-                if (fastSiege.Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
             }
         }
 

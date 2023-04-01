@@ -281,11 +281,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> triangulation = log.CombatData.GetBuffData(AchievementEligibilityTriangulation);
-            bool hasTriangulationBeenAdded = false;
             
             if(log.FightData.Success)
             {
+                IReadOnlyList<AbstractBuffEvent> triangulation = log.CombatData.GetBuffData(AchievementEligibilityTriangulation);
+                bool hasTriangulationBeenAdded = false;
                 if (triangulation.Any())
                 {
                     foreach (Player p in log.PlayerList)

@@ -118,11 +118,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> mildlyInsane = log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane);
-            bool hasBeenAdded = false;
 
             if (log.FightData.Success)
             {
+                IReadOnlyList<AbstractBuffEvent> mildlyInsane = log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane);
+                bool hasBeenAdded = false;
                 if (mildlyInsane.Any())
                 {
                     foreach (Player p in log.PlayerList)

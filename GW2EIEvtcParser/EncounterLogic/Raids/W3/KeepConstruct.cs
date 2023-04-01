@@ -450,18 +450,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            int hasHitKc = 0;
 
-            if (log.FightData.Success)
+            if (log.FightData.Success && log.FightData.IsCM)
             {
+                int hasHitKc = 0;
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0)
+                    if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Any())
                     {
                         hasHitKc++;
                     }
                 }
-                if (log.FightData.IsCM && hasHitKc == log.PlayerList.Count)
+                if (hasHitKc == log.PlayerList.Count)
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
                 }

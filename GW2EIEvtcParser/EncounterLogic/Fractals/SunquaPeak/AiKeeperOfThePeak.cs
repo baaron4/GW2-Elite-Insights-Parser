@@ -414,11 +414,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
-            IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
 
             if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
             {
+                IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
+                IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
                 if (dwd.Any())
                 {
                     int counter = 0;

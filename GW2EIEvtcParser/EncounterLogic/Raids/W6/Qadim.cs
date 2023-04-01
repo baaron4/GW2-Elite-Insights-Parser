@@ -963,13 +963,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> takingTurns = log.CombatData.GetBuffData(AchievementEligibilityTakingTurns);
-            IReadOnlyList<AbstractBuffEvent> manipulateTheManipulator = log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator);
 
             if (log.FightData.Success)
             {
-                if (takingTurns.Any()) { CheckAchievementBuff(log, AchievementEligibilityTakingTurns); }
-                if (manipulateTheManipulator.Any()) { CheckAchievementBuff(log, AchievementEligibilityManipulateTheManipulator); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityTakingTurns).Any()) { CheckAchievementBuff(log, AchievementEligibilityTakingTurns); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any()) { CheckAchievementBuff(log, AchievementEligibilityManipulateTheManipulator); }
             }
         }
 

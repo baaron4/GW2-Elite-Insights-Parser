@@ -150,11 +150,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> gitv = log.CombatData.GetBuffData(AchievementEligibilityGazeIntoTheVoid);
-            bool hasGitvBeenAdded = false;
 
             if (log.FightData.Success && log.FightData.IsCM)
             {
+                IReadOnlyList<AbstractBuffEvent> gitv = log.CombatData.GetBuffData(AchievementEligibilityGazeIntoTheVoid);
+                bool hasGitvBeenAdded = false;
                 if (gitv.Any())
                 {
                     foreach (Player p in log.PlayerList)

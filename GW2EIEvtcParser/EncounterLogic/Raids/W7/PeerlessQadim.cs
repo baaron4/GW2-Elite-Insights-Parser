@@ -471,11 +471,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> powerSurge = log.CombatData.GetBuffData(AchievementEligibilityPowerSurge);
-            bool hasPowerSurgeBeenAdded = false;
 
             if (log.FightData.Success)
             {
+                IReadOnlyList<AbstractBuffEvent> powerSurge = log.CombatData.GetBuffData(AchievementEligibilityPowerSurge);
+                bool hasPowerSurgeBeenAdded = false;
                 if (powerSurge.Any())
                 {
                     foreach (Player p in log.PlayerList)

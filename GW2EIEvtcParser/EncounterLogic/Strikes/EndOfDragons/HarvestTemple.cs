@@ -1183,13 +1183,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> voidwalker = log.CombatData.GetBuffData(AchievementEligibilityVoidwalker);
-            bool hasVoidwalkerBeenAdded = false;
 
-            if (log.FightData.Success)
+            if (log.FightData.Success && log.FightData.IsCM)
             {
+                IReadOnlyList<AbstractBuffEvent> voidwalker = log.CombatData.GetBuffData(AchievementEligibilityVoidwalker);
+                bool hasVoidwalkerBeenAdded = false;
                 // Added a CM mode check because the eligibility has been bugged for a while and showed up in normal mode.
-                if (voidwalker.Any() && log.FightData.IsCM)
+                if (voidwalker.Any())
                 {
                     foreach (Player p in log.PlayerList)
                     {
@@ -1201,7 +1201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                 }
-                if (!hasVoidwalkerBeenAdded && log.FightData.IsCM && CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
+                if (!hasVoidwalkerBeenAdded && CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityVoidwalker], 1));
                 }
