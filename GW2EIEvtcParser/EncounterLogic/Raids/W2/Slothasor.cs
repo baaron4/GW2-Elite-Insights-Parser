@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -57,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.HasBuff(log, SlipperySlubling, log.FightData.FightEnd - ParserHelper.ServerDelayConstant))
+                    if (p.HasBuff(log, SlipperySlubling, log.FightData.FightEnd - ServerDelayConstant))
                     {
                         InstanceBuffs.Add((log.Buffs.BuffsByIds[SlipperySlubling], 1));
                         break;

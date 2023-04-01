@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -255,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (countDict.TryGetValue(target.ID, out int count))
                     {
                         target.OverrideName(target.Character + " " + (++count));
-                    } 
+                    }
                     else
                     {
                         count = 1;
@@ -442,6 +443,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Decorations.Add(new LineDecoration(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));
                     }
+                }
+            }
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            int hasHitKc = 0;
+
+            if (log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0)
+                    {
+                        hasHitKc++;
+                    }
+                }
+                if (log.FightData.IsCM && hasHitKc == log.PlayerList.Count)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
                 }
             }
         }

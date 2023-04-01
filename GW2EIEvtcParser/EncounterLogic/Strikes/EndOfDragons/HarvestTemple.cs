@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap(CombatReplayHarvestTemple,
                             (788, 788),
-                            (-812,-21820,2037,-18971)/*,
+                            (-812, -21820, 2037, -18971)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
         }
@@ -176,11 +176,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (despawnEvent == null)
                     {
                         end = voidAmal.LastAware;
-                    } else
+                    }
+                    else
                     {
                         end = despawnEvent.Time;
                     }
-                } else
+                }
+                else
                 {
                     end = deadEvent.Time;
                 }
@@ -321,11 +323,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
-            var idsToUse = new List<ArcDPSEnums.TargetID> { 
+            var idsToUse = new List<ArcDPSEnums.TargetID> {
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-                ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 
-                ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 
+                ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
+                ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
@@ -372,7 +374,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (c.SrcMatchesAgent(dragonVoid, extensions))
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
-                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate) {
+                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
+                                {
                                     // Discard hp update that goes up close to death time
                                     if (c.DstAgent >= lastHPUpdate && c.Time > extra.LastAware - 2000)
                                     {
@@ -445,7 +448,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             (HashSet<ulong> soowonDamagingAgents, NPC soowon) = (new HashSet<ulong>(), null);
             foreach (NPC target in Targets)
             {
-                switch(target.ID)
+                switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                         target.OverrideName("The JormagVoid");
@@ -715,7 +718,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             var velocity = 50;
                             var lifespan = 15000;
-                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan/1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
+                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
                             //replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
                         }
                     }
@@ -763,7 +766,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
                     EffectGUIDEvent iceShard = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagIceShards);
-                    if (iceShard != null) 
+                    if (iceShard != null)
                     {
                         IReadOnlyList<EffectEvent> iceShardEffects = log.CombatData.GetEffectEventsByEffectID(iceShard.ContentID);
                         knownEffectsIDs.Add(iceShard.ContentID);
@@ -778,7 +781,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
                     EffectGUIDEvent meteor = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField);
-                    if (meteor != null) 
+                    if (meteor != null)
                     {
                         IReadOnlyList<EffectEvent> meteorEffects = log.CombatData.GetEffectEventsByEffectID(meteor.ContentID);
                         knownEffectsIDs.Add(iceShard.ContentID);
@@ -790,10 +793,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)effect.Time;
                             int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
                             // meteor impact
-                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start-indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, start, 600, (start - indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start - indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
                             // ice field
-                            replay.Decorations.Add(new CircleDecoration(true, start+spreadDuration, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(true, start + spreadDuration, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)));
                         }
                     }
@@ -880,7 +883,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         knownEffectsIDs.Add(voidPool.ContentID);
                         var radius = 100.0;
                         var radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
-                        for (int i = 0; i < poolEffects.Count-1; i++)
+                        for (int i = 0; i < poolEffects.Count - 1; i++)
                         {
                             EffectEvent curEffect = poolEffects[i];
                             EffectEvent nextEffect = poolEffects[i + 1];
@@ -994,7 +997,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, 0, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                             replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
-                    } 
+                    }
                     EffectGUIDEvent bouncingOrbClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator);
                     if (bouncingOrbClaw != null)
                     {
@@ -1075,7 +1078,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor activeDragon = Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
             return activeDragon ?? Targets.FirstOrDefault(x => x.FirstAware >= time);
         }
-        
+
         private AbstractSingleActor FindActiveOrNextPhase(long time)
         {
             var targetIDs = new List<int> {
@@ -1175,6 +1178,49 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return FightData.EncounterMode.CM;
             }
             return FightData.EncounterMode.Normal;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> voidwalker = log.CombatData.GetBuffData(AchievementEligibilityVoidwalker);
+            bool hasVoidwalkerBeenAdded = false;
+
+            if (log.FightData.Success)
+            {
+                // Added a CM mode check because the eligibility has been bugged for a while and showed up in normal mode.
+                if (voidwalker.Any() && log.FightData.IsCM)
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityVoidwalker, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityVoidwalker], 1));
+                            hasVoidwalkerBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasVoidwalkerBeenAdded && log.FightData.IsCM && CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityVoidwalker], 1));
+                }
+            }
+        }
+
+        private static bool CustomCheckVoidwalkerEligibility(ParsedEvtcLog log)
+        {
+            IReadOnlyList<AgentItem> orbs = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PushableVoidAmalgamate);
+
+            foreach (AgentItem orb in orbs)
+            {
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(orb).GetBuffGraphs(log);
+                if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out BuffsGraphModel bgm))
+                {
+                    if (bgm.BuffChart.Any(x => x.Value >= 3)) { return false; }
+                }
+            }
+            return true;
         }
     }
 }

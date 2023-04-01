@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -144,6 +145,49 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return FightData.EncounterMode.Story;
             }
             return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> gitv = log.CombatData.GetBuffData(AchievementEligibilityGazeIntoTheVoid);
+            bool hasGitvBeenAdded = false;
+
+            if (log.FightData.Success && log.FightData.IsCM)
+            {
+                if (gitv.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityGazeIntoTheVoid, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
+                            hasGitvBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasGitvBeenAdded && CustomCheckGazeIntoTheVoidEligibility(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
+                }
+            }
+            
+        }
+
+        private static bool CustomCheckGazeIntoTheVoidEligibility(ParsedEvtcLog log)
+        {
+            IReadOnlyList<AgentItem> agents = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Ankka);
+
+            foreach (AgentItem agent in agents)
+            {
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
+                if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out BuffsGraphModel bgm))
+                {
+                    if (bgm.BuffChart.Any(x => x.Value == 6)) { return true; }
+                }
+            }
+            return false;
         }
     }
 }

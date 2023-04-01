@@ -217,5 +217,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return target.GetHealth(combatData) > 20e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> fearNotThisKnight = log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight);
+            
+            if (fearNotThisKnight.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, AchievementEligibilityFearNotThisKnight, log.FightData.FightEnd - ServerDelayConstant))
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityFearNotThisKnight], 1));
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

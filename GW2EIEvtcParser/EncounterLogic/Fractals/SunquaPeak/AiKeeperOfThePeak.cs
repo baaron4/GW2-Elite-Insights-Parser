@@ -5,12 +5,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Reflection;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -406,6 +408,44 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 0:
                 default:
                     throw new MissingKeyActorsException("Ai not found");
+            }
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
+            IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
+
+            if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
+            {
+                if (dwd.Any())
+                {
+                    int counter = 0;
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            counter++;
+                        }
+                    }
+                    // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
+                    if (counter == 5)
+                    {
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
+                    }
+                }
+                if (energyDispersal.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

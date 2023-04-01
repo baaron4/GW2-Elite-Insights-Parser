@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -112,6 +113,46 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Twisted Castle";
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> mildlyInsane = log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane);
+            bool hasBeenAdded = false;
+
+            if (log.FightData.Success)
+            {
+                if (mildlyInsane.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityMildlyInsane, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
+                            hasBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasBeenAdded && CustomCheckMildlyInsaneEligibility(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
+                }
+            }
+        }
+
+        private static bool CustomCheckMildlyInsaneEligibility(ParsedEvtcLog log)
+        {
+            foreach (Player player in log.PlayerList)
+            {
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
+                if (bgms != null && bgms.TryGetValue(Madness, out BuffsGraphModel bgm))
+                {
+                    if (bgm.BuffChart.Any(x => x.Value >= 99)) { return false; }
+                }
+            }
+            return true;
         }
     }
 }

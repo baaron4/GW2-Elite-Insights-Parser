@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -217,6 +218,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            // Ferrous Bombs
+            var bombs = combatData.Where(x => x.DstAgent == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem bomb in bombs)
+            {
+                bomb.OverrideType(AgentItem.AgentType.NPC);
+                bomb.OverrideID(ArcDPSEnums.TrashID.FerrousBomb);
+            }
+            agentData.Refresh();
             // We remove extra Mai trins if present
             IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(ArcDPSEnums.TargetID.MaiTrinStrike);
             if (maiTrins.Count > 1)
@@ -267,6 +276,88 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mai Trin not found");
             }
             return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> triangulation = log.CombatData.GetBuffData(AchievementEligibilityTriangulation);
+            bool hasTriangulationBeenAdded = false;
+            
+            if(log.FightData.Success)
+            {
+                if (triangulation.Any())
+                {
+                    foreach (Player p in log.PlayerList)
+                    {
+                        if (p.HasBuff(log, AchievementEligibilityTriangulation, log.FightData.FightEnd - ServerDelayConstant))
+                        {
+                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
+                            hasTriangulationBeenAdded = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasTriangulationBeenAdded && CustomCheckTriangulationEligibility(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
+                }
+            }
+        }
+
+        private static bool CustomCheckTriangulationEligibility(ParsedEvtcLog log)
+        {
+            IReadOnlyList<long> beamsBuffs = new List<long>() { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed };
+            var beamsSegments = new List<Segment>();
+            var bombInvulnSegments = new List<Segment>();
+
+            foreach (AgentItem player in log.PlayerAgents)
+            {
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(player).GetBuffGraphs(log);
+                foreach (long buff in beamsBuffs)
+                {
+                    beamsSegments = GetBuffSegments(bgms, buff, beamsSegments).OrderBy(x => x.Start).ToList();
+                }
+            }
+
+            foreach (AgentItem agent in log.AgentData.GetNPCsByID(ArcDPSEnums.TrashID.FerrousBomb))
+            {
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
+                bombInvulnSegments = GetBuffSegments(bgms, FailSafeActivated, bombInvulnSegments).OrderBy(x => x.Start).ToList();
+            }
+
+            int counter = 0;
+
+            // For each segment where a bomb is invulnerable, check if it has started between the assignment and loss of a beam effect on a player (through buff)
+            // If the counter is == 8, it means every possible combination check has been met and it's eligible for the achievement.
+            // The combinations are 2 players buffs for each bomb invulnerability buff, so 2 x 4 total.
+            foreach (Segment invuln in bombInvulnSegments)
+            {
+                foreach (Segment s in  beamsSegments)
+                {
+                    if (s.Start < invuln.Start && invuln.Start < s.End)
+                    {
+                        counter++;
+                    }
+                }
+            }
+
+            return counter == 8;
+        }
+
+        private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long buff, List<Segment> segments)
+        {
+            if (bgms != null && bgms.TryGetValue(buff, out BuffsGraphModel bgm))
+            {
+                foreach (Segment s in bgm.BuffChart)
+                {
+                    if (s.Value == 1)
+                    {
+                        segments.Add(s);
+                    }
+                }
+            }
+            return segments;
         }
     }
 }
