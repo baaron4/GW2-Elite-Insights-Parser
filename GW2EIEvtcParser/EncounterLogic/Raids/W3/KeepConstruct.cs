@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (countDict.TryGetValue(target.ID, out int count))
                     {
                         target.OverrideName(target.Character + " " + (++count));
-                    } 
+                    }
                     else
                     {
                         count = 1;
@@ -450,24 +450,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> downDownDowned = log.CombatData.GetBuffData(AchievementEligibilityDownDownDowned);
-            bool hasBeenAdded = false;
+            int hasHitKc = 0;
 
             if (log.FightData.Success)
             {
-                if (downDownDowned.Any())
+                foreach (Player p in log.PlayerList)
                 {
-                    foreach (Player p in log.PlayerList)
+                    if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Count > 0)
                     {
-                        if (p.HasBuff(log, AchievementEligibilityDownDownDowned, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
-                            hasBeenAdded = true;
-                            break;
-                        }
+                        hasHitKc++;
                     }
                 }
-                if (GetEncounterMode(log.CombatData, log.AgentData, log.FightData) == FightData.EncounterMode.CM && !hasBeenAdded)
+                if (log.FightData.IsCM && hasHitKc == log.PlayerList.Count)
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
                 }

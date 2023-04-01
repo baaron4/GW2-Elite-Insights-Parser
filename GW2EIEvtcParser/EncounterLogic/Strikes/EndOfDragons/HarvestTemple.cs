@@ -1184,14 +1184,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
             IReadOnlyList<AbstractBuffEvent> voidwalker = log.CombatData.GetBuffData(AchievementEligibilityVoidwalker);
-
-            // Added a CM mode check because the eligibility has been bugged for a while and showed up in normal mode.
-            bool isCM = GetEncounterMode(log.CombatData, log.AgentData, log.FightData) == FightData.EncounterMode.CM;
             bool hasVoidwalkerBeenAdded = false;
 
             if (log.FightData.Success)
             {
-                if (voidwalker.Any() && isCM)
+                // Added a CM mode check because the eligibility has been bugged for a while and showed up in normal mode.
+                if (voidwalker.Any() && log.FightData.IsCM)
                 {
                     foreach (Player p in log.PlayerList)
                     {
@@ -1203,7 +1201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                 }
-                if (!hasVoidwalkerBeenAdded && CustomCheckVoidwalkerEligibility(log) && isCM) // In case all 10 players already have voidwalker
+                if (!hasVoidwalkerBeenAdded && log.FightData.IsCM && CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityVoidwalker], 1));
                 }
@@ -1217,16 +1215,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem orb in orbs)
             {
                 IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(orb).GetBuffGraphs(log);
-                if (bgms != null && bgms.ContainsKey(VoidEmpowerment))
+                if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out BuffsGraphModel bgm))
                 {
-                    bgms.TryGetValue(VoidEmpowerment, out BuffsGraphModel bgm);
-                    foreach (Segment s in bgm.BuffChart)
-                    {
-                        if (s.Value >= 3)
-                        {
-                            return false;
-                        }
-                    }
+                    if (bgm.BuffChart.Any(x => x.Value >= 3)) { return false; }
                 }
             }
             return true;

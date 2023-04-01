@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -164,6 +165,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, adjustedPlayers);
                 }
+            }
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            IReadOnlyList<AbstractBuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
+            int counter = 0;
+
+            if (beDynamic.Any() && log.FightData.Success)
+            {
+                foreach (Player p in log.PlayerList)
+                {
+                    if (p.HasBuff(log, AchievementEligibilityBeDynamic, log.FightData.FightEnd - ServerDelayConstant))
+                    {
+                        counter++;
+                    }
+                }
+            }
+            // The party must have 5 players to be eligible
+            if (counter == 5)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityBeDynamic], 1));
             }
         }
     }

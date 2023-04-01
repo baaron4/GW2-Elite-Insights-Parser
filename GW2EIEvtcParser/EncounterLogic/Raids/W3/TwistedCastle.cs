@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                 }
-                if (CustomCheckMildlyInsaneEligibility(log) && !hasBeenAdded)
+                if (!hasBeenAdded && CustomCheckMildlyInsaneEligibility(log))
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
                 }
@@ -147,16 +147,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Player player in log.PlayerList)
             {
                 IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
-                if (bgms != null && bgms.ContainsKey(Madness))
+                if (bgms != null && bgms.TryGetValue(Madness, out BuffsGraphModel bgm))
                 {
-                    bgms.TryGetValue(Madness, out BuffsGraphModel bgm);
-                    foreach (Segment s in bgm.BuffChart)
-                    {
-                        if (s.Value >= 99)
-                        {
-                            return false;
-                        }
-                    }
+                    if (bgm.BuffChart.Any(x => x.Value >= 99)) { return false; }
                 }
             }
             return true;

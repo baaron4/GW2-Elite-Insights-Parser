@@ -51,28 +51,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return true;
         }
-
-        protected override void SetInstanceBuffs(ParsedEvtcLog log)
-        {
-            base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
-            int counter = 0;
-
-            if (beDynamic.Any() && log.FightData.Success)
-            {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityBeDynamic, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        counter++;
-                    }
-                }
-            }
-            // The party must have 5 players to be eligible
-            if (counter == 5)
-            {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityBeDynamic], 1));
-            }
-        }
     }
 }

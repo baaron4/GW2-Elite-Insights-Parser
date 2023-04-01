@@ -416,10 +416,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.SetInstanceBuffs(log);
             IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
             IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
-            List<PhaseData> phases = GetPhases(log, true);
-            PhaseData darkPhase = phases.Find(x => x.Name == "Dark Phase");
 
-            if (log.FightData.Success && darkPhase != null)
+            if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
             {
                 if (dwd.Any())
                 {

@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Ferrous Bombs
-            var bombs = combatData.Where(x => x.DstAgent == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList();
+            var bombs = combatData.Where(x => x.DstAgent == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem bomb in bombs)
             {
                 bomb.OverrideType(AgentItem.AgentType.NPC);
@@ -328,8 +328,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             int counter = 0;
 
-            // For each segment where a bomb is invulnerable, check if it has started between the assignment and loss of a beam effect on a player
-            // If the counter is == 8, it means every possible combination check has been met, meaning it's eligible for the achievement.
+            // For each segment where a bomb is invulnerable, check if it has started between the assignment and loss of a beam effect on a player (through buff)
+            // If the counter is == 8, it means every possible combination check has been met and it's eligible for the achievement.
+            // The combinations are 2 players buffs for each bomb invulnerability buff, so 2 x 4 total.
             foreach (Segment invuln in bombInvulnSegments)
             {
                 foreach (Segment s in  beamsSegments)
@@ -346,9 +347,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long buff, List<Segment> segments)
         {
-            if (bgms != null && bgms.ContainsKey(buff))
+            if (bgms != null && bgms.TryGetValue(buff, out BuffsGraphModel bgm))
             {
-                bgms.TryGetValue(buff, out BuffsGraphModel bgm);
                 foreach (Segment s in bgm.BuffChart)
                 {
                     if (s.Value == 1)

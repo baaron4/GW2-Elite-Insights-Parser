@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyList<AbstractBuffEvent> gitv = log.CombatData.GetBuffData(AchievementEligibilityGazeIntoTheVoid);
             bool hasGitvBeenAdded = false;
 
-            if (log.FightData.Success)
+            if (log.FightData.Success && log.FightData.IsCM)
             {
                 if (gitv.Any())
                 {
@@ -182,16 +182,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AgentItem agent in agents)
             {
                 IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
-                if (bgms != null && bgms.ContainsKey(PowerOfTheVoid))
+                if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out BuffsGraphModel bgm))
                 {
-                    bgms.TryGetValue(PowerOfTheVoid, out BuffsGraphModel bgm);
-                    foreach (Segment s in bgm.BuffChart)
-                    {
-                        if (s.Value == 6)
-                        {
-                            return true;
-                        }
-                    }
+                    if (bgm.BuffChart.Any(x => x.Value == 6)) { return true; }
                 }
             }
             return false;
