@@ -348,6 +348,11 @@
         internal const string SynergeticLightAttunementGreen = "https://wiki.guildwars2.com/images/c/c0/Synergetic_Light_Attunement.png";
         internal const string StaticLightAttunementRed = "https://wiki.guildwars2.com/images/b/b5/Static_Light_Attunement.png";
         internal const string DynamicLightAttunementBlue = "https://wiki.guildwars2.com/images/3/3c/Dynamic_Light_Attunement.png";
+        internal const string TargetOrder1 = "https://wiki.guildwars2.com/images/0/03/Target_Order-_1.png";
+        internal const string TargetOrder2 = "https://wiki.guildwars2.com/images/1/1d/Target_Order-_2.png";
+        internal const string TargetOrder3 = "https://wiki.guildwars2.com/images/a/a7/Target_Order-_3.png";
+        internal const string TargetOrder4 = "https://wiki.guildwars2.com/images/1/14/Target_Order-_4.png";
+        internal const string TargetOrder5 = "https://wiki.guildwars2.com/images/b/bc/Target_Order-_5.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
