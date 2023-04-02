@@ -32,7 +32,7 @@
         internal const string Chilled = "https://wiki.guildwars2.com/images/a/a6/Chilled.png";
         internal const string Crippled = "https://wiki.guildwars2.com/images/f/fb/Crippled.png";
         internal const string Fear = "https://wiki.guildwars2.com/images/e/e6/Fear.png";
-        internal const string Immobile = "https://wiki.guildwars2.com/images/3/32/Immobile.png\"";
+        internal const string Immobile = "https://wiki.guildwars2.com/images/3/32/Immobile.png";
         internal const string Slow = "https://wiki.guildwars2.com/images/f/f5/Slow.png";
         internal const string Weakness = "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
         internal const string Taunt = "https://wiki.guildwars2.com/images/c/cc/Taunt.png";

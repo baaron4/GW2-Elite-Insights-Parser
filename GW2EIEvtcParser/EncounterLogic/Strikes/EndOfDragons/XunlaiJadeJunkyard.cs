@@ -151,28 +151,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
 
-            if (log.FightData.Success && log.FightData.IsCM)
+            if (log.FightData.Success && log.FightData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
             {
-                IReadOnlyList<AbstractBuffEvent> gitv = log.CombatData.GetBuffData(AchievementEligibilityGazeIntoTheVoid);
-                bool hasGitvBeenAdded = false;
-                if (gitv.Any())
-                {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityGazeIntoTheVoid, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
-                            hasGitvBeenAdded = true;
-                            break;
-                        }
-                    }
-                }
-                if (!hasGitvBeenAdded && CustomCheckGazeIntoTheVoidEligibility(log))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
-                }
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
             }
-            
         }
 
         private static bool CustomCheckGazeIntoTheVoidEligibility(ParsedEvtcLog log)
