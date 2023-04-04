@@ -85,6 +85,11 @@ namespace GW2EIJSON
         /// Barrier stats data
         /// </summary>
         public EXTJsonMinionsBarrierStats EXTBarrierStats { get; set; }
+        /// <summary>
+        /// Contains combat replay related data for each individual minion instance
+        /// </summary>
+        /// <seealso cref="JsonActorCombatReplayData"/>
+        public IReadOnlyList<JsonActorCombatReplayData> CombatReplayData { get; set; }
 
 
         public JsonMinions()

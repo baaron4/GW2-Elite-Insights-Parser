@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
 using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
@@ -18,7 +19,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     internal static class JsonMinionsBuilder
     {
         
-        public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
             var jsonMinions = new JsonMinions();
             jsonMinions.Id = minions.ID;
@@ -126,6 +127,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             if (log.CombatData.HasEXTBarrier && !isEnemyMinion)
             {
                 jsonMinions.EXTBarrierStats = EXTJsonMinionsBarrierStatsBuilder.BuildMinionsBarrierStats(minions, log, skillDesc, buffDesc);
+            }
+            if (log.CanCombatReplay)
+            {
+                jsonMinions.CombatReplayData = minions.MinionList.Select(x => JsonActorCombatReplayDataBuilder.BuildJsonActorCombatReplayDataBuilder(x, log, settings)).ToList();
             }
             return jsonMinions;
         }
