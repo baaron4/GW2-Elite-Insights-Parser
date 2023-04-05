@@ -54,6 +54,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = base.GetFightOffset(fightData, agentData, combatData);
+            AgentItem mama = agentData.GetNPCsByID(ArcDPSEnums.TargetID.MAMA).FirstOrDefault();
+            if (mama != null)
+            {
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+                if (enterCombat != null)
+                {
+                    startToUse = enterCombat.Time;
+                }
+            }
+            return startToUse;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
