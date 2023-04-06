@@ -7,11 +7,11 @@
                     <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
                         Name
                     </th>
-                    <th :class="getHeaderClass('All')" @click="sortBy('All')">
+                    <th class="damage-dist-cell" :class="getHeaderClass('All')" @click="sortBy('All')">
                         All
                     </th>
                     <th v-if="!targetless" v-for="(col, index) in tableData.cols"
-                        :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
+                        class="damage-dist-cell" :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
                         <span :title="col.name">
                             {{col.name}}
                         </span>
