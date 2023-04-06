@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Legendary Demon Stance", LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
             new Buff("Legendary Assassin Stance", LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
             // Traits
-            new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations, 0, GW2Builds.February2020Balance),
+            new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations, GW2Builds.StartOfLife, GW2Builds.February2020Balance),
             new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Expose Defenses", ExposeDefenses, Source.Revenant, BuffClassification.Other, BuffImages.MutilateDefenses),
             new Buff("Invoking Harmony", InvokingHarmony, Source.Revenant, BuffClassification.Other, BuffImages.InvokingHarmony),

@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
             }, ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance),
             new BuffDamageModifierTarget(new long[] { Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled }, "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.PredatorsOnslaught, DamageModifierMode.All).UsingApproximate(true),
             // Skirmishing
-            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All).WithBuilds( GW2Builds.February2020Balance, GW2Builds.June2022Balance),
+            new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
             new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance),
             new BuffDamageModifier(LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.LightOnYourFeet, DamageModifierMode.All),
@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Storm Spirit", StormSpirit, Source.Ranger, BuffClassification.Support, BuffImages.StormSpirit, GW2Builds.May2018Balance, GW2Builds.June2022Balance),
             // Skills
             new Buff("Attack of Opportunity", AttackOfOpportunity, Source.Ranger, BuffClassification.Other, BuffImages.MomentOfClarity),
-            new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, BuffImages.CallOfTheWild, 0, GW2Builds.July2019Balance),
+            new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, BuffImages.CallOfTheWild, GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.CallOfTheWild, GW2Builds.July2019Balance, GW2Builds.February2020Balance),
             new Buff("Strength of the Pack!", StrengthOfThePack, Source.Ranger, BuffClassification.Other, BuffImages.StrengthOfThePack),
             new Buff("Sic 'Em!", SicEmEffect, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),

@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser
             internal const ulong StartOfLife = ulong.MinValue;
             //
             internal const ulong February2017Balance = 72781;
+            internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
             internal const ulong July2018Balance = 90455;
@@ -25,6 +26,7 @@ namespace GW2EIEvtcParser
             internal const ulong October2019Balance = 99526;
             internal const ulong December2019Balance = 100690;
             internal const ulong February2020Balance = 102321;
+            internal const ulong February2020Balance2 = 102389;
             internal const ulong July2020Balance = 104844;
             internal const ulong May2021Balance = 115190;
             internal const ulong May2021BalanceHotFix = 115728;

@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.BloodReckoning, GW2Builds.October2022Balance, GW2Builds.EndOfLife),
             new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, BuffImages.ShatteringBlow),
             new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
-            new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry, 0 , GW2Builds.April2019Balance),
+            new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry, GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         };
 
 

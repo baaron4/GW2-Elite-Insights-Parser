@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Rebound", Rebound, Source.Tempest, BuffClassification.Defensive, BuffImages.Rebound),
-            new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit, 0, GW2Builds.October2019Balance),
+            new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit, GW2Builds.StartOfLife, GW2Builds.October2019Balance),
             new Buff("Transcendent Tempest", TranscendentTempest, Source.Tempest, BuffClassification.Other, BuffImages.TranscendentTempest, GW2Builds.October2019Balance, GW2Builds.EndOfLife),
             new Buff("Static Charge", StaticCharge, Source.Tempest, BuffClassification.Offensive, BuffImages.OverloadAir),
             new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, BuffImages.HeatSync),

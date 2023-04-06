@@ -34,11 +34,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Ferocious Symbiosis",FerociousSymbiosis, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.FerociousSymbiosis),
-            new Buff("Unleashed",Unleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashRanger),
-            new Buff("Pet Unleashed",PetUnleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashPet),
-            new Buff("Perilous Gift",PerilousGift, Source.Untamed, BuffClassification.Other, BuffImages.PerilousGift),
-            new Buff("Forest's Fortification",ForestsFortification, Source.Untamed, BuffClassification.Other, BuffImages.ForestsFortification),
+            new Buff("Ferocious Symbiosis", FerociousSymbiosis, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.FerociousSymbiosis),
+            new Buff("Unleashed", Unleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashRanger),
+            new Buff("Pet Unleashed", PetUnleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashPet),
+            new Buff("Perilous Gift", PerilousGift, Source.Untamed, BuffClassification.Other, BuffImages.PerilousGift),
+            new Buff("Forest's Fortification", ForestsFortification, Source.Untamed, BuffClassification.Other, BuffImages.ForestsFortification),
         };
 
     }

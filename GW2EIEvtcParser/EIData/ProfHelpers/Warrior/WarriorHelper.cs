@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(84794), // Reckless Impact
+            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance), // Reckless Impact
             new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffecct), // Berserker Stance
             new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect), // Balanced Stance
             new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect), // Endure Pain

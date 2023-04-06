@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Legendary Alliance Stance",LegendaryAllianceStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAllianceStance),
+            new Buff("Legendary Alliance Stance", LegendaryAllianceStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAllianceStance),
             new Buff("Urn of Saint Viktor", UrnOfSaintViktorEffect, Source.Vindicator, BuffClassification.Other, BuffImages.UrnOfSaintViktor),
             new Buff("Saint of zu Heltzer", SaintOfzuHeltzer, Source.Vindicator, BuffClassification.Other, BuffImages.SaintOfZuHeltzer),
             new Buff("Forerunner of Death", ForerunnerOfDeath, Source.Vindicator, BuffClassification.Other, BuffImages.ForerunnerOfDeath),

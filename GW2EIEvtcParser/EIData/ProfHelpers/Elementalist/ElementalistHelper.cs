@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Fire
-            new BuffDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All).WithBuilds(104844, GW2Builds.EndOfLife),
+            new BuffDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All).WithBuilds(GW2Builds.July2020Balance, GW2Builds.EndOfLife),
             new BuffDamageModifier(new long[] { FireAttunementEffect, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffDamageModifierTarget(Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffDamageModifierTarget(Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, BuffImages.RockBarrier),//750?
             new Buff("Magnetic Wave", MagneticWave, Source.Elementalist, BuffClassification.Other, BuffImages.MagneticWave),
             new Buff("Obsidian Flesh", ObsidianFlesh, Source.Elementalist, BuffClassification.Other, BuffImages.ObsidianFlesh),
-            new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.PersistingFlames, 104844, GW2Builds.EndOfLife),
+            new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.PersistingFlames, GW2Builds.July2020Balance, GW2Builds.EndOfLife),
             new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, BuffImages.FreshAir),
             new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, BuffImages.SoothingMist),
             new Buff("Stone Heart", StoneHeart, Source.Elementalist, BuffClassification.Defensive, BuffImages.StoneHeart),

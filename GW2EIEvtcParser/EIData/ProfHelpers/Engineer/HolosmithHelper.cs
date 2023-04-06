@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, BuffImages.PhotonWall),
             new Buff("Spectrum Shield", SpectrumShieldEffect, Source.Holosmith, BuffClassification.Other, BuffImages.SpectrumShield),
             new Buff("Photon Forge", PhotonForge, Source.Holosmith, BuffClassification.Other, BuffImages.EngagePhotonForge),
-            new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, BuffImages.LasersEdge, 0, GW2Builds.July2019Balance),
+            new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, BuffImages.LasersEdge, GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new Buff("Afterburner", Afterburner, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.SolarFocusingLens),
             new Buff("Heat Therapy", HeatTherapy, Source.Holosmith, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.HeatTherapy),
             new Buff("Overheat", OverheatEffect, Source.Holosmith, BuffClassification.Other, BuffImages.Overheat),
