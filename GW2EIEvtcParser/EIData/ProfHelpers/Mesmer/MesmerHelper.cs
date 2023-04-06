@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -116,7 +117,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
             }).WithBuilds(GW2Builds.October2022Balance),
             // Mantras        
-            new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.May2021Balance),
+            new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.February2023Balance),
             new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
@@ -133,10 +134,10 @@ namespace GW2EIEvtcParser.EIData
             // Domination
             // Empowered illusions require knowing all illusion species ID
             // We need illusion species ID to enable Vicious Expression on All
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, 102389),
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png", DamageModifierMode.All).WithBuilds(102389),
+            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
             //
-            new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -146,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-            new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -156,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-            new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png", (x,log) =>
+            new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -167,42 +168,41 @@ namespace GW2EIEvtcParser.EIData
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
             //
-            new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/3/33/Fragility.png", DamageModifierMode.All),
+            new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
             // Dueling
             // Superiority Complex can all the conditions be tracked?
             // Illusions
-            new BuffDamageModifier(CompoundingPower, "Compounding Power", "2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png", DamageModifierMode.All),
+            new BuffDamageModifier(CompoundingPower, "Compounding Power", "2% per stack (8s) after creating an illusion ", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All),
             // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
         };
 
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            
-                //signets
-                new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png"),
-                new Buff("Signet of Domination",SignetOfDomination, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3b/Signet_of_Domination.png"),
-                new Buff("Signet of Illusions",SignetOfIllusions, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Illusions.png"),
-                new Buff("Signet of Inspiration",SignetOfInspirationEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
-                new Buff("Signet of Midnight",SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
-                new Buff("Signet of Humility",SignetOfHumility, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
-                //skills
-                new Buff("Distortion",DistortionEffect, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
-                new Buff("Blur", Blur , Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
-                new Buff("Mirror",Mirror, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
-                new Buff("Echo",Echo, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
-                new Buff("Illusionary Counter",IllusionaryCounter, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
-                new Buff("Illusionary Riposte",IllusionaryRiposte, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"),
-                new Buff("Illusionary Leap",IllusionaryLeap, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png"),
-                new Buff("Portal Weaving",PortalWeaving, Source.Mesmer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png"),
-                new Buff("Illusion of Life",IllusionOfLife, Source.Mesmer, BuffClassification.Support, "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png"),
-                //traits
-                new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
-                new Buff("Illusionary Defense",IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),
-                new Buff("Compounding Power",CompoundingPower, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png"),
-                new Buff("Phantasmal Force", PhantasmalForce , Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5f/Mistrust.png"),
-                new Buff("Reflection", Reflection , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
-                new Buff("Reflection 2", Reflection2 , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/9d/Arcane_Shield.png"),
+            // Signets
+            new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
+            new Buff("Signet of Domination",SignetOfDomination, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfDomination),
+            new Buff("Signet of Illusions",SignetOfIllusions, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfIllusions),
+            new Buff("Signet of Inspiration",SignetOfInspirationEffect, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfInspiration),
+            new Buff("Signet of Midnight",SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfMidnight),
+            new Buff("Signet of Humility",SignetOfHumility, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfHumility),
+            // Skills
+            new Buff("Distortion", DistortionEffect, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Distortion),
+            new Buff("Blur", Blur , Source.Mesmer, BuffClassification.Other, BuffImages.Distortion),
+            new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, BuffImages.Mirror),
+            new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
+            new Buff("Illusionary Counter", IllusionaryCounter, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryCounter),
+            new Buff("Illusionary Riposte", IllusionaryRiposte, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryRiposte),
+            new Buff("Illusionary Leap", IllusionaryLeap, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
+            new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
+            new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
+            // Traits
+            new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
+            new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
+            new Buff("Compounding Power", CompoundingPower, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.CompoundingPower),
+            new Buff("Phantasmal Force", PhantasmalForce , Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Mistrust),
+            new Buff("Reflection", Reflection , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.ArcaneShield),
+            new Buff("Reflection 2", Reflection2 , Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.ArcaneShield),
         };
 
 

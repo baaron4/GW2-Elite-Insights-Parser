@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -69,17 +70,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/f/fc/Danger_Time.png", DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
-            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/f/fc/Danger_Time.png", DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
-            new BuffDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, "https://wiki.guildwars2.com/images/e/e9/Improved_Alacrity.png", DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
+            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
+            new BuffDamageModifierTarget(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
+            new BuffDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
         };
 
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Time Echo",TimeEcho, Source.Chronomancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
-                new Buff("Time Anchored",TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
-                new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
+            new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu),
+            new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ContinuumSplit),
+            new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
         };
 
         private static HashSet<long> NonCloneMinions = new HashSet<long>()

@@ -74,8 +74,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Healthful Rejuvenation", HealthfulRejuvenation, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.HealthfulRejuvenation),
             new Buff("5% Damage Bonus", DamageBonus5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageBonus5),
             //
-            new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.OtherConsumable, BuffImages.SkaleVenomConsumable),
+            new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.OtherConsumable, BuffImages.WeakPotionOfNightmareCourtSlaying),
             new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.OtherConsumable, BuffImages.SwiftMoaFeather),
+            new Buff("Fool's Dog Treat", FoolsDogTreat, Source.Item, BuffClassification.Nourishment, BuffImages.FoolsDogTreat),
+            new Buff("Chatoyant Elixir", ChatoyantElixir, Source.Item, BuffClassification.Nourishment, BuffImages.PowerfulPotionOfDredgeSlaying),
         };
 
         internal static readonly List<Buff> Writs = new List<Buff>
