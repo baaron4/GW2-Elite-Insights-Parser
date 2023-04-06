@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
                         // more than one candidate, put to unknown and drop the search
                         if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
                         {
-                            gadget.SetMaster(ParserHelper._unknownAgent);
+                            gadget.SetMaster(_unknownAgent);
                             break;
                         }
                         gadget.SetMaster(castEvent.Caster.GetFinalMaster());
@@ -298,7 +298,9 @@ namespace GW2EIEvtcParser.EIData
         private static HashSet<long> CommonMinions = new HashSet<long>()
         {
             (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
+            (int)ArcDPSEnums.MinionID.RuneRockDog,
             (int)ArcDPSEnums.MinionID.RuneMarkIGolem,
+            (int)ArcDPSEnums.MinionID.RuneTropicalBird,
         };
 
         internal static bool IsKnownMinionID(long id)
