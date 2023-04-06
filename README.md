@@ -145,6 +145,8 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ## HTML Overview
 
+For a more detailed look, please check the following guide: https://snowcrows.com/en/guides/starting-to-raid/reading-logs.
+
 ### Header
 
 <img src="./docs/Images/header.PNG" width="60%" height="60%">
