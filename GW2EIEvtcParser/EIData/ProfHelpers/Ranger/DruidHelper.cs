@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData.Buffs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -34,16 +35,16 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/59/Celestial_Avatar.png"),
-                new Buff("Ancestral Grace", AncestralGrace, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4b/Ancestral_Grace.png"),
-                new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", 0 , GW2Builds.April2019Balance),
-                new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/b/b1/Glyph_of_Unity.png"),
-                new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png"),
-                new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", GW2Builds.April2019Balance, GW2Builds.October2022Balance),
-                new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d7/Glyph_of_the_Stars.png", GW2Builds.April2019Balance, GW2Builds.EndOfLife),
-                new Buff("Natural Mender",NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png", GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-                new Buff("Natural Mender",NaturalMender, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e9/Natural_Mender.png", GW2Builds.October2022Balance, GW2Builds.EndOfLife),
-                new Buff("Lingering Light",LingeringLight, Source.Druid, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/5d/Lingering_Light.png"),
+            new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
+            new Buff("Ancestral Grace", AncestralGrace, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
+            new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars, 0, GW2Builds.April2019Balance),
+            new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
+            new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
+            new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfTheStars, GW2Builds.April2019Balance, GW2Builds.October2022Balance),
+            new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfEmpowermentCelestialAvatar, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.NaturalMender, GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new Buff("Natural Mender", NaturalMender, Source.Druid, BuffClassification.Other, BuffImages.NaturalMender, GW2Builds.October2022Balance, GW2Builds.EndOfLife),
+            new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, BuffImages.LingeringLight),
         };
 
     }
