@@ -20,14 +20,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var strikeRewardIDs = new HashSet<ulong>
             {
-                BouncyChests.ShiverpeaksPassChests,
-                BouncyChests.KodansOldAndCurrentChest,
-                BouncyChests.KodansCurrentChest1,
-                BouncyChests.KodansCurrentRepeatableChest,
-                BouncyChests.KodansCurrentChest2,
-                BouncyChests.FraenirRepeatableChest,
-                BouncyChests.WhisperRepeatableChest,
-                BouncyChests.BoneskinnerRepeatableChest,
+                RewardIDs.ShiverpeaksPassChests,
+                RewardIDs.KodansOldAndCurrentChest,
+                RewardIDs.KodansCurrentChest1,
+                RewardIDs.KodansCurrentRepeatableChest,
+                RewardIDs.KodansCurrentChest2,
+                RewardIDs.FraenirRepeatableChest,
+                RewardIDs.WhisperRepeatableChest,
+                RewardIDs.BoneskinnerRepeatableChest,
             };
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
             RewardEvent reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID));

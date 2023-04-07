@@ -75,21 +75,30 @@ namespace GW2EIEvtcParser
             public const int KitSet = 2;
         }
 
-        internal static class BouncyChests
+        /// <summary>
+        /// Class containing <see cref="int"/> reward types.
+        /// </summary>
+        internal static class RewardTypes
         {
-            // Chest Type
-            internal const ulong OldRaidChest1 = 55821; // On each kill
-            internal const ulong OldRaidChest2 = 60685; // On each kill
-            internal const ulong CurrentRaidChest = 22797; // Once per week
-            // Chest IDs
+            internal const int OldRaidReward1 = 55821; // On each kill
+            internal const int OldRaidReward2 = 60685; // On each kill
+            internal const int CurrentRaidReward = 22797; // Once per week
+            internal const int EoDStrikeReward = 29453;
+        }
+
+        /// <summary>
+        /// Class containing <see cref="ulong"/> reward IDs.
+        /// </summary>
+        internal static class RewardIDs
+        {
             internal const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
             internal const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
             internal const ulong KodansCurrentChest1 = 1028; // Current, once a day
             internal const ulong KodansCurrentChest2 = 1032; // Current, once a day
             internal const ulong KodansCurrentRepeatableChest = 1091; // Current, repeatable
             internal const ulong FraenirRepeatableChest = 1007;
-            internal const ulong WhisperRepeatableChest = 1052;
             internal const ulong BoneskinnerRepeatableChest = 1031;
+            internal const ulong WhisperRepeatableChest = 1052;
         }
 
         // Activation

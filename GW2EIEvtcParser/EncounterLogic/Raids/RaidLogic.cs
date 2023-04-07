@@ -24,11 +24,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             var raidRewardsTypes = new HashSet<int>();
             if (combatData.GetBuildEvent().Build < GW2Builds.June2019RaidRewards)
             {
-                raidRewardsTypes = new HashSet<int> { (int)BouncyChests.OldRaidChest1, (int)BouncyChests.OldRaidChest2 };
+                raidRewardsTypes = new HashSet<int> { RewardTypes.OldRaidReward1, RewardTypes.OldRaidReward2 };
             }
             else
             {
-                raidRewardsTypes = new HashSet<int> { (int)BouncyChests.CurrentRaidChest };
+                raidRewardsTypes = new HashSet<int> { RewardTypes.CurrentRaidReward };
             }
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
             RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
