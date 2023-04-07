@@ -22,9 +22,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Aegis", Aegis, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Aegis),
             new Buff("Stability", Stability, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Boon, BuffImages.Stability),
             new Buff("Swiftness", Swiftness, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Swiftness),
-            new Buff("Retaliation", Retaliation, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Retaliation, 0, GW2Builds.May2021Balance),
+            new Buff("Retaliation", Retaliation, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Retaliation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance),
-            new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution, GW2Builds.May2021Balance, GW2Builds.EndOfLife),
+            new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution).WithBuilds(GW2Builds.May2021Balance, GW2Builds.EndOfLife),
             //
             new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
         };
@@ -58,8 +58,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Stealth),
             new Buff("Revealed", Revealed, Source.Common, BuffClassification.Support, BuffImages.Revealed),
-            new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed, 0, GW2Builds.June2021Balance),
-            new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed, GW2Builds.June2021Balance, GW2Builds.EndOfLife),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.June2021Balance, GW2Builds.EndOfLife),
             new Buff("Determined (762)", Determined762, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (785)", Determined785, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (788)", Determined788, Source.Common, BuffClassification.Other, BuffImages.Determined),
@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
-            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable, GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
             new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Light Aura", LightAura, Source.Common, BuffClassification.Support, BuffImages.LightAura),
             new Buff("Magnetic Aura", MagneticAura, Source.Common, BuffClassification.Support, BuffImages.MagneticAura),
             new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
-            new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             // Race
             new Buff("Take Root", TakeRootEffect, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
             new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Gear = new List<Buff>
         {
             // Sigils
-            new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration, 0, 93543),
+            new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
             new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfCorruption),
             new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfCorruption),
             new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCorruption),
@@ -192,9 +192,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
             new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfVision),
             new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
-            new Buff("Leech (Sigil / Runes)", LeechEffect, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - 93543) and Vampirism (Builds StartOfLife - 93543)
+            new Buff("Leech (Sigil / Runes)", LeechEffect, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
             // Runes
-            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk, 93543, GW2Builds.EndOfLife),
+            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk).WithBuilds(GW2Builds.November2018Rune, GW2Builds.EndOfLife),
             new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
             new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation),
             new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical),

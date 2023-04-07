@@ -105,13 +105,13 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Legendary Demon Stance", LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
             new Buff("Legendary Assassin Stance", LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
             // Traits
-            new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations, GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-            new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+            new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Expose Defenses", ExposeDefenses, Source.Revenant, BuffClassification.Other, BuffImages.MutilateDefenses),
             new Buff("Invoking Harmony", InvokingHarmony, Source.Revenant, BuffClassification.Other, BuffImages.InvokingHarmony),
-            new Buff("Unyielding Devotion", UnyieldingDevotion, Source.Revenant, BuffClassification.Other, BuffImages.UnyieldingDevotion, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Unyielding Devotion", UnyieldingDevotion, Source.Revenant, BuffClassification.Other, BuffImages.UnyieldingDevotion).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             new Buff("Selfless Amplification", SelflessAmplification, Source.Revenant, BuffClassification.Other, BuffImages.SelflessAmplification),
-            new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ThrillOfCombat, GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ThrillOfCombat).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.SteadfastRejuvenation),
         };
 

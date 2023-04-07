@@ -32,11 +32,11 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Berserk", Berserk, Source.Berserker, BuffClassification.Other, BuffImages.Berserk),
             new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, BuffImages.FlamesOfWarWarrior),
-            new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, BuffImages.BloodReckoning, GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.BloodReckoning, GW2Builds.October2022Balance, GW2Builds.EndOfLife),
+            new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, BuffImages.BloodReckoning).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.BloodReckoning).WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
             new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, BuffImages.ShatteringBlow),
-            new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
-            new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry, GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+            new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         };
 
 

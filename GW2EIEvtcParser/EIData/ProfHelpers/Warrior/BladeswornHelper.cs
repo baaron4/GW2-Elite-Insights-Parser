@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, BuffImages.CombatStimulant),
             new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.GunsAndGlory),
             new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, BuffImages.TacticalReload),
-            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges, GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
 

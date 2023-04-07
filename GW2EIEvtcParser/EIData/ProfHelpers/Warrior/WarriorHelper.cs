@@ -79,10 +79,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of Stamina", SignetOfStamina, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
             new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
             // Banners
-            new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Tactics", BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Defense", BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Tactics", BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Defense", BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             // Stances
             new Buff("Shield Stance", ShieldStance, Source.Warrior, BuffClassification.Other, BuffImages.ShieldStance),
             new Buff("Berserker's Stance", BerserkersStanceEffecct, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
@@ -91,18 +91,18 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Defiant Stance", DefiantStance, Source.Warrior, BuffClassification.Other, BuffImages.DefiantStance),
             new Buff("Rampage", Rampage, Source.Warrior, BuffClassification.Other, BuffImages.Rampage),
             // Traits
-            new Buff("Soldier's Focus", SoldiersFocus, Source.Warrior, BuffClassification.Other, BuffImages.SoldiersFocus, GW2Builds.October2019Balance, GW2Builds.EndOfLife),
+            new Buff("Soldier's Focus", SoldiersFocus, Source.Warrior, BuffClassification.Other, BuffImages.SoldiersFocus).WithBuilds(GW2Builds.October2019Balance, GW2Builds.EndOfLife),
             new Buff("Brave Stride", BraveStride, Source.Warrior, BuffClassification.Other, BuffImages.DeathFromAbove),
-            new Buff("Empower Allies", EmpowerAllies, Source.Warrior, BuffClassification.Offensive, BuffImages.EmpowerAllies, GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Empower Allies", EmpowerAllies, Source.Warrior, BuffClassification.Offensive, BuffImages.EmpowerAllies).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Peak Performance", PeakPerformance, Source.Warrior, BuffClassification.Other, BuffImages.PeakPerformace),
             new Buff("Furious Surge", FuriousSurge, Source.Warrior, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Furious),
             //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),
             new Buff("Rousing Resilience", RousingResilience, Source.Warrior, BuffClassification.Other, BuffImages.RousingResilience),
-            new Buff("Berserker's Power" ,BerserkersPower, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.BerserkersPower, GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new Buff("Berserker's Power", BerserkersPower, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.BerserkersPower, GW2Builds.October2022Balance, GW2Builds.EndOfLife),
+            new Buff("Berserker's Power" ,BerserkersPower, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.BerserkersPower).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new Buff("Berserker's Power", BerserkersPower, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.BerserkersPower).WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
             new Buff("Signet of Ferocity", SignetOfFerocity, Source.Warrior, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SignetMastery),
-            new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.AdrenalHealth, GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.AdrenalHealth, GW2Builds.October2022Balance, GW2Builds.EndOfLife),
+            new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.AdrenalHealth).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.AdrenalHealth).WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
         };
 
 

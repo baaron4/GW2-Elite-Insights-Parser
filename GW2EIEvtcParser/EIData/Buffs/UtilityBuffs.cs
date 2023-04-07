@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> OtherConsumables = new List<Buff>
         {       
             //
-            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor, GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             //
             new Buff("15% Speed Bonus", SpeedBonus15, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.SpeedBonus15),
             new Buff("5% Damage Reduction", DamageReduction5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageReduction5),

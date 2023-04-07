@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Lotus Training", LotusTrainingEffect, Source.Daredevil, BuffClassification.Other, BuffImages.LotusTraining),
             new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, BuffImages.UnhinderedCombatant),
             new Buff("Bounding Dodger", BoundingDodgerEffect, Source.Daredevil, BuffClassification.Other, BuffImages.BoundingDodger),
-            new Buff("Weakening Strikes", WeakeningStrikes, Source.Daredevil, BuffClassification.Other, BuffImages.WeakeningStrikes, GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Weakening Strikes", WeakeningStrikes, Source.Daredevil, BuffClassification.Other, BuffImages.WeakeningStrikes).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
         };
 
         private static HashSet<long> Minions = new HashSet<long>()
