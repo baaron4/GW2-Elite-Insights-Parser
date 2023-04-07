@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser
             internal const ulong December2018Balance = 94051;
             internal const ulong March2019Balance = 95535;
             internal const ulong April2019Balance = 96406;
+            internal const ulong June2019RaidRewards = 97235;
             internal const ulong July2019Balance = 97950;
             internal const ulong July2019Balance2 = 98248;
             internal const ulong October2019Balance = 99526;
@@ -72,6 +73,23 @@ namespace GW2EIEvtcParser
             public const int SecondWaterSet = 1;
             public const int TransformSet = 3;
             public const int KitSet = 2;
+        }
+
+        internal static class BouncyChests
+        {
+            // Chest Type
+            internal const ulong OldRaidChest1 = 55821; // On each kill
+            internal const ulong OldRaidChest2 = 60685; // On each kill
+            internal const ulong CurrentRaidChest = 22797; // Once per week
+            // Chest IDs
+            internal const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
+            internal const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
+            internal const ulong KodansCurrentChest1 = 1028; // Current, once a day
+            internal const ulong KodansCurrentChest2 = 1032; // Current, once a day
+            internal const ulong KodansCurrentRepeatableChest = 1091; // Current, repeatable
+            internal const ulong FraenirRepeatableChest = 1007;
+            internal const ulong WhisperRepeatableChest = 1052;
+            internal const ulong BoneskinnerRepeatableChest = 1031;
         }
 
         // Activation
@@ -982,6 +1000,19 @@ namespace GW2EIEvtcParser
 
         public enum MinionID : int
         {
+            // Racial Summons
+            HoundOfBalthazar = 6394,
+            DruidSpirit = 6475,
+            SylvanHound = 6476,
+            IronLegionSoldier = 6509,
+            IronLegionMarksman = 6510,
+            BloodLegionSoldier = 10106,
+            BloodLegionMarksman = 10107,
+            AshLegionSoldier = 10108,
+            AshLegionMarksman = 10109,
+            // GW2 Digital Deluxe
+            MistfireWolf = 9801,
+            // Rune Summons
             RuneJaggedHorror = 21314,
             RuneRockDog = 8836,
             RuneMarkIGolem = 8837,

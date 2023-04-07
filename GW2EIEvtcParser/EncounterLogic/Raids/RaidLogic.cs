@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -21,23 +22,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>();
-            ulong build = combatData.GetBuildEvent().Build;
-            if (build < 97235)
+            if (combatData.GetBuildEvent().Build < GW2Builds.June2019RaidRewards)
             {
-                raidRewardsTypes = new HashSet<int>
-                {
-                    // Old types, on each kill
-                    55821,
-                    60685
-                };
+                raidRewardsTypes = new HashSet<int> { (int)BouncyChests.OldRaidChest1, (int)BouncyChests.OldRaidChest2 };
             }
             else
             {
-                raidRewardsTypes = new HashSet<int>
-                {
-                    // New types, once per week
-                    22797
-                };
+                raidRewardsTypes = new HashSet<int> { (int)BouncyChests.CurrentRaidChest };
             }
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
             RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
