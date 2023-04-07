@@ -261,7 +261,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Reclaimed Energy", ReclaimedEnergy, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
             new Buff("Mortal Coil (Statue of Death)", MortalCoilStatueOfDeath, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.MortalCoil),
             new Buff("Empowered (Statue of Death)", EmpoweredStatueOfDeath, Source.FightSpecific, BuffClassification.Offensive, BuffImages.EmpoweredEater),
-            //new Buff("Energy Threshold (Statue of Death)", 48583, Source.FightSpecific, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, BuffImages.SpiritForm),
             // Eyes
             new Buff("Last Grasp (Judgment)", LastGraspJudgment, Source.FightSpecific, BuffClassification.Other, BuffImages.LastGrasp),
             new Buff("Last Grasp (Fate)", LastGraspFate, Source.FightSpecific, BuffClassification.Other, BuffImages.LastGrasp),
@@ -278,7 +277,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Lethal Report", LethalReport, Source.FightSpecific, BuffClassification.Other, BuffImages.MantraOfSignets),
             new Buff("Hastened Demise", HastenedDemise, Source.FightSpecific, BuffClassification.Other, BuffImages.HastenedDemise),
             new Buff("Echo's Pick up", EchosPickup, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
-            new Buff("Energy Threshold (Dhuum)", EnergyThresholdDhuum, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm),
+            new Buff("Energy Threshold", EnergyThreshold, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm), // Dhuum & Eater of Souls
             //////////////////////////////////////////////
             // CA
             new Buff("Greatsword Power", GreatswordPower, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.GreatswordPower),
