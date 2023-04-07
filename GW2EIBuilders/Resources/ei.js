@@ -83,6 +83,27 @@ function compileTemplates() {
             });
         }
     });
+    Vue.component("table-scroll-component", {
+        props: ["min", "max", "vertical", "width", "height", "translate", "pagestructure"],
+        template : `      
+        <input 
+            style="position: relative;background-color: #888888;" 
+            :style=getStyle()
+            type="range" :min="min" :max="max" :value="min" class="slider" @input="updateOffset($event.target.value)">
+        `,
+        methods: {
+            updateOffset: function(value) {
+                this.pagestructure.offset = parseInt(value);
+            },
+            getStyle: function() {
+                return {
+                    width: this.width,
+                    height: this.height,
+                    transform: this.translate
+                };
+            },
+        }
+    });
     TEMPLATE_COMPILE
 };
 

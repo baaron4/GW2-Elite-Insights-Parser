@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div v-if="pageCount > 2">
+            <table-scroll-component :min="0" :max="pageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
@@ -10,7 +13,7 @@
                     <th class="damage-dist-cell" :class="getHeaderClass('All')" @click="sortBy('All')">
                         All
                     </th>
-                    <th v-if="!targetless" v-for="(col, index) in tableData.cols"
+                    <th v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)"
                         class="damage-dist-cell" :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
                         <span :title="col.name">
                             {{col.name}}
@@ -34,7 +37,7 @@
                     <td :class="getBodyClass('All')">
                         {{tableRound(row.dps[row.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols"
+                    <td v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)"
                         :class="getBodyClass('Target', index)">
                         {{tableRound(row.dps[index])}}
                     </td>
@@ -49,7 +52,7 @@
                     <td>
                         {{tableRound(sum.dps[sum.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols">
+                    <td v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)">
                         {{tableRound(sum.dps[index])}}
                     </td>
                 </tr>
@@ -71,10 +74,17 @@
                     order: "desc",
                     index: -1,
                     key: "All"
+                },
+                colStructure: {
+                    offset: 0,
+                    perpage: 2
                 }
             };
         },
         methods: {
+            isInColPage: function(index) {
+                return index >= this.colStructure.offset && index < this.colStructure.offset + this.colStructure.perpage;
+            },
             tableRound: function (value) {
                 return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
             },
@@ -130,6 +140,9 @@
             }
         },
         computed: {
+            pageCount: function() {
+                return this.tableData.cols.length - this.colStructure.perpage;
+            },
             tableid: function () {
                 return "combat-replay-dps-table";
             },
