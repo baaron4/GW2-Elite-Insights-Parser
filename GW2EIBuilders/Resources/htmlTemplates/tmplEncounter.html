@@ -56,9 +56,11 @@
         computed: {
             encounter: function () {
                 var targets = [];
-                for (var i = 0; i < logData.phases[0].targets.length; i++) {
-                    var targetData = logData.targets[logData.phases[0].targets[i]];
-                    targets.push(targetData);
+                if (logData.phases[0].targets.length < 10 && !logData.targetless) {
+                    for (var i = 0; i < logData.phases[0].targets.length; i++) {
+                        var targetData = logData.targets[logData.phases[0].targets[i]];
+                        targets.push(targetData);
+                    }
                 }
 
                 var encounter = {

@@ -109,8 +109,7 @@ function compileTemplates() {
 
 function mainLoad() {
     // make some additional variables reactive
-    var nonDummyPhases = logData.phases.filter(x => !x.dummy);
-    var firstActive = nonDummyPhases[0];
+    var firstActive = logData.phases[0];
     for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0

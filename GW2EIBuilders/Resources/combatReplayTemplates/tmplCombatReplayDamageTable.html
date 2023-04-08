@@ -1,7 +1,10 @@
 <template>
     <div>
-        <div v-if="pageCount > 2">
-            <table-scroll-component :min="0" :max="pageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="colStructure"></table-scroll-component>
+        <div v-if="colPageCount > 0">
+            <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
+        <div v-if="rowPageCount > 50">
+            <table-scroll-component :min="0" :max="rowPageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="rowStructure"></table-scroll-component>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -13,8 +16,8 @@
                     <th class="damage-dist-cell" :class="getHeaderClass('All')" @click="sortBy('All')">
                         All
                     </th>
-                    <th v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)"
-                        class="damage-dist-cell" :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
+                    <th v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
+                        class="damage-dist-cell" :class="getHeaderClass('Target', colIndex)" @click="sortBy('Target', colIndex)">
                         <span :title="col.name">
                             {{col.name}}
                         </span>
@@ -22,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}">
+                <tr v-for="(row, rowIndex) in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}" v-show="isInRowPage(rowIndex)">
                     <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
                         <img :src="row.player.icon" :alt="row.player.profession" class="icon">
                         <span style="display:none">
@@ -37,9 +40,9 @@
                     <td :class="getBodyClass('All')">
                         {{tableRound(row.dps[row.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)"
-                        :class="getBodyClass('Target', index)">
-                        {{tableRound(row.dps[index])}}
+                    <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
+                        :class="getBodyClass('Target', colIndex)">
+                        {{tableRound(row.dps[colIndex])}}
                     </td>
                 </tr>
             </tbody>
@@ -52,8 +55,8 @@
                     <td>
                         {{tableRound(sum.dps[sum.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols" v-show="isInColPage(index)">
-                        {{tableRound(sum.dps[index])}}
+                    <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)">
+                        {{tableRound(sum.dps[colIndex])}}
                     </td>
                 </tr>
             </tfoot>
@@ -78,12 +81,19 @@
                 colStructure: {
                     offset: 0,
                     perpage: 2
+                },
+                rowStructure: {
+                    offset:0,
+                    perpage: 10
                 }
             };
         },
         methods: {
             isInColPage: function(index) {
                 return index >= this.colStructure.offset && index < this.colStructure.offset + this.colStructure.perpage;
+            },
+            isInRowPage: function(index) {
+                return index >= this.rowStructure.offset && index < this.rowStructure.offset + this.rowStructure.perpage;
             },
             tableRound: function (value) {
                 return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
@@ -140,8 +150,11 @@
             }
         },
         computed: {
-            pageCount: function() {
+            colPageCount: function() {
                 return this.tableData.cols.length - this.colStructure.perpage;
+            },
+            rowPageCount: function() {
+                return this.tableData.rows.length - this.rowStructure.perpage;
             },
             tableid: function () {
                 return "combat-replay-dps-table";
@@ -150,7 +163,7 @@
                 return logData.phases[0];
             },
             targets: function () {
-                return this.phase.dummy ? [] : this.phase.targets;
+                return this.phase.targets;
             },
             graph: function () {
                 return graphData.phases[0].players;

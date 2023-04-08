@@ -23,7 +23,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
         {
             var jsonMinions = new JsonMinions();
             jsonMinions.Id = minions.ID;
-            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
             //
             jsonMinions.Name = minions.Character;
