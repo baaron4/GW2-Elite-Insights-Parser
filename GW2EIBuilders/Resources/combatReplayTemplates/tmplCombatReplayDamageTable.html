@@ -67,7 +67,7 @@
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent],
+        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent, colSliderComponent(2), rowSliderComponent(10)],
         props: ["playerid", "graphdata"],
         template: `${template}`,
         data: function () {
@@ -78,23 +78,9 @@
                     index: -1,
                     key: "All"
                 },
-                colStructure: {
-                    offset: 0,
-                    perpage: 2
-                },
-                rowStructure: {
-                    offset:0,
-                    perpage: 10
-                }
             };
         },
         methods: {
-            isInColPage: function(index) {
-                return index >= this.colStructure.offset && index < this.colStructure.offset + this.colStructure.perpage;
-            },
-            isInRowPage: function(index) {
-                return index >= this.rowStructure.offset && index < this.rowStructure.offset + this.rowStructure.perpage;
-            },
             tableRound: function (value) {
                 return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
             },
