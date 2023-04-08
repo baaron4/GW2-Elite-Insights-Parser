@@ -137,7 +137,7 @@
         internal const string SuperiorSigilOfBounty = "https://wiki.guildwars2.com/images/f/f8/Superior_Sigil_of_Bounty.png";
         internal const string MinorSigilOfBenevolence = "https://wiki.guildwars2.com/images/f/ff/Minor_Sigil_of_Benevolence.png";
         internal const string MajorSigilOfBenevolence = "https://wiki.guildwars2.com/images/c/c8/Major_Sigil_of_Benevolence.png";
-        internal const string SuperiorSigilOfBenevolence = "https://wiki.guildwars2.com/images/5/59/Superior_Sigil_of_Benevolence.png";
+        internal const string SuperiorSigilOfBenevolence = "https://wiki.guildwars2.com/images/9/91/Superior_Sigil_of_Sanctuary.png";
         internal const string SuperiorSigilOfMomentum = "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png";
         internal const string SuperiorSigilOfStars = "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png";
         internal const string SuperiorSigilOfSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
