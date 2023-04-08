@@ -299,10 +299,15 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashVoidAmalgamate = "https://i.imgur.com/BuKbosz.png";
 
         // Minion NPC Icons
+        private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
+        private const string MinionDruidSpirit = "https://i.imgur.com/Gi7okAw.png";
+        private const string MinionSylvanHound = "https://i.imgur.com/rtcKv9N.png";
+        private const string MinionWarband = "https://i.imgur.com/Y6n0bsV.png";
+        private const string MinionMistfireWolf = "https://i.imgur.com/9hNzLjI.png";
         private const string MinionRuneJaggedHorror = "https://i.imgur.com/opMTn10.png";
-        private const string MinionRuneRockDog = "https://i.imgur.com/666bLKr.png";
+        private const string MinionRuneRockDog = "https://i.imgur.com/EdNp7kY.png";
         private const string MinionRuneMarkIGolem = "https://i.imgur.com/0ePg7eN.png";
-        private const string MinionTropicalBird = "https://i.imgur.com/wxMDqpm.png";
+        private const string MinionTropicalBird = "https://i.imgur.com/iu11ECb.png";
         private const string MinionMesmerClone = "https://i.imgur.com/5Hknsa6.png";
         private const string MinionIllusionarySwordsman = "https://i.imgur.com/ReUwrAL.png";
         private const string MinionIllusionaryBerserker = "https://i.imgur.com/VNcYhXZ.png";
@@ -325,7 +330,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionSunSpirit = "https://i.imgur.com/HtCusPF.png";
         private const string MinionStoneSpirit = "https://i.imgur.com/4r6Ytj5.png";
         private const string MinionStormSpirit = "https://i.imgur.com/jXmencD.png";
-        private const string MinionWaterSpirit = "https://i.imgur.com/zPCwf3H.png";
+        private const string MinionWaterSpirit = "https://i.imgur.com/dMcLvwL.png";
         private const string MinionSpiritOfNatureRenewal = "https://i.imgur.com/sGMfD5j.png";
         private const string MinionJuvenileAlpineWolf = "https://i.imgur.com/6NJ4PJx.png";
         private const string MinionJuvenileArctodus = "https://i.imgur.com/of68C0V.png";
@@ -337,8 +342,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionJuvenileBoar = "https://i.imgur.com/l9ZDJoG.png";
         private const string MinionJuvenileBristleback = "https://i.imgur.com/rLFL4JL.png";
         private const string MinionJuvenileBrownBear = "https://i.imgur.com/tTR3z9V.png";
-        private const string MinionJuvenileCarrionDevourer = "https://wiki.guildwars2.com/images/9/9e/Juvenile_Carrion_Devourer.png";
-        private const string MinionJuvenileCaveSpider = "https://wiki.guildwars2.com/images/e/eb/Juvenile_Cave_Spider.png";
+        private const string MinionJuvenileCarrionDevourer = "https://i.imgur.com/sQX9L4E.png";
+        private const string MinionJuvenileCaveSpider = "https://i.imgur.com/ulQt5J5.png";
         private const string MinionJuvenileCheetah = "https://i.imgur.com/IosaqHc.png";
         private const string MinionJuvenileEagle = "https://i.imgur.com/WuOl5qh.png";
         private const string MinionJuvenileEletricWywern = "https://i.imgur.com/RsSNDV3.png";
@@ -346,45 +351,45 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionJuvenileFernHound = "https://i.imgur.com/j1c43bj.png";
         private const string MinionJuvenileFireWywern = "https://i.imgur.com/WjODNiP.png";
         private const string MinionJuvenileForestSpider = "https://i.imgur.com/Xu5kRnv.png";
-        private const string MinionJuvenileHawk = "https://wiki.guildwars2.com/images/0/0f/Juvenile_Hawk.png ";
+        private const string MinionJuvenileHawk = "https://i.imgur.com/K65bShd.png";
         private const string MinionJuvenileIceDrake = "https://i.imgur.com/SlbkLrD.png";
         private const string MinionJuvenileJacaranda = "https://i.imgur.com/IrmdDqo.png";
-        private const string MinionJuvenileJaguar = "https://wiki.guildwars2.com/images/9/91/Juvenile_Jaguar.png";
+        private const string MinionJuvenileJaguar = "https://i.imgur.com/0HVaGAX.png";
         private const string MinionJuvenileJungleSpider = "https://i.imgur.com/4zNZcn8.png";
         private const string MinionJuvenileJungleStalker = "https://i.imgur.com/jM51zQ0.png";
         private const string MinionJuvenileKrytanDrakehound = "https://i.imgur.com/KZZ0YPw.png";
         private const string MinionJuvenileLashtailDevourer = "https://i.imgur.com/CnRTFH8.png";
         private const string MinionJuvenileLynx = "https://i.imgur.com/fCjd2Qz.png";
         private const string MinionJuvenileMarshDrake = "https://i.imgur.com/5EuKe2F.png";
-        private const string MinionJuvenileMurellow = "https://wiki.guildwars2.com/images/2/21/Juvenile_Murellow.png";
+        private const string MinionJuvenileMurellow = "https://i.imgur.com/V6bElb0.png";
         private const string MinionJuvenileOwl = "https://i.imgur.com/dh3thfS.png";
-        private const string MinionJuvenilePhoenix = "https://wiki.guildwars2.com/images/7/79/Juvenile_Phoenix.png";
+        private const string MinionJuvenilePhoenix = "https://i.imgur.com/S9SJleP.png";
         private const string MinionJuvenilePig = "https://i.imgur.com/kjj0810.png";
         private const string MinionJuvenilePinkMoa = "https://i.imgur.com/AdzQreO.png";
-        private const string MinionJuvenilePolarBear = "https://wiki.guildwars2.com/images/9/96/Juvenile_Polar_Bear.png";
+        private const string MinionJuvenilePolarBear = "https://i.imgur.com/Qg4KM8u.png";
         private const string MinionJuvenileBlueRainbowJellyfish = "https://i.imgur.com/kS5xGdi.png";
-        private const string MinionJuvenileRaven = "https://wiki.guildwars2.com/images/6/6a/Juvenile_Raven.png";
+        private const string MinionJuvenileRaven = "https://i.imgur.com/RhVO1yf.png";
         private const string MinionJuvenileRedJellyfish = "https://i.imgur.com/BlQij3o.png";
         private const string MinionJuvenileRedMoa = "https://i.imgur.com/N97LXIO.png";
-        private const string MinionJuvenileReefDrake = "https://wiki.guildwars2.com/images/5/5b/Juvenile_Reef_Drake.png";
+        private const string MinionJuvenileReefDrake = "https://i.imgur.com/K5SLEX4.png";
         private const string MinionJuvenileRiverDrake = "https://i.imgur.com/K56jP8H.png";
         private const string MinionJuvenileRockGazelle = "https://i.imgur.com/XV1ySBt.png";
         private const string MinionJuvenileSalamanderDraker = "https://i.imgur.com/2EK2OBE.png";
         private const string MinionJuvenileSandLion = "https://i.imgur.com/XDkpvp9.png";
         private const string MinionJuvenileShark = "https://i.imgur.com/vZ9jIE9.png";
-        private const string MinionJuvenileSiamoth = "https://wiki.guildwars2.com/images/d/d3/Juvenile_Siamoth.png";
-        private const string MinionJuvenileSiegeTurtle = "https://wiki.guildwars2.com/images/6/6c/Juvenile_Siege_Turtle.png";
+        private const string MinionJuvenileSiamoth = "https://i.imgur.com/hD7PWzm.png";
+        private const string MinionJuvenileSiegeTurtle = "https://i.imgur.com/PdM4BnY.png";
         private const string MinionJuvenileSmokescale = "https://i.imgur.com/30k6BmC.png";
-        private const string MinionJuvenileSnowLeopard = "https://wiki.guildwars2.com/images/4/42/Juvenile_Snow_Leopard.png";
+        private const string MinionJuvenileSnowLeopard = "https://i.imgur.com/yid0beF.png";
         private const string MinionJuvenileTiger = "https://i.imgur.com/vALPpMJ.png";
-        private const string MinionJuvenileWallow = "https://wiki.guildwars2.com/images/6/63/Juvenile_Wallow.png";
+        private const string MinionJuvenileWallow = "https://i.imgur.com/a4XZott.png";
         private const string MinionJuvenileWarthog = "https://i.imgur.com/MPPsWBH.png";
         private const string MinionJuvenileWhiptailDevourer = "https://i.imgur.com/hqWNZkD.png";
-        private const string MinionJuvenileWhiteMoa = "https://wiki.guildwars2.com/images/d/d4/Juvenile_White_Moa.png";
-        private const string MinionJuvenileWhiteRaven = "https://wiki.guildwars2.com/images/3/39/Juvenile_White_Raven.png";
+        private const string MinionJuvenileWhiteMoa = "https://i.imgur.com/dhaBAxZ.png";
+        private const string MinionJuvenileWhiteRaven = "https://i.imgur.com/AGbidqS.png";
         private const string MinionJuvenileWhiteTiger = "https://i.imgur.com/B6wtfhQ.png";
         private const string MinionJuvenileWolf = "https://i.imgur.com/GQLiFky.png";
-        private const string MinionJuvenileHyena = "https://wiki.guildwars2.com/images/e/ef/Juvenile_Hyena.png";
+        private const string MinionJuvenileHyena = "https://i.imgur.com/IorUGEQ.png";
         private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
         private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
         private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -810,6 +815,16 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// </summary>
         internal static IReadOnlyDictionary<ArcDPSEnums.MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
         {
+            { ArcDPSEnums.MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
+            { ArcDPSEnums.MinionID.DruidSpirit, MinionDruidSpirit },
+            { ArcDPSEnums.MinionID.SylvanHound, MinionSylvanHound },
+            { ArcDPSEnums.MinionID.IronLegionSoldier, MinionWarband },
+            { ArcDPSEnums.MinionID.IronLegionMarksman, MinionWarband },
+            { ArcDPSEnums.MinionID.BloodLegionSoldier, MinionWarband },
+            { ArcDPSEnums.MinionID.BloodLegionMarksman, MinionWarband },
+            { ArcDPSEnums.MinionID.AshLegionSoldier, MinionWarband },
+            { ArcDPSEnums.MinionID.AshLegionMarksman, MinionWarband },
+            { ArcDPSEnums.MinionID.MistfireWolf, MinionMistfireWolf },
             { ArcDPSEnums.MinionID.RuneJaggedHorror, MinionRuneJaggedHorror },
             { ArcDPSEnums.MinionID.RuneRockDog, MinionRuneRockDog },
             { ArcDPSEnums.MinionID.RuneMarkIGolem, MinionRuneMarkIGolem },
