@@ -1,12 +1,17 @@
 <template>
     <div>
+        <div v-if="colPageCount > 0">
+            <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'600px'" :height="'10px'" :translate="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
                     <th class="sub-cell" :class="getHeaderClass('Sub')" @click="sortBy('Sub')">Sub</th>
                     <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
                     <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
-                    <th class="stat-cell" v-for="(modifier, index) in modifiers" :class="getHeaderClass('Data', index)" @click="sortBy('Data', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
+                    <th class="stat-cell" v-for="(modifier, index) in modifiers" :class="getHeaderClass('Data', index)" 
+                        v-show="isInColPage(index)"
+                        @click="sortBy('Data', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
                         <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
                     </th>
                 </tr>
@@ -21,6 +26,7 @@
                     </td>
                     <td :class="getBodyClass('Name')"class="text-left">{{row.player.name}}</td>
                     <td v-for="(modifier, index) in modifiers" :class="getBodyClass('Data', index, modifier.approximate)"
+                        v-show="isInColPage(index)"
                         :data-original-title="getTooltip(row.data[index], modifier)">
                         {{getCellValue(row.data[index], modifier)}}
                     </td>
@@ -32,6 +38,7 @@
                     <td></td>
                     <td class="text-left">{{row.name}}</td>
                     <td v-for="(modifier, index) in modifiers" :class="{approximate: modifier.approximate}"
+                        v-show="isInColPage(index)"
                         :data-original-title="getTooltip(row.data[index], modifier)">
                         {{getCellValue(row.data[index], modifier)}}
                     </td>
@@ -44,7 +51,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(20)],
         template: `${template}`,
         data: function () {
             return {
@@ -63,6 +70,9 @@
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
+            },
+            colPageCount: function() {
+                return this.modifiers.length - this.colStructure.perpage;
             },
             indicesToUse: function () {
                 var res = [];

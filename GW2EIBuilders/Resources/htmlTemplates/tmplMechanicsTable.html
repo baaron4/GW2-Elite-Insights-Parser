@@ -1,12 +1,17 @@
 <template>
     <div>
+        <div v-if="colPageCount > 0">
+            <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'600px'" :height="'10px'" :translate="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
         <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tablePid">
             <thead>
                 <tr>
                     <th class="sub-cell" :class="getPlayerHeaderClass('Sub')" @click="sortPlayerBy('Sub')">Sub</th>
                     <th class="prof-cell" :class="getPlayerHeaderClass('Prof')" @click="sortPlayerBy('Prof')"></th>
                     <th class="text-left" :class="getPlayerHeaderClass('Name')" @click="sortPlayerBy('Name')">Player</th>
-                    <th class="stat-cell" v-for="(mech, index) in playerMechHeader" :class="getPlayerHeaderClass('Data', index)" @click="sortPlayerBy('Data', index)" :data-original-title="mech.description">
+                    <th class="stat-cell" v-for="(mech, index) in playerMechHeader" 
+                        v-show="isInColPage(index)"
+                        :class="getPlayerHeaderClass('Data', index)" @click="sortPlayerBy('Data', index)" :data-original-title="mech.description">
                         {{ mech.shortName}}
                     </th>
                 </tr>
@@ -19,7 +24,9 @@
                         <span style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td :class="getPlayerBodyClass('Name')" class="text-left">{{row.player.name}}</td>
-                    <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                    <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
+                        v-show="isInColPage(index)"
+                        :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
                         {{ mech[0] ? mech[0] : '-'}}
                     </td>
                 </tr>
@@ -50,7 +57,7 @@
     Vue.component("mechanics-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(15)],
         data: function () {
             return {
                 cacheP: new Map(),
@@ -128,6 +135,9 @@
             },
         },
         computed: {
+            colPageCount: function() {
+                return this.playerMechHeader.length - this.colStructure.perpage;
+            },
             tablePid: function() {
                 return "playermechs";
             },
