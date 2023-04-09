@@ -453,8 +453,14 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> FoodProcs = new List<Buff>
         {
             // Effect procs for On Kill Food
-            new Buff("Nourishment (Bonus Power)", NourishmentBonusPower, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
-            new Buff("Nourishment (Bonus Power & Ferocity)", NourishmentBonusPowerFerocity, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 40 Power)", NourishmentBonusPower40, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 60 Power)", NourishmentBonusPower60, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 100 Power)", NourishmentBonusPower100, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 120 Power)", NourishmentBonusPower120, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 160 Power)", NourishmentBonusPower160, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 200 Power)", NourishmentBonusPower200, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 100 Power & 100 Ferocity)", NourishmentBonusPowerFerocity100, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
+            new Buff("Nourishment (Bonus 150 Power & 150 Vitality)", NourishmentBonusPowerVitality150, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
             new Buff("Malice (Bonus Condition Damage)", MaliceBonusConditionDamage, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
         };
 

@@ -21,7 +21,6 @@ namespace GW2EIEvtcParser.EIData
 
         public bool BreakbarPhase { get; internal set; } = false;
 
-        public bool Dummy { get; internal set; } = false;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         private readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
 

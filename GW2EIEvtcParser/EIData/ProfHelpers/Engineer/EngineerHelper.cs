@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -68,12 +69,12 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Explosives
-            new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(72781, 98248),
-            new DamageLogDamageModifier("Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(98248, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer,"https://wiki.guildwars2.com/images/6/6e/Glass_Cannon.png", (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
-            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/f/f3/Explosive_Powder.png", DamageModifierMode.All).WithBuilds(GW2Builds.October2019Balance),
-            new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
+            new DamageLogDamageModifier("Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
+            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
+            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All).WithBuilds(GW2Builds.October2019Balance),
+            new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -83,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.All ).UsingApproximate(true).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-            new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -93,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.August2022Balance),
-            new DamageLogDamageModifier("Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png", (x,log) =>
+            new DamageLogDamageModifier("Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
                 double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -104,39 +105,38 @@ namespace GW2EIEvtcParser.EIData
                 return selfHP > dstHP;
             }, ByPresence, DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.August2022Balance),
             // Firearms
-            new BuffDamageModifier(ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
-            new BuffDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png", DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-            new BuffDamageModifierTarget(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, "https://wiki.guildwars2.com/images/9/94/Modified_Ammunition.png", DamageModifierMode.All),
+            new BuffDamageModifier(ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
+            new BuffDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
+            new BuffDamageModifierTarget(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All),
             // Tools
-            new BuffDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, "https://wiki.guildwars2.com/images/1/1f/Excessive_Energy.png", DamageModifierMode.All),
+            new BuffDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Static Shield",StaticShield, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
-                new Buff("Absorb",Absorb, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
-                new Buff("A.E.D.",AED, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e6/A.E.D..png"),
-                new Buff("Elixir S",ElixirSEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png"),
-                new Buff("Utility Goggles",UtilityGoggles, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/02/Utility_Goggles.png"),
-                new Buff("Slick Shoes",SlickShoes, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/3d/Slick_Shoes.png"),
-                new Buff("Gear Shield",GearShield, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/ca/Gear_Shield.png"),
-                new Buff("Iron Blooded",IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/1e/Iron_Blooded.png"),
-                new Buff("Streamlined Kits",StreamlinedKits, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/cb/Streamlined_Kits.png"),
-                new Buff("Kinetic Charge",KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, "https://wiki.guildwars2.com/images/e/e0/Kinetic_Battery.png"),
-                new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png", GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-                new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8a/Skilled_Marksman.png"),
-                new Buff("Explosive Entrance",ExplosiveEntranceEffect, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/3/33/Explosive_Entrance.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
-                new Buff("Explosive Temper",ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/c/c1/Explosive_Temper.png", GW2Builds.February2020Balance, GW2Builds.EndOfLife),
-                new Buff("Big Boomer",BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/83/Big_Boomer.png"),
-                new Buff("Med Kit",MedKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
-                new Buff("Med Kit Bonus",MedKitBonus, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/1/14/Med_Kit.png"),
-                new Buff("Grenade Kit",GrenadeKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/dd/Grenade_Kit.png"),
-                new Buff("Bomb Kit",BombKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/50/Bomb_Kit.png"),
-                new Buff("Elixir Gun",ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/fe/Elixir_Gun.png"),
-                new Buff("Flamethrower",FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ad/Flamethrower.png"),
-                new Buff("Tool Kit",ToolKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/2/2a/Tool_Kit.png"),
-                new Buff("Elite Mortar",EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, "https://wiki.guildwars2.com/images/0/0c/Elite_Mortar_Kit.png"),
-
+            new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
+            new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),
+            new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, BuffImages.AED),
+            new Buff("Elixir S", ElixirSEffect, Source.Engineer, BuffClassification.Other, BuffImages.ElixirS),
+            new Buff("Utility Goggles", UtilityGoggles, Source.Engineer, BuffClassification.Other, BuffImages.UtilityGoggles),
+            new Buff("Slick Shoes", SlickShoes, Source.Engineer, BuffClassification.Other, BuffImages.SlickShoes),
+            new Buff("Gear Shield", GearShield, Source.Engineer, BuffClassification.Other, BuffImages.GearShield),
+            new Buff("Iron Blooded", IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IronBlooded),
+            new Buff("Streamlined Kits", StreamlinedKits, Source.Engineer, BuffClassification.Other, BuffImages.StreamlinedKits),
+            new Buff("Kinetic Charge", KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KineticBattery),
+            new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, BuffImages.PinpointDistribution).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, BuffImages.SkilledMarksman),
+            new Buff("Explosive Entrance", ExplosiveEntranceEffect, Source.Engineer, BuffClassification.Other, BuffImages.ExplosiveEntrance).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Explosive Temper", ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ExplosiveTemper).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, BuffImages.BigBoomer),
+            new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.MedKit),
+            new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  BuffImages.MedKit),
+            new Buff("Grenade Kit", GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
+            new Buff("Bomb Kit", BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
+            new Buff("Elixir Gun", ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ElixirGun),
+            new Buff("Flamethrower", FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.Flamethrower),
+            new Buff("Tool Kit", ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
+            new Buff("Elite Mortar", EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)

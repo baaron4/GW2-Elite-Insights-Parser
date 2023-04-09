@@ -67,15 +67,17 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> OtherConsumables = new List<Buff>
         {       
             //
-            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor, GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             //
             new Buff("15% Speed Bonus", SpeedBonus15, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.SpeedBonus15),
             new Buff("5% Damage Reduction", DamageReduction5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageReduction5),
             new Buff("Healthful Rejuvenation", HealthfulRejuvenation, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.HealthfulRejuvenation),
             new Buff("5% Damage Bonus", DamageBonus5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageBonus5),
             //
-            new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.OtherConsumable, BuffImages.SkaleVenomConsumable),
+            new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.OtherConsumable, BuffImages.WeakPotionOfNightmareCourtSlaying),
             new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.OtherConsumable, BuffImages.SwiftMoaFeather),
+            new Buff("Fool's Dog Treat", FoolsDogTreat, Source.Item, BuffClassification.Nourishment, BuffImages.FoolsDogTreat),
+            new Buff("Chatoyant Elixir", ChatoyantElixir, Source.Item, BuffClassification.Nourishment, BuffImages.PowerfulPotionOfDredgeSlaying),
         };
 
         internal static readonly List<Buff> Writs = new List<Buff>

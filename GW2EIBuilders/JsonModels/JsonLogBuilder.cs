@@ -148,7 +148,7 @@ namespace GW2EIBuilders.JsonModels
             }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Phases");
-            jsonLog.Phases = log.FightData.GetNonDummyPhases(log).Select(x => JsonPhaseBuilder.BuildJsonPhase(x, log)).ToList();
+            jsonLog.Phases = log.FightData.GetPhases(log).Select(x => JsonPhaseBuilder.BuildJsonPhase(x, log)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
             jsonLog.Targets = log.FightData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap)).ToList();

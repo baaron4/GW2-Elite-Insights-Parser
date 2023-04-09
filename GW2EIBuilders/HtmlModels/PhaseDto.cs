@@ -19,8 +19,6 @@ namespace GW2EIBuilders.HtmlModels
         public List<int> Targets { get; set; } = new List<int>();
         public bool BreakbarPhase { get; set; }
 
-        public bool Dummy { get; set; }
-
         public List<List<object>> DpsStats { get; set; }
         public List<List<List<object>>> DpsStatsTargets { get; set; }
         public List<List<List<object>>> OffensiveStatsTargets { get; set; }
@@ -119,7 +117,6 @@ namespace GW2EIBuilders.HtmlModels
             Start = phase.Start / 1000.0;
             End = phase.End / 1000.0;
             BreakbarPhase = phase.BreakbarPhase;
-            Dummy = phase.Dummy;
             foreach (AbstractSingleActor target in phase.Targets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));

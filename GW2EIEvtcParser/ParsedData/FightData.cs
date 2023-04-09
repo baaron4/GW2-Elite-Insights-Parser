@@ -325,15 +325,6 @@ namespace GW2EIEvtcParser.ParsedData
             return _phases;
         }
 
-        public IReadOnlyList<PhaseData> GetNonDummyPhases(ParsedEvtcLog log)
-        {
-            if (!_nonDummyPhases.Any())
-            {
-                _nonDummyPhases = GetPhases(log).Where(x => !x.Dummy).ToList();
-            }
-            return _nonDummyPhases;
-        }
-
         public IReadOnlyList<AbstractSingleActor> GetMainTargets(ParsedEvtcLog log)
         {
             return GetPhases(log)[0].Targets;

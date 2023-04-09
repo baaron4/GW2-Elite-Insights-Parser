@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID, long invulGainOffset)
+        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID)
         {         
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
@@ -94,25 +94,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            // check first invul gain at the start of the fight
+            // check first invul gain
             CombatItem invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsBuffApply() && x.SkillID == invulID && x.Time >= startToUse);
             // get invul lost
             CombatItem invulLost = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == invulID && x.Time >= startToUse);
-            // invul loss matches the gained invul
-            if (invulGain != null && invulLost != null && invulLost.Time > invulGain.Time)
+            // invul gain at the start and invul loss matches the gained invul
+            if (invulGain != null && (invulGain.IsStateChange == ArcDPSEnums.StateChange.BuffInitial || invulGain.Time - target.FirstAware < 200) && invulLost != null && invulLost.Time >= invulGain.Time)
             {
-                // check against offset
-                if (invulGain.Time - startToUse < invulGainOffset)
-                {
-                    return invulLost.Time + 1;
-                }
+                return invulLost.Time + 1;
             }
-            else if (invulLost != null)
+            else if (invulLost != null && (invulGain == null || invulLost.Time < invulGain.Time))
             {
                 // only invul lost, missing buff apply event
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.Time >= startToUse);
-                // verify that first enter combat matches the moment invul is lost
-                if (enterCombat != null && Math.Abs(enterCombat.Time - invulLost.Time) < 100)
+                // no buff apply -> target was invul the whole time
+                if (enterCombat != null && enterCombat.Time >= invulLost.Time)
                 {
                     return invulLost.Time + 1;
                 }

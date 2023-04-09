@@ -48,17 +48,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (_detailed)
             {
-                phases.Add(new PhaseData(phases[0].Start, phases[0].End)
+                var detailedPhase = new PhaseData(phases[0].Start, phases[0].End)
                 {
                     Name = "Detailed Full Fight",
                     CanBeSubPhase = false
-                });
-                phases[1].AddTargets(Targets);
-                if (phases[1].Targets.Any())
+                };
+                detailedPhase.AddTargets(Targets);
+                if (detailedPhase.Targets.Any())
                 {
-                    phases[1].RemoveTarget(mainTarget);
+                    detailedPhase.RemoveTarget(mainTarget);
                 }
-                phases[0].Dummy = phases[1].Targets.Any();
+                if (detailedPhase.Targets.Any())
+                {
+                    phases[0] = detailedPhase;
+                }
             }
             return phases;
         }

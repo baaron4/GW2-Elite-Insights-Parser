@@ -210,3 +210,45 @@ var sortedDistributionComponent = {
         },
     }
 };
+
+var colSliderComponent = function (perpage) {
+  return {
+    data: function () {
+      return {
+        colStructure: {
+            offset: 0,
+            perpage: perpage
+        },
+      };
+    },
+    methods: {
+      isInColPage: function (index) {
+        return (
+          index >= this.colStructure.offset &&
+          index < this.colStructure.offset + this.colStructure.perpage
+        );
+      },
+    },
+  };
+};
+
+var rowSliderComponent = function (perpage) {
+    return {
+      data: function () {
+        return {
+          rowStructure: {
+              offset: 0,
+              perpage: perpage
+          },
+        };
+      },
+      methods: {
+        isInRowPage: function (index) {
+          return (
+            index >= this.rowStructure.offset &&
+            index < this.rowStructure.offset + this.rowStructure.perpage
+          );
+        },
+      },
+    };
+  };

@@ -83,13 +83,33 @@ function compileTemplates() {
             });
         }
     });
+    Vue.component("table-scroll-component", {
+        props: ["min", "max", "vertical", "width", "height", "translate", "pagestructure"],
+        template : `      
+        <input 
+            style="position: relative;background-color: #888888;" 
+            :style=getStyle()
+            type="range" :min="min" :max="max" :value="min" class="slider" @input="updateOffset($event.target.value)">
+        `,
+        methods: {
+            updateOffset: function(value) {
+                this.pagestructure.offset = parseInt(value);
+            },
+            getStyle: function() {
+                return {
+                    width: this.width,
+                    height: this.height,
+                    transform: this.translate
+                };
+            },
+        }
+    });
     TEMPLATE_COMPILE
 };
 
 function mainLoad() {
     // make some additional variables reactive
-    var nonDummyPhases = logData.phases.filter(x => !x.dummy);
-    var firstActive = nonDummyPhases[0];
+    var firstActive = logData.phases[0];
     for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0

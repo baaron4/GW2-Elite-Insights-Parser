@@ -18,7 +18,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
 
         public static void FillJsonActor(JsonActor jsonActor, AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
         {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetNonDummyPhases(log);
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             //
             jsonActor.Name = actor.Character;
             jsonActor.TotalHealth = actor.GetHealth(log.CombatData);

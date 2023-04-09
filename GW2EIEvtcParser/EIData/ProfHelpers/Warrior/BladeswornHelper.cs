@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData.Buffs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -29,19 +30,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png", DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+            new BuffDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Gunsaber Mode", GunsaberMode, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/f/f0/Unsheathe_Gunsaber.png"),
-            new Buff("Dragon Trigger", DragonTrigger, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/b/b1/Dragon_Trigger.png"),
-            new Buff("Positive Flow", PositiveFlow, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, "https://wiki.guildwars2.com/images/f/f9/Attribute_bonus.png"),
-            new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png"),
-            new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/a/ad/Combat_Stimulant.png"),
-            new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other,"https://wiki.guildwars2.com/images/7/72/Guns_and_Glory.png"),
-            new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other,"https://wiki.guildwars2.com/images/4/47/Tactical_Reload.png"),
-            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other,"https://wiki.guildwars2.com/images/0/0a/Overcharged_Cartridges.png", GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Gunsaber Mode", GunsaberMode, Source.Bladesworn, BuffClassification.Other, BuffImages.UnsheatheGunsaber),
+            new Buff("Dragon Trigger", DragonTrigger, Source.Bladesworn, BuffClassification.Other, BuffImages.DragonTrigger),
+            new Buff("Positive Flow", PositiveFlow, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.AttributeBonus),
+            new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FierceAsFire),
+            new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, BuffImages.CombatStimulant),
+            new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.GunsAndGlory),
+            new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, BuffImages.TacticalReload),
+            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
 

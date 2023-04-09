@@ -1,5 +1,11 @@
 <template>
     <div>
+        <div v-if="colPageCount > 0">
+            <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
+        <div v-if="rowPageCount > 50">
+            <table-scroll-component :min="0" :max="rowPageCount" :vertical="false" :width="'200px'" :height="'10px'" :translate="'translate(400px)'" :pagestructure="rowStructure"></table-scroll-component>
+        </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
                 <tr>
@@ -7,11 +13,11 @@
                     <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
                         Name
                     </th>
-                    <th :class="getHeaderClass('All')" @click="sortBy('All')">
+                    <th class="damage-dist-cell" :class="getHeaderClass('All')" @click="sortBy('All')">
                         All
                     </th>
-                    <th v-if="!targetless" v-for="(col, index) in tableData.cols"
-                        :class="getHeaderClass('Target', index)" @click="sortBy('Target', index)">
+                    <th v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
+                        class="damage-dist-cell" :class="getHeaderClass('Target', colIndex)" @click="sortBy('Target', colIndex)">
                         <span :title="col.name">
                             {{col.name}}
                         </span>
@@ -19,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}">
+                <tr v-for="(row, rowIndex) in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}" v-show="isInRowPage(rowIndex)">
                     <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
                         <img :src="row.player.icon" :alt="row.player.profession" class="icon">
                         <span style="display:none">
@@ -34,9 +40,9 @@
                     <td :class="getBodyClass('All')">
                         {{tableRound(row.dps[row.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols"
-                        :class="getBodyClass('Target', index)">
-                        {{tableRound(row.dps[index])}}
+                    <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
+                        :class="getBodyClass('Target', colIndex)">
+                        {{tableRound(row.dps[colIndex])}}
                     </td>
                 </tr>
             </tbody>
@@ -49,8 +55,8 @@
                     <td>
                         {{tableRound(sum.dps[sum.dps.length - 1])}}
                     </td>
-                    <td v-if="!targetless" v-for="(col, index) in tableData.cols">
-                        {{tableRound(sum.dps[index])}}
+                    <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)">
+                        {{tableRound(sum.dps[colIndex])}}
                     </td>
                 </tr>
             </tfoot>
@@ -61,7 +67,7 @@
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent],
+        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent, colSliderComponent(2), rowSliderComponent(10)],
         props: ["playerid", "graphdata"],
         template: `${template}`,
         data: function () {
@@ -71,7 +77,7 @@
                     order: "desc",
                     index: -1,
                     key: "All"
-                }
+                },
             };
         },
         methods: {
@@ -130,6 +136,12 @@
             }
         },
         computed: {
+            colPageCount: function() {
+                return this.tableData.cols.length - this.colStructure.perpage;
+            },
+            rowPageCount: function() {
+                return this.tableData.rows.length - this.rowStructure.perpage;
+            },
             tableid: function () {
                 return "combat-replay-dps-table";
             },
@@ -137,7 +149,7 @@
                 return logData.phases[0];
             },
             targets: function () {
-                return this.phase.dummy ? [] : this.phase.targets;
+                return this.phase.targets;
             },
             graph: function () {
                 return graphData.phases[0].players;

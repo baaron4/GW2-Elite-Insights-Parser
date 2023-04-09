@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -68,16 +69,16 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-                new Buff("Ashes of the Just",AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
-                new Buff("Eternal Oasis",EternalOasis, Source.Firebrand, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
-                new Buff("Unbroken Lines",UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
-                new Buff("Tome of Justice",TomeOfJusticeEffect, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/ae/Tome_of_Justice.png"),
-                new Buff("Tome of Courage",TomeOfCourageEffect,Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/54/Tome_of_Courage.png"),
-                new Buff("Tome of Resolve",TomeOfResolveEffect, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png"),
-                new Buff("Quickfire",Quickfire, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/d6/Quickfire.png"),
-                new Buff("Dormant Justice",DormantJustice, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/5/55/Dormant_Justice.png"),
-                new Buff("Dormant Courage",DormantCourage, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/7/71/Dormant_Courage.png"),
-                new Buff("Dormant Resolve",DormantResolve, Source.Firebrand, BuffClassification.Other, "https://wiki.guildwars2.com/images/d/df/Dormant_Resolve.png"),
+            new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.EpilogueAshesOfTheJust),
+            new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, BuffImages.EpilogueEternalOasis),
+            new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, BuffImages.EpilogueUnbrokenLines),
+            new Buff("Tome of Justice", TomeOfJusticeEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfJustice),
+            new Buff("Tome of Courage", TomeOfCourageEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfCourage),
+            new Buff("Tome of Resolve", TomeOfResolveEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfResolve),
+            new Buff("Quickfire", Quickfire, Source.Firebrand, BuffClassification.Other, BuffImages.Quickfire),
+            new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, BuffImages.DormantJustice),
+            new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, BuffImages.DormantCourage),
+            new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, BuffImages.DormantResolve),
         };
 
     }

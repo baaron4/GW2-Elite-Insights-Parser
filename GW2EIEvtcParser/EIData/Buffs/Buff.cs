@@ -64,8 +64,8 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private ulong _maxBuild { get; } = GW2Builds.EndOfLife;
-        private ulong _minBuild { get; } = GW2Builds.StartOfLife;
+        private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
         public int Capacity { get; }
         public string Link { get; }
 
@@ -94,14 +94,11 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffClassification nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, type, capacity, nature, link)
+        internal Buff WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
         {
-            _maxBuild = maxBuild;
             _minBuild = minBuild;
-        }
-
-        internal Buff(string name, long id, ParserHelper.Source source, BuffClassification nature, string link, ulong minBuild, ulong maxBuild) : this(name, id, source, BuffStackType.Force, 1, nature, link, minBuild, maxBuild)
-        {
+            _maxBuild = maxBuild;
+            return this;
         }
 
         public Buff(string name, long id, string link)

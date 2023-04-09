@@ -11,16 +11,24 @@ namespace GW2EIEvtcParser
         {
             internal const ulong StartOfLife = ulong.MinValue;
             //
+            internal const ulong February2017Balance = 72781;
+            internal const ulong December2017Balance = 84832;
+            internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
             internal const ulong July2018Balance = 90455;
             internal const ulong August2018Balance = 92069;
             internal const ulong October2018Balance = 92715;
+            internal const ulong November2018Rune = 93543;
             internal const ulong December2018Balance = 94051;
             internal const ulong March2019Balance = 95535;
             internal const ulong April2019Balance = 96406;
             internal const ulong July2019Balance = 97950;
+            internal const ulong July2019Balance2 = 98248;
             internal const ulong October2019Balance = 99526;
+            internal const ulong December2019Balance = 100690;
             internal const ulong February2020Balance = 102321;
+            internal const ulong February2020Balance2 = 102389;
+            internal const ulong July2020Balance = 104844;
             internal const ulong May2021Balance = 115190;
             internal const ulong May2021BalanceHotFix = 115728;
             internal const ulong June2021Balance = 116210;
@@ -975,7 +983,9 @@ namespace GW2EIEvtcParser
         public enum MinionID : int
         {
             RuneJaggedHorror = 21314,
+            RuneRockDog = 8836,
             RuneMarkIGolem = 8837,
+            RuneTropicalBird = 8838,
             //
             IllusionarySwordsman = 6487,
             IllusionaryBerserker = 6535,
@@ -1028,39 +1038,53 @@ namespace GW2EIEvtcParser
             SunSpirit = 6330,
             FrostSpirit = 6369,
             StormSpirit = 6371,
+            WaterSpirit = 12778,
             SpiritOfNatureRenewal = 6649,
             JuvenileJungleStalker = 3827,
             JuvenileKrytanDrakehound = 4425,
             JuvenileBrownBear = 4426,
-            JuvenileSalamanderDraker = 5582,
+            JuvenileCarrionDevourer = 5581,
+            JuvenileSalamanderDrake = 5582,
             JuvenileAlpineWolf = 6043,
+            JuvenileSnowLeopard = 6044,
+            JuvenileRaven = 6045,
+            JuvenileJaguar = 6849,
             JuvenileMarshDrake = 6850,
             JuvenileBlueMoa = 6883,
             JuvenilePinkMoa = 6884,
             JuvenileRedMoa = 6885,
+            JuvenileWhiteMoa = 6886,
             JuvenileBlackMoa = 6887,
             JuvenileRiverDrake = 6888,
             JuvenileIceDrake = 6889,
+            JuvenileMurellow = 6898,
             JuvenileShark = 6968,
             JuvenileFernHound = 7336,
+            JuvenilePolarBear = 7926,
             JuvenileBlackBear = 7927,
             JuvenileArctodus = 7928,
             JuvenileLynx = 7932,
             JuvenileWhiptailDevourer = 7948,
             JuvenileLashtailDevourer = 7949,
             JuvenileWolf = 7975,
+            JuvenileHyena = 7976,
             JuvenileOwl = 8002,
             JuvenileEagle = 8003,
+            JuvenileWhiteRaven = 8004,
+            JuvenileCaveSpider = 8005,
             JuvenileJungleSpider = 8006,
             JuvenileForestSpider = 8007,
             JuvenileBlackWidowSpider = 8008,
             JuvenileBoar = 8013,
             JuvenileWarthog = 8014,
+            JuvenileSiamoth = 8015,
             JuvenilePig = 8016,
             JuvenileArmorFish = 8035,
             JuvenileBlueJellyfish = 8041,
             JuvenileRedJellyfish = 8042,
             JuvenileRainbowJellyfish = 9458,
+            JuvenileHawk = 10022,
+            JuvenileReefDrake = 11491,
             JuvenileTiger = 15380,
             JuvenileFireWywern = 15399,
             JuvenileSmokescale = 15402,
@@ -1071,7 +1095,10 @@ namespace GW2EIEvtcParser
             JuvenileCheetah = 19005,
             JuvenileRockGazelle = 19104,
             JuvenileSandLion = 19166,
+            JuvenileWallow = 24203,
             JuvenileWhiteTiger = 24298,
+            JuvenileSiegeTurtle = 24796,
+            JuvenilePhoenix = 25131,
             //
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,
