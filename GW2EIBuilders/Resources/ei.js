@@ -84,12 +84,11 @@ function compileTemplates() {
         }
     });
     Vue.component("table-scroll-component", {
-        props: ["min", "max", "vertical", "width", "height", "transform", "pagestructure"],
+        props: ["min", "max", "width", "height", "transform", "pagestructure"],
         template : `      
         <input 
-            style="position: relative;background-color: #888888;" 
+            style="background-color: #888888;" 
             :style=getStyle()
-            :orient="vertical ? 'vertical' : null"
             type="range" :min="min" :max="max" :value="min" class="slider" @input="updateOffset($event.target.value)">
         `,
         methods: {
@@ -102,9 +101,6 @@ function compileTemplates() {
                     height: this.height,
                     transform: this.transform
                 };
-                if (this.vertical) {
-                    res['-webkit-appearance'] = 'slider-vertical';
-                }
                 return res;
             },
         }

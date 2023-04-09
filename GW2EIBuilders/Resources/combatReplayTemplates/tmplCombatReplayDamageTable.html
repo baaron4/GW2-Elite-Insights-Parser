@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="d-flex flex-row justify-content-center">
-            <div v-if="rowPageCount > 0">
-                <table-scroll-component :min="0" :max="rowPageCount" :vertical="true" :width="'18px'" :height="'200px'" :transform="'translate(-5px, 100px) rotate(180deg)'" :pagestructure="rowStructure"></table-scroll-component>
+            <div v-if="rowPageCount > 0" style="width:25px;">
+                <table-scroll-component :min="0" :max="rowPageCount" :width="'230px'" :height="'10px'" :transform="'translate(-100px, 210) rotate(90deg)'" :pagestructure="rowStructure"></table-scroll-component>
             </div>
             <div>
                 <div v-if="colPageCount > 0">
-                    <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'200px'" :height="'10px'" :transform="'translate(350px, 5px)'" :pagestructure="colStructure"></table-scroll-component>
+                    <table-scroll-component :min="0" :max="colPageCount" :width="'200px'" :height="'10px'" :transform="'translate(350px, 5px)'" :pagestructure="colStructure"></table-scroll-component>
                 </div>
                 <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
                     <thead>

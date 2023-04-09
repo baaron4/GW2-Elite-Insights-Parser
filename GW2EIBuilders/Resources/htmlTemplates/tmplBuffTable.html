@@ -3,7 +3,7 @@
         <img v-if="generation" class="mb-1 icon" src="https://i.imgur.com/nSYuby8.png"
             :data-original-title="tooltipExpl" />
         <div v-if="colPageCount > 0">
-            <table-scroll-component :min="0" :max="colPageCount" :vertical="false" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
