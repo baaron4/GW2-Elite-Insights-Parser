@@ -426,6 +426,14 @@ th:hover img.icon-hover,
     width: 5px;
 }
 
+span.ellipsis {
+    width: 150px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .damage-cell {
     width: 150px;
 }
@@ -436,6 +444,14 @@ th:hover img.icon-hover,
 
 .damage-dist-cell {
     width: 100px;
+}
+
+.name-cr-cell {
+    width: 150px;
+}
+
+.damage-cr-cell {
+    width: 170px;
 }
 
 .sub-tabs {
