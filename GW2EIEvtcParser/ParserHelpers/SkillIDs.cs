@@ -816,9 +816,9 @@
         public const long RocketTurretCast2 = 22574;
         public const long ProtectedCaravan = 23088;
         public const long KodasArmor = 23158;
-        public const long MarkedSentryTurret1 = 23167;
+        public const long MarkedSentryTurretRed = 23167;
         public const long MarkedSentryTurretGreen = 23168;
-        public const long MarkedSentryTurret3 = 23169;
+        public const long MarkedSentryTurretBlue = 23169;
         public const long OvergrowthBonusTier1 = 23170;
         public const long OvergrowthBonusTier2 = 23171;
         public const long OvergrowthBonusTier3 = 23172;
