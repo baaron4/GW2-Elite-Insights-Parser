@@ -1,7 +1,7 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => x.RewardType == 29453);
+            RewardEvent reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.EoDStrikeReward);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);

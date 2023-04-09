@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Invul check
-            phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, false, true));
+            phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, false, true));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

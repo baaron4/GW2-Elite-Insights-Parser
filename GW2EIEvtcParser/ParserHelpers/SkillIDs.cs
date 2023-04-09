@@ -1878,7 +1878,7 @@
         public const long HastenedDemise = 48773;
         public const long LightCarrier = 48779;
         public const long HungeringAura = 48794;
-        public const long EnergyThresholdDhuum = 48848;
+        public const long EnergyThreshold = 48848;
         public const long ExposeDefenses = 48894;
         public const long SoulStoneVenomSkill = 49052;
         public const long CompoundingPower = 49058;
