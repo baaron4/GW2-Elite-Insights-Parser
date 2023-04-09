@@ -57,13 +57,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(fightData, agentData, combatData);
-            AgentItem mama = agentData.GetNPCsByID(ArcDPSEnums.TargetID.MAMA).FirstOrDefault();
+            AgentItem mama = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             if (mama != null)
             {
+                // players may enter combat with knights or an invisible hitbox before
+                // attempt to find first relevant event on mama
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
-                if (enterCombat != null)
+                CombatItem firstStrike = combatData.FirstOrDefault(x => {
+                    if (x.DstMatchesAgent(mama) && x.IsPhysicalDamage()) {
+                        ArcDPSEnums.PhysicalResult strike = ArcDPSEnums.GetPhysicalResult(x.Result);
+                        return strike == ArcDPSEnums.PhysicalResult.Normal
+                            || strike == ArcDPSEnums.PhysicalResult.Crit
+                            || strike == ArcDPSEnums.PhysicalResult.Glance
+                            || strike == ArcDPSEnums.PhysicalResult.Evade
+                            || strike == ArcDPSEnums.PhysicalResult.BreakbarDamage;
+                    }
+                    return false;
+                });
+                CombatItem firstBuffDamage = combatData.FirstOrDefault(x => x.DstMatchesAgent(mama) && x.IsBuffDamage());
+                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.DstMatchesAgent(mama) && x.IsBuffApply() && (x.SrcMasterInstid != 0 && agentData.GetAgentByInstID(x.SrcMasterInstid, x.Time).IsPlayer || agentData.GetAgent(x.SrcAgent, x.Time).IsPlayer));
+
+                long enterCombatTime = enterCombat?.Time ?? long.MaxValue;
+                long firstStrikeTime = firstStrike?.Time ?? long.MaxValue;
+                long firstBuffDamageTime = firstBuffDamage?.Time ?? long.MaxValue;
+                long firstBuffApplyTime = firstBuffApply?.Time ?? long.MaxValue;
+
+                // normal log start is 1 time unit before first event
+                long firstTime = new [] { enterCombatTime, firstStrikeTime, firstBuffDamageTime, firstBuffApplyTime }.Min();
+                if (firstTime != long.MaxValue)
                 {
-                    startToUse = enterCombat.Time;
+                    return Math.Max(startToUse, firstTime - 1);
                 }
             }
             return startToUse;
