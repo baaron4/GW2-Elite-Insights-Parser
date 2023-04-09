@@ -276,7 +276,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
                         }
-                        replay.Decorations.Add(new FacingPieDecoration((start, attackEnd), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                        if (replay.Rotations.Any())
+                        {
+                            replay.Decorations.Add(new FacingPieDecoration((start, attackEnd), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                        }
                     }
 
                     // Tormenting Blast (Quarter attacks)
@@ -298,15 +301,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
 
                         // Facing point
-                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
                         ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        if (facingDirection != null)
+                        {
+                            // Calculated points
+                            var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
+                            var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
 
-                        // Calculated points
-                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
-                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
-
-                        AddTormentingBlassDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
-                        AddTormentingBlassDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
+                            AddTormentingBlassDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
+                            AddTormentingBlassDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
+                        }
                     }
 
                     // Caustic Grasp (AoE Pull)
@@ -369,31 +374,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         }
                         // Initial facing point
-                        IReadOnlyList<ParametricPoint3D> list = target.GetCombatReplayPolledRotations(log);
+                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
                         ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
-                        // Calculated other quarters from initial point
-                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
-                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
-                        // First quarters
-                        int startFirstQuarter = start + 1500;
-                        int endFirstQuarter = Math.Min(startFirstQuarter + durationQuarter, attackEnd);
-                        int growingFirstQuarter = startFirstQuarter + durationQuarter;
-                        AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startFirstQuarter, endFirstQuarter, growingFirstQuarter);
-                        // Second quarters
-                        int startSecondQuarter = endFirstQuarter;
-                        int endSecondQuarter = Math.Min(startSecondQuarter + durationQuarter, attackEnd);
-                        int growingSecondQuarter = startSecondQuarter + durationQuarter;
-                        AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startSecondQuarter, endSecondQuarter, growingSecondQuarter);
-                        // Third quarters
-                        int startThirdQuarter = endSecondQuarter;
-                        int endThirdQuarter = Math.Min(startThirdQuarter + durationQuarter, attackEnd);
-                        int growingThirdQuarter = startThirdQuarter + durationQuarter;
-                        AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startThirdQuarter, endThirdQuarter, growingThirdQuarter);
-                        // Fourth quarters
-                        int startFourthQuarter = endThirdQuarter;
-                        int endFourthQuarter = Math.Min(startFourthQuarter + durationQuarter, attackEnd);
-                        int growingFourthQuarter = startFourthQuarter + durationQuarter;
-                        AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startFourthQuarter, endFourthQuarter, growingFourthQuarter);
+                        if (facingDirection != null)
+                        {
+                            // Calculated other quarters from initial point
+                            var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
+                            var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+                            // First quarters
+                            int startFirstQuarter = start + 1500;
+                            int endFirstQuarter = Math.Min(startFirstQuarter + durationQuarter, attackEnd);
+                            int growingFirstQuarter = startFirstQuarter + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startFirstQuarter, endFirstQuarter, growingFirstQuarter);
+                            // Second quarters
+                            int startSecondQuarter = endFirstQuarter;
+                            int endSecondQuarter = Math.Min(startSecondQuarter + durationQuarter, attackEnd);
+                            int growingSecondQuarter = startSecondQuarter + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startSecondQuarter, endSecondQuarter, growingSecondQuarter);
+                            // Third quarters
+                            int startThirdQuarter = endSecondQuarter;
+                            int endThirdQuarter = Math.Min(startThirdQuarter + durationQuarter, attackEnd);
+                            int growingThirdQuarter = startThirdQuarter + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startThirdQuarter, endThirdQuarter, growingThirdQuarter);
+                            // Fourth quarters
+                            int startFourthQuarter = endThirdQuarter;
+                            int endFourthQuarter = Math.Min(startFourthQuarter + durationQuarter, attackEnd);
+                            int growingFourthQuarter = startFourthQuarter + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startFourthQuarter, endFourthQuarter, growingFourthQuarter);
+                        }
                     }
 
                     // Lunge (Dash)
@@ -402,7 +410,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int startLine = (int)c.Time;
                         int lineEffectEnd = (int)c.Time + 1000;
-                        replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                        if (replay.Rotations.Any())
+                        {
+                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                        }
                     }
 
                     break;
@@ -413,7 +424,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int startLine = (int)c.Time;
                         int lineEffectEnd = (int)c.Time + 1000;
-                        replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                        if (replay.Rotations.Any())
+                        {
+                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                        }
                     }
 
                     // Upswing

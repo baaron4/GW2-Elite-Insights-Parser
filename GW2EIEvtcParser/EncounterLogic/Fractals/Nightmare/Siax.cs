@@ -137,7 +137,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 1500;
                         int openingAngle = 144;
                         int radius = 600;
-                        replay.Decorations.Add(new FacingPieDecoration(((int)c.Time, (int)c.Time + duration), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                        if (replay.Rotations.Any())
+                        {
+                            replay.Decorations.Add(new FacingPieDecoration(((int)c.Time, (int)c.Time + duration), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                        }
                     }
                     // 66% and 33% phases
                     var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33).ToList();

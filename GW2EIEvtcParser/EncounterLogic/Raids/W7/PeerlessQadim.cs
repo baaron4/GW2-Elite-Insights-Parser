@@ -268,11 +268,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         int aimTime = (int)((double)c.ExpectedDuration*ratio);
-                        replay.Decorations.Add(new FacingDecoration((0, end), new AgentConnector(target), replay.PolledRotations));
-                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
-                        if (end > start + aimTime)
+                        if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime,end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                            replay.Decorations.Add(new FacingDecoration((0, end), new AgentConnector(target), replay.PolledRotations));
+                            replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
+                            if (end > start + aimTime)
+                            {
+                                replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                            }
                         }
                     }
                     foreach (AbstractCastEvent c in expoReperc)

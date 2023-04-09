@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
                     }
-                    if (replay.Rotations.Count > 0)
+                    if (replay.Rotations.Any())
                     {
                         int start = (int)replay.TimeOffsets.start;
                         int end = (int)replay.TimeOffsets.end;

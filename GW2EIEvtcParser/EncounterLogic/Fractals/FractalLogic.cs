@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                 foreach (EffectEvent sicknessEffect in sicknessEffects)
                 {
-                    if (replay.Rotations.Count > 0)
+                    if (replay.Rotations.Any())
                     {
                         int duration = 4000;
                         int radius = 600;
