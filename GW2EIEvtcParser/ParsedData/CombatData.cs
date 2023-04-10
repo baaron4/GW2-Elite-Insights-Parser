@@ -377,6 +377,7 @@ namespace GW2EIEvtcParser.ParsedData
                     } 
                     else
                     {
+                        insertToSkillIDs = combatItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
                         CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion);
                     }
                     
