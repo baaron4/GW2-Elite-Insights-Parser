@@ -89,9 +89,6 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> ConditionsActiveStats { get; set; }
         public List<BuffData> PersBuffActiveStats { get; set; }
         public List<BuffData> GearBuffActiveStats { get; set; }
-        public List<BuffData> NourishmentActiveStats { get; set; }
-        public List<BuffData> EnhancementActiveStats { get; set; }
-        public List<BuffData> OtherConsumableActiveStats { get; set; }
         public List<BuffData> DebuffActiveStats { get; set; }
 
         public List<DamageModData> DmgModifiersCommon { get; set; }
@@ -221,9 +218,6 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDefbuffs, phase);
             PersBuffActiveStats = BuffData.BuildActivePersonalBuffUptimeData(log, persBuffDict, phase);
             GearBuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentGearbuffs, phase);
-            NourishmentActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentNourishements, phase);
-            EnhancementActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentEnhancements, phase);
-            OtherConsumableActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentOtherConsumables, phase);
             DebuffActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentDebuffs, phase);
             ConditionsActiveStats = BuffData.BuildActiveBuffUptimeData(log, statistics.PresentConditions, phase);
             BoonGenActiveSelfStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentBoons, phase, BuffEnum.Self);

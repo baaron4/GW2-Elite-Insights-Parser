@@ -98,9 +98,9 @@
                         function getValue(rowValue) {
                             var value = rowValue.data.data[index];
                             if (value instanceof Array) {
-                                return value[0];
+                                return value[0] ?? 0;
                             }
-                            return value;
+                            return value ?? 0;
                         }
                         rows.sort((x,y) => order * (getValue(x) - getValue(y)));
                         break;
