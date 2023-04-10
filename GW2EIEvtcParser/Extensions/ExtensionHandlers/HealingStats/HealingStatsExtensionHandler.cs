@@ -235,6 +235,11 @@ namespace GW2EIEvtcParser.Extensions
             return true;
         }
 
+        internal override bool IsSkillID(CombatItem c)
+        {
+            return true;
+        }
+
         internal override bool SrcIsAgent(CombatItem c)
         {
             return IsHealingEvent(c) || IsBarrierEvent(c);

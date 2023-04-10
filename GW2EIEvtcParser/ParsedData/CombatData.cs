@@ -364,13 +364,14 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Creating EI Combat Data");
             foreach (CombatItem combatItem in combatEvents)
             {
-                _skillIds.Add(combatItem.SkillID);
+                bool insertToSkillIDs = false;
                 if (combatItem.IsStateChange != ArcDPSEnums.StateChange.None)
                 {
                     if (combatItem.IsExtension)
                     {
                         if (extensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
                         {
+                            insertToSkillIDs = handler.IsSkillID(combatItem);
                             handler.InsertEIExtensionEvent(combatItem, agentData, skillData);
                         }
                     } 
@@ -382,6 +383,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 else if (combatItem.IsActivation != ArcDPSEnums.Activation.None)
                 {
+                    insertToSkillIDs = true;
                     if (castCombatEvents.TryGetValue(combatItem.SrcAgent, out List<CombatItem> list))
                     {
                         list.Add(combatItem);
@@ -393,10 +395,12 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 else if (combatItem.IsBuffRemove != ArcDPSEnums.BuffRemove.None)
                 {
+                    insertToSkillIDs = true;
                     CombatEventFactory.AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData);
                 }
                 else
                 {
+                    insertToSkillIDs = true;
                     if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
                     {
                         CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
@@ -409,6 +413,10 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         CombatEventFactory.AddIndirectDamageEvent(combatItem, damageData, brkDamageData, agentData, skillData);
                     }
+                }
+                if (insertToSkillIDs)
+                {
+                    _skillIds.Add(combatItem.SkillID);
                 }
             }
             HasStackIDs = evtcVersion > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
