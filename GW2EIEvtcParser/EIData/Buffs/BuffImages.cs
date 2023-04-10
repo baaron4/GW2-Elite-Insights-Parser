@@ -1469,6 +1469,7 @@
         internal const string ShatteringBlow = "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png";
         internal const string SavageInstinct = "https://wiki.guildwars2.com/images/4/4d/Savage_Instinct.png";
         internal const string DangerTime = "https://wiki.guildwars2.com/images/f/fc/Danger_Time.png";
+        internal const string PoisonMaster = "https://wiki.guildwars2.com/images/c/c0/Poison_Master.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

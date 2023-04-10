@@ -832,6 +832,7 @@
         public const long Critical = 24278;
         public const long StoneHeart = 24304;
         public const long LightningRod = 24305;
+        public const long PoisonMasterEffect = 24371;
         public const long RousingResilience = 24383;
         public const long BowlOfPricklyPearSorber = 24792;
         public const long PlateOfRoastedCactus = 24793;
