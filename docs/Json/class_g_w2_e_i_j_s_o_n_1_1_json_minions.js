@@ -1,5 +1,6 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_minions =
 [
+    [ "CombatReplayData", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#ac75fc46a6cb03b25f4ff9d8e1b338d7a", null ],
     [ "EXTBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a10a477b403958c0a6f8cf6cb0951ebd7", null ],
     [ "EXTHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#ab3744477bfc8d1155477123b08536259", null ],
     [ "Id", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a8e7fd0553c4811cee282f805ad518628", null ],
