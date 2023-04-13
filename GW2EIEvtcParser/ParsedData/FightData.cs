@@ -11,7 +11,6 @@ namespace GW2EIEvtcParser.ParsedData
     {
         // Fields
         private List<PhaseData> _phases = new List<PhaseData>();
-        private List<PhaseData> _nonDummyPhases = new List<PhaseData>();
         public int TriggerID { get; }
         public FightLogic Logic { get; }
         public long FightEnd { get; private set; } = long.MaxValue;
