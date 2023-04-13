@@ -2,7 +2,7 @@ var searchData=
 [
   ['cancrit',['CanCrit',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a70d52f519b69a5fef7f045be9ed8e167',1,'GW2EIJSON::JsonLog::SkillDesc']]],
   ['casttime',['CastTime',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#afdf59c40c0f6328675e5a393d3ca9b19',1,'GW2EIJSON::JsonRotation::JsonSkill']]],
-  ['combatreplaydata',['CombatReplayData',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a208fbc86c519f781718e44835e1214e1',1,'GW2EIJSON::JsonActor']]],
+  ['combatreplaydata',['CombatReplayData',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a208fbc86c519f781718e44835e1214e1',1,'GW2EIJSON.JsonActor.CombatReplayData()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#ac75fc46a6cb03b25f4ff9d8e1b338d7a',1,'GW2EIJSON.JsonMinions.CombatReplayData()']]],
   ['combatreplaymap',['CombatReplayMap',['../class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data_1_1_combat_replay_map.html',1,'GW2EIJSON::JsonCombatReplayMetaData']]],
   ['combatreplaymetadata',['CombatReplayMetaData',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a17b7decb5b6d8ef4f27f4b1747037199',1,'GW2EIJSON::JsonLog']]],
   ['concentration',['Concentration',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afe5b9eec1c6d795718679f1385ce4848',1,'GW2EIJSON::JsonActor']]],
