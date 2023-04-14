@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
             new Buff("Exhaustion", Exhaustion, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.Exhaustion),
             new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
-            new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Stealth),
+            new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Revealed", Revealed, Source.Common, BuffClassification.Support, BuffImages.Revealed),
             new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
             new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.June2021Balance, GW2Builds.EndOfLife),
