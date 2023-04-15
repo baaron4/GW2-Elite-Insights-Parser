@@ -71,6 +71,7 @@ namespace GW2EIEvtcParser.EIData
         {
             // Skills
             new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
+            new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Offensive, BuffImages.ImpaleWarriorSword),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
             new Buff("Dolyak Signet", DolyakSignet, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),

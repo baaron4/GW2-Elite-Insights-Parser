@@ -697,6 +697,7 @@
         public const long SignetOfStamina = 14478;
         public const long Rampage = 14484;
         public const long SignetOfRage = 14496;
+        public const long Impaled = 14499;
         public const long Counterattack = 14509;
         public const long BannerOfDefenseSkill = 14528;
         public const long BannerOfDefenseEffect = 14543;
