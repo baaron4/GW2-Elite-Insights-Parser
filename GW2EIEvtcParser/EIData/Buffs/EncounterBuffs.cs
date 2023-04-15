@@ -94,6 +94,9 @@ namespace GW2EIEvtcParser.EIData
             // Unknown Fixation            
             new Buff("Fixated 1(???)", Fixated1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated 2(???)", Fixated2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            // Mistlock Instabilities
+            new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
+            new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             //////////////////////////////////////////////
             // Mordremoth
             new Buff("Parietal Mastery", ParietalMastery, Source.FightSpecific, BuffClassification.Other, BuffImages.ParietalMastery),

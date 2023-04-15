@@ -2060,9 +2060,11 @@
         public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;
         public const long MistlockInstabilitySugarRush = 54237;
+        public const long NotStickingTogetherBuff = 54378;
         public const long MistlockInstabilityFrailty = 54477;
         public const long MistlockInstabilitySlipperySlope1 = 54559;
         public const long DragonCrystalPotion = 54561;
+        public const long StickingTogetherBuff = 54604;
         public const long MistlockInstabilityWeBleedFire = 54719;
         public const long MistlockInstabilitySlipperySlope2 = 54817;
         public const long SandstormShroud = 54870;
