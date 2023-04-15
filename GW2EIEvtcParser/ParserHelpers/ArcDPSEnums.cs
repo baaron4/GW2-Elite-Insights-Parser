@@ -41,6 +41,7 @@ namespace GW2EIEvtcParser
             internal const ulong March2022Balance2 = 127285;
             internal const ulong June2022Balance = 130910;
             internal const ulong June2022BalanceHotFix = 131084;
+            internal const ulong July2022FractalInstabilitiesRework = 131720;
             internal const ulong August2022BalanceHotFix = 132359;
             internal const ulong August2022Balance = 133322;
             internal const ulong October2022Balance = 135242;

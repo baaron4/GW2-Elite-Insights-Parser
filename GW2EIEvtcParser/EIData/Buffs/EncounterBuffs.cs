@@ -100,7 +100,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fixated 2(???)", Fixated2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             // Generic Fractals
             new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Agony),
-            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung),
+            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2022FractalInstabilitiesRework),
+            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 33, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
             new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
             new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             //////////////////////////////////////////////
