@@ -58,8 +58,6 @@ namespace GW2EIEvtcParser.EIData
             // Generic
             new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.Emboldened),
             new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
-            new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Agony),
-            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung),
             new Buff("Enraged (?)", Enraged1_Unknown, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged (??)", Enraged2_Unknown, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged 1 (100%)", Enraged1_100, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
@@ -94,7 +92,9 @@ namespace GW2EIEvtcParser.EIData
             // Unknown Fixation            
             new Buff("Fixated 1(???)", Fixated1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated 2(???)", Fixated2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            // Mistlock Instabilities
+            // Generic Fractals
+            new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Agony),
+            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung),
             new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
             new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             //////////////////////////////////////////////
