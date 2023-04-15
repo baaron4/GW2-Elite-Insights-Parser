@@ -1701,6 +1701,7 @@
         public const long KickGazelle = 43593;
         public const long SadisticSearing = 43626;
         public const long ThermalReleaseValve = 43630;
+        public const long NoMountUse = 43702;
         public const long PhotonForge = 43708;
         public const long ConsumingBite = 43734;
         public const long SightBeyondSightSkill = 43745;
@@ -1897,6 +1898,7 @@
         public const long PlateOfBeefRendang = 49686;
         public const long Enraged1_100 = 50070;
         public const long AvocadoSmoothie = 50091;
+        public const long BondOfLifeEffect = 50216;
         public const long HolographicSuperDrumstick = 50302;
         public const long HolographicSuperApple = 50307;
         public const long HolographicSuperCheese = 50320;
@@ -1931,6 +1933,7 @@
         public const long LampBond = 51726;
         public const long AquaticDetainmentEffect = 51755;
         public const long WaveOfForce = 51759;
+        public const long BondOfVigorEffect = 51762;
         public const long Slash = 51777;
         public const long AchievementEligibilityManipulateTheManipulator = 51867;
         public const long BodyOfFlame = 51879;
@@ -2054,6 +2057,7 @@
         public const long MistlockInstabilityStickTogether = 53932;
         public const long AuroraBeam3 = 53954;
         public const long MistlockInstabilityOutflanked = 54084;
+        public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;
         public const long MistlockInstabilitySugarRush = 54237;
         public const long MistlockInstabilityFrailty = 54477;
@@ -2367,6 +2371,7 @@
         public const long EssenceOfVigilanceTier4 = 60173;
         public const long PowerOfResilienceTier4 = 60312;
         public const long IcyEchoes = 60354;
+        public const long StealthMountEffect = 60469;
         public const long TargetedDragonVoid = 60517;
         public const long LethalCoalescence = 60545;
         public const long Enraged4_200 = 60674;
@@ -2563,6 +2568,7 @@
         public const long DeployJadeSphereFire2 = 63396;
         public const long DeadlyBlades = 63409;
         public const long DeployJadeSphereWaterUW = 63416;
+        public const long SiegeAmmoAvailable = 63417;
         public const long FierceAsFire = 63433;
         public const long DeployJadeSphereAirUW = 63439;
         public const long DeployJadeSphereEarthUW = 63454;

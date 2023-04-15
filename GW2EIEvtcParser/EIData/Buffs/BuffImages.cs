@@ -1480,6 +1480,10 @@
         internal const string SwiftMoaFeather = "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png";
         // Others
         internal const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
+        internal const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
+        internal const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";
+        internal const string BondOfVigorEffect = "https://wiki.guildwars2.com/images/b/b5/Bond_of_Vigor_%28effect%29.png";
+        internal const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
         #endregion Misc
     }
 }

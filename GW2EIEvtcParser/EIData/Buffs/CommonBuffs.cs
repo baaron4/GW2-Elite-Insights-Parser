@@ -104,6 +104,13 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Guild Item Research", GuildItemResearch, Source.Common, BuffClassification.Other, BuffImages.GuildMagicFind),
             //
             new Buff("Crystalline Heart", CrystallineHeart, Source.Common, BuffClassification.Other, BuffImages.CrystallineHeart),
+            // Mounts
+            new Buff("No Mount Use", NoMountUse, Source.Common, BuffClassification.Other, BuffImages.MountsDisabled),
+            new Buff("Bond of Life", BondOfLifeEffect, Source.Common, BuffClassification.Other, BuffImages.SynchronizedVitality),
+            new Buff("Bond of Vigor", BondOfVigorEffect, Source.Common, BuffClassification.Other, BuffImages.BondOfVigorEffect),
+            new Buff("Evasion (Bond of Faith)", EvasionBondOfFaith, Source.Common, BuffClassification.Other, BuffImages.SteelAndFury),
+            new Buff("Stealth (Mount Effect)", StealthMountEffect, Source.Common, BuffClassification.Other, BuffImages.StealthMountEffect),
+            new Buff("Siege Ammo Available", SiegeAmmoAvailable, Source.Common, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SiegeAmmoAvailable),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
