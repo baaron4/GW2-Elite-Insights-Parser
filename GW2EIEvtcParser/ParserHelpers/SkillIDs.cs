@@ -2056,6 +2056,7 @@
         public const long MistlockInstabilityBoonOverload = 53673;
         public const long MistlockInstabilityStickTogether = 53932;
         public const long AuroraBeam3 = 53954;
+        public const long SocialAwkwardnessImmunity = 54073;
         public const long MistlockInstabilityOutflanked = 54084;
         public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;

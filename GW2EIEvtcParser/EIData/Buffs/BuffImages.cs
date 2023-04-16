@@ -388,6 +388,7 @@
         internal const string ActivatePurple = "https://wiki.guildwars2.com/images/3/35/Activate..._%28purple%29.png";
         internal const string ActivateGreen = "https://wiki.guildwars2.com/images/f/fb/Activate..._%28green%29.png";
         internal const string ActivateRed = "https://wiki.guildwars2.com/images/6/6f/Activate..._%28red%29.png";
+        internal const string ActivateYellow = "https://wiki.guildwars2.com/images/9/98/Activate..._%28yellow%29.png";
         internal const string VinetenderShield = "https://wiki.guildwars2.com/images/7/78/Vinetender_Shield.png";
         internal const string FrozenBarrier = "https://wiki.guildwars2.com/images/c/c8/Frozen_Barrier.png";
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";

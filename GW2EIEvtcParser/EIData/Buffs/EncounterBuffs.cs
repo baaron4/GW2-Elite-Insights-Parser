@@ -98,12 +98,6 @@ namespace GW2EIEvtcParser.EIData
             // Unknown Fixation            
             new Buff("Fixated 1(???)", Fixated1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated 2(???)", Fixated2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            // Generic Fractals
-            new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Agony),
-            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2022FractalInstabilitiesRework),
-            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 33, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
-            new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
-            new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             //////////////////////////////////////////////
             // Mordremoth
             new Buff("Parietal Mastery", ParietalMastery, Source.FightSpecific, BuffClassification.Other, BuffImages.ParietalMastery),
@@ -367,6 +361,12 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fractal Champion", FractalChampion, Source.Common, BuffClassification.Offensive, BuffImages.Precise9Infusion),
             new Buff("Fractal God", FractalGod, Source.Common, BuffClassification.Offensive, BuffImages.Healing9Infusion),
             new Buff("Debilitated (Toxic Sickness)", DebilitatedToxicSickness, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Debuff, BuffImages.Debilitated),
+            new Buff("Agony", Agony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Agony),
+            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2022FractalInstabilitiesRework),
+            new Buff("Hamstrung", Hamstrung, Source.FightSpecific,BuffStackType.Stacking, 33, BuffClassification.Debuff, BuffImages.Hamstrung).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
+            new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
+            new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
+            new Buff("Social Awkwardness Immunity", SocialAwkwardnessImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.ActivateYellow),
             // Siax 
             new Buff("Fixated (Nightmare)", FixatedNightmare, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             // Ensolyss 
