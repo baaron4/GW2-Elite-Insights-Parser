@@ -38,7 +38,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in tableData.rows" :class="{active: row.player.id === playerindex}">
+                <tr v-for="row in sortData(tableData.rows)" :class="{active: row.player.id === playerindex}">
                     <td :class="getBodyClass('Sub')">
                         {{row.player.group}}
                     </td>
