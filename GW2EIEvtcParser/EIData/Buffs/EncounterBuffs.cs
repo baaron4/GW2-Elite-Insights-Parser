@@ -124,6 +124,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Unstable Pylon: Red", UnstablePylonRed, Source.FightSpecific, BuffClassification.Other, BuffImages.UnstableRed),
             new Buff("Unstable Pylon: Blue", UnstablePylonBlue, Source.FightSpecific, BuffClassification.Other, BuffImages.UnstableBlue),
             new Buff("Unstable Pylon: Green", UnstablePylonGreen, Source.FightSpecific, BuffClassification.Other, BuffImages.UnstableGreen),
+            new Buff("Magic Aura", MagicAuraEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAura),
+            new Buff("Magic Aura: Red", MagicAuraRedEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAuraRed),
+            new Buff("Magic Aura: Blue", MagicAuraBlueEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAuraBlue),
+            new Buff("Magic Aura: Green", MagicAuraGreenEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAuraGreen),
             // Gorseval
             new Buff("Spirited Fusion", SpiritedFusion, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.SpiritedFusion),
             new Buff("Protective Shadow", ProtectiveShadow, Source.FightSpecific, BuffClassification.Other, BuffImages.ProtectiveShadow),

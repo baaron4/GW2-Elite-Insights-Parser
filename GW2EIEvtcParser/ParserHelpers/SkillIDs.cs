@@ -1008,6 +1008,7 @@
         public const long SolarBeam = 31371;
         public const long ShadowStepSabetha = 31372;
         public const long MagicAuraGreenGuardian = 31375;
+        public const long MagicAuraRedEffect = 31382;
         public const long GlyphOfUnityEffect = 31385;
         public const long DistributedMagicRed = 31391;
         public const long UnstableMagicSpike = 31392;
@@ -1042,6 +1043,7 @@
         public const long CultivatedSynergyPet = 31629;
         public const long CannonBarrage = 31643;
         public const long Enraged1_200 = 31648;
+        public const long MagicAuraGreenEffect = 31651;
         public const long GlyphOfUnityCA = 31657;
         public const long GlyphOfEquality = 31658;
         public const long LightningJolt = 31686;
@@ -1055,6 +1057,7 @@
         public const long FlameBlast = 31761;
         public const long PlatformQuake = 31763;
         public const long GlyphOfEmpowerment = 31803;
+        public const long MagicAuraBlueEffect = 31812;
         public const long UnstablePylonGreen = 31828;
         public const long GhastlyRampage = 31834;
         public const long PylonAttunementGreen = 31852;
@@ -1066,6 +1069,7 @@
         public const long UnstablePylonBlue = 31884;
         public const long MagicAuraBlueGuardian = 31885;
         public const long MagicPulse = 31886;
+        public const long MagicAuraEffect = 31903;
         public const long WritOfLearnedMalice = 31959;
         public const long WritOfMasterfulAccuracy = 31970;
         public const long WritOfLearnedStrength = 32044;

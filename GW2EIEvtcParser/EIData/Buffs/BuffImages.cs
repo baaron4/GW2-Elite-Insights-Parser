@@ -217,6 +217,10 @@
         internal const string UnstableBlue = "https://wiki.guildwars2.com/images/c/c3/Unstable_Pylon_%28Blue%29.png";
         internal const string UnstableRed = "https://wiki.guildwars2.com/images/3/36/Unstable_Pylon_%28Red%29.png";
         internal const string UnstableGreen = "https://wiki.guildwars2.com/images/9/9d/Unstable_Pylon_%28Green%29.png";
+        internal const string MagicAura = "https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png";
+        internal const string MagicAuraRed = "https://wiki.guildwars2.com/images/9/93/Magic_Aura_%28red%29.png";
+        internal const string MagicAuraBlue = "https://wiki.guildwars2.com/images/7/72/Magic_Aura_%28blue%29.png";
+        internal const string MagicAuraGreen = "https://wiki.guildwars2.com/images/7/7b/Magic_Aura_%28green%29.png";
         // Gorseval
         internal const string SpiritedFusion = "https://wiki.guildwars2.com/images/e/eb/Spirited_Fusion.png";
         internal const string ProtectiveShadow = "https://wiki.guildwars2.com/images/8/87/Protective_Shadow.png";
@@ -345,7 +349,6 @@
         // Qadim the Peerless
         internal const string PowerShare = "https://wiki.guildwars2.com/images/8/82/Power_Share.png";
         internal const string GuiltExploitation = "https://wiki.guildwars2.com/images/6/6f/Guilt_Exploitation.png";
-        internal const string MagicAura = "https://wiki.guildwars2.com/images/8/8b/Magic_Aura.png";
         internal const string OrbOfAscension = "https://wiki.guildwars2.com/images/b/bf/Orb_of_Ascension_%28effect%29.png";
         internal const string KineticAbundance = "https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png";
         internal const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
