@@ -953,6 +953,7 @@
         public const long HealingPrism = 29997;
         public const long DefenseField = 30027;
         public const long EyeOfTheStormShout = 30047;
+        public const long ReapersFrostExecutionersScythe = 30070;
         public const long BulwarkGyro = 30101;
         public const long InfusingTerrorEffect = 30129;
         public const long TimeAnchored = 30136;
@@ -1129,6 +1130,7 @@
         public const long GuildObjectiveAuraIV = 33375;
         public const long WeakenedEffect1 = 33378;
         public const long JerkPoultryFlatbreadSandwich = 33392;
+        public const long ReapersFrostChilledToTheBone = 33423;
         public const long ExposedMordremoth = 33470;
         public const long PlateOfMusselsGnashblade = 33476;
         public const long WritOfBasicAccuracy = 33572;

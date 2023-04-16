@@ -44,6 +44,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, BuffImages.ReapersShroud),
             new Buff("Infusing Terror", InfusingTerrorEffect, Source.Reaper, BuffClassification.Other, BuffImages.InfusingTerror),
             new Buff("Dark Bond", DarkBond, Source.Reaper, BuffClassification.Other, BuffImages.Rise),
+            new Buff("Reaper's Frost (Chilled to the Bone!)", ReapersFrostChilledToTheBone, Source.Reaper, BuffClassification.Other, BuffImages.ChilledToTheBone),
+            new Buff("Reaper's Frost (Executioner's Scythe)", ReapersFrostExecutionersScythe, Source.Reaper, BuffClassification.Other, BuffImages.ChilledToTheBone),
         };
 
         private static HashSet<long> Minions = new HashSet<long>()

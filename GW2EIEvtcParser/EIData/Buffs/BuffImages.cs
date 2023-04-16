@@ -1474,6 +1474,7 @@
         internal const string DangerTime = "https://wiki.guildwars2.com/images/f/fc/Danger_Time.png";
         internal const string PoisonMaster = "https://wiki.guildwars2.com/images/c/c0/Poison_Master.png";
         internal const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
+        internal const string ChilledToTheBone = "https://wiki.guildwars2.com/images/0/05/%22Chilled_to_the_Bone%21%22.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
