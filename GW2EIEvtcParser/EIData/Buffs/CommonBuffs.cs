@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Bounty", SuperiorSigilOfBounty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBounty),
             new Buff("Minor Sigil of Benevolence", MinorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBenevolence),
             new Buff("Major Sigil of Benevolence", MajorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBenevolence),
-            new Buff("Superior Sigil of Benevolence", SuperiorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfSanctuary),
+            new Buff("Superior Sigil of Benevolence", SuperiorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBenevolence),
             new Buff("Superior Sigil of Momentum", SuperiorSigilOfMomentum, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfMomentum),
             new Buff("Superior Sigil of the Stars", SuperiorSigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfStars),
             new Buff("Superior Sigil of Severance", SuperiorSigilOfSeverance, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfSeverance),
