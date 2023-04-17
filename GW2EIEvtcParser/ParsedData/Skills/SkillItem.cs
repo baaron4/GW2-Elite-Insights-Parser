@@ -127,7 +127,8 @@ namespace GW2EIEvtcParser.ParsedData
             {PotentHasteOrOverwhelmingCelerity, "Potent Haste or Overwhelming Celerity" },
             {PortentOfFreedomOrUnhinderedDelivery, "Portent of Freedom or Unhindered Delivery" },
 
-            {GlennaCap, "Capture" }
+            {GlennaCap, "Capture" },
+            {MushroomKingsBlessing, "Mushroom King's Blessing"},
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -272,6 +273,7 @@ namespace GW2EIEvtcParser.ParsedData
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
             {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
 
+            {MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png"},
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
