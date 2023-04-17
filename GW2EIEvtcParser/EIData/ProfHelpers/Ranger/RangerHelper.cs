@@ -139,6 +139,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),
             new Buff("Quick Draw", QuickDraw, Source.Ranger, BuffClassification.Other, BuffImages.QuickDraw),
             new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.LightOnYourFeet),
+            new Buff("Poison Master", PoisonMasterEffect, Source.Ranger, BuffClassification.Other, BuffImages.PoisonMaster),
         };
 
 

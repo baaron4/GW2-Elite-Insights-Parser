@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.EIData.BuffSourceFinders;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -36,6 +37,7 @@ namespace GW2EIEvtcParser.EIData
                 UtilityBuffs.OtherConsumables,
                 EncounterBuffs.FightSpecific,
                 EncounterBuffs.FractalInstabilities,
+                WvWBuffs.Commons,
                 //
                 RevenantHelper.Buffs,
                 HeraldHelper.Buffs,
