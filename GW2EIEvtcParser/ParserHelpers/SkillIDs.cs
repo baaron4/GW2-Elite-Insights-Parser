@@ -827,7 +827,6 @@
         public const long Enraged2_Unknown = 23235;
         public const long SwiftMoaFeather = 23239;
         public const long WeaponStow = 23285;
-        public const long MushroomKingsBlessing = 23488;
         public const long Reflection2 = 24014;
         public const long SigilOfWater = 24241;
         public const long Critical = 24278;
@@ -1238,6 +1237,7 @@
         public const long NarcolepsySkill = 34515;
         public const long Halitosis = 34516;
         public const long BloodShield = 34518;
+        public const long MushroomKingsBlessingBuff = 34523;
         public const long HeatWave = 34526;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
@@ -1901,6 +1901,7 @@
         public const long UnstableArtifact = 49123;
         public const long EchosPickup = 49125;
         public const long BowlOfPoultrySatay = 49296;
+        public const long MushroomKingsBlessing = 46970;
         public const long PlateOfBeefRendang = 49686;
         public const long Enraged1_100 = 50070;
         public const long AvocadoSmoothie = 50091;

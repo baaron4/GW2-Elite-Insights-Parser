@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new BuffGainCastFinder(MushroomKingsBlessing, 34523).UsingICD(500), // Mushroom King's Blessing`
+                new BuffGainCastFinder(MushroomKingsBlessing, MushroomKingsBlessingBuff).UsingICD(500),
             };
         }
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
