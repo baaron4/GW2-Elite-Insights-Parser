@@ -90,12 +90,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
-                    phase.Name = "Split " + (i) / 2;
+                    int split = i / 2;
+                    phase.Name = "Split " + split;
                     var ids = new List<int>
                     {
                        (int)ArcDPSEnums.TrashID.CloneArtsariiv,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
+
+                    // deduplicate clone names
+                    foreach (NPC target in phase.Targets)
+                    {
+                        if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
+                        {
+                            target.OverrideName(target.Character + " " + split);
+                        }
+                    }
                 }
                 else
                 {
