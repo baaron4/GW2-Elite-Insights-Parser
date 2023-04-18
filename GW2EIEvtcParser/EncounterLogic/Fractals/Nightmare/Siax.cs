@@ -123,18 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else if (target.IsSpecies(ArcDPSEnums.TrashID.EchoOfTheUnclean))
                 {
-                    CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                    if (position != null)
-                    {
-                        (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
-                        foreach ((string nameAddition, float expectedX, float expectedY) in EchoLocations)
-                        {
-                            if ((Math.Abs(x - expectedX) < 10 && Math.Abs(y - expectedY) < 10))
-                            {
-                                target.OverrideName(target.Character + " " + nameAddition);
-                            }
-                        }
-                    }
+                    SuffixNameBasedOnInitialPosition(target, combatData, EchoLocations);
                 }
             }
         }
