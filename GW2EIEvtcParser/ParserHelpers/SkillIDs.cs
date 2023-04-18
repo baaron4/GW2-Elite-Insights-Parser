@@ -1801,6 +1801,7 @@
         public const long CorsairSharpeningStone = 46925;
         public const long FracturedSpirit = 46950;
         public const long SuperiorSigilOfTheStars = 46953;
+        public const long MushroomKingsBlessing = 46970;
         public const long AchievementEligibilityNecroDancer = 46994;
         public const long Glaciate = 47022;
         public const long Flare = 47074;
@@ -1901,7 +1902,6 @@
         public const long UnstableArtifact = 49123;
         public const long EchosPickup = 49125;
         public const long BowlOfPoultrySatay = 49296;
-        public const long MushroomKingsBlessing = 46970;
         public const long PlateOfBeefRendang = 49686;
         public const long Enraged1_100 = 50070;
         public const long AvocadoSmoothie = 50091;
