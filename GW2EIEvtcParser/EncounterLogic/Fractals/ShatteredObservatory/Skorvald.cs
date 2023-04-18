@@ -98,15 +98,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Skorvald not found");
             }
             skorvald.OverrideName("Skorvald");
-            int count = 0;
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly4))
-                {
-                    target.OverrideName(target.Character + " " + (++count));
+                switch (target.ID) {
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
+                        target.OverrideName(target.Character + " 1");
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
+                        target.OverrideName(target.Character + " 2");
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
+                        target.OverrideName(target.Character + " 3");
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
+                        target.OverrideName(target.Character + " 4");
+                        break;
                 }
             }
         }
