@@ -73,12 +73,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
                         (int)ArcDPSEnums.TrashID.FluxAnomaly1,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
+
+                    // add anomaly numbers
+                    int offset = 4 * (i / 2 - 1);
+                    foreach (NPC target in phase.Targets)
+                    {
+                        switch (target.ID) {
+                            case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
+                                target.OverrideName(target.Character + " " + (1 + offset));
+                                break;
+                            case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
+                                target.OverrideName(target.Character + " " + (2 + offset));
+                                break;
+                            case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
+                                target.OverrideName(target.Character + " " + (3 + offset));
+                                break;
+                            case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
+                                target.OverrideName(target.Character + " " + (4 + offset));
+                                break;
+                        } 
+                    }
                 }
                 else
                 {
@@ -98,23 +118,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Skorvald not found");
             }
             skorvald.OverrideName("Skorvald");
-            foreach (NPC target in _targets)
-            {
-                switch (target.ID) {
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
-                        target.OverrideName(target.Character + " 1");
-                        break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
-                        target.OverrideName(target.Character + " 2");
-                        break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
-                        target.OverrideName(target.Character + " 3");
-                        break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
-                        target.OverrideName(target.Character + " 4");
-                        break;
-                }
-            }
         }
 
         internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
