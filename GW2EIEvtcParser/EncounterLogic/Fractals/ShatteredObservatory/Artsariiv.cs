@@ -90,22 +90,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
-                    int split = i / 2;
-                    phase.Name = "Split " + split;
+                    phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
                        (int)ArcDPSEnums.TrashID.CloneArtsariiv,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
-
-                    // deduplicate clone names
-                    foreach (NPC target in phase.Targets)
-                    {
-                        if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
-                        {
-                            target.OverrideName(target.Character + " " + split);
-                        }
-                    }
                 }
                 else
                 {
@@ -159,11 +149,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     trashMob.OverrideName("Big " + trashMob.Character);
                 }
             }
+
+            Dictionary<string, int> nameCount = new Dictionary<string, int> {
+                    { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
+                    { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
+            };
             foreach (NPC target in _targets)
             {
                 if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
                 {
-                    SuffixNameBasedOnInitialPosition(target, combatData, CloneLocations);
+                    string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
+                    if (suffix != null && nameCount.ContainsKey(suffix))
+                    {
+                        // deduplicate name
+                        target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+                    }
                 }
             }
         }

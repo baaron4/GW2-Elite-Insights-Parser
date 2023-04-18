@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else if (target.IsSpecies(ArcDPSEnums.TrashID.EchoOfTheUnclean))
                 {
-                    SuffixNameBasedOnInitialPosition(target, combatData, EchoLocations);
+                    AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
                 }
             }
         }
