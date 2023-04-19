@@ -1491,6 +1491,8 @@
         internal const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";
         internal const string BondOfVigorEffect = "https://wiki.guildwars2.com/images/b/b5/Bond_of_Vigor_%28effect%29.png";
         internal const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
+        internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
+        internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
         #endregion Misc
     }
 }

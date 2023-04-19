@@ -1119,6 +1119,7 @@
         public const long BowlOfMusselSoup = 33148;
         public const long WritOfBasicStrength = 33160;
         public const long BoundingDodgerEffect = 33162;
+        public const long AnguishedTearOfAlba = 33164;
         public const long FrontalMastery = 33194;
         public const long ForceDomeTier5Effect = 33209;
         public const long BowlOfChocolateTapiocaPudding = 33223;
@@ -2609,7 +2610,7 @@
         public const long VoidPoolKralkatorrik = 63746;
         public const long Stomp = 63767;
         public const long ChargedShot = 63772;
-        public const long DeathsEmbraceEffect = 63785;
+        public const long DeathsEmbraceEffectNMCM = 63785;
         public const long EnragedAnkka = 63829;
         public const long StormOfSwords1 = 63838;
         public const long VitalityEqualizer1 = 63840;
@@ -2617,7 +2618,7 @@
         public const long VoidPoolCM = 63910;
         public const long DragonsEndContributor10 = 63928;
         public const long VoidBeam = 63956;
-        public const long DeathsEmbrace2Skill = 64386;
+        public const long DeathsEmbraceEffectCM = 64386;
         public const long AbominationSwipe = 64396;
         public const long JadeBusterCannon = 64016;
         public const long HeavensPalm1 = 64039;
@@ -2625,7 +2626,7 @@
         public const long LeyBreach = 64044;
         public const long SeveredFromBody = 64056;
         public const long VoidPurge = 64064;
-        public const long Thrash = 64124;
+        public const long ZhaitansReachThrashHT1 = 64124;
         public const long TormentOfTheVoid = 64150;
         public const long JadeRicochet2 = 64153;
         public const long GraspOfTheVoid = 64161;
@@ -2644,8 +2645,9 @@
         public const long ScreamOfZhaitanCM = 64428;
         public const long JadeMine1 = 64435;
         public const long StrongerTogether = 64465;
+        public const long HallucinatingShot2 = 64514;
         public const long InfluenceOfTheVoidEffect = 64524;
-        public const long GroundSlam1 = 64526;
+        public const long ZhaitansReachGroundSlamHT = 64526;
         public const long NourishmentBonusPowerFerocity100 = 64528;
         public const long VoidExplosion = 64557;
         public const long SoulReunited = 64559;
@@ -2656,10 +2658,11 @@
         public const long VoidExplosion3 = 64585;
         public const long DragonSlashRush2 = 64619;
         public const long DragonsEndContributor8 = 64623;
-        public const long WaveOfTorment = 64669;
+        public const long WaveOfTormentNM = 64669;
         public const long ToxicOrb = 64718;
         public const long StormOfSwords5 = 64738;
         public const long TsunamiSlam1 = 64748;
+        public const long ZhaitansReachThrashXJJ1 = 64805;
         public const long Shockwave = 64810;
         public const long BowlOfFishStew = 64829;
         public const long LethalInspiration = 64834;
@@ -2681,7 +2684,7 @@
         public const long FlankingStrike = 64965;
         public const long DebilitatingVoid = 64967;
         public const long ShareTheVoid3 = 64973;
-        public const long Thrash2 = 64998;
+        public const long ZhaitansReachThrashHT2 = 64998;
         public const long TargetOrder4 = 64999;
         public const long Drown1 = 65004;
         public const long BrandingBeam = 65017;
@@ -2769,6 +2772,7 @@
         public const long TerrifyingApparition = 66156;
         public const long DragonsEndContributor2 = 66185;
         public const long FallOfTheAxe1 = 66187;
+        public const long InevitabilityOfDeath = 66198;
         public const long BreathOfJormag2 = 66216;
         public const long SanctuaryAnkka1 = 66241;
         public const long SooWonSpearPhaseInvul = 66242;
@@ -2776,6 +2780,7 @@
         public const long JadeTechDefensiveOvercharge = 66303;
         public const long AbominationSlam = 66330;
         public const long WhitefishSushi = 66342;
+        public const long ZhaitansReachGroundSlamXJJ = 66397;
         public const long ChaosAndDestruction = 66409;
         public const long CallLightning = 66424;
         public const long GlacialSlam = 66446;
@@ -2783,11 +2788,12 @@
         public const long Drown2 = 66486;
         public const long TsunamiSlam2 = 66489;
         public const long FishyRiceBowl = 66503;
-        public const long GroundSlam2 = 66534;
+        public const long ZhaitansReachGroundSlam = 66534;
         public const long DeathsHand2 = 66564;
         public const long InfluenceOfTheVoidSkill = 66566;
         public const long KaleidoscopicChaos = 66568;
         public const long DragonsEndContributor5 = 66589;
+        public const long HallucinatingShot3 = 66626;
         public const long VoidChaos = 66631;
         public const long FlamesOfPrimordus = 66646;
         public const long ScreamOfZhaitanNM = 66658;
@@ -2802,6 +2808,7 @@
         public const long ShareTheVoid = 66814;
         public const long WallOfFear = 66824;
         public const long StormOfSwords4 = 66840;
+        public const long ZhaitansReachThrashXJJ2 = 66861;
         public const long DeathScream = 66886;
         public const long VitalityEqualizer2 = 66894;
         public const long Heartpiercer = 66896;
@@ -2815,7 +2822,7 @@
         public const long TargetedExpulsionSniper = 67070;
         public const long VitalityEqualizerCM = 67081;
         public const long ShatterEarth = 67104;
-        public const long DeathsEmbrace2Effect = 67120;
+        public const long DeathsEmbraceEffectNM = 67120;
         public const long ShareTheVoid2 = 67148;
         public const long DeathsEmbraceSkill = 67160;
         public const long ToxicBullet3 = 67163;
@@ -2856,16 +2863,16 @@
         public const long DragonSlashWaveCM = 67825;
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
-        public const long WaveOfTorment2 = 67839;
+        public const long WaveOfTormentCM = 67839;
         public const long ExplosiveUppercut2 = 67849;
         public const long MagneticBomb = 67856;
-        public const long ImminentDeath1 = 67859;
+        public const long ImminentDeathSkill = 67859;
         public const long TormentingWaveCM = 67866;
         public const long MaiTrinCMBeamsTargetRed = 67868;
         public const long MaiTrinCMBeamsTargetGreen = 67871;
         public const long PhotonSaturation = 67872;
         public const long AchievementEligibilityLeapsAbound = 67882;
-        public const long ImminnetDeath2 = 67931;
+        public const long ImminentDeathBuff = 67931;
         public const long FailSafeActivated = 67936;
         public const long SanctuaryAnkka2 = 67941;
         public const long DragonSlashRush2CM = 67943;

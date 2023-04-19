@@ -622,6 +622,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             var knownEffectsIDs = new HashSet<long>();
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
@@ -1059,6 +1061,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
                 case (int)ArcDPSEnums.TrashID.VoidWarforged2:
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
+                    break;
+                case (int)ArcDPSEnums.TrashID.ZhaitansReach:
+                    // Thrash - Circle that pulls in
+                    var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashHT1 || x.SkillId == ZhaitansReachThrashHT2).ToList();
+                    foreach (AbstractCastEvent c in thrash)
+                    {
+                        int castTime = 1900;
+                        int endTime = (int)c.Time + castTime;
+
+                        replay.Decorations.Add(new DoughnutDecoration(true, endTime, 300, 500, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 500, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
+                    // Ground Slam - AoE that knocks out
+                    var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT).ToList();
+                    foreach (AbstractCastEvent c in groundSlam)
+                    {
+                        int castTime = 0;
+                        int radius = 400;
+                        int endTime = (int)c.Time + castTime;
+                        // 66534 -> Fast AoE -- 64526 -> Slow AoE
+                        if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamHT) { castTime = 2500; }
+
+                        replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    }
                     break;
                 default:
                     break;

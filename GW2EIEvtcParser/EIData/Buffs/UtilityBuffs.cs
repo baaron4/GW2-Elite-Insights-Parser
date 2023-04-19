@@ -240,6 +240,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fractal Mobility", FractalMobility, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalMobility),
             new Buff("Fractal Defensive", FractalDefensive, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalDefensive),
             new Buff("Fractal Offensive", FractalOffensive, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalOffensive),
+            new Buff("Anguished Tear of Alba", AnguishedTearOfAlba, Source.Item, BuffClassification.OtherConsumable, BuffImages.AppliedFortitude),
             // Misc
             new Buff("Potion Of Karka Toughness", PotionOfKarkaToughness, Source.Item, BuffClassification.OtherConsumable, BuffImages.PowerfulPotionOfInquestSlaying),
         };
