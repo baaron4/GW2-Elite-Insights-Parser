@@ -73,10 +73,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
                         (int)ArcDPSEnums.TrashID.FluxAnomaly1,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
+                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                 }
@@ -98,15 +98,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Skorvald not found");
             }
             skorvald.OverrideName("Skorvald");
-            int count = 0;
+            
+            int[] nameCount = new [] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly1) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly2) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly3) ||
-                    target.IsSpecies(ArcDPSEnums.TrashID.FluxAnomaly4))
-                {
-                    target.OverrideName(target.Character + " " + (++count));
+                switch (target.ID) {
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
+                        target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
+                        target.OverrideName(target.Character + " " + (2 + 4 * nameCount[1]++));
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
+                        target.OverrideName(target.Character + " " + (3 + 4 * nameCount[2]++));
+                        break;
+                    case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
+                        target.OverrideName(target.Character + " " + (4 + 4 * nameCount[3]++));
+                        break;
                 }
             }
         }
