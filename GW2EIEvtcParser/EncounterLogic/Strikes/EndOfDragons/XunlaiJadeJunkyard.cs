@@ -4,14 +4,13 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
-using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -172,8 +171,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            //base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-
             var sanctuaryPrism = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem sanctuary in sanctuaryPrism)
             {
@@ -182,7 +179,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 sanctuary.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
             }
             agentData.Refresh();
-
             ComputeFightTargets(agentData, combatData, extensions);
         }
 
@@ -369,12 +365,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-        }
-
-        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
-        {
-            IReadOnlyList<AgentItem> items = log.AgentData.GetNPCsByID((int)TrashID.SanctuaryPrism);
-            string test = "";
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, double x, double y, double z)
