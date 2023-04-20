@@ -305,6 +305,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashReanimatedMalice = "https://i.imgur.com/FIxiGbG.png";
         private const string TrashReanimatedSpite = "https://i.imgur.com/oR2e2AL.png";
         private const string TrashReanimatedAntipathy = "https://i.imgur.com/pESxeae.png";
+        private const string TrashSanctuaryPrism = "https://i.imgur.com/MQWdNEW.png";
+        private const string TrashFerrousBomb = "https://i.imgur.com/GxJv8KH.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
@@ -711,6 +713,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.ScarletPhantomHP2, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.ScarletPhantomBreakbar, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.FerrousBomb, TrashFerrousBomb },
             { ArcDPSEnums.TrashID.KraitsHallucination, TrashKraitHallucination },
             { ArcDPSEnums.TrashID.LichHallucination, TrashLichHallucination },
             { ArcDPSEnums.TrashID.QuaggansHallucinationNM, TrashQuagganHallucination },
@@ -720,6 +723,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.ReanimatedMalice2, TrashReanimatedMalice },
             { ArcDPSEnums.TrashID.ReanimatedHatred, TrashReanimatedHatred },
             { ArcDPSEnums.TrashID.ReanimatedSpite, TrashReanimatedSpite },
+            { ArcDPSEnums.TrashID.SanctuaryPrism, TrashSanctuaryPrism },
             { ArcDPSEnums.TrashID.VoidBrandstalker, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SpiritOfPain, TrashGenericRedEnemySkull },

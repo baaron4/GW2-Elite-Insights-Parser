@@ -77,6 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.ScarletPhantom1,
                 ArcDPSEnums.TrashID.ScarletPhantom2,
                 ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho,
+                ArcDPSEnums.TrashID.FerrousBomb,
             };
         }
 

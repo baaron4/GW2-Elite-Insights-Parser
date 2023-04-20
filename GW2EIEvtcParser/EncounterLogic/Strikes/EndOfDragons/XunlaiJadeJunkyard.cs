@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -150,6 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.LichHallucination,
                 ArcDPSEnums.TrashID.QuaggansHallucinationNM,
                 ArcDPSEnums.TrashID.QuaggansHallucinationCM,
+                ArcDPSEnums.TrashID.SanctuaryPrism,
             };
         }
 
@@ -166,6 +168,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return FightData.EncounterMode.Story;
             }
             return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            //base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+
+            var sanctuaryPrism = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            foreach (AgentItem sanctuary in sanctuaryPrism)
+            {
+                sanctuary.OverrideType(AgentItem.AgentType.NPC);
+                sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
+                sanctuary.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
+            }
+            agentData.Refresh();
+
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
@@ -298,6 +316,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
+                case (int)ArcDPSEnums.TrashID.ReanimatedSpite:
+                    break;
+                case (int)ArcDPSEnums.TrashID.SanctuaryPrism:
+                    if (!log.FightData.IsCM)
+                    {
+                        replay.Trim(log.FightData.LogStart, log.FightData.LogStart);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -343,6 +369,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            IReadOnlyList<AgentItem> items = log.AgentData.GetNPCsByID((int)TrashID.SanctuaryPrism);
+            string test = "";
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, double x, double y, double z)

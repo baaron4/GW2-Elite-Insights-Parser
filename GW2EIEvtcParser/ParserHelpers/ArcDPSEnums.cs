@@ -491,6 +491,7 @@ namespace GW2EIEvtcParser
         private const int Mine = -35;
         private const int Environment = -36;
         private const int FerrousBomb = -37;
+        private const int SanctuaryPrism = -38;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -750,6 +751,7 @@ namespace GW2EIEvtcParser
             ReanimatedHatred = 23673,
             ReanimatedAntipathy = 24827,
             ZhaitansReach = 23839,
+            SanctuaryPrism = ArcDPSEnums.SanctuaryPrism,
             // Kaineng Overlook
             TheSniper = 23612,
             TheSniperCM = 25259,
