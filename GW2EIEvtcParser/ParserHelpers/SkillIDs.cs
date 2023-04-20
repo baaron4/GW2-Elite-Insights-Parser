@@ -2740,6 +2740,7 @@
         public const long EnforcerRushingJustice = 65608;
         public const long YellowfishSushi = 65613;
         public const long HallucinatingShot = 65649;
+        public const long DeathsHandSpreadBuff = 65661;
         public const long ExtremeVulnerability = 65662;
         public const long FrostMeteor = 65687;
         public const long SwordArc = 65663;
@@ -2789,7 +2790,7 @@
         public const long TsunamiSlam2 = 66489;
         public const long FishyRiceBowl = 66503;
         public const long ZhaitansReachGroundSlam = 66534;
-        public const long DeathsHand2 = 66564;
+        public const long DeathsHandDropped = 66564;
         public const long InfluenceOfTheVoidSkill = 66566;
         public const long KaleidoscopicChaos = 66568;
         public const long DragonsEndContributor5 = 66589;
@@ -2800,7 +2801,7 @@
         public const long BowlOfEchovaldHotpot = 66663;
         public const long FanOfBlades = 66714;
         public const long NightmareDevastationOW2 = 66721;
-        public const long DeathsHand1 = 66728;
+        public const long DeathsHandInBetween = 66728;
         public const long VoidCorruption2 = 66743;
         public const long ThreeRoundBurst = 66773;
         public const long CrystalBarrage = 66790;

@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,20 +22,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new PlayerDstHitMechanic(GraspingHorror, "GraspingHorror", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
                 new PlayerDstHitMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
-                new PlayerDstHitMechanic(DeathsHand1, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
-                new PlayerDstHitMechanic(DeathsHand2, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
+                new PlayerDstHitMechanic(DeathsHandInBetween, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
+                new PlayerDstHitMechanic(DeathsHandDropped, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
                 new PlayerDstHitMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
                 new PlayerDstHitMechanic(new long[] { WaveOfTormentNM, WaveOfTormentCM }, "Wave of Torment", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
                 new PlayerDstHitMechanic(TerrifyingApparition, "Terrifying Apparition", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2 }, "Thrash", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ }, "Ground Slam", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
                 new PlayerDstHitMechanic(ImminentDeathSkill, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 150),
-                new EnemyCastStartMechanic(InevitabilityOfDeath, "Inevitability of Death", new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "Inev.Death.H", "Casted Inevitability of Death (Enrage)", "Inevitability of Death (Enrage)", 150),
-                new EnemyCastStartMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "CastPull", "Casted Death's Embrace", "Death's Embrace Cast", 150),
+                new EnemyCastStartMechanic(InevitabilityOfDeath, "Inevitability of Death", new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "Inev.Death.C", "Casted Inevitability of Death (Enrage)", "Inevitability of Death (Enrage)", 150),
+                new EnemyCastStartMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "AnkkaPull.C", "Casted Death's Embrace", "Death's Embrace Cast", 150),
                 new EnemyDstBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150),
                 new PlayerDstBuffApplyMechanic(ImminentDeathBuff, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
                 new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated", new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Fxt.Hatred", "Fixated by Reanimated Hatred", "Fixated Hatred", 150),
                 new PlayerDstBuffApplyMechanic(Hallucinations, "Hallucinations", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Hallu", "Received Hallucinations Debuff", "Hallucinations Debuff", 150),
+                new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, "Death's Hand Spread", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
             }
             );
             Icon = EncounterIconXunlaiJadeJunkyard;
@@ -201,10 +203,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var deathsEmbrace = casts.Where(x => x.SkillId == DeathsEmbraceSkill).ToList();
                     foreach (AbstractCastEvent c in deathsEmbrace)
                     {
-                        Point3D ankkaPosition = target.GetCurrentPosition(log, c.Time);
                         int durationCast = 10143;
                         int delay = 1833 * 2;
                         int endTime = (int)c.Time + durationCast;
+
+                        Point3D ankkaPosition = target.GetCurrentPosition(log, c.Time);
+                        if (ankkaPosition == null) { continue; }
 
                         // Zone 1
                         if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
@@ -296,6 +300,48 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
+            {
+                foreach (Segment segment in value.BuffChart)
+                {
+                    if (segment != null && segment.Start > 0 && segment.Value == 1)
+                    {
+                        int radius = 0;
+                        int duration = 0;
+                        FightData.EncounterMode mode = GetEncounterMode(log.CombatData, log.AgentData, log.FightData);
+                        var playerPosition = new Point3D(p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).Last());
+
+                        if (mode == FightData.EncounterMode.Normal)
+                        {
+                            radius = 300;
+                            duration = 16000;
+                        }
+                        else if (mode == FightData.EncounterMode.CM)
+                        {
+                            radius = 380;
+                            duration = 36000;
+                        }
+
+                        // AoE on player
+                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, radius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+
+                        if (playerPosition != null)
+                        {
+                            // Growing AoE
+                            replay.Decorations.Add(new CircleDecoration(true, (int)segment.End + 3000, radius, ((int)segment.End, (int)segment.End + 3000), "rgba(250, 120, 0, 0.2)", new PositionConnector(playerPosition)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)segment.End, (int)segment.End + 3000), "rgba(250, 120, 0, 0.2)", new PositionConnector(playerPosition)));
+                            // Damaging AoE
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, ((int)segment.End + 3000, (int)segment.End + duration), "rgba(255, 0, 0, 0.4)", new PositionConnector(playerPosition)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)segment.End + 3000, (int)segment.End + duration), "rgba(0, 100, 0, 0.2)", new PositionConnector(playerPosition)));
+                        }
+                    }
+                }
             }
         }
 
