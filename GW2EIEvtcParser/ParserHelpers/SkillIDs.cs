@@ -827,7 +827,6 @@
         public const long Enraged2_Unknown = 23235;
         public const long SwiftMoaFeather = 23239;
         public const long WeaponStow = 23285;
-        public const long MushroomKingsBlessing = 23488;
         public const long Reflection2 = 24014;
         public const long SigilOfWater = 24241;
         public const long Critical = 24278;
@@ -1239,6 +1238,7 @@
         public const long NarcolepsySkill = 34515;
         public const long Halitosis = 34516;
         public const long BloodShield = 34518;
+        public const long MushroomKingsBlessingBuff = 34523;
         public const long HeatWave = 34526;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
@@ -1802,6 +1802,7 @@
         public const long CorsairSharpeningStone = 46925;
         public const long FracturedSpirit = 46950;
         public const long SuperiorSigilOfTheStars = 46953;
+        public const long MushroomKingsBlessing = 46970;
         public const long AchievementEligibilityNecroDancer = 46994;
         public const long Glaciate = 47022;
         public const long Flare = 47074;

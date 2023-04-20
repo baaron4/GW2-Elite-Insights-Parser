@@ -330,6 +330,15 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
         {
+            // Add missing breakbar active state
+            foreach (KeyValuePair<AgentItem, List<BreakbarStateEvent>> pair in _statusEvents.BreakbarStateEvents)
+            {
+                BreakbarStateEvent first = pair.Value.FirstOrDefault();
+                if (first != null && first.State != ArcDPSEnums.BreakbarState.Active && first.Time > pair.Key.FirstAware + 500)
+                {
+                    pair.Value.Insert(0, new BreakbarStateEvent(pair.Key, pair.Key.FirstAware, ArcDPSEnums.BreakbarState.Active));
+                }
+            }
             // master attachements
             operation.UpdateProgressWithCancellationCheck("Processing Warrior Gadgets");
             WarriorHelper.ProcessGadgets(players, this);

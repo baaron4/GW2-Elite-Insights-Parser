@@ -106,6 +106,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        static readonly List<(string, float, float)> CloneLocations = new List<(string, float, float)> {
+            ("M", 10357.898f, 1466.580f),
+            ("NE", 11431.998f, 2529.760f),
+            ("NW", 9286.878f, 2512.429f),
+            ("SW", 9284.729f, 392.916f),
+            ("SE", 11422.698f, 401.501f),
+            ("N", 10369.498f, 2529.010f),
+            ("E", 11_432.598f, 1460.400f),
+            ("S", 10_388.698f, 390.419f),
+            ("W", 9295.668f, 1450.060f),
+        };
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(ArcDPSEnums.TargetID.Artsariiv));
@@ -122,7 +134,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-            int count = 0;
             foreach (NPC trashMob in _trashMobs)
             {
                 if (trashMob.IsSpecies(ArcDPSEnums.TrashID.SmallArtsariiv))
@@ -138,11 +149,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     trashMob.OverrideName("Big " + trashMob.Character);
                 }
             }
+
+            Dictionary<string, int> nameCount = new Dictionary<string, int> {
+                    { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
+                    { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
+            };
             foreach (NPC target in _targets)
             {
                 if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
                 {
-                    target.OverrideName("Clone " + target.Character + " " + (++count));
+                    string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
+                    if (suffix != null && nameCount.ContainsKey(suffix))
+                    {
+                        // deduplicate name
+                        target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+                    }
                 }
             }
         }

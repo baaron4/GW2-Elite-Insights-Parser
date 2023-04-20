@@ -190,6 +190,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashPride = "https://i.imgur.com/ePTXx23.png";
         private const string TrashOil = "https://i.imgur.com/R26VgEr.png";
         private const string TrashTear = "https://i.imgur.com/N9seps0.png";
+        private const string TrashFluxAnomaly = "https://i.imgur.com/JZUYCHt.png";
         private const string TrashGamblerDrunkarThief = "https://i.imgur.com/vINeVU6.png";
         private const string TrashTormentedDeadMessenger = "https://i.imgur.com/1J2BTFg.png";
         private const string TrashEnforcer = "https://i.imgur.com/elHjamF.png";
@@ -821,6 +822,10 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.TheSniperCM, TrashTheSniper },
             { ArcDPSEnums.TrashID.PushableVoidAmalgamate, TrashVoidAmalgamate },
             { ArcDPSEnums.TrashID.KillableVoidAmalgamate, TrashVoidAmalgamate },
+            { ArcDPSEnums.TrashID.FluxAnomaly1, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomaly2, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomaly3, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomaly4, TrashFluxAnomaly },
         };
 
         /// <summary>

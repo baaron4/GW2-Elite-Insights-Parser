@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -98,6 +99,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return phases;
+        }
+        
+        static readonly List<(string, float, float)> EchoLocations = new List<(string, float, float)> {
+            ("N", 1870.630f, -2205.379f),
+            ("E", 2500.260f, -3288.280f),
+            ("S", 1572.040f, -3992.580f),
+            ("W", 907.199f, -2976.850f),
+            ("NW", 1036.980f, -2237.050f),
+            ("NE", 2556.450f, -2628.590f),
+            ("SE", 2293.149f, -3912.510f),
+            ("SW", 891.370f, -3722.450f),
+        };
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            foreach (AbstractSingleActor target in Targets)
+            {
+                if (target.IsSpecies(ArcDPSEnums.TargetID.Siax))
+                {
+                    target.OverrideName("Siax the Corrupted");
+                }
+                else if (target.IsSpecies(ArcDPSEnums.TrashID.EchoOfTheUnclean))
+                {
+                    AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

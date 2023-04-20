@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using System.IO;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -189,6 +190,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
             //
             List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();
+            if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
+                throw new InvalidDataException("ID collision between trash and targets");
+            }
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)

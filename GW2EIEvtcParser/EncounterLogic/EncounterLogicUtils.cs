@@ -182,5 +182,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return false;
         }
+
+        internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, float, float)> positionData, float maxDiff = 10)
+        {
+            CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+            if (position != null)
+            {
+                (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
+                foreach ((string suffix, float expectedX, float expectedY) in positionData)
+                {
+                    if ((Math.Abs(x - expectedX) <= maxDiff && Math.Abs(y - expectedY) <= maxDiff))
+                    {
+                        target.OverrideName(target.Character + " " + suffix);
+                        return suffix;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
