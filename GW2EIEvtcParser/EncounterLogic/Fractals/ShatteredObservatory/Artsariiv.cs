@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Artsariiv, Determined762);
         }

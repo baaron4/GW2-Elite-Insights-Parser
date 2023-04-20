@@ -54,6 +54,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+            {
+                // players may enter combat with knights or an invisible hitbox before
+                AgentItem mama = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+                if (mama != null)
+                {
+                    // attempt to use mama combat enter to determine start
+                    // logs that start with an outgoing/incoming hit on mama may not have combat enter for mama
+                    // but logs that start with an earlier player combat enter should
+                    CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.Time >= startToUse);
+                    if (enterCombat != null)
+                    {
+                        return enterCombat.Time;
+                    }
+                }
+            }
+            return startToUse;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);

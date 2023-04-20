@@ -125,7 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             GetMiniBossPhase((int)ArcDPSEnums.TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
             return phases;
         }
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)

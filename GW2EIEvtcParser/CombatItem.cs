@@ -153,6 +153,22 @@ namespace GW2EIEvtcParser
             return IsDamage();
         }
 
+        internal bool IsPhysicalDamage()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None &&
+                        IsActivation == ArcDPSEnums.Activation.None &&
+                        IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+                        IsBuff == 0;
+        }
+
+        internal bool IsBuffDamage()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None &&
+                        IsActivation == ArcDPSEnums.Activation.None &&
+                        IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+                        IsBuff != 0 && Value == 0;
+        }
+
         internal bool SrcIsAgent()
         {
             return IsStateChange == ArcDPSEnums.StateChange.None

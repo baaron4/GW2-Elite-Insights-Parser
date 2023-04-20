@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetGenericFightOffset(fightData);
         }

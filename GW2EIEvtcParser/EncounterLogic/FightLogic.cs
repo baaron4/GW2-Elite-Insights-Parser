@@ -406,7 +406,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return EncounterLogicTimeUtils.GetEnterCombatTime(fightData, agentData, combatData, upperLimit, GenericTriggerID);
         }
 
-        internal virtual long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal virtual long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
