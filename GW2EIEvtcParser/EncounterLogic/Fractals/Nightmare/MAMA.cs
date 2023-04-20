@@ -54,10 +54,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            long startToUse = base.GetFightOffset(fightData, agentData, combatData);
-            if (fightData.EvtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+            long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
             {
                 // players may enter combat with knights or an invisible hitbox before
                 AgentItem mama = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();

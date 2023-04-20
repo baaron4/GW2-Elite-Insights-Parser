@@ -13,7 +13,6 @@ namespace GW2EIEvtcParser.ParsedData
         private List<PhaseData> _phases = new List<PhaseData>();
         private List<PhaseData> _nonDummyPhases = new List<PhaseData>();
         public int TriggerID { get; }
-        public int EvtcVersion { get; }
         public FightLogic Logic { get; }
         public long FightEnd { get; private set; } = long.MaxValue;
         public long FightStart { get; } = 0;
@@ -288,7 +287,6 @@ namespace GW2EIEvtcParser.ParsedData
             }
             Logic = Logic.AdjustLogic(agentData, combatData);
             TriggerID = Logic.GetTriggerID();
-            EvtcVersion = evtcVersion;
         }
 
         internal void SetFightName(CombatData combatData, AgentData agentData)
