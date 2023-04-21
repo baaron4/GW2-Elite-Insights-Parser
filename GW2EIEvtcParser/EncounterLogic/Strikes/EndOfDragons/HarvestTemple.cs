@@ -1079,9 +1079,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 0;
                         int radius = 400;
-                        int endTime = (int)c.Time + castTime;
+                        int endTime = 0;
                         // 66534 -> Fast AoE -- 64526 -> Slow AoE
                         if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamHT) { castTime = 2500; }
+                        endTime = (int)c.Time + castTime;
 
                         replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
