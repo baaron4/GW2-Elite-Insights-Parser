@@ -174,9 +174,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             var sanctuaryPrism = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem sanctuary in sanctuaryPrism)
             {
+                IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.DstAgent == 0);
                 sanctuary.OverrideType(AgentItem.AgentType.NPC);
                 sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
-                sanctuary.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
+                sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault().Time : fightData.LogEnd);
             }
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData, extensions);
@@ -319,32 +320,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(log.FightData.LogStart, log.FightData.LogStart);
                     }
-                    else if (log.FightData.IsCM)
-                    {
-                        IReadOnlyList<AgentItem> agentItems = log.AgentData.GetNPCsByID(ArcDPSEnums.TrashID.SanctuaryPrism);
-                        foreach (AgentItem agentItem in agentItems)
-                        {
-                            // GetHealthUpdates sets the last health update when Value == 0 to log.FightData.LogEnd
-                            // Using GetHealthUpdateEvents to find the actual time of the HPPercent == 0 event and override the target last aware in the replay
-                            IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
-                            IReadOnlyList<HealthUpdateEvent> healthUpdateEvents = log.CombatData.GetHealthUpdateEvents(agentItem);
-                            if (healthUpdates != null && healthUpdateEvents != null)
-                            {
-                                Segment healthUpdate10 = healthUpdates.FirstOrDefault(x => x.Value == 10);
-                                HealthUpdateEvent healthEvent10 = healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 10);
+                    //else if (log.FightData.IsCM)
+                    //{
+                    //    IReadOnlyList<AgentItem> agentItems = log.AgentData.GetNPCsByID(ArcDPSEnums.TrashID.SanctuaryPrism);
+                    //    foreach (AgentItem agentItem in agentItems)
+                    //    {
+                    //        // GetHealthUpdates sets the last health update when Value == 0 to log.FightData.LogEnd
+                    //        // Using GetHealthUpdateEvents to find the actual time of the HPPercent == 0 event and override the target last aware in the replay
+                    //        IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
+                    //        IReadOnlyList<HealthUpdateEvent> healthUpdateEvents = log.CombatData.GetHealthUpdateEvents(agentItem);
+                    //        if (healthUpdates != null && healthUpdateEvents != null)
+                    //        {
+                    //            Segment healthUpdate10 = healthUpdates.FirstOrDefault(x => x.Value == 10);
+                    //            HealthUpdateEvent healthEvent10 = healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 10);
                                 
-                                // Checking the 10% health update because the prisms never get damaged at the same time
-                                // Their 10% timestamps match between GetHealthUpdates and GetHealthUpdateEvents
-                                if (healthUpdate10!= null && healthEvent10 != null && healthUpdate10.Start == healthEvent10.Time || healthUpdate10.End == healthEvent10.Time)
-                                {
-                                    if (healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 0) != null)
-                                    {
-                                        replay.Trim(log.FightData.LogStart, healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 0).Time);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //            // Checking the 10% health update because the prisms never get damaged at the same time
+                    //            // Their 10% timestamps match between GetHealthUpdates and GetHealthUpdateEvents
+                    //            if (healthUpdate10!= null && healthEvent10 != null && healthUpdate10.Start == healthEvent10.Time || healthUpdate10.End == healthEvent10.Time)
+                    //            {
+                    //                if (healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 0) != null)
+                    //                {
+                    //                    replay.Trim(log.FightData.LogStart, healthUpdateEvents.FirstOrDefault(x => x.HPPercent == 0).Time);
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     break;
                 default:
                     break;
