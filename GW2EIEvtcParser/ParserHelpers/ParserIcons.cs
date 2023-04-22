@@ -305,7 +305,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashReanimatedMalice = "https://i.imgur.com/FIxiGbG.png";
         private const string TrashReanimatedSpite = "https://i.imgur.com/oR2e2AL.png";
         private const string TrashReanimatedAntipathy = "https://i.imgur.com/pESxeae.png";
-        private const string TrashSanctuaryPrism = "https://i.imgur.com/MQWdNEW.png";
+        private const string TrashSanctuaryPrism = "https://i.imgur.com/3ten7WW.png";
         private const string TrashFerrousBomb = "https://i.imgur.com/GxJv8KH.png";
 
         // Minion NPC Icons
