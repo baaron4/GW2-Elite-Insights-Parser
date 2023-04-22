@@ -337,15 +337,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int radius = 0;
                         int duration = 0;
-                        FightData.EncounterMode mode = GetEncounterMode(log.CombatData, log.AgentData, log.FightData);
-                        var playerPosition = new Point3D(p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).Last());
-
-                        if (mode == FightData.EncounterMode.Normal)
+                        if (!log.FightData.IsCM)
                         {
                             radius = 300;
                             duration = 16000;
                         }
-                        else if (mode == FightData.EncounterMode.CM)
+                        else
                         {
                             radius = 380;
                             duration = 36000;
@@ -355,6 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, radius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
 
+                        ParametricPoint3D playerPosition = p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).LastOrDefault();
                         if (playerPosition != null)
                         {
                             // Growing AoE
@@ -372,14 +370,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, double x, double y, double z)
         {
             int endTime = startCast + durationCast;
-
-            replay.Decorations.Add(new CircleDecoration(true, startCast + delay, radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", GetDeathsEmbracePositionConnector(x, y, z)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", GetDeathsEmbracePositionConnector(x, y, z)));
-        }
-
-        private static PositionConnector GetDeathsEmbracePositionConnector(double x, double y, double z)
-        {
-            return new PositionConnector(new Point3D((float)x, (float)y, (float)z));
+            var position = new PositionConnector(new Point3D((float)x, (float)y, (float)z));
+            replay.Decorations.Add(new CircleDecoration(true, startCast + delay, radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", position));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", position));
         }
     }
 }
