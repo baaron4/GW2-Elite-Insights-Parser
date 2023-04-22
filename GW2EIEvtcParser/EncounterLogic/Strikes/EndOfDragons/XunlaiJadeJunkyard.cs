@@ -7,6 +7,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -25,6 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
                 new PlayerDstHitMechanic(new long[] { WaveOfTormentNM, WaveOfTormentCM }, "Wave of Torment", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
                 new PlayerDstHitMechanic(TerrifyingApparition, "Terrifying Apparition", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
+                new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, "Lich Fixation", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2 }, "Thrash", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ }, "Ground Slam", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
                 new PlayerDstHitMechanic(ImminentDeathSkill, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 0),
@@ -308,10 +310,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.LichHallucination:
                     // Terrifying Apparition
                     int awareTime = 1000;
-                    int lishRadius = 280;
+                    int lichRadius = 280;
 
-                    replay.Decorations.Add(new CircleDecoration(true, (int)target.FirstAware + awareTime, lishRadius, ((int)target.FirstAware, (int)target.FirstAware + awareTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, lishRadius, ((int)target.FirstAware + awareTime, (int)target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, (int)target.FirstAware + awareTime, lichRadius, ((int)target.FirstAware, (int)target.FirstAware + awareTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, lichRadius, ((int)target.FirstAware + awareTime, (int)target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
@@ -397,6 +399,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 AddDeathsHandDecoration(replay, playerPosition, (int)segment.End, 3000, deathsHandRadius, deathsHandDuration);
                             }
                         }
+                    }
+                }
+            }
+            //
+            List<AbstractBuffEvent> lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
+            int lichTetherStart = 0;
+            AbstractSingleActor lichTetherSource = null;
+            foreach (AbstractBuffEvent lichTether in lichTethers)
+            {
+                if (lichTether is BuffApplyEvent)
+                {
+                    lichTetherStart = (int)lichTether.Time;
+                    lichTetherSource = TrashMobs.FirstOrDefault(x => x.AgentItem == lichTether.CreditedBy);
+                }
+                else
+                {
+                    int tetherEnd = (int)lichTether.Time;
+                    if (lichTetherSource != null)
+                    {
+                        replay.Decorations.Add(new LineDecoration(0, (lichTetherStart, tetherEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(lichTetherSource)));
                     }
                 }
             }

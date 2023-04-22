@@ -2768,6 +2768,7 @@
         public const long BoomingCommand1 = 66021;
         public const long HarvestTempleTargetedExpulsionNM = 66025;
         public const long NightmareEpoch1 = 66059;
+        public const long AnkkaLichHallucinationFixation = 66075;
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRush1 = 66090;
         public const long FixatedAnkkaKainengOverlook = 66140;

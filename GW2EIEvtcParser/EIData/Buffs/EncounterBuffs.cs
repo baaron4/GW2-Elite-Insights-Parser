@@ -467,6 +467,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sanctuary (Ankka 1)", SanctuaryAnkka1, Source.FightSpecific, BuffClassification.Other, BuffImages.GiftOfTrueSight),
             new Buff("Sanctuary (Ankka 2)", SanctuaryAnkka2, Source.FightSpecific, BuffClassification.Other, BuffImages.GiftOfTrueSight),
             new Buff("Imminent Death", ImminentDeathBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.UnboundDeathPool),
+            new Buff("Ankka Lich Hallucination Fixation", AnkkaLichHallucinationFixation, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Death's Hand Spread", DeathsHandSpreadBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Achievement Eligibility: Clarity", AchievementEligibilityClarity, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Gaze into the Void", AchievementEligibilityGazeIntoTheVoid, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
