@@ -225,26 +225,52 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D ankkaPosition = target.GetCurrentPosition(log, c.Time);
                         if (ankkaPosition == null) { continue; }
 
-                        // Zone 1
-                        if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
+                        EffectGUIDEvent effectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsEmbrace);
+
+                        if (effectGUID != null)
                         {
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 500, delay, -3941.78, 66.76819, -3611.2); // CENTER
+                            var radius = 500; // Zone 1
+                            // Zone 2
+                            if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
+                            {
+                                radius = 340;
+                            }
+                            // Zone 3
+                            if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
+                            {
+                                radius = 380;
+                            }
+                            var effects = log.CombatData.GetEffectEventsByEffectID(effectGUID.ContentID).Where(x => x.Time >= c.Time && x.Time <= c.EndTime).ToList();
+                            foreach (EffectEvent effectEvt in effects)
+                            {
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, radius, (int)(effectEvt.Time - c.Time), effectEvt.Position);
+                            }
                         }
-                        // Zone 2
-                        if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
+                        else
                         {
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, 1663.69, 1739.87, -4639.695); // NW
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, 2563.689, 1739.87, -4664.611); // NE
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, 1663.69, 839.8699, -4640.633); // SW
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, 2563.689, 839.8699, -4636.368); // SE
-                        }
-                        // Zone 3
-                        if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
-                        {
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, -2547.61, 5466.439, -6257.504); // NW
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, -1647.61, 5466.439, -6256.795); // NE
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, -2547.61, 4566.439, -6256.799); // SW
-                            AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, -1647.61, 4566.439, -6257.402); // SE
+                            // logs without effects
+                            var positions = new List<Point3D>();
+                            // Zone 1
+                            if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
+                            {
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 500, delay, new Point3D(-3941.78f, 66.76819f, -3611.2f)); // CENTER
+                            }
+                            // Zone 2
+                            if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
+                            {
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, new Point3D(1663.69f, 1739.87f, -4639.695f)); // NW
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, new Point3D(2563.689f, 1739.87f, -4664.611f)); // NE
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, new Point3D(1663.69f, 839.8699f, -4640.633f)); // SW
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 340, delay, new Point3D(2563.689f, 839.8699f, -4636.368f)); // SE
+                            }
+                            // Zone 3
+                            if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
+                            {
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, new Point3D(-2547.61f, 5466.439f, -6257.504f)); // NW
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, new Point3D(-1647.61f, 5466.439f, -6256.795f)); // NE
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, new Point3D(-2547.61f, 4566.439f, -6256.799f)); // SW
+                                AddDeathEmbraceDecoration(replay, (int)c.Time, durationCast, 380, delay, new Point3D(-1647.61f, 4566.439f, -6257.402f)); // SE
+                            }
                         }
                     }
                     break;
@@ -367,12 +393,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, double x, double y, double z)
+        private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)
         {
             int endTime = startCast + durationCast;
-            var position = new PositionConnector(new Point3D((float)x, (float)y, (float)z));
-            replay.Decorations.Add(new CircleDecoration(true, startCast + delay, radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", position));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", position));
+            var connector = new PositionConnector(position);
+            replay.Decorations.Add(new CircleDecoration(true, startCast + delay, radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", connector));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", connector));
         }
     }
 }

@@ -119,6 +119,8 @@ namespace GW2EIEvtcParser
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Ankka
+        public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
