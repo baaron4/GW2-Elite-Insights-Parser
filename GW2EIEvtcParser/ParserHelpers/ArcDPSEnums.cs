@@ -491,6 +491,7 @@ namespace GW2EIEvtcParser
         private const int Mine = -35;
         private const int Environment = -36;
         private const int FerrousBomb = -37;
+        private const int SanctuaryPrism = -38;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -740,14 +741,17 @@ namespace GW2EIEvtcParser
             FerrousBomb = ArcDPSEnums.FerrousBomb,
             // Xunlai Jade Junkyard
             Ankka = 24634,
-            AnkkaHallucination1 = 24258,
-            AnkkaHallucination2 = 24158,
-            AnkkaHallucination3 = 24969,
-            ReanimatedSpite = 24348,
+            KraitsHallucination = 24258,
+            LichHallucination = 24158,
+            QuaggansHallucinationNM = 24969,
+            QuaggansHallucinationCM = 25289,
             ReanimatedMalice1 = 24976,
             ReanimatedMalice2 = 24171,
-            ZhaitansReach = 23839,
+            ReanimatedSpite = 24348,
             ReanimatedHatred = 23673,
+            ReanimatedAntipathy = 24827,
+            ZhaitansReach = 23839,
+            SanctuaryPrism = ArcDPSEnums.SanctuaryPrism,
             // Kaineng Overlook
             TheSniper = 23612,
             TheSniperCM = 25259,
