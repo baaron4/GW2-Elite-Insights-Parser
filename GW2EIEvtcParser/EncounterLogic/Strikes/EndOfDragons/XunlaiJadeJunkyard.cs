@@ -219,7 +219,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in deathsEmbrace)
                     {
                         int durationCast = 10143;
-                        int delay = 1833 * 2;
                         int endTime = (int)c.Time + durationCast;
 
                         Point3D ankkaPosition = target.GetCurrentPosition(log, c.Time);
@@ -249,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             // logs without effects
-                            var positions = new List<Point3D>();
+                            int delay = 1833 * 2;
                             // Zone 1
                             if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
                             {
