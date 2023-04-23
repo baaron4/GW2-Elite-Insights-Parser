@@ -114,6 +114,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Open Access", OpenAccessEffect, Source.Common, BuffClassification.Other, BuffImages.OpenAccessEffect),
             // Gliding
             new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
+            // Consumable Portal
+            new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingXeraWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
+            new Buff("Portal Uses (Xera/Watchwork)", PortalUsesXeraWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>

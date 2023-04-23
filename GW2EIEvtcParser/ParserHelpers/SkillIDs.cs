@@ -776,6 +776,7 @@
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
         public const long SuperiorRuneOfTormenting = 20479;
+        public const long PortalUsesXeraWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
         public const long SpoiledSupply = 21012;
@@ -1330,6 +1331,7 @@
         public const long Derangement = 34965;
         public const long PhantasmalBlades3 = 34971;
         public const long RedOrb = 34972;
+        public const long PortalWeavingXeraWatchwork = 34978;
         public const long Unbreakable = 34979;
         public const long RadiantAttunementPhantasm = 34992;
         public const long HerosDeparture = 34997;
