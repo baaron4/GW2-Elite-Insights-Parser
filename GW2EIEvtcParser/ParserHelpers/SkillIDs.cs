@@ -1094,6 +1094,7 @@
         public const long NourishmentBonusPowerVitality150 = 32293;
         public const long DuneRoller = 32295;
         public const long WritOfCalculatedMalice = 32316;
+        public const long InfernoHound = 32319;
         public const long MarkedTowerGreen = 32330;
         public const long MarkedKeepRed = 32342;
         public const long WritOfLearnedAccuracy = 32374;
@@ -1133,6 +1134,7 @@
         public const long BoundingDodgerEffect = 33162;
         public const long AnguishedTearOfAlba = 33164;
         public const long FrontalMastery = 33194;
+        public const long SmokeForm = 33207;
         public const long ForceDomeTier5Effect = 33209;
         public const long BowlOfChocolateTapiocaPudding = 33223;
         public const long HardenedGates = 33231;

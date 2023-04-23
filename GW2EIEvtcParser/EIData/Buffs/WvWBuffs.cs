@@ -62,6 +62,8 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Superspeed (Speedy Dolyak)", SuperspeedSpeedyDolyak, Source.Common, BuffClassification.Other, BuffImages.Superspeed),
             new Buff("Spoiled Supply", SpoiledSupply, Source.Common, BuffClassification.Other, BuffImages.SpoiledSupply),
             new Buff("Commander's Presence", CommandersPresence, Source.Common, BuffClassification.Support, BuffImages.MightyBlow),
+            new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
+            new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
             // Edge of the Mists
             new Buff("Marked (Mists Arena)", MarkedMistsArena, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),
             new Buff("Marked (Red Sentry Turret)", MarkedSentryTurretRed, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),

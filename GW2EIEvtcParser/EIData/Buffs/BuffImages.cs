@@ -1485,6 +1485,8 @@
         internal const string MightyBlow = "https://wiki.guildwars2.com/images/7/70/Mighty_Blow.png";
         internal const string MorphedPolymorphMoa = "https://wiki.guildwars2.com/images/5/55/Morphed_%28Polymorph_Moa%29.png";
         internal const string MorphedPolymorphTuna = "https://wiki.guildwars2.com/images/2/24/Chomp_%28armorfish%29.png";
+        internal const string HoundsOfBalthazar = "https://wiki.guildwars2.com/images/9/95/Hounds_of_Balthazar.png";
+        internal const string InkShot = "https://wiki.guildwars2.com/images/d/d3/Ink_Shot.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
