@@ -111,6 +111,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Evasion (Bond of Faith)", EvasionBondOfFaith, Source.Common, BuffClassification.Other, BuffImages.SteelAndFury),
             new Buff("Stealth (Mount Effect)", StealthMountEffect, Source.Common, BuffClassification.Other, BuffImages.StealthMountEffect),
             new Buff("Siege Ammo Available", SiegeAmmoAvailable, Source.Common, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SiegeAmmoAvailable),
+            new Buff("Open Access", OpenAccessEffect, Source.Common, BuffClassification.Other, BuffImages.OpenAccessEffect),
+            // Gliding
+            new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
@@ -144,6 +147,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
             new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation),
             new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical),
+            // Exotic Halloween Upgrades
+            new Buff("Spectral Countenance", SpectralCountenance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
+            new Buff("Ghastly Appearance", GhastlyAppearance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
+            new Buff("Gourd Vibrations", GourdVibrations, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
+            new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
         };
 
     }

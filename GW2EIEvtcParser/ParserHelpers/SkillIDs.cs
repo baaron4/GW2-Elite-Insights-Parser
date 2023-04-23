@@ -1,17 +1,19 @@
 ﻿namespace GW2EIEvtcParser
 {
     /// <summary>
-    /// Pool of skill ids used in the parser, custom or official.
-    /// Naming convention: 
-    /// no "id" inside the name
-    /// should the skill name collide with its cast/damage form and buff form, XXXSkill for for the damage/cast and XXXEffect for the buff
-    /// should the skill name collide with its cast form and damage form, XXXCast for for the cast and XXXDamage for the damage
+    /// Pool of skill IDs used in the parser, custom or official.
+    /// <para>Naming convention: </para>
+    /// <list type="bullet">
+    /// <item>No "id" inside the name.</item>
+    /// <item>Should the skill name collide with its cast/damage form and buff form, XXXSkill for the damage/cast and XXXEffect for the buff.</item>
+    /// <item>Should the skill name collide with its cast form and damage form, XXXCast for the cast and XXXDamage for the damage.</item>
+    /// </list>
     /// </summary>
     public static class SkillIDs
     {
 
         /////////////// Custom IDS
-        public const long Unknown = -1;
+        public const long Unknown = -1; 
         public const long WeaponSwap = -2;
         public const long NumberOfBoons = -3;
         public const long NumberOfConditions = -4;
@@ -553,6 +555,7 @@
         public const long ChickpeaFritter = 10139;
         public const long EggplantFritter = 10140;
         public const long CupOfLotusFries = 10141;
+        public const long MorphedPolymorphMoa = 10179;
         public const long CryOfFrustration = 10190;
         public const long MindWrack = 10191;
         public const long DistortionSkill = 10192;
@@ -744,6 +747,8 @@
         public const long StuffedArtichokeWithTropicalDressing = 15841;
         public const long BowlOfTropicalFruitSalad = 15842;
         public const long BowlOfTropicalMousse = 15843;
+        public const long CommandersPresence = 15857;
+        public const long MorphedPolymorphTuna = 15859;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -751,6 +756,7 @@
         public const long BowlOfBlueberryChocolateChunkIceCream = 16505;
         public const long BowlOfChocolateChipIceCream = 16506;
         public const long BowlOfCandyCornIceCream = 16523;
+        public const long PortalUses = 16553;
         public const long VirtueOfResolveBattlePresence = 17046;
         public const long VirtueOfResolveBattlePresenceAbsoluteResolve = 17047;
         public const long PlateOfSpicyHerbedChicken = 17823;
@@ -772,6 +778,7 @@
         public const long SuperiorRuneOfTormenting = 20479;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
+        public const long SpoiledSupply = 21012;
         public const long StructuralVulnerability = 21469;
         public const long IronHideRam = 21484;
         public const long ArcaneBrilliance = 21656;
@@ -858,6 +865,9 @@
         public const long SharpeningSkull = 25630;
         public const long LumpOfCrystallizedNougat = 25631;
         public const long FlaskOfPumpkinOil = 25632;
+        public const long GhoulsGrasp = 25634;
+        public const long FelineFury = 25636;
+        public const long PumpkinProwess = 25639;
         public const long BountifulTuningCrystal = 25877;
         public const long FuriousTuningCrystal = 25878;
         public const long BountifulMaintenanceOil = 25879;
@@ -871,6 +881,9 @@
         public const long SweetBeanBun = 26532;
         public const long SpringRoll = 26534;
         public const long SteamedRedDumpling = 26536;
+        public const long GourdVibrations = 25638;
+        public const long CatsShadow = 25641;
+        public const long GhastlyAppearance = 25642;
         public const long VengefulHammersSkill = 26557;
         public const long RiteOfTheGreatDwarf = 26596;
         public const long FacetOfStrengthSkill = 26644;
@@ -1368,6 +1381,7 @@
         public const long PlateOfSweetCurriedMussels = 36508;
         public const long CallOfTheWild = 36781;
         public const long Unblockable = 36781;
+        public const long SpectralCountenance = 36798;
         public const long HomingGrenades = 36887;
         public const long VolatileExpulsionSiax = 36894;
         public const long Extraction = 36903;
@@ -2913,6 +2927,7 @@
         public const long InfluenceOfTheVoid = 68124;
         public const long TacticalReload = 68126;
         public const long AchievementEligibilityStandingTogether = 68130;
+        public const long MistlockInstabilityVengeanceSkill = 68147;
         public const long DebilitatedToxicSickness = 68170;
         public const long DecadeEnhancement = 68235;
         public const long BladesongDistortion = 68273;
@@ -2945,6 +2960,7 @@
         public const long ErgoShearCM = 68468;
         public const long KineticImpact = 68480;
         public const long BoilingAether = 68483;
+        public const long OpenAccessEffect = 63488;
         public const long BoilingAether2 = 68493;
         public const long TriBolt2 = 68494;
         public const long PerniciousVortex = 68505;
