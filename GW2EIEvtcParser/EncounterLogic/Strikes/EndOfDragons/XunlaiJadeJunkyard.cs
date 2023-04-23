@@ -289,7 +289,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (!deathsEmbraces.Any(x => x.Time <= deathsHandEffect.Time && x.Time + deathsEmbraceCastDuration >= deathsHandEffect.Time))
                                 {
 
-                                    AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 1000, 380, 4000); // TODO: confirm delay, radius and duration
+                                    AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
                             else
