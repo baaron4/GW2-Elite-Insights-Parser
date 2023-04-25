@@ -830,6 +830,10 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.FluxAnomaly2, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly3, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly4, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomalyCM1, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomalyCM2, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomalyCM3, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.FluxAnomalyCM4, TrashFluxAnomaly },
         };
 
         /// <summary>
