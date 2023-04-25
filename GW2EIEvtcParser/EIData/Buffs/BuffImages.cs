@@ -117,6 +117,7 @@
         internal const string BattleRoar = "https://wiki.guildwars2.com/images/3/39/Battle_Roar.png";
         internal const string InvokeLightning = "https://wiki.guildwars2.com/images/a/ab/Invoke_Lightning.png";
         internal const string KodasArmor = "https://wiki.guildwars2.com/images/8/88/Koda%27s_Armor.png";
+        internal const string SpoiledSupply = "https://wiki.guildwars2.com/images/e/e2/Spoiled_Supply.png";
         #endregion Commons
 
         #region Gear
@@ -1019,6 +1020,9 @@
         internal const string FractalDefensive = "https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png";
         internal const string FractalOffensive = "https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png";
         internal const string FoolsDogTreat = "https://wiki.guildwars2.com/images/5/50/Fool%27s_Dog_Treat.png";
+        internal const string FelineFury = "https://wiki.guildwars2.com/images/3/32/Feline_Fury.png";
+        internal const string PumpkinProwess = "https://wiki.guildwars2.com/images/d/d3/Pumpkin_Prowess.png";
+        internal const string GhoulsGrasp = "https://wiki.guildwars2.com/images/1/12/Ghoul%27s_Grasp.png";
         #endregion Enhancement
 
         #region Misc
@@ -1478,6 +1482,11 @@
         internal const string PoisonMaster = "https://wiki.guildwars2.com/images/c/c0/Poison_Master.png";
         internal const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
         internal const string ChilledToTheBone = "https://wiki.guildwars2.com/images/0/05/%22Chilled_to_the_Bone%21%22.png";
+        internal const string MightyBlow = "https://wiki.guildwars2.com/images/7/70/Mighty_Blow.png";
+        internal const string MorphedPolymorphMoa = "https://wiki.guildwars2.com/images/5/55/Morphed_%28Polymorph_Moa%29.png";
+        internal const string MorphedPolymorphTuna = "https://wiki.guildwars2.com/images/2/24/Chomp_%28armorfish%29.png";
+        internal const string HoundsOfBalthazar = "https://wiki.guildwars2.com/images/9/95/Hounds_of_Balthazar.png";
+        internal const string InkShot = "https://wiki.guildwars2.com/images/d/d3/Ink_Shot.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
@@ -1493,6 +1502,7 @@
         internal const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
         internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
         internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
+        internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
         #endregion Misc
     }
 }
