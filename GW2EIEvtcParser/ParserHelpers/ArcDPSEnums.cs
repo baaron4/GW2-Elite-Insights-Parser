@@ -817,10 +817,14 @@ namespace GW2EIEvtcParser
             NightmareHallucination2 = 17033, // (small adds, last phase)
             NightmareAltar = 35791,
             // Skorvald
-            FluxAnomaly4 = 17673,
-            FluxAnomaly3 = 17851,
-            FluxAnomaly2 = 17770,
-            FluxAnomaly1 = 17599,
+            FluxAnomaly1 = 17578,
+            FluxAnomaly2 = 17929,
+            FluxAnomaly3 = 17695,
+            FluxAnomaly4 = 17651,
+            FluxAnomalyCM1 = 17599,
+            FluxAnomalyCM2 = 17770,
+            FluxAnomalyCM3 = 17851,
+            FluxAnomalyCM4 = 17673,
             SolarBloom = 17732,
             // Artsariiv
             TemporalAnomaly = 17870,

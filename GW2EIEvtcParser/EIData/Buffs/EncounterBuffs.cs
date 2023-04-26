@@ -220,6 +220,7 @@ namespace GW2EIEvtcParser.EIData
             // Cairn        
             new Buff("Shared Agony", SharedAgony, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SharedAgony),
             new Buff("Enraged (Cairn)", EnragedCairn, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
+            new Buff("Enraged (Cairn 2)", EnragedCairn2, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Unseen Burden", UnseenBurden, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.UnseenBurden),
             new Buff("Countdown", Countdown, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Countdown),
             new Buff("Gaze Avoidance", GazeAvoidance, Source.FightSpecific, BuffClassification.Other, BuffImages.GazeAvoidance),
@@ -435,7 +436,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Reflections in the Ice", AchievementEligibilityReflectionsInTheIce, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Slither-less", AchievementEligibilitySlitherLess, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Frezie      
+            // Freezie      
             new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IcyBarrier),
             // Mai Trin
             new Buff("Shared Destruction (Mai Trin)", SharedDestructionMaiTrin, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),

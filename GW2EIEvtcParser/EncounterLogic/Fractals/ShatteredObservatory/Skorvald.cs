@@ -77,6 +77,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (int)ArcDPSEnums.TrashID.FluxAnomaly2,
                         (int)ArcDPSEnums.TrashID.FluxAnomaly3,
                         (int)ArcDPSEnums.TrashID.FluxAnomaly4,
+                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM1,
+                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM2,
+                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM3,
+                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM4,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                 }
@@ -104,15 +108,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 switch (target.ID) {
                     case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
+                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM1:
                         target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
                         break;
                     case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
+                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM2:
                         target.OverrideName(target.Character + " " + (2 + 4 * nameCount[1]++));
                         break;
                     case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
+                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM3:
                         target.OverrideName(target.Character + " " + (3 + 4 * nameCount[2]++));
                         break;
                     case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
+                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM4:
                         target.OverrideName(target.Character + " " + (4 + 4 * nameCount[3]++));
                         break;
                 }
@@ -178,10 +186,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>()
             {
                 (int)ArcDPSEnums.TargetID.Skorvald,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly4,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly3,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly2,
                 (int)ArcDPSEnums.TrashID.FluxAnomaly1,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly2,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly3,
+                (int)ArcDPSEnums.TrashID.FluxAnomaly4,
+                (int)ArcDPSEnums.TrashID.FluxAnomalyCM1,
+                (int)ArcDPSEnums.TrashID.FluxAnomalyCM2,
+                (int)ArcDPSEnums.TrashID.FluxAnomalyCM3,
+                (int)ArcDPSEnums.TrashID.FluxAnomalyCM4,
             };
         }
 
@@ -414,10 +426,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.FluxAnomaly1:
-                case (int)ArcDPSEnums.TrashID.FluxAnomaly2:
-                case (int)ArcDPSEnums.TrashID.FluxAnomaly3:
-                case (int)ArcDPSEnums.TrashID.FluxAnomaly4:
+                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM1:
+                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM2:
+                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM3:
+                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM4:
                     // Solar Stomp
                     var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
                     foreach (AbstractCastEvent c in solarStomp)
