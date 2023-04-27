@@ -1206,6 +1206,11 @@ namespace GW2EIEvtcParser
             FireElemental = 6524,
             IceElemental = 6525,
             //
+            ShredderGyro = 15046,
+            MedicGyro = 15208,
+            BlastGyro = 15330,
+            FunctionGyro = 15336,
+            //
             ViskIcerazor = 18524,
             KusDarkrazor = 18594,
             JasRazorclaw = 18791,
