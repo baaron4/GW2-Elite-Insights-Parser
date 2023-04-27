@@ -801,6 +801,9 @@ namespace GW2EIEvtcParser
             DragonEnergyOrb = ArcDPSEnums.DragonOrb,
             // Freezie
             FreeziesFrozenHeart = 21328,
+            IceStormer = 21325,
+            IceSpiker = 21337,
+            IcyProtector = 21326,
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,
