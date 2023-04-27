@@ -751,11 +751,13 @@ namespace GW2EIEvtcParser
             SonsOfSvanirHighShaman = 22283,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,
-            ScarletPhantom1 = 24404,
+            ScarletPhantomNormalBeam = 24404,
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
-            ScarletPhantomHP2 = 25262,
-            ScarletPhantom2 = 24396,
+            ScarletPhantomHPCM = 25262,
+            ScarletPhantomConeWaveNM = 24396,
+            ScarletPhantomDeathBeamCM = 25284,
+            ScarletPhantomDeathBeamCM2 = 25287,
             FerrousBomb = ArcDPSEnums.FerrousBomb,
             // Xunlai Jade Junkyard
             Ankka = 24634,
