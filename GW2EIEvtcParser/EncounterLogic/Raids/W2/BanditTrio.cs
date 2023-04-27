@@ -196,17 +196,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Warg,
                 ArcDPSEnums.TrashID.VeteranTorturedWarg,
                 ArcDPSEnums.TrashID.BanditAssassin,
-                ArcDPSEnums.TrashID.BanditSapperTrio ,
+                ArcDPSEnums.TrashID.BanditAssassin2,
+                ArcDPSEnums.TrashID.BanditSapperTrio,
                 ArcDPSEnums.TrashID.BanditDeathsayer,
+                ArcDPSEnums.TrashID.BanditDeathsayer2,
                 ArcDPSEnums.TrashID.BanditBrawler,
+                ArcDPSEnums.TrashID.BanditBrawler2,
                 ArcDPSEnums.TrashID.BanditBattlemage,
+                ArcDPSEnums.TrashID.BanditBattlemage2,
                 ArcDPSEnums.TrashID.BanditCleric,
+                ArcDPSEnums.TrashID.BanditCleric2,
                 ArcDPSEnums.TrashID.BanditBombardier,
                 ArcDPSEnums.TrashID.BanditSniper,
                 ArcDPSEnums.TrashID.NarellaTornado,
                 ArcDPSEnums.TrashID.OilSlick,
                 ArcDPSEnums.TrashID.Prisoner1,
-                ArcDPSEnums.TrashID.Prisoner2
+                ArcDPSEnums.TrashID.Prisoner2,
+                ArcDPSEnums.TrashID.InsectSwarm,
             };
         }
 
