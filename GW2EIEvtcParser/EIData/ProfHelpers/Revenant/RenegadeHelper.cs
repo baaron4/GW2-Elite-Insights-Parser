@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Soulcleave's Summit", SoulcleavesSummit, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),
             new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
             new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
+            new Buff("Brutal Momentum", BrutalMomentum, Source.Renegade, BuffClassification.Other, BuffImages.BrutalMomentum),
         };
 
         private static HashSet<long> Minions = new HashSet<long>()

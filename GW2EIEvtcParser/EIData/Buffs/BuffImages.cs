@@ -1362,6 +1362,7 @@
         internal const string HardeningPersistence = "https://wiki.guildwars2.com/images/0/0f/Hardening_Persistence.png";
         internal const string SoothingBastion = "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png";
         internal const string RisingMomentum = "https://wiki.guildwars2.com/images/8/8c/Rising_Momentum.png";
+        internal const string BrutalMomentum = "https://wiki.guildwars2.com/images/3/3b/Brutal_Momentum.png";
         internal const string KallasFervor = "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png";
         internal const string SoulcleavesSummit = "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png";
         internal const string RazorclawsRage = "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png";
