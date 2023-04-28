@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.EIData
         private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
         private Dictionary<long, BuffsGraphModel> _buffGraphs { get; set; }
+        private Dictionary<AgentItem,Dictionary<long, BuffsGraphModel>> _buffGraphsPerAgent { get; set; }
         private CachingCollection<BuffDistribution> _buffDistribution;
         private CachingCollection<Dictionary<long, long>> _buffPresence;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]> _buffStats;
@@ -103,6 +104,24 @@ namespace GW2EIEvtcParser.EIData
             return _buffGraphs;
         }
 
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
+        {
+            AgentItem agent = by.AgentItem;
+            if (_buffGraphs == null)
+            {
+                SetBuffGraphs(log);
+            } 
+            if (_buffGraphsPerAgent == null)
+            {
+                _buffGraphsPerAgent = new Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>();
+            }
+            if (!_buffGraphsPerAgent.ContainsKey(agent))
+            {
+                SetBuffGraphs(log, by);
+            }
+            return _buffGraphsPerAgent[agent];
+        }
+
         /// <summary>
         /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
@@ -127,13 +146,33 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+        /// <summary>
+        /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="by"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log, by);
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
+            {
+                return bgm.IsPresent(time);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static Segment GetBuffStatus(long buffId, long time, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
+        {
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
                 return bgm.GetBuffStatus(time);
@@ -144,13 +183,26 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+            return GetBuffStatus(buffId, time, GetBuffGraphs(log));
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
+        }
+
+        private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
+        {
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
                 return bgm.GetBuffStatus(start, end);
@@ -159,6 +211,24 @@ namespace GW2EIEvtcParser.EIData
             {
                 return new List<Segment>();
             }
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            return GetBuffStatus(buffId, start, end, GetBuffGraphs(log));
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
+        {
+            if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+            {
+                throw new InvalidOperationException("Buff id must be simulated");
+            }
+            return GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by));
         }
 
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
@@ -338,6 +408,60 @@ namespace GW2EIEvtcParser.EIData
             {
                 _buffGraphs[SkillIDs.NumberOfClones] = numberOfClonesGraph;
             }
+        }
+
+        private void SetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
+        {
+            var buffGraphs = new Dictionary<long, BuffsGraphModel>();
+            _buffGraphsPerAgent[by.AgentItem] = buffGraphs;
+            BuffDictionary buffMap = _buffMap;
+            var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
+            //
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
+            //
+            foreach (Buff buff in GetTrackedBuffs(log))
+            {
+                long buffID = buff.ID;
+                if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
+                {
+                    bool updateBoonPresence = boonIds.Contains(buffID);
+                    bool updateCondiPresence = condiIds.Contains(buffID);
+                    var graphSegments = new List<Segment>();
+                    foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
+                    {
+                        // Graph
+                        var segment = simul.ToSegment(by);
+                        if (graphSegments.Count == 0)
+                        {
+                            graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
+                        }
+                        else if (graphSegments.Last().End != segment.Start)
+                        {
+                            graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
+                        }
+                        graphSegments.Add(segment);
+                    }
+                    // Graph object creation
+                    if (graphSegments.Count > 0)
+                    {
+                        graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
+                    }
+                    else
+                    {
+                        graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
+                    }
+                    buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
+                    if (updateBoonPresence || updateCondiPresence)
+                    {
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(_buffGraphs[buffID].BuffChart);
+                    }
+
+                }
+            }
+            buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
+            buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
         }
 
         public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
