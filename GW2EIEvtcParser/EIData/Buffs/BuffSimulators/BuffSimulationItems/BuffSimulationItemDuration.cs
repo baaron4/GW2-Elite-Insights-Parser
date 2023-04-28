@@ -21,6 +21,23 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         {
             return 1;
         }
+        public override int GetActiveStacks(AbstractSingleActor actor)
+        {
+            return GetActiveSources(actor).Count;
+        }
+        public override IReadOnlyList<AgentItem> GetActiveSources()
+        {
+            return new List<AgentItem>() { GetSources().First() };
+        }
+
+        public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
+        {
+            if (GetSources().First() == actor.AgentItem)
+            {
+                return new List<AgentItem>() { GetSources().First() };
+            }
+            return new List<AgentItem>();
+        }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
         {

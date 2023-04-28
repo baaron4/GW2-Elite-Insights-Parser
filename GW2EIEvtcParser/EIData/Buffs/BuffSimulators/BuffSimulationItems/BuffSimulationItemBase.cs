@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators
@@ -26,7 +27,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetActiveStacks()
         {
-            return 1;
+            return GetStacks();
         }
 
         public override int GetStacks()
@@ -34,14 +35,47 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return 1;
         }
 
+        public override int GetActiveStacks(AbstractSingleActor actor)
+        {
+            return GetStacks(actor);
+        }
+
+        public override int GetStacks(AbstractSingleActor actor)
+        {
+            if (GetActiveSources(actor).Any())
+            {
+                return 1;
+            }
+            return 0;
+        }
+
         public override IReadOnlyList<long> GetActualDurationPerStack()
         {
             return new List<long>() { _originalDuration };
         }
 
-        public override List<AgentItem> GetSources()
+        public override IReadOnlyList<AgentItem> GetSources()
         {
             return new List<AgentItem>() { _src };
+        }
+
+        public override IReadOnlyList<AgentItem> GetActiveSources()
+        {
+            return GetSources();
+        }
+
+        public override IReadOnlyList<AgentItem> GetSources(AbstractSingleActor actor)
+        {
+            if (actor.AgentItem != _src)
+            {
+                return new List<AgentItem>();
+            }
+            return new List<AgentItem>() { _src };
+        }
+
+        public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
+        {
+            return GetSources(actor);
         }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
