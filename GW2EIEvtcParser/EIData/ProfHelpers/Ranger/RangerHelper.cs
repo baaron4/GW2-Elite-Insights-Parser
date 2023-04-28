@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
+            new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Ranger)
         };
@@ -134,6 +135,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sharpen Spines", SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
             new Buff("Guard!", GuardEffect, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
+            new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
             // Traits
             new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, BuffImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),
