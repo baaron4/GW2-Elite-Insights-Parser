@@ -1653,6 +1653,7 @@
         public const long StowTome = 41380;
         public const long RestoringReprieve = 41475;
         public const long TomeOfResolveOpen = 41493;
+        public const long POV_BrutalMomentumCritChance = 41557; // pov only!
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
