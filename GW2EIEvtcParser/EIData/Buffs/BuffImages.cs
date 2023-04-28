@@ -1491,6 +1491,7 @@
         internal const string MercifulIntervention = "https://wiki.guildwars2.com/images/1/15/Merciful_Intervention.png";
         internal const string PrepareShadowPortal = "https://wiki.guildwars2.com/images/e/e3/Prepare_Shadow_Portal.png";
         internal const string ShadowPortal = "https://wiki.guildwars2.com/images/d/d3/Shadow_Portal.png";
+        internal const string SoothingWater = "https://wiki.guildwars2.com/images/d/d4/Soothing_Water.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

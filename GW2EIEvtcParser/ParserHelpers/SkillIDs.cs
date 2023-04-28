@@ -2567,6 +2567,7 @@
         public const long CrescentWindSkill = 62887;
         public const long LegendaryAllianceStanceUWSkill = 62891;
         public const long Triggerguard = 62893;
+        public const long SoothingWaterBuff = 62894;
         public const long ElementalCelerity = 62915;
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceEffect = 62919;
