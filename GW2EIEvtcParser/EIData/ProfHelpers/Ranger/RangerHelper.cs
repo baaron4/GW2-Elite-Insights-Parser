@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sharpen Spines", SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
             new Buff("Guard!", GuardEffect, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
-            new Buff("Search and Rescue!", SearchAndRescueSkill, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
+            new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
             // Traits
             new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, BuffImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),
