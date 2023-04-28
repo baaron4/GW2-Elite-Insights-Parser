@@ -77,5 +77,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.FreeziesFrozenHeart
             };
         }
+
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>()
+            {
+                ArcDPSEnums.TrashID.IceStormer,
+                ArcDPSEnums.TrashID.IceSpiker,
+                ArcDPSEnums.TrashID.IcyProtector
+            };
+        }
     }
 }
