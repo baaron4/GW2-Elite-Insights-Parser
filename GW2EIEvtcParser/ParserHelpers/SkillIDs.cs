@@ -138,7 +138,8 @@
         public const long MedKitSkill = 5802;
         public const long BombKit = 5812;
         public const long RifleTurretCast = 5818;
-        public const long SlickShoes = 5833;
+        public const long SlickShoesSkill = 5825;
+        public const long SlickShoesBuff = 5833;
         public const long FlameTurretCast = 5836;
         public const long NetTurretCast = 5837;
         public const long ThumperTurretCast = 5838;
@@ -203,11 +204,14 @@
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
+        public const long MercifulInterventionTargetBuff = 9231;
+        public const long MercifulInterventionSelfBuff = 9235;
         public const long SignetOfWrathPI = 9237;
         public const long SignetOfMercyPI = 9238;
         public const long SignetOfJudgmentPI = 9239;
         public const long BaneSignetPI = 9240;
         public const long SmiteCondition = 9245;
+        public const long MercifulInterventionSkill = 9246;
         public const long JudgesIntervention = 9247;
         public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
@@ -749,6 +753,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
+        public const long ShadowPortalPreparedBuff = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -2197,6 +2202,7 @@
         public const long SicEmEffectPvP = 56923;
         public const long Rewinder = 56928;
         public const long SplitSecond = 56930;
+        public const long ShadowPortalOpenedBuff = 57031;
         public const long SpherifiedSesameOysterSoup = 57037;
         public const long PlateOfBeefCarpaccioWithSalsaGarnish = 57042;
         public const long SesameVeggieFlatbread = 57050;
