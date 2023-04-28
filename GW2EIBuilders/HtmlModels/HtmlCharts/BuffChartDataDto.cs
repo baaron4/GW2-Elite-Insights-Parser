@@ -81,7 +81,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             }
         }
 
-        public static List<BuffChartDataDto> BuildBoonGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+        public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
             var list = new List<BuffChartDataDto>();
             var boonGraphData = p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value);

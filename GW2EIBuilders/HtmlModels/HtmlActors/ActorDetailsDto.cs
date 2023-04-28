@@ -46,7 +46,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
                 dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, actor, phase, usedSkills, usedBuffs));
-                dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, actor, phase, usedBuffs));
+                dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, actor, phase, usedBuffs));
             }
             foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
             {
@@ -94,7 +94,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetDMGDistData(log, target, phase, usedSkills, usedBuffs));
                     dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, target, phase, usedSkills, usedBuffs));
                     dto.Rotation.Add(SkillDto.BuildRotationData(log, target, phase, usedSkills));
-                    dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, target, phase, usedBuffs));
                 }
                 // rotation + buff graph for CR
                 else if (i == 0 && cr)
@@ -102,7 +102,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     dto.DmgDistributions.Add(new DmgDistributionDto());
                     dto.DmgDistributionsTaken.Add(new DmgDistributionDto());
                     dto.Rotation.Add(SkillDto.BuildRotationData(log, target, phase, usedSkills));
-                    dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, target, phase, usedBuffs));
                 }
                 else
                 {
