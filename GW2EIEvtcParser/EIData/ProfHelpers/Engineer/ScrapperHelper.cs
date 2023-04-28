@@ -27,5 +27,21 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
             new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
         };
+
+        private static HashSet<long> Minions = new HashSet<long>()
+        {
+            (int)MinionID.BlastGyro,
+            (int)MinionID.BulwarkGyro,
+            (int)MinionID.FunctionGyro,
+            (int)MinionID.MedicGyro,
+            (int)MinionID.ShredderGyro,
+            (int)MinionID.SneakGyro,
+            (int)MinionID.PurgeGyro,
+        };
+
+        internal static bool IsKnownMinionID(long id)
+        {
+            return Minions.Contains(id);
+        }
     }
 }
