@@ -1200,11 +1200,13 @@
         public const long ScoopOfMintberrySwirlIceCream = 34207;
         public const long TinOfFruitcake = 34211;
         public const long TropicalPeppermintCake = 34212;
+        public const long SearchAndRescueBuff = 34236;
         public const long FreshAir = 34241;
         public const long RockGuard = 34256;
         public const long GuardEffect = 34281;
         public const long InstantReflexes = 34283;
         public const long GlidingDisabled = 34298;
+        public const long SearchAndRescueSkill = 34309;
         public const long WellOfTheProfane = 34336;
         public const long FearMeSlothasor = 34340;
         public const long FieryVortexNarella = 34344;
