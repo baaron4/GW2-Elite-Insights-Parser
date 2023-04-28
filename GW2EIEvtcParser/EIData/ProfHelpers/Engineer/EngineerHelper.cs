@@ -53,6 +53,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance), // Explosive Entrance
             new BuffGainCastFinder(ElixirSSkill, ElixirSEffect), // Elixir S
+            new BuffGainCastFinder(SlickShoesSkill, SlickShoesBuff),
             new DamageCastFinder(OverchargedShot,OverchargedShot), // Overcharged Shot
             // Kits
             new EngineerKitFinder(BombKit), // Bomb Kit
@@ -119,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, BuffImages.AED),
             new Buff("Elixir S", ElixirSEffect, Source.Engineer, BuffClassification.Other, BuffImages.ElixirS),
             new Buff("Utility Goggles", UtilityGoggles, Source.Engineer, BuffClassification.Other, BuffImages.UtilityGoggles),
-            new Buff("Slick Shoes", SlickShoes, Source.Engineer, BuffClassification.Other, BuffImages.SlickShoes),
+            new Buff("Slick Shoes", SlickShoesBuff, Source.Engineer, BuffClassification.Other, BuffImages.SlickShoes),
             new Buff("Gear Shield", GearShield, Source.Engineer, BuffClassification.Other, BuffImages.GearShield),
             new Buff("Iron Blooded", IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IronBlooded),
             new Buff("Streamlined Kits", StreamlinedKits, Source.Engineer, BuffClassification.Other, BuffImages.StreamlinedKits),
