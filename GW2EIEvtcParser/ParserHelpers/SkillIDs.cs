@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -863,11 +863,15 @@ namespace GW2EIEvtcParser
         public const long FireElementalSummoned = 25475;
         public const long EarthElementalSummoned = 25477;
         public const long LesserFireElementalSummoned = 25479;
+        public const long AirElementalShockingBolt = 25480;
         public const long LesserAirElementalSummoned = 25481;
         public const long LesserWaterElementalSummoned = 25483;
         public const long LesserEarthElementalSummoned = 25484;
+        public const long WaterElementalCrashingWaves = 25492;
         public const long WaterElementalSummoned = 25493;
         public const long AirElementalSummoned = 25496;
+        public const long EarthElementalStomp = 25498;
+        public const long FireElementalFlameBarrage = 25499;
         public const long LightAura = 25518;
         public const long SuperiorSigilOfCruelty = 25526;
         public const long SiegeGolemMasteryRank4Omega = 25589;

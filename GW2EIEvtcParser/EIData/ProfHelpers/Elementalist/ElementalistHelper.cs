@@ -34,6 +34,12 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingDstBaseSpecChecker(Spec.Elementalist),
             new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
             //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
+            
+            // Elementals
+            new MinionCommandCastFinder(FireElementalFlameBarrage, (int) MinionID.FireElemental),
+            new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),
+            new MinionCommandCastFinder(AirElementalShockingBolt, (int) MinionID.AirElemental),
+            new MinionCommandCastFinder(EarthElementalStomp, (int) MinionID.EarthElemental),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
