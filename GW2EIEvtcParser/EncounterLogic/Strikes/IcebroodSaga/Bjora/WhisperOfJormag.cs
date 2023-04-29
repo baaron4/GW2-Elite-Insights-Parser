@@ -114,13 +114,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.WhisperEcho,
-                ArcDPSEnums.TrashID.DoppelgangerGuardian1,
+                ArcDPSEnums.TrashID.DoppelgangerElementalist,
+                ArcDPSEnums.TrashID.DoppelgangerElementalist2,
+                ArcDPSEnums.TrashID.DoppelgangerEngineer,
+                ArcDPSEnums.TrashID.DoppelgangerEngineer2,
+                ArcDPSEnums.TrashID.DoppelgangerGuardian,
                 ArcDPSEnums.TrashID.DoppelgangerGuardian2,
-                ArcDPSEnums.TrashID.DoppelgangerNecro,
+                ArcDPSEnums.TrashID.DoppelgangerMesmer,
+                ArcDPSEnums.TrashID.DoppelgangerMesmer2,
+                ArcDPSEnums.TrashID.DoppelgangerNecromancer,
+                ArcDPSEnums.TrashID.DoppelgangerNecromancer2,
+                ArcDPSEnums.TrashID.DoppelgangerRanger,
+                ArcDPSEnums.TrashID.DoppelgangerRanger2,
                 ArcDPSEnums.TrashID.DoppelgangerRevenant,
-                ArcDPSEnums.TrashID.DoppelgangerThief1,
+                ArcDPSEnums.TrashID.DoppelgangerRevenant2,
+                ArcDPSEnums.TrashID.DoppelgangerThief,
                 ArcDPSEnums.TrashID.DoppelgangerThief2,
                 ArcDPSEnums.TrashID.DoppelgangerWarrior,
+                ArcDPSEnums.TrashID.DoppelgangerWarrior2,
             };
         }
     }

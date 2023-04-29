@@ -267,6 +267,11 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.GetBuffGraphs(log);
         }
 
+        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
+        {
+            return _buffHelper.GetBuffGraphs(log, by);
+        }
+
         /// <summary>
         /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
@@ -279,6 +284,19 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.HasBuff(log, buffId, time);
         }
 
+        /// <summary>
+        /// Checks if a buff is present on the actor and was applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="by"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+        {
+            return _buffHelper.HasBuff(log, by, buffId, time);
+        }
+
         public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
         {
             return _buffHelper.GetBuffStatus(log, buffId, start, end);
@@ -287,6 +305,15 @@ namespace GW2EIEvtcParser.EIData
         public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
         {
             return _buffHelper.GetBuffStatus(log, buffId, time);
+        }
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
+        {
+            return _buffHelper.GetBuffStatus(log, by, buffId, start, end);
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+        {
+            return _buffHelper.GetBuffStatus(log, by, buffId, time);
         }
 
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)

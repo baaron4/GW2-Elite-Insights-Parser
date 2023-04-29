@@ -16,6 +16,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
         public List<List<object[]>> Rotation { get; set; }
         public List<List<BuffChartDataDto>> BoonGraph { get; set; }
+        public List<List<List<BuffChartDataDto>>> BoonGraphPerSource { get; set; }
         public List<FoodDto> Food { get; set; }
         public List<ActorDetailsDto> Minions { get; set; }
         public List<DeathRecapDto> DeathRecap { get; set; }
@@ -46,7 +47,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 }
                 dto.DmgDistributionsTargets.Add(dmgTargetsDto);
                 dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, actor, phase, usedSkills, usedBuffs));
-                dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, actor, phase, usedBuffs));
+                dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, actor, phase, usedBuffs));
             }
             foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
             {
@@ -83,6 +84,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 DmgDistributions = new List<DmgDistributionDto>(),
                 DmgDistributionsTaken = new List<DmgDistributionDto>(),
                 BoonGraph = new List<List<BuffChartDataDto>>(),
+                BoonGraphPerSource = new List<List<List<BuffChartDataDto>>>(),
                 Rotation = new List<List<object[]>>()
             };
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
@@ -94,7 +96,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetDMGDistData(log, target, phase, usedSkills, usedBuffs));
                     dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, target, phase, usedSkills, usedBuffs));
                     dto.Rotation.Add(SkillDto.BuildRotationData(log, target, phase, usedSkills));
-                    dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraphPerSource.Add(log.Friendlies.Select(p => BuffChartDataDto.BuildBuffGraphData(log, target, p, phase, usedBuffs)).ToList());
                 }
                 // rotation + buff graph for CR
                 else if (i == 0 && cr)
@@ -102,7 +105,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     dto.DmgDistributions.Add(new DmgDistributionDto());
                     dto.DmgDistributionsTaken.Add(new DmgDistributionDto());
                     dto.Rotation.Add(SkillDto.BuildRotationData(log, target, phase, usedSkills));
-                    dto.BoonGraph.Add(BuffChartDataDto.BuildBoonGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, target, phase, usedBuffs));
+                    dto.BoonGraphPerSource.Add(new List<List<BuffChartDataDto>>());
                 }
                 else
                 {
@@ -110,6 +114,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     dto.DmgDistributionsTaken.Add(new DmgDistributionDto());
                     dto.Rotation.Add(new List<object[]>());
                     dto.BoonGraph.Add(new List<BuffChartDataDto>());
+                    dto.BoonGraphPerSource.Add(new List<List<BuffChartDataDto>>());
                 }
             }
 

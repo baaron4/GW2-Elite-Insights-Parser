@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -27,14 +28,14 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Gliding Disabled Warning", GlidingDisabledWarning, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabledWarning),
             new Buff("Siege Disabled", SiegeDisabled, Source.Common, BuffClassification.Debuff, BuffImages.SiegeDisabled),
             new Buff("Force Dome", ForceDomeTier5Effect, Source.Common, BuffClassification.Support, BuffImages.ForceDome),
-            new Buff("Structural Vulnerability", StructuralVulnerability, Source.Common, BuffClassification.Other, BuffImages.StructuralVulnerability),
+            new Buff("Structural Vulnerability", StructuralVulnerability, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.StructuralVulnerability),
             new Buff("Sabotage Depot", SabotageDepot, Source.Common, BuffClassification.Other, BuffImages.SabotagedWeaponParts),
             new Buff("Iron Hide (Ram)", IronHideRam, Source.Common, BuffClassification.Defensive, BuffImages.IronHide),
             new Buff("Iron Hide (Guard)", IronHideGuards, Source.Common, BuffClassification.Other, BuffImages.IronHide),
             new Buff("Siege Decay Timer", SiegeDecayTimer, Source.Common, BuffClassification.Other, BuffImages.SiegeDecayTimer),
             new Buff("Presence of the Keep", PresenceOfTheKeep, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
             new Buff("Oil Mastery III (Increased Armor)",IncreasedArmorOilMasteryIII, Source.Common, BuffClassification.Defensive, BuffImages.BurningOilMastery),
-            new Buff("Chain Attached", ChainAttached, Source.Common, BuffClassification.Other, BuffImages.ChainPull),
+            new Buff("Chain Attached", ChainAttached, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ChainPull),
             new Buff("Hardened Gates", HardenedGates, Source.Common, BuffClassification.Other, BuffImages.HardenedGates),
             new Buff("Siege Deployment Blocked", SiegeDeploymentBlocked, Source.Common, BuffClassification.Debuff, BuffImages.SiegeDeploymentBlocked),
             new Buff("Outnumbered", Outnumbered, Source.Common, BuffClassification.Other, BuffImages.Bombard),
