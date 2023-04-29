@@ -75,6 +75,8 @@ namespace GW2EIEvtcParser
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
         public const string MechanistShiftSignet = "E1C1DD7F866B4149A1BADD216C9AA69D";
+        public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD";
+        public const string MechanistCrisisZone = "10873BDE22D87845AAF004B0A60FA546";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
