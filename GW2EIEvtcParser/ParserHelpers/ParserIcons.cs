@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
