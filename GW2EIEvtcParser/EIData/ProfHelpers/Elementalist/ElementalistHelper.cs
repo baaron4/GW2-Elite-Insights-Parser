@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect), // Air
             new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect), // Earth
             new DamageCastFinder(ArcaneBlast, ArcaneBlast), // Arcane Blast
-            new BuffGiveCastFinder(AranePowerSkill, ArcanePowerEffect), // Arcane Power
+            new BuffGiveCastFinder(ArcanePowerSkill, ArcanePowerEffect), // Arcane Power
             new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect), // Arcane Shield
             new DamageCastFinder(ArcaneWave, ArcaneWave), // Arcane Wave
             new BuffGainCastFinder(MistForm, MistForm), // Mist Form

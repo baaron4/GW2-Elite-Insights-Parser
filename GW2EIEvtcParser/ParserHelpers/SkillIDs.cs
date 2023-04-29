@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser
         public const long WaterArrow = 5595;
         public const long Whirlpool = 5601;
         public const long VaporForm = 5620;
-        public const long AranePowerSkill = 5635;
+        public const long ArcanePowerSkill = 5635;
         public const long ArmorOfEarth = 5639;
         public const long ArcaneShieldEffect = 5640;
         public const long ArcaneShieldSkill = 5641;
