@@ -20,10 +20,13 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Armor
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance), // Spectral Walk
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Walk
+            
             // Minions
-            new BuffGainWithMinionsCastFinder(RigorMortisSkill, RigorMortisEffect),
-            new BuffGainCastFinder(HauntSkill, HauntEffect),
-            new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
+            new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
+            new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
+            new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
+            // new BuffGainWithMinionsCastFinder(RigorMortisSkill, RigorMortisEffect),
+            // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
         };
 
 
