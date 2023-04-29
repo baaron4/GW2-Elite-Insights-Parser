@@ -18,7 +18,12 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(UnleashPet, PetUnleashed),
             new BuffGainCastFinder(UnleashRanger, Unleashed),
             new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions).UsingDstSpecChecker(Spec.Untamed),
-            new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingDstSpecChecker(Spec.Untamed)
+            new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingDstSpecChecker(Spec.Untamed),
+
+            // Pet
+            new EffectCastFinderFromMinion(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst),
+            new EffectCastFinderFromMinion(RendingVines, EffectGUIDs.UntamedRendingVines),
+            new EffectCastFinderFromMinion(EnvelopingHaze, EffectGUIDs.UntamedEnvelopingHaze),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

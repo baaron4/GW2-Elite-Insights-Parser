@@ -88,6 +88,9 @@ namespace GW2EIEvtcParser
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
+        public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";
+        public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
+        public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal

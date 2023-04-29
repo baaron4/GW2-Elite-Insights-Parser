@@ -2599,9 +2599,12 @@
         public const long OverclockSignetEffect = 63059;
         public const long BarrierSignet = 63064;
         public const long ShiftSignetEffect = 63068;
+        public const long VenomousOutburstPet = 63082;
+        public const long EnvelopingHaze = 63094;
         public const long OverclockSignetSkill = 63095;
         public const long ShiftSignetSkill = 63111;
         public const long JadeMortar = 63121;
+        public const long EnvelopingHazePet = 63136;
         public const long BarrierBurst = 63141;
         public const long PetUnleashed = 63145;
         public const long UnleashRanger = 63147;
@@ -2615,6 +2618,7 @@
         public const long FerociousSymbiosis = 63191;
         public const long UnnaturalTraversal = 63195;
         public const long ShroudedAlly = 63207;
+        public const long VenomousOutburst = 63209;
         public const long DawnsRepose = 63220;
         public const long BarrierSignetJDrive = 63228;
         public const long SkyCircus = 63236;
@@ -2624,8 +2628,10 @@
         public const long MindShock = 63249;
         public const long ExitShadowShroud = 63251;
         public const long MutateConditions = 63256;
+        public const long RendingVines = 63258;
         public const long PerilousGift = 63284;
         public const long CrisisZone = 63293;
+        public const long RendingVinesPet = 63296;
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
