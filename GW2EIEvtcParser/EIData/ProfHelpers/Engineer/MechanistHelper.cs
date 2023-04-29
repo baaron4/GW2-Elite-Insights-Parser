@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(JadeMortar, JadeMortar),
             new MinionCastCastFinder(BarrierBurst, BarrierBurst),
             new MinionCastCastFinder(SkyCircus, SkyCircus),
-            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon),
+            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingNotAccurate(true),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
