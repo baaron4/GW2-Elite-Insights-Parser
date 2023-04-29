@@ -133,10 +133,10 @@
         public const long ObsidianFlesh = 5667;
         public const long FireAura = 5677;
         public const long MagneticAura = 5684;
-        public const long GlyphOfElementalPowerFireBuff = 5739;
-        public const long GlyphOfElementalPowerAirBuff = 5740;
-        public const long GlyphOfElementalPowerWaterBuff = 5741;
-        public const long GlyphOfElementalPowerEarthBuff = 5742;
+        public const long GlyphOfElementalPowerFireEffect = 5739;
+        public const long GlyphOfElementalPowerAirEffect = 5740;
+        public const long GlyphOfElementalPowerWaterEffect = 5741;
+        public const long GlyphOfElementalPowerEarthEffect = 5742;
         public const long ElectrifiedTornado = 5749;
         public const long RenewalOfFire = 5764;
         public const long MedKitSkill = 5802;
@@ -2575,7 +2575,7 @@
         public const long CrescentWindSkill = 62887;
         public const long LegendaryAllianceStanceUWSkill = 62891;
         public const long Triggerguard = 62893;
-        public const long SoothingWaterBuff = 62894;
+        public const long SoothingWaterEffect = 62894;
         public const long ElementalCelerity = 62915;
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceEffect = 62919;

@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Immutable Stone", ImmutableStoneEffect, Source.Catalyst, BuffClassification.Other, BuffImages.ImmutableStone),
             new Buff("Fortified Earth", FortifiedEarth, Source.Catalyst, BuffClassification.Other, BuffImages.FortifiedEarth),
             new Buff("Elemental Celerity", ElementalCelerity, Source.Catalyst, BuffClassification.Other, BuffImages.ElementalCelerity),
-            new Buff("Soothing Water", SoothingWaterBuff, Source.Catalyst, BuffClassification.Other, BuffImages.SoothingWater),
+            new Buff("Soothing Water", SoothingWaterEffect, Source.Catalyst, BuffClassification.Other, BuffImages.SoothingWater),
             new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElementalEmpowerment),
             new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
             new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),

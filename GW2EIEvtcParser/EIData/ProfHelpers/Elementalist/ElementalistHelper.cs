@@ -19,10 +19,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementEffect), // Water
             new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect), // Air
             new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect), // Earth
-            new BuffGainCastFinder(GlyphOfElementalPowerFireSkill, GlyphOfElementalPowerFireBuff),
-            new BuffGainCastFinder(GlyphOfElementalPowerWaterSkill, GlyphOfElementalPowerWaterBuff),
-            new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirBuff),
-            new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthBuff),
+            new BuffGainCastFinder(GlyphOfElementalPowerFireSkill, GlyphOfElementalPowerFireEffect),
+            new BuffGainCastFinder(GlyphOfElementalPowerWaterSkill, GlyphOfElementalPowerWaterEffect),
+            new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirEffect),
+            new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthEffect),
             new DamageCastFinder(ArcaneBlast, ArcaneBlast), // Arcane Blast
             new BuffGiveCastFinder(AranePowerSkill, ArcanePowerEffect), // Arcane Power
             new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect), // Arcane Shield
@@ -121,10 +121,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, BuffImages.FreshAir),
             new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, BuffImages.SoothingMist),
             new Buff("Stone Heart", StoneHeart, Source.Elementalist, BuffClassification.Defensive, BuffImages.StoneHeart),
-            new Buff("Glyph of Elemental Power (Fire)", GlyphOfElementalPowerFireBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerFire),
-            new Buff("Glyph of Elemental Power (Air)", GlyphOfElementalPowerAirBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerAir),
-            new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerWater),
-            new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerEarth),
+            new Buff("Glyph of Elemental Power (Fire)", GlyphOfElementalPowerFireEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerFire),
+            new Buff("Glyph of Elemental Power (Air)", GlyphOfElementalPowerAirEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerAir),
+            new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerWater),
+            new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerEarth),
         };
 
 
