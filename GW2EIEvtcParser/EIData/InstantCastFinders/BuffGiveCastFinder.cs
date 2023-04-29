@@ -4,19 +4,10 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffGiveCastFinder : BuffCastFinder
+    internal class BuffGiveCastFinder : BuffCastFinder<BuffApplyEvent>
     {
-
-        public delegate bool BuffGiveCastChecker(BuffApplyEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private BuffGiveCastChecker _triggerCondition { get; set; }
         public BuffGiveCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-        }
-
-        internal BuffGiveCastFinder UsingChecker(BuffGiveCastChecker checker)
-        {
-            _triggerCondition = checker;
-            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -37,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = bae.Time;
                         continue;
                     }
-                    if (_triggerCondition == null || _triggerCondition(bae, combatData, agentData, skillData))
+                    if (CheckCondition(bae, combatData, agentData, skillData))
                     {
                         lastTime = bae.Time;
                         res.Add(new InstantCastEvent(GetTime(bae, bae.CreditedBy, combatData), skillData.Get(SkillID), bae.CreditedBy));
