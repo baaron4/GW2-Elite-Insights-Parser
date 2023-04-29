@@ -4,6 +4,7 @@
             :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="true" :column="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
+        <h3 class="text-center mt-1 mb-1">Buffs applied by {{player.name}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <rotation-legend-component></rotation-legend-component>
     </div>
@@ -11,16 +12,19 @@
 
 <script>
 
-    Vue.component("target-graph-tab-component", {
-        props: ["targetindex", "phaseindex", 'light'],
+    Vue.component("targetperplayer-graph-tab-component", {
+        props: ["targetindex", "phaseindex", 'light', 'playerindex'],
         template: `${template}`,
         mixins: [graphComponent, damageGraphComponent, targetTabGraphComponent],
         computed: {
             graphid: function () {
-                return "targetgraph-" + this.phaseTargetIndex + '-' + this.phaseindex;
+                return "targetgraphperplayer-" + this.phaseTargetIndex + '-' + this.phaseindex + '-' + this.playerindex;
             },
             boonGraph: function() {
-                return this.target.details.boonGraph[this.phaseindex];
+                return this.target.details.boonGraphPerSource[this.phaseindex][this.playerindex];
+            },
+            player: function() {
+                return logData.players[this.playerindex];
             }
         },
     });

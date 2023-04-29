@@ -424,7 +424,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (Buff buff in GetTrackedBuffs(log))
             {
                 long buffID = buff.ID;
-                if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
+                if (_buffSimulators.TryGetValue(buff.ID, out AbstractBuffSimulator simulator) && !buffGraphs.ContainsKey(buffID))
                 {
                     bool updateBoonPresence = boonIds.Contains(buffID);
                     bool updateCondiPresence = condiIds.Contains(buffID);
@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EIData
                     buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(_buffGraphs[buffID].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].BuffChart);
                     }
 
                 }

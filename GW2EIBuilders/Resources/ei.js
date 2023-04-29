@@ -105,6 +105,24 @@ function compileTemplates() {
             },
         }
     });
+    Vue.component("targetperplayer-graphs-tab-component", {
+        props: ["targetindex", "phaseindex", 'light', 'playerindex'],
+        template : `      
+        <div>            
+            <keep-alive>  
+                <targetperplayer-graph-tab-component v-for="(player, pId) in players" v-if="pId === playerindex"
+                :key="phaseindex + 'perplayer' + pId" :targetindex="targetindex" :phaseindex="phaseindex" :light="light"
+                :playerindex="playerindex">
+                </targetperplayer-graph-tab-component>           
+            <keep-alive>
+        </div>
+        `,
+        computed: {
+            players: function() {
+                return logData.players;
+            }
+        }
+    });
     TEMPLATE_COMPILE
 };
 
