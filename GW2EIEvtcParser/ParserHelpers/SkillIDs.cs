@@ -139,7 +139,7 @@
         public const long BombKit = 5812;
         public const long RifleTurretCast = 5818;
         public const long SlickShoesSkill = 5825;
-        public const long SlickShoesBuff = 5833;
+        public const long SlickShoesEffect = 5833;
         public const long FlameTurretCast = 5836;
         public const long NetTurretCast = 5837;
         public const long ThumperTurretCast = 5838;
@@ -204,8 +204,8 @@
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
-        public const long MercifulInterventionTargetBuff = 9231;
-        public const long MercifulInterventionSelfBuff = 9235;
+        public const long MercifulInterventionTargetEffect = 9231;
+        public const long MercifulInterventionSelfEffect = 9235;
         public const long SignetOfWrathPI = 9237;
         public const long SignetOfMercyPI = 9238;
         public const long SignetOfJudgmentPI = 9239;
@@ -602,13 +602,13 @@
         public const long LifeLeech = 10560;
         public const long LifeSiphon = 10563;
         public const long LocustSwarm = 10567;
-        public const long RigorMortis = 10570;
-        public const long RigorMortisBuff = 10571;
+        public const long RigorMortisSkill = 10570;
+        public const long RigorMortisEffect = 10571;
         public const long EnterDeathShroud = 10574;
         public const long SpectralArmorEffect = 10582;
         public const long SpectralArmorSkill = 10583;
         public const long ExitDeathShroud = 10585;
-        public const long Haunt = 10590;
+        public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
         public const long SignetOfUndeath = 10610;
@@ -757,7 +757,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
-        public const long ShadowPortalPreparedBuff = 16437;
+        public const long ShadowPortalPreparedEffect = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -784,7 +784,7 @@
         public const long Torment = 19426;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
-        public const long HauntBuff = 20229;
+        public const long HauntEffect = 20229;
         public const long SuperiorRuneOfTormenting = 20479;
         public const long PortalUsesXeraWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
@@ -1210,7 +1210,7 @@
         public const long ScoopOfMintberrySwirlIceCream = 34207;
         public const long TinOfFruitcake = 34211;
         public const long TropicalPeppermintCake = 34212;
-        public const long SearchAndRescueBuff = 34236;
+        public const long SearchAndRescueEffect = 34236;
         public const long FreshAir = 34241;
         public const long RockGuard = 34256;
         public const long GuardEffect = 34281;
@@ -1266,7 +1266,7 @@
         public const long NarcolepsySkill = 34515;
         public const long Halitosis = 34516;
         public const long BloodShield = 34518;
-        public const long MushroomKingsBlessingBuff = 34523;
+        public const long MushroomKingsBlessingEffect = 34523;
         public const long HeatWave = 34526;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
@@ -1557,7 +1557,7 @@
         public const long CosmicStreaks = 39021;
         public const long RedMarble1 = 39029;
         public const long HorizonStrikeSkorvald2 = 39031;
-        public const long ArkkStartBuff = 39032;
+        public const long ArkkStartEffect = 39032;
         public const long AstralSurge = 39035;
         public const long OystersWithPestoSauce = 39042;
         public const long OystersGnashblade = 39067;
@@ -2107,11 +2107,11 @@
         public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;
         public const long MistlockInstabilitySugarRush = 54237;
-        public const long NotStickingTogetherBuff = 54378;
+        public const long NotStickingTogetherEffect = 54378;
         public const long MistlockInstabilityFrailty = 54477;
         public const long MistlockInstabilitySlipperySlope1 = 54559;
         public const long DragonCrystalPotion = 54561;
-        public const long StickingTogetherBuff = 54604;
+        public const long StickingTogetherEffect = 54604;
         public const long MistlockInstabilityWeBleedFire = 54719;
         public const long MistlockInstabilitySlipperySlope2 = 54817;
         public const long SandstormShroudSmallShade = 54870;
@@ -2216,7 +2216,7 @@
         public const long SicEmEffectPvP = 56923;
         public const long Rewinder = 56928;
         public const long SplitSecond = 56930;
-        public const long ShadowPortalOpenedBuff = 57031;
+        public const long ShadowPortalOpenedEffect = 57031;
         public const long SpherifiedSesameOysterSoup = 57037;
         public const long PlateOfBeefCarpaccioWithSalsaGarnish = 57042;
         public const long SesameVeggieFlatbread = 57050;
@@ -2781,7 +2781,7 @@
         public const long EnforcerRushingJustice = 65608;
         public const long YellowfishSushi = 65613;
         public const long HallucinatingShot = 65649;
-        public const long DeathsHandSpreadBuff = 65661;
+        public const long DeathsHandSpreadEffect = 65661;
         public const long ExtremeVulnerability = 65662;
         public const long FrostMeteor = 65687;
         public const long SwordArc = 65663;
@@ -2915,7 +2915,7 @@
         public const long MaiTrinCMBeamsTargetGreen = 67871;
         public const long PhotonSaturation = 67872;
         public const long AchievementEligibilityLeapsAbound = 67882;
-        public const long ImminentDeathBuff = 67931;
+        public const long ImminentDeathEffect = 67931;
         public const long FailSafeActivated = 67936;
         public const long SanctuaryAnkka2 = 67941;
         public const long DragonSlashRush2CM = 67943;
