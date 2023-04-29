@@ -64,8 +64,8 @@ namespace GW2EIEvtcParser.EIData
                 }*/
                 return false;
             }).UsingNotAccurate(true),
-            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Chronomancer),
-            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingSrcSpecChecker(Spec.Chronomancer),
+            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingSrcSpecChecker(Spec.Chronomancer),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

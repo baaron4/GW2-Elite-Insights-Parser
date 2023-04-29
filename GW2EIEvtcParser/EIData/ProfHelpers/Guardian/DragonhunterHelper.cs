@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(TestOfFaith, EffectGUIDs.DragonhunterTestOfFaith).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Dragonhunter),
-            new EffectCastFinder(FragmentsOfFaith, EffectGUIDs.DragonhunterFragmentsOfFaith).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Dragonhunter),
+            new EffectCastFinder(TestOfFaith, EffectGUIDs.DragonhunterTestOfFaith).UsingSrcSpecChecker(Spec.Dragonhunter),
+            new EffectCastFinder(FragmentsOfFaith, EffectGUIDs.DragonhunterFragmentsOfFaith).UsingSrcSpecChecker(Spec.Dragonhunter),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

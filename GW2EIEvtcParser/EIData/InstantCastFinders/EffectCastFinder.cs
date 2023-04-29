@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -32,6 +33,26 @@ namespace GW2EIEvtcParser.EIData
         {
             _triggerCondition = checker;
             return this;
+        }
+
+        internal EffectCastFinder UsingSrcBaseSpecChecker(Spec spec)
+        {
+            return UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == spec);
+        }
+
+        internal EffectCastFinder UsingDstBaseSpecChecker(ParserHelper.Spec spec)
+        {
+            return UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+        }
+        
+        internal EffectCastFinder UsingSrcSpecChecker(Spec spec)
+        {
+            return UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);
+        }
+
+        internal EffectCastFinder UsingDstSpecChecker(ParserHelper.Spec spec)
+        {
+            return UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

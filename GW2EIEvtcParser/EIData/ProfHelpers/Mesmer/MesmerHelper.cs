@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer),
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
             new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, combatData, agentData, skillData) => 
             {
                 if (evt.Dst.BaseSpec != Spec.Mesmer)
@@ -121,11 +121,11 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.February2023Balance),
             new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
-            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
+            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
         };
 
 

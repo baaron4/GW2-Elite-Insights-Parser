@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(LightningStrike, LightningStrike), // Lightning Strike
             new DamageCastFinder(LightningRod, LightningRod), // Lightning Rod
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
-            new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist),
+            new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingDstBaseSpecChecker(Spec.Elementalist),
             new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
             //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
         };

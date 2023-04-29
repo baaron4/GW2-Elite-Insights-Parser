@@ -19,17 +19,17 @@ namespace GW2EIEvtcParser.EIData
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
             //new DamageCastFinder(12507,12507), // Crippling Shot
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect), // "Sic 'Em!"
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect), // Sharpening Stone
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffect), // "Sic 'Em!"
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffectPvP), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect), // Sharpening Stone
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
-            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Ranger),
-            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Ranger)
+            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
         };
 
 

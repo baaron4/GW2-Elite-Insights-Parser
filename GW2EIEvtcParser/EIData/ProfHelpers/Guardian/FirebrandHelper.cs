@@ -20,26 +20,26 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(MantraOfTruthCast,MantraOfTruthDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Mantra of Truth
             //
             new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace).WithBuilds(GW2Builds.May2021Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Mantra of Solace
-            new EffectCastFinderByDst(MantraOfFlameCast, EffectGUIDs.FirebrandMantraOfFlameSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfSolace, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfTruthCast, EffectGUIDs.FirebrandMantraOfTruthSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfFlameCast, EffectGUIDs.FirebrandMantraOfFlameSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfSolace, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfTruthCast, EffectGUIDs.FirebrandMantraOfTruthSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
             //     
             new DamageCastFinder(FlameRush,FlameRush).WithBuilds(GW2Builds.February2023Balance),
             new DamageCastFinder(FlameSurge,FlameSurge).WithBuilds(GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
             //   
             new DamageCastFinder(EchoOfTrue,EchoOfTrue).WithBuilds(GW2Builds.February2023Balance),
             new DamageCastFinder(VoiceOfTruth,VoiceOfTruth).WithBuilds(GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(PortentOfFreedomOrUnhinderedDelivery, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds( GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PortentOfFreedomOrUnhinderedDelivery, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds( GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(OpeningPassageOrClarifiedConclusion, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(OpeningPassageOrClarifiedConclusion, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(PotentHasteOrOverwhelmingCelerity, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PotentHasteOrOverwhelmingCelerity, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingDstSpecChecker(Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
             //
             new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
