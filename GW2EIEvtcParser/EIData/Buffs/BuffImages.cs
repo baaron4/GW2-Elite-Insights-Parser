@@ -1492,6 +1492,10 @@
         internal const string PrepareShadowPortal = "https://wiki.guildwars2.com/images/e/e3/Prepare_Shadow_Portal.png";
         internal const string ShadowPortal = "https://wiki.guildwars2.com/images/d/d3/Shadow_Portal.png";
         internal const string SoothingWater = "https://wiki.guildwars2.com/images/d/d4/Soothing_Water.png";
+        internal const string GlyphOfElementalPowerFire = "https://wiki.guildwars2.com/images/f/f2/Glyph_of_Elemental_Power_%28fire%29.png";
+        internal const string GlyphOfElementalPowerWater = "https://wiki.guildwars2.com/images/b/bf/Glyph_of_Elemental_Power_%28water%29.png";
+        internal const string GlyphOfElementalPowerAir = "https://wiki.guildwars2.com/images/c/cb/Glyph_of_Elemental_Power_%28air%29.png";
+        internal const string GlyphOfElementalPowerEarth = "https://wiki.guildwars2.com/images/0/0a/Glyph_of_Elemental_Power_%28earth%29.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
