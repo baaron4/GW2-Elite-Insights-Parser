@@ -602,11 +602,15 @@
         public const long LifeLeech = 10560;
         public const long LifeSiphon = 10563;
         public const long LocustSwarm = 10567;
+        public const long RigorMortis = 10570;
+        public const long RigorMortisBuff = 10571;
         public const long EnterDeathShroud = 10574;
         public const long SpectralArmorEffect = 10582;
         public const long SpectralArmorSkill = 10583;
         public const long ExitDeathShroud = 10585;
+        public const long Haunt = 10590;
         public const long LifeTransfer = 10594;
+        public const long NecroticTraversal = 10600;
         public const long SignetOfUndeath = 10610;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
@@ -780,6 +784,7 @@
         public const long Torment = 19426;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
+        public const long HauntBuff = 20229;
         public const long SuperiorRuneOfTormenting = 20479;
         public const long PortalUsesXeraWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
