@@ -78,6 +78,7 @@ namespace GW2EIEvtcParser
         // Ranger
         public const string RangerLightningReflexes = "3CF1D1228CBC3740AA33EDA357EABED4";
         public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
+        public const string RangerProtectMe = "9C7C1B2379CCDD4990001A38030E4495";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
