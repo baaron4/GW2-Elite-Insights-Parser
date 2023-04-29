@@ -27,14 +27,24 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return Stacks.Count;
         }
 
+        public override int GetStacks(AbstractSingleActor actor)
+        {
+            return GetSources(actor).Count;
+        }
+
         public override IReadOnlyList<long> GetActualDurationPerStack()
         {
             return new List<long>(Stacks.Select(x => x.GetActualDurationPerStack().First()));
         }
 
-        public override List<AgentItem> GetSources()
+        public override IReadOnlyList<AgentItem> GetSources()
         {
             return _sources;
+        }
+
+        public override IReadOnlyList<AgentItem> GetSources(AbstractSingleActor actor)
+        {
+            return _sources.Where(x => x == actor.AgentItem).ToList();
         }
     }
 }

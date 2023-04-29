@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
                 (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
-                (int)ArcDPSEnums.TrashID.ScarletPhantomHP2,
+                (int)ArcDPSEnums.TrashID.ScarletPhantomHPCM,
             };
         }
 
@@ -74,8 +74,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.ScarletPhantom1,
-                ArcDPSEnums.TrashID.ScarletPhantom2,
+                ArcDPSEnums.TrashID.ScarletPhantomNormalBeam,
+                ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM,
+                ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM,
+                ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2,
                 ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho,
                 ArcDPSEnums.TrashID.FerrousBomb,
             };
@@ -140,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
         {
-            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP2)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
+            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHPCM)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -260,7 +262,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName("Elite " + target.Character + " CC");
                         break;
                     case (int)ArcDPSEnums.TrashID.ScarletPhantomHP:
-                    case (int)ArcDPSEnums.TrashID.ScarletPhantomHP2:
+                    case (int)ArcDPSEnums.TrashID.ScarletPhantomHPCM:
                         target.OverrideName("Elite " + target.Character + " HP");
                         break;
                     default:

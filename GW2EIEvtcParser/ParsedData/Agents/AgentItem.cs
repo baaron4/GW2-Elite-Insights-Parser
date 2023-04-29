@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if a buff is present on the actor that corresponds to. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
         /// <param name="log"></param>
         /// <param name="buffId"></param>
@@ -280,6 +280,20 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.HasBuff(log, buffId, time);
+        }
+
+        /// <summary>
+        /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="by"></param>
+        /// <param name="buffId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.HasBuff(log, by, buffId, time);
         }
 
         public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
@@ -292,6 +306,18 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetBuffStatus(log, buffId, start, end);
+        }
+
+        public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetBuffStatus(log, by, buffId, time);
+        }
+
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetBuffStatus(log, by, buffId, start, end);
         }
 
         /// <summary>
