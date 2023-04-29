@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, BuffImages.ForceSignet),
             new Buff("Shift Signet", ShiftSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.ShiftSignet),
             new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, BuffImages.SuperconductingSignet),
-            new Buff("Overclock Signet", OverclockSignetSkill, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
+            new Buff("Overclock Signet", OverclockSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
             new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, BuffImages.MechanicalGenius),
             //
             //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
