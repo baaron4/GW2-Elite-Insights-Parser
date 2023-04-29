@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -2411,6 +2411,7 @@
         public const long AchievementEligibilityReflectionsInTheIce = 59482;
         public const long IceShatterWhisper2 = 59489;
         public const long ExplosiveTemper = 59528;
+        public const long MinionCommandEffect = 59536; // applied to minion, from player for necro/ele, from pet for ranger, not used for mechanist
         public const long ExplosiveEntranceSkill = 59562;
         public const long ExplosiveEntranceEffect = 59579;
         public const long InvokingTorment = 59591;
