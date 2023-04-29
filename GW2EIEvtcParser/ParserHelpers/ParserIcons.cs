@@ -325,6 +325,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashDoppelgangerRevenant = "https://i.imgur.com/3Ro8sfX.png";
         private const string TrashDoppelgangerThief = "https://i.imgur.com/ukMIsqk.png";
         private const string TrashDoppelgangerWarrior = "https://i.imgur.com/1YvlFYr.png";
+        private const string TrashScarletPhantom = "https://i.imgur.com/W17Ugtt.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
@@ -753,13 +754,13 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.SorrowDemon3, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SorrowDemon4, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SorrowDemon5, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomHPCM, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomBreakbar, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomNormalBeam, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomHPCM, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomBreakbar, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomNormalBeam, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM, TrashScarletPhantom },
             { ArcDPSEnums.TrashID.FerrousBomb, TrashFerrousBomb },
             { ArcDPSEnums.TrashID.KraitsHallucination, TrashKraitHallucination },
             { ArcDPSEnums.TrashID.LichHallucination, TrashLichHallucination },
