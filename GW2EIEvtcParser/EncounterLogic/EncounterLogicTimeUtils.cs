@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target not found");
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + 100);
             if (enterCombat != null)
             {
                 CombatItem exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
