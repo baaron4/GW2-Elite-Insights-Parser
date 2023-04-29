@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -1708,7 +1708,7 @@
         public const long AirMinorAttunement = 43229;
         public const long WaterMajorAttunement = 43236;
         public const long DesertEmpowerment = 43260;
-        public const long SharpenSpines = 43266;
+        public const long SharpenSpinesEffect = 43266;
         public const long BowlOfElonRed = 43333;
         public const long MantraOfLiberation = 43357;
         public const long BladeRenewal = 43343;
@@ -1779,6 +1779,7 @@
         public const long PerfectWeave = 45267;
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
+        public const long SharpenSpinesBeastmode = 45479;
         public const long LossAversion = 45534;
         public const long OrdersFromAbove = 45537;
         public const long TwiceAsVicious = 45600;
