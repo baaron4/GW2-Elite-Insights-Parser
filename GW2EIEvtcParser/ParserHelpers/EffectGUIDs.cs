@@ -42,6 +42,8 @@ namespace GW2EIEvtcParser
         public const string CatalystDeployEarthJadeSphere = "A674D3E7BC0C4342BC7A4EF0EE8FF8F0";
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
+        public const string NecromancerSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
+        public const string NecromancerYouAreAllWeaklings = "37242DF51D238A409E822E7A1936D7A6";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
