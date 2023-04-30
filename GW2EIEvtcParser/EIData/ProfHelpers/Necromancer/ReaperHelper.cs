@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(EnterReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect),
-            new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.NecromancerYouAreAllWeaklings),
+            new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.NecromancerYouAreAllWeaklings1),
             new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingEnable(combatData => !combatData.HasEffectData),
             new EffectCastFinder(Suffer, EffectGUIDs.NecromancerSuffer),
             new DamageCastFinder(Suffer, Suffer).UsingEnable(combatData => !combatData.HasEffectData),

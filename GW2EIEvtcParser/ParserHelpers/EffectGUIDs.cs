@@ -43,7 +43,9 @@ namespace GW2EIEvtcParser
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
-        public const string NecromancerYouAreAllWeaklings = "37242DF51D238A409E822E7A1936D7A6";
+        public const string NecromancerYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
+        public const string NecromancerYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
+        public const string NecromancerYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
