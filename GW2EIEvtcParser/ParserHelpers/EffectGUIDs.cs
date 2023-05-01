@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser
     {
         // Generic
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
+        public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         // Mesmer
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
         public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
@@ -26,7 +27,13 @@ namespace GW2EIEvtcParser
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
+        public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
+        public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E";
+        // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
+
+        // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
+        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
