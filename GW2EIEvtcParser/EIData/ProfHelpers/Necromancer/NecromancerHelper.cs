@@ -18,15 +18,12 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(LesserEnfeeble, LesserEnfeeble),
             new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers),
 
-            // distinguish unholy burst & spiteful spirit using cast before
-            new DamageCastFinder(UnholyBurst, UnholyBurst).UsingEnable(combatData => !combatData.HasEffectData),
-            new EffectCastFinder(UnholyBurst, EffectGUIDs.NecromancerUnholyBurst)
-                .UsingSrcBaseSpecChecker(Spec.Necromancer)
-                .UsingChecker((evt, combatData, skillData, agentData) => HasPreviousCast(combatData, UnholyFeast, evt.Src, evt.Time - 1200, 100)),
+            // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
+            new DamageCastFinder(UnholyBurst, UnholyBurst),
             new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingEnable(combatData => !combatData.HasEffectData),
             new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
                 .UsingSrcBaseSpecChecker(Spec.Necromancer)
-                .UsingChecker((evt, combatData, skillData, agentData) => !HasPreviousCast(combatData, UnholyFeast, evt.Src, evt.Time - 1200, 100)),
+                .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time)),
 
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),

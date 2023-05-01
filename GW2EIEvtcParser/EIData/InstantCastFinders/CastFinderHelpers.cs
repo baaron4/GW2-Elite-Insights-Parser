@@ -8,10 +8,16 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class CastFinderHelpers
     {
+        internal static bool HasRelatedHit(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return combatData.GetDamageData(skillID)
+                .Any(hit => hit.CreditedFrom == agent && Math.Abs(hit.Time - time) < epsilon);
+        }
+
         internal static bool HasPreviousCast(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
             return combatData.GetAnimatedCastData(skillID)
-                .Any(cast => cast.Caster == agent && cast.Time < time && Math.Abs(cast.Time - time) < epsilon);
+                .Any(cast => cast.Caster == agent && cast.Time <= time && time - cast.Time < epsilon);
         }
 
         internal static bool HasGainedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
