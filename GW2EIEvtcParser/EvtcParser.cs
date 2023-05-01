@@ -873,7 +873,7 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Adjusting minion names");
             foreach (AgentItem agent in _agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
-                if (agent.GetFinalMaster() != null)
+                if (agent.Master != null)
                 {
                     ProfHelper.AdjustMinionName(agent);
                 }
