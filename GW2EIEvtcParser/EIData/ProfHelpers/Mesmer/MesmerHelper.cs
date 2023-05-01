@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -79,11 +80,13 @@ namespace GW2EIEvtcParser.EIData
             }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
 
-            // difference between blink and phase retreat determined by spawned staff clone
+            // distinguish blink & phase retreat by spawned staff clone
             new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
-                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer && !spawnedClone(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingDstBaseSpecChecker(Spec.Mesmer)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
-                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer && spawnedClone(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingDstBaseSpecChecker(Spec.Mesmer)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
 
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
@@ -263,12 +266,6 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(long id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
-        }
-
-        internal static bool spawnedClone(AgentData agentData, MinionID clone, AgentItem master, long time)
-        {
-            return agentData._allAgentsList
-                .Any(x => x.Type != AgentItem.AgentType.Gadget && x.IsSpecies(clone) && x.GetFinalMaster() == master && Math.Abs(x.FirstAware - time) < ServerDelayConstant);
         }
     }
 }
