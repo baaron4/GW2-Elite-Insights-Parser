@@ -133,6 +133,10 @@
         public const long ObsidianFlesh = 5667;
         public const long FireAura = 5677;
         public const long MagneticAura = 5684;
+        public const long GlyphOfElementalPowerFireEffect = 5739;
+        public const long GlyphOfElementalPowerAirEffect = 5740;
+        public const long GlyphOfElementalPowerWaterEffect = 5741;
+        public const long GlyphOfElementalPowerEarthEffect = 5742;
         public const long ElectrifiedTornado = 5749;
         public const long RenewalOfFire = 5764;
         public const long MedKitSkill = 5802;
@@ -1281,6 +1285,7 @@
         public const long RockBarrier = 34633;
         public const long CanOfButternutSquashSoup = 34634;
         public const long BoxedChocolateRaspberryCookie = 34636;
+        public const long GlyphOfElementalPowerAirSkill = 34637;
         public const long CanOfSteakAndAsparagus = 34655;
         public const long CompactHardenedSharpeningStone = 34657;
         public const long LeadAttacks = 34659;
@@ -1295,10 +1300,12 @@
         public const long CanOfSpicyVeggieChili = 34689;
         public const long BoxedRaspberryPeachBar = 34690;
         public const long CannedRaspberryPassionFruitCompote = 34713;
+        public const long GlyphOfElementalPowerEarthSkill = 34714;
         public const long CanOfPotatoAndLeekSoup = 34717;
         public const long BoxedChocolateRaspberryCream = 34728;
         public const long CannedStuffedArtichokeWithTropicalDressing = 34731;
         public const long CannedSpicyStuffedMushroom = 34733;
+        public const long GlyphOfElementalPowerFireSkill = 34736;
         public const long CanOfPoultryAndLeekSoup = 34738;
         public const long CanOfSteakAndAsparagusDinner = 34739;
         public const long CanOfMangoSalsa = 34741;
@@ -1311,6 +1318,7 @@
         public const long CanOfArtichokeSoup = 34762;
         public const long AdrenalHealth = 34766;
         public const long CanOfPoultryTarragonPasta = 34769;
+        public const long GlyphOfElementalPowerWaterSkill = 34772;
         public const long CannedChocolateRaspberryCake = 34773;
         public const long CanOfAsparagusAndSageSalad = 34775;
         public const long BoxedSpicyCheeseburger = 34776;
@@ -2567,6 +2575,7 @@
         public const long CrescentWindSkill = 62887;
         public const long LegendaryAllianceStanceUWSkill = 62891;
         public const long Triggerguard = 62893;
+        public const long SoothingWaterEffect = 62894;
         public const long ElementalCelerity = 62915;
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceEffect = 62919;
