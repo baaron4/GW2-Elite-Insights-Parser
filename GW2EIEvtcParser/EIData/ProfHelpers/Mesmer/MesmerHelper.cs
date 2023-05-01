@@ -78,19 +78,13 @@ namespace GW2EIEvtcParser.EIData
                 
             }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, combatData, agentData, skillData) => 
-            {
-                if (evt.Dst.BaseSpec != Spec.Mesmer)
-                {
-                    return false;
-                }
-                // conflict with phase retreat (staff skill), ignore if staff is present
-                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID(MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
-                {
-                    return false;
-                }
-                return true;
-            }),
+
+            // difference between blink and phase retreat determined by spawned staff clone
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer && !spawnedClone(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+            new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer && spawnedClone(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
@@ -209,7 +203,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
         };
 
-
         private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
         {
             (int)MinionID.Clone1,
@@ -235,10 +228,11 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Clone21,
             (int)MinionID.Clone22,
             (int)MinionID.Clone23,
-            (int)MinionID.Clone24,
+            (int)MinionID.CloneAxe,
             (int)MinionID.Clone25,
             (int)MinionID.Clone26,
         };
+
         internal static bool IsClone(AgentItem agentItem)
         {
             if (agentItem.Type == AgentItem.AgentType.Gadget)
@@ -265,10 +259,16 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryRogue,
             (int)MinionID.IllusionaryDefender,
         };
+
         internal static bool IsKnownMinionID(long id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
         }
 
+        internal static bool spawnedClone(AgentData agentData, MinionID clone, AgentItem master, long time)
+        {
+            return agentData._allAgentsList
+                .Any(x => x.Type != AgentItem.AgentType.Gadget && x.IsSpecies(clone) && x.GetFinalMaster() == master && Math.Abs(x.FirstAware - time) < ServerDelayConstant);
+        }
     }
 }

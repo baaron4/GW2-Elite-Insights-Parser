@@ -882,7 +882,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.Clone21, MinionMesmerClone },
             { ArcDPSEnums.MinionID.Clone22, MinionMesmerClone },
             { ArcDPSEnums.MinionID.Clone23, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone24, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxe, MinionMesmerClone },
             { ArcDPSEnums.MinionID.Clone25, MinionMesmerClone },
             { ArcDPSEnums.MinionID.Clone26, MinionMesmerClone },
             { ArcDPSEnums.MinionID.IllusionarySwordsman, MinionIllusionarySwordsman },

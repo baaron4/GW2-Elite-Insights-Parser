@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -592,6 +592,7 @@ namespace GW2EIEvtcParser
         public const long IllusionaryRiposte = 10279;
         public const long Diversion = 10287;
         public const long Feedback = 10302;
+        public const long PhaseRetreat = 10310;
         public const long ChaosAura = 10332;
         public const long Blur = 10335;
         public const long IllusionOfLife = 10346;

@@ -1093,7 +1093,7 @@ namespace GW2EIEvtcParser
             Clone21 = 15240,
             Clone22 = 15249,
             Clone23 = 18922,
-            Clone24 = 18939,
+            CloneAxe = 18939,
             Clone25 = 19134,
             Clone26 = 19257,
             //
