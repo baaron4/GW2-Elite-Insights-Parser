@@ -14,7 +14,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class MesmerHelper
     {
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData, agentData, skillData) => {
@@ -212,33 +211,80 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
         {
-            (int)MinionID.Clone1,
-            (int)MinionID.Clone2,
-            (int)MinionID.Clone3,
-            (int)MinionID.Clone4,
-            (int)MinionID.Clone5,
+            (int)MinionID.CloneSpear,
+            (int)MinionID.CloneUnknown1,
+            (int)MinionID.CloneUnknown2,
+            (int)MinionID.CloneUnknown3,
+            (int)MinionID.CloneGreatsword,
             (int)MinionID.CloneStaff,
             (int)MinionID.CloneDownstate,
-            (int)MinionID.Clone8,
-            (int)MinionID.Clone9,
-            (int)MinionID.Clone10,
-            (int)MinionID.Clone11,
-            (int)MinionID.Clone12,
-            (int)MinionID.Clone13,
-            (int)MinionID.Clone14,
-            (int)MinionID.Clone15,
-            (int)MinionID.Clone16,
-            (int)MinionID.Clone17,
-            (int)MinionID.Clone18,
-            (int)MinionID.Clone19,
-            (int)MinionID.Clone20,
-            (int)MinionID.Clone21,
-            (int)MinionID.Clone22,
-            (int)MinionID.Clone23,
-            (int)MinionID.Clone24,
-            (int)MinionID.Clone25,
-            (int)MinionID.Clone26,
+            (int)MinionID.CloneSwordPistol,
+            (int)MinionID.CloneSwordTorch,
+            (int)MinionID.CloneScepterTorch,
+            (int)MinionID.CloneSwordFocus,
+            (int)MinionID.CloneSwordTorchPhantasm,
+            (int)MinionID.CloneSwordFocusPhantasm,
+            (int)MinionID.CloneSwordSword,
+            (int)MinionID.CloneSwordShield,
+            (int)MinionID.CloneScepterShield,
+            (int)MinionID.CloneSwordPistolPhantasm,
+            (int)MinionID.CloneScepterPistol,
+            (int)MinionID.CloneSwordShieldPhantasm,
+            (int)MinionID.CloneSwordSwordPhantasm,
+            (int)MinionID.CloneScepterFocus,
+            (int)MinionID.CloneScepterSword,
+            (int)MinionID.CloneAxeTorch,
+            (int)MinionID.CloneAxePistol,
+            (int)MinionID.CloneAxeSword,
+            (int)MinionID.CloneAxeFocus,
         };
+
+        internal static void AdjustMinionName(AgentItem minion)
+        {
+            switch (minion.ID)
+            {
+                case (int)MinionID.CloneSpear:
+                    minion.OverrideName("Spear " + minion.Name);
+                    break;
+                case (int)MinionID.CloneGreatsword:
+                    minion.OverrideName("Greatsword " + minion.Name);
+                    break;
+                case (int)MinionID.CloneStaff:
+                    minion.OverrideName("Staff " + minion.Name);
+                    break;
+                case (int)MinionID.CloneDownstate:
+                    minion.OverrideName("Downstate " + minion.Name);
+                    break;
+                case (int)MinionID.CloneSwordPistol:
+                case (int)MinionID.CloneSwordTorch:
+                case (int)MinionID.CloneSwordFocus:
+                case (int)MinionID.CloneSwordTorchPhantasm:
+                case (int)MinionID.CloneSwordFocusPhantasm:
+                case (int)MinionID.CloneSwordSword:
+                case (int)MinionID.CloneSwordShield:
+                case (int)MinionID.CloneSwordPistolPhantasm:
+                case (int)MinionID.CloneSwordShieldPhantasm:
+                case (int)MinionID.CloneSwordSwordPhantasm:
+                    minion.OverrideName("Sword " + minion.Name);
+                    break;
+                case (int)MinionID.CloneScepterTorch:
+                case (int)MinionID.CloneScepterShield:
+                case (int)MinionID.CloneScepterPistol:
+                case (int)MinionID.CloneScepterFocus:
+                case (int)MinionID.CloneScepterSword:
+                    minion.OverrideName("Scepter " + minion.Name);
+                    break;
+                case (int)MinionID.CloneAxeTorch:
+                case (int)MinionID.CloneAxePistol:
+                case (int)MinionID.CloneAxeSword:
+                case (int)MinionID.CloneAxeFocus:
+                    minion.OverrideName("Axe " + minion.Name);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         internal static bool IsClone(AgentItem agentItem)
         {
             if (agentItem.Type == AgentItem.AgentType.Gadget)
@@ -265,6 +311,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryRogue,
             (int)MinionID.IllusionaryDefender,
         };
+
         internal static bool IsKnownMinionID(long id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
