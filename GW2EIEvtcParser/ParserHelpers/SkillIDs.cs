@@ -623,6 +623,7 @@
         public const long LifeLeechUW = 10640;
         public const long GatheringPlague = 10643;
         public const long SpectralWalkSkill = 10685;
+        public const long UnholyFeast = 10701;
         public const long PowerSuit = 12326;
         public const long ReaperOfGrenth = 12366;
         public const long AvatarOfMelandru = 12368;
@@ -1551,6 +1552,7 @@
         public const long MagnanimousMaintenanceOil = 38605;
         public const long MagnanimousTuningCrystal = 38678;
         public const long Untargetable = 38793;
+        public const long UnholyBurst = 38767;
         public const long DeterminationViirastra = 38841;
         public const long OverheadSmash = 38844;
         public const long MistChargedChop = 38846;
