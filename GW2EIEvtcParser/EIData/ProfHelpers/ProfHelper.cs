@@ -313,5 +313,16 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
+        public static void AdjustMinionName(AgentItem minion)
+        {
+            switch (minion.GetFinalMaster().BaseSpec)
+            {
+                case Spec.Mesmer:
+                    MesmerHelper.AdjustMinionName(minion);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
