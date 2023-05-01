@@ -252,3 +252,160 @@ var rowSliderComponent = function (perpage) {
       },
     };
   };
+
+// Requires graphComponent and damageGraphComponent
+var targetTabGraphComponent = {   
+    data: function () {
+        return {
+            targetOffset: 0
+        };
+    },
+    watch: {
+        light: {
+            handler: function () {
+                var textColor = this.light ? '#495057' : '#cccccc';
+                this.layout.yaxis.gridcolor = textColor;
+                this.layout.yaxis.color = textColor;
+                this.layout.yaxis2.gridcolor = textColor;
+                this.layout.yaxis2.color = textColor;
+                this.layout.yaxis3.gridcolor = textColor;
+                this.layout.yaxis3.color = textColor;
+                this.layout.xaxis.gridcolor = textColor;
+                this.layout.xaxis.color = textColor;
+                this.layout.font.color = textColor;
+                for (var i = 0; i < this.layout.shapes.length; i++) {
+                    this.layout.shapes[i].line.color = textColor;
+                }
+                this.layout.datarevision = new Date().getTime();
+            }
+        }
+    },
+    created: function () {
+        var images = [];
+        this.data = [];
+        this.targetOffset += computeRotationData(this.rotationData, images, this.data, this.phase, this.target, 1);
+        var oldOffset = this.targetOffset;
+        this.targetOffset += computeBuffData(this.boonGraph, this.data);
+        var hasBuffs = oldOffset !== this.targetOffset;
+        this.targetOffset += addTargetLayout(this.data, this.target, this.breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
+        this.targetOffset += addTargetLayout(this.data, this.target, this.barrierStates, "barrier", "barrier", false);
+        this.targetOffset += addTargetLayout(this.data, this.target, this.healthStates, "hp", "health", true);
+        this.data.push({
+            x: this.phase.times,
+            y: [],
+            mode: 'lines',
+            line: {
+                shape: 'spline'
+            },
+            yaxis: 'y3',
+            hoverinfo: 'name+y+x',
+            name: 'Total'
+        });
+        this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
+        computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+        this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+    },
+    activated: function () {
+        var div = document.getElementById(this.graphid);
+        var layout = this.layout;
+        var images = layout.images;
+        var _this = this;
+        div.on('plotly_relayout', function (evt) {
+            var x0 = layout.xaxis.range[0];
+            var x1 = layout.xaxis.range[1];
+            //console.log("re-layout " + x0 + " " + x1);
+            if (_this.updateVisibily(images, x0, x1)) {
+                layout.datarevision = new Date().getTime();
+                //console.log("re-drawing");
+            }
+        });
+    },
+    computed: {
+        healthStates: function () {
+            return this.graph.targets[this.phaseTargetIndex].healthStates;
+        },
+        breakbarStates: function () {
+            return this.graph.targets[this.phaseTargetIndex].breakbarPercentStates;
+        },
+        barrierStates: function () {
+            return this.graph.targets[this.phaseTargetIndex].barrierStates;
+        },
+        target: function () {
+            return logData.targets[this.targetindex];
+        },
+        phaseTargetIndex: function () {
+            return this.phase.targets.indexOf(this.targetindex);
+        },
+        damageGraphName: function () {
+            switch (this.graphdata.damagemode) {
+                case DamageType.All:
+                    return "total";
+                case DamageType.Power:
+                    return "totalPower";
+                case DamageType.Condition:
+                    return "totalCondition";
+                default:
+                    throw new Error("unknown enum in damage graph name");
+            }
+        },
+        graphname: function () {
+            var name = getDamageGraphName(this.graphdata.damagemode, this.graphdata.graphmode);
+            switch (this.graphdata.dpsmode) {
+                case 0:
+                    name = "Full " + name;
+                    break;
+                case -1:
+                    name = "Phase " + name;
+                    break;
+                default:
+                    name = this.graphdata.dpsmode + "s " + name;
+                    break;
+            }
+            return name;
+        },
+        computeData: function () {
+            this.layout.datarevision = new Date().getTime();
+            this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
+            var res = this.data;
+            var data = this.computeDPSRelatedData();
+            for (var i = 0; i < data.length; i++) {
+                this.data[this.targetOffset - i].y = data[i];
+            }
+            return res;
+        },
+        rotationData: function() {
+            return this.target.details.rotation[this.phaseindex];
+        }
+    },
+    methods: {
+        computeDPSData: function () {
+            var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
+            if (this.dpsCache.has(cacheID)) {
+                return this.dpsCache.get(cacheID);
+            }
+            //var before = performance.now();
+            var res;
+            var damageData = this.graph.targets[this.phaseTargetIndex][this.damageGraphName];
+            if (this.graphdata.dpsmode >= 0) {
+                res = computeTargetDPS(this.target, damageData, this.graphdata.dpsmode, null, cacheID, this.phase.times, this.graphdata.graphmode);
+            } else {
+                res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID, this.phase.times, this.graphdata.graphmode);
+            }
+            this.dpsCache.set(cacheID, res);
+            return res;
+        },
+        computeDPSRelatedData: function () {
+            var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
+            if (this.dataCache.has(cacheID)) {
+                return this.dataCache.get(cacheID);
+            }
+            var dpsData = this.computeDPSData();
+            var res = [dpsData.dps];
+            addPointsToGraph(res, this.healthStates, dpsData.maxDPS);               
+            addPointsToGraph(res, this.barrierStates, dpsData.maxDPS);
+            addPointsToGraph(res, this.breakbarStates, dpsData.maxDPS);
+            this.dataCache.set(cacheID, res);
+            return res;
+        },
+    }
+}

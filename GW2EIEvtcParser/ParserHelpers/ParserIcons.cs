@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
@@ -307,6 +306,25 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashReanimatedAntipathy = "https://i.imgur.com/pESxeae.png";
         private const string TrashSanctuaryPrism = "https://i.imgur.com/3ten7WW.png";
         private const string TrashFerrousBomb = "https://i.imgur.com/GxJv8KH.png";
+        private const string TrashMushroomCharger = "https://i.imgur.com/zCG5ZDS.png";
+        private const string TrashMushroomKing = "https://i.imgur.com/SrIb6vQ.png";
+        private const string TrashMushroomSpikeThrower = "https://i.imgur.com/A174ab4.png";
+        private const string TrashWhiteMantleCleric = "https://i.imgur.com/P2JUQBo.png";
+        private const string TrashWhiteMantleMage = "https://i.imgur.com/Fu4iuoy.png";
+        private const string TrashWhiteMantleKnight = "https://i.imgur.com/7C8Mfh0.png";
+        private const string TrashWhiteMantleSeeker = "https://i.imgur.com/4HIdnBE.png";
+        private const string TrashIcyProtector = "https://i.imgur.com/yYXS0Ju.png";
+        private const string TrashIceSpiker = "https://i.imgur.com/OPi11bl.png";
+        private const string TrashDoppelgangerElementalist = "https://i.imgur.com/8VBsXN6.png";
+        private const string TrashDoppelgangerEngineer = "https://i.imgur.com/K6LTwWZ.png";
+        private const string TrashDoppelgangerGuardian = "https://i.imgur.com/QBDkDnG.png";
+        private const string TrashDoppelgangerMesmer = "https://i.imgur.com/4coLJWo.png";
+        private const string TrashDoppelgangerNecromancer = "https://i.imgur.com/6IvwEXZ.png";
+        private const string TrashDoppelgangerRanger = "https://i.imgur.com/cdRegkX.png";
+        private const string TrashDoppelgangerRevenant = "https://i.imgur.com/3Ro8sfX.png";
+        private const string TrashDoppelgangerThief = "https://i.imgur.com/ukMIsqk.png";
+        private const string TrashDoppelgangerWarrior = "https://i.imgur.com/1YvlFYr.png";
+        private const string TrashScarletPhantom = "https://i.imgur.com/W17Ugtt.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
@@ -407,7 +425,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionFleshWurm = "https://i.imgur.com/Bc1VfLm.png";
         private const string MinionUnstableHorror = "https://i.imgur.com/zHPC8BX.png";
         private const string MinionShamblingHorror = "https://i.imgur.com/eeE34so.png";
-        private const string MinionThiefDaredevilDeadeye = "https://i.imgur.com/6YkM5zY.png";
+        private const string MinionThievesGuild = "https://i.imgur.com/6YkM5zY.png";
         private const string MinionBowOfTruth = "https://i.imgur.com/i9uCT6p.png";
         private const string MinionHammerOfWisdom = "https://i.imgur.com/XXrlAma.png";
         private const string MinionShieldOfTheAvenger = "https://i.imgur.com/86a9LQ3.png";
@@ -420,6 +438,13 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionEarthElemental = "https://i.imgur.com/OrueMCk.png";
         private const string MinionFireElemental = "https://i.imgur.com/7Qhev66.png";
         private const string MinionIceElemental = "https://i.imgur.com/BTf2r0D.png";
+        private const string MinionSneakGyro = "https://i.imgur.com/6qHNVAM.png";
+        private const string MinionShredderGyro = "https://i.imgur.com/XQVVP4A.png";
+        private const string MinionPurgeGyro = "https://i.imgur.com/m2WLagF.png";
+        private const string MinionBulwarkGyro = "https://i.imgur.com/bSb2nPa.png";
+        private const string MinionBlastGyro = "https://i.imgur.com/F7ZMxGg.png";
+        private const string MinionMedicGyro = "https://i.imgur.com/zIURFje.png";
+        private const string MinionFunctionGyro = "https://i.imgur.com/STMhpzk.png";
 
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
@@ -702,6 +727,24 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.SurgingSoul, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.Enervator, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.WhisperEcho, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.DoppelgangerElementalist, TrashDoppelgangerElementalist },
+            { ArcDPSEnums.TrashID.DoppelgangerElementalist2, TrashDoppelgangerElementalist },
+            { ArcDPSEnums.TrashID.DoppelgangerEngineer, TrashDoppelgangerEngineer },
+            { ArcDPSEnums.TrashID.DoppelgangerEngineer2, TrashDoppelgangerEngineer },
+            { ArcDPSEnums.TrashID.DoppelgangerGuardian, TrashDoppelgangerGuardian },
+            { ArcDPSEnums.TrashID.DoppelgangerGuardian2, TrashDoppelgangerGuardian },
+            { ArcDPSEnums.TrashID.DoppelgangerMesmer, TrashDoppelgangerMesmer },
+            { ArcDPSEnums.TrashID.DoppelgangerMesmer2, TrashDoppelgangerMesmer },
+            { ArcDPSEnums.TrashID.DoppelgangerNecromancer, TrashDoppelgangerNecromancer },
+            { ArcDPSEnums.TrashID.DoppelgangerNecromancer2, TrashDoppelgangerNecromancer },
+            { ArcDPSEnums.TrashID.DoppelgangerRanger, TrashDoppelgangerRanger },
+            { ArcDPSEnums.TrashID.DoppelgangerRanger2, TrashDoppelgangerRanger },
+            { ArcDPSEnums.TrashID.DoppelgangerRevenant, TrashDoppelgangerRevenant },
+            { ArcDPSEnums.TrashID.DoppelgangerRevenant2, TrashDoppelgangerRevenant },
+            { ArcDPSEnums.TrashID.DoppelgangerThief, TrashDoppelgangerThief },
+            { ArcDPSEnums.TrashID.DoppelgangerThief2, TrashDoppelgangerThief },
+            { ArcDPSEnums.TrashID.DoppelgangerWarrior, TrashDoppelgangerWarrior },
+            { ArcDPSEnums.TrashID.DoppelgangerWarrior2, TrashDoppelgangerWarrior },
             { ArcDPSEnums.TrashID.CharrTank, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.PropagandaBallon, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.FearDemon, TrashGenericRedEnemySkull },
@@ -710,13 +753,13 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.SorrowDemon3, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SorrowDemon4, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.SorrowDemon5, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomHPCM, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomBreakbar, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomNormalBeam, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomHPCM, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomBreakbar, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomNormalBeam, TrashScarletPhantom },
+            { ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM, TrashScarletPhantom },
             { ArcDPSEnums.TrashID.FerrousBomb, TrashFerrousBomb },
             { ArcDPSEnums.TrashID.KraitsHallucination, TrashKraitHallucination },
             { ArcDPSEnums.TrashID.LichHallucination, TrashLichHallucination },
@@ -770,10 +813,28 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.EliteBrazenGladiator, TrashEliteBrazenGladiator },
             { ArcDPSEnums.TrashID.Fanatic, TrashFanatic },
             { ArcDPSEnums.TrashID.FreeziesFrozenHeart, TrashFreeziesFrozenHeart },
+            { ArcDPSEnums.TrashID.IceSpiker, TrashIceSpiker },
+            { ArcDPSEnums.TrashID.IceStormer, TrashIceElemental },
+            { ArcDPSEnums.TrashID.IcyProtector, TrashIcyProtector },
             { ArcDPSEnums.TrashID.RiverOfSouls, TrashRiverOfSouls },
             { ArcDPSEnums.TrashID.WargBloodhound, TrashWargBloodhound },
             { ArcDPSEnums.TrashID.CrimsonMcLeod, TrashCrimsonMcLeod },
             { ArcDPSEnums.TrashID.RadiantMcLeod, TrashRadiantMcLeod },
+            { ArcDPSEnums.TrashID.MushroomCharger, TrashMushroomCharger },
+            { ArcDPSEnums.TrashID.MushroomKing, TrashMushroomKing },
+            { ArcDPSEnums.TrashID.MushroomSpikeThrower, TrashMushroomSpikeThrower },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleCleric1, TrashWhiteMantleCleric },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleCleric2, TrashWhiteMantleCleric },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleKnight1, TrashWhiteMantleKnight },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleKnight2, TrashWhiteMantleKnight },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleMage1, TrashWhiteMantleMage },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleMage2, TrashWhiteMantleMage },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleMage1Escort, TrashWhiteMantleMage },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleMage2Escort, TrashWhiteMantleMage },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleSeeker1, TrashWhiteMantleSeeker },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleSeeker2, TrashWhiteMantleSeeker },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleCultist1, GenericEnemyIcon },
+            { ArcDPSEnums.TrashID.WhiteMantleBattleCultist2, GenericEnemyIcon },
             { ArcDPSEnums.TrashID.DhuumDesmina, TrashDhuumDesmina },
             { ArcDPSEnums.TrashID.Glenna, TrashGlenna },
             { ArcDPSEnums.TrashID.VoidStormseer, TrashVoidStormseer },
@@ -859,32 +920,32 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.RuneRockDog, MinionRuneRockDog },
             { ArcDPSEnums.MinionID.RuneMarkIGolem, MinionRuneMarkIGolem },
             { ArcDPSEnums.MinionID.RuneTropicalBird, MinionTropicalBird },
-            { ArcDPSEnums.MinionID.Clone1, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone2, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone3, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone4, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone5, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSpear, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneUnknown1, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneUnknown2, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneUnknown3, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneGreatsword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneStaff, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneDownstate, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone8, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone9, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone10, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone11, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone12, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone13, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone14, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone15, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone16, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone17, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone18, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone19, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone20, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone21, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone22, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone23, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneAxe, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone25, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.Clone26, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordPistol, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordTorch, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterTorch, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordTorchPhantasm, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordFocusPhantasm, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordPistolPhantasm, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterPistol, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordShieldPhantasm, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSwordSwordPhantasm, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxeTorch, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxePistol, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxeSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxeFocus, MinionMesmerClone },
             { ArcDPSEnums.MinionID.IllusionarySwordsman, MinionIllusionarySwordsman },
             { ArcDPSEnums.MinionID.IllusionaryBerserker, MinionIllusionaryBerserker },
             { ArcDPSEnums.MinionID.IllusionaryDisenchanter, MinionIllusionaryDisenchanter },
@@ -974,48 +1035,58 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.FleshWurm, MinionFleshWurm },
             { ArcDPSEnums.MinionID.UnstableHorror, MinionUnstableHorror },
             { ArcDPSEnums.MinionID.ShamblingHorror, MinionShamblingHorror },
-            { ArcDPSEnums.MinionID.Thief1, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief2, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief3, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief4, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief5, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief6, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief7, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief8, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief9, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief10, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief11, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief12, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief13, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief14, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief15, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief16, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief17, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief18, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief19, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief20, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief21, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Thief22, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil1, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil2, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil3, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil4, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil5, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil6, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil7, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil8, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil9, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Daredevil10, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye1, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye2, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye3, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye4, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye5, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye6, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye7, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye8, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye9, MinionThiefDaredevilDeadeye },
-            { ArcDPSEnums.MinionID.Deadeye10, MinionThiefDaredevilDeadeye },
+            { ArcDPSEnums.MinionID.Thief1, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief2, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief3, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief4, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief5, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief6, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief7, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief8, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief9, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief10, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief11, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief12, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief13, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief14, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief15, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief16, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief17, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief18, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief19, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief20, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief21, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Thief22, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil1, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil2, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil3, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil4, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil5, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil6, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil7, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil8, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil9, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Daredevil10, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye1, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye2, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye3, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye4, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye5, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye6, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye7, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye8, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye9, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Deadeye10, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter1, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter2, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter3, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter4, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter5, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter6, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter7, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter8, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter9, MinionThievesGuild },
+            { ArcDPSEnums.MinionID.Specter10, MinionThievesGuild },
             { ArcDPSEnums.MinionID.BowOfTruth, MinionBowOfTruth },
             { ArcDPSEnums.MinionID.HammerOfWisdom, MinionHammerOfWisdom },
             { ArcDPSEnums.MinionID.ShieldOfTheAvenger, MinionShieldOfTheAvenger },
@@ -1028,6 +1099,13 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.EarthElemental, MinionEarthElemental },
             { ArcDPSEnums.MinionID.FireElemental, MinionFireElemental },
             { ArcDPSEnums.MinionID.IceElemental, MinionIceElemental },
+            { ArcDPSEnums.MinionID.BlastGyro, MinionBlastGyro },
+            { ArcDPSEnums.MinionID.BulwarkGyro, MinionBulwarkGyro },
+            { ArcDPSEnums.MinionID.FunctionGyro, MinionFunctionGyro },
+            { ArcDPSEnums.MinionID.MedicGyro, MinionMedicGyro },
+            { ArcDPSEnums.MinionID.PurgeGyro, MinionPurgeGyro },
+            { ArcDPSEnums.MinionID.ShredderGyro, MinionShredderGyro },
+            { ArcDPSEnums.MinionID.SneakGyro, MinionSneakGyro },
         };
     }
 }

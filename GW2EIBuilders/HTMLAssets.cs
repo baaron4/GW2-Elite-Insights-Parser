@@ -119,6 +119,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplPlayersRotationTab,
                 Properties.Resources.tmplRotationLegend,
                 Properties.Resources.tmplTargetTabGraph,
+                Properties.Resources.tmplTargetTabPerPlayerGraph,
                 Properties.Resources.tmplTargetData,
                 Properties.Resources.tmplMainView,
             };

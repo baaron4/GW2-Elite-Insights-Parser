@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
@@ -44,7 +45,18 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<long> Minions = new HashSet<long>()
         {
+            (int)MinionID.Specter1,
+            (int)MinionID.Specter2,
+            (int)MinionID.Specter3,
+            (int)MinionID.Specter4,
+            (int)MinionID.Specter5,
+            (int)MinionID.Specter6,
+            (int)MinionID.Specter7,
+            (int)MinionID.Specter8,
+            (int)MinionID.Specter9,
+            (int)MinionID.Specter10,
         };
+
         internal static bool IsKnownMinionID(long id)
         {
             return Minions.Contains(id);

@@ -596,9 +596,12 @@ namespace GW2EIEvtcParser
                     break;
                 //
                 case Spec.Engineer:
-                case Spec.Scrapper:
                 case Spec.Holosmith:
                     res |= EngineerHelper.IsKnownMinionID(id);
+                    break;
+                case Spec.Scrapper:
+                    res |= EngineerHelper.IsKnownMinionID(id);
+                    res |= ScrapperHelper.IsKnownMinionID(id);
                     break;
                 case Spec.Mechanist:
                     res |= EngineerHelper.IsKnownMinionID(id);

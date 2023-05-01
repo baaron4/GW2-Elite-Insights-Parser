@@ -628,11 +628,11 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center&quot;&gt;
         ///            &lt;div v-if=&quot;rowPageCount &gt; 0&quot; style=&quot;width:25px;&quot;&gt;
-        ///                &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;rowPageCount&quot; :width=&quot;&apos;230px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;&apos;translate(-100px, 210) rotate(90deg)&apos;&quot; :pagestructure=&quot;rowStructure&quot;&gt;&lt;/table-scroll-component&gt;
+        ///                &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;rowPageCount&quot; :width=&quot;&apos;230px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;colPageCount &gt; 0 ? &apos;translate(-100px, 210px) rotate(90deg)&apos; : &apos;translate(-100px, 185px) rotate(90deg)&apos; &quot; :pagestructure=&quot;rowStructure&quot;&gt;&lt;/table-scroll-component&gt;
         ///            &lt;/div&gt;
         ///            &lt;div&gt;
         ///                &lt;div v-if=&quot;colPageCount &gt; 0&quot;&gt;
-        ///                    &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;colPage [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageTable {
             get {
@@ -1925,6 +1925,22 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplTargetTabGraph {
             get {
                 return ResourceManager.GetString("tmplTargetTabGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
+        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;true&quot; :column=&quot;false&quot;&gt;
+        ///        &lt;/dps-graph-mode-selector-component&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
+        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;Buffs applied by {{player.name}}&lt;/h3&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-compon [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetTabPerPlayerGraph {
+            get {
+                return ResourceManager.GetString("tmplTargetTabPerPlayerGraph", resourceCulture);
             }
         }
     }

@@ -193,7 +193,14 @@ namespace GW2EIEvtcParser.ParsedData
                 // This will most likely require a chinese client version
                 case ArcDPSEnums.TargetID.GadgetTheDragonVoid1:
                 case ArcDPSEnums.TargetID.GadgetTheDragonVoid2:
-                    Logic = new HarvestTemple(id);
+                    if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
+                    {
+                        Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
+                    }
+                    else
+                    {
+                        Logic = new UnknownFightLogic(id);
+                    }
                     break;
                 case ArcDPSEnums.TargetID.PrototypeVermilion:
                 case ArcDPSEnums.TargetID.PrototypeArsenite:

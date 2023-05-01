@@ -514,6 +514,10 @@ namespace GW2EIParser
             AddTraceMessage("UI: Populating from directory");
             using (var fbd = new FolderBrowserDialog())
             {
+                if (Directory.Exists(Properties.Settings.Default.AutoAddPath))
+                {
+                    fbd.SelectedPath = Properties.Settings.Default.AutoAddPath;
+                }
                 fbd.ShowNewFolderButton = false;
                 DialogResult result = fbd.ShowDialog();
 
