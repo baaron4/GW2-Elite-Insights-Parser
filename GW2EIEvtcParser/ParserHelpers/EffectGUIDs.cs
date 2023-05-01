@@ -34,6 +34,13 @@ namespace GW2EIEvtcParser
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
         // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
+        // Necromancer
+        public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
+        public const string NecromancerSpitefulSpirit = "C4E8DD3234E0C647993857940ED79AC1";
+        public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
+        public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
+        public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
+        public const string ReaperYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
@@ -47,12 +54,6 @@ namespace GW2EIEvtcParser
         public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
         public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";
         public const string CatalystDeployEarthJadeSphere = "A674D3E7BC0C4342BC7A4EF0EE8FF8F0";
-        // Necromancer
-        public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
-        public const string NecromancerSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
-        public const string NecromancerYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
-        public const string NecromancerYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
-        public const string NecromancerYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";

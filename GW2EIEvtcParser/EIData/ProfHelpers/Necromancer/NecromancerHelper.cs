@@ -12,14 +12,15 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
-            new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit), // Spiteful Spirit
-            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble), // Lesser Enfeeble
-            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers), // Lesser Spinal Shivers
-            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Armor
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance), // Spectral Walk
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Walk
+            new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingEnable(combatData => !combatData.HasEffectData),
+            new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerSpitefulSpirit).UsingSrcBaseSpecChecker(Spec.Necromancer),
+            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble),
+            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers),
+            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
             
             // Minions
             new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
