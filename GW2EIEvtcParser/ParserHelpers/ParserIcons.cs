@@ -328,9 +328,12 @@ namespace GW2EIEvtcParser.ParserHelpers
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
+        private const string MinionCallWurm = "https://i.imgur.com/vxj3C37.png";
         private const string MinionDruidSpirit = "https://i.imgur.com/Gi7okAw.png";
         private const string MinionSylvanHound = "https://i.imgur.com/rtcKv9N.png";
         private const string MinionWarband = "https://i.imgur.com/Y6n0bsV.png";
+        private const string MinionDSeries = "https://i.imgur.com/qYnWE47.png";
+        private const string Minion7Series = "https://i.imgur.com/CGHOzZI.png";
         private const string MinionMistfireWolf = "https://i.imgur.com/9hNzLjI.png";
         private const string MinionRuneJaggedHorror = "https://i.imgur.com/opMTn10.png";
         private const string MinionRuneRockDog = "https://i.imgur.com/EdNp7kY.png";
@@ -914,6 +917,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal static IReadOnlyDictionary<ArcDPSEnums.MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
         {
             { ArcDPSEnums.MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
+            { ArcDPSEnums.MinionID.SnowWurm, MinionCallWurm },
             { ArcDPSEnums.MinionID.DruidSpirit, MinionDruidSpirit },
             { ArcDPSEnums.MinionID.SylvanHound, MinionSylvanHound },
             { ArcDPSEnums.MinionID.IronLegionSoldier, MinionWarband },
@@ -922,6 +926,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.BloodLegionMarksman, MinionWarband },
             { ArcDPSEnums.MinionID.AshLegionSoldier, MinionWarband },
             { ArcDPSEnums.MinionID.AshLegionMarksman, MinionWarband },
+            { ArcDPSEnums.MinionID.STAD007, MinionDSeries },
+            { ArcDPSEnums.MinionID.STA7012, Minion7Series },
             { ArcDPSEnums.MinionID.MistfireWolf, MinionMistfireWolf },
             { ArcDPSEnums.MinionID.RuneJaggedHorror, MinionRuneJaggedHorror },
             { ArcDPSEnums.MinionID.RuneRockDog, MinionRuneRockDog },

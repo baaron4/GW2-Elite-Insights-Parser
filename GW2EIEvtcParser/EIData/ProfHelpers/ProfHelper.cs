@@ -302,6 +302,7 @@ namespace GW2EIEvtcParser.EIData
         {
             // Racial Summons
             (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
+            (int)ArcDPSEnums.MinionID.SnowWurm,
             (int)ArcDPSEnums.MinionID.DruidSpirit,
             (int)ArcDPSEnums.MinionID.SylvanHound,
             (int)ArcDPSEnums.MinionID.IronLegionSoldier,
@@ -310,6 +311,8 @@ namespace GW2EIEvtcParser.EIData
             (int)ArcDPSEnums.MinionID.BloodLegionMarksman,
             (int)ArcDPSEnums.MinionID.AshLegionSoldier,
             (int)ArcDPSEnums.MinionID.AshLegionMarksman,
+            (int)ArcDPSEnums.MinionID.STAD007,
+            (int)ArcDPSEnums.MinionID.STA7012,
             // GW2 Digital Deluxe
             (int)ArcDPSEnums.MinionID.MistfireWolf,
             // Rune Summons

@@ -1044,6 +1044,7 @@ namespace GW2EIEvtcParser
         {
             // Racial Summons
             HoundOfBalthazar = 6394,
+            SnowWurm = 6445,
             DruidSpirit = 6475,
             SylvanHound = 6476,
             IronLegionSoldier = 6509,
@@ -1052,6 +1053,8 @@ namespace GW2EIEvtcParser
             BloodLegionMarksman = 10107,
             AshLegionSoldier = 10108,
             AshLegionMarksman = 10109,
+            STAD007 = 10145,
+            STA7012 = 10146,
             // GW2 Digital Deluxe
             MistfireWolf = 9801,
             // Rune Summons
