@@ -117,6 +117,11 @@ namespace GW2EIEvtcParser.EIData
             // Consumable Portal
             new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingXeraWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses (Xera/Watchwork)", PortalUsesXeraWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
+            // Consumable Summons
+            new Buff("Ogre Pet Whistle", OgrePetWhistleEffect, Source.Common, BuffClassification.Other, BuffImages.OgrePetWhistle),
+            new Buff("Fire Elemental Powder", FireElementalPowderEffect, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
+            new Buff("Sunspear Paragon Support", SunspearParagonSupportEffect, Source.Common, BuffClassification.Other, BuffImages.SunspearParagonSupport),
+            new Buff("Raven Spirit Shadow", RavenSpiritShadowEffect, Source.Common, BuffClassification.Other, BuffImages.RavenSpiritShadow),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>

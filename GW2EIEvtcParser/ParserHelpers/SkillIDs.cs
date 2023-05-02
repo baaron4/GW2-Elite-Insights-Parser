@@ -830,8 +830,10 @@
         public const long MistlockInstabilityBloodlust = 22300;
         public const long MistlockInstabilityStamina = 22301;
         public const long ShatteredAegis = 22499;
+        public const long OgrePetWhistleEffect = 22571;
         public const long ArcaneWave = 22572;
         public const long RocketTurretCast2 = 22574;
+        public const long FireElementalPowderEffect = 22752;
         public const long ProtectedCaravan = 23088;
         public const long KodasArmor = 23158;
         public const long MarkedSentryTurretRed = 23167;
@@ -1877,6 +1879,7 @@
         public const long PiercingShadow = 47518;
         public const long NumbingBreach = 47531;
         public const long ConeSlash = 47561;
+        public const long SunspearParagonSupportEffect = 47564;
         public const long ShieldOfIce = 47595;
         public const long EnvironmentallyFriendly = 47625;
         public const long LastGraspJudgment = 47635;
@@ -2327,6 +2330,7 @@
         public const long RavenLeap1 = 58323;
         public const long Groundshaker = 58325;
         public const long PowerOfValorTier3 = 58332;
+        public const long RavenSpiritShadowEffect = 58349;
         public const long IceArmSwingFraenir = 58356;
         public const long ArrosOfTheFallen = 58371;
         public const long Frozen = 58376;

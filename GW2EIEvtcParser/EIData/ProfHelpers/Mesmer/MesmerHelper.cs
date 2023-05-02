@@ -211,26 +211,29 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
         {
-            (int)MinionID.CloneSpear,
-            (int)MinionID.CloneUnknown1,
-            (int)MinionID.CloneUnknown2,
-            (int)MinionID.CloneUnknown3,
+            (int)MinionID.CloneSword,
+            (int)MinionID.CloneScepter,
+            (int)MinionID.CloneAxe,
             (int)MinionID.CloneGreatsword,
             (int)MinionID.CloneStaff,
+            (int)MinionID.CloneTrident,
+            (int)MinionID.CloneSpear,
             (int)MinionID.CloneDownstate,
-            (int)MinionID.CloneSwordPistol,
+            (int)MinionID.CloneUnknown,
             (int)MinionID.CloneSwordTorch,
-            (int)MinionID.CloneScepterTorch,
             (int)MinionID.CloneSwordFocus,
-            (int)MinionID.CloneSwordTorchPhantasm,
-            (int)MinionID.CloneSwordFocusPhantasm,
             (int)MinionID.CloneSwordSword,
             (int)MinionID.CloneSwordShield,
+            (int)MinionID.CloneSwordPistol,
+            (int)MinionID.CloneIllusionaryLeap,
+            (int)MinionID.CloneIllusionaryLeapFocus,
+            (int)MinionID.CloneIllusionaryLeapShield,
+            (int)MinionID.CloneIllusionaryLeapSword,
+            (int)MinionID.CloneIllusionaryLeapPistol,
+            (int)MinionID.CloneIllusionaryLeapTorch,
+            (int)MinionID.CloneScepterTorch,
             (int)MinionID.CloneScepterShield,
-            (int)MinionID.CloneSwordPistolPhantasm,
             (int)MinionID.CloneScepterPistol,
-            (int)MinionID.CloneSwordShieldPhantasm,
-            (int)MinionID.CloneSwordSwordPhantasm,
             (int)MinionID.CloneScepterFocus,
             (int)MinionID.CloneScepterSword,
             (int)MinionID.CloneAxeTorch,
@@ -252,21 +255,27 @@ namespace GW2EIEvtcParser.EIData
                 case (int)MinionID.CloneStaff:
                     minion.OverrideName("Staff " + minion.Name);
                     break;
+                case (int)MinionID.CloneTrident:
+                    minion.OverrideName("Trident " + minion.Name);
+                    break;
                 case (int)MinionID.CloneDownstate:
                     minion.OverrideName("Downstate " + minion.Name);
                     break;
+                case (int)MinionID.CloneSword:
                 case (int)MinionID.CloneSwordPistol:
                 case (int)MinionID.CloneSwordTorch:
                 case (int)MinionID.CloneSwordFocus:
-                case (int)MinionID.CloneSwordTorchPhantasm:
-                case (int)MinionID.CloneSwordFocusPhantasm:
                 case (int)MinionID.CloneSwordSword:
                 case (int)MinionID.CloneSwordShield:
-                case (int)MinionID.CloneSwordPistolPhantasm:
-                case (int)MinionID.CloneSwordShieldPhantasm:
-                case (int)MinionID.CloneSwordSwordPhantasm:
+                case (int)MinionID.CloneIllusionaryLeap:
+                case (int)MinionID.CloneIllusionaryLeapFocus:
+                case (int)MinionID.CloneIllusionaryLeapShield:
+                case (int)MinionID.CloneIllusionaryLeapSword:
+                case (int)MinionID.CloneIllusionaryLeapPistol:
+                case (int)MinionID.CloneIllusionaryLeapTorch:
                     minion.OverrideName("Sword " + minion.Name);
                     break;
+                case (int)MinionID.CloneScepter:
                 case (int)MinionID.CloneScepterTorch:
                 case (int)MinionID.CloneScepterShield:
                 case (int)MinionID.CloneScepterPistol:
@@ -274,6 +283,7 @@ namespace GW2EIEvtcParser.EIData
                 case (int)MinionID.CloneScepterSword:
                     minion.OverrideName("Scepter " + minion.Name);
                     break;
+                case (int)MinionID.CloneAxe:
                 case (int)MinionID.CloneAxeTorch:
                 case (int)MinionID.CloneAxePistol:
                 case (int)MinionID.CloneAxeSword:
@@ -310,6 +320,8 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryDisenchanter,
             (int)MinionID.IllusionaryRogue,
             (int)MinionID.IllusionaryDefender,
+            (int)MinionID.IllusionaryMariner,
+            (int)MinionID.IllusionaryWhaler,
         };
 
         internal static bool IsKnownMinionID(long id)

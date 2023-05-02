@@ -347,6 +347,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionIllusionaryWarden = "https://i.imgur.com/dId5lC2.png";
         private const string MinionIllusionaryWarlock = "https://i.imgur.com/ZRCcbBM.png";
         private const string MinionIllusionaryAvenger = "https://i.imgur.com/SmEAtBo.png";
+        private const string MinionIllusionaryWhaler = "https://i.imgur.com/scQEWWG.png";
+        private const string MinionIllusionaryMariner = "https://i.imgur.com/uWYbVhz.png";
         private const string MinionJadeMech = "https://i.imgur.com/54evTaq.png";
         private const string MinionEraBreakrazor = "https://i.imgur.com/2X3G3Fl.png";
         private const string MinionKusDarkrazor = "https://i.imgur.com/rJq4Ngh.png";
@@ -445,6 +447,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionBlastGyro = "https://i.imgur.com/F7ZMxGg.png";
         private const string MinionMedicGyro = "https://i.imgur.com/zIURFje.png";
         private const string MinionFunctionGyro = "https://i.imgur.com/STMhpzk.png";
+        private const string MinionEmber = "https://i.imgur.com/Co4i7sh.png";
+        private const string MinionHawkeyeGriffon = "https://i.imgur.com/MdmIv6y.png";
+        private const string MinionSousChef = "https://i.imgur.com/v0cED9x.png";
+        private const string MinionSunspreadParagon = "https://i.imgur.com/0a5Ghmv.png";
+        private const string MinionRavenSpiritShadow = "https://i.imgur.com/ziqCoFD.png";
 
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
@@ -920,32 +927,40 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.RuneRockDog, MinionRuneRockDog },
             { ArcDPSEnums.MinionID.RuneMarkIGolem, MinionRuneMarkIGolem },
             { ArcDPSEnums.MinionID.RuneTropicalBird, MinionTropicalBird },
+            { ArcDPSEnums.MinionID.Ember, MinionEmber },
+            { ArcDPSEnums.MinionID.HawkeyeGriffon, MinionHawkeyeGriffon },
+            { ArcDPSEnums.MinionID.SousChef, MinionSousChef },
+            { ArcDPSEnums.MinionID.SunspearParagonSupport, MinionSunspreadParagon },
+            { ArcDPSEnums.MinionID.RavenSpiritShadow, MinionRavenSpiritShadow },
             { ArcDPSEnums.MinionID.CloneSpear, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneUnknown1, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneUnknown2, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneUnknown3, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneGreatsword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneStaff, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneDownstate, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneTrident, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneSword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneSwordPistol, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneSwordTorch, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneScepterTorch, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneSwordFocus, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneSwordTorchPhantasm, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneSwordFocusPhantasm, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneSwordSword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneSwordShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeap, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeapFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeapShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeapSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeapPistol, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneIllusionaryLeapTorch, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepter, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneScepterTorch, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneScepterShield, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneSwordPistolPhantasm, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneScepterPistol, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneSwordShieldPhantasm, MinionMesmerClone },
-            { ArcDPSEnums.MinionID.CloneSwordSwordPhantasm, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneScepterFocus, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneScepterSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxe, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxeTorch, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxePistol, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxeSword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxeFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDownstate, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneUnknown, MinionMesmerClone },
             { ArcDPSEnums.MinionID.IllusionarySwordsman, MinionIllusionarySwordsman },
             { ArcDPSEnums.MinionID.IllusionaryBerserker, MinionIllusionaryBerserker },
             { ArcDPSEnums.MinionID.IllusionaryDisenchanter, MinionIllusionaryDisenchanter },
@@ -956,6 +971,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.IllusionaryWarden, MinionIllusionaryWarden },
             { ArcDPSEnums.MinionID.IllusionaryWarlock, MinionIllusionaryWarlock },
             { ArcDPSEnums.MinionID.IllusionaryAvenger, MinionIllusionaryAvenger },
+            { ArcDPSEnums.MinionID.IllusionaryWhaler, MinionIllusionaryWhaler },
+            { ArcDPSEnums.MinionID.IllusionaryMariner, MinionIllusionaryMariner },
             { ArcDPSEnums.MinionID.JadeMech, MinionJadeMech },
             { ArcDPSEnums.MinionID.EraBreakrazor, MinionEraBreakrazor },
             { ArcDPSEnums.MinionID.KusDarkrazor, MinionKusDarkrazor },
