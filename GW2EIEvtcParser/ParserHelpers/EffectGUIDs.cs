@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
-        public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E";
+        public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush

@@ -14,8 +14,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(Jaunt, Jaunt).UsingEnable(combatData => !combatData.HasEffectData),
-            new EffectCastFinderByDst(Jaunt, EffectGUIDs.MirageJaunt).UsingDstSpecChecker(Spec.Mirage),
+            new DamageCastFinder(Jaunt, Jaunt),
+            // new EffectCastFinderByDst(Jaunt, EffectGUIDs.MirageJaunt).UsingDstSpecChecker(Spec.Mirage),
             new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
             //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
         };
