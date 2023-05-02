@@ -54,7 +54,17 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return false;
             }),
-            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.November2022Balance).UsingChecker((x, log) => {
+            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.November2022Balance, GW2Builds.May2023Balance).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AgentItem dst = x.To;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(JusticeDragonhunter).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 12000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                   return x.Time - effectApply.Time < 12000;
+                }
+                return false;
+            }),
+            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.May2023Balance).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(JusticeDragonhunter).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 12000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
