@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -83,6 +83,7 @@ namespace GW2EIEvtcParser
         public const long Stun = 872;
         public const long Retaliation = 873;
         public const long Resolution = 873;
+        public const long SignetOfStoneActive = 883;
         public const long Revealed = 890;
         public const long Determined895 = 895;
         public const long RighteousIndignation = 903;
@@ -651,7 +652,7 @@ namespace GW2EIEvtcParser
         public const long SharpeningStonesSkill = 12537;
         public const long SunSpiritOld = 12540;
         public const long SignetOfTheHuntActive = 12541;
-        public const long SignetOfStoneActive = 12543;
+        public const long SignetOfStoneEffect = 12543;
         public const long FrostSpiritOld = 12544;
         public const long StoneSpiritOld = 12547;
         public const long QuickeningZephyr = 12550;
@@ -659,7 +660,7 @@ namespace GW2EIEvtcParser
         public const long SpiritOfNature = 12567;
         public const long AttackOfOpportunity = 12574;
         public const long SignetOfTheHuntPassive = 12626;
-        public const long SignetOfStonePassive = 12627;
+        public const long SignetOfStoneEffectPet = 12627;
         public const long ProtectMe = 12631;
         public const long GuardSkill = 12632;
         public const long SicEmSkill = 12633;
