@@ -42,6 +42,8 @@ namespace GW2EIEvtcParser
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
         public const string ReaperYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
+        public const string ScourgeShade = "78408C6DA08C2746BEABEB995187271A";
+        public const string ScourgeShadeStrike = "C8B109540159AA429E83D0AA98EF3E90";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
