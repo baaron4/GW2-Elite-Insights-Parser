@@ -222,6 +222,7 @@ namespace GW2EIEvtcParser.ParsedData
             {SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {GlyphOfUnityCA, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png" },
+            { HaresSpeedSkill, "https://wiki.guildwars2.com/images/0/05/Hare%27s_Speed.png" },
             // Weaver attunements
             {DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },

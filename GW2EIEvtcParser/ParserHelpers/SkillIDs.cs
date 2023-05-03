@@ -178,6 +178,7 @@
         public const long RocketTurretDamage = 6108;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
+        public const long HaresSpeedSkill = 6221;
         public const long Knockdown = 6892;
         public const long LeapOfFaith = 9080;
         public const long ShieldOfWrathSkill = 9082;
@@ -1334,7 +1335,9 @@
         public const long SpatialDistortion = 34918;
         public const long GravityWellXera = 34921;
         public const long StatueFixated2 = 34925;
+        public const long DetonateMineEscort = 34926;
         public const long CreepingPursuit = 34927;
+        public const long TurretShotEscort = 34945;
         public const long ConstructAura = 34946;
         public const long Outnumbered = 34947;
         public const long SoothingWaters = 34955;
@@ -1370,9 +1373,11 @@
         public const long CerebralSlash = 35087;
         public const long CrimsonAttunementOrb = 35091;
         public const long Compromised = 35096;
+        public const long GlennaBombHit = 35100;
         public const long XerasFury = 35103;
         public const long StillWaters = 35106;
         public const long RadiantAttunementOrb = 35109;
+        public const long TeleportDisplacementField = 35116;
         public const long MagicBlast = 35119;
         public const long TemporalShredOrb = 35128;
         public const long ReviveSickness = 35133;
@@ -1384,6 +1389,7 @@
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
+        public const long FireMortarEscortHit = 35171;
         public const long SpinningCut = 35452;
         public const long PullCharge = 35761;
         public const long WhirlingDevastation = 35940;
