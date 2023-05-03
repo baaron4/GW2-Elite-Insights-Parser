@@ -107,6 +107,9 @@ namespace GW2EIEvtcParser
         public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
         public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
+        public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
+        public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
+        public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
