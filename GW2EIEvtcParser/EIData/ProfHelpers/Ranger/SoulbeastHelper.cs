@@ -13,24 +13,26 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             // Stout
-            new BuffGainCastFinder(EnterBeastMode,Stout), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Stout), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode, Stout), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode, Stout), // Leave Beastmode
             // Deadly
-            new BuffGainCastFinder(EnterBeastMode,Deadly), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Deadly), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode, Deadly), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode, Deadly), // Leave Beastmode
             // Versatile
-            new BuffGainCastFinder(EnterBeastMode,Versatile), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Versatile), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode, Versatile), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode, Versatile), // Leave Beastmode
             // Ferocious
-            new BuffGainCastFinder(EnterBeastMode,Ferocious), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Ferocious), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode, Ferocious), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode, Ferocious), // Leave Beastmode
             // Supportive
-            new BuffGainCastFinder(EnterBeastMode,Supportive), // Beastmode
-            new BuffLossCastFinder(ExitBeastMode,Supportive), // Leave Beastmode
+            new BuffGainCastFinder(EnterBeastMode, Supportive), // Beastmode
+            new BuffLossCastFinder(ExitBeastMode, Supportive), // Leave Beastmode
             // 
-            new BuffGiveCastFinder(DolyakStanceSkill,DolyakStanceEffect), // Dolyak Stance
-            new BuffGiveCastFinder(MoaStanceSkill,MoaStanceEffect), // Moa Stance
-            new BuffGiveCastFinder(VultureStanceSkill,VultureStanceEffect), // Vulture Stance
+            new BuffGiveCastFinder(DolyakStanceSkill, DolyakStanceEffect), // Dolyak Stance
+            new BuffGiveCastFinder(MoaStanceSkill, MoaStanceEffect), // Moa Stance
+            new BuffGiveCastFinder(VultureStanceSkill, VultureStanceEffect), // Vulture Stance
+            //
+            new BuffGainCastFinder(SharpenSpinesBeastmode, SharpenSpinesEffect), // Beastmode Sharpen Spines
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

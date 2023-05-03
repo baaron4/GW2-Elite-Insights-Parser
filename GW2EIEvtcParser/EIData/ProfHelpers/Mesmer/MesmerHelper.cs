@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -76,20 +77,16 @@ namespace GW2EIEvtcParser.EIData
                 return true;
                 
             }), // Distortion*/
-            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer),
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink).UsingChecker((evt, combatData, agentData, skillData) => 
-            {
-                if (evt.Dst.BaseSpec != Spec.Mesmer)
-                {
-                    return false;
-                }
-                // conflict with phase retreat (staff skill), ignore if staff is present
-                if (combatData.GetAnimatedCastData(WindsOfChaos).Any(x => x.Caster == evt.Dst) || combatData.GetAnimatedCastData(ChaosVortex).Any(x => x.Caster == evt.Dst) || combatData.GetDamageData(WindsOfChaos).Any(x => x.From == evt.Dst) || combatData.GetDamageData(ChaosVortex).Any(x => x.From == evt.Dst) ||agentData.GetNPCsByID(MinionID.CloneStaff).Any(x => x.GetFinalMaster() == evt.Dst))
-                {
-                    return false;
-                }
-                return true;
-            }),
+            new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
+
+            // distinguish blink & phase retreat by spawned staff clone
+            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
+                .UsingDstBaseSpecChecker(Spec.Mesmer)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+            new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
+                .UsingDstBaseSpecChecker(Spec.Mesmer)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
@@ -120,11 +117,11 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.February2023Balance),
             new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
-            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
+            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
         };
 
 
@@ -207,7 +204,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphMoa),
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
         };
-
 
         private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
         {
@@ -316,6 +312,5 @@ namespace GW2EIEvtcParser.EIData
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
         }
-
     }
 }

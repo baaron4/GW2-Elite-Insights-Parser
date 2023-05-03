@@ -12,15 +12,18 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true), // Reaper shroud
-            new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true), // Reaper shroud
-            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect), // Infusing Terror
-            new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings), // "You Are All Weaklings!"
-            new DamageCastFinder(Suffer, Suffer), // "Suffer!"
-            new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // "Rise!"
-            new DamageCastFinder(ChillingNova, ChillingNova), // Chilling Nova
+            new BuffGainCastFinder(EnterReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect),
+            new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1).UsingSrcSpecChecker(Spec.Reaper),
+            new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingEnable(combatData => !combatData.HasEffectData),
+            new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer).UsingSrcSpecChecker(Spec.Reaper),
+            new DamageCastFinder(Suffer, Suffer).UsingEnable(combatData => !combatData.HasEffectData),
+            // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
+            new MinionSpawnCastFinder(Rise, (int)MinionID.ShamblingHorror)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.GetFinalMaster().Spec == Spec.Reaper),
+            new DamageCastFinder(ChillingNova, ChillingNova),
         };
-
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {

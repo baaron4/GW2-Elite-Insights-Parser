@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Celestial Avatar
             new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Release Celestial Avatar
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingEnable((combatData) => !combatData.HasEffectData), // Disable this one when effect events are present
-            new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Druid),
-            new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Druid)
+            new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
+            new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
         };
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>

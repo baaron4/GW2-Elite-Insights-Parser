@@ -4,21 +4,10 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffLossCastFinder : BuffCastFinder
+    internal class BuffLossCastFinder : BuffCastFinder<BuffRemoveAllEvent>
     {
-
-        public delegate bool BuffLossCastChecker(BuffRemoveAllEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private BuffLossCastChecker _triggerCondition { get; set; }
-
-
         public BuffLossCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-        }
-
-        internal BuffLossCastFinder UsingChecker(BuffLossCastChecker checker)
-        {
-            _triggerCondition = checker;
-            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -35,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = brae.Time;
                         continue;
                     }
-                    if (_triggerCondition == null || _triggerCondition(brae, combatData, agentData, skillData))
+                    if (CheckCondition(brae, combatData, agentData, skillData))
                     {
                         lastTime = brae.Time;
                         res.Add(new InstantCastEvent(GetTime(brae, brae.To, combatData), skillData.Get(SkillID), brae.To));

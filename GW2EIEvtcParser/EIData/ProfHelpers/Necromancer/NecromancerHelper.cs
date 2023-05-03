@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData.Buffs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -12,16 +13,29 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
-            new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true), // Death shroud
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit), // Spiteful Spirit
-            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble), // Lesser Enfeeble
-            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers), // Lesser Spinal Shivers
-            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Armor
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance), // Spectral Walk
-            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance), // Spectral Walk
-        };
+            new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
+            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble),
+            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers),
 
+            // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
+            new DamageCastFinder(UnholyBurst, UnholyBurst),
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingEnable(combatData => !combatData.HasEffectData),
+            new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
+                .UsingSrcBaseSpecChecker(Spec.Necromancer)
+                .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time)),
+
+            new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
+            new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
+            
+            // Minions
+            new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
+            new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
+            new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
+            // new BuffGainWithMinionsCastFinder(RigorMortisSkill, RigorMortisEffect),
+            // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
+        };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {

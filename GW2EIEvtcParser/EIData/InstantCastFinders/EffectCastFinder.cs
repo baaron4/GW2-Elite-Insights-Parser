@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class EffectCastFinder : InstantCastFinder
+    internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
-        public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private EffectCastChecker _triggerCondition { get; set; }
-
         private readonly string _effectGUID;
 
         protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
@@ -28,10 +26,24 @@ namespace GW2EIEvtcParser.EIData
             _effectGUID = effectGUID;
         }
 
-        internal EffectCastFinder UsingChecker(EffectCastChecker checker)
+        internal EffectCastFinder UsingSrcBaseSpecChecker(Spec spec)
         {
-            _triggerCondition = checker;
-            return this;
+            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == spec);
+        }
+
+        internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
+        {
+            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+        }
+        
+        internal EffectCastFinder UsingSrcSpecChecker(Spec spec)
+        {
+            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);
+        }
+
+        internal EffectCastFinder UsingDstSpecChecker(Spec spec)
+        {
+            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -51,7 +63,7 @@ namespace GW2EIEvtcParser.EIData
                             lastTime = effectEvent.Time;
                             continue;
                         }
-                        if (_triggerCondition == null || _triggerCondition(effectEvent, combatData, agentData, skillData))
+                        if (CheckCondition(effectEvent, combatData, agentData, skillData))
                         {
                             lastTime = effectEvent.Time;
                             AgentItem caster = GetAgent(effectEvent);

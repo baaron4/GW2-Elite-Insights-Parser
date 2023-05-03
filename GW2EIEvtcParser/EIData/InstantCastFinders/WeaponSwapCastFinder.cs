@@ -4,21 +4,13 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class WeaponSwapCastFinder : InstantCastFinder
+    internal class WeaponSwapCastFinder : CheckedCastFinder<WeaponSwapEvent>
     {
-        public delegate bool WeaponSwapCastChecker(WeaponSwapEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private WeaponSwapCastChecker _triggerCondition { get; set; }
-
         private readonly long _swappedTo;
         public WeaponSwapCastFinder(long skillID, long swappedTo) : base(skillID)
         {
             _swappedTo = swappedTo;
             BeforeWeaponSwap = true;
-        }
-        internal WeaponSwapCastFinder UsingChecker(WeaponSwapCastChecker checker)
-        {
-            _triggerCondition = checker;
-            return this;
         }
 
         internal override InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
@@ -44,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = swap.Time;
                         continue;
                     }
-                    if (_triggerCondition == null || _triggerCondition(swap, combatData, agentData, skillData))
+                    if (CheckCondition(swap, combatData, agentData, skillData))
                     {
                         lastTime = swap.Time;
                         res.Add(new InstantCastEvent(GetTime(swap, swap.Caster, combatData), skillData.Get(SkillID), swap.Caster));

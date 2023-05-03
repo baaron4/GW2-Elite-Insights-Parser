@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
+            {RuneOfNightmare, "Rune of the Nightmare"},
             {Resurrect, "Resurrect"},
             {Bandage, "Bandage" },
             {ArcDPSDodge, "Dodge" },
@@ -133,6 +134,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
+            {RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png"},
             {Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
             {ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},

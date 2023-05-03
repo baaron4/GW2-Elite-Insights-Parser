@@ -42,8 +42,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             // Skills
-            new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
-            new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShadowPortal),
+            new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedEffect, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
+            new Buff("Shadow Portal (Open)", ShadowPortalOpenedEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShadowPortal),
             // Signets
             new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, BuffImages.SignetOfMalice),
             new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),

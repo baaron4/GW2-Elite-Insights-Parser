@@ -40,6 +40,8 @@
         public const long PotentHasteOrOverwhelmingCelerity = -22;
         public const long PortentOfFreedomOrUnhinderedDelivery = -23;
         public const long VirtuosoBlades = -25;
+        //
+        public const long RuneOfNightmare = -26;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -126,7 +128,7 @@
         public const long WaterArrow = 5595;
         public const long Whirlpool = 5601;
         public const long VaporForm = 5620;
-        public const long AranePowerSkill = 5635;
+        public const long ArcanePowerSkill = 5635;
         public const long ArmorOfEarth = 5639;
         public const long ArcaneShieldEffect = 5640;
         public const long ArcaneShieldSkill = 5641;
@@ -143,7 +145,7 @@
         public const long BombKit = 5812;
         public const long RifleTurretCast = 5818;
         public const long SlickShoesSkill = 5825;
-        public const long SlickShoesBuff = 5833;
+        public const long SlickShoesEffect = 5833;
         public const long FlameTurretCast = 5836;
         public const long NetTurretCast = 5837;
         public const long ThumperTurretCast = 5838;
@@ -208,8 +210,8 @@
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
-        public const long MercifulInterventionTargetBuff = 9231;
-        public const long MercifulInterventionSelfBuff = 9235;
+        public const long MercifulInterventionTargetEffect = 9231;
+        public const long MercifulInterventionSelfEffect = 9235;
         public const long SignetOfWrathPI = 9237;
         public const long SignetOfMercyPI = 9238;
         public const long SignetOfJudgmentPI = 9239;
@@ -594,6 +596,7 @@
         public const long IllusionaryRiposte = 10279;
         public const long Diversion = 10287;
         public const long Feedback = 10302;
+        public const long PhaseRetreat = 10310;
         public const long ChaosAura = 10332;
         public const long Blur = 10335;
         public const long IllusionOfLife = 10346;
@@ -606,11 +609,15 @@
         public const long LifeLeech = 10560;
         public const long LifeSiphon = 10563;
         public const long LocustSwarm = 10567;
+        public const long RigorMortisSkill = 10570;
+        public const long RigorMortisEffect = 10571;
         public const long EnterDeathShroud = 10574;
         public const long SpectralArmorEffect = 10582;
         public const long SpectralArmorSkill = 10583;
         public const long ExitDeathShroud = 10585;
+        public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
+        public const long NecroticTraversal = 10600;
         public const long SignetOfUndeath = 10610;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
@@ -620,6 +627,7 @@
         public const long LifeLeechUW = 10640;
         public const long GatheringPlague = 10643;
         public const long SpectralWalkSkill = 10685;
+        public const long UnholyFeast = 10701;
         public const long PowerSuit = 12326;
         public const long ReaperOfGrenth = 12366;
         public const long AvatarOfMelandru = 12368;
@@ -757,7 +765,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
-        public const long ShadowPortalPreparedBuff = 16437;
+        public const long ShadowPortalPreparedEffect = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -784,6 +792,7 @@
         public const long Torment = 19426;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
+        public const long POV_HauntEffect = 20229; // pov only!
         public const long SuperiorRuneOfTormenting = 20479;
         public const long PortalUsesXeraWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
@@ -862,11 +871,15 @@
         public const long FireElementalSummoned = 25475;
         public const long EarthElementalSummoned = 25477;
         public const long LesserFireElementalSummoned = 25479;
+        public const long AirElementalShockingBolt = 25480;
         public const long LesserAirElementalSummoned = 25481;
         public const long LesserWaterElementalSummoned = 25483;
         public const long LesserEarthElementalSummoned = 25484;
+        public const long WaterElementalCrashingWaves = 25492;
         public const long WaterElementalSummoned = 25493;
         public const long AirElementalSummoned = 25496;
+        public const long EarthElementalStomp = 25498;
+        public const long FireElementalFlameBarrage = 25499;
         public const long LightAura = 25518;
         public const long SuperiorSigilOfCruelty = 25526;
         public const long SiegeGolemMasteryRank4Omega = 25589;
@@ -1209,7 +1222,7 @@
         public const long ScoopOfMintberrySwirlIceCream = 34207;
         public const long TinOfFruitcake = 34211;
         public const long TropicalPeppermintCake = 34212;
-        public const long SearchAndRescueBuff = 34236;
+        public const long SearchAndRescueEffect = 34236;
         public const long FreshAir = 34241;
         public const long RockGuard = 34256;
         public const long GuardEffect = 34281;
@@ -1265,7 +1278,7 @@
         public const long NarcolepsySkill = 34515;
         public const long Halitosis = 34516;
         public const long BloodShield = 34518;
-        public const long MushroomKingsBlessingBuff = 34523;
+        public const long MushroomKingsBlessingEffect = 34523;
         public const long HeatWave = 34526;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
@@ -1547,6 +1560,7 @@
         public const long MagnanimousMaintenanceOil = 38605;
         public const long MagnanimousTuningCrystal = 38678;
         public const long Untargetable = 38793;
+        public const long UnholyBurst = 38767;
         public const long DeterminationViirastra = 38841;
         public const long OverheadSmash = 38844;
         public const long MistChargedChop = 38846;
@@ -1560,7 +1574,7 @@
         public const long CosmicStreaks = 39021;
         public const long RedMarble1 = 39029;
         public const long HorizonStrikeSkorvald2 = 39031;
-        public const long ArkkStartBuff = 39032;
+        public const long ArkkStartEffect = 39032;
         public const long AstralSurge = 39035;
         public const long OystersWithPestoSauce = 39042;
         public const long OystersGnashblade = 39067;
@@ -1725,7 +1739,7 @@
         public const long AirMinorAttunement = 43229;
         public const long WaterMajorAttunement = 43236;
         public const long DesertEmpowerment = 43260;
-        public const long SharpenSpines = 43266;
+        public const long SharpenSpinesEffect = 43266;
         public const long BowlOfElonRed = 43333;
         public const long MantraOfLiberation = 43357;
         public const long BladeRenewal = 43343;
@@ -1797,6 +1811,7 @@
         public const long PerfectWeave = 45267;
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
+        public const long SharpenSpinesBeastmode = 45479;
         public const long LossAversion = 45534;
         public const long OrdersFromAbove = 45537;
         public const long TwiceAsVicious = 45600;
@@ -2109,11 +2124,11 @@
         public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;
         public const long MistlockInstabilitySugarRush = 54237;
-        public const long NotStickingTogetherBuff = 54378;
+        public const long NotStickingTogetherEffect = 54378;
         public const long MistlockInstabilityFrailty = 54477;
         public const long MistlockInstabilitySlipperySlope1 = 54559;
         public const long DragonCrystalPotion = 54561;
-        public const long StickingTogetherBuff = 54604;
+        public const long StickingTogetherEffect = 54604;
         public const long MistlockInstabilityWeBleedFire = 54719;
         public const long MistlockInstabilitySlipperySlope2 = 54817;
         public const long SandstormShroudSmallShade = 54870;
@@ -2218,7 +2233,7 @@
         public const long SicEmEffectPvP = 56923;
         public const long Rewinder = 56928;
         public const long SplitSecond = 56930;
-        public const long ShadowPortalOpenedBuff = 57031;
+        public const long ShadowPortalOpenedEffect = 57031;
         public const long SpherifiedSesameOysterSoup = 57037;
         public const long PlateOfBeefCarpaccioWithSalsaGarnish = 57042;
         public const long SesameVeggieFlatbread = 57050;
@@ -2413,6 +2428,7 @@
         public const long AchievementEligibilityReflectionsInTheIce = 59482;
         public const long IceShatterWhisper2 = 59489;
         public const long ExplosiveTemper = 59528;
+        public const long MinionCommandEffect = 59536; // applied to minion, from player for necro/ele, from pet for ranger, not used for mechanist
         public const long ExplosiveEntranceSkill = 59562;
         public const long ExplosiveEntranceEffect = 59579;
         public const long InvokingTorment = 59591;
@@ -2594,10 +2610,16 @@
         public const long HardenedAuras = 62986;
         public const long SaintOfzuHeltzer = 62994;
         public const long HomemadeCampfireTreat = 63019;
-        public const long OverclockSignet = 63059;
+        public const long OverclockSignetEffect = 63059;
         public const long BarrierSignet = 63064;
         public const long ShiftSignetEffect = 63068;
+        public const long VenomousOutburstPet = 63082;
+        public const long EnvelopingHaze = 63094;
+        public const long OverclockSignetSkill = 63095;
         public const long ShiftSignetSkill = 63111;
+        public const long JadeMortar = 63121;
+        public const long EnvelopingHazePet = 63136;
+        public const long BarrierBurst = 63141;
         public const long PetUnleashed = 63145;
         public const long UnleashRanger = 63147;
         public const long EnterShadowShroud = 63155;
@@ -2606,24 +2628,35 @@
         public const long RotWallowVenom = 63168;
         public const long MechCoreBarrierEngine = 63173;
         public const long TwilightComboSecondProjectile = 63181;
+        public const long SparkRevolver = 63188;
         public const long FerociousSymbiosis = 63191;
         public const long UnnaturalTraversal = 63195;
         public const long ShroudedAlly = 63207;
+        public const long VenomousOutburst = 63209;
         public const long DawnsRepose = 63220;
         public const long BarrierSignetJDrive = 63228;
+        public const long SkyCircus = 63236;
         public const long ShadowShroud = 63239;
         public const long ForestsFortification = 63240;
         public const long ForceSignet = 63243;
         public const long MindShock = 63249;
         public const long ExitShadowShroud = 63251;
         public const long MutateConditions = 63256;
+        public const long RendingVines = 63258;
         public const long PerilousGift = 63284;
+        public const long CrisisZone = 63293;
+        public const long RendingVinesPet = 63296;
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
+        public const long RoilingSmash = 63334;
+        public const long JadeBusterCannon = 63334;
         public const long UnleashPet = 63344;
+        public const long CoreReactorShot = 63345;
         public const long EndlessNight = 63358;
         public const long HauntShot = 63362;
+        public const long ExplosiveKnuckle = 63365;
+        public const long DischargeArray = 63367;
         public const long OverclockSignetJDrive = 63378;
         public const long DeployJadeSphereFire2 = 63396;
         public const long DeadlyBlades = 63409;
@@ -2664,7 +2697,7 @@
         public const long VoidBeam = 63956;
         public const long DeathsEmbraceEffectCM = 64386;
         public const long AbominationSwipe = 64396;
-        public const long JadeBusterCannon = 64016;
+        public const long JadeBusterCannonMechRider = 64016;
         public const long HeavensPalm1 = 64039;
         public const long DestructiveAura2 = 64042;
         public const long LeyBreach = 64044;
@@ -2784,7 +2817,7 @@
         public const long EnforcerRushingJustice = 65608;
         public const long YellowfishSushi = 65613;
         public const long HallucinatingShot = 65649;
-        public const long DeathsHandSpreadBuff = 65661;
+        public const long DeathsHandSpreadEffect = 65661;
         public const long ExtremeVulnerability = 65662;
         public const long FrostMeteor = 65687;
         public const long SwordArc = 65663;
@@ -2918,7 +2951,7 @@
         public const long MaiTrinCMBeamsTargetGreen = 67871;
         public const long PhotonSaturation = 67872;
         public const long AchievementEligibilityLeapsAbound = 67882;
-        public const long ImminentDeathBuff = 67931;
+        public const long ImminentDeathEffect = 67931;
         public const long FailSafeActivated = 67936;
         public const long SanctuaryAnkka2 = 67941;
         public const long DragonSlashRush2CM = 67943;

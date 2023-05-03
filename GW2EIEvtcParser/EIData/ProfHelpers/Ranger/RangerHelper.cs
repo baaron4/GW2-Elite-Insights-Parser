@@ -19,17 +19,17 @@ namespace GW2EIEvtcParser.EIData
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
             //new DamageCastFinder(12507,12507), // Crippling Shot
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffect), // "Sic 'Em!"
-            new BuffGainWithMinionsCastFinder(SicEmSkill,SicEmEffectPvP), // "Sic 'Em!" PvP
-            new BuffGainCastFinder(SignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone,SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(SharpeningStonesSkill,SharpeningStonesEffect), // Sharpening Stone
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffect), // "Sic 'Em!"
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffectPvP), // "Sic 'Em!" PvP
+            new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect), // Sharpening Stone
             new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
-            new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
-            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Ranger),
-            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Ranger)
+            new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),
+            new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
         };
 
 
@@ -132,10 +132,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sic 'Em!", SicEmEffect, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),
             new Buff("Sic 'Em! (PvP)", SicEmEffectPvP, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),
             new Buff("Sharpening Stones", SharpeningStonesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpeningStone),
-            new Buff("Sharpen Spines", SharpenSpines, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
+            new Buff("Sharpen Spines", SharpenSpinesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
             new Buff("Guard!", GuardEffect, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
-            new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
+            new Buff("Search and Rescue!", SearchAndRescueEffect, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
             // Traits
             new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, BuffImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),

@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirEffect),
             new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthEffect),
             new DamageCastFinder(ArcaneBlast, ArcaneBlast), // Arcane Blast
-            new BuffGiveCastFinder(AranePowerSkill, ArcanePowerEffect), // Arcane Power
+            new BuffGiveCastFinder(ArcanePowerSkill, ArcanePowerEffect), // Arcane Power
             new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect), // Arcane Shield
             new DamageCastFinder(ArcaneWave, ArcaneWave), // Arcane Wave
             new BuffGainCastFinder(MistForm, MistForm), // Mist Form
@@ -34,9 +34,15 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(LightningStrike, LightningStrike), // Lightning Strike
             new DamageCastFinder(LightningRod, LightningRod), // Lightning Rod
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
-            new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist),
+            new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingDstBaseSpecChecker(Spec.Elementalist),
             new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
             //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
+            
+            // Elementals
+            new MinionCommandCastFinder(FireElementalFlameBarrage, (int) MinionID.FireElemental),
+            new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),
+            new MinionCommandCastFinder(AirElementalShockingBolt, (int) MinionID.AirElemental),
+            new MinionCommandCastFinder(EarthElementalStomp, (int) MinionID.EarthElemental),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

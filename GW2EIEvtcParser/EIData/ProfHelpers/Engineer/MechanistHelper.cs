@@ -15,7 +15,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Mechanist),
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingSrcSpecChecker(Spec.Mechanist),
+
+            // Mech
+            new MinionCastCastFinder(RoilingSmash, RoilingSmash),
+            new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
+            new MinionCastCastFinder(SparkRevolver, SparkRevolver),
+            new EffectCastFinderFromMinion(DischargeArray, EffectGUIDs.MechanistDischargeArray),
+            new EffectCastFinderFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone),
+            new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),
+            new MinionCastCastFinder(JadeMortar, JadeMortar),
+            new MinionCastCastFinder(BarrierBurst, BarrierBurst),
+            new MinionCastCastFinder(SkyCircus, SkyCircus),
+            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingNotAccurate(true),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -39,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, BuffImages.ForceSignet),
             new Buff("Shift Signet", ShiftSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.ShiftSignet),
             new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, BuffImages.SuperconductingSignet),
-            new Buff("Overclock Signet", OverclockSignet, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
+            new Buff("Overclock Signet", OverclockSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
             new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, BuffImages.MechanicalGenius),
             //
             //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),

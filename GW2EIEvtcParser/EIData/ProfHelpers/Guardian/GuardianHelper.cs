@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
             new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0), // Zealot's Flame
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfBuff),
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
@@ -59,8 +59,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Banish),
-            new Buff("Merciful Intervention (Self)", MercifulInterventionSelfBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
-            new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Self)", MercifulInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Target)", MercifulInterventionTargetEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
             new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
             new Buff("Signet of Resolve (Shared)", SignetOfResolveShared, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfResolve).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),

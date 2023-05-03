@@ -7,6 +7,9 @@ namespace GW2EIEvtcParser
 {
     public static class EffectGUIDs
     {
+        // Generic
+        public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
+        public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         // Mesmer
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
         public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
@@ -24,7 +27,20 @@ namespace GW2EIEvtcParser
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
+        public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
+        public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
+        // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
+
+        // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
+        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
+        // Necromancer
+        public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
+        public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
+        public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
+        public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
+        public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
+        public const string ReaperYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
@@ -71,6 +87,8 @@ namespace GW2EIEvtcParser
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
         public const string MechanistShiftSignet = "E1C1DD7F866B4149A1BADD216C9AA69D";
+        public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD";
+        public const string MechanistCrisisZone = "10873BDE22D87845AAF004B0A60FA546";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
@@ -82,6 +100,9 @@ namespace GW2EIEvtcParser
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
+        public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";
+        public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
+        public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal

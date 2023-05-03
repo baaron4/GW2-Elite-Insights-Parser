@@ -22,10 +22,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4), 
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4),
             new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4), // Invigorating Air
-            new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
-            new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
-            new EffectCastFinder(DeployJadeSphereWater, EffectGUIDs.CatalystDeployWaterJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst),
-            new EffectCastFinder(DeployJadeSphereEarth, EffectGUIDs.CatalystDeployEarthJadeSphere).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Catalyst)
+            new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereWater, EffectGUIDs.CatalystDeployWaterJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
+            new EffectCastFinder(DeployJadeSphereEarth, EffectGUIDs.CatalystDeployEarthJadeSphere).UsingSrcSpecChecker(Spec.Catalyst)
         };
 
 

@@ -18,6 +18,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500), // Fire Sigil
             new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500), // Hydro Sigil
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1), // Water Blast Combo
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
