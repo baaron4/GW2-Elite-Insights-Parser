@@ -1678,7 +1678,7 @@
         public const long RazorclawsRage = 41016;
         public const long OverheatEffect = 41037;
         public const long Sieche = 41052;
-        public const long TrailOfAnguishEffect1 = 41052;
+        public const long POV_TrailOfAnguishEffect1 = 41052;
         public const long ExitPhotonForge = 41123;
         public const long SignetOfRenewal = 41147;
         public const long DualWaterAttunement = 41166;
@@ -1713,7 +1713,7 @@
         public const long ManifestSandShadeSkill = 42297;
         public const long TomeOfCourageSkill = 42259;
         public const long DualAirAttunement = 42264;
-        public const long TrailOfAnguishEffect2 = 42311; // longer duration, 12s vs 6s
+        public const long TrailOfAnguishEffect = 42311; // longer duration (12s vs 6s) but not pov only
         public const long EchoOfTrue = 42360;
         public const long TomeOfCourageOpen = 42404;
         public const long ElementsOfRage = 42416;
@@ -1820,7 +1820,7 @@
         public const long POV_SandShade1 = 45225;
         public const long NarcoticSpores = 45262;
         public const long PerfectWeave = 45267;
-        public const long TrailOfAnguishEffectMoving = 45424; // reapplied as you move, 150ms duration
+        public const long POV_TrailOfAnguishEffectMoving = 45424; // reapplied as you move, 150ms duration
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
         public const long SharpenSpinesBeastmode = 45479;
@@ -3014,8 +3014,8 @@
         public const long DebilitatedToxicSickness = 68170;
         public const long DecadeEnhancement = 68235;
         public const long BladesongDistortion = 68273;
-        public const long TrailOfAnguishEffect4 = 68277;
-        public const long TrailOfAnguishEffect5 = 68286;
+        public const long POV_TrailOfAnguishEffect4 = 68277;
+        public const long POV_TrailOfAnguishEffect5 = 68286;
         public const long EmpoweredWatchknightTriumverate = 68302;
         public const long MalfunctioningLeyWovenShielding = 68303;
         public const long ToxicSlice = 68308;
