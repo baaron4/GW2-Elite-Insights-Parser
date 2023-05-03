@@ -854,6 +854,7 @@
         public const long PowerfulPotionOfSlayingScarletsArmies = 23228;
         public const long Enraged2_Unknown = 23235;
         public const long SwiftMoaFeather = 23239;
+        public const long WeaponDraw = 23284;
         public const long WeaponStow = 23285;
         public const long Reflection2 = 24014;
         public const long SigilOfWater = 24241;
