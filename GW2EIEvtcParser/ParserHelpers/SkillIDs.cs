@@ -1194,6 +1194,7 @@
         public const long CheesyCassavaRoll = 33909;
         public const long GuildObjectiveAuraVI = 32928;
         public const long PieceOfUnderseaWurmSushi = 33936;
+        public const long ChillingFogEffect = 33978;
         public const long HardenedSiegeGear = 33983;
         public const long BowlOfTapiocaPudding = 34014;
         public const long MarkedSentryGreen = 34015;
