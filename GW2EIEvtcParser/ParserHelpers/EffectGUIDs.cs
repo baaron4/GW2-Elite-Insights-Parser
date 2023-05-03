@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -37,6 +37,7 @@ namespace GW2EIEvtcParser
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
+        public const string NecromancerPlagueSignet = "E78ED095E97F1D4A8BEB901796449E2F"; // might be pov only?
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";

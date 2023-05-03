@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
-            new BuffLossCastFinder(PlagueSignetSkill, PlagueSignetEffect),
+            new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
             
             // Minions
             new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
