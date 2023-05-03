@@ -19,7 +19,9 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingEnable(combatData => !combatData.HasEffectData),
             new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer).UsingSrcSpecChecker(Spec.Reaper),
             new DamageCastFinder(Suffer, Suffer).UsingEnable(combatData => !combatData.HasEffectData),
-            new BuffGainCastFinder(Rise, DarkBond).UsingICD(500),
+            // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
+            new MinionSpawnCastFinder(Rise, (int)MinionID.ShamblingHorror)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.GetFinalMaster().Spec == Spec.Reaper),
             new DamageCastFinder(ChillingNova, ChillingNova),
         };
 
