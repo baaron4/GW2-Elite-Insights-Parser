@@ -26,8 +26,9 @@ namespace GW2EIEvtcParser.EIData
                                     Math.Abs(brae.Time - bae.Time) <= ServerDelayConstant
                                  );
                 }), // Signet of Midnight
-            new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
+            new BuffGainCastFinder(PortalEntre, PortalWeaving),
+            new BuffGainCastFinder(PortalExeunt, PortalUses),
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {

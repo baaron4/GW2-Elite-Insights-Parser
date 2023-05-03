@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -571,6 +571,7 @@ namespace GW2EIEvtcParser
         public const long DistortionSkill = 10192;
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
+        public const long PortalExeunt = 10199;
         public const long Blink = 10200;
         public const long MantraOfDistraction = 10204;
         public const long PowerLock = 10206;
