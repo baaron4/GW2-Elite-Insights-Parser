@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -107,6 +107,11 @@ namespace GW2EIEvtcParser
         public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
         public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
+        public const string PitfallAoE = "7325E9B0DD2E914F9837E5FCFC740A95";
+        public const string ThousandNeedlesAoE1 = "2125A13079C1C5479C150926EB60A15D";
+        public const string ThousandNeedlesAoE2 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
+        public const string ThousandNeedlesAoE3 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
+        public const string SealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
