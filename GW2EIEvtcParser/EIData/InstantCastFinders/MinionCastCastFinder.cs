@@ -22,8 +22,14 @@ namespace GW2EIEvtcParser.EIData
                 .ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<AnimatedCastEvent>> pair in casts)
             {
+                long lastTime = int.MinValue;
                 foreach (var cast in pair.Value)
                 {
+                    if (cast.Time - lastTime < ICD)
+                    {
+                        lastTime = cast.Time;
+                        continue;
+                    }
                     if (CheckCondition(cast, combatData, agentData, skillData))
                     {
                         result.Add(new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster()));
