@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -25,6 +25,13 @@ namespace GW2EIEvtcParser.EIData
             return combatData.GetBuffData(buffID)
                 .OfType<BuffApplyEvent>()
                 .Any(apply => apply.To == agent && Math.Abs(apply.Time - time) < epsilon);      
+        }
+
+        internal static bool HasGainedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long appliedDuration, long epsilon = ServerDelayConstant)
+        {
+            return combatData.GetBuffData(buffID)
+                .OfType<BuffApplyEvent>()
+                .Any(apply => apply.To == agent && Math.Abs(apply.Time - time) < epsilon && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
         }
 
         internal static bool HasSpawnedMinion(AgentData agentData, MinionID minion, AgentItem master, long time, long epsilon = ServerDelayConstant)
