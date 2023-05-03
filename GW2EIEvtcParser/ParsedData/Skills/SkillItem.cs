@@ -271,19 +271,16 @@ namespace GW2EIEvtcParser.ParsedData
             {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
             {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
-
+            // Special Forces Training Area
             {MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png"},
             // Shades
-            { ManifestSandShade, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
-            { NefariousFavor, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
-            { SandCascade, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
-            { GarishPillar, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { GarishPillar2, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { GarishPillar3, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { DesertShroud, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
-            { DesertShroud2, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
-            { SandstormShroudSmallShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
-            { SandstormShroudBigShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            { ManifestSandShadeShadeHit, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
+            { NefariousFavorShadeHit, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
+            { SandCascadeShadeHit, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
+            { GarishPillarHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            { GarishPillarShadeHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            { DesertShroudHit, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
+            { SandstormShroudHit, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
