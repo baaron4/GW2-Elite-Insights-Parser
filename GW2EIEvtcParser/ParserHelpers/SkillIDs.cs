@@ -603,6 +603,7 @@
         public const long IllusionOfLife = 10346;
         public const long IllusionaryLeap = 10353;
         public const long Mirror = 10357;
+        public const long SealArea = 13099; 
         public const long HealthfulRejuvenation = 10492;
         public const long DamageBonus5 = 10493;
         public const long SpeedBonus15 = 10495;
@@ -2240,9 +2241,17 @@
         public const long TimeSink = 56873;
         public const long Sunspot = 56883;
         public const long EarthenBlast = 56885;
+        public const long SealAreaPreparedEffect = 56887;
         public const long SymbolicAvenger = 56890;
+        public const long ThousandNeedlesPreparedEffect = 56895;
+        public const long ThousandNeedles = 56898;
+        public const long PitfallArmedEffect = 56903;
+        public const long ShadowPortalArmedEffect = 56904;
         public const long Pitfall = 56911;
+        public const long ThousandNeedlesArmedEffect = 56912;
+        public const long SealAreaArmedEffect = 56917;
         public const long SicEmEffectPvP = 56923;
+        public const long PitfallPreparedEffect = 56924;
         public const long Rewinder = 56928;
         public const long SplitSecond = 56930;
         public const long ShadowPortalOpenedEffect = 57031;
