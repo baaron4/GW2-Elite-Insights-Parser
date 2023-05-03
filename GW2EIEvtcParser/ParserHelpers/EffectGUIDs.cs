@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -10,6 +10,8 @@ namespace GW2EIEvtcParser
         // Generic
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
+        public const string WhiteMantlePortalInactive = "D43373FEFA19A54DA2A2B6BB7834A338";
+        public const string WhiteMantlePortalActive = "388CF9246218A34DB2F8107E19FCA471";
         // Mesmer
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
         public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
