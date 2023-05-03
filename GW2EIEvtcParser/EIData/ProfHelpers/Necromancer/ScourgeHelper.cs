@@ -17,8 +17,8 @@ namespace GW2EIEvtcParser.EIData
             // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
             new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
             new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
-            new BuffGainCastFinder(DesertShroud, DesertShroudEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.AppliedDuration == 6000),
-            new BuffGainCastFinder(SandstormShroudSkill, DesertShroudEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.AppliedDuration == 3500),
+            new BuffGainCastFinder(DesertShroud, DesertShroudEffect).UsingDurationChecker(6000),
+            new BuffGainCastFinder(SandstormShroudSkill, DesertShroudEffect).UsingDurationChecker(3500),
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
         };
