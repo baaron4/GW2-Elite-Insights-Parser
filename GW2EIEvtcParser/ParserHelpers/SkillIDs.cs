@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -707,15 +707,16 @@
         public const long BerserkersStanceSkill = 14406;
         public const long BannerOfDisciplineSkill = 14407;
         public const long BannerOfTacticsSkill = 14408;
+        public const long SignetOfFurySkill = 14410;
         public const long BalancedStanceSKill = 14412;
         public const long BannerOfStrengthEffect = 14417;
         public const long Riposte = 14434;
         public const long SignetOfMight = 14444;
         public const long BannerOfDisciplineEffect = 14449;
         public const long BannerOfTacticsEffect = 14450;
-        public const long BerserkersStanceEffecct = 14453;
+        public const long BerserkersStanceEffect = 14453;
         public const long DolyakSignet = 14458;
-        public const long SignetOfFury = 14459;
+        public const long SignetOfFuryEffect = 14459;
         public const long SignetOfStamina = 14478;
         public const long Rampage = 14484;
         public const long SignetOfRage = 14496;
@@ -1989,6 +1990,7 @@
         public const long TransmuteFrost = 51646;
         public const long BurstOfStrength = 51653;
         public const long GrindingStones = 51658;
+        public const long SignetOfFuryActive = 51664;
         public const long TrueNatureAssassin = 51667;
         public const long FacetOfNatureDragon = 51674;
         public const long TrueNatureDwarf = 51675;

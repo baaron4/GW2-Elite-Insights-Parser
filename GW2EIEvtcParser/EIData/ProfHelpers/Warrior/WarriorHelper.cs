@@ -15,10 +15,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance), // Reckless Impact
-            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffecct), // Berserker Stance
-            new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect), // Balanced Stance
-            new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect), // Endure Pain
+            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance),
+            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffect),
+            new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect),
+            new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect),
+            new BuffGainCastFinder(SignetOfFurySkill, SignetOfFuryActive),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -75,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
             new Buff("Dolyak Signet", DolyakSignet, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
-            new Buff("Signet of Fury", SignetOfFury, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
+            new Buff("Signet of Fury", SignetOfFuryEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
             new Buff("Signet of Might", SignetOfMight, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
             new Buff("Signet of Stamina", SignetOfStamina, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
             new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
@@ -86,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Banner of Defense", BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             // Stances
             new Buff("Shield Stance", ShieldStance, Source.Warrior, BuffClassification.Other, BuffImages.ShieldStance),
-            new Buff("Berserker's Stance", BerserkersStanceEffecct, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
+            new Buff("Berserker's Stance", BerserkersStanceEffect, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
             new Buff("Enduring Pain", EnduringPainEffect, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.EndurePain),
             new Buff("Balanced Stance", BalancedStanceEffect, Source.Warrior, BuffClassification.Other, BuffImages.BalancedStance),
             new Buff("Defiant Stance", DefiantStance, Source.Warrior, BuffClassification.Other, BuffImages.DefiantStance),
