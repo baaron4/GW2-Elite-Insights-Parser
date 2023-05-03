@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (KeyValuePair<AgentItem, List<AnimatedCastEvent>> pair in casts)
             {
                 long lastTime = int.MinValue;
-                foreach (var cast in pair.Value)
+                foreach (AnimatedCastEvent cast in pair.Value)
                 {
                     if (cast.Time - lastTime < ICD)
                     {

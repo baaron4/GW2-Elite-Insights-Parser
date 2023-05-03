@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal GuildEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             Src = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
-            var guid = new byte[16];
+            byte[] guid = new byte[16];
             byte[] first8 = BitConverter.GetBytes(evtcItem.DstAgent);
             byte[] mid4 = BitConverter.GetBytes(evtcItem.Value);
             byte[] last4 = BitConverter.GetBytes(evtcItem.BuffDmg);

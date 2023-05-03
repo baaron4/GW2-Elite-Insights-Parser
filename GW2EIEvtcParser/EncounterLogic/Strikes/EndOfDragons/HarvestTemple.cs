@@ -716,8 +716,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
-                            var velocity = 50;
-                            var lifespan = 15000;
+                            int velocity = 50;
+                            int lifespan = 15000;
                             var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
                             //replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
                         }
@@ -881,8 +881,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             break;
                         }
                         knownEffectsIDs.Add(voidPool.ContentID);
-                        var radius = 100.0;
-                        var radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
+                        double radius = 100.0;
+                        double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
                         for (int i = 0; i < poolEffects.Count - 1; i++)
                         {
                             EffectEvent curEffect = poolEffects[i];

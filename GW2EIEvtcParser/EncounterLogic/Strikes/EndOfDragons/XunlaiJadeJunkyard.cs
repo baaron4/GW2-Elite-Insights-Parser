@@ -33,10 +33,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyCastStartMechanic(InevitabilityOfDeath, "Inevitability of Death", new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "Inev.Death.C", "Casted Inevitability of Death (Enrage)", "Inevitability of Death (Enrage)", 150),
                 new EnemyCastStartMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "AnkkaPull.C", "Casted Death's Embrace", "Death's Embrace Cast", 150),
                 new EnemyDstBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150),
-                new PlayerDstBuffApplyMechanic(ImminentDeathEffect, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
+                new PlayerDstBuffApplyMechanic(ImminentDeathBuff, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
                 new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated", new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Fxt.Hatred", "Fixated by Reanimated Hatred", "Fixated Hatred", 150),
                 new PlayerDstBuffApplyMechanic(Hallucinations, "Hallucinations", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Hallu", "Received Hallucinations Debuff", "Hallucinations Debuff", 150),
-                new PlayerDstBuffApplyMechanic(DeathsHandSpreadEffect, "Death's Hand Spread", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
+                new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, "Death's Hand Spread", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
             }
             );
             Icon = EncounterIconXunlaiJadeJunkyard;
@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                         if (effectGUID != null)
                         {
-                            var radius = 500; // Zone 1
+                            int radius = 500; // Zone 1
                             // Zone 2
                             if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
                             {
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var deathsHandEffects = log.CombatData.GetEffectEventsByEffectID(deathsHandGUID.ContentID).Where(x => x.Src == target.AgentItem).ToList();
                         foreach (EffectEvent deathsHandEffect in deathsHandEffects)
                         {
-                            if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadEffect).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                            if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
                             {
                                 // One also happens during death's embrace so we filter that one out
                                 if (!deathsEmbraces.Any(x => x.Time <= deathsHandEffect.Time && x.Time + deathsEmbraceCastDuration >= deathsHandEffect.Time))
@@ -381,7 +381,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             (EffectGUIDEvent deathsHandOnPlayerGUID, int deathsHandRadius, int deathsHandDuration) = GetDeathsHandOnPlayerData(log);
-            if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadEffect, out BuffsGraphModel value))
+            if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
             {
                 foreach (Segment segment in value.BuffChart)
                 {

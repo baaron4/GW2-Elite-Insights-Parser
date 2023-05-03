@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal static string UnpackGUID(ulong first8, ulong last8)
         {
-            var guid = new byte[16];
+            byte[] guid = new byte[16];
             byte[] first8Bytes = BitConverter.GetBytes(first8);
             byte[] last8Bytes = BitConverter.GetBytes(last8);
             first8Bytes.CopyTo(guid, 0);

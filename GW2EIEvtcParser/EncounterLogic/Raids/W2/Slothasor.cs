@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
             if (mushroomAgents.Any())
             {
-                var idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
+                int idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
                 foreach (AgentItem mushroom in mushroomAgents)
                 {
                     if (!mushroom.IsSpecies(idToKeep))

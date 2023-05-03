@@ -80,8 +80,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             var fanaticalResilienceSegments = new List<Segment>();
             for (int i = 0; i < fanaticalResilienceTimes.Count; i +=2)
             {
-                var start = fanaticalResilienceTimes[i];
-                var end = long.MaxValue;
+                long start = fanaticalResilienceTimes[i];
+                long end = long.MaxValue;
                 if (i + 1 < fanaticalResilienceTimes.Count)
                 {
                     end = fanaticalResilienceTimes[i + 1];

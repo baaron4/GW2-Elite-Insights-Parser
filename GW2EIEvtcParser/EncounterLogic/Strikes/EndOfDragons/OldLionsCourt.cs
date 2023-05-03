@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor vermilion = Vermilion();
-            var canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
+            bool canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
             if (vermilion != null)
             {
                 phases[0].AddTarget(vermilion);
