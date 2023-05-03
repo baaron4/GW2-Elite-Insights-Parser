@@ -670,6 +670,7 @@
         public const long Stealth = 13017;
         public const long SpiderVenomEffect = 13036;
         public const long SpiderVenomSkill = 13037;
+        public const long PrepareShadowPortal = 13038;
         public const long AssassinsSignet = 13046;
         public const long AssassinsSignetPassive = 13047;
         public const long SignetOfMalice = 13049;
@@ -766,6 +767,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
+        public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
