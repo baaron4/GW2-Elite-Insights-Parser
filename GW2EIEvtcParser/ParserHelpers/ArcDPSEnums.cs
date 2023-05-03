@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser
         {
             internal const ulong StartOfLife = ulong.MinValue;
             //
+            internal const ulong HoTRelease = 54485;
             internal const ulong February2017Balance = 72781;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
@@ -1044,6 +1045,7 @@ namespace GW2EIEvtcParser
         {
             // Racial Summons
             HoundOfBalthazar = 6394,
+            SnowWurm = 6445,
             DruidSpirit = 6475,
             SylvanHound = 6476,
             IronLegionSoldier = 6509,
@@ -1052,6 +1054,8 @@ namespace GW2EIEvtcParser
             BloodLegionMarksman = 10107,
             AshLegionSoldier = 10108,
             AshLegionMarksman = 10109,
+            STAD007 = 10145,
+            STA7012 = 10146,
             // GW2 Digital Deluxe
             MistfireWolf = 9801,
             // Rune Summons
@@ -1059,7 +1063,13 @@ namespace GW2EIEvtcParser
             RuneRockDog = 8836,
             RuneMarkIGolem = 8837,
             RuneTropicalBird = 8838,
-            //
+            // Consumables with summons
+            Ember = 1454,
+            HawkeyeGriffon = 5614,
+            SousChef = 10076,
+            SunspearParagonSupport = 19643,
+            RavenSpiritShadow = 22309,
+            // Mesmer Phantasmas
             IllusionarySwordsman = 6487,
             IllusionaryBerserker = 6535,
             IllusionaryDisenchanter = 6621,
@@ -1069,36 +1079,45 @@ namespace GW2EIEvtcParser
             IllusionaryDuelist = 5758,
             IllusionaryWarlock = 6449,
             IllusionaryWarden = 7981,
+            IllusionaryMariner = 9052,
+            IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
-            //
-            CloneSpear = 6479,
-            CloneUnknown1 = 8106,
-            CloneUnknown2 = 8107,
-            CloneUnknown3 = 8108,
+            // Mesmer Clones
+            // - Single Weapon
+            CloneSword = 8108,
+            CloneScepter = 8109,
+            CloneAxe = 18894,
             CloneGreatsword = 8110,
             CloneStaff = 8111,
             CloneTrident = 9058,
+            CloneSpear = 6479,
             CloneDownstate = 10542,
-            CloneSwordPistol = 15003,
-            CloneSwordTorch = 15032,
+            CloneUnknown = 8107, // Possibly -> https://wiki.guildwars2.com/wiki/Clone_(Snowball_Mayhem)
+            // - Sword + Offhand
+            CloneSwordTorch = 15090,
+            CloneSwordFocus = 15114,
+            CloneSwordSword = 15233,
+            CloneSwordShield = 15199,
+            CloneSwordPistol = 15181,
+            // - Sword 3 + Offhand
+            CloneIllusionaryLeap = 8106,
+            CloneIllusionaryLeapFocus = 15084,
+            CloneIllusionaryLeapShield = 15131,
+            CloneIllusionaryLeapSword = 15117,
+            CloneIllusionaryLeapPistol = 15003,
+            CloneIllusionaryLeapTorch = 15032,
+            // - Scepter + Offhand
             CloneScepterTorch = 15044,
-            CloneSwordFocus = 15084,
-            CloneSwordTorchPhantasm = 15090,
-            CloneSwordFocusPhantasm = 15114,
-            CloneSwordSword = 15117,
-            CloneSwordShield = 15131,
             CloneScepterShield = 15156,
-            CloneSwordPistolPhantasm = 15181,
             CloneScepterPistol = 15196,
-            CloneSwordShieldPhantasm = 15199,
-            CloneSwordSwordPhantasm = 15233,
             CloneScepterFocus = 15240,
             CloneScepterSword = 15249,
+            // - Axe + Offhand
             CloneAxeTorch = 18922,
             CloneAxePistol = 18939,
             CloneAxeSword = 19134,
             CloneAxeFocus = 19257,
-            //
+            // Necromancer Minions
             BloodFiend = 1104,
             BoneFiend = 1458,
             FleshGolem = 1792,
@@ -1107,13 +1126,14 @@ namespace GW2EIEvtcParser
             BoneMinion = 1192,
             UnstableHorror = 18802,
             ShamblingHorror = 15314,
-            //
+            // Ranger Spirits
             StoneSpirit = 6370,
             SunSpirit = 6330,
             FrostSpirit = 6369,
             StormSpirit = 6371,
             WaterSpirit = 12778,
             SpiritOfNatureRenewal = 6649,
+            // Ranger Pets
             JuvenileJungleStalker = 3827,
             JuvenileKrytanDrakehound = 4425,
             JuvenileBrownBear = 4426,
@@ -1173,12 +1193,12 @@ namespace GW2EIEvtcParser
             JuvenileWhiteTiger = 24298,
             JuvenileSiegeTurtle = 24796,
             JuvenilePhoenix = 25131,
-            //
+            // Guardian Weapon Summons
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,
             ShieldOfTheAvenger = 6382,
             SwordOfJustice = 6381,
-            //
+            // Thief
             Thief1 = 7580,
             Thief2 = 7581,
             Thief3 = 10090,
@@ -1231,7 +1251,7 @@ namespace GW2EIEvtcParser
             Specter8 = 25231,
             Specter9 = 25232,
             Specter10 = 25234,
-            //
+            // Elementalist Summons
             LesserAirElemental = 8711,
             LesserEarthElemental = 8712,
             LesserFireElemental = 8713,
@@ -1240,7 +1260,7 @@ namespace GW2EIEvtcParser
             EarthElemental = 6523,
             FireElemental = 6524,
             IceElemental = 6525,
-            //
+            // Scrapper Gyros
             SneakGyro = 15012,
             ShredderGyro = 15046,
             BulwarkGyro = 15134,
@@ -1248,14 +1268,14 @@ namespace GW2EIEvtcParser
             MedicGyro = 15208,
             BlastGyro = 15330,
             FunctionGyro = 15336,
-            //
+            // Revenant Summons
             ViskIcerazor = 18524,
             KusDarkrazor = 18594,
             JasRazorclaw = 18791,
             EraBreakrazor = 18806,
             OfelaSoulcleave = 19002,
             VentariTablet = ArcDPSEnums.VentariTablet,
-            //
+            // Mechanist
             JadeMech = 23549,
             //
             Unknown,

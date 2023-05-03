@@ -291,9 +291,9 @@ namespace GW2EIEvtcParser.ParsedData
                         { LightningStrikeSigil, GW2Builds.StartOfLife }, 
                         { FlameBlastSigil, GW2Builds.StartOfLife },
                         { FireAttunementSkill, GW2Builds.December2018Balance }, 
-                        { Mug, GW2Builds.StartOfLife }, // Mug
-                        { PulmonaryImpactSkill, 54485 }, // Pulmonary Impact
-                        { 52370, GW2Builds.StartOfLife },
+                        { Mug, GW2Builds.StartOfLife },
+                        { PulmonaryImpactSkill, GW2Builds.HoTRelease },
+                        { ConjuredSlashPlayer, GW2Builds.StartOfLife },
                         { LightningJolt, GW2Builds.StartOfLife },
                         { Sunspot, GW2Builds.December2018Balance },
                         { EarthenBlast, GW2Builds.December2018Balance },
