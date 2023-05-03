@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -794,7 +794,8 @@
         public const long MistForm2 = 19718;
         public const long POV_HauntEffect = 20229; // pov only!
         public const long SuperiorRuneOfTormenting = 20479;
-        public const long PortalUsesXeraWatchwork = 20852;
+        public const long PortalExitWhiteMantleWatchwork = 20851;
+        public const long PortalUsesWhiteMantleWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
         public const long SpoiledSupply = 21012;
@@ -1362,7 +1363,7 @@
         public const long Derangement = 34965;
         public const long PhantasmalBlades3 = 34971;
         public const long RedOrb = 34972;
-        public const long PortalWeavingXeraWatchwork = 34978;
+        public const long PortalWeavingWhiteMantleWatchwork = 34978;
         public const long Unbreakable = 34979;
         public const long RadiantAttunementPhantasm = 34992;
         public const long HerosDeparture = 34997;
@@ -1397,6 +1398,7 @@
         public const long Incoming = 35140;
         public const long AchievementEligibilityMineControl = 35148;
         public const long SplishSplash = 35153;
+        public const long PortalEntranceWhiteMantleWatchwork = 35153;
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;

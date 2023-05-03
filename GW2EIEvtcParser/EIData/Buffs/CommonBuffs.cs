@@ -115,8 +115,8 @@ namespace GW2EIEvtcParser.EIData
             // Gliding
             new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
             // Consumable Portal
-            new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingXeraWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
-            new Buff("Portal Uses (Xera/Watchwork)", PortalUsesXeraWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
+            new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingWhiteMantleWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
+            new Buff("Portal Uses (Xera/Watchwork)", PortalUsesWhiteMantleWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             // Consumable Summons
             new Buff("Ogre Pet Whistle", OgrePetWhistleEffect, Source.Common, BuffClassification.Other, BuffImages.OgrePetWhistle),
             new Buff("Fire Elemental Powder", FireElementalPowderEffect, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
