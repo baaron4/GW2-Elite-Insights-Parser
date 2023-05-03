@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData, agentData, skillData) => {
-                return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000);
+                return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
                 }), // Signet of Midnight
             new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
