@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
+using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -116,7 +117,7 @@ namespace GW2EIEvtcParser.ParsedData
             {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
-            {RushingJusticeAnimation, "Rushing Justice - Animation" },
+            { RushingJusticeStrike, "Rushing Justice (Strike)" },
             //
             {PowerReturn, "Power Return" },
             {PowerCleanse, "Power Cleanse" },
@@ -130,6 +131,13 @@ namespace GW2EIEvtcParser.ParsedData
 
             {GlennaCap, "Capture" },
             {MushroomKingsBlessing, "Mushroom King's Blessing"},
+            //
+            { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
+            { UnrelentingAssaultMultihit, "Unrelenting Assault (Multi Hit)" },
+            { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
+            { ExecutionersCallingDualStrike, "Executioner's Calling (Dual Strike)" },
+            { ChargeGazelleMergeDamage, "Charge (Strike)" },
+            { OneWolfPackDamage, "One Wolf Pack (Strike)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -264,16 +272,40 @@ namespace GW2EIEvtcParser.ParsedData
             {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
-            {RushingJusticeAnimation, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
+            {RushingJusticeStrike, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
             //   
             {RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
             {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
             {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
-
-            {MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png"},
-            // Shades
+            // Special Action Keys
+            // - Training Area
+            { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
+            // - Icebrood Saga
+            { SpiritNovaTier1, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier2, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier3, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier4, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { NightTerrorTier1, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier2, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier3, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier4, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { ShatteredPsycheTier1, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier2, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier3, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier4, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            // - Sabetha
+            { SapperBombSkill, "https://wiki.guildwars2.com/images/b/ba/Sapper_Bomb.png" },
+            // Skills
+            { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
+            { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
+            { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
+            { ExecutionersCallingDualStrike, "https://wiki.guildwars2.com/images/d/da/Executioner%27s_Calling.png" },
+            { AdvancingStrikeSkill, "https://wiki.guildwars2.com/images/6/6b/Advancing_Strike.png" },
+            { ChargeGazelleMergeDamage, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
+            // - Shades
             { ManifestSandShade, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
             { NefariousFavor, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
             { SandCascade, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
@@ -284,6 +316,9 @@ namespace GW2EIEvtcParser.ParsedData
             { DesertShroud2, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
             { SandstormShroudSmallShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
             { SandstormShroudBigShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            // Traits
+            { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
+            { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>

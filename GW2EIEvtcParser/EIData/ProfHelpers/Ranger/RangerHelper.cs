@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
             new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect), // Sharpening Stone
-            new EXTHealingCastFinder(WindbornNotes, WindbornNotes), // Windborne Notes
+            new EXTHealingCastFinder(WindborneNotes, WindborneNotes), // Windborne Notes
             new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),
