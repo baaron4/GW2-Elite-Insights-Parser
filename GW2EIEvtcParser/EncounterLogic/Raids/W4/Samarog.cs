@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new PlayerDstHitMechanic(SamarogShockwave, "Shockwave", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0,(de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(PrisonerSweep, "Prisoner Sweep", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0,(de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(SamarogShockwave, "Shockwave", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv","Shockwave from Spears", "Shockwave",0).UsingChecker((de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(PrisonerSweep, "Prisoner Sweep", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp","Prisoner Sweep (horizontal)", "Sweep",0).UsingChecker((de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(TramplingRush, "Trampling Rush", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl","Trampling Rush (hit by stampede towards home)", "Trampling Rush",0),
             new PlayerDstHitMechanic(Bludgeon , "Bludgeon", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam","Bludgeon (vertical Slam)", "Slam",0),
             new PlayerDstBuffApplyMechanic(FixatedSamarog, "Fixate: Samarog", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(SpearImpact, "Spear Impact", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
             new PlayerDstBuffApplyMechanic(BrutalizeEffect, "Brutalized", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)", "Brutalized",0),
             new EnemyCastEndMechanic(BrutalizeCast, "Brutalize (Jump End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal),"CC","Brutalize (Breakbar)", "Breakbar",0),
-            new PlayerDstSkillMechanic(BrutalizeKill, "Brutalize (Killed)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Brutalize (Failed CC)", "CC Fail",0, (de, log) => de.HasKilled),
+            new PlayerDstSkillMechanic(BrutalizeKill, "Brutalize (Killed)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Brutalize (Failed CC)", "CC Fail",0).UsingChecker((de, log) => de.HasKilled),
             new EnemyDstBuffRemoveMechanic(FanaticalResilience, "Brutalize (End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC End","Ended Brutalize", "CC Ended",0),
             //new PlayerBoonRemoveMechanic(BrutalizeEffect, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Ended Brutalize (Breakbar broken)", "CCEnded",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.Manual)),
             //new Mechanic(BrutalizeEffect, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,"rgb(110,160,0)"), "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),

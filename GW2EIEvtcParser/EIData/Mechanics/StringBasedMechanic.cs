@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class StringBasedMechanic : Mechanic
+    public abstract class StringBasedMechanic<Checkable> : CheckedMechanic<Checkable>
     {
 
         protected HashSet<string> MechanicIDs { get; } = new HashSet<string>();

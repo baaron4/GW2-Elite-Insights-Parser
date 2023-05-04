@@ -7,11 +7,11 @@ namespace GW2EIEvtcParser.EIData
     internal class EnemyDstBuffApplyMechanic : EnemyBuffApplyMechanic
     {
 
-        public EnemyDstBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicID , inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public EnemyDstBuffApplyMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID , inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
-        public EnemyDstBuffApplyMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffApplyChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public EnemyDstBuffApplyMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 

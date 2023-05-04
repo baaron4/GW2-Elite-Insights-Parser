@@ -4,24 +4,15 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal abstract class BuffRemoveMechanic : IDBasedMechanic
+    internal abstract class BuffRemoveMechanic : IDBasedMechanic<BuffRemoveAllEvent>
     {
-        public delegate bool BuffRemoveChecker(BuffRemoveAllEvent rme, ParsedEvtcLog log);
 
-        private readonly BuffRemoveChecker _triggerCondition = null;
-
-        protected bool Keep(BuffRemoveAllEvent c, ParsedEvtcLog log)
-        {
-            return _triggerCondition == null || _triggerCondition(c, log);
-        }
-
-        public BuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffRemoveChecker condition = null) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public BuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
-        public BuffRemoveMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, BuffRemoveChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public BuffRemoveMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerCondition = condition;
         }
 
         protected abstract AgentItem GetAgentItem(BuffRemoveAllEvent brae);
