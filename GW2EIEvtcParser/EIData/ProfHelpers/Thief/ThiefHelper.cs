@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
             new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
-            new EffectCastFinder(Pitfall, EffectGUIDs.PitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
-            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThousandNeedlesAoE1).UsingSrcBaseSpecChecker(Spec.Thief),
-            new EffectCastFinder(SealArea, EffectGUIDs.SealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1).UsingSrcBaseSpecChecker(Spec.Thief),
+            new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

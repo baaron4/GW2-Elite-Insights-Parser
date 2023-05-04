@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingSrcSpecChecker(Spec.Mechanist),
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1).UsingSrcSpecChecker(Spec.Mechanist),
 
             // Mech
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),

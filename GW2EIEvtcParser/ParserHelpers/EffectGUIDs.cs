@@ -10,7 +10,12 @@ namespace GW2EIEvtcParser
         // Generic
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
+        public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
+        public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
         // Mesmer
+        public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
+        public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
+        public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
         public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
@@ -48,8 +53,9 @@ namespace GW2EIEvtcParser
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
-        public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200";
-        //public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Conflicts with certain field combos
+        public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200"; // also used with mesmer the prestige
+        public const string ElementalistSignetOfAir = "30A96C0E559DBD489FEE36DA96CC374A";
+        //public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Conflicts with certain field combos, thief teleport skills, guardian judges/merciful intervention
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
@@ -57,6 +63,10 @@ namespace GW2EIEvtcParser
         public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
         public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";
         public const string CatalystDeployEarthJadeSphere = "A674D3E7BC0C4342BC7A4EF0EE8FF8F0";
+        // Warrior
+        public const string WarriorSignetOfMight = "75EF160EAFC0394CACC436CF89819148";
+        public const string WarriorSignetOfStamina = "1E720C4D42448D45BDCB6307869D3D66"; // not actually instant cast, just for reference
+        public const string WarriorDolyakSignet = "D7F8FA5695F8714B99A51EE72EF6E178";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
@@ -67,8 +77,17 @@ namespace GW2EIEvtcParser
         public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
         public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
         // Guardian
+        public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
+        public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // is it shout in general?
+        public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
+        public const string GuardianContemplationOfPurity1 = "75D72E2DA47ECF47A6BD009B49B7C708";
+        public const string GuardianContemplationOfPurity2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // same as elementalist armor of earth
+        public const string GuardianJudgesIntervention = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target?
+        public const string GuardianMercifulIntervention = "B45E7BD66E424A4CA695DE63DC13E93F"; // delayed, when reaching target?
+        public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
+        public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";
@@ -89,16 +108,20 @@ namespace GW2EIEvtcParser
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
-        public const string MechanistShiftSignet = "E1C1DD7F866B4149A1BADD216C9AA69D";
-        public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD";
-        public const string MechanistCrisisZone = "10873BDE22D87845AAF004B0A60FA546";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD";
+        public const string MechanistCrisisZone = "10873BDE22D87845AAF004B0A60FA546";
+        public const string MechanistShiftSignet1 = "E1C1DD7F866B4149A1BADD216C9AA69D"; // happens twice, without owner at destination, with owner at origin?
+        public const string MechanistShiftSignet2 = "DB22850AE209B34BBD11372F56D42D43";
+        public const string MechanistOverclockSignet = "734834E7EB7CD74EB129ACBCE5C64C1D";
         // Ranger
         public const string RangerLightningReflexes = "3CF1D1228CBC3740AA33EDA357EABED4";
         public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
+        public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
+        public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
@@ -107,11 +130,19 @@ namespace GW2EIEvtcParser
         public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
         public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
-        public const string PitfallAoE = "7325E9B0DD2E914F9837E5FCFC740A95";
-        public const string ThousandNeedlesAoE1 = "2125A13079C1C5479C150926EB60A15D";
-        public const string ThousandNeedlesAoE2 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
-        public const string ThousandNeedlesAoE3 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
-        public const string SealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
+        public const string ThiefTeleportTrail = "03A8D8B8F81FE94FB52FFE5F74F31C9E"; // likely the trail, used with infiltrators arrow, shadow step, infiltrators signet, measured shot
+        // public const string ThiefTeleport = "1DEF5F2ECCF6CA4683ECC2DAED54726C"; // used with e.g. shadow shot, shadow strike
+        public const string ThiefShadowstep = "2C40AE26C91BEE468E245D0009B590F9";
+        public const string ThiefInfiltratorsSignet1 = "23284B87C26C9A41A887F410F930E1A2";
+        public const string ThiefInfiltratorsSignet2 = "2C89A39F7B88614ABED16D4B5A5BD2EB";
+        // public const string ThiefInfiltratorsSignetCollision = "70CFE546FA6A9B4E93BCAAF1ED1CD326"; // collision with shadow shot, shadow strike
+        public const string ThiefSignetOfAgility = "BB5488951B60B546BB1BD5626DAE83E1";
+        public const string ThiefSignetOfShadows = "14A5982DB277744CB928A4935555F563";
+        public const string ThiefPitfallAoE = "7325E9B0DD2E914F9837E5FCFC740A95";
+        public const string ThiefThousandNeedlesAoE1 = "2125A13079C1C5479C150926EB60A15D";
+        public const string ThiefThousandNeedlesAoE2 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
+        public const string ThiefThousandNeedlesAoE3 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
+        public const string ThiefSealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
