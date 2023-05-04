@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(ArcaneWave, ArcaneWave),
             new BuffGainCastFinder(MistForm, MistForm),
             new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir).UsingDstBaseSpecChecker(Spec.Elementalist),
             new DamageCastFinder(Sunspot, Sunspot),
             new DamageCastFinder(EarthenBlast, EarthenBlast),
             new DamageCastFinder(LightningStrike, LightningStrike),

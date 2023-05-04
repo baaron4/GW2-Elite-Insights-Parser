@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.ParsedData
             {ShatteredAegis, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             {ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
             {SelflessDaring, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
-            {SignetOfRenewal, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
+            {SignetOfRenewalEffect, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
             {OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
             {RuggedGrowth, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {WaterBlastCombo1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo

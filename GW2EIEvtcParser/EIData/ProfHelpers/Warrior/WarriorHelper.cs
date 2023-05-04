@@ -17,9 +17,12 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance),
             new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffect),
-            new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect),
+            new BuffGainCastFinder(BalancedStanceSill, BalancedStanceEffect),
             new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect),
             new BuffGainCastFinder(SignetOfFurySkill, SignetOfFuryActive),
+            new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -75,10 +78,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
-            new Buff("Dolyak Signet", DolyakSignet, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
+            new Buff("Dolyak Signet", DolyakSignetEffect, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
             new Buff("Signet of Fury", SignetOfFuryEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
-            new Buff("Signet of Might", SignetOfMight, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
-            new Buff("Signet of Stamina", SignetOfStamina, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
+            new Buff("Signet of Might", SignetOfMightEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
+            new Buff("Signet of Stamina", SignetOfStaminaEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
             new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
             // Banners
             new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),

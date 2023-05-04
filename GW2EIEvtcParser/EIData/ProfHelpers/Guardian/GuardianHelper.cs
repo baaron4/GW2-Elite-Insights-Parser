@@ -14,19 +14,20 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
-            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0), // Zealot's Flame
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0),
             new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(JudgesIntervention,JudgesIntervention), // Judge's Intervention
-            new DamageCastFinder(WrathOfJustice,WrathOfJustice), // Wrath of Justice
-            new DamageCastFinder(SmitersBoon,SmitersBoon), // Smiter's Boon
-            new DamageCastFinder(SmiteCondition,SmiteCondition), // Smite Condition
+            new DamageCastFinder(JudgesIntervention, JudgesIntervention),
+            new DamageCastFinder(WrathOfJustice, WrathOfJustice),
+            new DamageCastFinder(SmitersBoon, SmitersBoon),
+            new DamageCastFinder(SmiteCondition, SmiteCondition),
+            new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
             //new DamageCastFinder(9097,9097), // Symbol of Blades
-            new DamageCastFinder(GlacialHeart, GlacialHeart), // Glacial Heart
-            new DamageCastFinder(ShatteredAegis, ShatteredAegis), // Shattered Aegis
-            new EXTHealingCastFinder(SelflessDaring, SelflessDaring), // Selfless Daring
+            new DamageCastFinder(GlacialHeart, GlacialHeart),
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis),
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring),
         };
 
 
@@ -68,7 +69,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bane Signet", BaneSignet, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.BaneSignet).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
-            new Buff("Signet of Judgment", SignetOfJudgment, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
+            new Buff("Signet of Judgment", SignetOfJudgmentEffect, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),

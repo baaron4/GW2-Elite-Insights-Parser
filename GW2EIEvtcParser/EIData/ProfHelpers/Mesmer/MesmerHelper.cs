@@ -17,17 +17,21 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData, agentData, skillData) => {
-                return combatData.GetBuffData(brae.To).Any(x =>
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect)
+                .UsingChecker((brae, combatData, agentData, skillData) =>
+                {
+                    return combatData.GetBuffData(brae.To).Any(x =>
                                     x is BuffApplyEvent bae &&
                                     bae.BuffID == SkillIDs.HideInShadows &&
                                     Math.Abs(bae.AppliedDuration - 2000) <= ServerDelayConstant &&
                                     bae.CreditedBy == brae.To &&
                                     Math.Abs(brae.Time - bae.Time) <= ServerDelayConstant
                                  );
-                }), // Signet of Midnight
-            new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
+                })
+                .UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight),
+            new BuffGainCastFinder(PortalEntre, PortalWeaving),
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {

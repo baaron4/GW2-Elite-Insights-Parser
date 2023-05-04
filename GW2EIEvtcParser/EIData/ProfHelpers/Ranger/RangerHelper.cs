@@ -30,6 +30,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
         };
 
 
@@ -105,13 +107,13 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),
             // Signets
-            new Buff("Signet of Renewal", SignetOfRenewal, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfRenewal),
+            new Buff("Signet of Renewal", SignetOfRenewalEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfRenewal),
             new Buff("Signet of Stone (Passive)", SignetOfStoneEffectPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone),
             new Buff("Signet of Stone (Active)", SignetOfStoneEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone),
             new Buff("Signet of the Wild", SignetOfTheWild, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheWild),
             new Buff("Signet of the Wild (Pet)", SignetOfTheWildPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheWild),
-            new Buff("Signet of the Hunt (Passive)", SignetOfTheHuntPassive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
-            new Buff("Signet of the Hunt (Active)", SignetOfTheHuntActive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
+            new Buff("Signet of the Hunt (Passive)", SignetOfTheHuntEffectPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
+            new Buff("Signet of the Hunt (Active)", SignetOfTheHuntEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
             // Spirits
             // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, BuffImages.WaterSpirit),
             new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, BuffImages.FrostSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
