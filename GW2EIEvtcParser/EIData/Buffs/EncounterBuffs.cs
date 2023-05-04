@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Spectral Darkness", SpectralDarkness, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.SpectralDarkness),
             // Sabetha    
             new Buff("Shell-Shocked", ShellShocked, Source.FightSpecific, BuffClassification.Other, BuffImages.ShellShocked),
-            new Buff("Sapper Bomb", SapperBomb, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
+            new Buff("Sapper Bomb", SapperBombEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
             new Buff("Time Bomb", TimeBomb, Source.FightSpecific, BuffClassification.Other, BuffImages.TimeBomb),
             //////////////////////////////////////////////
             // Slothasor
