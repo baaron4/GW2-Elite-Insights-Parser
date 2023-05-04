@@ -5,26 +5,17 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal abstract class EffectMechanic : StringBasedMechanic
+    internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
     {
-        public delegate bool EffectChecker(EffectEvent ba, ParsedEvtcLog log);
-
-        private readonly EffectChecker _triggerCondition = null;
-
-        protected bool Keep(EffectEvent c, ParsedEvtcLog log)
-        {
-            return _triggerCondition == null || _triggerCondition(c, log);
-        }
 
         protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
 
-        public EffectMechanic(string effectGUID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, EffectChecker condition = null) : this(new string[] { effectGUID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public EffectMechanic(string effectGUID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new string[] { effectGUID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
-        public EffectMechanic(string[] effectGUIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, EffectChecker condition = null) : base(effectGUIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public EffectMechanic(string[] effectGUIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effectGUIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerCondition = condition;
         }
 
         protected void PlayerChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
