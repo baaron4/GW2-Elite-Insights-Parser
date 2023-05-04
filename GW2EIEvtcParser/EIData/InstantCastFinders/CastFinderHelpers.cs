@@ -16,25 +16,25 @@ namespace GW2EIEvtcParser.EIData
 
         internal static bool HasRelatedHit(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(combatData.GetDamageData(skillID), time)
+            return FindRelatedEvents(combatData.GetDamageData(skillID), time, epsilon)
                 .Any(hit => hit.CreditedFrom == agent);
         }
 
         internal static bool HasPreviousCast(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(combatData.GetAnimatedCastData(skillID), time)
+            return FindRelatedEvents(combatData.GetAnimatedCastData(skillID), time, epsilon)
                 .Any(cast => cast.Caster == agent && cast.Time <= time);
         }
 
         internal static bool HasSelfAppliedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long minDuration = 0, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time)
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
                 .Any(apply => apply.By == agent && apply.To == agent && apply.AppliedDuration >= minDuration);      
         }
 
         internal static bool HasSelfAppliedStackingBuff(CombatData combatData, long buffID, long minStacks, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return minStacks <= FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time)
+            return minStacks <= FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
                 .Count(apply => apply.By == agent && apply.To == agent);      
         }
 
