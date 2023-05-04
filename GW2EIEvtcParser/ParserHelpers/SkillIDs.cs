@@ -190,7 +190,7 @@
         public const long SymbolOfJudgement = 9095;
         public const long SymbolOfBlades = 9097;
         public const long SignetOfWrath = 9100;
-        public const long SmitersBoon = 9101;
+        public const long LesserSmiteCondition = 9101;
         public const long ZealotsFlameEffect = 9103;
         public const long ZealotsFlameSkill = 9104;
         public const long HolyStrike = 9108;
@@ -222,6 +222,7 @@
         public const long SmiteCondition = 9245;
         public const long MercifulInterventionSkill = 9246;
         public const long JudgesIntervention = 9247;
+        public const long ContemplationOfPurity = 9248;
         public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
         public const long ReinforcedArmor = 9283;
@@ -1010,7 +1011,7 @@
         public const long FuriousSurge = 30204;
         public const long InvigoratedBulwark = 30207;
         public const long JusticeDragonhunter = 30232;
-        public const long WrathOfJustice = 30255;
+        public const long LesserSignetOfWrath = 30255;
         public const long VampiricAura = 30285;
         public const long WingsOfResolveEffect = 30308;
         public const long EscapistsFortitude = 30313;

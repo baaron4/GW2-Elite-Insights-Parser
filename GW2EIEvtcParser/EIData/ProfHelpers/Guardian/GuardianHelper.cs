@@ -19,11 +19,13 @@ namespace GW2EIEvtcParser.EIData
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(JudgesIntervention, JudgesIntervention),
-            new DamageCastFinder(WrathOfJustice, WrathOfJustice),
-            new DamageCastFinder(SmitersBoon, SmitersBoon),
+            new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(JudgesIntervention, EffectGUIDs.GuardianJudgesIntervention).UsingDstBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
+            new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
             new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
+            new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath),
             //new DamageCastFinder(9097,9097), // Symbol of Blades
             new DamageCastFinder(GlacialHeart, GlacialHeart),
             new DamageCastFinder(ShatteredAegis, ShatteredAegis),
