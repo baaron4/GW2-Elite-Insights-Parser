@@ -8,10 +8,11 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public delegate bool Checker(Checkable evt, ParsedEvtcLog log);
-        protected List<Checker> _checkers { get; set; }
+        private List<Checker> _checkers { get; set; }
 
         protected CheckedMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
+            _checkers = new List<Checker>();
         }
 
         internal CheckedMechanic<Checkable> UsingChecker(Checker checker)
