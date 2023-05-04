@@ -39,10 +39,12 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
                         .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration >= 20000 && apply.AppliedDuration <= 40000);
-                }),
+                })
+                .UsingNotAccurate(true),
             new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
                 .UsingDstBaseSpecChecker(Spec.Guardian)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSelfAppliedStackingBuff(combatData, Stability, 5, evt.Dst, evt.Time)),
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSelfAppliedStackingBuff(combatData, Stability, 5, evt.Dst, evt.Time))
+                .UsingNotAccurate(true),
             // hold the line boons may overlap with save yourselves/pure of voice
 
             // Signets
