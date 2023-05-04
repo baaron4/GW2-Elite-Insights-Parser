@@ -52,11 +52,10 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
-                if (DLChecker != null && !DLChecker(evt, log))
+                if (CheckCondition(evt, log))
                 {
-                    continue;
+                    res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
                 }
-                res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
             }
             res.RemoveAll(x => x.DamageGain == -1.0);
             return res;
