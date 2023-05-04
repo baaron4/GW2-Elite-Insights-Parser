@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
 
             // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
             new DamageCastFinder(UnholyBurst, UnholyBurst),
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingEnable(combatData => !combatData.HasEffectData),
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData(),
             new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
                 .UsingSrcBaseSpecChecker(Spec.Necromancer)
                 .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time)),
