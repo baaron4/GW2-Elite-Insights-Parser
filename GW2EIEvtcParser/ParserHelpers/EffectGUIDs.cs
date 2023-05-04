@@ -80,7 +80,8 @@ namespace GW2EIEvtcParser
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
-        public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // is it shout in general?
+        public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // used with all shouts
+        public const string GuardianSaveYourselves = "68F2C378E6C80548B5A3C89870C5DD86";
         public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
         public const string GuardianContemplationOfPurity1 = "75D72E2DA47ECF47A6BD009B49B7C708";
         public const string GuardianContemplationOfPurity2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // same as elementalist armor of earth

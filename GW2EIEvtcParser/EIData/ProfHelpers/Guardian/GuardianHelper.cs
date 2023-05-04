@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -13,19 +16,39 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect),
             new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0),
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
+
+            // Meditations
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(JudgesIntervention, EffectGUIDs.GuardianJudgesIntervention).UsingDstBaseSpecChecker(Spec.Guardian),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
             new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
+            
+            // Shouts
+            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves).UsingDstBaseSpecChecker(Spec.Guardian),
+            // distinguish by boons, check duration/stacks to counteract pure of voice
+            new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
+                        .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration >= 20000 && apply.AppliedDuration <= 40000);
+                }),
+            new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSelfAppliedStackingBuff(combatData, Stability, 5, evt.Dst, evt.Time)),
+            // hold the line boons may overlap with save yourselves/pure of voice
+
+            // Signets
             new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath),
+            
             //new DamageCastFinder(9097,9097), // Symbol of Blades
             new DamageCastFinder(GlacialHeart, GlacialHeart),
             new DamageCastFinder(ShatteredAegis, ShatteredAegis),

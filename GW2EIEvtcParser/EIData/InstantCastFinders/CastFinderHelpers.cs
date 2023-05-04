@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -8,23 +9,33 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class CastFinderHelpers
     {
+        internal static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T: AbstractTimeCombatEvent
+        {
+            return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
+        }
+
         internal static bool HasRelatedHit(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return combatData.GetDamageData(skillID)
-                .Any(hit => hit.CreditedFrom == agent && Math.Abs(hit.Time - time) < epsilon);
+            return FindRelatedEvents(combatData.GetDamageData(skillID), time)
+                .Any(hit => hit.CreditedFrom == agent);
         }
 
         internal static bool HasPreviousCast(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return combatData.GetAnimatedCastData(skillID)
-                .Any(cast => cast.Caster == agent && cast.Time <= time && time - cast.Time < epsilon);
+            return FindRelatedEvents(combatData.GetAnimatedCastData(skillID), time)
+                .Any(cast => cast.Caster == agent && cast.Time <= time);
         }
 
-        internal static bool HasGainedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        internal static bool HasSelfAppliedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long minDuration = 0, long epsilon = ServerDelayConstant)
         {
-            return combatData.GetBuffData(buffID)
-                .OfType<BuffApplyEvent>()
-                .Any(apply => apply.To == agent && Math.Abs(apply.Time - time) < epsilon);      
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time)
+                .Any(apply => apply.By == agent && apply.To == agent && apply.AppliedDuration >= minDuration);      
+        }
+
+        internal static bool HasSelfAppliedStackingBuff(CombatData combatData, long buffID, long minStacks, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return minStacks <= FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffApplyEvent>(), time)
+                .Count(apply => apply.By == agent && apply.To == agent);      
         }
 
         internal static bool HasSpawnedMinion(AgentData agentData, MinionID minion, AgentItem master, long time, long epsilon = ServerDelayConstant)

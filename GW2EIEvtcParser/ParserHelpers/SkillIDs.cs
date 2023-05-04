@@ -185,6 +185,8 @@
         public const long Knockdown = 6892;
         public const long LeapOfFaith = 9080;
         public const long ShieldOfWrathSkill = 9082;
+        public const long Advance = 9084;
+        public const long SaveYourselves = 9085;
         public const long SymbolOfPunishment = 9090;
         public const long BaneSignet = 9092;
         public const long SymbolOfJudgement = 9095;
@@ -206,6 +208,7 @@
         public const long BindingBlade = 9148;
         public const long SignetOfJudgmentSkill = 9120;
         public const long HoldTheLine = 9152;
+        public const long StandYourGround = 9153;
         public const long SignetOfJudgmentEffect = 9156;
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
