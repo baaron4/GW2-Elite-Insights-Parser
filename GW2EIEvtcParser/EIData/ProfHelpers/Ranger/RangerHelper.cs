@@ -21,8 +21,8 @@ namespace GW2EIEvtcParser.EIData
             //new DamageCastFinder(12507,12507), // Crippling Shot
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffect),
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffectPvP),
-            new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingDurationChecker(6000),
-            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingDurationChecker(5000),
+            new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect),
             new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
