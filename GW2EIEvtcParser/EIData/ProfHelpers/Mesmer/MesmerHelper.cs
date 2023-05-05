@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
                 })
                 .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
                 .UsingDisableWithEffectData(),
-            new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight),
+            new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {

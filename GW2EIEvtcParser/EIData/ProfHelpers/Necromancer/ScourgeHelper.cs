@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            // Trail of Anguish ? Unique effect?
             new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishEffect),
+            // Trail of Anguish? Unique effect?
             // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
             new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
             new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
