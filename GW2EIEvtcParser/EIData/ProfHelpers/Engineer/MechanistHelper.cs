@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1).UsingSrcSpecChecker(Spec.Mechanist),
             new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingDisableWithEffectData().UsingNotAccurate(true),
-            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet).UsingSrcSpecChecker(Spec.Mechanist),
+            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet).UsingDstSpecChecker(Spec.Mechanist),
 
             // Mech
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
