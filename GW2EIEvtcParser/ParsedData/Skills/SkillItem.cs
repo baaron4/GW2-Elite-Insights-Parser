@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.ParsedData
             // Keep Construct
             {MagicBlastCharge, "Magic Blast Charge" },
             // CA
-            {ConjuredSlash, "Conjured Slash" },
+            {ConjuredSlashSAK, "Conjured Slash" },
             {ConjuredProtection, "Conjured Protection" },
             // Adina
             {DoubleRotatingEarthRays, "Double Rotating Earth Rays" },
@@ -138,6 +138,11 @@ namespace GW2EIEvtcParser.ParsedData
             { ExecutionersCallingDualStrike, "Executioner's Calling (Dual Strike)" },
             { ChargeGazelleMergeDamage, "Charge (Strike)" },
             { OneWolfPackDamage, "One Wolf Pack (Strike)" },
+            { PhantomsOnslaughtDamage, "Phantom's Onslaught (Strike)" },
+            { ImpossibleOddsDamage, "Impossible Odds (Strike)" },
+            { DarkrazorsDaringDamage, "Darkrazor's Daring (Strike)" },
+            { RiftSlashExplosion, "Rift Slash (Explosion)" },
+            { EmbraceTheDarknessDamage, "Embrace the Darkness (Strike)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -155,8 +160,8 @@ namespace GW2EIEvtcParser.ParsedData
             {DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png"},
             {UnstableArtifact, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
             {LightningJolt, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
-            {ConjuredSlash, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
-            {ConjuredProtection, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
+            { ConjuredSlashPlayer, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
+            { ConjuredProtection, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             {BoundingDodgerSkill, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"},
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"},
@@ -298,6 +303,11 @@ namespace GW2EIEvtcParser.ParsedData
             { ShatteredPsycheTier4, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
             // - Sabetha
             { SapperBombSkill, "https://wiki.guildwars2.com/images/b/ba/Sapper_Bomb.png" },
+            // - Cairn
+            { CelestialDash, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            // - Conjured Amalgamated
+            { ConjuredSlashSAK, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
+            { ConjuredProtectionSAK, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
             // Skills
             { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
@@ -306,6 +316,16 @@ namespace GW2EIEvtcParser.ParsedData
             { AdvancingStrikeSkill, "https://wiki.guildwars2.com/images/6/6b/Advancing_Strike.png" },
             { ChargeGazelleMergeDamage, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
             { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
+            { PhantomsOnslaughtDamage, "https://wiki.guildwars2.com/images/b/b2/Phantom%27s_Onslaught.png" },
+            { ImpossibleOddsDamage, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png" },
+            { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
+            { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
+            { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
+            { IcerazorsIreDamage, "https://wiki.guildwars2.com/images/2/2d/Icerazor%27s_Ire.png" },
+            { EnchantedDaggers2, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png" },
+            { DarkrazorsDaringDamage, "https://wiki.guildwars2.com/images/7/77/Darkrazor%27s_Daring.png" },
+            { RiftSlashExplosion, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
+            { EmbraceTheDarknessDamage, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png" },
             // - Shades
             { ManifestSandShade, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
             { NefariousFavor, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
@@ -320,6 +340,7 @@ namespace GW2EIEvtcParser.ParsedData
             // Traits
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
+            { ElectricDischarge, "https://wiki.guildwars2.com/images/a/a4/Electric_Discharge.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
