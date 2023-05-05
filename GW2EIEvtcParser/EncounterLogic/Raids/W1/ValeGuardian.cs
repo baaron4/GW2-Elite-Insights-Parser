@@ -34,8 +34,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new PlayerDstHitMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new EnemyCastStartMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, (c, log) => c.ActualDuration <= 8544),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
+            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0).UsingChecker((c, log) => c.ActualDuration <= 8544),
+            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0).UsingChecker((c, log) => c.ActualDuration > 8544),
             });
             Extension = "vg";
             Icon = EncounterIconValeGuardian;

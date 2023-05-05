@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SkillIDs;
@@ -9,17 +9,15 @@ namespace GW2EIEvtcParser.EIData
     {
         protected int SpeciesID { get; }
 
+        protected override AgentItem GetCasterAgent(AgentItem agent)
+        {
+            return agent.GetFinalMaster();
+        }
+
         public MinionCommandCastFinder(long skillID, int speciesID) : base(skillID, MinionCommandEffect)
         {
             SpeciesID = speciesID;
-        }
-
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            return base.ComputeInstantCast(combatData, skillData, agentData)
-                .Where(cast => cast.Caster.IsSpecies(SpeciesID))
-                .Select(cast => new InstantCastEvent(cast.Time, cast.Skill, cast.Caster.GetFinalMaster()))
-                .ToList();
+            UsingChecker((evt, combatData, agentData, skillData) => evt.To.Type != AgentItem.AgentType.Gadget && evt.To.IsSpecies(speciesID) && evt.To.Master != null);
         }
     }
 }

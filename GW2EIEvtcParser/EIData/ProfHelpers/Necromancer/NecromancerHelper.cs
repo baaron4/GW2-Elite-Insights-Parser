@@ -94,12 +94,11 @@ namespace GW2EIEvtcParser.EIData
         {
             EnterDeathShroud, ExitDeathShroud,
             EnterReaperShroud, ExitReaperShroud, 
-            EnterHarbingerShroud, ExitHarbingerShroud
         };
 
         public static bool IsShroudTransform(long id)
         {
-            return _shroudTransform.Contains(id);
+            return _shroudTransform.Contains(id) || HarbingerHelper.IsHarbingerShroudTransform(id);
         }
 
         private static HashSet<long> Minions = new HashSet<long>()

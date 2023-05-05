@@ -31,5 +31,16 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, BuffImages.HarbingerShroud),
             new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Blight),
         };
+
+        private static readonly HashSet<long> _harbingerShroudTransform = new HashSet<long>
+        {
+            EnterHarbingerShroud, ExitHarbingerShroud
+        };
+
+        public static bool IsHarbingerShroudTransform(long id)
+        {
+            return _harbingerShroudTransform.Contains(id);
+        }
+
     }
 }

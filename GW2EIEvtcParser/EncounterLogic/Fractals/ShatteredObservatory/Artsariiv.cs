@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(TeleportLunge, "Teleport Lunge", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump","Triple Jump Mid->Edge", "Triple Jump",0),
             new PlayerDstHitMechanic(AstralSurge, "Astral Surge", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle","Different sized spiraling circles", "1000 Circles",0),
             new PlayerDstHitMechanic(new long[] { RedMarble1, RedMarble2 }, "Red Marble", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble","Red KD Marble after Jump", "Red Marble",0),
-            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new SpawnMechanic((int)ArcDPSEnums.TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";

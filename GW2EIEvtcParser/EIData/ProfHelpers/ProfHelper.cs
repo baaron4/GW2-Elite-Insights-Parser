@@ -296,12 +296,37 @@ namespace GW2EIEvtcParser.EIData
             return _canSummonClones.Contains(spec);
         }
 
-        private static HashSet<long> CommonMinions = new HashSet<long>()
+        /// <summary>
+        /// Minions that aren't profession-specific bound.
+        /// </summary>
+        private static readonly HashSet<long> CommonMinions = new HashSet<long>()
         {
+            // Racial Summons
+            (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
+            (int)ArcDPSEnums.MinionID.SnowWurm,
+            (int)ArcDPSEnums.MinionID.DruidSpirit,
+            (int)ArcDPSEnums.MinionID.SylvanHound,
+            (int)ArcDPSEnums.MinionID.IronLegionSoldier,
+            (int)ArcDPSEnums.MinionID.IronLegionMarksman,
+            (int)ArcDPSEnums.MinionID.BloodLegionSoldier,
+            (int)ArcDPSEnums.MinionID.BloodLegionMarksman,
+            (int)ArcDPSEnums.MinionID.AshLegionSoldier,
+            (int)ArcDPSEnums.MinionID.AshLegionMarksman,
+            (int)ArcDPSEnums.MinionID.STAD007,
+            (int)ArcDPSEnums.MinionID.STA7012,
+            // GW2 Digital Deluxe
+            (int)ArcDPSEnums.MinionID.MistfireWolf,
+            // Rune Summons
             (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
             (int)ArcDPSEnums.MinionID.RuneRockDog,
             (int)ArcDPSEnums.MinionID.RuneMarkIGolem,
             (int)ArcDPSEnums.MinionID.RuneTropicalBird,
+            // Consumables with summons
+            (int)ArcDPSEnums.MinionID.Ember,
+            (int)ArcDPSEnums.MinionID.HawkeyeGriffon,
+            (int)ArcDPSEnums.MinionID.SousChef,
+            (int)ArcDPSEnums.MinionID.SunspearParagonSupport,
+            (int)ArcDPSEnums.MinionID.RavenSpiritShadow,
         };
 
         internal static bool IsKnownMinionID(long id)

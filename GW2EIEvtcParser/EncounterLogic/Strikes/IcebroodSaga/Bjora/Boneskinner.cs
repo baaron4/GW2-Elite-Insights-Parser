@@ -20,10 +20,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // TODO find this
                 //new HitOnPlayerMechanic(58811, "Grasp", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Grasp","Grasp (hit by claw AoE)", "Grasp",4000),
                 new PlayerDstHitMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "H.Charge","Hit by Charge", "Charge hit",0),
-                new PlayerDstHitMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Star,Colors.Red), "Launched","Launched by Death Wind", "Launched",0, (de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new EnemyCastEndMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "D.Torch","Destroyed a Torch", "Destroyed a Torch",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-                new EnemyCastEndMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "D.Wind","Death Wind (extinguished torches)", "Death Wind",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-                new EnemyCastEndMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "D.Darkness","Douse in Darkness (extinguished torches)", "Douse in Darkness",0, (ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new PlayerDstHitMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Star,Colors.Red), "Launched","Launched by Death Wind", "Launched",0).UsingChecker((de, log) => !de.To.HasBuff(log, SkillIDs.Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new EnemyCastEndMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.Hexagram,Colors.LightRed), "D.Torch","Destroyed a Torch", "Destroyed a Torch",0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new EnemyCastEndMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "D.Wind","Death Wind (extinguished torches)", "Death Wind",0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+                new EnemyCastEndMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "D.Darkness","Douse in Darkness (extinguished torches)", "Douse in Darkness",0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
             }
             );
             Extension = "boneskin";

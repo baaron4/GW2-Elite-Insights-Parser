@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingDurationChecker(6000),
             new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingDurationChecker(5000),
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect),
-            new EXTHealingCastFinder(WindbornNotes, WindbornNotes),
+            new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),

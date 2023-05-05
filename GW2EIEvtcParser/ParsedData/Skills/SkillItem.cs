@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
+using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -116,7 +117,7 @@ namespace GW2EIEvtcParser.ParsedData
             {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
-            {RushingJusticeAnimation, "Rushing Justice - Animation" },
+            { RushingJusticeStrike, "Rushing Justice (Strike)" },
             //
             {PowerReturn, "Power Return" },
             {PowerCleanse, "Power Cleanse" },
@@ -130,6 +131,13 @@ namespace GW2EIEvtcParser.ParsedData
 
             {GlennaCap, "Capture" },
             {MushroomKingsBlessing, "Mushroom King's Blessing"},
+            //
+            { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
+            { UnrelentingAssaultMultihit, "Unrelenting Assault (Multi Hit)" },
+            { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
+            { ExecutionersCallingDualStrike, "Executioner's Calling (Dual Strike)" },
+            { ChargeGazelleMergeDamage, "Charge (Strike)" },
+            { OneWolfPackDamage, "One Wolf Pack (Strike)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -224,6 +232,7 @@ namespace GW2EIEvtcParser.ParsedData
             {SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             {GlyphOfUnityCA, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png" },
+            { HaresSpeedSkill, "https://wiki.guildwars2.com/images/0/05/Hare%27s_Speed.png" },
             // Weaver attunements
             {DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             {FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },
@@ -264,16 +273,40 @@ namespace GW2EIEvtcParser.ParsedData
             {CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             {BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
-            {RushingJusticeAnimation, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
+            {RushingJusticeStrike, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
             //   
             {RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
             {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
             {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
-            // Special Forces Training Area
-            {MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png"},
-            // Shades
+            // Special Action Keys
+            // - Training Area
+            { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
+            // - Icebrood Saga
+            { SpiritNovaTier1, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier2, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier3, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { SpiritNovaTier4, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
+            { NightTerrorTier1, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier2, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier3, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { NightTerrorTier4, "https://wiki.guildwars2.com/images/0/03/Night_Terror.png" },
+            { ShatteredPsycheTier1, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier2, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier3, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            { ShatteredPsycheTier4, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
+            // - Sabetha
+            { SapperBombSkill, "https://wiki.guildwars2.com/images/b/ba/Sapper_Bomb.png" },
+            // Skills
+            { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
+            { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
+            { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
+            { ExecutionersCallingDualStrike, "https://wiki.guildwars2.com/images/d/da/Executioner%27s_Calling.png" },
+            { AdvancingStrikeSkill, "https://wiki.guildwars2.com/images/6/6b/Advancing_Strike.png" },
+            { ChargeGazelleMergeDamage, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
+            // - Shades
             { ManifestSandShadeShadeHit, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
             { NefariousFavorShadeHit, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
             { SandCascadeShadeHit, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
@@ -281,6 +314,9 @@ namespace GW2EIEvtcParser.ParsedData
             { GarishPillarShadeHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
             { DesertShroudHit, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
             { SandstormShroudHit, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            // Traits
+            { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
+            { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
@@ -288,9 +324,9 @@ namespace GW2EIEvtcParser.ParsedData
                         { LightningStrikeSigil, GW2Builds.StartOfLife }, 
                         { FlameBlastSigil, GW2Builds.StartOfLife },
                         { FireAttunementSkill, GW2Builds.December2018Balance }, 
-                        { Mug, GW2Builds.StartOfLife }, // Mug
-                        { PulmonaryImpactSkill, 54485 }, // Pulmonary Impact
-                        { 52370, GW2Builds.StartOfLife },
+                        { Mug, GW2Builds.StartOfLife },
+                        { PulmonaryImpactSkill, GW2Builds.HoTRelease },
+                        { ConjuredSlashPlayer, GW2Builds.StartOfLife },
                         { LightningJolt, GW2Builds.StartOfLife },
                         { Sunspot, GW2Builds.December2018Balance },
                         { EarthenBlast, GW2Builds.December2018Balance },
@@ -314,7 +350,7 @@ namespace GW2EIEvtcParser.ParsedData
         //public int Range { get; private set; } = 0;
         public bool AA { get; }
 
-        public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID);
+        public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID) || HarbingerHelper.IsHarbingerShroudTransform(ID);
         public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
         public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
         public string Name { get; }

@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                         if (effectGUID != null)
                         {
-                            var radius = 500; // Zone 1
+                            int radius = 500; // Zone 1
                             // Zone 2
                             if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
                             {

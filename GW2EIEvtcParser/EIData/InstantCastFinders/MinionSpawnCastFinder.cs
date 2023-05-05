@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var result = new List<InstantCastEvent>();
             long lastTime = int.MinValue;
-            foreach (var agent in agentData.GetNPCsByID(SpeciesID))
+            foreach (AgentItem agent in agentData.GetNPCsByID(SpeciesID))
             {
                 if (agent.Master == null)
                 {
