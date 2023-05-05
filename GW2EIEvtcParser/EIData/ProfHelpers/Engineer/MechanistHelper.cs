@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
@@ -23,8 +23,7 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new EffectCastFinderFromMinion(DischargeArray, EffectGUIDs.MechanistDischargeArray)
-                .UsingChecker((effect, combatData, agentData, skillData) => effect.Src.IsSpecies(MinionID.JadeMech)),
+            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayEffect),
             new EffectCastFinderFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone1)
                 .UsingChecker((effect, combatData, agentData, skillData) => effect.Src.IsSpecies(MinionID.JadeMech)),
             new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),

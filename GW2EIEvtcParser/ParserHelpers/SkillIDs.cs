@@ -2727,6 +2727,7 @@
         public const long DawnsRepose = 63220;
         public const long BarrierSignetJDrive = 63228;
         public const long SkyCircus = 63236;
+        public const long DischargeArrayEffect = 63238;
         public const long ShadowShroud = 63239;
         public const long ForestsFortification = 63240;
         public const long ForceSignet = 63243;
