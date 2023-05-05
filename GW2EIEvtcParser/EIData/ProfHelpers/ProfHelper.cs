@@ -96,11 +96,9 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-        public static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData, SkillData skillData, FightData fightData)
+        internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<Player> players)
         {
             var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
-            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastFinders.Add(x));
-            var res = new List<InstantCastEvent>();
             foreach (Player p in players)
             {
                 switch (p.Spec)
@@ -251,25 +249,7 @@ namespace GW2EIEvtcParser.EIData
                         break;
                 }
             }
-            res.AddRange(ComputeInstantCastEventsFromFinders(combatData, agentData, skillData, instantCastFinders.ToList()));
-            return res;
-        }
-
-        private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(CombatData combatData, AgentData agentData, SkillData skillData, IReadOnlyList<InstantCastFinder> instantCastFinders)
-        {
-            var res = new List<InstantCastEvent>();
-            foreach (InstantCastFinder icf in instantCastFinders)
-            {
-                if (icf.Available(combatData))
-                {
-                    if (icf.NotAccurate)
-                    {
-                        skillData.NotAccurate.Add(icf.SkillID);
-                    }
-                    res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
-                }
-            }
-            return res;
+            return instantCastFinders;
         }
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
