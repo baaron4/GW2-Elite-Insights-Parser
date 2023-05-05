@@ -38,12 +38,16 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((evt, combatData, agentData, skillData) =>
                 {
                     return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
-                        .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration >= 20000 && apply.AppliedDuration <= 40000);
-                })
+                        .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
+                }) // identify advance by self-applied 20s to 40s aegis
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
                 .UsingDstBaseSpecChecker(Spec.Guardian)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSelfAppliedStackingBuff(combatData, Stability, 5, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return 5 <= FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
+                        .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
+                }) // identify stand your ground by self-applied 5+ stacks of stability
                 .UsingNotAccurate(true),
             // hold the line boons may overlap with save yourselves/pure of voice
 
