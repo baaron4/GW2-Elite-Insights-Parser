@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser
     public static class EffectGUIDs
     {
         // Generic
+        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // blue circles indicating radius of boons etc.
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
@@ -114,7 +115,8 @@ namespace GW2EIEvtcParser
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD";
-        public const string MechanistCrisisZone = "10873BDE22D87845AAF004B0A60FA546";
+        public const string MechanistCrisisZone1 = "CDF749672C01964BAEF64CCB3D431DEE";
+        public const string MechanistCrisisZone2 = "956450E1260FB94B8691BC1378086250";
         public const string MechanistShiftSignet1 = "E1C1DD7F866B4149A1BADD216C9AA69D"; // happens twice, without owner at destination, with owner at origin?
         public const string MechanistShiftSignet2 = "DB22850AE209B34BBD11372F56D42D43";
         public const string MechanistOverclockSignet = "734834E7EB7CD74EB129ACBCE5C64C1D";

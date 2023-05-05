@@ -17,14 +17,16 @@ namespace GW2EIEvtcParser.EIData
         {
             new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1).UsingSrcSpecChecker(Spec.Mechanist),
             new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingDisableWithEffectData().UsingNotAccurate(true),
-            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet),
+            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet).UsingSrcSpecChecker(Spec.Mechanist),
 
             // Mech
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new EffectCastFinderFromMinion(DischargeArray, EffectGUIDs.MechanistDischargeArray),
-            new EffectCastFinderFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone),
+            new EffectCastFinderFromMinion(DischargeArray, EffectGUIDs.MechanistDischargeArray)
+                .UsingChecker((effect, combatData, agentData, skillData) => effect.Src.IsSpecies(MinionID.JadeMech)),
+            new EffectCastFinderFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone1)
+                .UsingChecker((effect, combatData, agentData, skillData) => effect.Src.IsSpecies(MinionID.JadeMech)),
             new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),
             new MinionCastCastFinder(JadeMortar, JadeMortar),
             new MinionCastCastFinder(BarrierBurst, BarrierBurst),
