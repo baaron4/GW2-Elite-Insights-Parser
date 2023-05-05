@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -32,10 +33,11 @@ namespace GW2EIEvtcParser.EIData
         public string Name { get; }
         public int ID { get; }
         public string Tooltip { get; protected set; }
-        internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
         protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
-        internal DamageLogChecker DLChecker { get; private set; }
+
+        internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
+        private List<DamageLogChecker> _dlCheckers { get; set; }
 
 
         internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
@@ -78,6 +80,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 Tooltip += "<br>Non multiplier";
             }
+            _dlCheckers = new List<DamageLogChecker>();
         }
 
         internal DamageModifier WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
@@ -89,8 +92,13 @@ namespace GW2EIEvtcParser.EIData
 
         internal virtual DamageModifier UsingChecker(DamageLogChecker dlChecker)
         {
-            DLChecker = dlChecker;
+            _dlCheckers.Add(dlChecker);
             return this;
+        }
+
+        protected bool CheckCondition(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        {
+            return _dlCheckers.All(checker => checker(dl, log));
         }
 
         public bool Available(CombatData combatData)

@@ -31,8 +31,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(CorruptTheLiving, "Corrupt the Living", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
             new PlayerDstHitMechanic(WurmSpit, "Wurm Spit", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
-            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
+            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0).UsingChecker((ce, log) => ce.ActualDuration <= 6800),
+            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0).UsingChecker((ce,log) => ce.ActualDuration > 6800),
 
             });
             Extension = "sh";

@@ -4,28 +4,19 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal abstract class CastMechanic : IDBasedMechanic
+    internal abstract class CastMechanic : IDBasedMechanic<AbstractCastEvent>
     {
-        public delegate bool CastChecker(AbstractCastEvent ce, ParsedEvtcLog log);
-
-        private readonly CastChecker _triggerCondition = null;
-
-        protected bool Keep(AbstractCastEvent c, ParsedEvtcLog log)
-        {
-            return _triggerCondition == null || _triggerCondition(c, log);
-        }
 
         protected abstract long GetTime(AbstractCastEvent evt);
 
         protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
-        public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CastChecker condition = null) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 
-        public CastMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CastChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public CastMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerCondition = condition;
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)

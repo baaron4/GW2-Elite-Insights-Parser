@@ -45,6 +45,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        {
+            long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            if (logStartNPCUpdate != null)
+            {
+                AgentItem mainTarget = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+                if (mainTarget == null)
+                {
+                    throw new MissingKeyActorsException("Main target not found");
+                }
+                CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw);
+                if (startToUse == mainTarget.FirstAware && firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + ParserHelper.TimeThresholdConstant))
+                {
+                    startToUse = firstCast.Time;
+                }
+            }
+            return startToUse;
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
