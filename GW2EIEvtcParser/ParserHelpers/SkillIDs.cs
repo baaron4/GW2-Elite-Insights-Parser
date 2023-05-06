@@ -990,8 +990,10 @@
         public const long VentarisWill = 28427;
         public const long LegendaryDemonStanceSkill = 28494;
         public const long EnchantedDaggers = 28557;
+        public const long RiftSlashSkill = 28964;
         public const long HardeningPersistence = 28957;
         public const long InvokingHarmony = 29025;
+        public const long RiftSlashRiftHit = 29073;
         public const long NaturalHarmony = 29082;
         public const long EnergyExpulsion = 29114;
         public const long MendersRebuke = 29145;
@@ -1707,6 +1709,7 @@
         public const long TrailOfAnguish = 40274;
         public const long SignetOfTheLocustShroud = 40283;
         public const long MirageCloak = 40408;
+        public const long IcerazorsIreSkill = 40485;
         public const long VultureStanceSkill = 40498;
         public const long TomeOfJusticeEffect = 40530;
         public const long SignetOfUndeathShroud = 40583;
@@ -1720,16 +1723,19 @@
         public const long FalseOasis = 40802;
         public const long NefariousFavorSkill = 40813;
         public const long MantraOfPotence = 40915;
+        public const long IcerazorsIreMinion = 40916; // cast by created minion, does not hit
         public const long FireMajorAttunement = 40926;
         public const long Chapter4StalwartStand = 40988;
         public const long RazorclawsRage = 41016;
         public const long OverheatEffect = 41037;
         public const long Sieche = 41052;
         public const long POV_TrailOfAnguishEffect1 = 41052;
+        public const long DarkrazorsDaringHit = 41095;
         public const long ExitPhotonForge = 41123;
         public const long SignetOfRenewalEffect = 41147;
         public const long DualWaterAttunement = 41166;
         public const long SpectrumShieldSkill = 41218;
+        public const long DarkrazorsDaringSkill = 41220;
         public const long Chapter1SearingSpell = 41258;
         public const long UnhinderedDelivery = 41328;
         public const long Mercy = 41372;
@@ -1780,6 +1786,7 @@
         public const long EnterPhotonForge = 42938;
         public const long EnterBeastMode = 42944;
         public const long WeaveSelf = 42951;
+        public const long SmokeAssaultMergeHit = 42955;
         public const long RejuvenatingRespite = 42960;
         public const long PotentHaste = 42983;
         public const long Chapter1UnflinchingCharge = 42986;
@@ -1821,11 +1828,12 @@
         public const long SandCascadeBarrier = 43759;
         public const long EarthMajorAttunement = 43740;
         public const long SignetOfSpiteShroud = 43772;
+        public const long IcerazorsIreHit = 43856;
         public const long SignetOfVampirismShroud = 43885;
         public const long SuperiorSigilOfSeverance = 43930;
         public const long OverheatSkill = 43937;
         public const long FullCounter = 43949;
-        public const long ChargeGazelleMergeDamage = 43995;
+        public const long ChargeGazelleMergeTravel = 43995;
         public const long VoiceOfTruth = 44008;
         public const long ChargeGazelle = 44051;
         public const long MantraOfTruthCast = 44080;
@@ -1865,6 +1873,7 @@
         public const long WovenFire = 45110;
         public const long Quickfire = 45123;
         public const long Chapter3AzureSun = 45128;
+        public const long DarkrazorsDaringMinion = 45168; // cast by created minion, does not hit
         public const long POV_SandShade1 = 45225;
         public const long NarcoticSpores = 45262;
         public const long PerfectWeave = 45267;
@@ -2018,6 +2027,7 @@
         public const long SoulStoneVenomStrike = 49077;
         public const long SoulStoneVenomEffect = 49083;
         public const long IllusionaryDefense = 49099;
+        public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
         public const long EchosPickup = 49125;
