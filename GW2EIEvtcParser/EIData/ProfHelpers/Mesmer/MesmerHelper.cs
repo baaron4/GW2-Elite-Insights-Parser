@@ -17,9 +17,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData, agentData, skillData) => {
-                return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
-            }).UsingNotAccurate(true), // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect)
+                .UsingChecker((brae, combatData, agentData, skillData) => {
+                     return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
+                })
+                .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
+                .UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new BuffGainCastFinder(PortalExeunt, PortalUses),
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),

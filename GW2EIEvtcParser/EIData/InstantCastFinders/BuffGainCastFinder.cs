@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,6 +15,12 @@ namespace GW2EIEvtcParser.EIData
 
         public BuffGainCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
+        }
+
+        internal BuffGainCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
+        {  
+            UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - duration) < epsilon);
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)

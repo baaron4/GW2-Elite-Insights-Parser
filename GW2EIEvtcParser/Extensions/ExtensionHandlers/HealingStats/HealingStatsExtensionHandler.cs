@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.Extensions
             LifeTransfer, 
             GatheringPlague,
             SoulSpiral,
-            GarishPillar,
+            GarishPillarSkill,
             WingsOfResolveSkill,
             ElixirOfPromise,
             HauntShot,

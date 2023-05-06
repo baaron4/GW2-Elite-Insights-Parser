@@ -57,6 +57,11 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal InstantCastFinder UsingDisableWithEffectData()
+        {
+            return UsingEnable(combatData => !combatData.HasEffectData);
+        }
+
         internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
         {
             BeforeWeaponSwap = beforeWeaponSwap;

@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
 
             // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
             new DamageCastFinder(UnholyBurst, UnholyBurst),
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingEnable(combatData => !combatData.HasEffectData),
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData(),
             new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
                 .UsingSrcBaseSpecChecker(Spec.Necromancer)
                 .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time)),
@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
+            new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
             
             // Minions
             new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
@@ -64,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of Vampirism", SignetOfVampirism, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfVampirism),
             new Buff("Vampiric Mark", VampiricMark, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfVampirism),
             new Buff("Signet of Vampirism (Shroud)", SignetOfVampirismShroud, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfVampirism),
-            new Buff("Plague Signet", PlagueSignet, Source.Necromancer, BuffClassification.Other, BuffImages.PlagueSignet),
+            new Buff("Plague Signet", PlagueSignetEffect, Source.Necromancer, BuffClassification.Other, BuffImages.PlagueSignet),
             new Buff("Plague Sending", PlagueSending, Source.Necromancer, BuffClassification.Other, BuffImages.PlagueSending),
             new Buff("Plague Signet (Shroud)", PlagueSignetShroud, Source.Necromancer, BuffClassification.Other, BuffImages.PlagueSignet),
             new Buff("Signet of Spite", SignetOfSpite, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfSpite),

@@ -19,17 +19,19 @@ namespace GW2EIEvtcParser.EIData
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
             //new DamageCastFinder(12507,12507), // Crippling Shot
-            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffect), // "Sic 'Em!"
-            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffectPvP), // "Sic 'Em!" PvP
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffect),
+            new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmEffectPvP),
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
             new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
-            new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect), // Sharpening Stone
-            new EXTHealingCastFinder(WindborneNotes, WindborneNotes), // Windborne Notes
-            new EXTBarrierCastFinder(ProtectMe, ProtectMe), // Protect Me!
+            new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect),
+            new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
+            new EXTBarrierCastFinder(ProtectMe, ProtectMe),
             new BuffGiveCastFinder(GuardSkill, GuardEffect),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
+            new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
         };
 
 
@@ -105,13 +107,14 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),
             // Signets
-            new Buff("Signet of Renewal", SignetOfRenewal, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfRenewal),
-            new Buff("Signet of Stone (Passive)", SignetOfStonePassive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone),
+            new Buff("Signet of Renewal", SignetOfRenewalEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfRenewal),
+            new Buff("Signet of Stone", SignetOfStoneEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone),
+            new Buff("Signet of Stone (Pet)", SignetOfStoneEffectPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone), // not present even on soulbeast?
             new Buff("Signet of Stone (Active)", SignetOfStoneActive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfStone),
             new Buff("Signet of the Wild", SignetOfTheWild, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheWild),
             new Buff("Signet of the Wild (Pet)", SignetOfTheWildPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheWild),
-            new Buff("Signet of the Hunt (Passive)", SignetOfTheHuntPassive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
-            new Buff("Signet of the Hunt (Active)", SignetOfTheHuntActive, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
+            new Buff("Signet of the Hunt", SignetOfTheHuntEffect, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
+            new Buff("Signet of the Hunt (Pet)", SignetOfTheHuntEffectPet, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfTheHunt),
             // Spirits
             // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, BuffImages.WaterSpirit),
             new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, BuffImages.FrostSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),

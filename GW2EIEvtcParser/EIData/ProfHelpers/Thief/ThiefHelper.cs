@@ -13,17 +13,23 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Shadowstep,Infiltration),
-            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
+            new BuffGainCastFinder(Shadowstep, Infiltration),
+            new BuffLossCastFinder(ShadowReturn, Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
             new DamageCastFinder(Mug, Mug),
             new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
-            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive),
-            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect),
-            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect),
-            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect),
+            new BuffGainCastFinder(AssassinsSignet, AssassinsSignetActive),
+            new BuffGiveCastFinder(DevourerVenomSkill, DevourerVenomEffect),
+            new BuffGiveCastFinder(IceDrakeVenomSkill, IceDrakeVenomEffect),
+            new BuffGiveCastFinder(SkaleVenomSkill, SkaleVenomEffect),
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect),
-            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
+            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
+            new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1).UsingSrcBaseSpecChecker(Spec.Thief),
+            new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
+            new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1).UsingDstBaseSpecChecker(Spec.Thief),
+            new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
+            new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -49,9 +55,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, BuffImages.SignetOfMalice),
             new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),
             new Buff("Assassin's Signet (Active)", AssassinsSignetActive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),
-            new Buff("Infiltrator's Signet", InfiltratorsSignet, Source.Thief, BuffClassification.Other, BuffImages.InfiltratorsSignet),
-            new Buff("Signet of Agility", SignetOfAgility, Source.Thief, BuffClassification.Other, BuffImages.SignetOfAgility),
-            new Buff("Signet of Shadows", SignetOfShadows, Source.Thief, BuffClassification.Other, BuffImages.SignetOfShadows),
+            new Buff("Infiltrator's Signet", InfiltratorsSignetEffect, Source.Thief, BuffClassification.Other, BuffImages.InfiltratorsSignet),
+            new Buff("Signet of Agility", SignetOfAgilityEffect, Source.Thief, BuffClassification.Other, BuffImages.SignetOfAgility),
+            new Buff("Signet of Shadows", SignetOfShadowsEffect, Source.Thief, BuffClassification.Other, BuffImages.SignetOfShadows),
             // Venoms // src is always the user, makes generation data useless
             new Buff("Skelk Venom", SkelkVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Defensive, BuffImages.SkelkVenom),
             new Buff("Ice Drake Venom", IceDrakeVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, BuffImages.IceDrakeVenom),

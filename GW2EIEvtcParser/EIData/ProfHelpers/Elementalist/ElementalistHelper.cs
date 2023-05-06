@@ -15,29 +15,31 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FireAttunementSkill, FireAttunementEffect), // Fire
-            new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementEffect), // Water
-            new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect), // Air
-            new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect), // Earth
+            new BuffGainCastFinder(FireAttunementSkill, FireAttunementEffect),
+            new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementEffect),
+            new BuffGainCastFinder(AirAttunementSkill, AirAttunementEffect),
+            new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementEffect),
+
             new BuffGainCastFinder(GlyphOfElementalPowerFireSkill, GlyphOfElementalPowerFireEffect),
             new BuffGainCastFinder(GlyphOfElementalPowerWaterSkill, GlyphOfElementalPowerWaterEffect),
             new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirEffect),
             new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthEffect),
-            new DamageCastFinder(ArcaneBlast, ArcaneBlast), // Arcane Blast
-            new BuffGiveCastFinder(ArcanePowerSkill, ArcanePowerEffect), // Arcane Power
-            new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect), // Arcane Shield
-            new DamageCastFinder(ArcaneWave, ArcaneWave), // Arcane Wave
-            new BuffGainCastFinder(MistForm, MistForm), // Mist Form
-            new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill), // Signet of Air
-            new DamageCastFinder(Sunspot, Sunspot), // Sunspot
-            new DamageCastFinder(EarthenBlast, EarthenBlast), // Earth Blast
-            new DamageCastFinder(LightningStrike, LightningStrike), // Lightning Strike
-            new DamageCastFinder(LightningRod, LightningRod), // Lightning Rod
+            new DamageCastFinder(ArcaneBlast, ArcaneBlast),
+            new BuffGiveCastFinder(ArcanePowerSkill, ArcanePowerEffect),
+            new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldEffect),
+            new DamageCastFinder(ArcaneWave, ArcaneWave),
+            new BuffGainCastFinder(MistForm, MistForm),
+            new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir).UsingDstBaseSpecChecker(Spec.Elementalist),
+            new DamageCastFinder(Sunspot, Sunspot),
+            new DamageCastFinder(EarthenBlast, EarthenBlast),
+            new DamageCastFinder(LightningStrike, LightningStrike),
+            new DamageCastFinder(LightningRod, LightningRod), 
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
             new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingDstBaseSpecChecker(Spec.Elementalist),
             new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
             //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
-            
+
             // Elementals
             new MinionCommandCastFinder(FireElementalFlameBarrage, (int) MinionID.FireElemental),
             new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),

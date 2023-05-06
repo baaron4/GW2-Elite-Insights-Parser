@@ -103,14 +103,26 @@ namespace GW2EIEvtcParser.ParsedData
             {EarthFireAttunement, "Earth Fire Attunement" },
             {EarthWaterAttunement, "Earth Water Attunement" },
             {EarthAirAttunement, "Earth Air Attunement" },
-
-            {TrueNatureDragon, "True Nature - Dragon" },
-            {TrueNatureDemon, "True Nature - Demon" },
-            {TrueNatureDwarf, "True Nature - Dwarf" },
-            {TrueNatureAssassin, "True Nature - Assassin" },
-            {TrueNatureCentaur, "True Nature - Centaur" },
+            // Revenant
+            { RiftSlashRiftHit, "Rift Slash (Rift Hit)" },
+            { UnrelentingAssaultMultihit, "Unrelenting Assault (Multi Hit)" },
+            { ImpossibleOddsHit, "Impossible Odds (Hit)" },
+            { EmbraceTheDarknessDamage, "Embrace the Darkness (Hit)" },
+            { TrueNatureDragon, "True Nature - Dragon" },
+            { TrueNatureDemon, "True Nature - Demon" },
+            { TrueNatureDwarf, "True Nature - Dwarf" },
+            { TrueNatureAssassin, "True Nature - Assassin" },
+            { TrueNatureCentaur, "True Nature - Centaur" },
+            {  DarkrazorsDaringHit, "Darkrazor's Daring (Hit)" },
+            {  IcerazorsIreHit, "Icerazor's Ire (Hit)" },
+            { PhantomsOnslaughtDamage, "Phantom's Onslaught (Hit)" },
+            // Ranger
+            { ChargeGazelleMergeTravel, "Charge (Travel Hit)" },
+            { SmokeAssaultMergeHit, "Smoke Assault (Multi Hit)" },
+            { OneWolfPackDamage, "One Wolf Pack (Hit)" },
+            //
             {SoulStoneVenomSkill, "Soul Stone Venom" },
-            {SoulStoneVenomStrike, "Soul Stone Venom Strike" },
+            {SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             {MantraOfSolace, "Mantra of Solace" },
             {DesertEmpowerment, "Desert Empowerment" },
             {SigilOfWater, "Sigil of Water" },
@@ -119,7 +131,7 @@ namespace GW2EIEvtcParser.ParsedData
             {WaterBlastCombo2, "Water Blast Combo" }, // Water Blast Combo
             {AstralWispAttachment, "Astral Wisp Attachment" }, // Water Blast Combo
             {MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
-            { RushingJusticeStrike, "Rushing Justice (Strike)" },
+            { RushingJusticeStrike, "Rushing Justice (Hit)" },
             //
             {PowerReturn, "Power Return" },
             {PowerCleanse, "Power Cleanse" },
@@ -135,16 +147,8 @@ namespace GW2EIEvtcParser.ParsedData
             {MushroomKingsBlessing, "Mushroom King's Blessing"},
             //
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
-            { UnrelentingAssaultMultihit, "Unrelenting Assault (Multi Hit)" },
             { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
             { ExecutionersCallingDualStrike, "Executioner's Calling (Dual Strike)" },
-            { ChargeGazelleMergeDamage, "Charge (Strike)" },
-            { OneWolfPackDamage, "One Wolf Pack (Strike)" },
-            { PhantomsOnslaughtDamage, "Phantom's Onslaught (Strike)" },
-            { ImpossibleOddsDamage, "Impossible Odds (Strike)" },
-            { DarkrazorsDaringDamage, "Darkrazor's Daring (Strike)" },
-            { RiftSlashExplosion, "Rift Slash (Explosion)" },
-            { EmbraceTheDarknessDamage, "Embrace the Darkness (Strike)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -206,7 +210,7 @@ namespace GW2EIEvtcParser.ParsedData
             {ShatteredAegis, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             {ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
             {SelflessDaring, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
-            {SignetOfRenewal, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
+            {SignetOfRenewalEffect, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
             {OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
             {RuggedGrowth, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             {WaterBlastCombo1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" }, // Water Blast Combo
@@ -262,13 +266,26 @@ namespace GW2EIEvtcParser.ParsedData
             {EarthFireAttunement, "https://i.imgur.com/Vgu0B54.png" },
             {EarthWaterAttunement, "https://i.imgur.com/exrTKSW.png" },
             {EarthAirAttunement, "https://i.imgur.com/Z3P8cPa.png" },
-            //
+            // Revenant
+            { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
+            { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
+            { EnchantedDaggers2, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png" },
+            { ImpossibleOddsHit, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png" },
+            { EmbraceTheDarknessDamage, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png" },
+            { DarkrazorsDaringHit, "https://wiki.guildwars2.com/images/7/77/Darkrazor%27s_Daring.png" },
+            { IcerazorsIreHit, "https://wiki.guildwars2.com/images/2/2d/Icerazor%27s_Ire.png" },
+            { PhantomsOnslaughtDamage, "https://wiki.guildwars2.com/images/b/b2/Phantom%27s_Onslaught.png" },
+            // Ranger
+            { ChargeGazelleMergeTravel, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            { SmokeAssaultMergeHit, "https://wiki.guildwars2.com/images/9/92/Smoke_Assault.png" },
+            { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
+            // Specter
             {HauntShot, "https://wiki.guildwars2.com/images/b/be/Haunt_Shot.png" },
             {GraspingShadows, "https://wiki.guildwars2.com/images/e/ef/Grasping_Shadows.png" },
             {DawnsRepose, "https://wiki.guildwars2.com/images/3/31/Dawn%27s_Repose.png" },
             {EternalNight, "https://wiki.guildwars2.com/images/7/7b/Eternal_Night.png" },
             {MindShock, "https://wiki.guildwars2.com/images/e/e6/Mind_Shock.png" },
-            //
+            // Bladesworn
             {DragonSlashBoost, "https://wiki.guildwars2.com/images/7/75/Dragon_Slash%E2%80%94Boost.png" },
             {DragonSlashForce, "https://wiki.guildwars2.com/images/b/b5/Dragon_Slash%E2%80%94Force.png" },
             {DragonSlashReach, "https://wiki.guildwars2.com/images/e/eb/Dragon_Slash%E2%80%94Reach.png" },
@@ -284,7 +301,7 @@ namespace GW2EIEvtcParser.ParsedData
             {MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             {RushingJusticeStrike, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             {TwilightComboSecondProjectile, "https://wiki.guildwars2.com/images/d/dc/Twilight_Combo.png" },
-            //   
+            // Firebrand
             {RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
             {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
@@ -313,34 +330,21 @@ namespace GW2EIEvtcParser.ParsedData
             { ConjuredSlashSAK, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
             { ConjuredProtectionSAK, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
             // Skills
-            { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
             { ExecutionersCallingDualStrike, "https://wiki.guildwars2.com/images/d/da/Executioner%27s_Calling.png" },
             { AdvancingStrikeSkill, "https://wiki.guildwars2.com/images/6/6b/Advancing_Strike.png" },
-            { ChargeGazelleMergeDamage, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
-            { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
-            { PhantomsOnslaughtDamage, "https://wiki.guildwars2.com/images/b/b2/Phantom%27s_Onslaught.png" },
-            { ImpossibleOddsDamage, "https://wiki.guildwars2.com/images/8/87/Impossible_Odds.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
-            { IcerazorsIreDamage, "https://wiki.guildwars2.com/images/2/2d/Icerazor%27s_Ire.png" },
-            { EnchantedDaggers2, "https://wiki.guildwars2.com/images/f/fa/Enchanted_Daggers.png" },
-            { DarkrazorsDaringDamage, "https://wiki.guildwars2.com/images/7/77/Darkrazor%27s_Daring.png" },
-            { RiftSlashExplosion, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
-            { EmbraceTheDarknessDamage, "https://wiki.guildwars2.com/images/5/51/Embrace_the_Darkness.png" },
             // - Shades
-            { ManifestSandShade, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
-            { NefariousFavor, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
-            { SandCascade, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
-            { GarishPillar, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { GarishPillar2, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { GarishPillar3, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
-            { DesertShroud, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
-            { DesertShroud2, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
-            { SandstormShroudSmallShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
-            { SandstormShroudBigShade, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            { ManifestSandShadeShadeHit, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
+            { NefariousFavorShadeHit, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
+            { SandCascadeShadeHit, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
+            { GarishPillarHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            { GarishPillarShadeHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
+            { DesertShroudHit, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
+            { SandstormShroudHit, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
             // Traits
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },

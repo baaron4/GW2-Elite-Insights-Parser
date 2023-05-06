@@ -15,19 +15,21 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet).UsingSrcSpecChecker(Spec.Mechanist),
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1).UsingSrcSpecChecker(Spec.Mechanist),
+            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingDisableWithEffectData().UsingNotAccurate(true),
+            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet).UsingDstSpecChecker(Spec.Mechanist),
 
             // Mech
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new EffectCastFinderFromMinion(DischargeArray, EffectGUIDs.MechanistDischargeArray),
-            new EffectCastFinderFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone),
+            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayEffect),
+            new EffectCastFinderByDstFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone1)
+                .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
             new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),
             new MinionCastCastFinder(JadeMortar, JadeMortar),
             new MinionCastCastFinder(BarrierBurst, BarrierBurst),
             new MinionCastCastFinder(SkyCircus, SkyCircus),
-            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingNotAccurate(true),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

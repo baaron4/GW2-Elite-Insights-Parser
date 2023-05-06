@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -13,20 +16,49 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
-            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0), // Zealot's Flame
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect),
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(JudgesIntervention,JudgesIntervention), // Judge's Intervention
-            new DamageCastFinder(WrathOfJustice,WrathOfJustice), // Wrath of Justice
-            new DamageCastFinder(SmitersBoon,SmitersBoon), // Smiter's Boon
-            new DamageCastFinder(SmiteCondition,SmiteCondition), // Smite Condition
+
+            // Meditations
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
+            new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(JudgesIntervention, EffectGUIDs.GuardianJudgesIntervention).UsingDstBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
+            new DamageCastFinder(SmiteCondition, SmiteCondition),
+            new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
+            
+            // Shouts
+            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves).UsingDstBaseSpecChecker(Spec.Guardian),
+            // distinguish by boons, check duration/stacks to counteract pure of voice
+            new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
+                        .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
+                }) // identify advance by self-applied 20s to 40s aegis
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return 5 <= FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
+                        .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
+                }) // identify stand your ground by self-applied 5+ stacks of stability
+                .UsingNotAccurate(true),
+            // hold the line boons may overlap with save yourselves/pure of voice
+
+            // Signets
+            new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
+            new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath),
+            
             //new DamageCastFinder(9097,9097), // Symbol of Blades
-            new DamageCastFinder(GlacialHeart, GlacialHeart), // Glacial Heart
-            new DamageCastFinder(ShatteredAegis, ShatteredAegis), // Shattered Aegis
-            new EXTHealingCastFinder(SelflessDaring, SelflessDaring), // Selfless Daring
+            new DamageCastFinder(GlacialHeart, GlacialHeart),
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis),
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring),
         };
 
 
@@ -68,7 +100,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bane Signet", BaneSignet, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.BaneSignet).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
-            new Buff("Signet of Judgment", SignetOfJudgment, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
+            new Buff("Signet of Judgment", SignetOfJudgmentEffect, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),

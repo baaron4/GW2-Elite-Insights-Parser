@@ -10,16 +10,18 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ScourgeHelper
     {
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            // Trail of Anguish ? Unique effect?
-            new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
-            new EXTBarrierCastFinder(DesertShroud, DesertShroud), // Desert Shroud
-            new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier), // Sand Cascade
-            // Sandstorm Shroud ? The detonation part is problematic
+            new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishEffect),
+            // Trail of Anguish? Unique effect?
+            // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
+            new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
+            new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
+            new BuffGainCastFinder(DesertShroud, DesertShroudEffect).UsingDurationChecker(6000),
+            new BuffGainCastFinder(SandstormShroudSkill, DesertShroudEffect).UsingDurationChecker(3500),
+            // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
+            new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
         };
-
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
