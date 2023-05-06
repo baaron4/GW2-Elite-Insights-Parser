@@ -575,6 +575,7 @@
         public const long DistortionSkill = 10192;
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
+        public const long PortalExeunt = 10199;
         public const long Blink = 10200;
         public const long MantraOfDistraction = 10204;
         public const long PowerLock = 10206;
@@ -689,6 +690,7 @@
         public const long Stealth = 13017;
         public const long SpiderVenomEffect = 13036;
         public const long SpiderVenomSkill = 13037;
+        public const long PrepareShadowPortal = 13038;
         public const long AssassinsSignet = 13046;
         public const long AssassinsSignetPassive = 13047;
         public const long SignetOfMalice = 13049;
@@ -785,6 +787,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
+        public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
@@ -814,7 +817,8 @@
         public const long MistForm2 = 19718;
         public const long POV_HauntEffect = 20229; // pov only!
         public const long SuperiorRuneOfTormenting = 20479;
-        public const long PortalUsesXeraWatchwork = 20852;
+        public const long PortalExitWhiteMantleWatchwork = 20851;
+        public const long PortalUsesWhiteMantleWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
         public const long SpoiledSupply = 21012;
@@ -1388,7 +1392,7 @@
         public const long Derangement = 34965;
         public const long PhantasmalBlades3 = 34971;
         public const long RedOrb = 34972;
-        public const long PortalWeavingXeraWatchwork = 34978;
+        public const long PortalWeavingWhiteMantleWatchwork = 34978;
         public const long Unbreakable = 34979;
         public const long RadiantAttunementPhantasm = 34992;
         public const long HerosDeparture = 34997;
@@ -1425,6 +1429,7 @@
         public const long Incoming = 35140;
         public const long AchievementEligibilityMineControl = 35148;
         public const long SplishSplash = 35153;
+        public const long PortalEntranceWhiteMantleWatchwork = 35153;
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;

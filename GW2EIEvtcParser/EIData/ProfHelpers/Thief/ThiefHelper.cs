@@ -13,16 +13,17 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
-            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(Mug, Mug), // Mug
+            new BuffGainCastFinder(Shadowstep,Infiltration),
+            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
+            new DamageCastFinder(Mug, Mug),
             new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
-            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
-            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect), // Devourer Venom
-            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
-            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
-            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
+            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive),
+            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect),
+            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect),
+            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect),
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect),
             new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
+            new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

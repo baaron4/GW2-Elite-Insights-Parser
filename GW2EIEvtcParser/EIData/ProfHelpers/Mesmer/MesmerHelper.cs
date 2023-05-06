@@ -19,9 +19,10 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect).UsingChecker((brae, combatData, agentData, skillData) => {
                 return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
-                }).UsingNotAccurate(true), // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
-            new BuffGainCastFinder(PortalEntre, PortalWeaving), // Portal Entre
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender), // Lesser Phantasmal Defender
+            }).UsingNotAccurate(true), // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
+            new BuffGainCastFinder(PortalEntre, PortalWeaving),
+            new BuffGainCastFinder(PortalExeunt, PortalUses),
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {

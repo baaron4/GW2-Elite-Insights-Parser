@@ -10,6 +10,8 @@ namespace GW2EIEvtcParser
         // Generic
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
+        public const string WhiteMantlePortalInactive = "D43373FEFA19A54DA2A2B6BB7834A338";
+        public const string WhiteMantlePortalActive = "388CF9246218A34DB2F8107E19FCA471";
         // Mesmer
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
         public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
@@ -42,6 +44,7 @@ namespace GW2EIEvtcParser
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
         public const string ReaperYouAreAllWeaklings3 = "ED6A8440CB49B248A352B2073FAF1F5F";
         public const string ScourgeTrailOfAnguish = "1DAE3CAEF2228845867AAF419BF31E8C";
+        public const string ScourgeSandSwellPortal = "086CF7823EB13047B2187E7933639703";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
@@ -104,6 +107,9 @@ namespace GW2EIEvtcParser
         public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
         public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
         // Thief
+        public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
+        public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
+        public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";

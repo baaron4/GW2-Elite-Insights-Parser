@@ -34,6 +34,8 @@ namespace GW2EIEvtcParser.ParsedData
             {ArcDPSDodge20220307, "Dodge" },
             {ArcDPSGenericBreakbar, "Generic Breakbar" },
             {ArcDPSGenericBreakbar20220307, "Generic Breakbar" },
+            {PortalEntranceWhiteMantleWatchwork, "Portal Entrance"},
+            {PortalExitWhiteMantleWatchwork, "Portal Exit"},
             {MirageCloakDodge, "Mirage Cloak" },
             {WeaponSwap, "Weapon Swap" },
             {SelflessDaring, "Selfless Daring"}, // The game maps this name incorrectly to "Selflessness Daring"
@@ -143,6 +145,8 @@ namespace GW2EIEvtcParser.ParsedData
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png"},
+            {PortalEntranceWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png"},
+            {PortalExitWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png"},
             {Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
             {ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png"},
