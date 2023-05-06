@@ -13,12 +13,14 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500), // Earth Sigil
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500), // Air Sigil
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500), // Fire Sigil
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500), // Hydro Sigil
-            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1), // Water Blast Combo
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500),
+            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500),
+            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500),
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500),
+            new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare),
+            new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
+            new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
@@ -96,11 +98,9 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-        public static IReadOnlyList<InstantCastEvent> ComputeInstantCastEvents(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData, SkillData skillData, FightData fightData)
+        internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<Player> players)
         {
             var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
-            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastFinders.Add(x));
-            var res = new List<InstantCastEvent>();
             foreach (Player p in players)
             {
                 switch (p.Spec)
@@ -251,25 +251,7 @@ namespace GW2EIEvtcParser.EIData
                         break;
                 }
             }
-            res.AddRange(ComputeInstantCastEventsFromFinders(combatData, agentData, skillData, instantCastFinders.ToList()));
-            return res;
-        }
-
-        private static IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(CombatData combatData, AgentData agentData, SkillData skillData, IReadOnlyList<InstantCastFinder> instantCastFinders)
-        {
-            var res = new List<InstantCastEvent>();
-            foreach (InstantCastFinder icf in instantCastFinders)
-            {
-                if (icf.Available(combatData))
-                {
-                    if (icf.NotAccurate)
-                    {
-                        skillData.NotAccurate.Add(icf.SkillID);
-                    }
-                    res.AddRange(icf.ComputeInstantCast(combatData, skillData, agentData));
-                }
-            }
-            return res;
+            return instantCastFinders;
         }
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

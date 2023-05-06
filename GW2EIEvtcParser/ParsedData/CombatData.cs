@@ -164,6 +164,23 @@ namespace GW2EIEvtcParser.ParsedData
                 _damageData[a] = _damageData[a].OrderBy(x => x.Time).ToList();
             }
         }
+
+        private IReadOnlyList<InstantCastEvent> ComputeInstantCastEventsFromFinders(AgentData agentData, SkillData skillData, IReadOnlyList<InstantCastFinder> instantCastFinders)
+        {
+            var res = new List<InstantCastEvent>();
+            foreach (InstantCastFinder icf in instantCastFinders)
+            {
+                if (icf.Available(this))
+                {
+                    if (icf.NotAccurate)
+                    {
+                        skillData.NotAccurate.Add(icf.SkillID);
+                    }
+                    res.AddRange(icf.ComputeInstantCast(this, skillData, agentData));
+                }
+            }
+            return res;
+        }
         private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
@@ -228,9 +245,10 @@ namespace GW2EIEvtcParser.ParsedData
                     wepSwapAgentsToSort.Add(wse.Caster);
                 }
             }
-            IReadOnlyList<InstantCastEvent> instantCasts = ProfHelper.ComputeInstantCastEvents(players, this, agentData, skillData, fightData);
+            var instantCastsFinder = new HashSet<InstantCastFinder>(ProfHelper.GetProfessionInstantCastFinders(players));
+            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastsFinder.Add(x));
             //
-            foreach (InstantCastEvent ice in instantCasts)
+            foreach (InstantCastEvent ice in ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder.ToList()))
             {
                 if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
                 {

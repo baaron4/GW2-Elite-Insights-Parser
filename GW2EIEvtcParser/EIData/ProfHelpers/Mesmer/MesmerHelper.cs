@@ -25,6 +25,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDisableWithEffectData(),
             new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
+            new BuffGainCastFinder(PortalExeunt, PortalUses),
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>

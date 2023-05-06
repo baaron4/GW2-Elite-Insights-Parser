@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1).UsingSrcBaseSpecChecker(Spec.Thief),
             new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
             new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1).UsingDstBaseSpecChecker(Spec.Thief),
             new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
             new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),

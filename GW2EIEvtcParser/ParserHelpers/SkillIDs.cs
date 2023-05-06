@@ -582,6 +582,7 @@
         public const long DistortionSkill = 10192;
         public const long PortalEntre = 10197;
         public const long PortalWeaving = 10198;
+        public const long PortalExeunt = 10199;
         public const long Blink = 10200;
         public const long MantraOfDistraction = 10204;
         public const long PowerLock = 10206;
@@ -700,6 +701,7 @@
         public const long Stealth = 13017;
         public const long SpiderVenomEffect = 13036;
         public const long SpiderVenomSkill = 13037;
+        public const long PrepareShadowPortal = 13038;
         public const long AssassinsSignet = 13046;
         public const long AssassinsSignetPassive = 13047;
         public const long SignetOfMalice = 13049;
@@ -803,6 +805,7 @@
         public const long BowlOfTropicalMousse = 15843;
         public const long CommandersPresence = 15857;
         public const long MorphedPolymorphTuna = 15859;
+        public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
@@ -832,12 +835,14 @@
         public const long MistForm2 = 19718;
         public const long POV_HauntEffect = 20229;
         public const long SuperiorRuneOfTormenting = 20479;
-        public const long PortalUsesXeraWatchwork = 20852;
+        public const long PortalExitWhiteMantleWatchwork = 20851;
+        public const long PortalUsesWhiteMantleWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
         public const long SpoiledSupply = 21012;
         public const long StructuralVulnerability = 21469;
         public const long IronHideRam = 21484;
+        public const long ElectricDischarge = 21636;
         public const long ArcaneBrilliance = 21656;
         public const long AED = 21660;
         public const long LitanyOfWrath = 21665;
@@ -983,6 +988,7 @@
         public const long LegendaryCentaurStanceSkill = 28195;
         public const long UnrelentingAssaultMultihit = 28232;
         public const long FacetOfElementsEffect = 28243;
+        public const long EnchantedDaggers2 = 28313;
         public const long RelinquishPower = 28382;
         public const long FacetOfDarknessSkill = 28379;
         public const long PhaseTraversal = 28395;
@@ -990,8 +996,8 @@
         public const long VentarisWill = 28427;
         public const long LegendaryDemonStanceSkill = 28494;
         public const long EnchantedDaggers = 28557;
-        public const long RiftSlashSkill = 28964;
         public const long HardeningPersistence = 28957;
+        public const long RiftSlashSkill = 28964;
         public const long InvokingHarmony = 29025;
         public const long RiftSlashRiftHit = 29073;
         public const long NaturalHarmony = 29082;
@@ -1276,6 +1282,7 @@
         public const long InstantReflexes = 34283;
         public const long GlidingDisabled = 34298;
         public const long SearchAndRescueSkill = 34309;
+        public const long EmbraceTheDarknessDamage = 34331;
         public const long WellOfTheProfane = 34336;
         public const long FearMeSlothasor = 34340;
         public const long FieryVortexNarella = 34344;
@@ -1408,7 +1415,7 @@
         public const long Derangement = 34965;
         public const long PhantasmalBlades3 = 34971;
         public const long RedOrb = 34972;
-        public const long PortalWeavingXeraWatchwork = 34978;
+        public const long PortalWeavingWhiteMantleWatchwork = 34978;
         public const long Unbreakable = 34979;
         public const long RadiantAttunementPhantasm = 34992;
         public const long HerosDeparture = 34997;
@@ -1445,6 +1452,7 @@
         public const long Incoming = 35140;
         public const long AchievementEligibilityMineControl = 35148;
         public const long SplishSplash = 35153;
+        public const long PortalEntranceWhiteMantleWatchwork = 35153;
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
@@ -1859,6 +1867,7 @@
         public const long Versatile = 44693;
         public const long HeadbuttGazelle = 44733;
         public const long EarthMinorAttunement = 44822;
+        public const long SwordOfJusticeSkill = 44846;
         public const long DualEarthAttunement = 44857;
         public const long EternalOasis = 44871;
         public const long StoneResonanceSkill = 44926;
@@ -1871,6 +1880,7 @@
         public const long FlameRush = 45082;
         public const long StoneResonanceEffect = 45097;
         public const long WovenFire = 45110;
+        public const long RefractionCutterBlade = 45119;
         public const long Quickfire = 45123;
         public const long Chapter3AzureSun = 45128;
         public const long DarkrazorsDaringMinion = 45168; // cast by created minion, does not hit
@@ -1902,6 +1912,8 @@
         public const long PredatorsCunning = 46299;
         public const long DeadeyesGaze = 46333;
         public const long CoolingVapor = 46444;
+        public const long SwordOfJusticeDamage = 46469;
+        public const long EntangleDamage = 46470;
         public const long MantraOfTruthDamage = 46508;
         public const long SignetOfResolveShared = 46554;
         public const long SignetOfResolvePI = 46554;
@@ -2109,7 +2121,7 @@
         public const long BigHit = 52310;
         public const long AidOfTheWaterDjinn = 52320;
         public const long VolcanicGeyser = 52323;
-        public const long ConjuredSlash = 52325;
+        public const long ConjuredSlashSAK = 52325;
         public const long SeismicStomp = 52330;
         public const long FlameSlash = 52333;
         public const long FlameSlash2 = 52334;
@@ -2656,6 +2668,7 @@
         public const long DeathDropSkill = 62693;
         public const long CallOfTheAlliance = 62705;
         public const long CrescentWindEffect = 62707;
+        public const long PhantomsOnslaughtDamage = 62713;
         public const long DeployJadeSphereWater = 62723;
         public const long InvigoratingAirEffect = 62726;
         public const long DeathDropDodge = 62730;
@@ -2691,6 +2704,7 @@
         public const long LegendaryAllianceStanceUWSkill = 62891;
         public const long Triggerguard = 62893;
         public const long SoothingWaterEffect = 62894;
+        public const long PhantomsOnslaughtSkill = 62895;
         public const long ElementalCelerity = 62915;
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceEffect = 62919;
