@@ -13,7 +13,9 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool ProbablyInvert { get; private set; }
 
-        public ArcDPSEnums.BuffCategory Category { get; private set; }
+        //public ArcDPSEnums.BuffCategory Category { get; private set; }
+
+        public byte CategoryByte { get; private set; }
 
         public byte StackingTypeByte { get; private set; } = 6;
         public ArcDPSEnums.BuffStackType StackingType { get; private set; } = ArcDPSEnums.BuffStackType.Unknown;
@@ -53,7 +55,8 @@ namespace GW2EIEvtcParser.ParsedData
         {
             ProbablyInvul = evtcItem.IsFlanking > 0;
             ProbablyInvert = evtcItem.IsShields > 0;
-            Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
+            //Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
+            CategoryByte = evtcItem.IsOffcycle;
             MaxStacks = evtcItem.SrcMasterInstid;
             DurationCap = evtcItem.OverstackValue;
             // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
@@ -80,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void BuildFromBuffFormula(CombatItem evtcItem, int evtcVersion)
         {
-            Formulas.Add(new BuffFormula(evtcItem, this, evtcVersion));
+            Formulas.Add(new BuffFormula(evtcItem, evtcVersion));
         }
 
     }

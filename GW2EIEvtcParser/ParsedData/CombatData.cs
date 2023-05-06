@@ -724,7 +724,7 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-        public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(ArcDPSEnums.BuffCategory category)
+        public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(byte category)
         {
             if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
             {
