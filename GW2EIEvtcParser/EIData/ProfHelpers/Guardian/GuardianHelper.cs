@@ -31,7 +31,9 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
             
             // Shouts
-            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves).UsingDstBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingSecondaryEffectChecker(EffectGUIDs.GuardianShout),
             // distinguish by boons, check duration/stacks to counteract pure of voice
             new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
                 .UsingDstBaseSpecChecker(Spec.Guardian)
