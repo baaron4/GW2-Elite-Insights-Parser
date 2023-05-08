@@ -145,9 +145,9 @@ namespace GW2EIEvtcParser
         public const string ThiefSignetOfAgility = "BB5488951B60B546BB1BD5626DAE83E1";
         public const string ThiefSignetOfShadows = "14A5982DB277744CB928A4935555F563";
         public const string ThiefPitfallAoE = "7325E9B0DD2E914F9837E5FCFC740A95";
-        public const string ThiefThousandNeedlesAoE1 = "2125A13079C1C5479C150926EB60A15D";
-        public const string ThiefThousandNeedlesAoE2 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
-        public const string ThiefThousandNeedlesAoE3 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
+        // public const string ThiefThousandNeedlesAoECollision = "2125A13079C1C5479C150926EB60A15D"; // collision with shadow flare & other
+        public const string ThiefThousandNeedlesAoE1 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
+        public const string ThiefThousandNeedlesAoE2 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
         public const string ThiefSealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
         public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";

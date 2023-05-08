@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -24,7 +26,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect),
             new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
             new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
-            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1).UsingSrcBaseSpecChecker(Spec.Thief),
+            new BuffLossCastFinder(ThousandNeedlesArmedEffect, ThousandNeedlesArmedEffect),
+            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1)
+                .UsingSrcBaseSpecChecker(Spec.Thief)
+                .UsingSecondaryEffectChecker(EffectGUIDs.ThiefThousandNeedlesAoE2),
             new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
             new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1).UsingDstBaseSpecChecker(Spec.Thief),

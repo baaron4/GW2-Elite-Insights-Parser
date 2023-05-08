@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -28,22 +29,36 @@ namespace GW2EIEvtcParser.EIData
 
         internal EffectCastFinder UsingSrcBaseSpecChecker(Spec spec)
         {
-            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == spec);
+            return this;
         }
 
         internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
         {
-            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+            return this;
         }
         
         internal EffectCastFinder UsingSrcSpecChecker(Spec spec)
         {
-            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);
+            return this;
         }
 
         internal EffectCastFinder UsingDstSpecChecker(Spec spec)
         {
-            return (EffectCastFinder) UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingSecondaryEffectChecker(string effectGUID, long timeOffset = 0, long epsilon = ServerDelayConstant)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) =>
+            {
+                return combatData.GetEffectEventsByEffectGUID(effectGUID)
+                    .Any(other => GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time + timeOffset - evt.Time) < epsilon);
+            });
+            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
