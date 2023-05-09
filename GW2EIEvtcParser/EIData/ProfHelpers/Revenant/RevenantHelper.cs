@@ -143,10 +143,9 @@ namespace GW2EIEvtcParser.EIData
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
         {
-            EffectGUIDEvent tabletAutoHealEffect = combatData.GetEffectGUIDEvent(EffectGUIDs.RevenantTabletAutoHeal);
-            if (tabletAutoHealEffect != null)
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out IReadOnlyList<EffectEvent> tabletHealEffectEvents))
             {
-                var allTablets = new HashSet<AgentItem>(combatData.GetEffectEventsByEffectID(tabletAutoHealEffect.ContentID).Select(x => x.Src));
+                var allTablets = new HashSet<AgentItem>(tabletHealEffectEvents.Select(x => x.Src));
                 foreach (AgentItem tablet in allTablets)
                 {
                     tablet.OverrideType(AgentItem.AgentType.NPC);

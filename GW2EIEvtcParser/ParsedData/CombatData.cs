@@ -998,6 +998,18 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
+        public bool TryGetEffectEventsByGUID(string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
+            effectEvents = null;
+            if (effectGUIDEvent != null)
+            {
+                effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
+                return true;
+            }
+            return false;
+        }
+
 
         public IReadOnlyList<EffectEvent> GetEffectEvents()
         {

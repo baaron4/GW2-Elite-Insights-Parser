@@ -229,9 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
                         if (ankkaPosition == null) { continue; }
 
-                        EffectGUIDEvent effectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsEmbrace);
-
-                        if (effectGUID != null)
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
                         {
                             int radius = 500; // Zone 1
                             // Zone 2
@@ -244,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 radius = 380;
                             }
-                            var effects = log.CombatData.GetEffectEventsByEffectID(effectGUID.ContentID).Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime).ToList();
+                            var effects = deathsEmbraceEffects.Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime).ToList();
                             foreach (EffectEvent effectEvt in effects)
                             {
                                 AddDeathEmbraceDecoration(replay, (int)deathEmbrace.Time, deathsEmbraceCastDuration, radius, (int)(effectEvt.Time - deathEmbrace.Time), effectEvt.Position);
