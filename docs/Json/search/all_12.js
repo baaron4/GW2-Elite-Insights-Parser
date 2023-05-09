@@ -20,6 +20,7 @@ var searchData=
   ['stacking',['Stacking',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#ac0d68686cd784720f6025de293392527',1,'GW2EIJSON::JsonLog::BuffDesc']]],
   ['start',['Start',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#acaee9fa09259b4349fcd80f23aca647a',1,'GW2EIJSON.JsonActorCombatReplayData.Start()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a365caf0bee40d26d357e1a13e3ebff12',1,'GW2EIJSON.JsonPhase.Start()']]],
   ['states',['States',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a30a0e714285f415fa84bc252873e4a2c',1,'GW2EIJSON::JsonBuffsUptime']]],
+  ['statespersource',['StatesPerSource',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#aaa57a74c57a2b900fd5619ec280eb1fb',1,'GW2EIJSON::JsonBuffsUptime']]],
   ['statsall',['StatsAll',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ab3b05160641e65d8cc2dc6bfe59801cd',1,'GW2EIJSON::JsonActor']]],
   ['statstargets',['StatsTargets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#adeb2ba39b74aaaa5cda7f854680bc14f',1,'GW2EIJSON::JsonPlayer']]],
   ['subphases',['SubPhases',['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#ab7e7ed3df9eacbd3d09f004e3533862d',1,'GW2EIJSON::JsonPhase']]],

@@ -2926,7 +2926,7 @@
         public const long StormOfSwords3 = 65569;
         public const long ExplosiveLeap2 = 65576;
         public const long VoidRepulsion2 = 65577;
-        public const long VoidPoolSooWon = 65578;
+        public const long VoidPoolNM = 65578;
         public const long VoidCorruption = 65590;
         public const long VoidExplosion2 = 65595;
         public const long PowerOfTheVoid = 65601;
@@ -3048,7 +3048,7 @@
         public const long SwarmOfMordremoth_CorruptedWaters = 67703;
         public const long FlightOfSushi = 67705;
         public const long JadeLaserShot2 = 67691;
-        public const long VoidPoolNM = 67739;
+        public const long VoidPoolSooWon = 67739;
         public const long OldExposed = 67763;
         public const long GraspOfJormag = 67772;
         public const long FoolsDogTreat = 67796;

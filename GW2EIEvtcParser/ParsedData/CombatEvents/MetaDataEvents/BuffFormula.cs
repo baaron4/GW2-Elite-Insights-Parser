@@ -73,13 +73,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         private string _solvedDescription = null;
 
-        private readonly BuffInfoEvent _buffInfoEvent;
 
-        private int Level => (_buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Food || _buffInfoEvent.Category == ArcDPSEnums.BuffCategory.Enhancement) ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
+        private int Level => (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
-        internal BuffFormula(CombatItem evtcItem, BuffInfoEvent buffInfoEvent, int evtcVersion)
+        internal BuffFormula(CombatItem evtcItem, int evtcVersion)
         {
-            _buffInfoEvent = buffInfoEvent;
             Npc = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
