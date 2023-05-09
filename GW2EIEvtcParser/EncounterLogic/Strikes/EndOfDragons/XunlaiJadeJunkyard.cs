@@ -67,36 +67,55 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, false, true);
+
+            // DPS Phases
+            List<PhaseData> dpsPhase = GetPhasesByInvul(log, Determined895, ankka, false, true);
+            for (int i = 0; i < dpsPhase.Count; i++)
+            {
+                dpsPhase[i].Name = $"DPS Phase {i + 1}";
+                dpsPhase[i].AddTarget(ankka);
+            }
+            phases.AddRange(dpsPhase);
+
+            // Necrotic Rituals
+            List<PhaseData> rituals = GetPhasesByInvul(log, NecroticRitual, ankka, true, true);
+            for (int i = 0; i < rituals.Count; i++)
+            {
+                if (i % 2 != 0)
+                {
+                    rituals[i].Name = $"Necrotic Ritual {(i + 1) / 2}";
+                    rituals[i].AddTarget(ankka);
+                }
+            }
+            phases.AddRange(rituals);
+
+            // Health and Transition Phases
+            List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, true, true);
             for (int i = 0; i < subPhases.Count; i++)
             {
-                subPhases[i].Name = "Location " + (i + 1);
+                switch (i)
+                {
+                    case 0:
+                        subPhases[i].Name = "Phase 100-75%";
+                        break;
+                    case 1:
+                        subPhases[i].Name = "Transition 1";
+                        break;
+                    case 2:
+                        subPhases[i].Name = "Phase 75-40%";
+                        break;
+                    case 3:
+                        subPhases[i].Name = "Transition 2";
+                        break;
+                    case 4:
+                        subPhases[i].Name = "Phase 40-0%";
+                        break;
+                    default:
+                        break;
+                }
                 subPhases[i].AddTarget(ankka);
             }
             phases.AddRange(subPhases);
-            List<PhaseData> subSubPhases = GetPhasesByInvul(log, Determined895, ankka, false, false);
-            subSubPhases.RemoveAll(x => subPhases.Any(y => Math.Abs(y.Start - x.Start) < ServerDelayConstant && Math.Abs(y.End - x.End) < ServerDelayConstant));
-            int curSubSubPhaseID = 0;
-            PhaseData previousSubPhase = null;
-            for (int i = 0; i < subSubPhases.Count; i++)
-            {
-                PhaseData subsubPhase = subSubPhases[i];
-                PhaseData subPhase = subPhases.FirstOrDefault(x => x.Start - ServerDelayConstant <= subsubPhase.Start && x.End + ServerDelayConstant >= subsubPhase.End);
-                if (previousSubPhase != subPhase)
-                {
-                    previousSubPhase = subPhase;
-                    curSubSubPhaseID = 0;
-                }
-                if (subPhase != null)
-                {
-                    int index = subPhases.IndexOf(subPhase);
-                    subsubPhase.OverrideStart(Math.Max(subsubPhase.Start, subPhase.Start));
-                    subsubPhase.OverrideEnd(Math.Min(subsubPhase.End, subPhase.End));
-                    subsubPhase.Name = "Location " + (index + 1) + " - " + (++curSubSubPhaseID);
-                    subsubPhase.AddTarget(ankka);
-                }
-            }
-            phases.AddRange(subSubPhases);
             //
             return phases;
         }
