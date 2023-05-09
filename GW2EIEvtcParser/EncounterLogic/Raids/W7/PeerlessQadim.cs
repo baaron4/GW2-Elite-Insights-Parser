@@ -35,10 +35,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(CausticChaosProjectile, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", 0),
                 new EnemySrcHitMechanic(ShowerOfChaos, "Shower of Chaos", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", 1000),
                 new EnemySrcHitMechanic(EclipsedBacklash, "Eclipsed Backlash", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", 1000),
+                new PlayerCastStartMechanic(PlayerLiftUpQadimThePeerless, "Lift Up", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Up", "Player lifted up", "Player lifted up", 0),
+                new PlayerCastEndMechanic(FluxDisruptorActivateCast, "Flux Disruptor: Activate", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Blue), "Flux.Act", "Flux Disruptor Activated", "Flux Disruptor Activated", 0),
+                new PlayerCastEndMechanic(FluxDisruptorDeactivateCast, "Flux Disruptor: Deactivate", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Flux.Dea", "Flux Disruptor Deactivated", "Flux Disruptor Deactivated", 0),
                 new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
                 new PlayerDstBuffApplyMechanic(CriticalMass, "Critical Mass", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", 0),
-                new PlayerDstHitMechanic(CausticChaosExplosion, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
                 new PlayerDstBuffApplyMechanic(SappingSurge, "Sapping Surge", new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
+                new PlayerDstHitMechanic(CausticChaosExplosion, "Caustic Chaos", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", 0),
             });
             Extension = "prlqadim";
             Icon = EncounterIconPeerlessQadim;

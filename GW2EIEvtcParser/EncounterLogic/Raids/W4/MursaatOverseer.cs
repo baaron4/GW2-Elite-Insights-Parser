@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(DispelSAK, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(ProtectSAK, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
             new PlayerDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0).UsingChecker((ba, log) => ba.AppliedDuration == 1000),
-            new PlayerDstBuffApplyMechanic(ProtectSAK, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
-            new PlayerDstBuffApplyMechanic(DispelSAK, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
-            new PlayerDstBuffApplyMechanic(ClaimSAK, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
+            new PlayerDstBuffApplyMechanic(ProtectEffect, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
+            new PlayerDstBuffApplyMechanic(DispelEffect, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
+            new PlayerDstBuffApplyMechanic(ClaimEffect, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
             new EnemyDstBuffApplyMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
             new EnemyDstBuffRemoveMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(EnemyTile, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable

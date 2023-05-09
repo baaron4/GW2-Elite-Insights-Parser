@@ -287,6 +287,8 @@
         internal const string Claim = "https://wiki.guildwars2.com/images/e/ef/Claim.png";
         // Samarog
         internal const string SoulSwarm = "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png";
+        internal const string FixateRigom = "https://wiki.guildwars2.com/images/f/f9/Fixate_%28Rigom%29.png";
+        internal const string FixateGuldhem = "https://wiki.guildwars2.com/images/8/83/Fixate_%28Guldhem%29.png";
         internal const string Burrowed = "https://wiki.guildwars2.com/images/e/e3/Burrowed.png";
         // Deimos
         internal const string UnnaturalSignet = "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png";
@@ -354,6 +356,7 @@
         internal const string KineticAbundance = "https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png";
         internal const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
         internal const string MagicBlastIntensity = "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png";
+        internal const string PartiallyProtected = "https://wiki.guildwars2.com/images/d/d0/Partially_Protected.png";
         // Fractal
         internal const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
         internal const string RedirectAnomaly = "https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png";
@@ -397,6 +400,7 @@
         internal const string FrozenBarrier = "https://wiki.guildwars2.com/images/c/c8/Frozen_Barrier.png";
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";
         internal const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
+        internal const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
