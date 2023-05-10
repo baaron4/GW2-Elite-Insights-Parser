@@ -2059,6 +2059,7 @@
         public const long StoneSpirit = 50415;
         public const long FrostSpirit = 50421;
         public const long ThermalVision = 51389;
+        public const long POV_MechCrisisZoneEffect = 51391; // possibly related to the cleanse?
         public const long TransmuteFrost = 51646;
         public const long BurstOfStrength = 51653;
         public const long GrindingStones = 51658;
