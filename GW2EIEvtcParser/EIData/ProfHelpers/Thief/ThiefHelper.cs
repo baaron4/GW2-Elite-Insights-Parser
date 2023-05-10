@@ -29,7 +29,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedEffect)
                 .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280)),
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
+                .UsingNotAccurate(true),
             new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
             new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1)

@@ -25,9 +25,11 @@ namespace GW2EIEvtcParser.EIData
             // Meditations
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
             new BuffGainCastFinder(JudgesIntervention, MercifulInterventionSelfEffect)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianJudgesIntervention, evt.To, evt.Time + 120)),
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianJudgesIntervention, evt.To, evt.Time + 120))
+                .UsingNotAccurate(true),
             new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200)),
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
+                .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
             new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
