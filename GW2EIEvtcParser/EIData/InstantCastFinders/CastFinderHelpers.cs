@@ -55,5 +55,17 @@ namespace GW2EIEvtcParser.EIData
             return agentData.GetNPCsByID(minion)
                 .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
         }
+
+        internal static bool HasRelatedEffect(CombatData combatData, string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetEffectEventsByEffectGUID(effectGUID), time, epsilon)
+                .Any(effect => effect.Src == agent);
+        }
+
+        internal static bool HasRelatedEffectDst(CombatData combatData, string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetEffectEventsByEffectGUID(effectGUID), time, epsilon)
+                .Any(effect => effect.Dst == agent);
+        }
     }
 }

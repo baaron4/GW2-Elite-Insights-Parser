@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 return combatData.GetEffectEventsByEffectGUID(effectGUID)
-                    .Any(other => GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time + timeOffset - evt.Time) < epsilon);
+                    .Any(other => GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             });
             return this;
         }

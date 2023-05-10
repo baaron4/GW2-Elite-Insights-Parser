@@ -23,9 +23,11 @@ namespace GW2EIEvtcParser.EIData
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
 
             // Meditations
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
-            new EffectCastFinderByDst(JudgesIntervention, EffectGUIDs.GuardianJudgesIntervention).UsingDstBaseSpecChecker(Spec.Guardian),
+            new BuffGainCastFinder(JudgesIntervention, MercifulInterventionSelfEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianJudgesIntervention, evt.To, evt.Time + 120)),
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200)),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
             new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
