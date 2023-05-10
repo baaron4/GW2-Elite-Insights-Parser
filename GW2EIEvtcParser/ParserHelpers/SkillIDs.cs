@@ -2724,6 +2724,7 @@
         public const long HardenedAuras = 62986;
         public const long SaintOfzuHeltzer = 62994;
         public const long HomemadeCampfireTreat = 63019;
+        public const long CrashDown = 63050;
         public const long OverclockSignetEffect = 63059;
         public const long BarrierSignet = 63064;
         public const long ShiftSignetEffect = 63068;
