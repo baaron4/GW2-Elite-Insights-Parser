@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser
         public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
         public const string GuardianContemplationOfPurity1 = "75D72E2DA47ECF47A6BD009B49B7C708";
         public const string GuardianContemplationOfPurity2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // same as elementalist armor of earth
-        public const string GuardianJudgesIntervention = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target?
+        public const string GuardianJudgesIntervention = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? also used with symbol of blades
         public const string GuardianMercifulIntervention = "B45E7BD66E424A4CA695DE63DC13E93F"; // delayed, when reaching target?
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
