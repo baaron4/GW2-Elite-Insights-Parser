@@ -24,10 +24,10 @@ namespace GW2EIEvtcParser.EIData
 
             // Meditations
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
-            new BuffGainCastFinder(JudgesIntervention, MercifulInterventionSelfEffect)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianJudgesIntervention, evt.To, evt.Time + 120))
+            new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
                 .UsingNotAccurate(true),
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect)
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfEffect)
                 .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Banish),
-            new Buff("Merciful Intervention (Self)", MercifulInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             new Buff("Merciful Intervention (Target)", MercifulInterventionTargetEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
             new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
