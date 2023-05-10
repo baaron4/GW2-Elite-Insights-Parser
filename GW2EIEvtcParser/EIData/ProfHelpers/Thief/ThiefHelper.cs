@@ -6,6 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -26,13 +27,14 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect),
             new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
             new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
-            new BuffLossCastFinder(ThousandNeedlesArmedEffect, ThousandNeedlesArmedEffect),
-            new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1)
-                .UsingSrcBaseSpecChecker(Spec.Thief)
-                .UsingSecondaryEffectChecker(EffectGUIDs.ThiefThousandNeedlesAoE2),
+            new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280)),
             new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedEffect),
-            new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1).UsingDstBaseSpecChecker(Spec.Thief),
+            new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1)
+                .UsingDstBaseSpecChecker(Spec.Thief)
+                .UsingSecondaryEffectChecker(EffectGUIDs.ThiefInfiltratorsSignet2),
             new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
             new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
         };
