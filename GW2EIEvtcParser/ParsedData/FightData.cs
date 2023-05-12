@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA:
                 case ArcDPSEnums.TargetID.CALeftArm_CHINA:
                 case ArcDPSEnums.TargetID.CARightArm_CHINA:
-                    Logic = new ConjuredAmalgamate((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+                    Logic = new ConjuredAmalgamate(id);
                     break;
                 case ArcDPSEnums.TargetID.Kenut:
                 case ArcDPSEnums.TargetID.Nikare:
