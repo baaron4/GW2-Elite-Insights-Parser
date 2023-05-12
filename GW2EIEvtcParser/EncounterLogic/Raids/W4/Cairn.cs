@@ -98,10 +98,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
-            if (displacementEffectGUID != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out IReadOnlyList<EffectEvent> displacementEffects))
             {
-                IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEventsByEffectID(displacementEffectGUID.ContentID);
                 foreach (EffectEvent displacement in displacementEffects)
                 {
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
@@ -147,11 +145,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
-                    EffectGUIDEvent dashGreenEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDashGreen);
-                    if (dashGreenEffectGUID != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
                     {
                         var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
-                        IReadOnlyList<EffectEvent> dashGreenEffects = log.CombatData.GetEffectEventsByEffectID(dashGreenEffectGUID.ContentID);
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
                             int dashGreenStart = (int)dashGreen.Time;

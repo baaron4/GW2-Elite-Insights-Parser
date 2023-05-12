@@ -191,10 +191,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Nightmare Miasma AoE
-                    EffectGUIDEvent miasma = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareMiasmaIndicator);
-                    if (miasma != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaIndicator, out IReadOnlyList<EffectEvent> miasmaEffects))
                     {
-                        var miasmaEffects = log.CombatData.GetEffectEventsByEffectID(miasma.ContentID).ToList();
                         foreach (EffectEvent miasmaEffect in miasmaEffects)
                         {
                             int durationFirstAoe = 300;
@@ -216,10 +214,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Arkk's Shield
-                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
-                    if (shield != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
                         foreach (EffectEvent shieldEffect in shieldEffects)
                         {
                             int duration = 6200;
@@ -232,12 +228,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     // Cascade Of Torment
                     int cotDuration = 1000;
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0), cotDuration, 0, 150);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1), cotDuration, 150, 250);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2), cotDuration, 250, 350);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3), cotDuration, 350, 450);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4), cotDuration, 450, 550);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5), cotDuration, 550, 650);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing1, cotDuration, 150, 250);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing2, cotDuration, 250, 350);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing3, cotDuration, 350, 450);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
                 case (int)ArcDPSEnums.TrashID.BlueKnight:
                 case (int)ArcDPSEnums.TrashID.RedKnight:

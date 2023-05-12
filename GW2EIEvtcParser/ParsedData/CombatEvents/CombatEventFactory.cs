@@ -143,13 +143,13 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     if (stateChangeEvent.IsStateChange == ArcDPSEnums.StateChange.BuffInfo)
                     {
-                        if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.Category, out List<BuffInfoEvent> bdEvtList))
+                        if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.CategoryByte, out List<BuffInfoEvent> bdEvtList))
                         {
                             bdEvtList.Add(buffInfoEvent);
                         }
                         else
                         {
-                            metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.Category] = new List<BuffInfoEvent> { buffInfoEvent };
+                            metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.CategoryByte] = new List<BuffInfoEvent> { buffInfoEvent };
                         }
                     }
                     break;

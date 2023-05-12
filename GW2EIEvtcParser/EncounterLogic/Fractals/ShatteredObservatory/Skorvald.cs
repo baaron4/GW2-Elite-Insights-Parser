@@ -338,10 +338,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Solar Bolt
-                    EffectGUIDEvent solarBolt = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SolarBolt);
-                    if (solarBolt != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SolarBolt, out IReadOnlyList<EffectEvent> solarBoltEffects))
                     {
-                        var solarBoltEffects = log.CombatData.GetEffectEventsByEffectID(solarBolt.ContentID).ToList();
                         foreach (EffectEvent solarBoltEffect in solarBoltEffects)
                         {
                             int aoeRadius = 100;
@@ -386,10 +384,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Solar Cyclone
-                    EffectGUIDEvent kick = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.KickGroundEffect);
-                    if (kick != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out IReadOnlyList<EffectEvent> kickEffects))
                     {
-                        IReadOnlyList<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID);
                         foreach (EffectEvent kickEffect in kickEffects)
                         {
                             int start = (int)kickEffect.Time;
@@ -546,10 +542,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Mist Bomb - Both for Skorvald and Flux Anomalies
-            EffectGUIDEvent mistBomb = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.MistBomb);
-            if (mistBomb != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out IReadOnlyList<EffectEvent> mistBombEffects))
             {
-                var mistBombEffects = log.CombatData.GetEffectEventsByEffectID(mistBomb.ContentID).ToList();
                 foreach (EffectEvent mistBombEffect in mistBombEffects)
                 {
                     int aoeRadius = 130;
