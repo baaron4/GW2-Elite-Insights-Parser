@@ -222,7 +222,7 @@
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
         public const long MercifulInterventionTargetEffect = 9231;
-        public const long MercifulInterventionSelfEffect = 9235;
+        public const long MercifulAndJudgesInterventionSelfEffect = 9235; // applied by judges intervention and merciful intervention
         public const long SignetOfWrathPI = 9237;
         public const long SignetOfMercyPI = 9238;
         public const long SignetOfJudgmentPI = 9239;

@@ -83,13 +83,13 @@ namespace GW2EIEvtcParser
         // Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
+        public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // used with all shouts
         public const string GuardianSaveYourselves = "68F2C378E6C80548B5A3C89870C5DD86";
         public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
         public const string GuardianContemplationOfPurity1 = "75D72E2DA47ECF47A6BD009B49B7C708";
         public const string GuardianContemplationOfPurity2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // same as elementalist armor of earth
-        public const string GuardianJudgesIntervention = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target?
         public const string GuardianMercifulIntervention = "B45E7BD66E424A4CA695DE63DC13E93F"; // delayed, when reaching target?
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
@@ -117,9 +117,9 @@ namespace GW2EIEvtcParser
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD"; // likely the white radius indicator
-        public const string MechanistCrisisZone1 = "CDF749672C01964BAEF64CCB3D431DEE";
-        public const string MechanistCrisisZone2 = "956450E1260FB94B8691BC1378086250";
+        public const string MechanistCrisisZone = "956450E1260FB94B8691BC1378086250";
         public const string MechanistShiftSignet1 = "E1C1DD7F866B4149A1BADD216C9AA69D"; // happens twice, without owner at destination, with owner at origin?
         public const string MechanistShiftSignet2 = "DB22850AE209B34BBD11372F56D42D43";
         public const string MechanistOverclockSignet = "734834E7EB7CD74EB129ACBCE5C64C1D";
@@ -145,9 +145,9 @@ namespace GW2EIEvtcParser
         public const string ThiefSignetOfAgility = "BB5488951B60B546BB1BD5626DAE83E1";
         public const string ThiefSignetOfShadows = "14A5982DB277744CB928A4935555F563";
         public const string ThiefPitfallAoE = "7325E9B0DD2E914F9837E5FCFC740A95";
-        public const string ThiefThousandNeedlesAoE1 = "2125A13079C1C5479C150926EB60A15D";
-        public const string ThiefThousandNeedlesAoE2 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
-        public const string ThiefThousandNeedlesAoE3 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
+        // public const string ThiefThousandNeedlesAoECollision = "2125A13079C1C5479C150926EB60A15D"; // collision with shadow flare & other
+        public const string ThiefThousandNeedlesAoE1 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
+        public const string ThiefThousandNeedlesAoE2 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
         public const string ThiefSealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
         public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";

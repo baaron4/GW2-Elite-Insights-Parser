@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
             // distinguish blink & phase retreat by spawned staff clone
             new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
                 .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
