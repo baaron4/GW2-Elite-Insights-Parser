@@ -30,6 +30,18 @@ namespace GW2EIEvtcParser.ParsedData
             return UnpackMovementData(_dstAgent, _value);
         }
 
+        internal Point3D ToPoint()
+        {
+            (float x, float y, float z) = Unpack();
+            return new Point3D(x, y, z);
+        }
+
+        internal ParametricPoint3D ToParametricPoint()
+        {
+            (float x, float y, float z) = Unpack();
+            return new ParametricPoint3D(x, y, z, Time);
+        }
+
         internal abstract void AddPoint3D(CombatReplay replay);
     }
 }

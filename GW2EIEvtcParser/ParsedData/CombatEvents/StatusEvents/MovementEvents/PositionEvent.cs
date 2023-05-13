@@ -9,18 +9,6 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal Point3D ToPoint()
-        {
-            (float x, float y, float z) = Unpack();
-            return new Point3D(x, y, z);
-        }
-
-        internal ParametricPoint3D ToParametricPoint()
-        {
-            (float x, float y, float z) = Unpack();
-            return new ParametricPoint3D(x, y, z, Time);
-        }
-
         internal override void AddPoint3D(CombatReplay replay)
         {
             (float x, float y, float z) = Unpack();
