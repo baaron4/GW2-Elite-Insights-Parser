@@ -144,11 +144,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
-            if (distributedMagicGUIDEvent != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
             {
                 int distributedMagicDuration = 6700;
-                IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
                 //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
                 foreach (EffectEvent distributedMagic in distributedMagicEvents)
                 {
@@ -159,10 +157,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
                 }
             }
-            EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
-            if (magicSpikeGUIDEvent != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out IReadOnlyList<EffectEvent> magicSpikeEvents))
             {
-                IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
                 //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
                 foreach (EffectEvent magicSpike in magicSpikeEvents)
                 {

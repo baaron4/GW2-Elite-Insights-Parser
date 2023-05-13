@@ -217,23 +217,23 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Hero's Departure", HerosDeparture, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Hero's Return", HerosReturn, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             //////////////////////////////////////////////
-            // Cairn        
+            // Cairn
             new Buff("Shared Agony", SharedAgony, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SharedAgony),
             new Buff("Enraged (Cairn)", EnragedCairn, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged (Cairn 2)", EnragedCairn2, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Unseen Burden", UnseenBurden, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.UnseenBurden),
             new Buff("Countdown", Countdown, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Countdown),
             new Buff("Gaze Avoidance", GazeAvoidance, Source.FightSpecific, BuffClassification.Other, BuffImages.GazeAvoidance),
-            // MO             
+            // Mursaat Overseer
             new Buff("Empowered", Empowered, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.Empowered),
             new Buff("Mursaat Overseer's Shield", MursaatOverseersShield, Source.FightSpecific, BuffClassification.Other, BuffImages.Dispel),
-            new Buff("Protect (SAK)", ProtectSAK, Source.FightSpecific, BuffClassification.Other, BuffImages.Protect),
-            new Buff("Dispel (SAK)", DispelSAK, Source.FightSpecific, BuffClassification.Other, BuffImages.Dispel),
-            new Buff("Claim (SAK)", ClaimSAK, Source.FightSpecific, BuffClassification.Other, BuffImages.Claim),
-            // Samarog            
+            new Buff("Protect", ProtectEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Protect),
+            new Buff("Dispel", DispelEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Dispel),
+            new Buff("Claim", ClaimEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Claim),
+            // Samarog
             new Buff("Fixated (Samarog)", FixatedSamarog, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            new Buff("Fixated (Guldhem)", FixatedGuldhem, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            new Buff("Fixated (Rigom)", FixatedRigom, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Guldhem)", FixatedGuldhem, Source.FightSpecific, BuffClassification.Other, BuffImages.FixateGuldhem),
+            new Buff("Fixated (Rigom)", FixatedRigom, Source.FightSpecific, BuffClassification.Other, BuffImages.FixateRigom),
             new Buff("Inevitable Betrayal (Big)", InevitableBetrayalBig, Source.FightSpecific, BuffClassification.Other, BuffImages.FeedingFrenzy),
             new Buff("Inevitable Betrayal (Small)", InevitableBetrayalSmall, Source.FightSpecific, BuffClassification.Other, BuffImages.FeedingFrenzy),
             new Buff("Soul Swarm", SoulSwarm, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulSwarm),
@@ -357,6 +357,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Incorporeal", Incorporeal, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAura),
             new Buff("Flare-Up", FlareUp, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.MagicAura),
             new Buff("Unbridled Chaos", UnbridledChaos, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ExposedEyes),
+            new Buff("Rebellious Power", RebelliousPower, Source.FightSpecific, BuffStackType.Stacking, 40, BuffClassification.Other, BuffImages.InfusedShield),
+            new Buff("Charged Soul", ChargedSoul, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.PartiallyProtected),
             new Buff("Achievement Eligibility: Power Surge", AchievementEligibilityPowerSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             //////////////////////////////////////////////
             // Fractals 
@@ -492,7 +494,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shared Destruction (Li CM)", SharedDestructionLiCM, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Debilitated", Debilitated, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Debuff, BuffImages.Debilitated),
             new Buff("Infirmity", Infirmity, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Debuff, BuffImages.DebilitatingVoid),
-            //Harvest Temple
+            new Buff("Disoriented", DisorientedEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Disoriented),
+            // Harvest Temple
             new Buff("Influence of the Void", InfluenceOfTheVoidEffect, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.ThrowCursedArtifact),
             new Buff("Targeted (Dragon Void)", TargetedDragonVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Void Repulsion 1", VoidRepulsion1, Source.FightSpecific, BuffClassification.Other, BuffImages.FrozenBarrier),

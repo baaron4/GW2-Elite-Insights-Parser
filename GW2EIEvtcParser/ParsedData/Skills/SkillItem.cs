@@ -76,6 +76,9 @@ namespace GW2EIEvtcParser.ParsedData
             {RegenerativeBreakbar, "Regenerative Breakbar" },
             // P.Qadim
             {RuinousNovaCharge, "Ruinous Nova Charge" },
+            { FluxDisruptorActivateCast, "Flux Disruptor: Activate" },
+            { FluxDisruptorDeactivateCast, "Flux Disruptor: Deactivate" },
+            { PlayerLiftUpQadimThePeerless, "Player Lift Up Mechanic" },
             //{56036, "Magma Bomb" },
             {ForceOfRetaliationCast, "Force of Retaliation Cast" },
             {PeerlessQadimTPCenter, "Teleport Center" },
@@ -123,6 +126,7 @@ namespace GW2EIEvtcParser.ParsedData
             //
             {SoulStoneVenomSkill, "Soul Stone Venom" },
             {SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
+            { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
             {MantraOfSolace, "Mantra of Solace" },
             {DesertEmpowerment, "Desert Empowerment" },
             {SigilOfWater, "Sigil of Water" },
@@ -329,6 +333,12 @@ namespace GW2EIEvtcParser.ParsedData
             // - Conjured Amalgamated
             { ConjuredSlashSAK, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
             { ConjuredProtectionSAK, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
+            // - Sabir
+            { FlashDischargeSAK, "https://wiki.guildwars2.com/images/5/59/Flash_Discharge.png" },
+            // - Qadim the Peerless
+            { FluxDisruptorActivateCast, "https://wiki.guildwars2.com/images/d/d5/Flux_Disruptor-_Activate.png" },
+            { FluxDisruptorDeactivateCast, "https://wiki.guildwars2.com/images/3/34/Flux_Disruptor-_Deactivate.png" },
+            { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
             // Skills
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
@@ -337,6 +347,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
+            { BasiliskVenomStunBreakbarDamage, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png" },
             // Necromancer
             { ManifestSandShadeShadeHit, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
             { NefariousFavorShadeHit, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },

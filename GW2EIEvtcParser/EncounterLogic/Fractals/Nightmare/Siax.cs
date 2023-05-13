@@ -189,10 +189,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
                     // Poison AoE
-                    EffectGUIDEvent poisonField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VileSpitSiax);
-                    if (poisonField != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VileSpitSiax, out IReadOnlyList<EffectEvent> poisonEffects))
                     {
-                        var poisonEffects = log.CombatData.GetEffectEventsByEffectID(poisonField.ContentID).ToList();
                         int duration = 16000;
                         foreach (EffectEvent effect in poisonEffects)
                         {
@@ -200,10 +198,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Nightmare Hallucinations Spawn Event
-                    EffectGUIDEvent spawnField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareHallucinationsSpawn);
-                    if (spawnField != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareHallucinationsSpawn, out IReadOnlyList<EffectEvent> spawnEffects))
                     {
-                        var spawnEffects = log.CombatData.GetEffectEventsByEffectID(spawnField.ContentID).ToList();
                         int duration = 3000;
                         foreach (EffectEvent effect in spawnEffects)
                         {
@@ -212,10 +208,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Caustic Barrage
-                    EffectGUIDEvent causticBarrage = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CausticBarrageIndicator);
-                    if (causticBarrage != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CausticBarrageIndicator, out IReadOnlyList<EffectEvent> barrageEffects))
                     {
-                        var barrageEffects = log.CombatData.GetEffectEventsByEffectID(causticBarrage.ContentID).ToList();
                         int duration = 500;
                         foreach (EffectEvent effect in barrageEffects)
                         {
@@ -224,10 +218,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Volatile Hallucinations Explosions
-                    EffectGUIDEvent volatileExpulsion = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VolatileExpulsionIndicator);
-                    if (volatileExpulsion != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VolatileExpulsionIndicator, out IReadOnlyList<EffectEvent> expulsionEffects))
                     {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(volatileExpulsion.ContentID).ToList();
                         int duration = 200;
                         foreach (EffectEvent effect in expulsionEffects)
                         {
@@ -237,12 +229,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     // Cascade Of Torment
                     int cotDuration = 1000;
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0), cotDuration, 0, 150);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1), cotDuration, 150, 250);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2), cotDuration, 250, 350);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3), cotDuration, 350, 450);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4), cotDuration, 450, 550);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5), cotDuration, 550, 650);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing1, cotDuration, 150, 250);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing2, cotDuration, 250, 350);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing3, cotDuration, 350, 450);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
                 case (int)ArcDPSEnums.TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();

@@ -163,10 +163,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                     // Arkk's Shield
-                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
-                    if (shield != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
                         foreach (EffectEvent shieldEffect in shieldEffects)
                         {
                             if (shieldEffect != null)
@@ -203,10 +201,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // 100% to 66% Doughnut
-                    EffectGUIDEvent doughnut100_66 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut100_66);
-                    if (doughnut100_66 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut100_66, out IReadOnlyList<EffectEvent> miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut100_66.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             if (percent66treshhold != null)
@@ -224,10 +221,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // 66% to 15% Doughnut
-                    EffectGUIDEvent doughnut66_15 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut66_15);
-                    if (doughnut66_15 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut66_15, out miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut66_15.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             // Check if the Arkk's shield attack has been skipped with high dps
@@ -246,10 +242,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // 15% to 0% Doughnut
-                    EffectGUIDEvent doughnut15_0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut15_0);
-                    if (doughnut15_0 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut15_0, out miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut15_0.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             // If Arkk's shield has been skipped at 15% this decoration should never be added
@@ -466,10 +461,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             //}
 
             // Altar Shockwave
-            EffectGUIDEvent altarWave = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssNightmareAltarShockwave);
-            if (altarWave != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarShockwave, out IReadOnlyList<EffectEvent> waveEffects))
             {
-                var waveEffects = log.CombatData.GetEffectEventsByEffectID(altarWave.ContentID).ToList();
                 foreach (EffectEvent waveEffect in waveEffects)
                 {
                     int duration = 2000;

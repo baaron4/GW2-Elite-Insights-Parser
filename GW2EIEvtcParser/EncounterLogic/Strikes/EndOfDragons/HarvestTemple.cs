@@ -571,10 +571,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             //
-            EffectGUIDEvent green = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen);
-            if (green != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
-                IReadOnlyList<EffectEvent> greenEffects = log.CombatData.GetEffectEventsByEffectID(green.ContentID);
                 foreach (EffectEvent greenEffect in greenEffects)
                 {
                     int duration = 5000;
@@ -584,10 +582,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
                 }
             }
-            EffectGUIDEvent greenFailed = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleFailedGreen);
-            if (greenFailed != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out IReadOnlyList<EffectEvent> failedGreenEffects))
             {
-                IReadOnlyList<EffectEvent> failedGreenEffects = log.CombatData.GetEffectEventsByEffectID(greenFailed.ContentID);
                 foreach (EffectEvent failedGreen in failedGreenEffects)
                 {
                     int duration = 5000;
@@ -597,10 +593,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
                 }
             }
-            EffectGUIDEvent redPuddle = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddle);
-            if (redPuddle != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddle, out IReadOnlyList<EffectEvent> redPuddleEffects))
             {
-                IReadOnlyList<EffectEvent> redPuddleEffects = log.CombatData.GetEffectEventsByEffectID(redPuddle.ContentID);
                 foreach (EffectEvent effect in redPuddleEffects)
                 {
                     int inactiveDuration = 1500;
@@ -626,8 +620,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
                     //
-                    EffectGUIDEvent purificationZone = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationZones);
-                    if (purificationZone != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationZones, out IReadOnlyList<EffectEvent> purificationZoneEffects))
                     {
                         var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
                         var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
@@ -635,9 +628,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int voidShellRemovalOffset = 0;
                         int purificationAdd = 0;
                         bool breakPurification = false;
-                        var purificationZoneEffects = log.CombatData.GetEffectEventsByEffectID(purificationZone.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(purificationZone.ContentID);
-                        foreach (EffectEvent purificationZoneEffect in purificationZoneEffects)
+                        foreach (EffectEvent purificationZoneEffect in purificationZoneEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int start = (int)purificationZoneEffect.Time;
                             int end = start + purificationZoneEffect.Duration;
@@ -659,12 +650,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent lightning = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationLightnings);
-                    if (lightning != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationLightnings, out IReadOnlyList<EffectEvent> lightningEffects))
                     {
-                        var lightningEffects = log.CombatData.GetEffectEventsByEffectID(lightning.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(lightning.ContentID);
-                        foreach (EffectEvent lightningEffect in lightningEffects)
+                        foreach (EffectEvent lightningEffect in lightningEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int duration = 3000;
                             int start = (int)lightningEffect.Time - duration;
@@ -674,12 +662,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent fireBall = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationFireBalls);
-                    if (fireBall != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationFireBalls, out IReadOnlyList<EffectEvent> fireBallEffects))
                     {
-                        var fireBallEffects = log.CombatData.GetEffectEventsByEffectID(fireBall.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(fireBall.ContentID);
-                        foreach (EffectEvent fireBallEffect in fireBallEffects)
+                        foreach (EffectEvent fireBallEffect in fireBallEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int startLoad = (int)fireBallEffect.Time - 2000;
                             int endLoad = (int)fireBallEffect.Time;
@@ -689,12 +674,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent voidZone = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationVoidZones);
-                    if (voidZone != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationVoidZones, out IReadOnlyList<EffectEvent> voidZoneEffects))
                     {
-                        var voidZoneEffects = log.CombatData.GetEffectEventsByEffectID(voidZone.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(voidZone.ContentID);
-                        foreach (EffectEvent voidZoneEffect in voidZoneEffects)
+                        foreach (EffectEvent voidZoneEffect in voidZoneEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int start = (int)voidZoneEffect.Time;
                             int end = start + 5000;
@@ -703,12 +685,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent beeLaunch = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationBeeLaunch);
-                    if (beeLaunch != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationBeeLaunch, out IReadOnlyList<EffectEvent> beeLaunchEffects))
                     {
-                        var beeLaunchEffects = log.CombatData.GetEffectEventsByEffectID(beeLaunch.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(beeLaunch.ContentID);
-                        foreach (EffectEvent beeLaunchEffect in beeLaunchEffects)
+                        foreach (EffectEvent beeLaunchEffect in beeLaunchEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int start = (int)beeLaunchEffect.Time;
                             int end = start + 3000;
@@ -723,12 +702,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent poisonTrail = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePurificationPoisonTrail);
-                    if (poisonTrail != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationPoisonTrail, out IReadOnlyList<EffectEvent> poisonTrailEffects))
                     {
-                        var poisonTrailEffects = log.CombatData.GetEffectEventsByEffectID(poisonTrail.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(poisonTrail.ContentID);
-                        foreach (EffectEvent poisonTrailEffect in poisonTrailEffects)
+                        foreach (EffectEvent poisonTrailEffect in poisonTrailEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int startLoad = (int)poisonTrailEffect.Time - 1000;
                             int start = (int)poisonTrailEffect.Time;
@@ -738,12 +714,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    EffectGUIDEvent orbExploded = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleOrbExplosion);
-                    if (orbExploded != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleOrbExplosion, out IReadOnlyList<EffectEvent> orbEffects))
                     {
-                        IReadOnlyList<EffectEvent> orbEffects = log.CombatData.GetEffectEventsByEffectID(orbExploded.ContentID).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
-                        knownEffectsIDs.Add(orbExploded.ContentID);
-                        foreach (EffectEvent orbEffect in orbEffects)
+                        foreach (EffectEvent orbEffect in orbEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int duration = 3000;
                             int start = (int)orbEffect.Time;
@@ -765,11 +738,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     //
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
-                    EffectGUIDEvent iceShard = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagIceShards);
-                    if (iceShard != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleJormagIceShards, out IReadOnlyList<EffectEvent> iceShardEffects))
                     {
-                        IReadOnlyList<EffectEvent> iceShardEffects = log.CombatData.GetEffectEventsByEffectID(iceShard.ContentID);
-                        knownEffectsIDs.Add(iceShard.ContentID);
                         foreach (EffectEvent iceShardEffect in iceShardEffects)
                         {
                             int duration = 2500;
@@ -779,12 +749,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)));
                         }
                     }
-                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, 54000, 57000);
-                    EffectGUIDEvent meteor = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField);
-                    if (meteor != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField, out IReadOnlyList<EffectEvent> meteorEffects))
                     {
-                        IReadOnlyList<EffectEvent> meteorEffects = log.CombatData.GetEffectEventsByEffectID(meteor.ContentID);
-                        knownEffectsIDs.Add(iceShard.ContentID);
                         foreach (EffectEvent effect in meteorEffects)
                         {
                             int indicatorDuration = 1500;
@@ -806,11 +772,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(false, 0, 160, (dragonOrbStart, dragonOrbEnd), "rgba(200, 50, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
-                    EffectGUIDEvent smallJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusSmallJaw);
-                    if (smallJaw != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusSmallJaw, out IReadOnlyList<EffectEvent> smallJawEffects))
                     {
-                        IReadOnlyList<EffectEvent> smallJawEffects = log.CombatData.GetEffectEventsByEffectID(smallJaw.ContentID);
-                        knownEffectsIDs.Add(smallJaw.ContentID);
                         // The effect is slightly shifted on X
                         var jawPosition = new Point3D(610, -21400.3f, -15417.3f);
                         foreach (EffectEvent smallJawEffect in smallJawEffects)
@@ -822,11 +785,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)));
                         }
                     }
-                    EffectGUIDEvent bigJaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTemplePrimordusBigJaw);
-                    if (bigJaw != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
                     {
-                        IReadOnlyList<EffectEvent> bigJawEffects = log.CombatData.GetEffectEventsByEffectID(bigJaw.ContentID);
-                        knownEffectsIDs.Add(bigJaw.ContentID);
                         foreach (EffectEvent bigJawEffect in bigJawEffects)
                         {
                             int start = (int)bigJawEffect.Time;
@@ -838,11 +798,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
-                    EffectGUIDEvent kralkBeam = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator);
-                    if (kralkBeam != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator, out IReadOnlyList<EffectEvent> kralkBeamEffects))
                     {
-                        IReadOnlyList<EffectEvent> kralkBeamEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeam.ContentID);
-                        knownEffectsIDs.Add(kralkBeam.ContentID);
                         foreach (EffectEvent effect in kralkBeamEffects)
                         {
                             int indicatorDuration = 2000;
@@ -854,11 +811,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new RectangleDecoration(true, 0, 700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent kralkBeamAoe = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe);
-                    if (kralkBeamAoe != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe, out IReadOnlyList<EffectEvent> kralkBeamAoeEffects))
                     {
-                        IReadOnlyList<EffectEvent> kralkBeamAoeEffects = log.CombatData.GetEffectEventsByEffectID(kralkBeamAoe.ContentID);
-                        knownEffectsIDs.Add(kralkBeamAoe.ContentID);
                         foreach (EffectEvent effect in kralkBeamAoeEffects)
                         {
                             int start = (int)effect.Time;
@@ -870,17 +824,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidAmalgamate:
-                    EffectGUIDEvent voidPool = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleVoidPool);
-                    if (voidPool != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPool, out IReadOnlyList<EffectEvent> allPoolEffects))
                     {
-                        var poolEffects = log.CombatData.GetEffectEventsByEffectID(voidPool.ContentID).Where(x => x.Src == target.AgentItem).ToList();
-                        // sort pool effects by time so that we can grow each effect
-                        poolEffects.Sort((a, b) => a.Time.CompareTo(b.Time));
+                        var poolEffects = allPoolEffects.Where(x => x.Src == target.AgentItem).ToList();
                         if (!poolEffects.Any())
                         {
                             break;
                         }
-                        knownEffectsIDs.Add(voidPool.ContentID);
+                        // sort pool effects by time so that we can grow each effect
+                        poolEffects.Sort((a, b) => a.Time.CompareTo(b.Time));
                         double radius = 100.0;
                         double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
                         for (int i = 0; i < poolEffects.Count - 1; i++)
@@ -942,11 +894,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
-                    EffectGUIDEvent mordremothPoison = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact);
-                    if (mordremothPoison != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact, out IReadOnlyList<EffectEvent> mordremothPoisonEffects))
                     {
-                        IReadOnlyList<EffectEvent> mordremothPoisonEffects = log.CombatData.GetEffectEventsByEffectID(mordremothPoison.ContentID);
-                        knownEffectsIDs.Add(mordremothPoison.ContentID);
                         foreach (EffectEvent effect in mordremothPoisonEffects)
                         {
                             int end = (int)effect.Time;
@@ -957,11 +906,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
-                    EffectGUIDEvent zhaitanPoisonImpact = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact);
-                    if (zhaitanPoisonImpact != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact, out IReadOnlyList<EffectEvent> zhaitanPoisonImpactEffects))
                     {
-                        IReadOnlyList<EffectEvent> zhaitanPoisonImpactEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonImpact.ContentID);
-                        knownEffectsIDs.Add(zhaitanPoisonImpact.ContentID);
                         foreach (EffectEvent effect in zhaitanPoisonImpactEffects)
                         {
                             int end = (int)effect.Time;
@@ -970,11 +916,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent zhaitanPoisonAoE = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE);
-                    if (zhaitanPoisonAoE != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE, out IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects))
                     {
-                        IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects = log.CombatData.GetEffectEventsByEffectID(zhaitanPoisonAoE.ContentID);
-                        knownEffectsIDs.Add(zhaitanPoisonAoE.ContentID);
                         foreach (EffectEvent effect in zhaitanPoisonAoeEffects)
                         {
                             int start = (int)effect.Time;
@@ -985,11 +928,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
-                    EffectGUIDEvent sooWonClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSooWonClaw);
-                    if (sooWonClaw != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonClaw, out IReadOnlyList<EffectEvent> sooWonClawEffects))
                     {
-                        IReadOnlyList<EffectEvent> sooWonClawEffects = log.CombatData.GetEffectEventsByEffectID(sooWonClaw.ContentID);
-                        knownEffectsIDs.Add(sooWonClaw.ContentID);
                         foreach (EffectEvent effect in sooWonClawEffects)
                         {
                             int start = (int)effect.Time;
@@ -998,11 +938,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent bouncingOrbClaw = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator);
-                    if (bouncingOrbClaw != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> bouncingOrbClawEffects))
                     {
-                        IReadOnlyList<EffectEvent> bouncingOrbClawEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbClaw.ContentID);
-                        knownEffectsIDs.Add(bouncingOrbClaw.ContentID);
                         foreach (EffectEvent effect in bouncingOrbClawEffects)
                         {
                             int start = (int)effect.Time;
@@ -1011,11 +948,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent bouncingOrbTail = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTormentOfTheVoidTailIndicator);
-                    if (bouncingOrbTail != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidTailIndicator, out IReadOnlyList<EffectEvent> bouncingOrbTailEffects))
                     {
-                        IReadOnlyList<EffectEvent> bouncingOrbTailEffects = log.CombatData.GetEffectEventsByEffectID(bouncingOrbTail.ContentID);
-                        knownEffectsIDs.Add(bouncingOrbTail.ContentID);
                         foreach (EffectEvent effect in bouncingOrbTailEffects)
                         {
                             int start = (int)effect.Time;
@@ -1024,11 +958,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(true, end, 200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent tailSlam = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTailSlamIndicator);
-                    if (tailSlam != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out IReadOnlyList<EffectEvent> tailSlamEffects))
                     {
-                        IReadOnlyList<EffectEvent> tailSlamEffects = log.CombatData.GetEffectEventsByEffectID(tailSlam.ContentID);
-                        knownEffectsIDs.Add(tailSlam.ContentID);
                         foreach (EffectEvent effect in tailSlamEffects)
                         {
                             int start = (int)effect.Time;
@@ -1037,11 +968,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new RectangleDecoration(true, end, 3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
-                    EffectGUIDEvent tsunami = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleTsunami1);
-                    if (tsunami != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTsunami1, out IReadOnlyList<EffectEvent> tsunamiEffects))
                     {
-                        IReadOnlyList<EffectEvent> tsunamiEffects = log.CombatData.GetEffectEventsByEffectID(tsunami.ContentID);
-                        knownEffectsIDs.Add(tsunami.ContentID);
                         foreach (EffectEvent effect in tsunamiEffects)
                         {
                             // AoE indicator
@@ -1124,12 +1052,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             var knownEffectsIDs = new HashSet<long>();
-            EffectGUIDEvent spread = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSpread);
-            if (spread != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpread, out IReadOnlyList<EffectEvent> spreadEffects))
             {
-                var spreadEffects = log.CombatData.GetEffectEventsByEffectID(spread.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
-                knownEffectsIDs.Add(spread.ContentID);
-                foreach (EffectEvent spreadEffect in spreadEffects)
+                var spreadEffectsOnPlayer = spreadEffects.Where(x => x.Dst == p.AgentItem).ToList();
+                foreach (EffectEvent spreadEffect in spreadEffectsOnPlayer)
                 {
                     int duration = 5500;
                     int start = (int)spreadEffect.Time;
@@ -1154,12 +1080,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                 }
             }
-            EffectGUIDEvent redSelected = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleRedPuddleSelect);
-            if (redSelected != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelect, out IReadOnlyList<EffectEvent> redSelectedEffects))
             {
-                var redSelectedEffects = log.CombatData.GetEffectEventsByEffectID(redSelected.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
-                knownEffectsIDs.Add(redSelected.ContentID);
-                foreach (EffectEvent redSelectedEffect in redSelectedEffects)
+                var redSelectedEffectsOnPlayer = redSelectedEffects.Where(x => x.Dst == p.AgentItem).ToList();
+                foreach (EffectEvent redSelectedEffect in redSelectedEffectsOnPlayer)
                 {
                     int duration = 7000;
                     int start = (int)redSelectedEffect.Time;

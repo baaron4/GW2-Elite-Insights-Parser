@@ -118,13 +118,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
-
-            if (sickness != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ToxicSicknessPuke1, out IReadOnlyList<EffectEvent> sicknessEffects))
             {
-                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
+                var sicknessEffectsOnPlayer = sicknessEffects.Where(x => x.Dst == p.AgentItem).ToList();
 
-                foreach (EffectEvent sicknessEffect in sicknessEffects)
+                foreach (EffectEvent sicknessEffect in sicknessEffectsOnPlayer)
                 {
                     if (replay.Rotations.Any())
                     {
@@ -142,10 +140,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent fluxBombSmall = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SmallFluxBomb);
-            if (fluxBombSmall != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombEffects))
             {
-                var fluxBombEffects = log.CombatData.GetEffectEventsByEffectID(fluxBombSmall.ContentID).ToList();
                 foreach (EffectEvent fluxEffect in fluxBombEffects)
                 {
                     int duration = 5000;

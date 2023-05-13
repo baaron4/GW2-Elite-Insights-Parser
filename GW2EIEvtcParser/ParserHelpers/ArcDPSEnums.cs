@@ -398,6 +398,8 @@ namespace GW2EIEvtcParser
             return res;
         }
 
+        // Broken
+        /*
         public enum BuffCategory : byte
         {
             Boon = 0,
@@ -414,7 +416,7 @@ namespace GW2EIEvtcParser
         internal static BuffCategory GetBuffCategory(byte bt)
         {
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
-        }
+        }*/
         // WIP
         public enum SkillAction : byte
         {

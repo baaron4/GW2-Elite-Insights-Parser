@@ -724,7 +724,7 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-        public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(ArcDPSEnums.BuffCategory category)
+        public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(byte category)
         {
             if (_metaDataEvents.BuffInfoEventsByCategory.TryGetValue(category, out List<BuffInfoEvent> evts))
             {
@@ -1006,6 +1006,18 @@ namespace GW2EIEvtcParser.ParsedData
                 return list;
             }
             return new List<EffectEvent>();
+        }
+
+        public bool TryGetEffectEventsByGUID(string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
+            effectEvents = null;
+            if (effectGUIDEvent != null)
+            {
+                effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
+                return true;
+            }
+            return false;
         }
 
 

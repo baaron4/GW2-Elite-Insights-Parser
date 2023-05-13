@@ -22,10 +22,8 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (string guid in MechanicIDs)
             {
-                EffectGUIDEvent effectGUID = log.CombatData.GetEffectGUIDEvent(guid);
-                if (effectGUID != null)
+                if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
                 {
-                    IReadOnlyList<EffectEvent> effects = log.CombatData.GetEffectEventsByEffectID(effectGUID.ContentID);
                     foreach (EffectEvent effectEvent in effects)
                     {
                         AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
@@ -42,10 +40,8 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (string guid in MechanicIDs)
             {
-                EffectGUIDEvent effectGUID = log.CombatData.GetEffectGUIDEvent(guid);
-                if (effectGUID != null)
+                if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
                 {
-                    IReadOnlyList<EffectEvent> effects = log.CombatData.GetEffectEventsByEffectID(effectGUID.ContentID);
                     foreach (EffectEvent effectEvent in effects)
                     {
                         AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
