@@ -989,16 +989,6 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEventsByEffectGUID(string effectGUID)
-        {
-            EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
-            if (effectGUIDEvent != null)
-            {
-                return GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
-            }
-            return new List<EffectEvent>();
-        }
-
         public IReadOnlyList<EffectEvent> GetEffectEventsByTrackingID(long trackingID)
         {
             if (_statusEvents.EffectEventsByTrackingID.TryGetValue(trackingID, out List<EffectEvent> list))

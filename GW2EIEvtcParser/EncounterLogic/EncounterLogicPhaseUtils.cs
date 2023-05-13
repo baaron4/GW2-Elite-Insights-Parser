@@ -87,12 +87,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
         {
-            var phases = new List<PhaseData>();
-            phases.Add(new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
+            return new List<PhaseData>
             {
-                CanBeSubPhase = false
-            });
-            return phases;
+                new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
+                {
+                    CanBeSubPhase = false
+                }
+            };
         }
     }
 }

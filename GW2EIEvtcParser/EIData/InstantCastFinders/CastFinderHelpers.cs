@@ -58,14 +58,20 @@ namespace GW2EIEvtcParser.EIData
 
         internal static bool HasRelatedEffect(CombatData combatData, string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(combatData.GetEffectEventsByEffectGUID(effectGUID), time, epsilon)
-                .Any(effect => effect.Src == agent);
+            if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            {
+                return FindRelatedEvents(effectEvents, time, epsilon).Any(effect => effect.Src == agent);
+            }
+            return false;
         }
 
         internal static bool HasRelatedEffectDst(CombatData combatData, string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(combatData.GetEffectEventsByEffectGUID(effectGUID), time, epsilon)
-                .Any(effect => effect.Dst == agent);
+            if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            {
+                return FindRelatedEvents(effectEvents, time, epsilon).Any(effect => effect.Dst == agent);
+            }
+            return false;
         }
     }
 }

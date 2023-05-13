@@ -16,7 +16,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect),
             new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingDisableWithEffectData(),
-            new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1).UsingSrcSpecChecker(Spec.Reaper),
+            new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1)
+                .UsingSrcSpecChecker(Spec.Reaper)
+                .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings2)
+                .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings3),
             new DamageCastFinder(Suffer, Suffer).UsingDisableWithEffectData(),
             new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer).UsingSrcSpecChecker(Spec.Reaper),
             // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
