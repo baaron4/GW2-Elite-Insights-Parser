@@ -48,22 +48,22 @@ namespace GW2EIEvtcParser.EIData
             return _engineerKit.Contains(id);
         }
 
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance), // Explosive Entrance
-            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect), // Elixir S
+            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance),
+            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect),
             new BuffGainCastFinder(SlickShoesSkill, SlickShoesEffect),
-            new DamageCastFinder(OverchargedShot,OverchargedShot), // Overcharged Shot
+            new DamageCastFinder(OverchargedShot, OverchargedShot),
             // Kits
-            new EngineerKitFinder(BombKit), // Bomb Kit
-            new EngineerKitFinder(ElixirGun), // Elixir Gun
-            new EngineerKitFinder(Flamethrower), // Flamethrower
-            new EngineerKitFinder(GrenadeKit), // Grenade Kit
-            new EngineerKitFinder(MedKitSkill), // Med Kit
-            new EngineerKitFinder(ToolKit), // Tool Kit
-            new EngineerKitFinder(EliteMortarKit), // Elite Mortar Kit
-            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
+            new EngineerKitFinder(BombKit),
+            new EngineerKitFinder(ElixirGun),
+            new EngineerKitFinder(Flamethrower),
+            new EngineerKitFinder(GrenadeKit),
+            new EngineerKitFinder(MedKitSkill),
+            new EngineerKitFinder(ToolKit),
+            new EngineerKitFinder(EliteMortarKit),
+            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
         };
 
 

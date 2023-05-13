@@ -1029,6 +1029,7 @@
         public const long SpearOfJustice = 29632;
         public const long SignetOfCourage = 29633;
         public const long Echo = 29664;
+        public const long BypassCoating = 29665;
         public const long QuickDraw = 29703;
         public const long LastRites = 29726;
         public const long PurgeGyro = 29739;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -122,6 +122,7 @@ namespace GW2EIEvtcParser
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
+        public const string ScrapperBypassCoating = "D2307A69B227BE4B831C2AA1DAAE646A"; // player is owner
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
         public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, ~800ms after spawn
         public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone

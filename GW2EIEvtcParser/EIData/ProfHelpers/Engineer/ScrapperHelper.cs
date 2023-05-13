@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingSrcSpecChecker(Spec.Scrapper),
             new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingSrcSpecChecker(Spec.Scrapper),
             new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating).UsingSrcSpecChecker(Spec.Scrapper),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
