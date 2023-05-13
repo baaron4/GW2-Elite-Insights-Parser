@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
-        public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, bit delayed
+        public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, ~800ms after spawn
         public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD"; // likely the white radius indicator
         public const string MechanistCrisisZone = "956450E1260FB94B8691BC1378086250";
