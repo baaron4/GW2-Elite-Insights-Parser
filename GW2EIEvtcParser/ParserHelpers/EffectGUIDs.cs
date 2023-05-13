@@ -8,8 +8,11 @@ namespace GW2EIEvtcParser
     public static class EffectGUIDs
     {
         // Generic
-        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // blue circles indicating radius of boons etc.
+        // blue circles indicating radius of boons etc.
+        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // e.g. crisis zone
+        public const string Generic360UnitRadius2 = "0B3A5E8DDBB43447815547D96E7CA146"; // e.g. deathly haste, barrier burst - this vs 600 2 for barrier engine vs mechanical genius
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
+        public const string Generic600UnitRadius2 = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // e.g. medical dispersion field, barrier engine
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -54,6 +57,9 @@ namespace GW2EIEvtcParser
         public const string ScourgeShade = "78408C6DA08C2746BEABEB995187271A";
         public const string ScourgeShadeStrike = "C8B109540159AA429E83D0AA98EF3E90";
         public const string ScourgeSandSwellPortal = "086CF7823EB13047B2187E7933639703";
+        public const string HarbingerCascadingCorruption = "EEDCAB61CD35E840909B03D398878B1C";
+        public const string HarbingerDeathlyHaste = "9C06D9D9B0E22247A1752C426808CD80";
+        public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear

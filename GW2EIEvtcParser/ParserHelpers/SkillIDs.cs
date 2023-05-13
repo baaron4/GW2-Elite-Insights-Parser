@@ -900,6 +900,7 @@
         public const long WeaponDraw = 23284;
         public const long WeaponStow = 23285;
         public const long Reflection2 = 24014;
+        public const long POV_DhuumfireCooldown = 24286;
         public const long SigilOfWater = 24241;
         public const long Critical = 24278;
         public const long StoneHeart = 24304;
@@ -2647,6 +2648,7 @@
         public const long ExecutionersCallingSkill = 62525;
         public const long RushingJusticeEffect = 62529;
         public const long ExitHarbingerShroud = 62540;
+        public const long DoomApproaches = 62558;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
         public const long Bladeturn = 62592;
@@ -2660,8 +2662,10 @@
         public const long Blight = 62653;
         public const long ExecutionersCallingDualStrike = 62656;
         public const long VirtuosoBlade1 = 62658;
+        public const long CascadingCorruption = 62660;
         public const long ElixirOfPromise = 62667;
         public const long RushingJusticeSkill = 62668;
+        public const long DeathlyHaste = 62671;
         public const long FriedBananaChips = 62677;
         public const long ShatteringIce = 62686;
         public const long UrnOfSaintViktorSkill = 62687;

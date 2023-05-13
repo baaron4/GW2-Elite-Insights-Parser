@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
-            // - Shades
+            // Necromancer
             { ManifestSandShadeShadeHit, "https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png" },
             { NefariousFavorShadeHit, "https://wiki.guildwars2.com/images/8/83/Nefarious_Favor.png" },
             { SandCascadeShadeHit, "https://wiki.guildwars2.com/images/1/1e/Sand_Cascade.png" },
@@ -345,6 +345,9 @@ namespace GW2EIEvtcParser.ParsedData
             { GarishPillarShadeHit, "https://wiki.guildwars2.com/images/4/40/Garish_Pillar.png" },
             { DesertShroudHit, "https://wiki.guildwars2.com/images/0/08/Desert_Shroud.png" },
             { SandstormShroudHit, "https://wiki.guildwars2.com/images/3/34/Sandstorm_Shroud.png" },
+            { CascadingCorruption, "https://wiki.guildwars2.com/images/9/9e/Cascading_Corruption.png" },
+            { DeathlyHaste, "https://wiki.guildwars2.com/images/9/9d/Deathly_Haste.png" },
+            { DoomApproaches, "https://wiki.guildwars2.com/images/2/28/Doom_Approaches.png" },
             // Traits
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
