@@ -325,6 +325,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashDoppelgangerThief = "https://i.imgur.com/ukMIsqk.png";
         private const string TrashDoppelgangerWarrior = "https://i.imgur.com/1YvlFYr.png";
         private const string TrashScarletPhantom = "https://i.imgur.com/W17Ugtt.png";
+        private const string TrashTorch = "https://i.imgur.com/RKaDon5.png";
+        private const string TrashAberrantWisp = "https://i.imgur.com/e10lZMa.png";
+        private const string TrashBoundIcebroodElemental = "https://i.imgur.com/RKaDon5.png";
+        private const string TrashIcebroodElemental = "https://i.imgur.com/pEkBeNp.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
@@ -909,6 +913,10 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.FluxAnomalyCM2, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomalyCM3, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomalyCM4, TrashFluxAnomaly },
+            { ArcDPSEnums.TrashID.Torch, TrashTorch },
+            { ArcDPSEnums.TrashID.AberrantWisp, TrashAberrantWisp },
+            { ArcDPSEnums.TrashID.BoundIcebroodElemental, TrashBoundIcebroodElemental },
+            { ArcDPSEnums.TrashID.IcebroodElemental, TrashIcebroodElemental },
         };
 
         /// <summary>

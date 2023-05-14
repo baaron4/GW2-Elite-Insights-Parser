@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -16,12 +17,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(DeatlyIceShockWave, "Deadly Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.Red),"D.IceWave","Deadly Ice Shock Wave", "Deadly Shock Wave", 0),
-                new PlayerDstHitMechanic(IceArmSwing, "Ice Arm Swing",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightOrange),"A.Swing","Ice Arm Swing", "Ice Arm Swing", 0),
-                new PlayerDstHitMechanic(new long[] { IceShockWave1, IceShockWave2, IceShockWave3 }, "Ice Shock Wave",new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange),"ShockWave","Ice Shock Wave", "Ice Shock Wave", 0),
-                new PlayerDstHitMechanic(IceShatter, "Ice Shatter",new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Pink),"Ice Orbs","Rotating Ice Orbs", "Ice Orbs", 50),
-                new PlayerDstHitMechanic(IceCrystal, "Ice Crystal",new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange),"I.Crystal","Ice Crystal", "Ice Crystal", 50),
-                new PlayerDstHitMechanic(new long[] { IceFrail1, IceFrail2 }, "Ice Flail",new MechanicPlotlySetting(Symbols.Square,Colors.Pink),"I.Flail","Ice Flail", "Ice Flail", 50),
+                new PlayerDstHitMechanic(DeadlyIceShockWave, "Deadly Ice Shock Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "DeadIceWave.H", "Hit by Deadly Ice Shock Wave", "Deadly Ice Shock Wave", 0),
+                new PlayerDstHitMechanic(IceArmSwing, "Ice Arm Swing", new MechanicPlotlySetting(Symbols.Star, Colors.Orange), "ArmSwing.H", "Hit by Ice Arm Swing (Spin)", "Ice Arm Swing", 0),
+                new PlayerDstHitMechanic(IceArmSwing, "Ice Arm Swing", new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "ArmSwing.CC", "Knocked by Ice Arm Swing (Spin)", "Ice Arm Swing", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHitMechanic(IceShatter, "Ice Shatter", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink), "IceOrbs.H", "Hit by Rotating Ice Shatter (Orbs)", "Ice Shatter (Orbs)", 50),
+                new PlayerDstHitMechanic(IceCrystal, "Ice Crystal", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "IceCrystal.H", "Hit by Ice Crystal (Chill AoE)", "Ice Crystal", 50),
+                new PlayerDstHitMechanic(Frostbite, "Frostbite", new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Frostbite.H", "Hit by Frostbite", "Frostbite", 0),
+                new PlayerDstHitMechanic(new long[] { IceFrail1, IceFrail2 }, "Ice Flail", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "IceFlail.H", "Hit by Ice Flail (Arm Swipe)", "Ice Flail", 50),
+                new PlayerDstHitMechanic(new long[] { IceFrail1, IceFrail2 }, "Ice Flail", new MechanicPlotlySetting(Symbols.Square, Colors.Yellow), "IceFlail.CC", "Knocked by Ice Flail (Arm Swipe)", "Ice Flail", 50).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHitMechanic(new long[] { IceShockWave1, IceShockWave2, IceShockWave3 }, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "ShockWave.H", "Hit by Ice Shock Wave", "Ice Shock Wave", 0),
+                new PlayerDstHitMechanic(new long[] { SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4 }, "Spinning Ice", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.White), "SpinIce.H", "Hit by Spinning Ice", "Spinning Ice", 0),
+                new EnemyCastEndMechanic(DeadlyIceShockWave, "Deadly Ice Shock Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", 0),
+                new EnemyCastEndMechanic(IceArmSwing, "Ice Arm Swing", new MechanicPlotlySetting(Symbols.Star, Colors.White), "Ice Arm Swing", "Cast Ice Arm Swing (Spin)", "Cast Ice Arm Swing", 0),
             }
             );
             Extension = "icebrood";
@@ -43,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(FrostbiteAuraIcebroodConstruct, FrostbiteAuraIcebroodConstruct), // Frostbite Aura
+                new DamageCastFinder(FrostbiteAuraIcebroodConstruct, FrostbiteAuraIcebroodConstruct),
             };
         }
 

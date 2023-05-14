@@ -109,6 +109,10 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
+        public Point3D((float x, float y, float z) tuple) : this(tuple.x, tuple.y, tuple.z)
+        {
+        }
+
         public Point3D(Point3D a, Point3D b, float ratio)
         {
             X = Mix(a.X, b.X, ratio);
