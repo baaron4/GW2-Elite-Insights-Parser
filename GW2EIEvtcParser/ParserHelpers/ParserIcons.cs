@@ -325,10 +325,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashDoppelgangerThief = "https://i.imgur.com/ukMIsqk.png";
         private const string TrashDoppelgangerWarrior = "https://i.imgur.com/1YvlFYr.png";
         private const string TrashScarletPhantom = "https://i.imgur.com/W17Ugtt.png";
-        private const string TrashTorch = "https://i.imgur.com/RKaDon5.png";
-        private const string TrashAberrantWisp = "https://i.imgur.com/e10lZMa.png";
-        private const string TrashBoundIcebroodElemental = "https://i.imgur.com/RKaDon5.png";
-        private const string TrashIcebroodElemental = "https://i.imgur.com/pEkBeNp.png";
+        private const string TrashTorch = "";
+        private const string TrashAberrantWisp = "";
+        private const string TrashBoundIcebroodElemental = "";
+        private const string TrashIcebroodElemental = "";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/icmaNZS.png";
