@@ -42,11 +42,23 @@ namespace GW2EIJSON
         /// Name of the mechanic
         /// </summary>
         public string Name { get; set; }
-        
+
+        /// <summary>
+        /// Non reduced name of the mechanic
+        /// </summary>
+        public string FullName { get; set; }
+
         /// <summary>
         /// Description of the mechanic
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// If true, then the mechanic represent an achievement eligibility mechanic. \n
+        /// Will only appear on successful encounters. \n
+        /// Any Player who appears in <see cref="JsonMechanics.MechanicsData"/> will not be eligible for the achievement.
+        /// </summary>
+        public bool IsAchievementEligibility { get; set; }
 
         
         public JsonMechanics()
