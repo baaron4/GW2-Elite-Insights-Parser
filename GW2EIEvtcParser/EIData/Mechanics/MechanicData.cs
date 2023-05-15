@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         internal MechanicData(List<Mechanic> fightMechanics)
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
-            foreach (Mechanic m in fightMechanics)
+            foreach (Mechanic m in fightMechanics.OrderBy(x => x.IsAchievementEligibility))
             {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
                 {
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
-                // Don't remove eligibility mechanics on successful encounters (if everybody is eligibile, no event will trigger)
+                // Don't remove eligibility mechanics on successful encounters (if everybody is eligible, no event will trigger)
                 if (m.IsAchievementEligibility && log.FightData.Success)
                 {
                     continue;
