@@ -39,18 +39,12 @@ namespace GW2EIBuilders.JsonModels
             var dict = new Dictionary<Mechanic, List<JsonMechanic>>();
             foreach (Mechanic mech in presentMechanics)
             {
+                var jsonMechanics = new List<JsonMechanic>();
                 foreach (MechanicEvent ml in mechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    JsonMechanic jsonMech = BuildJsonMechanic(ml);
-                    if (dict.TryGetValue(mech, out List<JsonMechanic> jsonMechData))
-                    {
-                        jsonMechData.Add(jsonMech);
-                    }
-                    else
-                    {
-                        dict[mech] =  new List<JsonMechanic> { jsonMech };
-                    }
+                    jsonMechanics.Add(BuildJsonMechanic(ml));
                 }
+                dict[mech] = jsonMechanics;
             }
             foreach (KeyValuePair<Mechanic, List<JsonMechanic>> pair in dict)
             {
