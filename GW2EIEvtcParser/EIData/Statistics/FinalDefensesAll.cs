@@ -31,8 +31,8 @@ namespace GW2EIEvtcParser.EIData
             {
                 DownCount = log.CombatData.GetBuffData(SkillIDs.Downed).Where(be => be.To == actor.AgentItem && be.Time >= start && be.Time <= end && be is BuffApplyEvent).Count();
             }
-            DeadCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DeathMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
-            DcCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DespawnMechanic).Count(x => x.Actor == actor && x.Time >= start && x.Time <= end);
+            DeadCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DeathMechanic, actor, start, end).Count;
+            DcCount = log.MechanicData.GetMechanicLogs(log, FightLogic.DespawnMechanic, actor, start, end).Count;
 
             DownDuration = (long)down.Sum(x => x.IntersectingArea(start, end));
             DeadDuration = (long)dead.Sum(x => x.IntersectingArea(start, end));
