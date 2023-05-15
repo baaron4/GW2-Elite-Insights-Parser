@@ -23,15 +23,21 @@ namespace GW2EIEvtcParser.EIData
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
 
             // Meditations
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfEffect),
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
-            new EffectCastFinderByDst(JudgesIntervention, EffectGUIDs.GuardianJudgesIntervention).UsingDstBaseSpecChecker(Spec.Guardian),
+            new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
+                .UsingNotAccurate(true),
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfEffect)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
+                .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
             new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
             
             // Shouts
-            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves).UsingDstBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingSecondaryEffectChecker(EffectGUIDs.GuardianShout),
             // distinguish by boons, check duration/stacks to counteract pure of voice
             new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
                 .UsingDstBaseSpecChecker(Spec.Guardian)
@@ -91,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Banish),
-            new Buff("Merciful Intervention (Self)", MercifulInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             new Buff("Merciful Intervention (Target)", MercifulInterventionTargetEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
             new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
