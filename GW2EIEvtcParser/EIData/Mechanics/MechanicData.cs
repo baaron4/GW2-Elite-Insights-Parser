@@ -17,27 +17,52 @@ namespace GW2EIEvtcParser.EIData
         internal MechanicData(List<Mechanic> fightMechanics)
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
+            var errorMechanicNaming= new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
             foreach (Mechanic m in fightMechanics.OrderBy(x => x.IsAchievementEligibility))
             {
-                if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
                 {
-                    colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
-                    errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
+                    if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
+                    {
+                        colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
+                        errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
+                    }
+                    if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
+                    {
+                        sizeDict = new Dictionary<int, List<Mechanic>>();
+                        colorDict[m.PlotlySetting.Color] = sizeDict;
+                    }
+                    if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
+                    {
+                        mList = new List<Mechanic>();
+                        sizeDict[m.PlotlySetting.Size] = mList;
+                    }
+                    mList.Add(m);
+                    if (mList.Count > 1)
+                    {
+                        throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same plotly configuration");
+                    }
                 }
-                if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
                 {
-                    sizeDict = new Dictionary<int, List<Mechanic>>();
-                    colorDict[m.PlotlySetting.Color] = sizeDict;
-                }
-                if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
-                {
-                    mList = new List<Mechanic>();
-                    sizeDict[m.PlotlySetting.Size] = mList;
-                }
-                mList.Add(m);
-                if (mList.Count > 1)
-                {
-                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same configuration");
+                    if (!errorMechanicNaming.TryGetValue(m.FullName, out Dictionary<string, Dictionary<string, List<Mechanic>>> shortNameDict))
+                    {
+                        shortNameDict = new Dictionary<string, Dictionary<string, List<Mechanic>>>();
+                        errorMechanicNaming[m.FullName] = shortNameDict;
+                    }
+                    if (!shortNameDict.TryGetValue(m.ShortName, out Dictionary<string, List<Mechanic>> descriptionDict))
+                    {
+                        descriptionDict = new Dictionary<string, List<Mechanic>>();
+                        shortNameDict[m.ShortName] = descriptionDict;
+                    }
+                    if (!descriptionDict.TryGetValue(m.Description, out List<Mechanic> mList))
+                    {
+                        mList = new List<Mechanic>();
+                        descriptionDict[m.Description] = mList;
+                    }
+                    mList.Add(m);
+                    if (mList.Count > 1)
+                    {
+                        throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming configuration");
+                    }
                 }
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
