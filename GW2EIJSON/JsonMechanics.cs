@@ -39,17 +39,17 @@ namespace GW2EIJSON
         public IReadOnlyList<JsonMechanic> MechanicsData { get; set; }
         
         /// <summary>
-        /// Name of the mechanic
+        /// Name of the mechanic, this is the short name as it appears on EI HTML Mechanic tables.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Non reduced name of the mechanic
+        /// Non reduced name of the mechanic, this is the full name as it appears on EI HTML Graphs.
         /// </summary>
         public string FullName { get; set; }
 
         /// <summary>
-        /// Description of the mechanic
+        /// Description of the mechanic, this is the description that appears on hover on EI HTML Mechanic tables.
         /// </summary>
         public string Description { get; set; }
 
