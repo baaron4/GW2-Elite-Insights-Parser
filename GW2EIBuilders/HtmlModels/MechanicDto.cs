@@ -48,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
                 } 
                 else
                 {
-                    count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;;
+                    count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
                 }
                 res.Add(new int[] { count - filterCount, count });
             }
