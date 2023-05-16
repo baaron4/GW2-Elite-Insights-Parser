@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(ChainsOfFrostHit, "Chains of Frost Hit", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Red), "Chains.H", "Hit by Chains of Frost", "Chains of Frost", 0),
+                new PlayerDstHitMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Red), "Chains.H", "Hit by Chains of Frost", "Chains of Frost", 0),
                 new PlayerDstHitMechanic(SlitheringRime, "Slithering Rime", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "SlitRime.H", "Hit by Slithering Rime (Orbs)", "Slithering Rime", 0),
                 new PlayerDstHitMechanic(LethalCoalescenceSoaked, "Lethal Coalescence Soaked", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "LethalCoaSoa.H", "Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence", 50),
                 new PlayerDstHitMechanic(SpreadingIceOwn, "Spreading Ice (Own)", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "OwnIceSprd.H", "Hit by own Spreading Ice", "Spreading Ice (Own)", 50),
@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyCastStartMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "Chains of Frost", "Cast Chains of Frost", "Cast Chains of Frost", 0),
                 new EnemyCastStartMechanic(FrigidVortexSkill, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.Magenta), "Frigid Vortex", "Cast Frigid Vortex", "Cast Frigid Vortex", 50),
                 new EnemyCastStartMechanic(LethalCoalescenceSoaked, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Lethal Coalescence", "Cast Lethal Coalescence", "Cast Lethal Coalescence", 50),
-                new EnemyCastStartMechanic(new long[] { ViciousSlam1, ViciousSlam2 }, "Launch",  new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Launch Up", "Players launched in air", "Launch Up", 150),
+                new EnemyCastStartMechanic(new long[] { ViciousSlam1, ViciousSlam2 }, "Vicious Slam",  new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)", 150),
             }
             );
             Extension = "woj";
