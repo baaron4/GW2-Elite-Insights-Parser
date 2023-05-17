@@ -1119,13 +1119,14 @@
         public const long CelestialAvatar = 31508;
         public const long DistributedMagic = 31529;
         public const long Enraged_500 = 31534;
+        public const long AncestralGraceSkill = 31535;
         public const long AstralWispAttachment = 31536;
         public const long UnstablePylonRed = 31539;
         public const long VividEcho = 31548;
         public const long FlakShot = 31544;
         public const long GlyphOfUnityEffectCA = 31556;
         public const long MagicAuraValeGuardian = 31557;
-        public const long AncestralGrace = 31584;
+        public const long AncestralGraceEffect = 31584;
         public const long Exposed31589 = 31589;
         public const long BoundingDodgerSkill = 31600;
         public const long GorsevalBloom = 31616;
