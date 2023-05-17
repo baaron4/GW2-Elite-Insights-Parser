@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(AncestralGraceSkill, AncestralGraceEffect),
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
@@ -36,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-            new Buff("Ancestral Grace", AncestralGrace, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
+            new Buff("Ancestral Grace", AncestralGraceEffect, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
             new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
             new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
             new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
