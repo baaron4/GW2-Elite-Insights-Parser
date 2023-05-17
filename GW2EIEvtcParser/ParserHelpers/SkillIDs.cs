@@ -1726,6 +1726,7 @@
         public const long MirageCloak = 40408;
         public const long IcerazorsIreSkill = 40485;
         public const long VultureStanceSkill = 40498;
+        public const long PhotonForgeAbove100Heat = 40499;
         public const long TomeOfJusticeEffect = 40530;
         public const long SignetOfUndeathShroud = 40583;
         public const long SightBeyondSightEffect = 40616;
@@ -1737,6 +1738,7 @@
         public const long Chapter1DesertBloomSkill = 40787;
         public const long FalseOasis = 40802;
         public const long NefariousFavorSkill = 40813;
+        public const long PhotonForgeAbove50Heat = 40884;
         public const long MantraOfPotence = 40915;
         public const long IcerazorsIreMinion = 40916; // cast by created minion, does not hit
         public const long FireMajorAttunement = 40926;
@@ -1818,6 +1820,7 @@
         public const long WaterMajorAttunement = 43236;
         public const long DesertEmpowerment = 43260;
         public const long SharpenSpinesEffect = 43266;
+        public const long PhotonForgeAbove0Heat = 43277;
         public const long BowlOfElonRed = 43333;
         public const long MantraOfLiberation = 43357;
         public const long BladeRenewal = 43343;
