@@ -17,8 +17,8 @@ namespace GW2EIEvtcParser.EIData
             //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect), // Legendary Alliance Stance (UW)
             new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance), // Call of the Alliance
             new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorEffect), // Urn of Saint Viktor
-            new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath), // Forerunner of Death (Death Drop) 
-            new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer), // Saint of zu Heltzer (Saint's Shield)
+            //new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath), // Forerunner of Death (Death Drop) 
+            //new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer), // Saint of zu Heltzer (Saint's Shield)
             //new EXTHealingCastFinder(-1, -1), // Redemptor's Sermon
         };
 
