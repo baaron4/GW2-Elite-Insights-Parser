@@ -1083,9 +1083,11 @@
         public const long DeathsCarapace = 30845;
         public const long TidalSurge = 30864;
         public const long ExitReaperShroud = 30961;
+        public const long Bound = 31129;
+        public const long Dash = 31187;
         public const long WatchfulEye = 31229;
         public const long DarkBond = 31247;
-        public const long LotusTrainingSkill = 31267;
+        public const long ImpalingLotus = 31267;
         public const long KingOfFires = 31289;
         public const long PylonAttunementBlue = 31317;
         public const long Firestorm = 31332;
@@ -1127,7 +1129,6 @@
         public const long MagicAuraValeGuardian = 31557;
         public const long AncestralGrace = 31584;
         public const long Exposed31589 = 31589;
-        public const long BoundingDodgerSkill = 31600;
         public const long GorsevalBloom = 31616;
         public const long GhastlyPrison = 31623;
         public const long CultivatedSynergyPet = 31629;
@@ -1165,7 +1166,7 @@
         public const long WritOfLearnedStrength = 32044;
         public const long WritOfStrength = 32105;
         public const long FractalDefensive = 32134;
-        public const long LotusTrainingEffect = 32200;
+        public const long LotusTraining = 32200;
         public const long ParietalMastery = 32208;
         public const long OccipitalOrigin = 32218;
         public const long LingeringLight = 32248;
@@ -1209,7 +1210,7 @@
         public const long ShiftyAura = 33131;
         public const long BowlOfMusselSoup = 33148;
         public const long WritOfBasicStrength = 33160;
-        public const long BoundingDodgerEffect = 33162;
+        public const long BoundingDodger = 33162;
         public const long AnguishedTearOfAlba = 33164;
         public const long FrontalMastery = 33194;
         public const long SmokeForm = 33207;

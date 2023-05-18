@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static System.Net.WebRequestMethods;
@@ -175,7 +176,9 @@ namespace GW2EIEvtcParser.ParsedData
             { ConjuredSlashPlayer, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
             { ConjuredProtection, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
-            {BoundingDodgerSkill, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"},
+            {Bound, BuffImages.BoundingDodger},
+            {ImpalingLotus, BuffImages.LotusTraining},
+            {Dash, BuffImages.UnhinderedCombatant},
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png"},
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png"},
             {LossAversion, "https://wiki.guildwars2.com/images/8/85/Loss_Aversion.png" },
