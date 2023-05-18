@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -14,11 +15,23 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
-            new BuffGainCastFinder(AncestralGraceSkill, AncestralGraceEffect),
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
         };
+
+        public static IReadOnlyList<AnimatedCastEvent> ComputeAncestralGraceCastEvents(Player druid, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(AncestralGraceSkill);
+            var applies = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffApplyEvent>().Where(x => x.To == druid.AgentItem).ToList();
+            var removals = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffRemoveAllEvent>().Where(x => x.To == druid.AgentItem).ToList();
+            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            {
+                res.Add(new AnimatedCastEvent(druid.AgentItem, skill, applies[i].Time, applies[i].AppliedDuration - removals[i].RemovedDuration));
+            }
+            return res;
+        }
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>
         {
