@@ -70,6 +70,7 @@ namespace GW2EIEvtcParser
 
         public static class WeaponSetIDs
         {
+            public const int NoSet = -1;
             public const int FirstLandSet = 4;
             public const int SecondLandSet = 5;
             public const int FirstWaterSet = 0;

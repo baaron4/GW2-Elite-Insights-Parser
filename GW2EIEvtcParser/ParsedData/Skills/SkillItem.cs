@@ -433,9 +433,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (ApiSkill != null && ApiSkill.Type == "Weapon" 
                 && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 
-                && (ApiSkill.Categories == null || ApiSkill.Categories.Count == 0 
-                    || ApiSkill.Categories.Contains("Clone") || ApiSkill.Categories.Contains("Phantasm") 
-                    || ApiSkill.Categories.Contains("DualWield")))
+                && WeaponDescriptor.IsWeaponSlot(ApiSkill.Slot))
             {
                 _weaponDescriptor = new WeaponDescriptor(ApiSkill);
             }
@@ -465,13 +463,13 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        internal int FindWeaponSlot(List<int> swaps)
+        internal int FindFirstWeaponSet(List<int> swaps)
         {
-            int swapped = -1;
+            int swapped = WeaponSetIDs.NoSet;
             // we started on a proper weapon set
             if (_weaponDescriptor != null)
             {
-                swapped = _weaponDescriptor.FindWeaponSlot(swaps);
+                swapped = _weaponDescriptor.FindFirstWeaponSet(swaps);
             }
             return swapped;
         }

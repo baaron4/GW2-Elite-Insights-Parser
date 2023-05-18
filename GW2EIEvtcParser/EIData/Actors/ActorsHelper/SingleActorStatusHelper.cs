@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            int swapped = -1;
+            int swapped = WeaponSetIDs.NoSet;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
             {
@@ -108,9 +108,9 @@ namespace GW2EIEvtcParser.EIData
                 }
                 SkillItem skill = cl.Skill;
                 // first iteration
-                if (swapped == -1)
+                if (swapped == WeaponSetIDs.NoSet)
                 {
-                    swapped = skill.FindWeaponSlot(swaps);
+                    swapped = skill.FindFirstWeaponSet(swaps);
                 }
                 if (!skill.EstimateWeapons(_weaponSets, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
                 {
