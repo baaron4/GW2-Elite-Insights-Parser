@@ -29,8 +29,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Sadistic Searing", SadisticSearing, ParserHelper.Source.Scourge, BuffClassification.Other, BuffImages.SadisticSearing),
-            new Buff("Path Uses", PathUses, ParserHelper.Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
+            new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, BuffImages.SadisticSearing),
+            new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
         };
     }
 }
