@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -643,6 +643,7 @@ namespace GW2EIEvtcParser
         public const long GatheringPlague = 10643;
         public const long SpectralWalkSkill = 10685;
         public const long UnholyFeast = 10701;
+        public const long Technobabble = 12318;
         public const long PowerSuit = 12326;
         public const long ReaperOfGrenth = 12366;
         public const long AvatarOfMelandru = 12368;
