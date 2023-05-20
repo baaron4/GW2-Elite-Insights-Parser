@@ -1320,6 +1320,7 @@
         internal const string UnholyFervor = "https://wiki.guildwars2.com/images/e/e2/Unholy_Fervor.png";
         internal const string CloseToDeath = "https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png";
         internal const string SoulBarbs = "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png";
+        internal const string DeathPerception = "https://wiki.guildwars2.com/images/6/60/Death_Perception.png";
         internal const string LichForm = "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png";
         internal const string DeathShroud = "https://wiki.guildwars2.com/images/f/f5/Death_Shroud.png";
         internal const string SignetOfVampirism = "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png";
