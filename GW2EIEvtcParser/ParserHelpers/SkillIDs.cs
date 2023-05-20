@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -1465,6 +1465,7 @@
         public const long FireMortarEscortHit = 35171;
         public const long SpinningCut = 35452;
         public const long PullCharge = 35761;
+        public const long AnguishedTearOfAlbaMastery = 35919;
         public const long WhirlingDevastation = 35940;
         public const long AchievementEligibilityFastSiege = 34982;
         public const long Enraged2_200 = 36078;
