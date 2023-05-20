@@ -1213,6 +1213,10 @@
         internal const string CoolantBlast = "https://wiki.guildwars2.com/images/b/b1/Coolant_Blast.png";
         internal const string PhotonWall = "https://wiki.guildwars2.com/images/e/ea/Photon_Wall.png";
         internal const string SpectrumShield = "https://wiki.guildwars2.com/images/2/29/Spectrum_Shield.png";
+        internal const string Heat = "https://wiki.guildwars2.com/images/c/c4/Heat.png";
+        internal const string Heat1 = "https://i.imgur.com/BNiORVR.png";
+        internal const string Heat2 = "https://i.imgur.com/ilVa7nM.png";
+        internal const string Heat3 = "https://i.imgur.com/Q9A8rUw.png";
         internal const string EngagePhotonForge = "https://wiki.guildwars2.com/images/d/dd/Engage_Photon_Forge.png";
         internal const string SolarFocusingLens = "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png";
         internal const string HeatTherapy = "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png";
