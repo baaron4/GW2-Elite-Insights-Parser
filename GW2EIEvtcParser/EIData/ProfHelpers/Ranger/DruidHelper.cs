@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             var removals = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffRemoveAllEvent>().Where(x => x.To == druid.AgentItem).ToList();
             for (int i = 0; i < applies.Count && i < removals.Count; i++)
             {
-                res.Add(new AnimatedCastEvent(druid.AgentItem, skill, applies[i].Time, applies[i].AppliedDuration - removals[i].RemovedDuration));
+                res.Add(new AnimatedCastEvent(druid.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
             }
             return res;
         }
