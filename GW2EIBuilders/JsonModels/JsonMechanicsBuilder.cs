@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
@@ -20,34 +22,33 @@ namespace GW2EIBuilders.JsonModels
             return jsMech;
         }
 
-        public static JsonMechanics BuildJsonMechanics(string name, string description, List<JsonMechanic> data)
+        public static JsonMechanics BuildJsonMechanics(Mechanic mech, List<JsonMechanic> data)
         {
             var jsMechs = new JsonMechanics();
-            jsMechs.Name = name;
-            jsMechs.Description = description;
+            jsMechs.Name = mech.ShortName;
+            jsMechs.FullName = mech.FullName;
+            jsMechs.Description = mech.Description;
+            jsMechs.IsAchievementEligibility = mech.IsAchievementEligibility;
             jsMechs.MechanicsData = data;
             return jsMechs;
         }
 
-        internal static List<JsonMechanics> GetJsonMechanicsList(List<MechanicEvent> mechanicLogs)
+        internal static List<JsonMechanics> GetJsonMechanicsList(ParsedEvtcLog log, MechanicData mechanicData, IReadOnlyCollection<Mechanic> presentMechanics)
         {
             var mechanics = new List<JsonMechanics>();
-            var dict = new Dictionary<string, (string desc, List<JsonMechanic> data)>();
-            foreach (MechanicEvent ml in mechanicLogs)
+            var dict = new Dictionary<Mechanic, List<JsonMechanic>>();
+            foreach (Mechanic mech in presentMechanics)
             {
-                JsonMechanic mech = BuildJsonMechanic(ml);
-                if (dict.TryGetValue(ml.ShortName, out (string _, List<JsonMechanic> data) jsonMechData))
+                var jsonMechanics = new List<JsonMechanic>();
+                foreach (MechanicEvent ml in mechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    jsonMechData.data.Add(mech);
+                    jsonMechanics.Add(BuildJsonMechanic(ml));
                 }
-                else
-                {
-                    dict[ml.ShortName] = (ml.Description, new List<JsonMechanic> { mech });
-                }
+                dict[mech] = jsonMechanics;
             }
-            foreach (KeyValuePair<string, (string desc, List<JsonMechanic> data)> pair in dict)
+            foreach (KeyValuePair<Mechanic, List<JsonMechanic>> pair in dict)
             {
-                mechanics.Add(BuildJsonMechanics(pair.Key, pair.Value.desc, pair.Value.data));
+                mechanics.Add(BuildJsonMechanics(pair.Key, pair.Value));
             }
             return mechanics;
         }

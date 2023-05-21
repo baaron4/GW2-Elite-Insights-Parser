@@ -20,7 +20,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             Symbol = mech.PlotlySetting.Symbol;
             Size = mech.PlotlySetting.Size;
             Visible = !mech.ShowOnTable;
-            Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech), mech.IsEnemyMechanic);
+            Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd), mech.IsEnemyMechanic);
         }
 
         private static List<List<object>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)

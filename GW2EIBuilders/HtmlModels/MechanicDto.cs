@@ -15,6 +15,7 @@ namespace GW2EIBuilders.HtmlModels
         public string Description { get; set; }
         public bool EnemyMech { get; set; }
         public bool PlayerMech { get; set; }
+        public bool IsAchievementEligibility { get; set; }
 
         private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
         {
@@ -27,7 +28,7 @@ namespace GW2EIBuilders.HtmlModels
                 if (mech.InternalCooldown > 0)
                 {
                     long timeFilter = 0;
-                    var mls = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor == actor).ToList();
+                    IReadOnlyList<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech, actor, log.FightData.FightStart, log.FightData.FightEnd);
                     foreach (MechanicEvent ml in mls)
                     {
                         bool inInterval = phase.InInterval(ml.Time);
@@ -47,7 +48,7 @@ namespace GW2EIBuilders.HtmlModels
                 } 
                 else
                 {
-                    count = log.MechanicData.GetMechanicLogs(log, mech).Where(x => x.Actor == actor && phase.InInterval(x.Time)).Count();
+                    count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
                 }
                 res.Add(new int[] { count - filterCount, count });
             }
@@ -65,6 +66,7 @@ namespace GW2EIBuilders.HtmlModels
                     Description = mech.Description,
                     PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
                     EnemyMech = mech.IsEnemyMechanic,
+                    IsAchievementEligibility = mech.IsAchievementEligibility,
                     Icd = mech.InternalCooldown
                 };
                 mechsDtos.Add(dto);
