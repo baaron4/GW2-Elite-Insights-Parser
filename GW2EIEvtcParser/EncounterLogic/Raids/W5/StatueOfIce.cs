@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 } 
                 else
                 {
-                    startToUse = logStartNPCUpdate.Time;
+                    startToUse = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, brokenKing);
                 }
             }
             return startToUse;

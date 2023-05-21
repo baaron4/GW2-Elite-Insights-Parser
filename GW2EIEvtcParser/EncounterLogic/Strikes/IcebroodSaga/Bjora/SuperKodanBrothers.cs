@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Main target not found");
                 }
                 CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw);
-                if (startToUse == mainTarget.FirstAware && firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + ParserHelper.TimeThresholdConstant))
+                if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + ParserHelper.TimeThresholdConstant))
                 {
                     startToUse = firstCast.Time;
                 }
