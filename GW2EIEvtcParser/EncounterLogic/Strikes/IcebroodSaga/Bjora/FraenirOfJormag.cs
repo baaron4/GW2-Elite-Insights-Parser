@@ -19,8 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(Icequake, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram, Colors.Red), "Icequake.CC", "Knocked by Icequake", "Icequake", 4000).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
-                new PlayerDstHitMechanic(IceShockWaveFraenir, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "IceShockWave.CC", "Knocked by Ice Shock Wave", "Ice Shock Wave", 4000).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHitMechanic(Icequake, "Icequake", new MechanicPlotlySetting(Symbols.Hexagram, Colors.Red), "Icequake", "Knocked by Icequake", "Icequake", 4000).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHitMechanic(IceShockWaveFraenir, "Ice Shock Wave", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Ice Shock Wave", "Knocked by Ice Shock Wave", "Ice Shock Wave", 4000).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(IceArmSwingFraenir, "Ice Arm Swing", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Orange), "IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing", 4000).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(FrozenMissile, "Frozen Missile", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile", 4000).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(SeismicCrush, "Seismic Crush", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "SeismicCrush.CC", "Knocked by Seismic Crush", "Seismic Crush", 4000).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
