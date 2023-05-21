@@ -35,7 +35,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData
                     {
                         continue;
                     }
-                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
+                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds, buff);
                     if (desc.Length > 0)
                     {
                         descriptions.Add(desc);

@@ -17,34 +17,34 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem item, ParsedEvtcLog log)
+        internal static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
-                Name = item.Name,
-                AutoAttack = item.AA,
-                Icon = item.Icon,
-                CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
-                IsSwap = item.IsSwap,
-                IsInstantCast = log.CombatData.GetInstantCastData(item.ID).Any(),
-                IsNotAccurate = log.SkillData.IsNotAccurate(item.ID),
-                ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
-                HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
+                Name = skill.Name,
+                AutoAttack = skill.AA,
+                Icon = skill.Icon,
+                CanCrit = SkillItem.CanCrit(skill.ID, log.LogData.GW2Build),
+                IsSwap = skill.IsSwap,
+                IsInstantCast = log.CombatData.GetInstantCastData(skill.ID).Any(),
+                IsNotAccurate = log.SkillData.IsNotAccurate(skill.ID),
+                ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
+                HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
             };
             return skillDesc;
         }
 
-        internal static BuffDesc BuildBuffDesc(Buff item, ParsedEvtcLog log)
+        internal static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
         {
             var buffDesc = new BuffDesc
             {
-                Name = item.Name,
-                Icon = item.Link,
-                Stacking = item.Type == Buff.BuffType.Intensity,
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
-                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
+                Name = buff.Name,
+                Icon = buff.Link,
+                Stacking = buff.Type == Buff.BuffType.Intensity,
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
+                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
-            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
+            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>(){
@@ -60,7 +60,7 @@ namespace GW2EIBuilders.JsonModels
                     {
                         continue;
                     }
-                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
+                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds, buff);
                     if (desc.Length > 0)
                     {
                         descriptions.Add(desc);
@@ -71,16 +71,16 @@ namespace GW2EIBuilders.JsonModels
             return buffDesc;
         }
 
-        internal static DamageModDesc BuildDamageModDesc(DamageModifier item)
+        internal static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
         {
             var damageModDesc = new DamageModDesc
             {
-                Name = item.Name,
-                Icon = item.Icon,
-                Description = item.Tooltip,
-                NonMultiplier = !item.Multiplier,
-                SkillBased = item.SkillBased,
-                Approximate = item.Approximate
+                Name = damageModifier.Name,
+                Icon = damageModifier.Icon,
+                Description = damageModifier.Tooltip,
+                NonMultiplier = !damageModifier.Multiplier,
+                SkillBased = damageModifier.SkillBased,
+                Approximate = damageModifier.Approximate
             };
             return damageModDesc;
         }

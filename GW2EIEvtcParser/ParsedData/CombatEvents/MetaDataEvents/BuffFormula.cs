@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.ParsedData
         private string _solvedDescription = null;
 
 
-        private int Level => (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
+        private int Level(Buff buff) => buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
         internal BuffFormula(CombatItem evtcItem, int evtcVersion)
         {
@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public string GetDescription(bool authorizeUnknowns, IReadOnlyDictionary<long, Buff> buffsByIds)
+        public string GetDescription(bool authorizeUnknowns, IReadOnlyDictionary<long, Buff> buffsByIds, Buff buff)
         {
             if (!authorizeUnknowns && (Attr1 == Unknown || Attr2 == Unknown))
             {
@@ -182,9 +182,9 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (IsExtraNumberBuffID)
             {
-                if (buffsByIds.TryGetValue(ExtraNumber, out Buff buff))
+                if (buffsByIds.TryGetValue(ExtraNumber, out Buff otherBuff))
                 {
-                    stat1 += " (" + buff.Name + ")";
+                    stat1 += " (" + otherBuff.Name + ")";
                 }
             }
             string stat2 = GetAttributeString(Attr2);
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             _solvedDescription += stat1;
             double variable = Math.Round(Variable, 6);
-            double totalOffset = Math.Round(Level * LevelOffset + ConstantOffset, 6);      
+            double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);      
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {

@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (formula.Attr1 == BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds));
+                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
                         }
                     }
                 }
