@@ -17,27 +17,52 @@ namespace GW2EIEvtcParser.EIData
         internal MechanicData(List<Mechanic> fightMechanics)
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
-            foreach (Mechanic m in fightMechanics)
+            var errorMechanicNaming= new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
+            foreach (Mechanic m in fightMechanics.OrderBy(x => x.IsAchievementEligibility))
             {
-                if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
                 {
-                    colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
-                    errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
+                    if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
+                    {
+                        colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
+                        errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
+                    }
+                    if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
+                    {
+                        sizeDict = new Dictionary<int, List<Mechanic>>();
+                        colorDict[m.PlotlySetting.Color] = sizeDict;
+                    }
+                    if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
+                    {
+                        mList = new List<Mechanic>();
+                        sizeDict[m.PlotlySetting.Size] = mList;
+                    }
+                    mList.Add(m);
+                    if (mList.Count > 1)
+                    {
+                        throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same plotly configuration");
+                    }
                 }
-                if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
                 {
-                    sizeDict = new Dictionary<int, List<Mechanic>>();
-                    colorDict[m.PlotlySetting.Color] = sizeDict;
-                }
-                if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
-                {
-                    mList = new List<Mechanic>();
-                    sizeDict[m.PlotlySetting.Size] = mList;
-                }
-                mList.Add(m);
-                if (mList.Count > 1)
-                {
-                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same configuration");
+                    if (!errorMechanicNaming.TryGetValue(m.FullName, out Dictionary<string, Dictionary<string, List<Mechanic>>> shortNameDict))
+                    {
+                        shortNameDict = new Dictionary<string, Dictionary<string, List<Mechanic>>>();
+                        errorMechanicNaming[m.FullName] = shortNameDict;
+                    }
+                    if (!shortNameDict.TryGetValue(m.ShortName, out Dictionary<string, List<Mechanic>> descriptionDict))
+                    {
+                        descriptionDict = new Dictionary<string, List<Mechanic>>();
+                        shortNameDict[m.ShortName] = descriptionDict;
+                    }
+                    if (!descriptionDict.TryGetValue(m.Description, out List<Mechanic> mList))
+                    {
+                        mList = new List<Mechanic>();
+                        descriptionDict[m.Description] = mList;
+                    }
+                    mList.Add(m);
+                    if (mList.Count > 1)
+                    {
+                        throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming configuration");
+                    }
                 }
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
@@ -49,6 +74,11 @@ namespace GW2EIEvtcParser.EIData
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
+                // Don't check eligibility mechanics on failed encounters
+                if (mech.IsAchievementEligibility && !log.FightData.Success)
+                {
+                    continue;
+                }
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
         }
@@ -67,6 +97,11 @@ namespace GW2EIEvtcParser.EIData
             var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
+                // Don't remove eligibility mechanics on successful encounters (if everybody is eligible, no event will trigger)
+                if (m.IsAchievementEligibility && log.FightData.Success)
+                {
+                    continue;
+                }
                 _mechanicLogs.Remove(m);
             }
             foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
@@ -75,16 +110,26 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        /// <summary>
+        /// DEPRECATED, CSV Usage only
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
         public Dictionary<Mechanic, List<MechanicEvent>>.ValueCollection GetAllMechanicEvents(ParsedEvtcLog log)
         {
             ProcessMechanics(log);
             return _mechanicLogs.Values;
         }
 
-        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech)
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
         {
             ProcessMechanics(log);
-            return _mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list) ? list : new List<MechanicEvent>();
+            return _mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : new List<MechanicEvent>();
+        }
+
+        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, AbstractSingleActor actor, long start, long end)
+        {
+            return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
         }
 
         private void ComputeMechanicData(long start, long end)

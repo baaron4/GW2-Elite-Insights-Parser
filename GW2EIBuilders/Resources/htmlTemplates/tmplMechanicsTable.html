@@ -27,7 +27,7 @@
                     <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
                         v-show="isInColPage(index)"
                         :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                        {{ mech[0] ? mech[0] : '-'}}
+                        {{ playerMechHeader[index].isAchievementEligibility ? (mech[0] ? '-' : 'Eligible') : (mech[0] ? mech[0] : '-')}}
                     </td>
                 </tr>
             </tbody>

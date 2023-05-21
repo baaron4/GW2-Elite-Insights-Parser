@@ -49,6 +49,8 @@ namespace GW2EIEvtcParser.EIData
         public bool IsEnemyMechanic { get; protected set; }
         public bool ShowOnTable { get; private set; }
 
+        public bool IsAchievementEligibility { get; private set; }
+
         /// <summary>
         /// Full constructor without special checks
         /// </summary>
@@ -74,6 +76,17 @@ namespace GW2EIEvtcParser.EIData
         internal Mechanic UsingShowOnTable(bool showOnTable)
         {
             ShowOnTable = showOnTable;
+            return this;
+        }
+
+        /// <summary>
+        /// Eligibility mechanics will only be computed in successful logs
+        /// </summary>
+        /// <param name="isAchievementEligibility"></param>
+        /// <returns></returns>
+        internal Mechanic UsingAchievementEligibility(bool isAchievementEligibility)
+        {
+            IsAchievementEligibility = isAchievementEligibility;
             return this;
         }
 

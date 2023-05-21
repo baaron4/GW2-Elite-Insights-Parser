@@ -137,14 +137,10 @@ namespace GW2EIBuilders.JsonModels
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
-            var mechanicLogs = new List<MechanicEvent>();
-            foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanicEvents(log))
+            IReadOnlyCollection<Mechanic> presentMechanics = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
+            if (presentMechanics.Any())
             {
-                mechanicLogs.AddRange(mLog);
-            }
-            if (mechanicLogs.Any())
-            {
-                jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(mechanicLogs);
+                jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(log, mechanicData, presentMechanics);
             }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Phases");
