@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -19,8 +20,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Trapped","Trapped", "Trapped",2500),
-                new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Enrage","Enrage", "Enrage",1 << 16),
+                new PlayerDstHitMechanic(Groundshaker, "Groundshaker", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Grey), "Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit", 150),
+                new PlayerDstHitMechanic(Groundpiercer, "Groundpiercer", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.White), "Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown", 150),
+                new PlayerDstBuffApplyMechanic(UnrelentingPainEffect, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
+                new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Trapped", "Trapped", "Trapped", 2500),
+                new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Enrage", "Enrage", "Enrage", 1 << 16),
+                new EnemyCastStartMechanic(DeadlySynergy, "Deadly Synergy", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Deadly Synergy", "Cast  Deadly Synergy", "Deadly Synergy", 10000),
+                new EnemyCastStartMechanic(KodanTeleport, "Teleport", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), "Teleport", "Cast Teleport", "Teleport", 150),
             }
             );
             Extension = "supkodbros";
@@ -41,7 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(VengefulAuraClaw, VengefulAuraClaw), // Vengeful Aura Claw
+                new DamageCastFinder(VengefulAuraClaw, VengefulAuraClaw),
             };
         }
 
@@ -56,8 +62,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Main target not found");
                 }
-                CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw);
-                if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + ParserHelper.TimeThresholdConstant))
+                CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
+                if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
                 {
                     startToUse = firstCast.Time;
                 }
@@ -95,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             //
-            List<PhaseData> unmergedPhases = GetPhasesByInvul(log, 762, claw, false, true);
+            List<PhaseData> unmergedPhases = GetPhasesByInvul(log, Determined762, claw, false, true);
             for (int i = 0; i < unmergedPhases.Count; i++)
             {
                 unmergedPhases[i].Name = "Phase " + (i + 1);
@@ -127,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(phase);
             }
             //
-            var teleports = voice.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == 58382).ToList();
+            var teleports = voice.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == KodanTeleport).ToList();
             long tpCount = 0;
             long preTPPhaseStart = 0;
             foreach (AbstractCastEvent teleport in teleports)
@@ -165,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             
             //
-            AbstractBuffEvent enrage = log.CombatData.GetBuffData(SkillIDs.EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
+            AbstractBuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
             if (enrage != null)
             {
                 var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");

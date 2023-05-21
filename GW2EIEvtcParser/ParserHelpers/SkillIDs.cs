@@ -2422,7 +2422,7 @@
         public const long ShatterArmShiverpeaksPass = 57729;
         public const long SpinningIce1 = 57757;
         public const long IceShockWave3 = 57779;
-        public const long DeatlyIceShockWave = 57832;
+        public const long DeadlyIceShockWave = 57832;
         public const long SpinningIce2 = 57839;
         public const long BowlOfFirebreatherChili = 57853;
         public const long PlateOfSpicyMoaWings = 57883;
@@ -2434,6 +2434,7 @@
         public const long SoldiersFocus = 58102;
         public const long HammerSpin = 58132;
         public const long Fixated2 = 58136;
+        public const long UnrelentingPainDamage = 58139;
         public const long HammerSlam = 58150;
         public const long VengefulAuraClaw = 58174;
         public const long FlareOfIce3 = 58177;
@@ -2460,6 +2461,7 @@
         public const long ArrosOfTheFallen = 58371;
         public const long Frozen = 58376;
         public const long FrigidFusillade = 58378;
+        public const long DeadlySynergy = 58381;
         public const long KodanTeleport = 58382;
         public const long PowerOfValorTier1 = 58385;
         public const long PowerOfResilienceTier3 = 58395;
@@ -2477,6 +2479,7 @@
         public const long ShatterArmFraenir = 58515;
         public const long SeismicCrush = 58518;
         public const long FrozenMissile = 58520;
+        public const long BoundIceElemental = 58543;
         public const long DeathWind = 58546;
         public const long EssenceOfValorTier2 = 58585;
         public const long TormentingAura5 = 58600;
@@ -2485,6 +2488,7 @@
         public const long GhostlyArrow = 58638;
         public const long IceFlail2 = 58647;
         public const long Cascade = 58653;
+        public const long BarrageWispBoneskinner = 58669;
         public const long NightTerrorTier3 = 58685;
         public const long TormentingAura9 = 58693;
         public const long TormentingAura6 = 58707;
@@ -2498,12 +2502,14 @@
         public const long SpiritNovaTier2 = 58766;
         public const long FlyingHammer = 58785;
         public const long EssenceOfVigilanceTier1 = 58786;
+        public const long BoneskinnerBreakbar = 58787;
         public const long EssenceOfValorTier3 = 58792;
         public const long TormentingAura7 = 58793;
         public const long ShatteredPsycheTier1 = 58798;
         public const long NightTerrorTier1 = 58807;
         public const long DouseInDarkness = 58809;
         public const long Icequake = 58811;
+        public const long UnrelentingPainEffect = 58823;
         public const long DaggerStrike2 = 58828;
         public const long EssenceOfResilienceTier3 = 58839;
         public const long EssenceOfResilienceTier2 = 58841;
@@ -2521,9 +2527,10 @@
         public const long IceShatterWhisper1 = 59078;
         public const long ViciousSlam1 = 59081;
         public const long AchievementEligibilitySlitherLess = 59086;
+        public const long IceShatterWhisper3 = 59096;
         public const long ChainsOfFrostActive = 59100;
         public const long SpreadingIceOwn = 59102;
-        public const long FrigidVortex = 59105;
+        public const long FrigidVortexEffect = 59105;
         public const long BrainFreeze2 = 59111;
         public const long ChainsOfFrostApplication = 59120;
         public const long ViciousSlam2 = 59131;
@@ -2532,12 +2539,13 @@
         public const long AchievementEligibilityVortexInterrupted = 59180;
         public const long AchievementEligibilityBreakItUp = 59194;
         public const long FrostbiteAuraWhisperOfJormag = 59202;
-        public const long FrigidVortex2 = 59211;
-        public const long FrigidVortex3 = 59213;
+        public const long FrigidVortexSkill = 59211;
+        public const long FrigidVortexDamage = 59213;
         public const long WhisperTeleportOut = 59223;
         public const long AchievementEligibilityFraenirFrolic = 59249;
         public const long IceTempest = 59255;
         public const long AchievementEligibilityKodanDodger = 59322;
+        public const long LethalCoalescenceEffect = 59363;
         public const long AchievementEligibilityHighShamanHighStakes = 59377;
         public const long AchievementEligibilityHoldOntoTheLight = 59395;
         public const long SlitheringRime = 59418;
