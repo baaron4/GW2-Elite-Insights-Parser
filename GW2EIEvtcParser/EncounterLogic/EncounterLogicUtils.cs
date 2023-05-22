@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -167,8 +168,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                (float x, float y, float z) = AbstractMovementEvent.UnpackMovementData(evt.DstAgent, evt.Value);
-                if (Math.Abs(x - chestPosition.X) < 5 && Math.Abs(y - chestPosition.Y) < 5)
+                Point3D position = AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value);
+                if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
                 {
                     return true;
                 }
@@ -183,15 +184,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return false;
         }
 
-        internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, float, float)> positionData, float maxDiff = 10)
+        internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Point3D)> positionData, float maxDiff = InchDistanceThreshold)
         {
-            CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-            if (position != null)
+            CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+            if (positionEvt != null)
             {
-                (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
-                foreach ((string suffix, float expectedX, float expectedY) in positionData)
+                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                foreach ((string suffix, Point3D expectedPosition) in positionData)
                 {
-                    if ((Math.Abs(x - expectedX) <= maxDiff && Math.Abs(y - expectedY) <= maxDiff))
+                    if (position.Distance2DToPoint(expectedPosition) < maxDiff)
                     {
                         target.OverrideName(target.Character + " " + suffix);
                         return suffix;

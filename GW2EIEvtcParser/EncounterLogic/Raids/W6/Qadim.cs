@@ -121,23 +121,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             bool refresh = lampAgents.Count > 0;
             // Pyres
+            var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
+            var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
+            var resolutionRetaliationPyrePositions = new List<Point3D> { new Point3D(-8951, 9429), new Point3D(-5716, 9325), new Point3D(-7846, 10612) };
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                if (position != null)
+                CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                if (positionEvt != null)
                 {
-                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
-                    if ((Math.Abs(x + 8947) < 10 && Math.Abs(y - 14728) < 10) || (Math.Abs(x + 10834) < 10 && Math.Abs(y - 12477) < 10))
+                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                    if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
                         pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianProtect);
                         refresh = true;
                     }
-                    else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
+                    else if (stabilityPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
                         pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianStab);
                         refresh = true;
                     }
-                    else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
+                    else if (resolutionRetaliationPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
                         pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
                         refresh = true;

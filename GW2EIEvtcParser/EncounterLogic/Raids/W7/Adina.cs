@@ -47,6 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = 0;
             long final = fightData.FightEnd;
+            var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
@@ -55,13 +56,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(hand) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem posEvt = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
-                if (pos != null)
+                if (posEvt != null)
                 {
-                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(pos.DstAgent, 0);
-                    if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
-                            (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
+                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt.DstAgent, 0);
+                    if (handOfEruptionPositions.Any(x => x.Distance2DToPoint(pos) < InchDistanceThreshold))
                     {
                         id = ArcDPSEnums.TrashID.HandOfEruption;
                     }

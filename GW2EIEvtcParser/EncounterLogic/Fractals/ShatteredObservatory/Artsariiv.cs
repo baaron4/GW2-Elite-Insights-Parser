@@ -106,16 +106,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        static readonly List<(string, float, float)> CloneLocations = new List<(string, float, float)> {
-            ("M", 10357.898f, 1466.580f),
-            ("NE", 11431.998f, 2529.760f),
-            ("NW", 9286.878f, 2512.429f),
-            ("SW", 9284.729f, 392.916f),
-            ("SE", 11422.698f, 401.501f),
-            ("N", 10369.498f, 2529.010f),
-            ("E", 11_432.598f, 1460.400f),
-            ("S", 10_388.698f, 390.419f),
-            ("W", 9295.668f, 1450.060f),
+        static readonly List<(string, Point3D)> CloneLocations = new List<(string, Point3D)> {
+            ("M", new Point3D(10357.898f, 1466.580f)),
+            ("NE", new Point3D(11431.998f, 2529.760f)),
+            ("NW", new Point3D(9286.878f, 2512.429f)),
+            ("SW", new Point3D(9284.729f, 392.916f)),
+            ("SE", new Point3D(11422.698f, 401.501f)),
+            ("N", new Point3D(10369.498f, 2529.010f)),
+            ("E", new Point3D(11_432.598f, 1460.400f)),
+            ("S", new Point3D(10_388.698f, 390.419f)),
+            ("W", new Point3D(9295.668f, 1450.060f)),
         };
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
