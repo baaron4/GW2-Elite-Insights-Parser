@@ -11,8 +11,7 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class InstantCastFinder : IVersionable
     {
         public delegate bool InstantCastEnableChecker(CombatData combatData);
-        private InstantCastEnableChecker _enableCondition { get; set; }
-        private InstantCastEnableChecker _enableConditionInternal { get; set; }
+        private List<InstantCastEnableChecker> _enableConditions { get; }
 
 
         public const long DefaultICD = 50;
@@ -30,6 +29,7 @@ namespace GW2EIEvtcParser.EIData
         protected InstantCastFinder(long skillID)
         {
             SkillID = skillID;
+            _enableConditions = new List<InstantCastEnableChecker>();
         }
 
         internal InstantCastFinder WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal InstantCastFinder UsingEnable(InstantCastEnableChecker checker)
         {
-            _enableCondition = checker;
+            _enableConditions.Add(checker);
             return this;
         }
 
@@ -65,12 +65,6 @@ namespace GW2EIEvtcParser.EIData
         internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
         {
             BeforeWeaponSwap = beforeWeaponSwap;
-            return this;
-        }
-
-        protected InstantCastFinder UsingEnableInternal(InstantCastEnableChecker checker)
-        {
-            _enableConditionInternal = checker;
             return this;
         }
 
@@ -90,11 +84,8 @@ namespace GW2EIEvtcParser.EIData
 
         public bool Available(CombatData combatData)
         {
-            if (_enableConditionInternal != null && !_enableConditionInternal(combatData))
+            if (!_enableConditions.All(checker => checker(combatData)))
             {
-                return false;
-            }
-            if (_enableCondition != null && !_enableCondition(combatData)) {
                 return false;
             }
             ulong gw2Build = combatData.GetBuildEvent().Build;

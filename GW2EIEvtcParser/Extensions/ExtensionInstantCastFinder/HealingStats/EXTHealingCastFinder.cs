@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         public EXTHealingCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             UsingNotAccurate(true);
-            UsingEnableInternal((combatData) => combatData.HasEXTHealing);
+            UsingEnable((combatData) => combatData.HasEXTHealing);
             _damageSkillID = damageSkillID;
         }
 
