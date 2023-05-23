@@ -72,13 +72,12 @@ namespace GW2EIEvtcParser.EIData
         private void ComputeMechanics(ParsedEvtcLog log)
         {
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
+            foreach (Mechanic mech in _mechanicLogs.Keys.Where(x => !x.Keep(log)))
+            {
+                _mechanicLogs.Remove(mech);
+            }
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
-                // Don't check eligibility mechanics on failed encounters
-                if (mech.IsAchievementEligibility && !log.FightData.Success)
-                {
-                    continue;
-                }
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
         }
@@ -97,8 +96,7 @@ namespace GW2EIEvtcParser.EIData
             var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
-                // Don't remove eligibility mechanics on successful encounters (if everybody is eligible, no event will trigger)
-                if (m.IsAchievementEligibility && log.FightData.Success)
+                if (m.KeepIfEmpty(log))
                 {
                     continue;
                 }
