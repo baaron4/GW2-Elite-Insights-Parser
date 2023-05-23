@@ -174,6 +174,8 @@
         public const long TurretExplosion = 5958;
         public const long HealingMist = 5966;
         public const long Superspeed = 5974;
+        public const long IncendiaryAmmoEffect = 5976;
+        public const long IncendiaryAmmoSkill = 5977;
         public const long GearShield = 5997;
         public const long ToolKitOpen = 6006;
         public const long GrenadeKit = 6020;

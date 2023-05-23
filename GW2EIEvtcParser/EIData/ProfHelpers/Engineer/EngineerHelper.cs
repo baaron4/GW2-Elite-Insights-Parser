@@ -53,6 +53,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance),
             new BuffGainCastFinder(ElixirSSkill, ElixirSEffect),
             new BuffGainCastFinder(SlickShoesSkill, SlickShoesEffect),
+            new BuffGainCastFinder(IncendiaryAmmoSkill, IncendiaryAmmoEffect),
             new DamageCastFinder(OverchargedShot, OverchargedShot),
             // Kits
             new EngineerKitFinder(BombKit),
