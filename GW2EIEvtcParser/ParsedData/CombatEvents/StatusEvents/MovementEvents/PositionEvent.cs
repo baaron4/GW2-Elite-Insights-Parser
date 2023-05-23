@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return;
             }
-            replay.Positions.Add(ToParametricPoint());
+            replay.Positions.Add(point);
         }
     }
 }

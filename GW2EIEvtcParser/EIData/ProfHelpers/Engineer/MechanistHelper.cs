@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((spawn, combatData, agentData, skillData) =>
                 {
                     // TODO: what if shift signet ports the minion away from effect before arc polls the position? so far unable to produce
-                    Point3D pos = combatData.GetMovementData(spawn.Src).OfType<PositionEvent>().FirstOrDefault(evt => evt.Time + ServerDelayConstant >= spawn.Time)?.ToPoint();
+                    Point3D pos = combatData.GetMovementData(spawn.Src).OfType<PositionEvent>().FirstOrDefault(evt => evt.Time + ServerDelayConstant >= spawn.Time)?.GetPoint3D();
                     if (pos != null && combatData.TryGetEffectEventsByGUID(EffectGUIDs.MechanistCrashDownImpact, out IReadOnlyList<EffectEvent> effects))
                     {
                         return FindRelatedEvents(effects, spawn.Time + 800).Any(effect => pos.Distance2DToPoint(effect.Position) < 10.0f);
