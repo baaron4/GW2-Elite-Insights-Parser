@@ -70,6 +70,7 @@ namespace GW2EIEvtcParser
 
         public static class WeaponSetIDs
         {
+            public const int NoSet = -1;
             public const int FirstLandSet = 4;
             public const int SecondLandSet = 5;
             public const int FirstWaterSet = 0;
@@ -496,6 +497,8 @@ namespace GW2EIEvtcParser
         private const int Environment = -36;
         private const int FerrousBomb = -37;
         private const int SanctuaryPrism = -38;
+        private const int Torch = -39;
+        private const int BoundIcebroodElemental = -40;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -714,12 +717,14 @@ namespace GW2EIEvtcParser
             EnergyOrb = 21946,
             // Fraenir
             IcebroodElemental = 22576,
+            BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
             // Boneskinner
             PrioryExplorer = 22561,
             PrioryScholar = 22448,
             VigilRecruit = 22389,
             VigilTactician = 22420,
             AberrantWisp = 22538,
+            Torch = ArcDPSEnums.Torch,
             // Whisper of Jormag
             WhisperEcho = 22628,
             DoppelgangerElementalist = 22627,

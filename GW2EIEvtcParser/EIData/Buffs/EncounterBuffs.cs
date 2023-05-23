@@ -416,29 +416,32 @@ namespace GW2EIEvtcParser.EIData
             // Fraenir of Jormag
             new Buff("Frozen", Frozen, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Frostbite),
             new Buff("Snowblind", Snowblind, Source.FightSpecific, BuffClassification.Other, BuffImages.Frostbite),
+            new Buff("Bound Ice Elemental", BoundIceElemental, Source.FightSpecific, BuffClassification.Other, BuffImages.UnboundBlizzard),
             new Buff("Achievement Eligibility: Elemental Elegy", AchievementEligibilityElementalElegy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Fraenir Frolic", AchievementEligibilityFraenirFrolic, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: High Shaman, High Stakes", AchievementEligibilityHighShamanHighStakes, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Voice and Claw            
+            // Voice and Claw
+            new Buff("Unrelenting Pain", UnrelentingPainEffect, Source.FightSpecific, BuffClassification.Debuff, BuffImages.OverchargedGateGolem), // Founds on Kodans and Boneskinner
             new Buff("Enraged (V&C)", EnragedVC, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Achievement Eligibility: Break It Up", AchievementEligibilityBreakItUp, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Flawless Fallen", AchievementEligibilityFlawlessFallen, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Kodan Dodger", AchievementEligibilityKodanDodger, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Boneskinner     
+            // Boneskinner
             new Buff("Tormenting Aura", TormentingAura, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Darkness),
             new Buff("Achievement Eligibility: Deathless Hunt", AchievementEligibilityDeathlessHunt, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Hold onto the Light", AchievementEligibilityHoldOntoTheLight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Whisper of Jormag
-            new Buff("Whisper Teleport Out", WhisperTeleportOut, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Whisper Teleport Back", WhisperTeleportBack, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Frigid Vortex", FrigidVortex, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall),
-            new Buff("Chains of Frost Active", ChainsOfFrostActive, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulBinder),
-            new Buff("Chains of Frost Application", ChainsOfFrostApplication, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Whisper Teleport (Out)", WhisperTeleportOut, Source.FightSpecific, BuffClassification.Other, BuffImages.EmergencyWaypoint),
+            new Buff("Whisper Teleport (Back)", WhisperTeleportBack, Source.FightSpecific, BuffClassification.Other, BuffImages.EmergencyWaypoint),
+            new Buff("Frigid Vortex", FrigidVortexEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall),
+            new Buff("Chains of Frost (Active)", ChainsOfFrostActive, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulBinder),
+            new Buff("Chains of Frost (Application)", ChainsOfFrostApplication, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulBinder),
             new Buff("Brain Freeze", BrainFreeze, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Frostbite),
+            new Buff("Lethal Coalescence", LethalCoalescenceEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Achievement Eligibility: Reflections in the Ice", AchievementEligibilityReflectionsInTheIce, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Slither-less", AchievementEligibilitySlitherLess, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Freezie      
+            // Freezie
             new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IcyBarrier),
             // Mai Trin
             new Buff("Shared Destruction (Mai Trin)", SharedDestructionMaiTrin, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),

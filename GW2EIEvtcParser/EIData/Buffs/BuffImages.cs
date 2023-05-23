@@ -118,6 +118,7 @@
         internal const string InvokeLightning = "https://wiki.guildwars2.com/images/a/ab/Invoke_Lightning.png";
         internal const string KodasArmor = "https://wiki.guildwars2.com/images/8/88/Koda%27s_Armor.png";
         internal const string SpoiledSupply = "https://wiki.guildwars2.com/images/e/e2/Spoiled_Supply.png";
+        internal const string EmergencyWaypoint = "https://wiki.guildwars2.com/images/8/87/Emergency_Waypoint.png";
         #endregion Commons
 
         #region Gear
@@ -1526,6 +1527,8 @@
         internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
         internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
         internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
+        internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
+        internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
         #endregion Misc
     }
 }

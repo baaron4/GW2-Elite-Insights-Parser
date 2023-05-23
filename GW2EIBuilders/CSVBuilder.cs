@@ -645,7 +645,7 @@ namespace GW2EIBuilders
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.MechanicData.GetMechanicLogs(_log, mech).Count(x => x.Actor == p && phase.InInterval(x.Time));
+                        int count = _log.MechanicData.GetMechanicLogs(_log, mech, p, phase.Start, phase.End).Count;
                         WriteCell(count.ToString());
                     }
                     NewLine();
