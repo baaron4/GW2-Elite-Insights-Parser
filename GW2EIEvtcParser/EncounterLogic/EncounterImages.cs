@@ -135,7 +135,7 @@
         internal const string CombatReplayKodanBrothers = "https://i.imgur.com/kLjZ7eU.png";
         internal const string CombatReplayFraenirOfJormag = "https://i.imgur.com/kLjZ7eU.png";
         internal const string CombatReplayBoneskinner = "https://i.imgur.com/kLjZ7eU.png";
-        internal const string CombatReplayWhisperOfJormag = "https://i.imgur.com/sXvx6AL.png";
+        internal const string CombatReplayWhisperOfJormag = "https://i.imgur.com/iNEWXJF.png";
         internal const string CombatReplayColdWar = "https://i.imgur.com/sXvx6AL.png";
         internal const string CombatReplayAetherbladeHideout = "https://i.imgur.com/Qhnhrvp.png";
         internal const string CombatReplayXunlaiJadeJunkyard = "https://i.imgur.com/bwTO5Xg.png";
