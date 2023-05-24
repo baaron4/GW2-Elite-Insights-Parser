@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
+            new EffectCastFinder(SeedOfLife, EffectGUIDs.DruidSeedOfLife2).UsingSrcSpecChecker(Spec.Druid),
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)

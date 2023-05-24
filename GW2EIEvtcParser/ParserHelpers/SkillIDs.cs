@@ -1109,6 +1109,7 @@
         public const long DistributedMagicRed = 31391;
         public const long UnstableMagicSpike = 31392;
         public const long GlyphOfEqualityCA = 31401;
+        public const long SeedOfLife = 31406;
         public const long BanditKick = 31408;
         public const long ExitCelestialAvatar = 31411;
         public const long BluePylonPower = 31413;
