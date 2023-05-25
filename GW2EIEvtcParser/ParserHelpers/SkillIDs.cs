@@ -41,8 +41,8 @@
         public const long PotentHasteOrOverwhelmingCelerity = -22;
         public const long PortentOfFreedomOrUnhinderedDelivery = -23;
         public const long VirtuosoBlades = -25;
-        //
         public const long RuneOfNightmare = -26;
+        public const long BlinkOrPhaseRetreat = -27;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;

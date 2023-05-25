@@ -78,13 +78,15 @@ namespace GW2EIEvtcParser.EIData
             }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
 
-            // distinguish blink & phase retreat by spawned staff clone
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
+            // identify phase retreat by spawned staff clone, fallback to blink or phase retreat
+            new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerBlink)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingNotAccurate(true),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingNotAccurate(true),
 
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),

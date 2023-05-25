@@ -142,6 +142,7 @@ namespace GW2EIEvtcParser.ParsedData
             {PowerCleanse, "Power Cleanse" },
             {PowerBreak, "Power Break" },
             {PowerLock, "Power Lock" },
+            { BlinkOrPhaseRetreat, "Blink or Phase Retreat" },
             //
             {RestoringReprieveOrRejunevatingRespite, "Restoring Reprieve or Rejunevating Respite" },
             {OpeningPassageOrClarifiedConclusion, "Opening Passage or Clarified Conclusion" },
@@ -313,6 +314,7 @@ namespace GW2EIEvtcParser.ParsedData
             {OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             {PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
             {PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
+            { BlinkOrPhaseRetreat, "https://i.imgur.com/yxMF7D1.png" },
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
