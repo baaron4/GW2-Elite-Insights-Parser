@@ -839,7 +839,7 @@
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
         public const long POV_HauntEffect = 20229;
-        public const long SuperiorRuneOfTormenting = 20479;
+        public const long RuneOfTormenting = 20479;
         public const long PortalExitWhiteMantleWatchwork = 20851;
         public const long PortalUsesWhiteMantleWatchwork = 20852;
         public const long SpeedOfTheBattlefield = 20893;
