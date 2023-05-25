@@ -726,7 +726,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.PyreGuardianResolution, TrashPyreGuardianResolution },
             { ArcDPSEnums.TrashID.PyreGuardianStab, TrashPyreGuardianStab },
             { ArcDPSEnums.TrashID.PyreGuardianProtect, TrashPyreGuardianProtect },
-            { ArcDPSEnums.TrashID.ReaperofFlesh, TrashReaperofFlesh },
+            { ArcDPSEnums.TrashID.ReaperOfFlesh, TrashReaperofFlesh },
             { ArcDPSEnums.TrashID.Kernan, TrashKernan },
             { ArcDPSEnums.TrashID.Knuckles, TrashKnuckles },
             { ArcDPSEnums.TrashID.Karde, TrashKarde },
