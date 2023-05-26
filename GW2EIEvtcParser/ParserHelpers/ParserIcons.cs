@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Generic enemy icon.
         /// </summary>
-        public const string GenericEnemyIcon = "https://i.imgur.com/HuJHqRZ.png";
+        public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
