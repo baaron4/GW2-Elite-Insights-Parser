@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
         public EffectCastFinder(long skillID, string effectGUID) : base(skillID)
         {
             UsingNotAccurate(true); // TODO: confirm if culling is server side logic
-            UsingEnableInternal((combatData) => combatData.HasEffectData);
+            UsingEnable((combatData) => combatData.HasEffectData);
             _effectGUID = effectGUID;
         }
 

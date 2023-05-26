@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -51,6 +52,9 @@ namespace GW2EIEvtcParser.EIData
 
         public bool IsAchievementEligibility { get; private set; }
 
+        public delegate bool Keeper(ParsedEvtcLog log);
+        private List<Keeper> _keepers { get; }
+
         /// <summary>
         /// Full constructor without special checks
         /// </summary>
@@ -69,6 +73,7 @@ namespace GW2EIEvtcParser.EIData
             Description = description;
             InternalCooldown = internalCoolDown;
             ShowOnTable = true;
+            _keepers = new List<Keeper>();
         }
 
         internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
@@ -79,6 +84,11 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        private static bool EligibilityKeeper(ParsedEvtcLog log)
+        {
+            return log.FightData.Success;
+        }
+
         /// <summary>
         /// Eligibility mechanics will only be computed in successful logs
         /// </summary>
@@ -87,7 +97,31 @@ namespace GW2EIEvtcParser.EIData
         internal Mechanic UsingAchievementEligibility(bool isAchievementEligibility)
         {
             IsAchievementEligibility = isAchievementEligibility;
+            if (isAchievementEligibility)
+            {
+                _keepers.Add(EligibilityKeeper);
+            } 
+            else
+            {
+                _keepers.Remove(EligibilityKeeper);
+            }
             return this;
+        }
+
+        internal Mechanic UsingKeeper(Keeper keeper)
+        {
+            _keepers.Add(keeper);
+            return this;
+        }
+
+        internal bool Keep(ParsedEvtcLog log)
+        {
+            return _keepers.All(keeper => keeper(log));
+        }
+
+        internal bool KeepIfEmpty(ParsedEvtcLog log)
+        {
+            return IsAchievementEligibility && log.FightData.Success;
         }
 
     }

@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             UsingNotAccurate(true);
-            UsingEnableInternal((combatData) => combatData.HasEXTBarrier);
+            UsingEnable((combatData) => combatData.HasEXTBarrier);
             _damageSkillID = damageSkillID;
         }
 

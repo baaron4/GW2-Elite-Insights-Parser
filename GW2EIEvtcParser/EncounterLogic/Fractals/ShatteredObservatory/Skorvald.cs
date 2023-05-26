@@ -137,9 +137,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Skorvald not found");
                 }
+                long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
                 CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ParserHelper.ServerDelayConstant);
                 return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);

@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (logStartNPCUpdate != null)
                         {
                             // we couldn't have hit CA before the initial smash
-                            return firstArmSmash.Time > logStartNPCUpdate.Time ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                            return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                         } 
                         else
                         {

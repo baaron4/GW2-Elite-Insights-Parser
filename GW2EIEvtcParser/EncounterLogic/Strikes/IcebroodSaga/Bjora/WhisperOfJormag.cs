@@ -46,14 +46,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000005;
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayWhisperOfJormag,
-                            (729, 581),
-                            (-32118, -11470, -28924, -8274),
+                            (1682, 1682),
+                            (-3287, -1772, 3313, 4828)/*,
                             (-0, -0, 0, 0),
-                            (0, 0, 0, 0));
-        }*/
+                            (0, 0, 0, 0)*/);
+        }
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()

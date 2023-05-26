@@ -11,7 +11,7 @@
                     <th class="text-left" :class="getPlayerHeaderClass('Name')" @click="sortPlayerBy('Name')">Player</th>
                     <th class="stat-cell" v-for="(mech, index) in playerMechHeader" 
                         v-show="isInColPage(index)"
-                        :class="getPlayerHeaderClass('Data', index)" @click="sortPlayerBy('Data', index)" :data-original-title="mech.description">
+                        :class="getPlayerHeaderClass('Data', index)" @click="sortPlayerBy('Data', index)" :data-original-title="mech.fullName + ': ' + mech.description">
                         {{ mech.shortName}}
                     </th>
                 </tr>
@@ -27,7 +27,7 @@
                     <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
                         v-show="isInColPage(index)"
                         :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                        {{ playerMechHeader[index].isAchievementEligibility ? (mech[0] ? '-' : 'Eligible') : (mech[0] ? mech[0] : '-')}}
+                        {{ playerMechHeader[index].isAchievementEligibility ? (mech[0] ? 'Non Eligible' : 'Eligible') : (mech[0] ? mech[0] : '-')}}
                     </td>
                 </tr>
             </tbody>
@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     <th class="text-left" :class="getEnemyHeaderClass('Name')" @click="sortEnemyBy('Name')">Enemy</th>
-                    <th v-for="(mech, index) in enemyMechHeader" :class="getEnemyHeaderClass('Data', index)" @click="sortEnemyBy('Data', index)" :data-original-title="mech.description">
+                    <th v-for="(mech, index) in enemyMechHeader" :class="getEnemyHeaderClass('Data', index)" @click="sortEnemyBy('Data', index)" :data-original-title="mech.fullName + ': ' + mech.description">
                         {{ mech.shortName}}
                     </th>
                 </tr>
