@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EIData
         internal ActorOrientationDecorationCombatReplayDescription(ParsedEvtcLog log, FacingDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "ActorOrientation";
+            IsMechanicOrSkill = false;
         }
 
     }

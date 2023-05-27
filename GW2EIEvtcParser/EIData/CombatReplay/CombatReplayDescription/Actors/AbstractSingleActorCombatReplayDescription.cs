@@ -3,17 +3,14 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSingleActorCombatReplayDescription
+    public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
         public string Img { get; }
-        public string Type { get; }
         public int ID { get; }
         public IReadOnlyList<float> Positions { get; }
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
-        public long Start { get; }
-        public long End { get; }
 
         public long HitboxWidth { get; }
 
@@ -50,6 +47,7 @@ namespace GW2EIEvtcParser.EIData
                 positions.Add(x);
                 positions.Add(y);
             }
+            IsMechanicOrSkill = false;
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)
         {
