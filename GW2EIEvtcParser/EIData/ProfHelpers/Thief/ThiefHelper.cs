@@ -110,10 +110,14 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Thief21,
             (int)MinionID.Thief22,
         };
+
         internal static bool IsKnownMinionID(long id)
         {
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+        }
     }
 }

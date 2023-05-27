@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
@@ -260,6 +260,7 @@ namespace GW2EIEvtcParser.EIData
             switch (player.Spec)
             {
                 case Spec.Scourge:
+                    ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
                 case Spec.Chronomancer:
@@ -271,6 +272,7 @@ namespace GW2EIEvtcParser.EIData
                 case Spec.Daredevil:
                 case Spec.Deadeye:
                 case Spec.Specter:
+                    ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
             }
         }

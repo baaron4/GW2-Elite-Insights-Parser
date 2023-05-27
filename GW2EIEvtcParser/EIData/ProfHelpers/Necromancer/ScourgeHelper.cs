@@ -32,5 +32,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sadistic Searing", SadisticSearing, ParserHelper.Source.Scourge, BuffClassification.Other, BuffImages.SadisticSearing),
             new Buff("Path Uses", PathUses, ParserHelper.Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
         };
+
+         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+        }
     }
 }
