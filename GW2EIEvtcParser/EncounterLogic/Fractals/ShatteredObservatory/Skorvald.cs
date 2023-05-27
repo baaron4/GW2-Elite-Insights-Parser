@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -153,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
-            if (combatData.GetBuildEvent().Build >= 106277)
+            if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
                 /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())

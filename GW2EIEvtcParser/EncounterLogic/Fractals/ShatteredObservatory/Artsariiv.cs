@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            Dictionary<string, int> nameCount = new Dictionary<string, int> {
+            var nameCount = new Dictionary<string, int> {
                     { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
                     { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
             };

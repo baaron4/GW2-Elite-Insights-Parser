@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2020Balance = 102321;
             internal const ulong February2020Balance2 = 102389;
             internal const ulong July2020Balance = 104844;
+            internal const ulong September2020SunquaPeakRelease = 106277;
             internal const ulong May2021Balance = 115190;
             internal const ulong May2021BalanceHotFix = 115728;
             internal const ulong June2021Balance = 116210;
@@ -911,12 +912,13 @@ namespace GW2EIEvtcParser
             ProjectionArkk = 17613,
             // Ai
             EnrageWaterSprite = 23270,
-            SorrowDemon1 = 23265,
-            SorrowDemon2 = 23242,
-            SorrowDemon3 = 23279,
-            SorrowDemon4 = 23245,
-            SorrowDemon5 = 23256,
-            DoubtDemon = 23268,
+            TransitionSorrowDemon1 = 23265,
+            TransitionSorrowDemon2 = 23242,
+            TransitionSorrowDemon3 = 23279,
+            TransitionSorrowDemon4 = 23245,
+            CCSorrowDemon = 23256,
+            AiDoubtDemon = 23268,
+            PlayerDoubtDemon = 23246,
             FearDemon = 23264,
             GuiltDemon = 23252,
             // Open world Soo-Won
