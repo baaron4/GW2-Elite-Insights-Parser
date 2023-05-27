@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
@@ -254,9 +255,24 @@ namespace GW2EIEvtcParser.EIData
             return instantCastFinders;
         }
 
-        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            return;
+            switch (player.Spec)
+            {
+                case Spec.Scourge:
+                    break;
+                case Spec.Mesmer:
+                case Spec.Chronomancer:
+                case Spec.Mirage:
+                case Spec.Virtuoso:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Thief:
+                case Spec.Daredevil:
+                case Spec.Deadeye:
+                case Spec.Specter:
+                    break;
+            }
         }
 
         internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -265,6 +281,43 @@ namespace GW2EIEvtcParser.EIData
             CombatReplay.DebugEffects(p, log, replay, knownEffects);
         }
 
+        /// <summary>Returns effect events for the given player and effect GUID.</summary>
+        internal static IEnumerable<EffectEvent> GetEffectsForPlayer(CombatData combatData, AbstractPlayer player, string effectGUID)
+        {
+            if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+                return effects.Where(effect => effect.Src.ID == player.ID);
+            }
+            return new List<EffectEvent>();
+        }
+
+        /// <summary>
+        /// Returns effect events for the given player and effect GUID.
+        /// The same effects happening within epsilon milliseconds are grouped together.
+        /// </summary>
+        internal static List<List<EffectEvent>> GetGroupedEffectsForPlayer(CombatData combatData, AbstractPlayer player, string effectGUID, long epsilon = ServerDelayConstant)
+        {
+            var effectGroups = new List<List<EffectEvent>>();
+            if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+                var processedTimes = new HashSet<long>();
+                foreach (EffectEvent first in effects)
+                {
+                    if (first.Src.ID == player.ID) {
+                        if (processedTimes.Contains(first.Time))
+                        {
+                            continue;
+                        }
+                        List<EffectEvent> group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                        foreach (EffectEvent effect in group)
+                        {
+                            processedTimes.Add(effect.Time);
+                        }
+
+                        effectGroups.Add(group);
+                    }
+                }
+            }
+            return effectGroups;
+        }
 
         private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
         {
