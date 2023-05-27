@@ -1001,7 +1001,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool TryGetEffectEndByTrackingId(long trackingID, long time, out long end)
         {
             end = 0;
-            EffectEvent endEvent = GetEffectEventsByTrackingID(trackingID).FirstOrDefault(effect => effect.EffectID == 0 && effect.Time >= time);
+            EffectEvent endEvent = GetEffectEventsByTrackingID(trackingID).FirstOrDefault(effect => effect.IsEnd && effect.Time >= time);
             if (endEvent != null)
             {
                 end = endEvent.Time;

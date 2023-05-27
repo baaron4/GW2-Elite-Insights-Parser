@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
         public Point3D Position { get; } = new Point3D(0, 0, 0);
 
         public bool IsAroundDst => Dst != null;
+        public bool IsEnd => EffectID == 0;
 
         public long EffectID { get; }
         public long TrackingID { get; }
