@@ -118,6 +118,31 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            List<EffectEvent> entrances = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance).ToList();
+            List<IconDecoration> entranceDecorations = entrances.Select(effect =>
+            {
+                int start = (int)effect.Time;
+                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
+                int end = (int?)remove?.Time ?? start + 8000;
+                var decoration = new IconDecoration("https://wiki.guildwars2.com/images/e/e3/Prepare_Shadow_Portal.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position));
+                replay.Decorations.Add(decoration);
+                return decoration;
+            }).ToList();
+
+            foreach (EffectEvent exit in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit))
+            {
+                int start = (int)exit.Time;
+                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
+                int end = (int?)remove?.Time ?? start + 8000;
+                var decoration = new IconDecoration("https://wiki.guildwars2.com/images/d/d3/Shadow_Portal.png", 128, 0.5f, exit.Src, (start, end), new PositionConnector(exit.Position));
+                replay.Decorations.Add(decoration);
+
+                int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);
+                if (index > -1)
+                {
+                    replay.Decorations.Add(entranceDecorations[index].LineTo(decoration, 0, "rgba(169, 108, 108, 0.5)"));
+                }
+            }
         }
     }
 }
