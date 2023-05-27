@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Ai not found");
             }
             _china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
-            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
+            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
             _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == AiHasDarkModeCN_SurgeOfDarkness : x.SkillID == AiHasDarkMode_SurgeOfDarkness) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
