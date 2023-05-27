@@ -371,7 +371,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
                 MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
                 // Add custom spawn event
-                combatData.Add(new CombatItem(_deimos10PercentTime + 1, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
+                combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");
@@ -467,11 +467,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent signet = signets[i];
                 if (signet is BuffApplyEvent)
                 {
-                    sigStart = Math.Max(signet.Time + 1, 0);
+                    sigStart = Math.Max(signet.Time, 0);
                 }
                 else
                 {
-                    long sigEnd = Math.Min(signet.Time - 1, log.FightData.FightEnd);
+                    long sigEnd = Math.Min(signet.Time, log.FightData.FightEnd);
                     var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
                     burstPhase.AddTarget(mainTarget);
                     phases.Add(burstPhase);
@@ -588,7 +588,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
                     if (Saul != null)
                     {
-                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware - 1);
+                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.DemonicBond:

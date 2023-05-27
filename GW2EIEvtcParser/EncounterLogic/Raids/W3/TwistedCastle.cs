@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     if (replay.Rotations.Any())
                     {
-                        replay.Decorations.Add(new FacingDecoration(lifespan, new AgentConnector(npc), replay.PolledRotations));
+                        replay.Decorations.Add(new ActorOrientationDecoration(lifespan, new AgentConnector(npc), replay.PolledRotations));
                     }
                     break;
                 //case (ushort)ParseEnum.TrashIDS.CastleFountain:

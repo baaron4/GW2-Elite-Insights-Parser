@@ -64,6 +64,7 @@ namespace GW2EIEvtcParser.EIData
 
                 return pos;
             }).ToArray();
+            IsMechanicOrSkill = false;
         }
 
     }

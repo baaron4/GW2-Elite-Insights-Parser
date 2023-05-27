@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 };
                 normalPhase.AddTarget(cairn);
 
-                var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
+                var enragePhase = new PhaseData(enrageApply.Time, log.FightData.FightEnd)
                 {
                     Name = "Angry"
                 };
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
-                return spawnProtectionLoss.Time - 1;
+                return spawnProtectionLoss.Time;
             }
             else
             {
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Adds around 15 to 20 ms diff compared to buff loss
                     else
                     {
-                        return firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1;
+                        return firstCastEnd.Time - firstCastEnd.Value + actionHappened;
                     }
                 }
             }
