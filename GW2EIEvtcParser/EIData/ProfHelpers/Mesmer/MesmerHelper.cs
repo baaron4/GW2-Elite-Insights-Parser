@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive))
             {
                 int start = (int)effect.Time;
-                var remove = log.CombatData.GetBuffData(PortalWeaving).OfType<AbstractBuffRemoveEvent>().FirstOrDefault(x => x.Time >= start);
+                var remove = log.CombatData.GetBuffData(PortalWeaving).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 60000;
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/81/Portal_Entre.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position)));
             }
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     EffectEvent effect = group[i];
                     int start = (int)effect.Time;
-                    var remove = log.CombatData.GetBuffData(PortalUses).OfType<AbstractBuffRemoveEvent>().FirstOrDefault(x => x.Time >= start);
+                    var remove = log.CombatData.GetBuffData(PortalUses).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                     int end = (int?)remove?.Time ?? start + 10000;
                     var decoration = new IconDecoration("https://wiki.guildwars2.com/images/6/6f/Portal_Exeunt.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
