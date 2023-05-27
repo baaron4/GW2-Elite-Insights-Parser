@@ -607,10 +607,9 @@ class IconDecorationDrawable extends MechanicDrawable {
         if (pos === null) {
             return;
         }
-        /** @type {CanvasRenderingContext2D} */
+        
         const ctx = animator.mainContext;
         const size = this.size / animator.scale;
-
         ctx.save();
         ctx.globalAlpha = this.opacity;
         ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
