@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.TemporalAnomaly2,
                 ArcDPSEnums.TrashID.BLIGHT,
@@ -73,6 +73,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.CHOP,
                 ArcDPSEnums.TrashID.ProjectionArkk
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

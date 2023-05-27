@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.FearDemon,
                 ArcDPSEnums.TrashID.GuiltDemon,
@@ -134,6 +134,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.TransitionSorrowDemon3,
                 ArcDPSEnums.TrashID.TransitionSorrowDemon4,
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
