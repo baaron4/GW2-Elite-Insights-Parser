@@ -327,15 +327,15 @@ namespace GW2EIEvtcParser.EIData
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             // TODO: tracking ids seem broken in arc? using buff remove with hardcoded fallback for now
-            foreach (EffectEvent effect in ProfHelper.GetEffectsForPlayer(log.CombatData, player, EffectGUIDs.MesmerPortalInactive))
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive))
             {
                 int start = (int)effect.Time;
                 var remove = log.CombatData.GetBuffData(PortalWeaving).OfType<AbstractBuffRemoveEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 60000;
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/81/Portal_Entre.png", 128, 0.5f, effect.Src.ID, (start, end), new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/81/Portal_Entre.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position)));
             }
 
-            foreach (List<EffectEvent> group in ProfHelper.GetGroupedEffectsForPlayer(log.CombatData, player, EffectGUIDs.MesmerPortalActive))
+            foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive))
             {
                 IconDecoration first = null;
                 for (int i = 0; i < group.Count; i++)
@@ -344,7 +344,7 @@ namespace GW2EIEvtcParser.EIData
                     int start = (int)effect.Time;
                     var remove = log.CombatData.GetBuffData(PortalUses).OfType<AbstractBuffRemoveEvent>().FirstOrDefault(x => x.Time >= start);
                     int end = (int?)remove?.Time ?? start + 10000;
-                    var decoration = new IconDecoration("https://wiki.guildwars2.com/images/6/6f/Portal_Exeunt.png", 128, 0.5f, effect.Src.ID, (start, end), new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration("https://wiki.guildwars2.com/images/6/6f/Portal_Exeunt.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {

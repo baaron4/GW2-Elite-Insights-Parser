@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -1022,6 +1023,43 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
+        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        internal IEnumerable<EffectEvent> GetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID)
+        {
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+                return effects.Where(effect => effect.Src == agent);
+            }
+            return new List<EffectEvent>();
+        }
+
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUID.
+        /// The same effects happening within epsilon milliseconds are grouped together.
+        /// </summary>
+        internal List<List<EffectEvent>> GetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, long epsilon = ServerDelayConstant)
+        {
+            var effectGroups = new List<List<EffectEvent>>();
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+                var processedTimes = new HashSet<long>();
+                foreach (EffectEvent first in effects)
+                {
+                    if (first.Src == agent) {
+                        if (processedTimes.Contains(first.Time))
+                        {
+                            continue;
+                        }
+                        List<EffectEvent> group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                        foreach (EffectEvent effect in group)
+                        {
+                            processedTimes.Add(effect.Time);
+                        }
+
+                        effectGroups.Add(group);
+                    }
+                }
+            }
+            return effectGroups;
+        }
 
         public IReadOnlyList<EffectEvent> GetEffectEvents()
         {
