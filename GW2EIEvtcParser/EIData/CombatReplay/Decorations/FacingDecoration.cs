@@ -2,11 +2,11 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class FacingDecoration : GenericAttachedDecoration
+    internal abstract class FacingDecoration : GenericAttachedDecoration
     {
         public List<float> Angles { get; } = new List<float>();
 
-        public FacingDecoration((int start, int end) lifespan, AgentConnector connector, IReadOnlyList<ParametricPoint3D> facings) : base(lifespan, connector)
+        protected FacingDecoration((int start, int end) lifespan, AgentConnector connector, IReadOnlyList<ParametricPoint3D> facings) : base(lifespan, connector)
         {
             foreach (ParametricPoint3D facing in facings)
             {
@@ -15,13 +15,6 @@ namespace GW2EIEvtcParser.EIData
                     Angles.Add(-Point3D.GetRotationFromFacing(facing));
                 }
             }
-        }
-
-        //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
-        {
-            return new FacingDecorationCombatReplayDescription(log, this, map);
         }
     }
 }

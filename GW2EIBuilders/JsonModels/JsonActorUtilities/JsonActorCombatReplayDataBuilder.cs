@@ -67,9 +67,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 foreach (GenericDecoration decoration in decorations)
                 {
                     GenericDecorationCombatReplayDescription decDescription = decoration.GetCombatReplayDescription(map, log);
-                    if (decDescription is FacingDecorationCombatReplayDescription facingDescription)
+                    if (decDescription is ActorOrientationDecorationCombatReplayDescription actorOrientationDescription)
                     {
-                        actorCombatReplayData.Orientations = facingDescription.FacingData;
+                        actorCombatReplayData.Orientations = actorOrientationDescription.FacingData;
                     }
                 }
             }

@@ -82,7 +82,7 @@ class Animator {
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
         this.mechanicActorData = [];
-        this.attachedActorData = new Map();
+        this.actorOrientationData = new Map();
         this.backgroundActorData = [];
         this.backgroundImages = [];
         this.selectedActor = null;
@@ -159,7 +159,7 @@ class Animator {
         this.targetData.clear();
         this.trashMobData.clear();
         this.friendlyMobData.clear();
-        this.attachedActorData.clear();
+        this.actorOrientationData.clear();
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
@@ -200,8 +200,8 @@ class Animator {
                 case "Line":
                     this.mechanicActorData.push(new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo));
                     break;
-                case "Facing":
-                    this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
+                case "ActorOrientation":
+                    this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
                     break;
                 case "FacingRectangle":
                     this.mechanicActorData.push(new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color));
@@ -589,6 +589,12 @@ class Animator {
         }
     }
 
+    _drawActorOrientation(key) {
+        if (this.actorOrientationData.has(key)) {
+            this.actorOrientationData.get(key).draw();
+        }
+    }
+
     _drawMainCanvas() {
         var _this = this;
         var ctx = this.mainContext;
@@ -615,9 +621,7 @@ class Animator {
         this.friendlyMobData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
-                }
+                _this._drawActorOrientation(key);
             }
         });
         
@@ -625,9 +629,7 @@ class Animator {
             this.playerData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
@@ -636,9 +638,7 @@ class Animator {
             this.trashMobData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
@@ -646,26 +646,20 @@ class Animator {
         this.targetData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
-                }
+                _this._drawActorOrientation(key);
             }
         });
         if (this.displaySettings.useActorHitboxWidth) {           
             this.playerData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
         if (this.selectedActor !== null) {
-            this.selectedActor.draw();
-            if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
-                this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
-            }
+            this.selectedActor.draw();     
+            this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
         }
     }
 
