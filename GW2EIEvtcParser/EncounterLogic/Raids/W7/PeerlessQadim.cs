@@ -273,7 +273,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int aimTime = (int)((double)c.ExpectedDuration*ratio);
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingDecoration((0, end), new AgentConnector(target), replay.PolledRotations));
                             replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
                             if (end > start + aimTime)
                             {
