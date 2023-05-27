@@ -212,6 +212,9 @@ class Animator {
                 case "MovingPlatform":
                     this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                     break;
+                case "IconDecoration":
+                    this.mechanicActorData.push(new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, this.inchToPixel * actor.size, actor.opacity, actor.owner));
+                    break;
             }
         }
     }

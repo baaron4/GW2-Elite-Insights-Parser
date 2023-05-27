@@ -590,3 +590,30 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         };
     }
 }
+
+class IconDecorationDrawable extends MechanicDrawable {
+    constructor(start, end, connectedTo, image, size, opacity, owner) {
+        super(start, end, connectedTo);
+        this.image = new Image();
+        this.image.src = image;
+        this.image.onload = () => animateCanvas(noUpdateTime);
+        this.size = size;
+        this.opacity = opacity;
+        this.owner = owner;
+    }
+
+    draw() {
+        const pos = this.getPosition();
+        if (pos === null) {
+            return;
+        }
+        /** @type {CanvasRenderingContext2D} */
+        const ctx = animator.mainContext;
+        const size = this.size / animator.scale;
+
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
+        ctx.restore();
+    }
+}
