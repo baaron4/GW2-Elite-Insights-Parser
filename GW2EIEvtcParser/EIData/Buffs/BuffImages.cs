@@ -1502,6 +1502,9 @@
         internal const string GlyphOfElementalPowerAir = "https://wiki.guildwars2.com/images/c/cb/Glyph_of_Elemental_Power_%28air%29.png";
         internal const string GlyphOfElementalPowerEarth = "https://wiki.guildwars2.com/images/0/0a/Glyph_of_Elemental_Power_%28earth%29.png";
         internal const string FreezingGust = "https://wiki.guildwars2.com/images/4/48/Freezing_Gust.png";
+        internal const string HeatLvl1 = "https://i.imgur.com/nNQEVpb.png";
+        internal const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
+        internal const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
