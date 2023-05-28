@@ -130,10 +130,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.TwistedHorror
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()

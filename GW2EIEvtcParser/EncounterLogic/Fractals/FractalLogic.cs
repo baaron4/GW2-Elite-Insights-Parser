@@ -58,6 +58,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>()
+            {
+                ArcDPSEnums.TrashID.FractalAvenger,
+                ArcDPSEnums.TrashID.FractalVindicator,
+            };
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             // check reward
