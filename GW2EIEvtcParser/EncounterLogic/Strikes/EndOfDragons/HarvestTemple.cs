@@ -290,8 +290,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return;
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault(x => x.Time <= targetOffs[1].Time - ServerDelayConstant);
-                        if (lastHPUpdate != null && lastHPUpdate.HPPercent > 2.0)
+                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
+                        if (lastHPUpdate != null && lastHPUpdate.HPPercent > 0.01)
                         {
                             return;
                         }
@@ -374,10 +374,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                                 {
-                                    // Discard hp update that goes up close to death time
-                                    if (c.DstAgent >= lastHPUpdate && c.Time > extra.LastAware - 2000)
+                                    // Regenerating back to full HP, override to 0
+                                    if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
-                                        continue;
+                                        c.OverrideDstAgent(0);
                                     }
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;
