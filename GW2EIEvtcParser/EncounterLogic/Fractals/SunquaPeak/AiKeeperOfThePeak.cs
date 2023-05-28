@@ -115,23 +115,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak,
                 (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2,
-                (int)ArcDPSEnums.TrashID.SorrowDemon5,
+                (int)ArcDPSEnums.TrashID.CCSorrowDemon,
             };
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.FearDemon,
                 ArcDPSEnums.TrashID.GuiltDemon,
+                ArcDPSEnums.TrashID.AiDoubtDemon,
+                ArcDPSEnums.TrashID.PlayerDoubtDemon,
                 ArcDPSEnums.TrashID.EnrageWaterSprite,
                 // Transition sorrow demons
-                ArcDPSEnums.TrashID.SorrowDemon1,
-                ArcDPSEnums.TrashID.SorrowDemon2,
-                ArcDPSEnums.TrashID.SorrowDemon3,
-                ArcDPSEnums.TrashID.SorrowDemon4,
+                ArcDPSEnums.TrashID.TransitionSorrowDemon1,
+                ArcDPSEnums.TrashID.TransitionSorrowDemon2,
+                ArcDPSEnums.TrashID.TransitionSorrowDemon3,
+                ArcDPSEnums.TrashID.TransitionSorrowDemon4,
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -244,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int sorrowCount = 0;
                 foreach (AbstractSingleActor target in Targets)
                 {
-                    if (target.IsSpecies(ArcDPSEnums.TrashID.SorrowDemon5))
+                    if (target.IsSpecies(ArcDPSEnums.TrashID.CCSorrowDemon))
                     {
                         target.OverrideName(target.Character + " " + (++sorrowCount));
                     }

@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 // General
-                new PlayerDstEffectMechanic(EffectGUIDs.HarvestTempleSpread, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
-                new PlayerDstEffectMechanic(EffectGUIDs.HarvestTempleRedPuddleSelect, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
+                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
+                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleCM}, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPoolNM, VoidPoolCM }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
@@ -570,44 +570,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            //
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
-                foreach (EffectEvent greenEffect in greenEffects)
-                {
-                    int duration = 5000;
-                    int start = (int)greenEffect.Time - duration;
-                    int end = (int)greenEffect.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(greenEffect.Position)));
-                }
+                AddShareTheVoidDecoration(greenEffects, true);
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out IReadOnlyList<EffectEvent> failedGreenEffects))
             {
-                foreach (EffectEvent failedGreen in failedGreenEffects)
-                {
-                    int duration = 5000;
-                    int start = (int)failedGreen.Time - duration;
-                    int end = (int)failedGreen.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(failedGreen.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(120, 0, 0, 0.4)", new PositionConnector(failedGreen.Position)));
-                }
+                AddShareTheVoidDecoration(failedGreenEffects, false);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddle, out IReadOnlyList<EffectEvent> redPuddleEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffects))
             {
-                foreach (EffectEvent effect in redPuddleEffects)
-                {
-                    int inactiveDuration = 1500;
-                    int start = (int)effect.Time;
-                    AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
-                    if (dragonVoid == null)
-                    {
-                        continue;
-                    }
-                    int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + 300000); // puddles stay alive for 5 minutes
-                    EnvironmentDecorations.Add(new CircleDecoration(true, start + inactiveDuration, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 400, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
-                }
+                AddPlacedVoidPoolDecoration(redPuddleEffects, 400, 300000);
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleNM, out IReadOnlyList<EffectEvent> redPuddleEffectsNM))
+            {
+                AddPlacedVoidPoolDecoration(redPuddleEffects, 300, 25000);
             }
         }
 
@@ -1052,50 +1029,97 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             var knownEffectsIDs = new HashSet<long>();
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpread, out IReadOnlyList<EffectEvent> spreadEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpreadCM, out IReadOnlyList<EffectEvent> spreadEffectsCM))
             {
-                var spreadEffectsOnPlayer = spreadEffects.Where(x => x.Dst == p.AgentItem).ToList();
-                foreach (EffectEvent spreadEffect in spreadEffectsOnPlayer)
-                {
-                    int duration = 5500;
-                    int start = (int)spreadEffect.Time;
-                    int end = start + duration;
-                    AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(spreadEffect.Time);
-                    if (dragonVoid == null)
-                    {
-                        continue;
-                    }
-                    int effectEnd = Math.Min((int)dragonVoid.LastAware, end);
-                    DeadEvent deadEvent = log.CombatData.GetDeadEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
-                    if (deadEvent != null && deadEvent.Time <= effectEnd)
-                    {
-                        effectEnd = Math.Min((int)deadEvent.Time, end);
-                    }
-                    DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
-                    if (despawnEvent != null && despawnEvent.Time <= effectEnd)
-                    {
-                        effectEnd = Math.Min((int)despawnEvent.Time, end);
-                    }
-                    replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                }
+                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsCM, 300, 5500);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelect, out IReadOnlyList<EffectEvent> redSelectedEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpreadNM, out IReadOnlyList<EffectEvent> spreadEffectsNM))
             {
-                var redSelectedEffectsOnPlayer = redSelectedEffects.Where(x => x.Dst == p.AgentItem).ToList();
-                foreach (EffectEvent redSelectedEffect in redSelectedEffectsOnPlayer)
+                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsNM, 240, 5000);
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelectCM, out IReadOnlyList<EffectEvent> redSelectedEffectsCM))
+            {
+                AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsCM, 400);
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelectNM, out IReadOnlyList<EffectEvent> redSelectedEffectsNM))
+            {
+                AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsNM, 300);
+            }
+        }
+
+        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, int radius)
+        {
+            var redSelectedEffectsOnPlayer = redSelectedEffects.Where(x => x.Dst == p.AgentItem).ToList();
+            foreach (EffectEvent redSelectedEffect in redSelectedEffectsOnPlayer)
+            {
+                int duration = 7000;
+                int start = (int)redSelectedEffect.Time;
+                AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(redSelectedEffect.Time);
+                if (dragonVoid == null)
                 {
-                    int duration = 7000;
-                    int start = (int)redSelectedEffect.Time;
-                    AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(redSelectedEffect.Time);
-                    if (dragonVoid == null)
-                    {
-                        continue;
-                    }
-                    int end = Math.Min((int)dragonVoid.LastAware, start + duration);
-                    replay.Decorations.Add(new CircleDecoration(true, end, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                    continue;
                 }
+                int end = Math.Min((int)dragonVoid.LastAware, start + duration);
+                replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+            }
+        }
+
+        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, int radius, int duration)
+        {
+            var spreadEffectsOnPlayer = spreadEffects.Where(x => x.Dst == p.AgentItem).ToList();
+            foreach (EffectEvent spreadEffect in spreadEffectsOnPlayer)
+            {
+                int start = (int)spreadEffect.Time;
+                int end = start + duration;
+                AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(spreadEffect.Time);
+                if (dragonVoid == null)
+                {
+                    continue;
+                }
+                int effectEnd = Math.Min((int)dragonVoid.LastAware, end);
+                DeadEvent deadEvent = log.CombatData.GetDeadEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
+                if (deadEvent != null && deadEvent.Time <= effectEnd)
+                {
+                    effectEnd = Math.Min((int)deadEvent.Time, end);
+                }
+                DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(p.AgentItem).FirstOrDefault(x => x.Time >= start);
+                if (despawnEvent != null && despawnEvent.Time <= effectEnd)
+                {
+                    effectEnd = Math.Min((int)despawnEvent.Time, end);
+                }
+                replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+            }
+        }
+
+        private void AddPlacedVoidPoolDecoration(IReadOnlyList<EffectEvent> redPuddleEffects, int radius, int duration)
+        {
+            foreach (EffectEvent effect in redPuddleEffects)
+            {
+                int inactiveDuration = 1500;
+                int start = (int)effect.Time;
+                AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+                if (dragonVoid == null)
+                {
+                    continue;
+                }
+                int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + duration);
+                EnvironmentDecorations.Add(new CircleDecoration(true, start + inactiveDuration, radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(true, 0, radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+            }
+        }
+
+        private void AddShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful)
+        {
+            foreach (EffectEvent green in greenEffects)
+            {
+                int duration = 5000;
+                int start = (int)green.Time - duration;
+                int end = (int)green.Time;
+                string color = isSuccessful ? "rgba(0, 120, 0, 0.4)" : "rgba(120, 0, 0, 0.4)";
+                EnvironmentDecorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(green.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, end), color, new PositionConnector(green.Position)));
             }
         }
 

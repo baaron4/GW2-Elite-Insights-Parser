@@ -329,6 +329,13 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashAberrantWisp = "https://i.imgur.com/m3cKqUB.png";
         private const string TrashBoundIcebroodElemental = "https://i.imgur.com/Jm0wCup.png";
         private const string TrashIcebroodElemental = "https://i.imgur.com/36L8Si4.png";
+        private const string TrashFractalAvenger = "https://i.imgur.com/LC2E4rg.png";
+        private const string TrashFractalVindicator = "https://i.imgur.com/1EgFMTg.png";
+        private const string TrashCCSorrow = "https://i.imgur.com/jvNPtMJ.png";
+        private const string TrashFear = "https://i.imgur.com/Eq3xHIm.png";
+        private const string TrashAiDoubt = "https://i.imgur.com/IKmpccC.png";
+        private const string TrashGuilt = "https://i.imgur.com/ko7137g.png";
+        private const string TrashTransitionSorrow = "https://i.imgur.com/2rrUxX7.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -657,8 +664,6 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.Spirit2, TrashSpiritDemonSoul },
             { ArcDPSEnums.TrashID.ChargedSoul, TrashSpiritDemonSoul },
             { ArcDPSEnums.TrashID.HollowedBomber, TrashSpiritDemonSoul },
-            { ArcDPSEnums.TrashID.GuiltDemon, TrashSpiritDemonSoul },
-            { ArcDPSEnums.TrashID.DoubtDemon, TrashSpiritDemonSoul },
             { ArcDPSEnums.TrashID.Saul, TrashSaul },
             { ArcDPSEnums.TrashID.ShackledPrisoner, TrashShackledPrisoner },
             { ArcDPSEnums.TrashID.DemonicBond, TrashDemonicBond },
@@ -726,7 +731,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.PyreGuardianResolution, TrashPyreGuardianResolution },
             { ArcDPSEnums.TrashID.PyreGuardianStab, TrashPyreGuardianStab },
             { ArcDPSEnums.TrashID.PyreGuardianProtect, TrashPyreGuardianProtect },
-            { ArcDPSEnums.TrashID.ReaperofFlesh, TrashReaperofFlesh },
+            { ArcDPSEnums.TrashID.ReaperOfFlesh, TrashReaperofFlesh },
             { ArcDPSEnums.TrashID.Kernan, TrashKernan },
             { ArcDPSEnums.TrashID.Knuckles, TrashKnuckles },
             { ArcDPSEnums.TrashID.Karde, TrashKarde },
@@ -761,12 +766,15 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.DoppelgangerWarrior2, TrashDoppelgangerWarrior },
             { ArcDPSEnums.TrashID.CharrTank, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.PropagandaBallon, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.FearDemon, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SorrowDemon1, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SorrowDemon2, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SorrowDemon3, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SorrowDemon4, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SorrowDemon5, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.FearDemon, TrashFear },
+            { ArcDPSEnums.TrashID.GuiltDemon, TrashGuilt },
+            { ArcDPSEnums.TrashID.AiDoubtDemon, TrashAiDoubt },
+            { ArcDPSEnums.TrashID.PlayerDoubtDemon, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TransitionSorrowDemon1, TrashTransitionSorrow },
+            { ArcDPSEnums.TrashID.TransitionSorrowDemon2, TrashTransitionSorrow },
+            { ArcDPSEnums.TrashID.TransitionSorrowDemon3, TrashTransitionSorrow },
+            { ArcDPSEnums.TrashID.TransitionSorrowDemon4, TrashTransitionSorrow },
+            { ArcDPSEnums.TrashID.CCSorrowDemon, TrashCCSorrow },
             { ArcDPSEnums.TrashID.ScarletPhantomHP, TrashScarletPhantom },
             { ArcDPSEnums.TrashID.ScarletPhantomHPCM, TrashScarletPhantom },
             { ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM, TrashScarletPhantom },
@@ -917,6 +925,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.AberrantWisp, TrashAberrantWisp },
             { ArcDPSEnums.TrashID.BoundIcebroodElemental, TrashBoundIcebroodElemental },
             { ArcDPSEnums.TrashID.IcebroodElemental, TrashIcebroodElemental },
+            { ArcDPSEnums.TrashID.FractalAvenger, TrashFractalAvenger },
+            { ArcDPSEnums.TrashID.FractalVindicator, TrashFractalVindicator },
         };
 
         /// <summary>

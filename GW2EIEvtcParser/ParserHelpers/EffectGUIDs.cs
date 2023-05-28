@@ -212,9 +212,12 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleMordremothPoisonRoarImpact = "E500544171F13643899C178EC3FB38A9";
         public const string HarvestTempleZhaitanPutridDelugeImpact = "FE8B96A200376B4BA75297FF2367C5C4";
         public const string HarvestTempleZhaitanPutridDelugeAoE = "82A8BC954DD69E4DBBF526EE1C6A3E74";
-        public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
-        public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
-        public const string HarvestTempleRedPuddle = "FF0A7D32AD894E45993BE5ED748BF484";
+        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808Ef8E6C654A";
+        public const string HarvestTempleSpreadCM = "BDF708225224C64183BA3CE2A609D37F";
+        public const string HarvestTempleRedPuddleSelectNM = "0CD6F76C1BF9C049A2FCE4D86CB46475";
+        public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
+        public const string HarvestTempleRedPuddleSelectCM = "61C1CD7E89346843B04FCE613EC487AA";
+        public const string HarvestTempleRedPuddleCM = "FF0A7D32AD894E45993BE5ED748BF484";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
