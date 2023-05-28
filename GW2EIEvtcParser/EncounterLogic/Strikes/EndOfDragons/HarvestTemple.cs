@@ -572,19 +572,31 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
-                AddShareTheVoidDecoration(greenEffects, true);
+                if (greenEffects.Count > 0)
+                {
+                    AddShareTheVoidDecoration(greenEffects, true);
+                }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out IReadOnlyList<EffectEvent> failedGreenEffects))
             {
-                AddShareTheVoidDecoration(failedGreenEffects, false);
+                if (failedGreenEffects.Count > 0)
+                {
+                    AddShareTheVoidDecoration(failedGreenEffects, false);
+                }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffectsCM))
             {
-                AddPlacedVoidPoolDecoration(redPuddleEffects, 400, 300000);
+                if (redPuddleEffectsCM.Count > 0)
+                {
+                    AddPlacedVoidPoolDecoration(redPuddleEffectsCM, 400, 300000);
+                }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleNM, out IReadOnlyList<EffectEvent> redPuddleEffectsNM))
             {
-                AddPlacedVoidPoolDecoration(redPuddleEffects, 300, 25000);
+                if (redPuddleEffectsNM.Count > 0)
+                {
+                    AddPlacedVoidPoolDecoration(redPuddleEffectsNM, 300, 25000);
+                }
             }
         }
 
@@ -1031,19 +1043,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             var knownEffectsIDs = new HashSet<long>();
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpreadCM, out IReadOnlyList<EffectEvent> spreadEffectsCM))
             {
-                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsCM, 300, 5500);
+                if (spreadEffectsCM.Count > 0)
+                {
+                    AddSpreadSelectionDecoration(p, log, replay, spreadEffectsCM, 300, 5500);
+                }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSpreadNM, out IReadOnlyList<EffectEvent> spreadEffectsNM))
             {
-                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsNM, 240, 5000);
+                if (spreadEffectsNM.Count > 0)
+                {
+                    AddSpreadSelectionDecoration(p, log, replay, spreadEffectsNM, 240, 5000);
+                }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelectCM, out IReadOnlyList<EffectEvent> redSelectedEffectsCM))
             {
-                AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsCM, 400);
+                if (redSelectedEffectsCM.Count > 0)
+                {
+                    AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsCM, 400);
+                }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleSelectNM, out IReadOnlyList<EffectEvent> redSelectedEffectsNM))
             {
-                AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsNM, 300);
+                if (redSelectedEffectsNM.Count > 0)
+                {
+                    AddVoidPoolSelectionDecoration(p, replay, redSelectedEffectsNM, 300);
+                }
             }
         }
 
