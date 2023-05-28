@@ -578,13 +578,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 AddShareTheVoidDecoration(failedGreenEffects, false);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffectsCM))
             {
-                AddPlacedVoidPoolDecoration(redPuddleEffects, 400, 300000);
+                AddPlacedVoidPoolDecoration(redPuddleEffectsCM, 400, 300000);
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleNM, out IReadOnlyList<EffectEvent> redPuddleEffectsNM))
             {
-                AddPlacedVoidPoolDecoration(redPuddleEffects, 300, 25000);
+                AddPlacedVoidPoolDecoration(redPuddleEffectsNM, 300, 25000);
             }
         }
 
