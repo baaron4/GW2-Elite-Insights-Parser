@@ -202,6 +202,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractBuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
+            var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in shields)
+            {
+                // Missing Buff Initial
+                if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
+                {
+                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), 1, true));
+                }
+            }
+            return toAdd;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
