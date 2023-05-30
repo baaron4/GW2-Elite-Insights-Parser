@@ -911,7 +911,7 @@ namespace GW2EIEvtcParser
             CHOP = 16552,
             ProjectionArkk = 17613,
             // Ai
-            EnrageWaterSprite = 23270,
+            EnragedWaterSprite = 23270,
             TransitionSorrowDemon1 = 23265,
             TransitionSorrowDemon2 = 23242,
             TransitionSorrowDemon3 = 23279,
