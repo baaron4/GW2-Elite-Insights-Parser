@@ -80,20 +80,20 @@
                             class="icon">
                     </th>           
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12, x => getMinCastingTime(x))"    
-                        data-original-title="Minimum Casting Time">
+                        :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12, x => getMinCastingTimeNoInterrupt(x))"    
+                        data-original-title="Minimum Casting Time (No interrupted skills)">
                         Min <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13, x => round3(0.001 * getCastDuration(x) / getCast(x) ))" 
-                        data-original-title="Average Casting Time">
+                        :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
+                        data-original-title="Average Casting Time (No interrupted skills)">
                         Avg <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 14)" @click="sortBy('Data', 14, x => getMaxCastingTime(x))"    
-                        data-original-title="Maximum Damage">
+                        :class="getHeaderClass('Data', 14)" @click="sortBy('Data', 14, x => getMaxCastingTimeNoInterrupt(x))"    
+                        data-original-title="Maximum Casting Time (No interrupted skills)">
                         Max <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
@@ -148,13 +148,13 @@
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getMinCastingTime(row)) + 's': ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's': ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 13)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getCastDuration(row) / getCast(row) ) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row) ) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 14)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getMaxCastingTime(row)) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
@@ -262,10 +262,16 @@
             getCastDuration: function(data) {
                 return data[9];
             },
-            getMinCastingTime: function(data) {
+            getCastDurationNoInterrupt: function(data) {
+                return data[13];
+            },
+            getCastNoInterrupt: function(data) {
+                return data[14];
+            },
+            getMinCastingTimeNoInterrupt: function(data) {
                 return data[11];
             },
-            getMaxCastingTime: function(data) {
+            getMaxCastingTimeNoInterrupt: function(data) {
                 return data[12];
             },
             showInequality: function (data) {

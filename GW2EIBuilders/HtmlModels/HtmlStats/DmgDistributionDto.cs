@@ -17,11 +17,12 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        internal static (long timeSpentCasting, long minTimeSpentCasting, long maxTimeSpentCasting, int numberOfCast, int timeSaved, int timeWasted) GetCastValues(IReadOnlyList<AbstractCastEvent> clList, PhaseData phase)
+        internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IReadOnlyList<AbstractCastEvent> clList, PhaseData phase)
         {
             long timeSpentCasting = 0;
-            int numberOfCast = 0, timeWasted = 0, timeSaved = 0;
-            long minTimeSpentCasting = long.MaxValue, maxTimeSpentCasting = long.MinValue;
+            long timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
+            long minTimeSpentCastingNoInterrupt = long.MaxValue, maxTimeSpentCastingNoInterrupt = long.MinValue;
             foreach (AbstractCastEvent cl in clList)
             {
                 if (phase.InInterval(cl.Time))
@@ -37,18 +38,24 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                             timeSaved += cl.SavedDuration;
                             break;
                     }
+                    if (cl.Status == AbstractCastEvent.AnimationStatus.Reduced || cl.Status == AbstractCastEvent.AnimationStatus.Full)
+                    {
+                        timeSpentCastingNoInterrupt += cl.ActualDuration;
+                        numberOfCastNoInterrupt++;
+                        minTimeSpentCastingNoInterrupt = Math.Min(cl.ActualDuration, minTimeSpentCastingNoInterrupt);
+                        maxTimeSpentCastingNoInterrupt = Math.Max(cl.ActualDuration, maxTimeSpentCastingNoInterrupt);
+                    }
                 }
                 long castTime = Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-                minTimeSpentCasting = Math.Min(castTime, minTimeSpentCasting);
-                maxTimeSpentCasting = Math.Max(castTime, maxTimeSpentCasting);
-                timeSpentCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
+                
+                timeSpentCasting += castTime;
             }
             if (timeSpentCasting == 0)
             {
-                minTimeSpentCasting = 0;
-                maxTimeSpentCasting = 0;
+                minTimeSpentCastingNoInterrupt = 0;
+                maxTimeSpentCastingNoInterrupt = 0;
             }
-            return (timeSpentCasting, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, timeSaved, timeWasted);
+            return (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted);
         }
 
         private static object[] GetDMGDtoItem(SkillItem skill, List<AbstractHealthDamageEvent> damageLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<SkillItem, List<AbstractBreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
@@ -123,11 +130,12 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             }
 
             long timeSpentCasting = 0;
-            int numberOfCast = 0, timeWasted = 0, timeSaved = 0;
-            long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
+            long timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
+            long minTimeSpentCastingNoInterrupt = 0, maxTimeSpentCastingNoInterrupt = 0;
             if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                (timeSpentCasting, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, timeSaved, timeWasted) = GetCastValues(clList, phase);
+                (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = GetCastValues(clList, phase);
                 castLogsBySkill.Remove(skill);
             }
             double breakbarDamage = 0.0;
@@ -155,8 +163,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     IsIndirectDamage ? 0 : timeSpentCasting,
                     againstMoving,
                     Math.Round(breakbarDamage, 1),
-                    IsIndirectDamage ? 0 : minTimeSpentCasting,
-                    IsIndirectDamage ? 0 : maxTimeSpentCasting
+                    IsIndirectDamage ? 0 : minTimeSpentCastingNoInterrupt,
+                    IsIndirectDamage ? 0 : maxTimeSpentCastingNoInterrupt,
+                    IsIndirectDamage ? 0 : timeSpentCastingNoInterrupt,
+                    IsIndirectDamage ? 0 : numberOfCastNoInterrupt,
                 };
             return skillItem;
         }
@@ -208,7 +218,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     breakbarLogsBySkill.Remove(pair.Key);
                 }
 
-                (long timeSpentCasting, long minTimeSpentCasting, long maxTimeSpentCasting, int numberOfCast, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
+                (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
 
                 object[] skillData = {
                     false,
@@ -229,8 +239,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     timeSpentCasting,
                     0,
                     Math.Round(breakbarDamage, 1),
-                    minTimeSpentCasting,
-                    maxTimeSpentCasting
+                    minTimeSpentCastingNoInterrupt,
+                    maxTimeSpentCastingNoInterrupt,
+                    timeSpentCastingNoInterrupt,
+                    numberOfCastNoInterrupt,
                 };
                 list.Add(skillData);
             }

@@ -101,20 +101,20 @@
                             class="icon">
                     </th>                 
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 18)" @click="sortBy('Data', 18, x => getMinCastingTime(x))"    
-                        data-original-title="Minimum Casting Time">
+                        :class="getHeaderClass('Data', 18)" @click="sortBy('Data', 18, x => getMinCastingTimeNoInterrupt(x))"    
+                        data-original-title="Minimum Casting Time (No interrupted skills)">
                         Min <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19, x => round3(0.001 * getCastDuration(x) / getCast(x) ))" 
-                        data-original-title="Average Casting Time">
+                        :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
+                        data-original-title="Average Casting Time (No interrupted skills)">
                         Avg <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 20)" @click="sortBy('Data', 20, x => getMaxCastingTime(x))"    
-                        data-original-title="Maximum Damage">
+                        :class="getHeaderClass('Data', 20)" @click="sortBy('Data', 20, x => getMaxCastingTimeNoInterrupt(x))"    
+                        data-original-title="Maximum Casting Time (No interrupted skills)">
                         Max <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                         class="icon">
                     </th>
@@ -205,13 +205,13 @@
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>              
                     <td :class="getBodyClass('Data', 18)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getMinCastingTime(row)) + 's': ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's': ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 19)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getCastDuration(row) / getCast(row) ) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row) ) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 20)" v-if="actor !== null" >
-                        {{ getCastDuration(row) ? round3(0.001 * getMaxCastingTime(row)) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" 
                         :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? getCriticalHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s) <br> Damage: ' + getCriticalDamage(row) + '<br>' + round2(getCriticalDamage(row)*100/getDamage(row)) + '% of skill damage' : false">
@@ -313,6 +313,9 @@
             getCastDuration: function(data) {
                 return data[15];
             },
+            getCastDurationNoInterrupt: function(data) {
+                return data[20];
+            },
             getDamage: function(data) {
                 return data[2];
             },
@@ -349,13 +352,16 @@
             getCast: function(data) {
                 return data[5];
             },
+            getCastNoInterrupt: function(data) {
+                return data[21];
+            },
             getCastTimeWasted: function(data) {
                 return data[10];
             },
-            getMinCastingTime: function(data) {
+            getMinCastingTimeNoInterrupt: function(data) {
                 return data[18];
             },
-            getMaxCastingTime: function(data) {
+            getMaxCastingTimeNoInterrupt: function(data) {
                 return data[19];
             },
             getCastTimeSaved: function(data) {

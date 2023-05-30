@@ -60,12 +60,12 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
             {
                 isIndirectBarrier = false;
             }
-            long timeSpentCasting = 0;
-            int numberOfCast = 0, timeWasted = 0, timeSaved = 0;
+            long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
             long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
             if (!isIndirectBarrier && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                (timeSpentCasting, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
+                (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
                 castLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
@@ -80,7 +80,9 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
                     hits,
                     isIndirectBarrier ? 0 : timeSpentCasting,
                     isIndirectBarrier ? 0 : minTimeSpentCasting,
-                    isIndirectBarrier ? 0 : maxTimeSpentCasting
+                    isIndirectBarrier ? 0 : maxTimeSpentCasting,
+                    isIndirectBarrier ? 0 : timeSpentCastingNoInterrupt,
+                    isIndirectBarrier ? 0 : numberOfCastNoInterrupt,
                 };
             return skillItem;
         }

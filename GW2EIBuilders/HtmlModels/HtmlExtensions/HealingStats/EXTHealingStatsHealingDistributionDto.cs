@@ -66,12 +66,12 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
             {
                 isIndirectHealing = false;
             }
-            long timeSpentCasting = 0;
-            int numberOfCast = 0, timeWasted = 0, timeSaved = 0;
+            long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
             long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
             if (!isIndirectHealing && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                (timeSpentCasting, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
+                (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
                 castLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
@@ -87,7 +87,9 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
                     isIndirectHealing ? 0 : timeSpentCasting,
                     totaldownedhealing,
                     isIndirectHealing ? 0 : minTimeSpentCasting,
-                    isIndirectHealing ? 0 : maxTimeSpentCasting
+                    isIndirectHealing ? 0 : maxTimeSpentCasting,
+                    isIndirectHealing ? 0 : timeSpentCastingNoInterrupt,
+                    isIndirectHealing ? 0 : numberOfCastNoInterrupt,
                 };
             return skillItem;
         }
