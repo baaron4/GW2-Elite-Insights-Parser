@@ -52,6 +52,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static bool HasLostBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffRemoveAllEvent>(), time, epsilon)
+                .Any(remove => remove.To == agent);
+        }
+
+        internal static bool HasLostBuffStack(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
             return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
                 .Any(remove => remove.To == agent);
         }

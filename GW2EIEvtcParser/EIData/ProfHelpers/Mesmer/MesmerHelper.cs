@@ -83,16 +83,16 @@ namespace GW2EIEvtcParser.EIData
             // fallback to blink or phase retreat
             new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuff(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuff(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
                 .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuff(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
                 .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
 
