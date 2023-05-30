@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
-        public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
+        public const string MesmerTeleport = "C34E250B01FF534292EE6AB36D768337"; // used by blink, phase retreat, swap (illusionary leap)
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
         public const string MesmerPortalActive = "3C346BE32EFB9E40BE39E379B061C803";
         public const string MesmerMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";

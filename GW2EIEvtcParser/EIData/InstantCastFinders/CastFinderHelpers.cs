@@ -50,6 +50,12 @@ namespace GW2EIEvtcParser.EIData
                 .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
         }
 
+        internal static bool HasLostBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
+                .Any(remove => remove.To == agent);
+        }
+
         internal static bool HasSpawnedMinion(AgentData agentData, MinionID minion, AgentItem master, long time, long epsilon = ServerDelayConstant)
         {
             return agentData.GetNPCsByID(minion)

@@ -219,6 +219,7 @@
         public const long SignetOfJudgmentEffect = 9156;
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
+        public const long POV_AegisTimer = 9177; // guardian passive aegis
         public const long SymbolOfSpears = 9192;
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
@@ -579,6 +580,7 @@
         public const long ChickpeaFritter = 10139;
         public const long EggplantFritter = 10140;
         public const long CupOfLotusFries = 10141;
+        public const long IllusionaryLeapSkill = 10173;
         public const long MorphedPolymorphMoa = 10179;
         public const long CryOfFrustration = 10190;
         public const long MindWrack = 10191;
@@ -614,8 +616,9 @@
         public const long PhaseRetreat = 10310;
         public const long ChaosAura = 10332;
         public const long Blur = 10335;
+        public const long Swap = 10337;
         public const long IllusionOfLife = 10346;
-        public const long IllusionaryLeap = 10353;
+        public const long IllusionaryLeapEffect = 10353;
         public const long Mirror = 10357;
         public const long SealArea = 13099; 
         public const long HealthfulRejuvenation = 10492;
@@ -2135,7 +2138,7 @@
         public const long CAInvul = 52255;
         public const long QadimRiposte = 52265;
         public const long Determined52271 = 52271;
-        public const long Swap = 52281;
+        public const long SwapQadim = 52281;
         public const long BigHit = 52310;
         public const long AidOfTheWaterDjinn = 52320;
         public const long VolcanicGeyser = 52323;
