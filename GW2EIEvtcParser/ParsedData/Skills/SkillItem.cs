@@ -452,9 +452,6 @@ namespace GW2EIEvtcParser.ParsedData
                     AA = AA && !ApiSkill.Description.Contains("Ambush.");
                 }
             }
-#if DEBUG
-            Name += " (" + ID + ")";
-#endif
         }
 
         public static bool CanCrit(long id, ulong gw2Build)
