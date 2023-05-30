@@ -17,7 +17,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        private static (long timeSpentCasting, long minTimeSpentCasting, long maxTimeSpentCasting, int numberOfCast, int timeSaved, int timeWasted) GetCastValues(IReadOnlyList<AbstractCastEvent> clList, PhaseData phase)
+        internal static (long timeSpentCasting, long minTimeSpentCasting, long maxTimeSpentCasting, int numberOfCast, int timeSaved, int timeWasted) GetCastValues(IReadOnlyList<AbstractCastEvent> clList, PhaseData phase)
         {
             long timeSpentCasting = 0;
             int numberOfCast = 0, timeWasted = 0, timeSaved = 0;

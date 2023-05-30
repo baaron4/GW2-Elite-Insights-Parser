@@ -72,6 +72,24 @@
                         /
                         <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
                             class="icon">
+                    </th>  
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 11)" @click="sortBy('Data', 11, x => getMinCastingTime(x))"    
+                        data-original-title="Minimum Casting Time">
+                        Min <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        class="icon">
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12, x => round3(0.001 * getCastDuration(x) / getCast(x) ))" 
+                        data-original-title="Average Casting Time">
+                        Avg <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        class="icon">
+                    </th>
+                    <th class="damage-dist-cell" v-if="actor !== null" 
+                        :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13, x => getMaxCastingTime(x))"    
+                        data-original-title="Maximum Damage">
+                        Max <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9, x => getCastTimeWasted(x))"
@@ -120,6 +138,15 @@
                     <td :class="getBodyClass('Data', 8)" v-if="actor !== null">
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
+                    <td :class="getBodyClass('Data', 11)" v-if="actor !== null" >
+                        {{ getCastDuration(row) ? round3(0.001 * getMinCastingTime(row)) + 's': ' '}}
+                    </td>
+                    <td :class="getBodyClass('Data', 12)" v-if="actor !== null" >
+                        {{ getCastDuration(row) ? round3(0.001 * getCastDuration(row) / getCast(row) ) + 's'  : ' '}}
+                    </td>
+                    <td :class="getBodyClass('Data', 13)" v-if="actor !== null" >
+                        {{ getCastDuration(row) ? round3(0.001 * getMaxCastingTime(row)) + 's'  : ' '}}
+                    </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
                         {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
@@ -146,6 +173,9 @@
                     <td v-if="actor !== null">
                         {{round2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting))}}
                     </td>
+                    <td v-if="actor !== null"></td>
+                    <td v-if="actor !== null"></td>
+                    <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
                 </tr>
@@ -202,6 +232,12 @@
             },
             getCastDuration: function(data) {
                 return data[9];
+            },
+            getMinCastingTime: function(data) {
+                return data[10];
+            },
+            getMaxCastingTime: function(data) {
+                return data[11];
             },
             showInequality: function (data) {
                 return this.getCastDuration(data) === 0 && this.getSkill(data).notAccurate;
