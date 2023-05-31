@@ -8,8 +8,13 @@ namespace GW2EIEvtcParser
     public static class EffectGUIDs
     {
         // Generic
-        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // blue circles indicating radius of boons etc.
-        public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
+        // blue circles indicating radius of boons etc.
+        public const string Generic240UnitRadius = "E7C50E0E148CBE44BB2770AF2D6750A4"; // e.g. speed of synergy, bypass coating
+        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // e.g. crisis zone
+        public const string Generic360UnitRadius2 = "0B3A5E8DDBB43447815547D96E7CA146"; // e.g. over shield, deathly haste, mechanical genius, barrier burst
+        public const string Generic360Or600UnitRadius = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // somehow both? e.g. chaos vortex, medical dispersion field, reconstruction enclosure, barrier engine
+        public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495"; // e.g. ranger spirits, protect me
+        public const string Generic900UnitRadius = "EB9EBC2CB610B448BB00B7FBCB191F28"; // e.g. call of the wild
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -20,7 +25,7 @@ namespace GW2EIEvtcParser
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
-        public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
+        public const string MesmerTeleport = "C34E250B01FF534292EE6AB36D768337"; // used by blink, phase retreat, swap (illusionary leap)
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
         public const string MesmerPortalActive = "3C346BE32EFB9E40BE39E379B061C803";
         public const string MesmerMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
@@ -54,6 +59,9 @@ namespace GW2EIEvtcParser
         public const string ScourgeShade = "78408C6DA08C2746BEABEB995187271A";
         public const string ScourgeShadeStrike = "C8B109540159AA429E83D0AA98EF3E90";
         public const string ScourgeSandSwellPortal = "086CF7823EB13047B2187E7933639703";
+        public const string HarbingerCascadingCorruption = "EEDCAB61CD35E840909B03D398878B1C";
+        public const string HarbingerDeathlyHaste = "9C06D9D9B0E22247A1752C426808CD80";
+        public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
@@ -116,7 +124,9 @@ namespace GW2EIEvtcParser
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
+        public const string ScrapperBypassCoating = "D2307A69B227BE4B831C2AA1DAAE646A"; // player is owner
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, ~800ms after spawn
         public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD"; // likely the white radius indicator
         public const string MechanistCrisisZone = "956450E1260FB94B8691BC1378086250";
@@ -130,6 +140,8 @@ namespace GW2EIEvtcParser
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
+        public const string DruidSeedOfLife1 = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
+        public const string DruidSeedOfLife2 = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed, explosion?
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
         public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";

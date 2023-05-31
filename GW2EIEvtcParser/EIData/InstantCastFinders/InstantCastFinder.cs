@@ -19,6 +19,8 @@ namespace GW2EIEvtcParser.EIData
 
         public bool NotAccurate { get; private set; } = false;
 
+        protected long TimeOffset { get; set; } = 0;
+
         protected bool BeforeWeaponSwap { get; set; } = false;
 
         protected long ICD { get; private set; } = DefaultICD;
@@ -62,6 +64,12 @@ namespace GW2EIEvtcParser.EIData
             return UsingEnable(combatData => !combatData.HasEffectData);
         }
 
+        internal virtual InstantCastFinder UsingTimeOffset(long timeOffset)
+        {
+            TimeOffset = timeOffset;
+            return this;
+        }
+
         internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
         {
             BeforeWeaponSwap = beforeWeaponSwap;
@@ -70,15 +78,16 @@ namespace GW2EIEvtcParser.EIData
 
         protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
         {
+            long time = evt.Time +  TimeOffset;
             if (BeforeWeaponSwap)
             {
-                var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2).ToList();
+                var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();
                 if (wepSwaps.Any())
                 {
-                    return Math.Min(wepSwaps[0].Time - 1, evt.Time);
+                    return Math.Min(wepSwaps[0].Time - 1, time);
                 }
             }
-            return evt.Time;
+            return time;
         }
 
 

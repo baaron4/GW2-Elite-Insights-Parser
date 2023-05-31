@@ -31,6 +31,11 @@ namespace GW2EIEvtcParser.ParsedData
             return new ParametricPoint3D(x, y, z, Time);
         }
 
+        public Point3D GetPoint3D()
+        {
+            return GetPoint3D(_dstAgent, _value);
+        }
+
         /// <summary>
         /// Uses <see cref="UnpackMovementData(ulong, int)"/> to get X, Y, Z coordinates.<br></br>
         /// Converts the coordinate points to a <see cref="Point3D"/> to access the class methods.

@@ -54,6 +54,16 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Reaper's Frost (Executioner's Scythe)", ReapersFrostExecutionersScythe, Source.Reaper, BuffClassification.Other, BuffImages.ChilledToTheBone),
         };
 
+        private static readonly HashSet<long> _reaperShroudTransform = new HashSet<long>
+        {
+            EnterReaperShroud, ExitReaperShroud,
+        };
+
+        public static bool IsReaperShroudTransform(long id)
+        {
+            return _reaperShroudTransform.Contains(id);
+        }
+
         private static HashSet<long> Minions = new HashSet<long>()
         {
             (int)MinionID.ShamblingHorror,

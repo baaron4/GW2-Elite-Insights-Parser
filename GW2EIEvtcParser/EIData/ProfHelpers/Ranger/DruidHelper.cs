@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -14,10 +15,24 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
+            new EffectCastFinder(SeedOfLife, EffectGUIDs.DruidSeedOfLife2).UsingSrcSpecChecker(Spec.Druid),
             new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
             new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
         };
+
+        public static IReadOnlyList<AnimatedCastEvent> ComputeAncestralGraceCastEvents(Player druid, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(AncestralGraceSkill);
+            var applies = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffApplyEvent>().Where(x => x.To == druid.AgentItem).ToList();
+            var removals = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffRemoveAllEvent>().Where(x => x.To == druid.AgentItem).ToList();
+            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            {
+                res.Add(new AnimatedCastEvent(druid.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+            }
+            return res;
+        }
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>
         {
@@ -36,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-            new Buff("Ancestral Grace", AncestralGrace, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
+            new Buff("Ancestral Grace", AncestralGraceEffect, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
             new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
             new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
             new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),

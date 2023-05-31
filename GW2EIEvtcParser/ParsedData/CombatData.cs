@@ -190,6 +190,9 @@ namespace GW2EIEvtcParser.ParsedData
                     case ParserHelper.Spec.Willbender:
                         toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
                         break;
+                    case ParserHelper.Spec.Druid:
+                        toAdd.AddRange(DruidHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
+                        break;
                     default:
                         break;
                 }
