@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, true, false));
+            phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

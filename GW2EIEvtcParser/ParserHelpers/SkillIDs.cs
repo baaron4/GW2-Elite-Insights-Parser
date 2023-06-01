@@ -2143,6 +2143,7 @@
         public const long AidOfTheWaterDjinn = 52320;
         public const long VolcanicGeyser = 52323;
         public const long ConjuredSlashSAK = 52325;
+        public const long QadimInvulnerable = 52329;
         public const long SeismicStomp = 52330;
         public const long FlameSlash = 52333;
         public const long FlameSlash2 = 52334;

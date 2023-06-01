@@ -311,6 +311,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Don't Go in the Water", AchievementEligibilityDontGoInTheWater, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Qadim
             new Buff("Flame Armor", FlameArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.MagmaOrb),
+            new Buff("Qadim Invulnerable", QadimInvulnerable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Fiery Surge", FierySurge, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.FierySurge),
             new Buff("Power of the Lamp", PowerOfTheLamp, Source.FightSpecific, BuffClassification.Other, BuffImages.BreakOut),
             new Buff("Unbearable Flames", UnbearableFlames, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ExcessMagic),

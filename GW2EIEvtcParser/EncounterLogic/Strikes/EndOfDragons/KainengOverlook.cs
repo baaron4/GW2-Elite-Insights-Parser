@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<PhaseData> subPhases = GetPhasesByInvul(log, 762, ministerLi, false, true);
+            List<PhaseData> subPhases = GetPhasesByInvul(log, Determined762, ministerLi, false, true);
             for (int i = 0; i < subPhases.Count; i++)
             {
                 subPhases[i].Name = "Phase " + (i + 1);

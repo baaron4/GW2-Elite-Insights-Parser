@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Invul check
-            phases.AddRange(GetPhasesByInvul(log, 757, mainTarget, true, true));
+            phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
             var ids = new List<int>
                     {
                        (int) ArcDPSEnums.TrashID.Kernan,
