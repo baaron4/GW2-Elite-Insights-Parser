@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
                 mainPhase.AddTarget(maiTrin);
                 phases.Add(mainPhase);
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, true, true, maiTrinStart, maiTrinEnd);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
                 phase.AddTarget(echoOfScarlet);
                 phases.Add(phase);
-                List<PhaseData> echoPhases = GetPhasesByInvul(log, 38793, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
+                List<PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
                 for (int i = 0; i < echoPhases.Count; i++)
                 {
                     PhaseData subPhase = echoPhases[i];
