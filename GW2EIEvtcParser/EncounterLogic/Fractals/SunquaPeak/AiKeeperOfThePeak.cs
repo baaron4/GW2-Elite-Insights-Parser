@@ -318,7 +318,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             subPhase.AddTarget(elementalAi);
                             phases.Add(subPhase);
                             long invul762Loss = invul762Losses[i].Time;
-                            long skillID = _china ? 61388 : 61385;
+                            //long skillID = _china ? 61388 : 61385;
+                            long skillID = 61187;
                             AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == skillID && x.Time >= invul762Loss);
                             if (castEvt == null)
                             {
