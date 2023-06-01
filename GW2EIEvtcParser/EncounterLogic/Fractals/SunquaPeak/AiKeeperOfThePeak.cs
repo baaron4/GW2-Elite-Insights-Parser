@@ -301,41 +301,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (requirePhases)
                 {
-
-                    //
-                    var invul762Gains = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
-                    var invul762Losses = log.CombatData.GetBuffData(Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == elementalAi.AgentItem).ToList();
                     // sub phases
                     string[] eleNames = { "Air", "Fire", "Water" };
-                    long subStart = eleStart;
-                    long subEnd = 0;
-                    for (int i = 0; i < invul762Gains.Count; i++)
+                    var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.FightData.FightStart, elementalAi.LastAware).Take(3).ToList();
+                    for (int i = 0; i < elementalPhases.Count; i++)
                     {
-                        subEnd = invul762Gains[i].Time;
-                        if (i < invul762Losses.Count)
+                        elementalPhases[i].Name = eleNames[i];
+                        if (i > 0)
                         {
-                            var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                            subPhase.AddTarget(elementalAi);
-                            phases.Add(subPhase);
-                            long invul762Loss = invul762Losses[i].Time;
                             //long skillID = _china ? 61388 : 61385;
                             long skillID = 61187;
-                            AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == skillID && x.Time >= invul762Loss);
-                            if (castEvt == null)
+                            AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == skillID && x.Time >= elementalPhases[i].Start && x.Time <= elementalPhases[i].End);
+                            if (castEvt != null)
                             {
-                                break;
+                                elementalPhases[i].OverrideStart(castEvt.Time);
+                                elementalPhases[i].AddTarget(elementalAi);
                             }
-                            subStart = castEvt.Time;
-                        }
+                        } 
                         else
                         {
-                            var subPhase = new PhaseData(subStart, subEnd, eleNames[i]);
-                            subPhase.AddTarget(elementalAi);
-                            phases.Add(subPhase);
-                            break;
+                            elementalPhases[i].AddTarget(elementalAi);
                         }
-
                     }
+                    phases.AddRange(elementalPhases);
                 }
             }
             if (_hasDarkMode)
