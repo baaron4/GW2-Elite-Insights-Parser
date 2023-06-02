@@ -1510,6 +1510,7 @@
         internal const string HeatLvl1 = "https://i.imgur.com/nNQEVpb.png";
         internal const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
         internal const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
+        internal const string NecroticTraversal = "https://wiki.guildwars2.com/images/9/98/Necrotic_Traversal.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
