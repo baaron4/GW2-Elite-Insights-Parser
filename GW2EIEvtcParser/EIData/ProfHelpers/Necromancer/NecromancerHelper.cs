@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -28,6 +30,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
+            new BuffLossCastFinder(SpectralRecallSkill, SpectralWalkTeleportBuff)
+                .UsingChecker((evt, combatData, skillData, agentData) => !FindRelatedEvents(combatData.GetBuffData(SpectralWalkEffect).OfType<BuffRemoveAllEvent>(), evt.Time + 120).Any())
+                .WithBuilds(GW2Builds.December2018Balance),
             new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
             
             // Minions

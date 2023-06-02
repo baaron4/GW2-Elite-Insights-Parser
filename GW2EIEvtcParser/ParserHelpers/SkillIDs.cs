@@ -182,6 +182,7 @@
         public const long StaticShield = 6055;
         public const long Absorb = 6056;
         public const long RocketTurretDamage = 6108;
+        public const long MagneticInversion = 6126;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
         public const long HaresSpeedSkill = 6221;
@@ -647,6 +648,8 @@
         public const long LifeLeechUW = 10640;
         public const long GatheringPlague = 10643;
         public const long SpectralWalkSkill = 10685;
+        public const long SpectralWalkTeleportBuff = 10686;
+        public const long SpectralRecallSkill = 10687;
         public const long UnholyFeast = 10701;
         public const long Technobabble = 12318;
         public const long PowerSuit = 12326;
