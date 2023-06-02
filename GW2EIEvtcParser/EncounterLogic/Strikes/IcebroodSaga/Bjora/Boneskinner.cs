@@ -169,11 +169,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (pullTime, finalTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
                     }
                     // Cascade
-                    AddCascadeDecoration(target, log, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
-                    AddCascadeDecoration(target, log, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
-                    AddCascadeDecoration(target, log, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
-                    AddCascadeDecoration(target, log, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
-                    AddCascadeDecoration(target, log, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
+                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
+                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
+                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
+                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
+                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
                     break;
                 case (int)ArcDPSEnums.TrashID.AberrantWisp:
                     break;
@@ -210,7 +210,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddCascadeDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, string guid, int width, int height)
+        private static void AddCascadeDecoration(ParsedEvtcLog log, CombatReplay replay, string guid, int width, int height)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
             {
@@ -220,7 +220,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    ParametricPoint3D point = target.GetCombatReplayPolledRotations(log).Where(x => x.Time > start && x.Time < end).FirstOrDefault();
+                    ParametricPoint3D point = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
                     if (point != null)
                     {
                         double radian = Math.Atan2(point.X, point.Y);
