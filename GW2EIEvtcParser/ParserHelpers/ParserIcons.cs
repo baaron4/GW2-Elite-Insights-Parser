@@ -336,6 +336,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashAiDoubt = "https://i.imgur.com/IKmpccC.png";
         private const string TrashGuilt = "https://i.imgur.com/ko7137g.png";
         private const string TrashTransitionSorrow = "https://i.imgur.com/2rrUxX7.png";
+        private const string TrashEnragedWaterSprite = "https://i.imgur.com/TQ5vOrg.png";
+        //private const string TrashBoulders = "https://i.imgur.com/OAFzpxC.png"; // For future usage - 100CM boulders
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -766,6 +768,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.DoppelgangerWarrior2, TrashDoppelgangerWarrior },
             { ArcDPSEnums.TrashID.CharrTank, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.PropagandaBallon, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EnragedWaterSprite, TrashEnragedWaterSprite },
             { ArcDPSEnums.TrashID.FearDemon, TrashFear },
             { ArcDPSEnums.TrashID.GuiltDemon, TrashGuilt },
             { ArcDPSEnums.TrashID.AiDoubtDemon, TrashAiDoubt },

@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.GuiltDemon,
                 ArcDPSEnums.TrashID.AiDoubtDemon,
                 ArcDPSEnums.TrashID.PlayerDoubtDemon,
-                ArcDPSEnums.TrashID.EnrageWaterSprite,
+                ArcDPSEnums.TrashID.EnragedWaterSprite,
                 // Transition sorrow demons
                 ArcDPSEnums.TrashID.TransitionSorrowDemon1,
                 ArcDPSEnums.TrashID.TransitionSorrowDemon2,
