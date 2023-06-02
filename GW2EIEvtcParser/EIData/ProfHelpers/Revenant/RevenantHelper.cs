@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
             new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
+            new DamageCastFinder(LesserBanishEnchantment, LesserBanishEnchantment).WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance),
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
             new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
