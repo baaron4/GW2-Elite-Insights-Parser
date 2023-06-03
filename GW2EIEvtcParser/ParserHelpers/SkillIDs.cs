@@ -1807,6 +1807,7 @@
         public const long Chapter3HeatedRebuke = 42449;
         public const long LesserSignetOfStone = 42470;
         public const long BerserkersPower = 42539;
+        public const long GrimSpecterBuff = 42651;
         public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
         public const long Kneeling = 42869;
