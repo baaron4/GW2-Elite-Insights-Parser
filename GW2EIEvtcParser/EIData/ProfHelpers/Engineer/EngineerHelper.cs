@@ -5,6 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -55,6 +56,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SlickShoesSkill, SlickShoesEffect),
             new BuffGainCastFinder(IncendiaryAmmoSkill, IncendiaryAmmoEffect),
             new DamageCastFinder(OverchargedShot, OverchargedShot),
+            new DamageCastFinder(MagneticInversion, MagneticInversion).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(MagneticInversion, EffectGUIDs.EngineerMagneticInversion)
+                .UsingDstBaseSpecChecker(Spec.Engineer)
+                .UsingChecker((effect, combatData, agentData, skillData) => HasLostBuff(combatData, Absorb, effect.Dst, effect.Time)),
             // Kits
             new EngineerKitFinder(BombKit),
             new EngineerKitFinder(ElixirGun),

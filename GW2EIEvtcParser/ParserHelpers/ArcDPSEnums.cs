@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser
             //
             internal const ulong HoTRelease = 54485;
             internal const ulong February2017Balance = 72781;
+            internal const ulong May2017Balance = 76706;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;

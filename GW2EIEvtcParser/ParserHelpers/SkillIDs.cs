@@ -182,6 +182,7 @@
         public const long StaticShield = 6055;
         public const long Absorb = 6056;
         public const long RocketTurretDamage = 6108;
+        public const long MagneticInversion = 6126;
         public const long OverchargedShot = 6154;
         public const long SupplyCrateUW = 6183;
         public const long HaresSpeedSkill = 6221;
@@ -638,6 +639,7 @@
         public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
+        public const long Epidemic = 10606;
         public const long SignetOfUndeath = 10610;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
@@ -647,6 +649,8 @@
         public const long LifeLeechUW = 10640;
         public const long GatheringPlague = 10643;
         public const long SpectralWalkSkill = 10685;
+        public const long SpectralWalkTeleportBuff = 10686;
+        public const long SpectralRecallSkill = 10687;
         public const long UnholyFeast = 10701;
         public const long Technobabble = 12318;
         public const long PowerSuit = 12326;
@@ -733,6 +737,7 @@
         public const long ArcaneLightning = 13423;
         public const long SelflessDaring = 13594;
         public const long LesserSymbolOfProtection = 13684;
+        public const long PowerBlock = 13752;
         public const long StrengthinNumbers = 13796;
         public const long FleshOfTheMaster = 13810;
         public const long LesserSpinalShivers = 13906;
@@ -1000,6 +1005,7 @@
         public const long FacetOfElementsEffect = 28243;
         public const long EnchantedDaggers2 = 28313;
         public const long RelinquishPower = 28382;
+        public const long LesserBanishEnchantment = 28388;
         public const long FacetOfDarknessSkill = 28379;
         public const long PhaseTraversal = 28395;
         public const long LegendaryDwarfStanceSkill = 28419;
@@ -1801,6 +1807,7 @@
         public const long Chapter3HeatedRebuke = 42449;
         public const long LesserSignetOfStone = 42470;
         public const long BerserkersPower = 42539;
+        public const long GrimSpecterBuff = 42651;
         public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
         public const long Kneeling = 42869;
