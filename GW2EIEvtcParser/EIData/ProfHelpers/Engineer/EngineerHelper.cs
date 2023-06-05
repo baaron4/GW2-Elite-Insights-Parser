@@ -138,12 +138,14 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, BuffImages.BigBoomer),
             new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.MedKit),
             new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  BuffImages.MedKit),
-            new Buff("Grenade Kit", GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
-            new Buff("Bomb Kit", BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
-            new Buff("Elixir Gun", ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ElixirGun),
-            new Buff("Flamethrower", FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.Flamethrower),
-            new Buff("Tool Kit", ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
-            new Buff("Elite Mortar", EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
+            /*
+            new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
+            new Buff("Bomb Kit", POV_BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
+            new Buff("Elixir Gun", POV_ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ElixirGun),
+            new Buff("Flamethrower", POV_FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.Flamethrower),
+            new Buff("Tool Kit", POV_ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
+            new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
+            */
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
