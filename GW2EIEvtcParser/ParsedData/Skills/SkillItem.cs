@@ -336,6 +336,8 @@ namespace GW2EIEvtcParser.ParsedData
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
+            { WeaponStow, "https://i.imgur.com/K7taOUe.png" },
+            { WeaponDraw, "https://i.imgur.com/7TAlNtd.png" },
             // - Icebrood Saga
             { SpiritNovaTier1, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
             { SpiritNovaTier2, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
