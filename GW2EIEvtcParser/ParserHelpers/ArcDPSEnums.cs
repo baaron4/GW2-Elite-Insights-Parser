@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser
             //
             internal const ulong HoTRelease = 54485;
             internal const ulong February2017Balance = 72781;
+            internal const ulong May2017Balance = 76706;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -911,7 +912,7 @@ namespace GW2EIEvtcParser
             CHOP = 16552,
             ProjectionArkk = 17613,
             // Ai
-            EnrageWaterSprite = 23270,
+            EnragedWaterSprite = 23270,
             TransitionSorrowDemon1 = 23265,
             TransitionSorrowDemon2 = 23242,
             TransitionSorrowDemon3 = 23279,

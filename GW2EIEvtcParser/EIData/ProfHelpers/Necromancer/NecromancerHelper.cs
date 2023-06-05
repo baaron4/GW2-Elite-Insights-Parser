@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -28,6 +30,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorEffect).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffectOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkEffect).WithBuilds(GW2Builds.December2018Balance),
+            new BuffLossCastFinder(SpectralRecallSkill, SpectralWalkTeleportBuff)
+                .UsingChecker((evt, combatData, skillData, agentData) => !FindRelatedEvents(combatData.GetBuffData(SpectralWalkEffect).OfType<BuffRemoveAllEvent>(), evt.Time + 120).Any())
+                .WithBuilds(GW2Builds.December2018Balance),
             new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
             
             // Minions
@@ -75,10 +80,13 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of Undeath", SignetOfUndeath, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfUndeath),
             new Buff("Signet of Undeath (Shroud)", SignetOfUndeathShroud, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfUndeath),
             // Skills
-            new Buff("Spectral Walk", SpectralWalkEffectOld, Source.Necromancer, BuffClassification.Other, BuffImages.SpectralWalk).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
+            new Buff("Spectral Walk", SpectralWalkEffectOld, Source.Necromancer, BuffClassification.Other, BuffImages.NecroticTraversal).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
+            new Buff("Spectral Walk", SpectralWalkEffectOld, Source.Necromancer, BuffClassification.Other, BuffImages.SpectralWalk).WithBuilds(GW2Builds.July2018Balance, GW2Builds.December2018Balance),
             new Buff("Spectral Walk", SpectralWalkEffect, Source.Necromancer, BuffClassification.Other, BuffImages.SpectralWalk).WithBuilds(GW2Builds.December2018Balance, GW2Builds.EndOfLife),
+            new Buff("Spectral Walk (Teleport)", SpectralWalkTeleportBuff, Source.Necromancer, BuffClassification.Other, BuffImages.SpectralWalk).WithBuilds(GW2Builds.December2018Balance, GW2Builds.EndOfLife),
             new Buff("Spectral Armor", SpectralArmorEffect, Source.Necromancer, BuffClassification.Other, BuffImages.SpectralArmor),
             new Buff("Locust Swarm", LocustSwarm, Source.Necromancer, BuffClassification.Other, BuffImages.LocustSwarm),
+            new Buff("Grim Specter", GrimSpecterBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.GrimSpecter),
             // Traits
             new Buff("Corrupter's Defense", CorruptersDefense, Source.Necromancer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.CorruptersFervor).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
             new Buff("Death's Carapace", DeathsCarapace, Source.Necromancer, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.DeathsCarapace).WithBuilds(GW2Builds.October2019Balance, GW2Builds.EndOfLife),

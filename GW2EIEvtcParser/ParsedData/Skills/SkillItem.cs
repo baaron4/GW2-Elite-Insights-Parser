@@ -301,6 +301,7 @@ namespace GW2EIEvtcParser.ParsedData
             { DeathDropDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
+            { LesserBanishEnchantment, "https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" },
             // Thief
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
             { DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png" },
@@ -369,28 +370,28 @@ namespace GW2EIEvtcParser.ParsedData
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
-                    {
-                        { LightningStrikeSigil, GW2Builds.StartOfLife }, 
-                        { FlameBlastSigil, GW2Builds.StartOfLife },
-                        { FireAttunementSkill, GW2Builds.December2018Balance }, 
-                        { Mug, GW2Builds.StartOfLife },
-                        { PulmonaryImpactSkill, GW2Builds.HoTRelease },
-                        { ConjuredSlashPlayer, GW2Builds.StartOfLife },
-                        { LightningJolt, GW2Builds.StartOfLife },
-                        { Sunspot, GW2Builds.December2018Balance },
-                        { EarthenBlast, GW2Builds.December2018Balance },
-                        { ChillingNova, GW2Builds.December2018Balance },
-                                         // Spontaneous Destruction GW2Builds.December2018Balance
-                        {LesserEnfeeble, GW2Builds.December2018Balance },
-                        {SpitefulSpirit, GW2Builds.December2018Balance },
-                        {LesserSpinalShivers, GW2Builds.December2018Balance }, 
-                                         // Power block GW2Builds.December2018Balance
-                        {ShatteredAegis, GW2Builds.December2018Balance }, 
-                        {GlacialHeart, GW2Builds.December2018Balance }, 
-                        {ThermalReleaseValve, GW2Builds.December2018Balance },
-                        {LossAversion, GW2Builds.December2018Balance },
-                        // 
-                    };
+        {
+            { LightningStrikeSigil, GW2Builds.StartOfLife }, 
+            { FlameBlastSigil, GW2Builds.StartOfLife },
+            { FireAttunementSkill, GW2Builds.December2018Balance }, 
+            { Mug, GW2Builds.StartOfLife },
+            { PulmonaryImpactSkill, GW2Builds.HoTRelease },
+            { ConjuredSlashPlayer, GW2Builds.StartOfLife },
+            { LightningJolt, GW2Builds.StartOfLife },
+            { Sunspot, GW2Builds.December2018Balance },
+            { EarthenBlast, GW2Builds.December2018Balance },
+            { ChillingNova, GW2Builds.December2018Balance },
+            { LesserBanishEnchantment, GW2Builds.December2018Balance },
+            { LesserEnfeeble, GW2Builds.December2018Balance },
+            { SpitefulSpirit, GW2Builds.December2018Balance },
+            { LesserSpinalShivers, GW2Builds.December2018Balance },
+            { PowerBlock, GW2Builds.December2018Balance },
+            { ShatteredAegis, GW2Builds.December2018Balance }, 
+            { GlacialHeart, GW2Builds.December2018Balance }, 
+            { ThermalReleaseValve, GW2Builds.December2018Balance },
+            { LossAversion, GW2Builds.December2018Balance },
+            { Epidemic, GW2Builds.May2017Balance },
+        };
 
         private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 

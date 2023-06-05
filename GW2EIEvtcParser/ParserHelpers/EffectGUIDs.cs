@@ -121,6 +121,7 @@ namespace GW2EIEvtcParser
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
+        public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
@@ -200,6 +201,16 @@ namespace GW2EIEvtcParser
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Boneskinner
+        public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
+        public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator
+        public const string GraspClaws2 = "4C290CBF719C0E448391E9415EF307A7";
+        public const string CascadeBonesEffect = "3E370A8629BB134F83902A8F14B99CCE";
+        public const string CascadeAoEIndicator1 = "4692619BBBFE6346B409C4A2B93B9BA6";
+        public const string CascadeAoEIndicator2 = "8E8592D62B48834180C66FE806278C86";
+        public const string CascadeAoEIndicator3 = "89CB4BCA7B012244B0864DFAD7E9F3AC";
+        public const string CascadeAoEIndicator4 = "965355FD1C53F24085A9C422B8333780";
+        public const string CascadeAoEIndicator5 = "F26A2240C0F1E24E81EAEFDE64EFA3BF";
         // Ankka
         public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         public const string DeathsHandOnPlayerCM = "9A64DC8F21EEC046BA1D4412863F2940";
