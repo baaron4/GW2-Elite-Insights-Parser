@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
             // Special Forces Training Area
-            { MushroomKingsBlessing, "Mushroom King's Blessing" },
+            { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
             // Gorseval
             { GhastlyRampage,"Ghastly Rampage" },
             { ProtectiveShadow,"Protective Shadow" },
