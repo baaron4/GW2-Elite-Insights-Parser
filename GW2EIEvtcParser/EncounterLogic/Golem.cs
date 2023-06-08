@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new BuffGainCastFinder(POV_MushroomKingsBlessing, MushroomKingsBlessingEffect).UsingICD(500),
+                new BuffGainCastFinder(MushroomKingsBlessing, POV_MushroomKingsBlessingEffect).UsingICD(500),
             };
         }
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

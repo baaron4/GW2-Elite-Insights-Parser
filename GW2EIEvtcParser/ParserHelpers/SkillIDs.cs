@@ -1352,7 +1352,7 @@
         public const long NarcolepsySkill = 34515;
         public const long Halitosis = 34516;
         public const long BloodShield = 34518;
-        public const long MushroomKingsBlessingEffect = 34523;
+        public const long POV_MushroomKingsBlessingEffect = 34523;
         public const long HeatWave = 34526;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
@@ -1967,7 +1967,7 @@
         public const long CorsairSharpeningStone = 46925;
         public const long FracturedSpirit = 46950;
         public const long SuperiorSigilOfTheStars = 46953;
-        public const long POV_MushroomKingsBlessing = 46970;
+        public const long MushroomKingsBlessing = 46970;
         public const long AchievementEligibilityNecroDancer = 46994;
         public const long Glaciate = 47022;
         public const long Flare = 47074;
