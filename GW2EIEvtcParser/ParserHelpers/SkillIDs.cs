@@ -1967,7 +1967,7 @@
         public const long CorsairSharpeningStone = 46925;
         public const long FracturedSpirit = 46950;
         public const long SuperiorSigilOfTheStars = 46953;
-        public const long MushroomKingsBlessing = 46970;
+        public const long POV_MushroomKingsBlessing = 46970;
         public const long AchievementEligibilityNecroDancer = 46994;
         public const long Glaciate = 47022;
         public const long Flare = 47074;

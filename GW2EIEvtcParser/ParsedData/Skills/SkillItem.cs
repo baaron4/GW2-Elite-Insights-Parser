@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
             // Special Forces Training Area
-            { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
+            { POV_MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
             // Gorseval
             { GhastlyRampage,"Ghastly Rampage" },
             { ProtectiveShadow,"Protective Shadow" },
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.ParsedData
             { BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             // Special Action Keys
             // - Training Area
-            { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
+            { POV_MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
             { WeaponStow, "https://i.imgur.com/K7taOUe.png" },
             { WeaponDraw, "https://i.imgur.com/7TAlNtd.png" },
             // - Icebrood Saga
