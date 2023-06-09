@@ -311,20 +311,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phase.AddTarget(elementalAi);
                         if (i > 0)
                         {
-                            // try to use later of the two transition skills, fallback to first or to determined loss
+                            // try to use transition skill, fallback to determined loss
+                            // long skillId = _china ? 61388 : 61385;
                             long skillID = 61187;
-                            long fallbackSkillId = _china ? 61388 : 61385;
                             IReadOnlyList<AbstractCastEvent> casts = elementalAi.GetCastEvents(log, phase.Start, phase.End);
                             // use last cast since determined is fixed 5s and the transition out (ai flying up) can happen after loss
                             AbstractCastEvent castEvt = casts.LastOrDefault(x => x.SkillId == skillID);
-                            AbstractCastEvent fallbackCastEvt = casts.LastOrDefault(x => x.SkillId == fallbackSkillId);
                             if (castEvt != null)
                             {
                                 phase.OverrideStart(castEvt.Time);
                             }
-                            else if (fallbackCastEvt != null)
+                            else
                             {
-                                phase.OverrideStart(fallbackCastEvt.Time);
+                                phase.Name += " (Fallback)";
                             }
                         }
                     }
