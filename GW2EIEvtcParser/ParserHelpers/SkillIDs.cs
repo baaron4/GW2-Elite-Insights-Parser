@@ -137,6 +137,7 @@
         public const long ObsidianFlesh = 5667;
         public const long FireAura = 5677;
         public const long MagneticAura = 5684;
+        public const long ArcaneShieldDamage = 5703;
         public const long GlyphOfElementalPowerFireEffect = 5739;
         public const long GlyphOfElementalPowerAirEffect = 5740;
         public const long GlyphOfElementalPowerWaterEffect = 5741;
@@ -598,6 +599,7 @@
         public const long PowerSpike = 10212;
         public const long MantraOfRecovery = 10213;
         public const long PowerReturn = 10214;
+        public const long PhantasmalBerserkerPhantasmDamage = 10222;
         public const long Reflection = 10225;
         public const long SignetOfDomination = 10231;
         public const long SignetOfMidnightEffect = 10233;
@@ -768,6 +770,7 @@
         public const long SignetOfStaminaEffect = 14478;
         public const long SignetOfStaminaSkill = 14479;
         public const long Rampage = 14484;
+        public const long RushDamage = 14493;
         public const long SignetOfRage = 14496;
         public const long Impaled = 14499;
         public const long Counterattack = 14509;
@@ -820,6 +823,7 @@
         public const long MorphedPolymorphTuna = 15859;
         public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
+        public const long ThrowGunkEttinGunk = 16460;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -1319,6 +1323,7 @@
         public const long Targeted = 34392;
         public const long Target = 34393;
         public const long ShardsOfRageHuman = 34404;
+        public const long Eat = 34408;
         public const long ShardsOfRageAbomination = 34411;
         public const long Surrender = 34413;
         public const long Corruption1 = 34416;
@@ -1644,6 +1649,7 @@
         public const long MagnanimousTuningCrystal = 38678;
         public const long Untargetable = 38793;
         public const long UnholyBurst = 38767;
+        public const long PhantasmalBerserkerProjectileDamage = 38785;
         public const long DeterminationViirastra = 38841;
         public const long OverheadSmash = 38844;
         public const long MistChargedChop = 38846;
@@ -1794,6 +1800,7 @@
         public const long Chapter4ShiningRiver = 42008;
         public const long WeaversProwess = 42061;
         public const long PrimordialStanceEffect = 42086;
+        public const long TailSpin = 42133;
         public const long OneWolfPackDamage = 42145;
         public const long Afterburner = 42210;
         public const long ManifestSandShadeSkill = 42297;
@@ -1857,6 +1864,7 @@
         public const long SadisticSearing = 43626;
         public const long ThermalReleaseValve = 43630;
         public const long NoMountUse = 43702;
+        public const long UnstableExplosion = 44703;
         public const long PhotonForge = 43708;
         public const long ConsumingBite = 43734;
         public const long SightBeyondSightSkill = 43745;
@@ -1972,7 +1980,7 @@
         public const long Glaciate = 47022;
         public const long Flare = 47074;
         public const long EndersEchoDamage = 47076;
-        public const long ReclaimedEnergy = 47090;
+        public const long ReclaimedEnergyBuff = 47090;
         public const long FollowersAsylum = 47122;
         public const long GreensEaterofSouls = 47153;
         public const long DhuumShacklesHit = 47164;
@@ -2017,6 +2025,7 @@
         public const long QuadSlashSecondSet = 47915;
         public const long OneTrackMind = 47929;
         public const long SoulSiphon2 = 47939;
+        public const long ReclaimedEnergySkill = 47942;
         public const long BrokenKingFirstCast = 47981;
         public const long Imbibe = 48007;
         public const long DhuumDamagingShackles = 48042;
@@ -2040,6 +2049,7 @@
         public const long CorsairTuningCrystal = 48348;
         public const long ExilesEmbrace = 48349;
         public const long QuadSlashFirstSet = 48363;
+        public const long ThrowLight = 48380;
         public const long CataclysmicCycle = 48398;
         public const long FractalChampion = 48414;
         public const long OuterVortexSlash = 48432;
@@ -2447,6 +2457,7 @@
         public const long IceShockWave3 = 57779;
         public const long DeadlyIceShockWave = 57832;
         public const long SpinningIce2 = 57839;
+        public const long PlateOfSpicyMoaWingsGastricDistress = 57844;
         public const long BowlOfFirebreatherChili = 57853;
         public const long PlateOfSpicyMoaWings = 57883;
         public const long IceShockWave1 = 57948;
@@ -2672,6 +2683,7 @@
         public const long ElementalManipulationWater3 = 61556;
         public const long FulgorSphere2 = 61565;
         public const long ElementalSurge = 61560;
+        public const long UnstableBladestormProjectiles = 62564;
         public const long FulgorSphere = 61565;
         public const long FixatedFear4 = 61566;
         public const long ElementalSweep = 61567;
@@ -2748,12 +2760,14 @@
         public const long GunsaberSheath = 62861;
         public const long UrnOfSaintViktorEffect = 62864;
         public const long SaintsShieldDodge = 62879;
+        public const long DragonspikeMineDamage = 62883;
         public const long BreakStep = 62885;
         public const long CrescentWindSkill = 62887;
         public const long LegendaryAllianceStanceUWSkill = 62891;
         public const long Triggerguard = 62893;
         public const long SoothingWaterEffect = 62894;
         public const long PhantomsOnslaughtSkill = 62895;
+        public const long ShatteringIceDamage = 62909;
         public const long ElementalCelerity = 62915;
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceEffect = 62919;
@@ -3150,6 +3164,7 @@
         public const long VoidEmpowerment = 68083;
         public const long OverchargedCartridgesSkill = 68085;
         public const long Emboldened = 68087;
+        public const long JumpShotEOD = 68091;
         public const long OverchargedCartridgesEffect = 68095;
         public const long AchievementEligibilityJumpingTheNopeRopes = 68123;
         public const long InfluenceOfTheVoid = 68124;
