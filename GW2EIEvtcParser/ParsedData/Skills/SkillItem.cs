@@ -41,6 +41,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RuneOfNightmare, "Rune of the Nightmare" },
             { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
             { PortalExitWhiteMantleWatchwork, "Portal Exit" },
+            { PlateOfSpicyMoaWingsGastricDistress, "Plate of Spicy Moa Wings (Gastric Distress)" },
+            { ThrowGunkEttinGunk, "Throw Gunk (Ettin Gunk)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -58,6 +60,8 @@ namespace GW2EIEvtcParser.ParsedData
             { EarthFireAttunement, "Earth Fire Attunement" },
             { EarthWaterAttunement, "Earth Water Attunement" },
             { EarthAirAttunement, "Earth Air Attunement" },
+            { ShatteringIceDamage, "Shattering Ice (Hit)" },
+            { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
             // Engineer
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
             // Guardian
@@ -77,6 +81,8 @@ namespace GW2EIEvtcParser.ParsedData
             { PowerLock, "Power Lock" },
             { BlinkOrPhaseRetreat, "Blink or Phase Retreat" },
             { MirageCloakDodge, "Mirage Cloak" },
+            { UnstableBladestormProjectiles, "Unstable Bladestorm (Projectile Hit)" },
+            { PhantasmalBerserkerProjectileDamage, "Phantasmal Berserker (Greatsword Projectile Hit)" },
             // Necromancer
             { DesertEmpowerment, "Desert Empowerment" },
             // Ranger
@@ -107,6 +113,8 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulStoneVenomSkill, "Soul Stone Venom" },
             { SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
+            // Warrior
+            { RushDamage, "Rush (Hit)" },
             // Special Forces Training Area
             { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
             // Gorseval
@@ -176,11 +184,24 @@ namespace GW2EIEvtcParser.ParsedData
             { RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png" },
             { PortalEntranceWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png" },
             { PortalExitWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png" },
+            { PlateOfSpicyMoaWingsGastricDistress, BuffImages.PlateOfSpicyMoaWings },
+            { ThrowGunkEttinGunk, "https://wiki.guildwars2.com/images/d/d9/Throw_Gunk.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png" },
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png" },
+            // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
+            // Escort
             { HaresSpeedSkill, "https://wiki.guildwars2.com/images/0/05/Hare%27s_Speed.png" },
+            // Mounts
+            { TailSpin, "https://wiki.guildwars2.com/images/f/f2/Tail_Spin.png" },
+            // Slothasor
+            { Eat, "https://wiki.guildwars2.com/images/7/7b/Eat.png" },
+            // Eater of Souls
+            { ReclaimedEnergySkill, BuffImages.ReclaimedEnergy },
+            // Eyes of Judgment
+            { ThrowLight, "https://wiki.guildwars2.com/images/8/8c/Throw_Light.png" },
+            { Flare, "https://wiki.guildwars2.com/images/5/54/Flare.png" },
             // Elementalist
             { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
             { FireWaterAttunement, "https://i.imgur.com/ar8Hn8G.png" },
@@ -201,11 +222,14 @@ namespace GW2EIEvtcParser.ParsedData
             { EarthenBlast, "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png" },
             { ElectricDischarge, "https://wiki.guildwars2.com/images/a/a4/Electric_Discharge.png" },
             { LightningJolt, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
+            { ShatteringIceDamage, "https://wiki.guildwars2.com/images/6/63/Shattering_Ice.png" },
+            { ArcaneShieldDamage, BuffImages.ArcaneShield },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { ThermalReleaseValve, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
+            { JumpShotEOD, "https://wiki.guildwars2.com/images/b/b5/Jump_Shot.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
@@ -243,6 +267,9 @@ namespace GW2EIEvtcParser.ParsedData
             { SignetOfTheEther, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png" },
             { BlinkOrPhaseRetreat, "https://i.imgur.com/yxMF7D1.png" },
             { MirageCloakDodge, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png" },
+            { UnstableBladestormProjectiles, "https://wiki.guildwars2.com/images/9/93/Unstable_Bladestorm.png" },
+            { PhantasmalBerserkerProjectileDamage, "https://wiki.guildwars2.com/images/e/e8/Phantasmal_Berserker.png" },
+            { PhantasmalBerserkerPhantasmDamage, "https://wiki.guildwars2.com/images/e/e8/Phantasmal_Berserker.png" },
             // Necromancer
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             { ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
@@ -259,6 +286,7 @@ namespace GW2EIEvtcParser.ParsedData
             { CascadingCorruption, "https://wiki.guildwars2.com/images/9/9e/Cascading_Corruption.png" },
             { DeathlyHaste, "https://wiki.guildwars2.com/images/9/9d/Deathly_Haste.png" },
             { DoomApproaches, "https://wiki.guildwars2.com/images/2/28/Doom_Approaches.png" },
+            { UnstableExplosion, "https://wiki.guildwars2.com/images/c/c9/Mark_of_Horror.png" },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
@@ -334,6 +362,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ArtillerySlash, "https://wiki.guildwars2.com/images/6/68/Artillery_Slash.png" },
             { CycloneTrigger, "https://wiki.guildwars2.com/images/6/6c/Cyclone_Trigger.png" },
             { BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
+            { RushDamage, "https://wiki.guildwars2.com/images/4/42/Rush.png" },
+            { DragonspikeMineDamage, "https://wiki.guildwars2.com/images/3/3e/Dragonspike_Mine.png" },
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },

@@ -306,21 +306,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.FightData.FightStart, elementalAi.LastAware).Take(3).ToList();
                     for (int i = 0; i < elementalPhases.Count; i++)
                     {
-                        elementalPhases[i].Name = eleNames[i];
+                        PhaseData phase = elementalPhases[i];
+                        phase.Name = eleNames[i];
+                        phase.AddTarget(elementalAi);
                         if (i > 0)
                         {
-                            //long skillID = _china ? 61388 : 61385;
+                            // try to use transition skill, fallback to determined loss
+                            // long skillId = _china ? 61388 : 61385;
                             long skillID = 61187;
-                            AbstractCastEvent castEvt = elementalAi.GetCastEvents(log, eleStart, eleEnd).FirstOrDefault(x => x.SkillId == skillID && x.Time >= elementalPhases[i].Start && x.Time <= elementalPhases[i].End);
+                            IReadOnlyList<AbstractCastEvent> casts = elementalAi.GetCastEvents(log, phase.Start, phase.End);
+                            // use last cast since determined is fixed 5s and the transition out (ai flying up) can happen after loss
+                            AbstractCastEvent castEvt = casts.LastOrDefault(x => x.SkillId == skillID);
                             if (castEvt != null)
                             {
-                                elementalPhases[i].OverrideStart(castEvt.Time);
-                                elementalPhases[i].AddTarget(elementalAi);
+                                phase.OverrideStart(castEvt.Time);
                             }
-                        } 
-                        else
-                        {
-                            elementalPhases[i].AddTarget(elementalAi);
+                            else
+                            {
+                                phase.Name += " (Fallback)";
+                            }
                         }
                     }
                     phases.AddRange(elementalPhases);
