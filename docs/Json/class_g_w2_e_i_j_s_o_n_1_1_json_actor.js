@@ -23,6 +23,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_actor =
     [ "PowerDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a8187b6427bfa96464bc691e28dd4ebe2", null ],
     [ "Rotation", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afbce1d98528b0b6e651ce76ba27c5424", null ],
     [ "StatsAll", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ab3b05160641e65d8cc2dc6bfe59801cd", null ],
+    [ "TeamID", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ad287fd01542d0878c8b6dfd0f9cc81d8", null ],
     [ "TotalDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ac27d3b80083bc3784bf61d22f4ed6d5b", null ],
     [ "TotalDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a1ef56a32931ff46f55417b4740501898", null ],
     [ "TotalHealth", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a4d6e844feaeb74afb0992ae8c0c3e73a", null ],
