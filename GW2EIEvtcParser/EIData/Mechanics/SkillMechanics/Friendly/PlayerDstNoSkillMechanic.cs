@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.EIData
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
         {
             var allPlayers = new HashSet<AbstractSingleActor>(log.PlayerList);
+            var regroupedSkillDst = new Dictionary<long, HashSet<AbstractSingleActor>>();
             foreach (long skillID in MechanicIDs)
             {
-                var regrouped = new Dictionary<long, HashSet<AbstractSingleActor>>();
                 long lastTime = int.MinValue;
                 foreach (AbstractHealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
                 {
@@ -42,24 +42,36 @@ namespace GW2EIEvtcParser.EIData
                     AbstractSingleActor amp = GetActor(log, GetAgentItem(ahde), regroupedMobs);
                     if (amp != null)
                     {
-                        if (regrouped.TryGetValue(time, out HashSet<AbstractSingleActor> set))
+                        if (regroupedSkillDst.TryGetValue(time, out HashSet<AbstractSingleActor> set))
                         {
                             set.Add(amp);
                         }
                         else
                         {
-                            regrouped[time] = new HashSet<AbstractSingleActor> { amp };
+                            regroupedSkillDst[time] = new HashSet<AbstractSingleActor> { amp };
                         }
                     }    
                     
                     lastTime = ahde.Time;
                 }
-                foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regrouped)
+            }
+            var regroupedNeverSkillDst = new Dictionary<long, HashSet<AbstractSingleActor>>();
+            foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regroupedSkillDst)
+            {
+                regroupedNeverSkillDst[pair.Key] = new HashSet<AbstractSingleActor>();
+                foreach (AbstractSingleActor p in allPlayers.Except(pair.Value))
                 {
-                    foreach (AbstractSingleActor p in allPlayers.Except(pair.Value))
+                    if (!regroupedSkillDst.Any(x => x.Value != pair.Value && x.Value.Contains(p)))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(pair.Key, this, p));
+                        regroupedNeverSkillDst[pair.Key].Add(p);
                     }
+                }
+            }
+            foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regroupedNeverSkillDst)
+            {
+                foreach (AbstractSingleActor p in pair.Value)
+                {
+                    mechanicLogs[this].Add(new MechanicEvent(pair.Key, this, p));
                 }
             }
         }
