@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Glaciate", Glaciate, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Glaciate),
             // Eater of Soul         
             new Buff("Soul Digestion", SoulDigestion, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulDigestion),
-            new Buff("Reclaimed Energy", ReclaimedEnergy, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
+            new Buff("Reclaimed Energy", ReclaimedEnergyBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
             new Buff("Mortal Coil (Statue of Death)", MortalCoilStatueOfDeath, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.MortalCoil),
             new Buff("Empowered (Statue of Death)", EmpoweredStatueOfDeath, Source.FightSpecific, BuffClassification.Offensive, BuffImages.EmpoweredEater),
             // Eyes
