@@ -514,7 +514,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Jumping the Nope Ropes", AchievementEligibilityJumpingTheNopeRopes, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Standing Together", AchievementEligibilityStandingTogether, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Voidwalker", AchievementEligibilityVoidwalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            new Buff("Test", 68110, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchievementEffect),
+            // new Buff("POV Share The Void Counter", POV_ShareTheVoidCounter, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchievementEffect), // Counts successful greens, POV only
             // Old Lion's Court
             new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Ergo Shear", ErgoShear, Source.FightSpecific, BuffClassification.Other, BuffImages.ErgoShear),
