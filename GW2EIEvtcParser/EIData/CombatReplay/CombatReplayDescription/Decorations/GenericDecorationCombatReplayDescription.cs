@@ -7,7 +7,6 @@
         {
             Start = decoration.Lifespan.start;
             End = decoration.Lifespan.end;
-            IsMechanicOrSkill = true;
         }
     }
 }
