@@ -10,6 +10,15 @@ class MechanicDrawable {
         this.end = end;
         this.connectedTo = connectedTo;
         this.master = null;
+        this.ownerID = null;
+        this.owner = null;
+        this.drawOnSelect = false;
+    }
+
+    usingSkillMode(ownerID, drawOnSelect) {
+        this.ownerID = ownerID;
+        this.drawOnSelect = drawOnSelect;
+        return this;
     }
 
     draw() {
@@ -17,9 +26,6 @@ class MechanicDrawable {
     }
 
     getPosition() {
-        if (this.connectedTo === null) {
-            return null;
-        }
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
@@ -27,7 +33,8 @@ class MechanicDrawable {
         if (this.connectedTo.interpolationMethod >= 0) {
             // only linear support for now
             var index = -1;
-            for (var i = 0; i < this.connectedTo.positions.length / 3; i++) {
+            var totalPoints = this.connectedTo.positions.length / 3;
+            for (var i = 0; i < totalPoints; i++) {
                 var posTime = this.connectedTo.positions[3 * i + 2];
                 if (time < posTime) {
                     break;
@@ -39,7 +46,7 @@ class MechanicDrawable {
                     x: this.connectedTo.positions[0],
                     y: this.connectedTo.positions[1]
                 }; 
-            } else if (index === this.connectedTo.positions.length / 3 - 1) {
+            } else if (index === totalPoints - 1) {
                 return {
                     x: this.connectedTo.positions[3 * index],
                     y: this.connectedTo.positions[3 * index + 1]
@@ -80,6 +87,24 @@ class MechanicDrawable {
         }
     }
 
+    canDraw() {
+        if (this.connectedTo === null) {
+            return false;
+        }
+        if (this.ownerID !== null) {
+            if (this.owner === null) {
+                this.owner = animator.getActorData(this.ownerID);
+            }
+            if (this.owner === null) {
+                return false;
+            }
+            if (this.drawOnSelect && !this.owner.isSelected()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 //// FACING
 class FacingMechanicDrawable extends MechanicDrawable {
@@ -110,10 +135,14 @@ class FacingMechanicDrawable extends MechanicDrawable {
         return angle;
     }
 
-    getRotation() {
+    canDraw() {
         if (this.facingData.length === 0) {
-            return null;
+            return false;
         }
+        return super.canDraw();
+    }
+
+    getRotation() {
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
@@ -128,6 +157,9 @@ class FacingMechanicDrawable extends MechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -168,6 +200,9 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -196,6 +231,9 @@ class FacingPieMechanicDrawable extends FacingMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -245,6 +283,9 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -271,6 +312,9 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -306,6 +350,9 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -342,6 +389,9 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -382,6 +432,9 @@ class PieMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -412,9 +465,6 @@ class LineMechanicDrawable extends FormMechanicDrawable {
     }
 
     getTargetPosition() {
-        if (this.connectedFrom === null) {
-            return null;
-        }
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
@@ -435,8 +485,18 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             return this.endmaster.getPosition();
         }
     }
+    
+    canDraw() {
+        if (this.connectedFrom === null) {
+            return false;
+        }
+        return super.canDraw();
+    }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const target = this.getTargetPosition();
         if (pos === null || target === null) {
