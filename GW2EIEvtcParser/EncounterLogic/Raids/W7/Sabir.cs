@@ -46,6 +46,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            // Handle potentially wrongly associated logs
+            if (logStartNPCUpdate != null)
+            {
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(adina) && evt.Value > 0 && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+                {
+                    return new Sabir((int)ArcDPSEnums.TargetID.Adina);
+                }
+            }
+            return base.AdjustLogic(agentData, combatData);
+        }
+
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()
