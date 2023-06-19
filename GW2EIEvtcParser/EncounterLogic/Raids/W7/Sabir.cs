@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(adina) && evt.Value > 0 && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
                 {
-                    return new Sabir((int)ArcDPSEnums.TargetID.Adina);
+                    return new Adina((int)ArcDPSEnums.TargetID.Adina);
                 }
             }
             return base.AdjustLogic(agentData, combatData);
