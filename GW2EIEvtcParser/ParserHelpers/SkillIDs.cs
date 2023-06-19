@@ -2946,6 +2946,7 @@
         public const long FlankingStrike = 64965;
         public const long DebilitatingVoid = 64967;
         public const long ShareTheVoid3 = 64973;
+        public const long POV_KainengOverlookTeleportBuff = 64995;
         public const long ZhaitansReachThrashHT2 = 64998;
         public const long TargetOrder4 = 64999;
         public const long Drown1 = 65004;
