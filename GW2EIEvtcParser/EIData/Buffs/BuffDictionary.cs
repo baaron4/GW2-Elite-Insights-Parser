@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -95,11 +96,20 @@ namespace GW2EIEvtcParser.EIData
         public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
         {
             // add buff remove all for each despawn events
+            long lastDespawn = agentItem.FirstAware;
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
             {
+                lastDespawn = dsp.Time;
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                }
+            }
+            if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
+            {
+                foreach(KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+                {
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
