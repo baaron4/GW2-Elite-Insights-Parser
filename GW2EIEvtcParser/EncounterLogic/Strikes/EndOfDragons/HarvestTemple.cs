@@ -377,6 +377,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     // Regenerating back to full HP, override to 0
                                     if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
+                                        // All dragons go back to 100% when their phase ends
+                                        // In the particular situation of Soo-Won, it disappears roughly immediately if the fight was a failure at Targetable Off
+                                        // Otherwise it lingers at little bit
                                         if (index == idsToUse.Count && extra.LastAware - c.Time < ServerDelayConstant)
                                         {
                                             c.OverrideDstAgent(lastHPUpdate);
