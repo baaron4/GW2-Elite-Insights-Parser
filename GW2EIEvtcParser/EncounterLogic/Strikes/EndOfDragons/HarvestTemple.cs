@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             return;
                         }
                         HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
-                        if (lastHPUpdate != null && lastHPUpdate.HPPercent > 0.01)
+                        if (lastHPUpdate == null || lastHPUpdate.HPPercent > 0.01)
                         {
                             return;
                         }
@@ -377,7 +377,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     // Regenerating back to full HP, override to 0
                                     if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
-                                        c.OverrideDstAgent(0);
+                                        if (index == idsToUse.Count && extra.LastAware - c.Time < ServerDelayConstant)
+                                        {
+                                            c.OverrideDstAgent(lastHPUpdate);
+                                        } 
+                                        else
+                                        {
+                                            c.OverrideDstAgent(0);
+                                        }
                                     }
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;
