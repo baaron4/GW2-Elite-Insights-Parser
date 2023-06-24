@@ -95,7 +95,7 @@ class MechanicDrawable {
             if (this.owner === null) {
                 this.owner = animator.getActorData(this.ownerID);
             }
-            if (this.owner === null) {
+            if (!this.owner) {
                 return false;
             }
             if (this.drawOnSelect && !this.owner.isSelected()) {
