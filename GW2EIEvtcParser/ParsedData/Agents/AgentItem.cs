@@ -219,6 +219,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, CombatData combatData, FightData fightData)
         {
+            // State changes are not reliable
+            if (Type == AgentType.NonSquadPlayer)
+            {
+                return;
+            }
             var status = new List<AbstractStatusEvent>();
             status.AddRange(combatData.GetDownEvents(this));
             status.AddRange(combatData.GetAliveEvents(this));
