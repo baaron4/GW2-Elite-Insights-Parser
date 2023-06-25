@@ -64,6 +64,9 @@ namespace GW2EIEvtcParser.ParsedData
             { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
             // Engineer
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
+            { MedBlasterHeal, "Med Blaster (Heal)" },
+            { SoothingDetonation, "Soothing Detonation" },
+            { HealingTurretHeal, "Healing Turret (Heal)" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -83,10 +86,14 @@ namespace GW2EIEvtcParser.ParsedData
             { MirageCloakDodge, "Mirage Cloak" },
             { UnstableBladestormProjectiles, "Unstable Bladestorm (Projectile Hit)" },
             { PhantasmalBerserkerProjectileDamage, "Phantasmal Berserker (Greatsword Projectile Hit)" },
+            { HealingPrism, "Healing Prism" },
             // Necromancer
             { DesertEmpowerment, "Desert Empowerment" },
+            { SandCascadeBarrier, "Sand Cascade (Barrier)" },
+            { SandFlare, "Sand Cascade" },
             // Ranger
-	        { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
+            { WindborneNotes, "Windborne Notes" },
+            { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
             { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
             { AstralWispAttachment, "Astral Wisp Attachment" },
             { GlyphOfUnityCA, "Glyph of Unity (CA)" },
@@ -230,6 +237,9 @@ namespace GW2EIEvtcParser.ParsedData
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             { JumpShotEOD, "https://wiki.guildwars2.com/images/b/b5/Jump_Shot.png" },
+            { MedBlasterHeal, "https://wiki.guildwars2.com/images/6/65/Med_Blaster.png" },
+            { SoothingDetonation, "https://wiki.guildwars2.com/images/a/ad/Soothing_Detonation.png" },
+            { HealingTurretHeal, "https://wiki.guildwars2.com/images/4/42/Healing_Turret.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },

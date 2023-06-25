@@ -177,6 +177,7 @@
         public const long Superspeed = 5974;
         public const long IncendiaryAmmoEffect = 5976;
         public const long IncendiaryAmmoSkill = 5977;
+        public const long HealingTurretHeal = 5981;
         public const long GearShield = 5997;
         public const long POV_ToolKitOpen = 6006;
         public const long GrenadeKit = 6020;
@@ -1068,6 +1069,7 @@
         public const long FuriousSurge = 30204;
         public const long InvigoratedBulwark = 30207;
         public const long JusticeDragonhunter = 30232;
+        public const long MedBlasterHeal = 30235;
         public const long LesserSignetOfWrath = 30255;
         public const long VampiricAura = 30285;
         public const long WingsOfResolveEffect = 30308;
@@ -1086,6 +1088,7 @@
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
         public const long FeelTheBurn = 30662;
+        public const long SoothingDetonation = 30564;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
