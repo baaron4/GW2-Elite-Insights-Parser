@@ -47,7 +47,6 @@ namespace GW2EIEvtcParser.EIData
                 positions.Add(x);
                 positions.Add(y);
             }
-            IsMechanicOrSkill = false;
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)
         {
