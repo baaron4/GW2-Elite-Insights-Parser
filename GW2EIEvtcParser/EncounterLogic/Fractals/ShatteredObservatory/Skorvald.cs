@@ -166,12 +166,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
                 // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
                 // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
+                // WARNING: Skorvald seems to cast SupernovaCM on T4 regardless of the mode since an unknown amount of time, removing that id check
+                // and adding split thrash mob check
                 var cmSkills = new HashSet<long>
                 {
                     SolarBoltCM,
-                    SupernovaCM,
+                    //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any())
+                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
                 {
                     return FightData.EncounterMode.CM;
                 }
