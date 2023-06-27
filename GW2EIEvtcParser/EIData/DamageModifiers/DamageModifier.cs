@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
     public abstract class DamageModifier : IVersionable
     {
 
-        public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW };
+        public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW };
         public enum DamageSource { All, NoPets };
 
         private DamageType _compareType { get; }
@@ -130,9 +130,9 @@ namespace GW2EIEvtcParser.EIData
                 case FightLogic.ParseMode.Instanced5:
                 case FightLogic.ParseMode.Instanced10:
                 case FightLogic.ParseMode.Benchmark:
-                    return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly;
+                    return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly || Mode == DamageModifierMode.PvEWvW;
                 case FightLogic.ParseMode.WvW:
-                    return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW);
+                    return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEWvW);
                 case FightLogic.ParseMode.sPvP:
                     return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
             }
