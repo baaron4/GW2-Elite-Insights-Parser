@@ -2716,6 +2716,7 @@
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
         public const long Bladeturn = 62592;
+        public const long BladeturnRequiem = 62597;
         public const long FlowingResolveSkill = 62603;
         public const long VirtuosoBlade5 = 62613;
         public const long CrashingCourage = 62615;
