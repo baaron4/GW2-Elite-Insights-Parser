@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static long GetLastAttunement(AgentItem agent, long time, CombatData combatData)
         {
+            time = Math.Max(time, ServerDelayConstant);
             var list = new List<AbstractBuffEvent>();
             foreach (long attunement in _weaverAtunements)
             {
