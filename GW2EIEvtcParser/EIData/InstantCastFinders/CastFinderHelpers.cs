@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -24,6 +24,12 @@ namespace GW2EIEvtcParser.EIData
         {
             return FindRelatedEvents(combatData.GetAnimatedCastData(skillID), time, epsilon)
                 .Any(cast => cast.Caster == agent && cast.Time <= time);
+        }
+
+        internal static bool IsCasting(CombatData combatData, long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return combatData.GetAnimatedCastData(skillID)
+                .Any(cast => cast.Caster == agent && cast.Time - epsilon <= time && cast.EndTime + epsilon >= time);
         }
 
         internal static bool HasGainedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
@@ -84,6 +90,30 @@ namespace GW2EIEvtcParser.EIData
                 return FindRelatedEvents(effectEvents, time, epsilon).Any(effect => effect.Dst == agent);
             }
             return false;
+        }
+
+        internal static bool HasExtendedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent);
+        }
+
+        internal static bool HasExtendedBuff(CombatData combatData, long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source);
+        }
+
+        internal static bool HasExtendedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long extendedDuration, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
+        }
+
+        internal static bool HasExtendedBuff(CombatData combatData, long buffID, AgentItem agent, long time, long extendedDuration, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(combatData.GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
         }
     }
 }
