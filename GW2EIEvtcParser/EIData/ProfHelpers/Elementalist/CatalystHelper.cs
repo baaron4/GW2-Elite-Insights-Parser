@@ -17,11 +17,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4), 
-            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4),
-            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4), 
-            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect).UsingChecker((ba, combatData, agentData, skillData) => ba.OverridenDuration == 0).WithBuilds(GW2Builds.EODBeta4),
-            new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4), // Invigorating Air
+            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBeta), 
+            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBeta),
+            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBeta), 
+            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBeta),
+            new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirEffect).WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBeta),
             new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
             new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
             new EffectCastFinder(DeployJadeSphereWater, EffectGUIDs.CatalystDeployWaterJadeSphere).UsingSrcSpecChecker(Spec.Catalyst),
@@ -44,10 +52,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Flame Wheel", FlameWheelEffect, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel),
-            new Buff("Icy Coil", IcyCoilEffect, Source.Catalyst, BuffClassification.Other, BuffImages.IcyCoil),
-            new Buff("Crescent Wind", CrescentWindEffect, Source.Catalyst, BuffClassification.Other, BuffImages.CrescentWind),
-            new Buff("Rocky Loop", RockyLoopEffect, Source.Catalyst, BuffClassification.Other, BuffImages.RockyLoop),
+            new Buff("Flame Wheel", FlameWheelEffect, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel).WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBeta),
+            new Buff("Icy Coil", IcyCoilEffect, Source.Catalyst, BuffClassification.Other, BuffImages.IcyCoil).WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBeta),
+            new Buff("Crescent Wind", CrescentWindEffect, Source.Catalyst, BuffClassification.Other, BuffImages.CrescentWind).WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBeta),
+            new Buff("Rocky Loop", RockyLoopEffect, Source.Catalyst, BuffClassification.Other, BuffImages.RockyLoop).WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBeta),
             new Buff("Relentless Fire", RelentlessFire, Source.Catalyst, BuffClassification.Other, BuffImages.RelentlessFire),
             new Buff("Shattering Ice", ShatteringIce, Source.Catalyst, BuffClassification.Other, BuffImages.ShatteringIce),
             new Buff("Invigorating Air", InvigoratingAirEffect, Source.Catalyst, BuffClassification.Other, BuffImages.InvigoratingAir),
