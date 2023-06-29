@@ -2768,6 +2768,7 @@
         public const long ImperialImpactSkill = 62859;
         public const long GunsaberSheath = 62861;
         public const long UrnOfSaintViktorEffect = 62864;
+        public const long GrandFinale = 62876;
         public const long SaintsShieldDodge = 62879;
         public const long DragonspikeMineDamage = 62883;
         public const long BreakStep = 62885;
@@ -3248,6 +3249,12 @@
         public const long BowlOfMistsInfusedFruitSaladWithMintGarnish = 69105;
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
+        public const long DualOrbitFireAndEarth = 69164;
+        public const long DualOrbitFireAndWater = 69184;
+        public const long DualOrbitWaterAndAir = 69211;
+        public const long DualOrbitAirAndEarth = 69246;
+        public const long DualOrbitFireAndAir = 69341;
+        public const long DualOrbitWaterAndEarth = 69413;
     }
 
 }
