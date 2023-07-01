@@ -89,9 +89,9 @@
         public const long RighteousIndignation = 903;
         public const long NourishmentGuildBanquetTable = 937;
         public const long SkaleVenomConsumable = 972;
+        public const long Resurrect = 1066;
         public const long Stability = 1122;
         public const long Encumbered = 1159;
-        public const long Resurrect = 1066;
         public const long Bandage = 1175;
         public const long Quickness = 1187;
         public const long GraspingVinesDamage = 1290;
@@ -751,6 +751,7 @@
         public const long Spotter = 14055;
         public const long EmpowerAllies = 14222;
         public const long RecklessImpact = 14268;
+        public const long MendingMight = 14282;
         public const long EndurePainSkill = 14392;
         public const long SignetOfMightSkill = 14404;
         public const long BannerOfStrengthSkill = 14405;
@@ -1097,6 +1098,7 @@
         public const long Rise = 30772;
         public const long HuntersMark = 30778;
         public const long WingsOfResolveSkill = 30783;
+        public const long InvigoratingBond = 30784;
         public const long EnterReaperShroud = 30792;
         public const long EliteMortarKit = 30800;
         public const long WellOfAction = 30814;
