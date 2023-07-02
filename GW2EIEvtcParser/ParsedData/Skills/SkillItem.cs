@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -63,6 +63,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ShatteringIceDamage, "Shattering Ice (Hit)" },
             { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
             // Engineer
+            { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
@@ -226,6 +227,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ArcaneShieldDamage, BuffImages.ArcaneShield },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
+            { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
             { ThermalReleaseValve, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },

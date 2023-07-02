@@ -68,10 +68,8 @@ namespace GW2EIEvtcParser.EIData
             new EngineerKitFinder(MedKitSkill),
             new EngineerKitFinder(ToolKit),
             new EngineerKitFinder(EliteMortarKit),
-            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist)
-                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
+            new EffectCastFinderByDst(HealingMistOrSoothingDetonation, EffectGUIDs.EngineerHealingMist).UsingDstBaseSpecChecker(Spec.Engineer),
         };
-
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {

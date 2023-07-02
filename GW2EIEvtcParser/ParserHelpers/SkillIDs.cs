@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser
+namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -43,6 +43,7 @@
         public const long VirtuosoBlades = -25;
         public const long RuneOfNightmare = -26;
         public const long BlinkOrPhaseRetreat = -27;
+        public const long HealingMistOrSoothingDetonation = -28;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -1085,6 +1086,7 @@
         public const long PulmonaryImpactEffect = 30510;
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
+        public const long SoothingDetonation = 30564;
         public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;

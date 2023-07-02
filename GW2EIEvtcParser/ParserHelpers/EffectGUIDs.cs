@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Engineer
-        public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
+        public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
