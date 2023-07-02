@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     /// <summary>
     /// Pool of skill IDs used in the parser, custom or official.
@@ -825,6 +825,7 @@ namespace GW2EIEvtcParser
         public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
         public const long ThrowGunkEttinGunk = 16460;
+        public const long ThrowNetUnderwaterNet = 16484;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -848,6 +849,8 @@ namespace GW2EIEvtcParser
         public const long Enraged1_Unknown = 18711;
         public const long FieryBlock = 18981;
         public const long IncreasedArmorOilMasteryIII = 19083;
+        public const long SmashBottle = 19152;
+        public const long ThrowBottle = 19153;
         public const long Torment = 19426;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;

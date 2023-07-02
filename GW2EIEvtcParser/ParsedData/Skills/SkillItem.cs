@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -43,6 +43,9 @@ namespace GW2EIEvtcParser.ParsedData
             { PortalExitWhiteMantleWatchwork, "Portal Exit" },
             { PlateOfSpicyMoaWingsGastricDistress, "Plate of Spicy Moa Wings (Gastric Distress)" },
             { ThrowGunkEttinGunk, "Throw Gunk (Ettin Gunk)" },
+            { SmashBottle, "Smash (Bottle)" },
+            { ThrowBottle, "Throw (Bottle)" },
+            { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -187,6 +190,9 @@ namespace GW2EIEvtcParser.ParsedData
             { PortalExitWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png" },
             { PlateOfSpicyMoaWingsGastricDistress, BuffImages.PlateOfSpicyMoaWings },
             { ThrowGunkEttinGunk, "https://wiki.guildwars2.com/images/d/d9/Throw_Gunk.png" },
+            { SmashBottle, "https://wiki.guildwars2.com/images/b/ba/Smash_%28empty_bottle%29.png" },
+            { ThrowBottle, "https://wiki.guildwars2.com/images/7/75/Throw_%28empty_bottle%29.png" },
+            { ThrowNetUnderwaterNet, "https://wiki.guildwars2.com/images/3/3d/Net_Shot.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png" },
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png" },
