@@ -723,6 +723,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.ShardEvents;
         }
 
+        public IReadOnlyList<TickRateEvent> GetTickRateEvents()
+        {
+            return _metaDataEvents.TickRateEvents;
+        }
+
         public BuffInfoEvent GetBuffInfoEvent(long buffID)
         {
             if (_metaDataEvents.BuffInfoEvents.TryGetValue(buffID, out BuffInfoEvent evt))

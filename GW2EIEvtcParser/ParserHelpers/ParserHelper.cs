@@ -216,7 +216,7 @@ namespace GW2EIEvtcParser
 
         internal static bool IsSupportedStateChange(StateChange state)
         {
-            return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.TickRate && state != StateChange.Idle;
+            return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.Idle;
         }
 
         /*
