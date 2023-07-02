@@ -13,8 +13,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true), // Harbinger shroud
-            new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true), // Harbinger shroud
+            new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
+            new DamageCastFinder(CascadingCorruption, CascadingCorruption).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption).UsingDstSpecChecker(Spec.Harbinger),
+            new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste).UsingDstSpecChecker(Spec.Harbinger),
+            new EffectCastFinderByDst(DoomApproaches, EffectGUIDs.HarbingerDoomApproaches).UsingDstSpecChecker(Spec.Harbinger),
         };
 
 
@@ -23,7 +27,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
             new BuffDamageModifier(Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
             new BuffDamageModifier(Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
-            new BuffDamageModifier(Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+            new BuffDamageModifier(Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023Balance),
+            new BuffDamageModifier(Blight, "Septic Corruption", "0.25% per blight stack", DamageSource.NoPets, 0.25, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
+            new BuffDamageModifier(Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2023Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

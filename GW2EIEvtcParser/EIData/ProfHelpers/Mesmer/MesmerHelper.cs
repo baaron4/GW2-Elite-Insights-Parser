@@ -79,18 +79,28 @@ namespace GW2EIEvtcParser.EIData
             }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
 
-            // distinguish blink & phase retreat by spawned staff clone
-            new EffectCastFinderByDst(Blink, EffectGUIDs.MesmerBlink)
+            // identify swap by buff remove
+            // identify phase retreat by spawned staff clone
+            // fallback to blink or phase retreat
+            new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
-            new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerBlink)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time)),
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
+                .UsingDstBaseSpecChecker(Spec.Mesmer)
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingNotAccurate(true),
 
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) =>{
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) =>{
                 if (evt.Src.Spec != Spec.Mesmer || evt.Src.Spec != Spec.Mirage)
                 {
                     return false;
@@ -101,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => {
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
                 if (evt.Src.BaseSpec != Spec.Mesmer || evt.Src.Spec == Spec.Virtuoso)
                 {
                     return false;
@@ -189,7 +199,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
             new Buff("Illusionary Counter", IllusionaryCounter, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryCounter),
             new Buff("Illusionary Riposte", IllusionaryRiposte, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryRiposte),
-            new Buff("Illusionary Leap", IllusionaryLeap, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
+            new Buff("Illusionary Leap", IllusionaryLeapEffect, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),

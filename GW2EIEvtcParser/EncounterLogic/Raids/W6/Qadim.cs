@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(BodyOfFlame, "Body of Flame", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Pink,10), "P.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
             new PlayerDstHitMechanic(SeaOfFlame, "Sea of Flame", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Q.Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
             new PlayerDstHitMechanic(Claw, "Claw", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
-            new PlayerDstHitMechanic(Swap, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
+            new PlayerDstHitMechanic(SwapQadim, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerDstBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, true, false));
+            phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -298,10 +298,53 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.PyreGuardianRetal,
                 ArcDPSEnums.TrashID.PyreGuardianResolution,
                 ArcDPSEnums.TrashID.PyreGuardianStab,
-                ArcDPSEnums.TrashID.ReaperofFlesh,
+                ArcDPSEnums.TrashID.ReaperOfFlesh,
                 ArcDPSEnums.TrashID.DestroyerTroll,
                 ArcDPSEnums.TrashID.IceElemental,
-                ArcDPSEnums.TrashID.AngryZommoros
+                ArcDPSEnums.TrashID.AngryZommoros,
+                ArcDPSEnums.TrashID.AssaultCube,
+                ArcDPSEnums.TrashID.AwakenedSoldier,
+                ArcDPSEnums.TrashID.Basilisk,
+                ArcDPSEnums.TrashID.BlackMoa,
+                ArcDPSEnums.TrashID.BrandedCharr,
+                ArcDPSEnums.TrashID.BrandedDevourer,
+                ArcDPSEnums.TrashID.ChakDrone,
+                ArcDPSEnums.TrashID.CrazedKarkaHatchling,
+                ArcDPSEnums.TrashID.FireImpLamp,
+                ArcDPSEnums.TrashID.GhostlyPirateFighter,
+                ArcDPSEnums.TrashID.GiantBrawler,
+                ArcDPSEnums.TrashID.GiantHunter,
+                ArcDPSEnums.TrashID.GoldOoze,
+                ArcDPSEnums.TrashID.GrawlBascher,
+                ArcDPSEnums.TrashID.GrawlTrapper,
+                ArcDPSEnums.TrashID.GuildInitiateModusSceleris,
+                ArcDPSEnums.TrashID.IcebroodAtrocity,
+                ArcDPSEnums.TrashID.IcebroodKodan,
+                ArcDPSEnums.TrashID.IcebroodQuaggan,
+                ArcDPSEnums.TrashID.Jotun,
+                ArcDPSEnums.TrashID.JungleWurm,
+                ArcDPSEnums.TrashID.Karka,
+                ArcDPSEnums.TrashID.MinotaurBull,
+                ArcDPSEnums.TrashID.ModnirrBerserker,
+                ArcDPSEnums.TrashID.MoltenDisaggregator,
+                ArcDPSEnums.TrashID.MoltenProtector,
+                ArcDPSEnums.TrashID.MoltenReverberant,
+                ArcDPSEnums.TrashID.MordremVinetooth,
+                ArcDPSEnums.TrashID.Murellow,
+                ArcDPSEnums.TrashID.NightmareCourtier,
+                ArcDPSEnums.TrashID.OgreHunter,
+                ArcDPSEnums.TrashID.PirareSkrittSentry,
+                ArcDPSEnums.TrashID.PolarBear,
+                ArcDPSEnums.TrashID.Rabbit,
+                ArcDPSEnums.TrashID.ReefSkelk,
+                ArcDPSEnums.TrashID.RisenKraitDamoss,
+                ArcDPSEnums.TrashID.RottingAncientOakheart,
+                ArcDPSEnums.TrashID.RottingDestroyer,
+                ArcDPSEnums.TrashID.ShadowSkelk,
+                ArcDPSEnums.TrashID.SpiritOfExcess,
+                ArcDPSEnums.TrashID.TamedWarg,
+                ArcDPSEnums.TrashID.TarElemental,
+                ArcDPSEnums.TrashID.WindRider,
             };
         }
 

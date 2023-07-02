@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser
             //
             internal const ulong HoTRelease = 54485;
             internal const ulong February2017Balance = 72781;
+            internal const ulong May2017Balance = 76706;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -31,6 +32,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2020Balance = 102321;
             internal const ulong February2020Balance2 = 102389;
             internal const ulong July2020Balance = 104844;
+            internal const ulong September2020SunquaPeakRelease = 106277;
             internal const ulong May2021Balance = 115190;
             internal const ulong May2021BalanceHotFix = 115728;
             internal const ulong June2021Balance = 116210;
@@ -40,6 +42,7 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta4 = 122479;
             internal const ulong March2022Balance = 126520;
             internal const ulong March2022Balance2 = 127285;
+            internal const ulong May2022Balance = 128773;
             internal const ulong June2022Balance = 130910;
             internal const ulong June2022BalanceHotFix = 131084;
             internal const ulong July2022FractalInstabilitiesRework = 131720;
@@ -50,6 +53,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2023Balance = 141374;
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
+            internal const ulong June2023Balance = 147734;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -692,7 +696,7 @@ namespace GW2EIEvtcParser
             PyreGuardianResolution = ArcDPSEnums.PyreGuardianResolution,
             PyreGuardianProtect = ArcDPSEnums.PyreGuardianProtect,
             PyreGuardianStab = ArcDPSEnums.PyreGuardianStab,
-            ReaperofFlesh = 21218,
+            ReaperOfFlesh = 21218,
             DestroyerTroll = 20944,
             IceElemental = 21049,
             AncientInvokedHydra = 21285,
@@ -700,8 +704,51 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
-            AngryZommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            AngryZommoros = 20961,
             ChillZommoros = 21118,
+            AssaultCube = 21092,
+            AwakenedSoldier = 21244,
+            Basilisk = 21140,
+            BlackMoa = 20980,
+            BrandedCharr = 21083,
+            BrandedDevourer = 21053,
+            ChakDrone = 21064,
+            CrazedKarkaHatchling = 21040,
+            FireImpLamp = 21173,
+            GhostlyPirateFighter = 21257,
+            GiantBrawler = 21288,
+            GiantHunter = 20972,
+            GoldOoze = 21264,
+            GrawlBascher = 21145,
+            GrawlTrapper = 21290,
+            GuildInitiateModusSceleris = 21161,
+            IcebroodAtrocity = 16504,
+            IcebroodKodan = 20975,
+            IcebroodQuaggan = 21196,
+            Jotun = 21054,
+            JungleWurm = 21147,
+            Karka = 21192,
+            MinotaurBull = 20969,
+            ModnirrBerserker = 20951,
+            MoltenDisaggregator = 21010,
+            MoltenProtector = 21037,
+            MoltenReverberant = 20956,
+            MordremVinetooth = 20940,
+            Murellow = 21032,
+            NightmareCourtier = 21261,
+            OgreHunter = 21116,
+            PirareSkrittSentry = 21189,
+            PolarBear = 20968,
+            Rabbit = 1085,
+            ReefSkelk = 21024,
+            RisenKraitDamoss = 21070,
+            RottingAncientOakheart = 21252,
+            RottingDestroyer = 21182,
+            ShadowSkelk = 20966,
+            SpiritOfExcess = 21095,
+            TamedWarg = 18184,
+            TarElemental = 21019,
+            WindRider = 21164,
             // Adina
             HandOfErosion = ArcDPSEnums.HandOfErosion,
             HandOfEruption = ArcDPSEnums.HandOfEruption,
@@ -867,13 +914,14 @@ namespace GW2EIEvtcParser
             CHOP = 16552,
             ProjectionArkk = 17613,
             // Ai
-            EnrageWaterSprite = 23270,
-            SorrowDemon1 = 23265,
-            SorrowDemon2 = 23242,
-            SorrowDemon3 = 23279,
-            SorrowDemon4 = 23245,
-            SorrowDemon5 = 23256,
-            DoubtDemon = 23268,
+            EnragedWaterSprite = 23270,
+            TransitionSorrowDemon1 = 23265,
+            TransitionSorrowDemon2 = 23242,
+            TransitionSorrowDemon3 = 23279,
+            TransitionSorrowDemon4 = 23245,
+            CCSorrowDemon = 23256,
+            AiDoubtDemon = 23268,
+            PlayerDoubtDemon = 23246,
             FearDemon = 23264,
             GuiltDemon = 23252,
             // Open world Soo-Won

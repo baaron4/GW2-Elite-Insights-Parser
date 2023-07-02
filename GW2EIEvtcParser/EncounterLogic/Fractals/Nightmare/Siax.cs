@@ -46,11 +46,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.VolatileHallucinationSiax,
                 ArcDPSEnums.TrashID.NightmareHallucinationSiax
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
         protected override List<int> GetTargetsIDs()
         {

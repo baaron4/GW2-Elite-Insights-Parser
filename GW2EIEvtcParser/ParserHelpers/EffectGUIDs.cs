@@ -8,8 +8,13 @@ namespace GW2EIEvtcParser
     public static class EffectGUIDs
     {
         // Generic
-        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // blue circles indicating radius of boons etc.
-        public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495";
+        // blue circles indicating radius of boons etc.
+        public const string Generic240UnitRadius = "E7C50E0E148CBE44BB2770AF2D6750A4"; // e.g. speed of synergy, bypass coating
+        public const string Generic360UnitRadius = "10873BDE22D87845AAF004B0A60FA546"; // e.g. crisis zone
+        public const string Generic360UnitRadius2 = "0B3A5E8DDBB43447815547D96E7CA146"; // e.g. over shield, deathly haste, mechanical genius, barrier burst
+        public const string Generic360Or600UnitRadius = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // somehow both? e.g. chaos vortex, medical dispersion field, reconstruction enclosure, barrier engine
+        public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495"; // e.g. ranger spirits, protect me
+        public const string Generic900UnitRadius = "EB9EBC2CB610B448BB00B7FBCB191F28"; // e.g. call of the wild
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -20,17 +25,15 @@ namespace GW2EIEvtcParser
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
-        public const string MesmerBlink = "C34E250B01FF534292EE6AB36D768337";
+        public const string MesmerTeleport = "C34E250B01FF534292EE6AB36D768337"; // used by blink, phase retreat, swap (illusionary leap)
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
         public const string MesmerPortalActive = "3C346BE32EFB9E40BE39E379B061C803";
-        public const string MesmerMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
         public const string MesmerCryOfFrustration = "52F65A4D9970954BA849CB57A46A65A8";
         public const string MesmerDiversion = "916D8385083F144EBAA5BEEDE21FD47A";
-        public const string MesmerDistortion = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
+        public const string MesmerDistortionOrMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
         public const string MesmerMantraOfResolveAndPowerCleanse = "593E668A006AB24D84999AED68F2E4C4";
         public const string MesmerMantraOfConcentrationAndPowerBreak = "5B488D552E316045AD99C4A98EEDDB1E";
         public const string MesmerPowerReturn = "F53E2CE3B06B934085D46FA59468477B";
-        public const string MesmerPowerCleanse = "F53E2CE3B06B934085D46FA59468477B";
         public const string ChronomancerSeizeTheMomentShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
@@ -38,6 +41,7 @@ namespace GW2EIEvtcParser
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
+        public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
@@ -54,6 +58,9 @@ namespace GW2EIEvtcParser
         public const string ScourgeShade = "78408C6DA08C2746BEABEB995187271A";
         public const string ScourgeShadeStrike = "C8B109540159AA429E83D0AA98EF3E90";
         public const string ScourgeSandSwellPortal = "086CF7823EB13047B2187E7933639703";
+        public const string HarbingerCascadingCorruption = "EEDCAB61CD35E840909B03D398878B1C";
+        public const string HarbingerDeathlyHaste = "9C06D9D9B0E22247A1752C426808CD80";
+        public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
@@ -113,10 +120,13 @@ namespace GW2EIEvtcParser
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
+        public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
+        public const string ScrapperBypassCoating = "D2307A69B227BE4B831C2AA1DAAE646A"; // player is owner
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, ~800ms after spawn
         public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD"; // likely the white radius indicator
         public const string MechanistCrisisZone = "956450E1260FB94B8691BC1378086250";
@@ -130,6 +140,8 @@ namespace GW2EIEvtcParser
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
+        public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
+        public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
         public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";
@@ -188,6 +200,16 @@ namespace GW2EIEvtcParser
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Boneskinner
+        public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
+        public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator
+        public const string GraspClaws2 = "4C290CBF719C0E448391E9415EF307A7";
+        public const string CascadeBonesEffect = "3E370A8629BB134F83902A8F14B99CCE";
+        public const string CascadeAoEIndicator1 = "4692619BBBFE6346B409C4A2B93B9BA6";
+        public const string CascadeAoEIndicator2 = "8E8592D62B48834180C66FE806278C86";
+        public const string CascadeAoEIndicator3 = "89CB4BCA7B012244B0864DFAD7E9F3AC";
+        public const string CascadeAoEIndicator4 = "965355FD1C53F24085A9C422B8333780";
+        public const string CascadeAoEIndicator5 = "F26A2240C0F1E24E81EAEFDE64EFA3BF";
         // Ankka
         public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         public const string DeathsHandOnPlayerCM = "9A64DC8F21EEC046BA1D4412863F2940";
@@ -212,9 +234,12 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleMordremothPoisonRoarImpact = "E500544171F13643899C178EC3FB38A9";
         public const string HarvestTempleZhaitanPutridDelugeImpact = "FE8B96A200376B4BA75297FF2367C5C4";
         public const string HarvestTempleZhaitanPutridDelugeAoE = "82A8BC954DD69E4DBBF526EE1C6A3E74";
-        public const string HarvestTempleSpread = "BDF708225224C64183BA3CE2A609D37F";
-        public const string HarvestTempleRedPuddleSelect = "61C1CD7E89346843B04FCE613EC487AA";
-        public const string HarvestTempleRedPuddle = "FF0A7D32AD894E45993BE5ED748BF484";
+        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808Ef8E6C654A";
+        public const string HarvestTempleSpreadCM = "BDF708225224C64183BA3CE2A609D37F";
+        public const string HarvestTempleRedPuddleSelectNM = "0CD6F76C1BF9C049A2FCE4D86CB46475";
+        public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
+        public const string HarvestTempleRedPuddleSelectCM = "61C1CD7E89346843B04FCE613EC487AA";
+        public const string HarvestTempleRedPuddleCM = "FF0A7D32AD894E45993BE5ED748BF484";
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";

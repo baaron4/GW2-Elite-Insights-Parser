@@ -19,10 +19,8 @@ namespace GW2EIEvtcParser.EIData
         }
         protected override void TrimCombatReplay(ParsedEvtcLog log)
         {
-            if (!AgentItem.IsNotInSquadFriendlyPlayer)
-            {
-                TrimCombatReplay(log, CombatReplay, AgentItem);
-            }
+            // Down, Dead, Alive, Spawn and Despawn events are not reliable
+            CombatReplay.Trim(FirstAware, LastAware);
         }
 
     }

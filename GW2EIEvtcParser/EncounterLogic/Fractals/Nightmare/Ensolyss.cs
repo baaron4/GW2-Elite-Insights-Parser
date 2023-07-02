@@ -66,12 +66,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.NightmareHallucination1,
                 ArcDPSEnums.TrashID.NightmareHallucination2,
                 //ArcDPSEnums.TrashID.NightmareAltar,
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         //internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -112,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private static void AddTormentingBlassDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
+        private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
         {
             int startQuarter = start + quarterAoE;
             int endQuarter = start + quarterHit;
@@ -304,8 +306,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
                             var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
 
-                            AddTormentingBlassDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
-                            AddTormentingBlassDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
+                            AddTormentingBlastDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
+                            AddTormentingBlastDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
                         }
                     }
 

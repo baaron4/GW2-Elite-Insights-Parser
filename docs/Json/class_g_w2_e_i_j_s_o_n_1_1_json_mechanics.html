@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.54.0.0+</span>
+   &#160;<span id="projectnumber">2.55.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -112,11 +112,19 @@ Properties</h2></td></tr>
 <tr class="memdesc:a045320c3663f087280d577a9ab24df36"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of mechanics application  <a href="#a045320c3663f087280d577a9ab24df36">More...</a><br /></td></tr>
 <tr class="separator:a045320c3663f087280d577a9ab24df36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a930663a4d965322669510dbabb8036b4"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#a930663a4d965322669510dbabb8036b4">Name</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a930663a4d965322669510dbabb8036b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the mechanic  <a href="#a930663a4d965322669510dbabb8036b4">More...</a><br /></td></tr>
+<tr class="memdesc:a930663a4d965322669510dbabb8036b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the mechanic, this is the short name as it appears on EI HTML Mechanic tables.  <a href="#a930663a4d965322669510dbabb8036b4">More...</a><br /></td></tr>
 <tr class="separator:a930663a4d965322669510dbabb8036b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab91787e40570e2477ddf28c99adc0fdb"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#ab91787e40570e2477ddf28c99adc0fdb">FullName</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ab91787e40570e2477ddf28c99adc0fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non reduced name of the mechanic, this is the full name as it appears on EI HTML Graphs.  <a href="#ab91787e40570e2477ddf28c99adc0fdb">More...</a><br /></td></tr>
+<tr class="separator:ab91787e40570e2477ddf28c99adc0fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d53762d78ddefb9173498e83de6c4e8"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#a6d53762d78ddefb9173498e83de6c4e8">Description</a><code> [get, set]</code></td></tr>
-<tr class="memdesc:a6d53762d78ddefb9173498e83de6c4e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description of the mechanic  <a href="#a6d53762d78ddefb9173498e83de6c4e8">More...</a><br /></td></tr>
+<tr class="memdesc:a6d53762d78ddefb9173498e83de6c4e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description of the mechanic, this is the description that appears on hover on EI HTML Mechanic tables.  <a href="#a6d53762d78ddefb9173498e83de6c4e8">More...</a><br /></td></tr>
 <tr class="separator:a6d53762d78ddefb9173498e83de6c4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef40ef184058ac5cb32ca7ce0c0a8884"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#aef40ef184058ac5cb32ca7ce0c0a8884">IsAchievementEligibility</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aef40ef184058ac5cb32ca7ce0c0a8884"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, then the mechanic represent an achievement eligibility mechanic. <br />
+Will only appear on successful encounters. <br />
+Any Player who appears in <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#a045320c3663f087280d577a9ab24df36" title="List of mechanics application">JsonMechanics.MechanicsData</a> will not be eligible for the achievement.  <a href="#aef40ef184058ac5cb32ca7ce0c0a8884">More...</a><br /></td></tr>
+<tr class="separator:aef40ef184058ac5cb32ca7ce0c0a8884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class corresponding to mechanics </p>
@@ -141,7 +149,57 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Description of the mechanic </p>
+<p>Description of the mechanic, this is the description that appears on hover on EI HTML Mechanic tables. </p>
+
+</div>
+</div>
+<a id="ab91787e40570e2477ddf28c99adc0fdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab91787e40570e2477ddf28c99adc0fdb">&#9670;&nbsp;</a></span>FullName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GW2EIJSON.JsonMechanics.FullName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Non reduced name of the mechanic, this is the full name as it appears on EI HTML Graphs. </p>
+
+</div>
+</div>
+<a id="aef40ef184058ac5cb32ca7ce0c0a8884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef40ef184058ac5cb32ca7ce0c0a8884">&#9670;&nbsp;</a></span>IsAchievementEligibility</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonMechanics.IsAchievementEligibility</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If true, then the mechanic represent an achievement eligibility mechanic. <br />
+Will only appear on successful encounters. <br />
+Any Player who appears in <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#a045320c3663f087280d577a9ab24df36" title="List of mechanics application">JsonMechanics.MechanicsData</a> will not be eligible for the achievement. </p>
 
 </div>
 </div>
@@ -189,7 +247,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Name of the mechanic </p>
+<p>Name of the mechanic, this is the short name as it appears on EI HTML Mechanic tables. </p>
 
 </div>
 </div>

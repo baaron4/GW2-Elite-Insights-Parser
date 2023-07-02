@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.54.0.0+</span>
+   &#160;<span id="projectnumber">2.55.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -138,6 +138,11 @@ Properties</h2></td></tr>
 <tr class="memitem:a9dc1b5e789ca92a24e51e00d169e6cc3"><td class="memItemLeft" align="right" valign="top">ushort&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a9dc1b5e789ca92a24e51e00d169e6cc3">InstanceID</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a9dc1b5e789ca92a24e51e00d169e6cc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the actor in the instance  <a href="#a9dc1b5e789ca92a24e51e00d169e6cc3">More...</a><br /></td></tr>
 <tr class="separator:a9dc1b5e789ca92a24e51e00d169e6cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad287fd01542d0878c8b6dfd0f9cc81d8"><td class="memItemLeft" align="right" valign="top">ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ad287fd01542d0878c8b6dfd0f9cc81d8">TeamID</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad287fd01542d0878c8b6dfd0f9cc81d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The team ID of the actor. <br />
+Mainly useful for WvW logs to differentiate targets from different servers. <br />
+In PvE logs, the situation is always a simple Friend vs Foe situation. \ If value is equal to 0 then no information regarding TeamID was present for given actor.  <a href="#ad287fd01542d0878c8b6dfd0f9cc81d8">More...</a><br /></td></tr>
+<tr class="separator:ad287fd01542d0878c8b6dfd0f9cc81d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecc145e27c4ce37cbec550b23d4f3bbb"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_minions.html">JsonMinions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#aecc145e27c4ce37cbec550b23d4f3bbb">Minions</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:aecc145e27c4ce37cbec550b23d4f3bbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of minions  <a href="#aecc145e27c4ce37cbec550b23d4f3bbb">More...</a><br /></td></tr>
 <tr class="separator:aecc145e27c4ce37cbec550b23d4f3bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -801,6 +806,32 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 <p>Stats against all <br />
 Length == # of phases </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html" title="Gameplay stats">JsonStatistics.JsonGameplayStatsAll</a></dd></dl>
+
+</div>
+</div>
+<a id="ad287fd01542d0878c8b6dfd0f9cc81d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad287fd01542d0878c8b6dfd0f9cc81d8">&#9670;&nbsp;</a></span>TeamID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ulong GW2EIJSON.JsonActor.TeamID</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The team ID of the actor. <br />
+Mainly useful for WvW logs to differentiate targets from different servers. <br />
+In PvE logs, the situation is always a simple Friend vs Foe situation. \ If value is equal to 0 then no information regarding TeamID was present for given actor. </p>
 
 </div>
 </div>

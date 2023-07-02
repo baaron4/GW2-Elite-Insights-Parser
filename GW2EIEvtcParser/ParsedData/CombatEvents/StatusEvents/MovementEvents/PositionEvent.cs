@@ -4,7 +4,6 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class PositionEvent : AbstractMovementEvent
     {
-
         internal PositionEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
         }
@@ -17,7 +16,6 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             replay.Positions.Add(point);
-
         }
     }
 }

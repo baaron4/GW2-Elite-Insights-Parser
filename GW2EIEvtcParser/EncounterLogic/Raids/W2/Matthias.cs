@@ -119,15 +119,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractBuffEvent heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
             if (heatWave != null)
             {
-                phases.Add(new PhaseData(0, heatWave.Time - 1));
+                phases.Add(new PhaseData(0, heatWave.Time));
                 AbstractBuffEvent downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
                 if (downPour != null)
                 {
-                    phases.Add(new PhaseData(heatWave.Time, downPour.Time - 1));
+                    phases.Add(new PhaseData(heatWave.Time, downPour.Time));
                     AbstractBuffEvent abo = log.CombatData.GetBuffData(Unstable).FirstOrDefault();
                     if (abo != null)
                     {
-                        phases.Add(new PhaseData(downPour.Time, abo.Time - 1));
+                        phases.Add(new PhaseData(downPour.Time, abo.Time));
                         AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == Invulnerability757 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {

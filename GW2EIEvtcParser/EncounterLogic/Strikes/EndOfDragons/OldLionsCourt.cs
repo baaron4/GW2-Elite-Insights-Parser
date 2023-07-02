@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { Tribocharge, TribochargeCM }, "Tribocharge", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousVaporBlade, NoxiousVaporBladeCM }, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousReturn, NoxiousReturnCM }, "Noxious Return", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
+                new PlayerDstHitMechanic(new long [] { BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM }, "Boiling Aether", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150).UsingAchievementEligibility(true),
                 new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)),
                 new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)),
                 new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)),
@@ -200,6 +201,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return startToUse;
+        }
+
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractBuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
+            var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in shields)
+            {
+                // Missing Buff Initial
+                if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
+                {
+                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), 1, true));
+                }
+            }
+            return toAdd;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

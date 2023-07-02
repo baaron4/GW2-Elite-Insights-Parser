@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -153,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
-            if (combatData.GetBuildEvent().Build >= 106277)
+            if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
                 /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())
@@ -165,12 +166,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
                 // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
                 // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
+                // WARNING: Skorvald seems to cast SupernovaCM on T4 regardless of the mode since an unknown amount of time, removing that id check
+                // and adding split thrash mob check
                 var cmSkills = new HashSet<long>
                 {
                     SolarBoltCM,
-                    SupernovaCM,
+                    //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any())
+                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
                 {
                     return FightData.EncounterMode.CM;
                 }
@@ -224,10 +231,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.SolarBloom
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

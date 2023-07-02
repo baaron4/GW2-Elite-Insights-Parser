@@ -5,6 +5,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.Extensions;
+using GW2EIBuilders.HtmlModels.HTMLStats;
 
 namespace GW2EIBuilders.HtmlModels.EXTHealing
 {
@@ -65,29 +66,13 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
             {
                 isIndirectHealing = false;
             }
-            long timeCasting = 0;
-            int casts = 0, timeWasted = 0, timeSaved = 0;
+            long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
+            long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
             if (!isIndirectHealing && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                foreach (AbstractCastEvent cl in clList)
-                {
-                    if (phase.InInterval(cl.Time))
-                    {
-                        casts++;
-                        switch (cl.Status)
-                        {
-                            case AbstractCastEvent.AnimationStatus.Interrupted:
-                                timeWasted += cl.SavedDuration;
-                                break;
-
-                            case AbstractCastEvent.AnimationStatus.Reduced:
-                                timeSaved += cl.SavedDuration;
-                                break;
-                        }
-                    }
-                    timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-
-                }
+                (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
+                castLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
                     isIndirectHealing,
@@ -95,12 +80,16 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
                     totalhealing,
                     minhealing == int.MaxValue ? 0 : minhealing,
                     maxhealing == int.MinValue ? 0 : maxhealing,
-                    isIndirectHealing ? 0 : casts,
+                    isIndirectHealing ? 0 : numberOfCast,
                     isIndirectHealing ? 0 : -timeWasted / 1000.0,
                     isIndirectHealing ? 0 : timeSaved / 1000.0,
                     hits,
-                    isIndirectHealing ? 0 : timeCasting,
-                    totaldownedhealing
+                    isIndirectHealing ? 0 : timeSpentCasting,
+                    totaldownedhealing,
+                    isIndirectHealing ? 0 : minTimeSpentCasting,
+                    isIndirectHealing ? 0 : maxTimeSpentCasting,
+                    isIndirectHealing ? 0 : timeSpentCastingNoInterrupt,
+                    isIndirectHealing ? 0 : numberOfCastNoInterrupt,
                 };
             return skillItem;
         }

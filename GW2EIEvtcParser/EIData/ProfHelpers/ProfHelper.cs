@@ -15,11 +15,13 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
+            new BreakbarDamageCastFinder(Technobabble, Technobabble),
             new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500),
             new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500),
             new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500),
             new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
+            new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
             new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),

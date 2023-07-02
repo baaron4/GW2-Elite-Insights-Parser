@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => {
+            new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
                 if(evt.Src.Spec != Spec.Virtuoso) {
                     return false;
                 }
@@ -29,6 +29,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
             }).WithBuilds(GW2Builds.October2022Balance),
+            new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem).UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023Balance)
         };
 
 

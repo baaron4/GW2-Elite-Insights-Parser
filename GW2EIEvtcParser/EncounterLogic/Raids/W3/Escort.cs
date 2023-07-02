@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (_hasPreEvent)
             {
                 var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware).ToList();
-                var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware - 1)
+                var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
                 {
                     Name = "Escort",
                 };

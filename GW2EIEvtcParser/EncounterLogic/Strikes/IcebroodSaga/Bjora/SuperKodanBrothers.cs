@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long finalPositionEnd = log.FightData.FightEnd;
                 if (nextUnmergedPhase != null)
                 {
-                    finalStart = nextUnmergedPhase.Start + 1;
+                    finalStart = nextUnmergedPhase.Start;
                 }
                 if (enrage != null)
                 {

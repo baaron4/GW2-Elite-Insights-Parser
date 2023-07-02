@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End, "Leftover " + leftOverCount++);
+                            var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                             leftOverPhase.AddTarget(mainTarget);
                             leftOverPhases.Add(leftOverPhase);
                         }

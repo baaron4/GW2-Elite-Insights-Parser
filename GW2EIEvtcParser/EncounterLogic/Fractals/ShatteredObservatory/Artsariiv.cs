@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.TemporalAnomaly,
                 ArcDPSEnums.TrashID.Spark,
@@ -68,6 +68,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.MediumArtsariiv,
                 ArcDPSEnums.TrashID.BigArtsariiv,
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -150,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            Dictionary<string, int> nameCount = new Dictionary<string, int> {
+            var nameCount = new Dictionary<string, int> {
                     { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
                     { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
             };

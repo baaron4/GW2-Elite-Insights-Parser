@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Glaciate", Glaciate, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Glaciate),
             // Eater of Soul         
             new Buff("Soul Digestion", SoulDigestion, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulDigestion),
-            new Buff("Reclaimed Energy", ReclaimedEnergy, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
+            new Buff("Reclaimed Energy", ReclaimedEnergyBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
             new Buff("Mortal Coil (Statue of Death)", MortalCoilStatueOfDeath, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.MortalCoil),
             new Buff("Empowered (Statue of Death)", EmpoweredStatueOfDeath, Source.FightSpecific, BuffClassification.Offensive, BuffImages.EmpoweredEater),
             // Eyes
@@ -311,6 +311,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Don't Go in the Water", AchievementEligibilityDontGoInTheWater, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Qadim
             new Buff("Flame Armor", FlameArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.MagmaOrb),
+            new Buff("Qadim Invulnerable", QadimInvulnerable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Fiery Surge", FierySurge, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.FierySurge),
             new Buff("Power of the Lamp", PowerOfTheLamp, Source.FightSpecific, BuffClassification.Other, BuffImages.BreakOut),
             new Buff("Unbearable Flames", UnbearableFlames, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ExcessMagic),
@@ -469,7 +470,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Death's Embrace 2", DeathsEmbraceEffectNM, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Power of the Void", PowerOfTheVoid, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PowerOfTheVoid),
             new Buff("Enraged (Ankka)", EnragedAnkka, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Debilitating Void", DebilitatingVoid, Source.FightSpecific, BuffClassification.Debuff, BuffImages.DebilitatingVoid),
+            new Buff("Debilitating Void", DebilitatingVoid, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ArcingAffliction).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2022Balance),
+            new Buff("Debilitating Void", DebilitatingVoid, Source.FightSpecific, BuffClassification.Debuff, BuffImages.DebilitatingVoid).WithBuilds(GW2Builds.May2022Balance),
+            new Buff("Devouring Void", DevouringVoid, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 99, BuffClassification.Debuff, BuffImages.Devour),
             new Buff("Sanctuary (Ankka 1)", SanctuaryAnkka1, Source.FightSpecific, BuffClassification.Other, BuffImages.GiftOfTrueSight),
             new Buff("Sanctuary (Ankka 2)", SanctuaryAnkka2, Source.FightSpecific, BuffClassification.Other, BuffImages.GiftOfTrueSight),
             new Buff("Imminent Death", ImminentDeathEffect, Source.FightSpecific, BuffClassification.Other, BuffImages.UnboundDeathPool),
@@ -488,7 +491,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Vitality Equalizer 1", VitalityEqualizer1, Source.FightSpecific, BuffClassification.Other, BuffImages.SynchronizedVitality),
             new Buff("Vitality Equalizer CM", VitalityEqualizerCM, Source.FightSpecific, BuffClassification.Other, BuffImages.SynchronizedVitality),
             new Buff("Vitality Equalizer 2", VitalityEqualizer2, Source.FightSpecific, BuffClassification.Other, BuffImages.SynchronizedVitality),
-            new Buff("Destructive Aura", DestructiveAura, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, BuffImages.ToxicGas),
+            new Buff("Destructive Aura", DestructiveAuraBuff, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, BuffImages.ToxicGas),
+            new Buff("Enhanced Destructive Aura", EnhancedDestructiveAuraBuff, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, BuffImages.ToxicGas),
             new Buff("Equalization Matrix", EqualizationMatrix, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EqualizationMatrix),
             new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, BuffImages.PowerOfTheVoid),
             new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExtremeVulnerability),
@@ -510,6 +514,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Jumping the Nope Ropes", AchievementEligibilityJumpingTheNopeRopes, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Standing Together", AchievementEligibilityStandingTogether, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Voidwalker", AchievementEligibilityVoidwalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // new Buff("POV Share The Void Counter", POV_ShareTheVoidCounter, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchievementEffect), // Counts successful greens, POV only
             // Old Lion's Court
             new Buff("Fixated (Old Lion's Court)", FixatedOldLionsCourt, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Ergo Shear", ErgoShear, Source.FightSpecific, BuffClassification.Other, BuffImages.ErgoShear),
