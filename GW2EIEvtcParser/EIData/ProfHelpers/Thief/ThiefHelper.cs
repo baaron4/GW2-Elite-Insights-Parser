@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
                 int start = (int)effect.Time;
                 var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 8000;
-                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, effect.Src, (start, end), new PositionConnector(effect.Position));
+                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
                 replay.Decorations.Add(decoration);
                 return decoration;
             }).ToList();
@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EIData
                 int start = (int)exit.Time;
                 var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 8000;
-                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, exit.Src, (start, end), new PositionConnector(exit.Position));
+                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, player, (start, end), new PositionConnector(exit.Position));
                 replay.Decorations.Add(decoration);
 
                 int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);

@@ -7,14 +7,13 @@ namespace GW2EIEvtcParser.EIData
         public string Image { get; }
         public int Size { get; }
         public float Opacity { get; }
-        public int OwnerID { get; }
 
-        public IconDecoration(string icon, int size, float opacity, AgentItem owner, (int start, int end) lifespan, Connector connector) : base(lifespan, connector)
+        public IconDecoration(string icon, int size, float opacity, AbstractSingleActor owner, (int start, int end) lifespan, Connector connector) : base(lifespan, connector)
         {
             Image = icon;
             Size = size;
             Opacity = opacity;
-            OwnerID = owner.UniqueID;
+            UsingSkillMode(owner, false);
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)

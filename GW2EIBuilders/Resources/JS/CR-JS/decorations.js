@@ -652,14 +652,13 @@ class MovingPlatformDrawable extends BackgroundDrawable {
 }
 
 class IconDecorationDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, image, size, opacity, owner) {
+    constructor(start, end, connectedTo, image, size, opacity) {
         super(start, end, connectedTo);
         this.image = new Image();
         this.image.src = image;
         this.image.onload = () => animateCanvas(noUpdateTime);
         this.size = size;
         this.opacity = opacity;
-        this.owner = owner;
     }
 
     draw() {

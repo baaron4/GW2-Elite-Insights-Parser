@@ -5,7 +5,6 @@ namespace GW2EIEvtcParser.EIData
         public string Image { get; }
         public int Size { get; }
         public float Opacity { get; }
-        public int Owner { get; }
 
         internal IconDecorationCombatReplayDescription(ParsedEvtcLog log, IconDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
@@ -13,7 +12,6 @@ namespace GW2EIEvtcParser.EIData
             Image = decoration.Image;
             Size = decoration.Size;
             Opacity = decoration.Opacity;
-            Owner = decoration.OwnerID;
         }
     }
 

@@ -14,6 +14,7 @@ namespace GW2EIEvtcParser.EIData
             ConnectedTo = connector;
         }
 
+        /// <summary>Creates a new line towards the other decoration</summary>
         public LineDecoration LineTo(GenericAttachedDecoration other, int growing, string color)
         {
             int start = Math.Max(this.Lifespan.start, other.Lifespan.start);

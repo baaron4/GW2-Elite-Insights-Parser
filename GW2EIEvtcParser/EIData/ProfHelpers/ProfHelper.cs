@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EIData
                 int start = (int)effect.Time;
                 var remove = log.CombatData.GetBuffData(PortalWeavingWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 60000;
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, player, (start, end), new PositionConnector(effect.Position)));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.EIData
                     int start = (int)effect.Time;
                     var remove = log.CombatData.GetBuffData(PortalUsesWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                     int end = (int?)remove?.Time ?? start + 10000;
-                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, effect.Src, (start, end), new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {
