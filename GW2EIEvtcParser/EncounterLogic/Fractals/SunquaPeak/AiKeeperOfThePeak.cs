@@ -303,7 +303,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     // sub phases
                     string[] eleNames = { "Air", "Fire", "Water" };
-                    var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.FightData.FightStart, elementalAi.LastAware).Take(3).ToList();
+                    var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.FightData.FightStart, Math.Min(elementalAi.LastAware, log.FightData.FightEnd)).Take(3).ToList();
                     for (int i = 0; i < elementalPhases.Count; i++)
                     {
                         PhaseData phase = elementalPhases[i];
