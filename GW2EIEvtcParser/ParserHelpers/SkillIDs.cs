@@ -1739,6 +1739,7 @@ namespace GW2EIEvtcParser
         public const long Chapter4ScorchedAftermath = 40015;
         public const long BearStance = 40045;
         public const long DesertShroudEffect = 40052;
+        public const long POV_StealResistanceEffect = 40059;
         public const long Supportive = 40069;
         public const long GarishPillarHit = 40071;
         public const long PortentOfFreedom = 40114;
@@ -1788,6 +1789,7 @@ namespace GW2EIEvtcParser
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
         public const long TomeOfResolveSkill = 41780;
+        public const long POV_StealWarmthEffect = 41788;
         public const long PlateOfSugarRibRoast = 41809;
         public const long DolyakStanceEffect = 41815;
         public const long Chapter3ValiantBulwark = 41836;
@@ -1804,6 +1806,7 @@ namespace GW2EIEvtcParser
         public const long PrimordialStanceEffect = 42086;
         public const long TailSpin = 42133;
         public const long OneWolfPackDamage = 42145;
+        public const long POV_StealPrecisionEffect = 42194;
         public const long Afterburner = 42210;
         public const long ManifestSandShadeSkill = 42297;
         public const long TomeOfCourageSkill = 42259;
@@ -1819,9 +1822,12 @@ namespace GW2EIEvtcParser
         public const long GrimSpecterBuff = 42651;
         public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
-        public const long Kneeling = 42869;
+        public const long POV_StealDefensesEffect = 42762;
+        public const long POV_StealMobilityEffect = 42839;
         public const long FireMinorAttunement = 42811;
         public const long OpeningPassage = 42864;
+        public const long Kneeling = 42869;
+        public const long POV_StealHealthEffect = 42870;
         public const long KallasFervor = 42883;
         public const long EpilogueAshesOfTheJust = 42898;
         public const long FlameSurge = 42924;
@@ -1872,6 +1878,7 @@ namespace GW2EIEvtcParser
         public const long SightBeyondSightSkill = 43745;
         public const long SandCascadeBarrier = 43759;
         public const long EarthMajorAttunement = 43740;
+        public const long POV_StealDurabilityEffect = 43770;
         public const long SignetOfSpiteShroud = 43772;
         public const long IcerazorsIreHit = 43856;
         public const long SignetOfVampirismShroud = 43885;
@@ -1887,6 +1894,7 @@ namespace GW2EIEvtcParser
         public const long ClarifiedConclusion = 44248;
         public const long LegendaryRenegadeStanceEffect = 44272;
         public const long TomeOfJusticeOpen = 44291;
+        public const long POV_StealTimeEffect = 45325;
         public const long Riptide = 44405;
         public const long LasersEdge = 44414;
         public const long GarishPillarSkill = 44428;
@@ -1899,6 +1907,7 @@ namespace GW2EIEvtcParser
         public const long BowlOfSpicedRedLentilStew = 44639;
         public const long VultureStanceEffect = 44651;
         public const long DesertShroud = 44663;
+        public const long POV_StealStrengthEffect = 44674;
         public const long BreakrazorsBastion = 44682;
         public const long PhantasmalForce = 44691;
         public const long Versatile = 44693;
