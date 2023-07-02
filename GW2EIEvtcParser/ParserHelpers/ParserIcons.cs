@@ -460,6 +460,14 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionSunspreadParagon = "https://i.imgur.com/0a5Ghmv.png";
         private const string MinionRavenSpiritShadow = "https://i.imgur.com/ziqCoFD.png";
 
+        internal const string PortalMesmerEntre = "https://i.imgur.com/TILHQ1u.png";
+        internal const string PortalMesmerExeunt = "https://i.imgur.com/7gsObHV.png";
+        internal const string PortalShadowPortalPrepare = "https://i.imgur.com/oDpQcea.png";
+        internal const string PortalShadowPortalOpen = "https://i.imgur.com/P7YI6am.png";
+        internal const string PortalSandswell = "https://i.imgur.com/15kzkcj.png";
+        internal const string PortalWhiteMantleItem = "https://i.imgur.com/FcO9n7c.png";
+        internal const string PortalWhiteMantleSkill = "https://i.imgur.com/qf99SF9.png";
+
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
         /// </summary>

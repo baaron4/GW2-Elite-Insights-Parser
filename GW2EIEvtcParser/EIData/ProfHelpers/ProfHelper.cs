@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -257,12 +258,14 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            const string lineColor = "rgba(0, 0, 255, 0.5)";
+
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive))
             {
                 int start = (int)effect.Time;
                 var remove = log.CombatData.GetBuffData(PortalWeavingWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 60000;
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png", 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, effect.Src, (start, end), new PositionConnector(effect.Position)));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
@@ -274,7 +277,7 @@ namespace GW2EIEvtcParser.EIData
                     int start = (int)effect.Time;
                     var remove = log.CombatData.GetBuffData(PortalUsesWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                     int end = (int?)remove?.Time ?? start + 10000;
-                    var decoration = new IconDecoration("https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png", 128, 0.7f, effect.Src, (start, end), new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, effect.Src, (start, end), new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {
@@ -282,7 +285,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     else
                     {
-                        replay.Decorations.Add(first.LineTo(decoration, 0, "rgba(0, 0, 255, 0.5)"));
+                        replay.Decorations.Add(first.LineTo(decoration, 0, lineColor));
                     }
                 }
             }
