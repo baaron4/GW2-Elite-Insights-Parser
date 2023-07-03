@@ -331,6 +331,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
             int index = 0;
+            attackTargetEvents = attackTargetEvents.OrderBy(x =>
+            {
+                AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
+                // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
+                var targetables = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable && y.SrcMatchesAgent(atAgent) && y.Time > 2000).ToList();
+                return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+            }).ToList();
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
