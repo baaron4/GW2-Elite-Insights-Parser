@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
+            internal const ulong SOTOBeta = 147830;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -1148,6 +1149,7 @@ namespace GW2EIEvtcParser
             CloneTrident = 9058,
             CloneSpear = 6479,
             CloneDownstate = 10542,
+            CloneDagger = 25569,
             CloneUnknown = 8107, // Possibly -> https://wiki.guildwars2.com/wiki/Clone_(Snowball_Mayhem)
             // - Sword + Offhand
             CloneSwordTorch = 15090,
@@ -1173,6 +1175,13 @@ namespace GW2EIEvtcParser
             CloneAxePistol = 18939,
             CloneAxeSword = 19134,
             CloneAxeFocus = 19257,
+            CloneAxeShield = 25576,
+            // - Dagger + Offhand
+            CloneDaggerShield = 25570,
+            CloneDaggerPistol = 25573,
+            CloneDaggerFocus = 25575,
+            CloneDaggerTorch = 25578,
+            CloneDaggerSword = 25582,
             // Necromancer Minions
             BloodFiend = 1104,
             BoneFiend = 1458,

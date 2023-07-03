@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {         
             // Skills
-            new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, BuffImages.CrystalHibernation),
+            new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
             // Facets
             new Buff("Facet of Light", FacetOfLight, Source.Herald, BuffClassification.Other, BuffImages.FacetOfLight),
             new Buff("Facet of Light (Traited)", FacetOfLightTraited, Source.Herald, BuffClassification.Other, BuffImages.FacetOfLight), //Lingering buff with Draconic Echo trait
