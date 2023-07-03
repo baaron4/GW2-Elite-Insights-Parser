@@ -192,6 +192,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Guard!", GuardEffect, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
             new Buff("Search and Rescue!", SearchAndRescueEffect, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
+            new Buff("Ancestral Grace", AncestralGraceEffect, Source.Ranger, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.SOTOBeta),
             // Traits
             new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, BuffImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),
@@ -200,6 +201,18 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Poison Master", PoisonMasterEffect, Source.Ranger, BuffClassification.Other, BuffImages.PoisonMaster),
         };
 
+        public static IReadOnlyList<AnimatedCastEvent> ComputeAncestralGraceCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(AncestralGraceSkill);
+            var applies = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
+            var removals = combatData.GetBuffData(AncestralGraceEffect).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
+            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            {
+                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+            }
+            return res;
+        }
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {

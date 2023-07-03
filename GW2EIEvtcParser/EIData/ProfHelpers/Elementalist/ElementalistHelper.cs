@@ -45,6 +45,23 @@ namespace GW2EIEvtcParser.EIData
             new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),
             new MinionCommandCastFinder(AirElementalShockingBolt, (int) MinionID.AirElemental),
             new MinionCommandCastFinder(EarthElementalStomp, (int) MinionID.EarthElemental),
+            // Hammer
+            new BuffGainCastFinder(FlameWheelSkill, FlameWheelEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.SOTOBeta),
+            new BuffGainCastFinder(IcyCoilSkill, IcyCoilEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.SOTOBeta),
+            new BuffGainCastFinder(CrescentWindSkill, CrescentWindEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.SOTOBeta),
+            new BuffGainCastFinder(RockyLoopSkill, RockyLoopEffect)
+            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+            .WithBuilds(GW2Builds.SOTOBeta),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -72,6 +89,7 @@ namespace GW2EIEvtcParser.EIData
             // Arcane
             new BuffDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
             new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.December2018Balance),
+            new BuffDamageModifier(FlameWheelEffect, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All).WithBuilds(GW2Builds.SOTOBeta),
         };
 
 
@@ -133,6 +151,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Glyph of Elemental Power (Air)", GlyphOfElementalPowerAirEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerAir),
             new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerWater),
             new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthEffect, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerEarth),
+            // Hammer
+            new Buff("Flame Wheel", FlameWheelEffect, Source.Elementalist, BuffClassification.Other, BuffImages.FlameWheel).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Icy Coil", IcyCoilEffect, Source.Elementalist, BuffClassification.Other, BuffImages.IcyCoil).WithBuilds( GW2Builds.SOTOBeta),
+            new Buff("Crescent Wind", CrescentWindEffect, Source.Elementalist, BuffClassification.Other, BuffImages.CrescentWind).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Rocky Loop", RockyLoopEffect, Source.Elementalist, BuffClassification.Other, BuffImages.RockyLoop).WithBuilds(GW2Builds.SOTOBeta),
         };
 
 

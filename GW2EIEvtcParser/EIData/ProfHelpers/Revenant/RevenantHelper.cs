@@ -105,6 +105,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
             new Buff("Legendary Demon Stance", LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
             new Buff("Legendary Assassin Stance", LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
+            new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBeta),
             // Traits
             new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
             new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),

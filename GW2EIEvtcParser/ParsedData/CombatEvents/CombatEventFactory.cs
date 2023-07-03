@@ -204,6 +204,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.StateChange.BuffInitial:
                     buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
                     break;
+                case ArcDPSEnums.StateChange.TickRate:
+                    metaDataEvents.TickRateEvents.Add(new TickRateEvent(stateChangeEvent));
+                    break;
                 case ArcDPSEnums.StateChange.Last90BeforeDown:
                     var last90Evt = new Last90BeforeDownEvent(stateChangeEvent, agentData);
                     statusEvents.Last90BeforeDownEvents.Add(last90Evt);

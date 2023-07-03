@@ -202,6 +202,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
+            new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBeta),
             // Traits
             new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
             new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
@@ -223,6 +224,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneStaff,
             (int)MinionID.CloneTrident,
             (int)MinionID.CloneSpear,
+            (int)MinionID.CloneDagger,
             (int)MinionID.CloneDownstate,
             (int)MinionID.CloneUnknown,
             (int)MinionID.CloneSwordTorch,
@@ -245,6 +247,12 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneAxePistol,
             (int)MinionID.CloneAxeSword,
             (int)MinionID.CloneAxeFocus,
+            (int)MinionID.CloneAxeShield,
+            (int)MinionID.CloneDaggerShield,
+            (int)MinionID.CloneDaggerPistol,
+            (int)MinionID.CloneDaggerFocus,
+            (int)MinionID.CloneDaggerTorch,
+            (int)MinionID.CloneDaggerSword,
         };
 
         internal static void AdjustMinionName(AgentItem minion)
@@ -293,7 +301,16 @@ namespace GW2EIEvtcParser.EIData
                 case (int)MinionID.CloneAxePistol:
                 case (int)MinionID.CloneAxeSword:
                 case (int)MinionID.CloneAxeFocus:
+                case (int)MinionID.CloneAxeShield:
                     minion.OverrideName("Axe " + minion.Name);
+                    break;
+                case (int)MinionID.CloneDagger:
+                case (int)MinionID.CloneDaggerShield:
+                case (int)MinionID.CloneDaggerPistol:
+                case (int)MinionID.CloneDaggerFocus:
+                case (int)MinionID.CloneDaggerTorch:
+                case (int)MinionID.CloneDaggerSword:
+                    minion.OverrideName("Dagger " + minion.Name);
                     break;
                 default:
                     break;
@@ -327,6 +344,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryDefender,
             (int)MinionID.IllusionaryMariner,
             (int)MinionID.IllusionaryWhaler,
+            (int)MinionID.IllusionaryAvenger,
         };
 
         internal static bool IsKnownMinionID(long id)

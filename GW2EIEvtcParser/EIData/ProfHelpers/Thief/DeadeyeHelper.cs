@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, BuffImages.Kneel),
+            new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, BuffImages.Kneel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
             new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, BuffImages.DeadeyesMark),
         };
 
