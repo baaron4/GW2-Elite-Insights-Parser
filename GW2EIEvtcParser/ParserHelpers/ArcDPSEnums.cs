@@ -925,6 +925,14 @@ namespace GW2EIEvtcParser
             PlayerDoubtDemon = 23246,
             FearDemon = 23264,
             GuiltDemon = 23252,
+            // Kanaxai
+            AspectOfTorment = 25556,
+            AspectOfLethargy = 25561,
+            AspectOfExposure = 25562,
+            AspectOfDeath = 25580,
+            LuxonMonkSpirit = 25571,
+            CaptainThess1 = 25554,
+            CaptainThess2 = 25557,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
@@ -1065,6 +1073,7 @@ namespace GW2EIEvtcParser
             TheVoice = 20497,
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
+            KanaxaiScytheOfHouseAurkus = 25572,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,

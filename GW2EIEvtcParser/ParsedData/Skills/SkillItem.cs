@@ -380,6 +380,9 @@ namespace GW2EIEvtcParser.ParsedData
             { BreakStep, "https://wiki.guildwars2.com/images/7/76/Break_Step.png" },
             { RushDamage, "https://wiki.guildwars2.com/images/4/42/Rush.png" },
             { DragonspikeMineDamage, "https://wiki.guildwars2.com/images/3/3e/Dragonspike_Mine.png" },
+            // Silent Surf Fractal
+            { GrapplingHook, "https://wiki.guildwars2.com/images/c/c8/Scorpion_Wire.png" },
+            { Parachute, "https://wiki.guildwars2.com/images/f/fd/Feathers_%28skill%29.png" },
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
