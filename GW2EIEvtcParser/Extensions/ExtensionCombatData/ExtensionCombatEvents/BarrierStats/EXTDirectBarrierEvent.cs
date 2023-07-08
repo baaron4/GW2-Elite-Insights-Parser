@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.Extensions
         internal EXTDirectBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             BarrierGiven = -evtcItem.Value;
-            AgainstDowned = ((evtcItem.IsOffcycle & ~SrcPeerMask) & ~DstPeerMask) == 1;
+            AgainstDowned = AgainstDowned || (evtcItem.IsOffcycle & ~(byte)HealingExtensionOffcycleBits.PeerMask) == 1;
         }
     }
 }

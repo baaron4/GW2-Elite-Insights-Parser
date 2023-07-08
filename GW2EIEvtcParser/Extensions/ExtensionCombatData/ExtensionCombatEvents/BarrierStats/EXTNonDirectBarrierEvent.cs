@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.Extensions
         internal EXTNonDirectBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             BarrierGiven = -evtcItem.BuffDmg;
-            AgainstDowned = evtcItem.Pad1 == 1;
         }
     }
 }
