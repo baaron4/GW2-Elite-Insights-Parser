@@ -290,10 +290,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         bool isSuccess = false;
                         var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time).ToList();
                         IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
-                        foreach (BuffApplyEvent determinedApply in determinedApplies)
+                        foreach (AnimatedCastEvent liffOff in liftOffs)
                         {
                             isSuccess = true;
-                            if (liftOffs.Count(x => x.Caster == determinedApply.To && Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant) != 1)
+                            if (determinedApplies.Count(x => x.To == liffOff.Caster && Math.Abs(x.Time - liffOff.Time) < ServerDelayConstant) != 1)
                             {
                                 isSuccess = false;
                                 break;
@@ -388,20 +388,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                                 {
-                                    // Regenerating back to full HP, override to 0
+                                    // Regenerating back to full HP
                                     if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
-                                        // All dragons go back to 100% when their phase ends
-                                        // In the particular situation of Soo-Won, it disappears roughly immediately if the fight was a failure at Targetable Off
-                                        // Otherwise it lingers at little bit
-                                        if (index == idsToUse.Count && extra.LastAware - c.Time < ServerDelayConstant)
-                                        {
-                                            c.OverrideDstAgent(lastHPUpdate);
-                                        }
-                                        else
-                                        {
-                                            c.OverrideDstAgent(0);
-                                        }
+                                        continue;
                                     }
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;
