@@ -287,16 +287,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
-                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 200, fightData.FightEnd), playerAgents))
+                        bool isSuccess = false;
+                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time).ToList();
+                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                        foreach (BuffApplyEvent determinedApply in determinedApplies)
                         {
-                            return;
+                            isSuccess = true;
+                            if (liftOffs.Count(x => x.Caster == determinedApply.To && Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant) != 1)
+                            {
+                                isSuccess = false;
+                                break;
+                            }
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
-                        if (lastHPUpdate == null || lastHPUpdate.HPPercent > 0.01)
+                        if (isSuccess)
                         {
-                            return;
+                            fightData.SetSuccess(true, targetOffs[1].Time);
                         }
-                        fightData.SetSuccess(true, targetOffs[1].Time);
                     }
                 }
             }
@@ -385,17 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     // Regenerating back to full HP, override to 0
                                     if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
-                                        // All dragons go back to 100% when their phase ends
-                                        // In the particular situation of Soo-Won, it disappears roughly immediately if the fight was a failure at Targetable Off
-                                        // Otherwise it lingers at little bit
-                                        if (index == idsToUse.Count && extra.LastAware - c.Time < ServerDelayConstant)
-                                        {
-                                            c.OverrideDstAgent(lastHPUpdate);
-                                        } 
-                                        else
-                                        {
-                                            c.OverrideDstAgent(0);
-                                        }
+                                        c.OverrideDstAgent(0);
                                     }
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;

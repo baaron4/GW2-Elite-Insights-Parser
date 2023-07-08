@@ -2884,6 +2884,7 @@
         public const long StormOfSwords1 = 63838;
         public const long VitalityEqualizer1 = 63840;
         public const long LightningOfJormag = 63881;
+        public const long HarvestTempleLiftOff = 63896;
         public const long VoidPoolCM = 63910;
         public const long DragonsEndContributor10 = 63928;
         public const long VoidBeam = 63956;
