@@ -37,6 +37,9 @@ namespace GW2EIEvtcParser.ParsedData
             { ArcDPSGenericBreakbar20220307, "Generic Breakbar" },
             { WaterBlastCombo1, "Water Blast Combo" },
             { WaterBlastCombo2, "Water Blast Combo" },
+            { MendingMight, "Mending Might" },
+            { WaterLeapCombo, "Water Leap Combo" },
+            { InvigoratingBond, "Invigorating Bond" },
             { SigilOfWater, "Sigil of Water" },
             { RuneOfNightmare, "Rune of the Nightmare" },
             { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
@@ -68,6 +71,9 @@ namespace GW2EIEvtcParser.ParsedData
             // Engineer
             { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
+            { MedBlasterHeal, "Med Blaster (Heal)" },
+            { SoothingDetonation, "Soothing Detonation" },
+            { HealingTurretHeal, "Healing Turret (Heal)" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -87,10 +93,14 @@ namespace GW2EIEvtcParser.ParsedData
             { MirageCloakDodge, "Mirage Cloak" },
             { UnstableBladestormProjectiles, "Unstable Bladestorm (Projectile Hit)" },
             { PhantasmalBerserkerProjectileDamage, "Phantasmal Berserker (Greatsword Projectile Hit)" },
+            { HealingPrism, "Healing Prism" },
             // Necromancer
             { DesertEmpowerment, "Desert Empowerment" },
+            { SandCascadeBarrier, "Sand Cascade (Barrier)" },
+            { SandFlare, "Sand Cascade" },
             // Ranger
-	        { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
+            { WindborneNotes, "Windborne Notes" },
+            { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
             { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
             { AstralWispAttachment, "Astral Wisp Attachment" },
             { GlyphOfUnityCA, "Glyph of Unity (CA)" },
@@ -180,6 +190,9 @@ namespace GW2EIEvtcParser.ParsedData
             { ArcDPSDodge20220307, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { WaterBlastCombo1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             { WaterBlastCombo2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
+            { WaterLeapCombo, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
+            { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },
+            { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
             { LightningStrikeSigil, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
             { FlameBlastSigil, "https://wiki.guildwars2.com/images/5/56/Superior_Sigil_of_Fire.png" },
             { SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
@@ -239,6 +252,9 @@ namespace GW2EIEvtcParser.ParsedData
             { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
             { MechCoreBarrierEngine, "https://wiki.guildwars2.com/images/d/da/Mech_Core-_Barrier_Engine.png" },
             { JumpShotEOD, "https://wiki.guildwars2.com/images/b/b5/Jump_Shot.png" },
+            { MedBlasterHeal, "https://wiki.guildwars2.com/images/6/65/Med_Blaster.png" },
+            { SoothingDetonation, "https://wiki.guildwars2.com/images/a/ad/Soothing_Detonation.png" },
+            { HealingTurretHeal, "https://wiki.guildwars2.com/images/4/42/Healing_Turret.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },

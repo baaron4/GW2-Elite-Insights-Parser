@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new [] { VoidPoolNM, VoidPoolCM }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
                 new PlayerDstSkillMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150).UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
                 new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0).UsingChecker((de, log) => (de.To.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || de.To.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
+                new PlayerDstHitMechanic(new [] { Shockwave, TsunamiSlam1, TsunamiSlam2 }, "Shockwaves", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150).UsingAchievementEligibility(true),
                 // Jormag
                 new PlayerDstHitMechanic(new [] { BreathOfJormag1, BreathOfJormag2, BreathOfJormag3 }, "Breath of Jormag", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
                 new PlayerDstHitMechanic(FrostMeteor, "Frost Meteor", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
@@ -286,16 +287,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
-                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 200, fightData.FightEnd), playerAgents))
+                        bool isSuccess = false;
+                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time).ToList();
+                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                        foreach (AnimatedCastEvent liffOff in liftOffs)
                         {
-                            return;
+                            isSuccess = true;
+                            if (determinedApplies.Count(x => x.To == liffOff.Caster && Math.Abs(x.Time - liffOff.Time) < ServerDelayConstant) != 1)
+                            {
+                                isSuccess = false;
+                                break;
+                            }
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
-                        if (lastHPUpdate != null && lastHPUpdate.HPPercent > 0.01)
+                        if (isSuccess)
                         {
-                            return;
+                            fightData.SetSuccess(true, targetOffs[1].Time);
                         }
-                        fightData.SetSuccess(true, targetOffs[1].Time);
                     }
                 }
             }
@@ -330,6 +337,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
             int index = 0;
+            attackTargetEvents = attackTargetEvents.OrderBy(x =>
+            {
+                AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
+                // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
+                var targetables = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable && y.SrcMatchesAgent(atAgent) && y.Time > 2000).ToList();
+                return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+            }).ToList();
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
@@ -374,10 +388,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                                 {
-                                    // Regenerating back to full HP, override to 0
+                                    // Regenerating back to full HP
                                     if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
                                     {
-                                        c.OverrideDstAgent(0);
+                                        continue;
                                     }
                                     // Remember last hp
                                     lastHPUpdate = c.DstAgent;

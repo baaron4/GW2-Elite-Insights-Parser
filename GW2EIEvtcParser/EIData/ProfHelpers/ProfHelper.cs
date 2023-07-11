@@ -19,6 +19,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500),
             new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
+            new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
             new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),

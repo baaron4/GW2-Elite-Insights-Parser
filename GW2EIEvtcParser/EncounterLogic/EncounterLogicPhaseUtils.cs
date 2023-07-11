@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var invuls = skillIDs.SelectMany(skillID => GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true)).ToList();
             invuls.RemoveAll(x => x.Time < 0);
             invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
-            bool lastIsSkipPhase = !beginWithStart;
+            bool nextToAddIsSkipPhase = !beginWithStart;
             for (int i = 0; i < invuls.Count; i++)
             {
                 AbstractBuffEvent c = invuls[i];
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long curEnd = Math.Min(c.Time, end);
                     phases.Add(new PhaseData(last, curEnd));
                     last = curEnd;
-                    lastIsSkipPhase = false;
+                    nextToAddIsSkipPhase = true;
                 }
                 else
                 {
@@ -68,10 +68,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phases.Add(new PhaseData(last, curEnd));
                     }
                     last = curEnd;
-                    lastIsSkipPhase = true;
+                    nextToAddIsSkipPhase = false;
                 }
             }
-            if (end - last > ParserHelper.PhaseTimeLimit && (!lastIsSkipPhase || (lastIsSkipPhase && addSkipPhases)))
+            if (end - last > ParserHelper.PhaseTimeLimit && (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases)))
             {
                 phases.Add(new PhaseData(last, end));
             }

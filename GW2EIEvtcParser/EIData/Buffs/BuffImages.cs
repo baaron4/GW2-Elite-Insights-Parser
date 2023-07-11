@@ -1512,6 +1512,8 @@
         internal const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
         internal const string NecroticTraversal = "https://wiki.guildwars2.com/images/9/98/Necrotic_Traversal.png";
         internal const string GrimSpecter = "https://wiki.guildwars2.com/images/3/30/Grim_Specter.png";
+        internal const string NaturalBalance = "https://wiki.guildwars2.com/images/3/3d/Natural_Balance.png";
+        internal const string TempestuousAria = "https://wiki.guildwars2.com/images/2/28/Tempestuous_Aria.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

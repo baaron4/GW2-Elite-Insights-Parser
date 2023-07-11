@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -23,6 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EXTHealingCastFinder(MendingMight, MendingMight),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -55,13 +57,17 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffDamageModifier(NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, BuffImages.Empowered, DamageModifierMode.All),
             // Warrior's Cunning (Barrier)
-            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
             // Warrior's Cunning (High HP, no Barrier)
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
             // Warrior's Sprint
             new BuffDamageModifier(Swiftness, "Warrior's Sprint", "7% under swiftness", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2018Balance, GW2Builds.May2021Balance),
             new BuffDamageModifier(Swiftness, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2018Balance),
@@ -76,6 +82,7 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
             new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
+            new Buff("Flames of War", FlamesOfWar, Source.Warrior, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.SOTOBeta),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
             new Buff("Dolyak Signet", DolyakSignetEffect, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),

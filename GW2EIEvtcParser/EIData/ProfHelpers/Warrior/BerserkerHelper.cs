@@ -22,7 +22,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(Berserk, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
             new BuffDamageModifier(Berserk, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2019Balance),
             new BuffDamageModifier(Berserk, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.August2022Balance),
-            new BuffDamageModifier(Berserk, "Bloody Roar", "25% while in berserk", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
+            new BuffDamageModifier(Berserk, "Bloody Roar", "25% while in berserk", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.June2023Balance),
+            new BuffDamageModifier(Berserk, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
             new BuffDamageModifier(Berserk, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2022Balance),
             new BuffDamageModifier(Berserk, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2022Balance),
 
@@ -31,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Berserk", Berserk, Source.Berserker, BuffClassification.Other, BuffImages.Berserk),
-            new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, BuffImages.FlamesOfWarWarrior),
+            new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
             new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, BuffImages.BloodReckoning).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
             new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.BloodReckoning).WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
             new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, BuffImages.ShatteringBlow),

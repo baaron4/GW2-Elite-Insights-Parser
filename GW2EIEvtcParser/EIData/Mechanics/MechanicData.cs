@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
             var errorMechanicNaming= new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
-            foreach (Mechanic m in fightMechanics.OrderBy(x => x.IsAchievementEligibility))
+            foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
             {
                 {
                     if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
@@ -72,10 +72,7 @@ namespace GW2EIEvtcParser.EIData
         private void ComputeMechanics(ParsedEvtcLog log)
         {
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
-            foreach (Mechanic mech in _mechanicLogs.Keys.Where(x => !x.Keep(log)))
-            {
-                _mechanicLogs.Remove(mech);
-            }
+            _mechanicLogs.Keys.Where(x => !x.Keep(log)).ToList().ForEach(x => _mechanicLogs.Remove(x));
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
