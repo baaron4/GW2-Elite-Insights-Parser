@@ -249,6 +249,14 @@ namespace GW2EIEvtcParser.ParsedData
                         }
                     }
                     break;
+                case ArcDPSEnums.StateChange.FractalScale:
+                    // Sanity check
+                    if (stateChangeEvent.SrcAgent == 0)
+                    {
+                        return;
+                    }
+                    metaDataEvents.FractalScaleEvent = new FractalScaleEvent(stateChangeEvent);
+                    break;
                 default:
                     break;
             }

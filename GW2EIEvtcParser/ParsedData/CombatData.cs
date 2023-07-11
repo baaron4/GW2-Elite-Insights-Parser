@@ -619,6 +619,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.PointOfViewEvent;
         }
 
+        public FractalScaleEvent GetFractalScaleEvent()
+        {
+            return _metaDataEvents.FractalScaleEvent;
+        }
+
         public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem src)
         {
             if (_statusEvents.SpawnEvents.TryGetValue(src, out List<SpawnEvent> list))

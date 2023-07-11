@@ -256,6 +256,7 @@ namespace GW2EIEvtcParser
             LogStartNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
+            FractalScale = 50,
             Unknown
         };
 
