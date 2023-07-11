@@ -109,6 +109,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.UploadLinks = uploadLinks;
             jsonLog.Language = log.LogData.Language;
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
+            jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             jsonLog.IsCM = log.FightData.IsCM;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();
