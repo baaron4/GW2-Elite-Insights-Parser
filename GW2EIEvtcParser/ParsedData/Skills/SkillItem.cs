@@ -94,7 +94,8 @@ namespace GW2EIEvtcParser.ParsedData
             { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
             { AstralWispAttachment, "Astral Wisp Attachment" },
             { GlyphOfUnityCA, "Glyph of Unity (CA)" },
-            { ChargeGazelleMergeTravel, "Charge (Travel Hit)" },
+            { ChargeGazelleMergeSkill, "Charge (Travel)" },
+            { ChargeGazelleMergeImpact, "Charge (Impact)" },
             { SmokeAssaultMergeHit, "Smoke Assault (Multi Hit)" },
             { OneWolfPackDamage, "One Wolf Pack (Hit)" },
             { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
@@ -316,7 +317,7 @@ namespace GW2EIEvtcParser.ParsedData
             { LiveVicariously, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
             { NaturalHealing, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
             { GlyphOfUnityCA, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png" },
-            { ChargeGazelleMergeTravel, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
+            { ChargeGazelleMergeImpact, "https://wiki.guildwars2.com/images/a/af/Charge_%28gazelle%29.png" },
             { SmokeAssaultMergeHit, "https://wiki.guildwars2.com/images/9/92/Smoke_Assault.png" },
             { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
             { PredatorsCunning, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },

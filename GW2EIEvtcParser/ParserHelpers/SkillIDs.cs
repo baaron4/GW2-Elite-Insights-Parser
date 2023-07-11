@@ -1888,7 +1888,7 @@
         public const long SuperiorSigilOfSeverance = 43930;
         public const long OverheatSkill = 43937;
         public const long FullCounter = 43949;
-        public const long ChargeGazelleMergeTravel = 43995;
+        public const long ChargeGazelleMergeImpact = 43995;
         public const long VoiceOfTruth = 44008;
         public const long ChargeGazelle = 44051;
         public const long MantraOfTruthCast = 44080;
@@ -2030,7 +2030,7 @@
         public const long LastGraspJudgment = 47635;
         public const long ArcingAffliction = 47646;
         public const long CorsairMaintenanceOil = 47734;
-        public const long ChargeGazelleMergeSkill = 45743;
+        public const long ChargeGazelleMergeSkill = 45743; // travel damage, impact is differen cast
         public const long WurmSpit = 47756;
         public const long EnergyThresholdRiver = 47758;
         public const long FrozenWind = 47776;
