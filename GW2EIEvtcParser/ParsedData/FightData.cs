@@ -298,6 +298,10 @@ namespace GW2EIEvtcParser.ParsedData
         internal void SetFightName(CombatData combatData, AgentData agentData)
         {
             FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
+            if (combatData.GetFractalScaleEvent() != null)
+            {
+                FightName += " (" + combatData.GetFractalScaleEvent().Scale + ")";
+            }
         }
 
         public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
