@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -42,6 +42,10 @@ namespace GW2EIEvtcParser.ParsedData
             { InvigoratingBond, "Invigorating Bond" },
             { SigilOfWater, "Sigil of Water" },
             { RuneOfNightmare, "Rune of the Nightmare" },
+            { FrozenBurstRuneOfIce, "Frozen Burst (Rune of the Ice)" },
+            { HuntersCallRuneOfMadKing, "Hunter's Call (Rune of the Mad King)" },
+            { ArtilleryBarrageRuneofCitadel, "Artillery Barrage (Rune of the Citadel)" },
+            { HandOfGrenthRuneOfGrenth, "Hand of Grenth (Rune of Grenth)" },
             { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
             { PortalExitWhiteMantleWatchwork, "Portal Exit" },
             { PlateOfSpicyMoaWingsGastricDistress, "Plate of Spicy Moa Wings (Gastric Distress)" },
@@ -202,6 +206,10 @@ namespace GW2EIEvtcParser.ParsedData
             { SigilOfWater, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
             { RuneOfTormenting, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
             { RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png" },
+            { FrozenBurstRuneOfIce, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png" },
+            { HuntersCallRuneOfMadKing, "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png" },
+            { ArtilleryBarrageRuneofCitadel, "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png" },
+            { HandOfGrenthRuneOfGrenth, "https://wiki.guildwars2.com/images/6/6e/Superior_Rune_of_Grenth.png" },
             { PortalEntranceWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png" },
             { PortalExitWhiteMantleWatchwork, "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png" },
             { PlateOfSpicyMoaWingsGastricDistress, BuffImages.PlateOfSpicyMoaWings },

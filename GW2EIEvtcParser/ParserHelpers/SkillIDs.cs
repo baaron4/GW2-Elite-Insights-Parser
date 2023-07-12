@@ -262,6 +262,7 @@
         public const long SigilOfHydromancy = 9428;
         public const long SigilOfEarth = 9433;
         public const long SigilOfDoom = 9441;
+        public const long FrozenBurstRuneOfIce = 9604;
         public const long BowlOfSimpleStirfry = 9733;
         public const long BowlOfGarlicSpinachSautee = 9734;
         public const long BowlOfAvocadoStirfry = 9736;
@@ -801,6 +802,7 @@
         public const long GlazedPeachTart = 15258;
         public const long OmnomberryGhost = 15259;
         public const long SpicyPumpkinCookie = 15260;
+        public const long HuntersCallRuneOfMadKing = 15266;
         public const long WeakPotionOfHalloweenSlaying = 15272;
         public const long MinorPotionOfHalloweenSlaying = 15274;
         public const long PotionOfHalloweenSlaying = 15276;
@@ -1094,7 +1096,6 @@
         public const long FragmentsOfFaith = 30553;
         public const long SoothingDetonation = 30564;
         public const long FeelTheBurn = 30662;
-        public const long SoothingDetonation = 30564;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
@@ -2239,8 +2240,10 @@
         public const long SoulPastry = 53222;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;
+        public const long ArtilleryBarrageRuneofCitadel = 53337;
         public const long PotentLucentOil = 53374;
         public const long CanOfStewedOysters = 53384;
+        public const long HandOfGrenthRuneOfGrenth = 53406;
         public const long MarkedMistsArena = 53412;
         public const long AuroraBeam1 = 53445;
         public const long FrostPatch = 53446;
