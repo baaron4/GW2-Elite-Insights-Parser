@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -102,6 +102,7 @@ namespace GW2EIEvtcParser.ParsedData
             { WindborneNotes, "Windborne Notes" },
             { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
             { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
+            { EntangleDamage, "Entangle (Hit)" },
             { AstralWispAttachment, "Astral Wisp Attachment" },
             { GlyphOfUnityCA, "Glyph of Unity (CA)" },
             { ChargeGazelleMergeSkill, "Charge (Travel)" },
@@ -128,6 +129,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulStoneVenomSkill, "Soul Stone Venom" },
             { SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
+            { TwilightComboSecondProjectile, "Twilight Combo (Secondary)" },
             // Warrior
             { RushDamage, "Rush (Hit)" },
             // Special Forces Training Area
