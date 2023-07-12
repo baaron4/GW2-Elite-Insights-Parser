@@ -3270,6 +3270,7 @@
         public const long DeterminedToDestroy = 69275;
         public const long GrapplingHook = 69284;
         public const long Parachute = 69286;
+        public const long SpiritFang = 69305;
         public const long AchievementEligibilityPeaceAndQuiet = 69312;
         public const long NaturalBalance = 69314;
         public const long AchievementEligibilityJadeSeaLegs = 69325;
@@ -3279,6 +3280,7 @@
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed2 = 69356;
         public const long GatheringShadows = 69365;
+        public const long BleedingEdge2 = 69371;
         public const long RendingStorm = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
         public const long WorldCleaver = 69419;

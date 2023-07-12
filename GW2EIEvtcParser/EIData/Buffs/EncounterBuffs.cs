@@ -417,6 +417,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Gathering Shadows", GatheringShadows, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.CaptainsInspiration),
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
             new Buff("Dread Visage", DreadVisage, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall), // Temp image
+            new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Achievement Eligibility: Unsundered", AchievementEligibilityUnsundered, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Peace and Quiet", AchievementEligibilityPeaceAndQuiet, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),

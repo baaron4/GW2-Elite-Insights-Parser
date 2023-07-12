@@ -30,12 +30,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.FractalMasks.SilentSurfMask | 0x000001;
         }
 
-        /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayKanaxai,
-                           (0, 0),
-                           (0, -0, 0, 0));
-        }*/
+                           (334, 370),
+                           (-6195, -295, -799, 5685));
+        }
 
         protected override HashSet<int> GetUniqueNPCIDs()
         {
