@@ -224,7 +224,9 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     }
-                    if (effectEvt.TrackingID != 0)
+                    // Currently trackingID is not working properly so we leave the list empty
+                    // Update the value of the enum when things are okay
+                    if (effectEvt.TrackingID != 0 && evtcVersion >= ArcDPSBuilds.FunctionalTrackingIDsForEffects)
                     {
                         Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
                     }
