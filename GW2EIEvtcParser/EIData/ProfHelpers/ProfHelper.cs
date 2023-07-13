@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Minions that aren't profession-specific bound.
         /// </summary>
-        private static readonly HashSet<long> CommonMinions = new HashSet<long>()
+        private static readonly HashSet<int> CommonMinions = new HashSet<int>()
         {
             // Racial Summons
             (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.EIData
             (int)ArcDPSEnums.MinionID.RavenSpiritShadow,
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return CommonMinions.Contains(id);
         }

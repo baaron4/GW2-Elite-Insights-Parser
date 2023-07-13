@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.Thief1,
             (int)MinionID.Thief2,
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Thief21,
             (int)MinionID.Thief22,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

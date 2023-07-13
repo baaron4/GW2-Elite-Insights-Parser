@@ -545,7 +545,7 @@ namespace GW2EIEvtcParser
             {
                 return false;
             }
-            long id = minion.ID;
+            int id = minion.ID;
             bool res = ProfHelper.IsKnownMinionID(id);
             switch (spec)
             {

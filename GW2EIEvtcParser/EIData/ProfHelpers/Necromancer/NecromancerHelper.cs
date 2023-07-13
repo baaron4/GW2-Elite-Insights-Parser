@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
                 || HarbingerHelper.IsHarbingerShroudTransform(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.BloodFiend,
             (int)MinionID.FleshGolem,
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.BoneMinion,
             (int)MinionID.UnstableHorror,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

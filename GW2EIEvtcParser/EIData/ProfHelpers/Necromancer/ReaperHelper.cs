@@ -64,11 +64,11 @@ namespace GW2EIEvtcParser.EIData
             return _reaperShroudTransform.Contains(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.ShamblingHorror,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

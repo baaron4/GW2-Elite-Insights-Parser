@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, BuffImages.DeadeyesMark),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.Deadeye1,
             (int)MinionID.Deadeye2,
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Deadeye9,
             (int)MinionID.Deadeye10,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

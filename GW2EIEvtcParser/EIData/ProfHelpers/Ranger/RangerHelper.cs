@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private static readonly HashSet<long> SpiritIDs = new HashSet<long>()
+        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
         {
             (int)MinionID.FrostSpirit,
             (int)MinionID.StoneSpirit,
@@ -247,7 +247,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.SpiritOfNatureRenewal,
         };
 
-        private static HashSet<long> NonSpiritMinions = new HashSet<long>()
+        private static HashSet<int> NonSpiritMinions = new HashSet<int>()
         {
             (int)MinionID.JuvenileAlpineWolf,
             (int)MinionID.JuvenileArctodus,
@@ -310,7 +310,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileHyena
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }
