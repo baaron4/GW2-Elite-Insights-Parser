@@ -331,6 +331,7 @@ namespace GW2EIEvtcParser.ParsedData
             { PredatorsCunning, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
             { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
             { RangerPetSpawned, "https://wiki.guildwars2.com/images/thumb/1/11/Activate_Pet.png/25px-Activate_Pet.png" },
+            { QuickDraw, BuffImages.QuickDraw },
             // Revenant
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
             { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
