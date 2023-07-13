@@ -3253,6 +3253,7 @@
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
         public const long DualOrbitFireAndEarth = 69164;
+        public const long LesserGuardSkill = 69183;
         public const long DualOrbitFireAndWater = 69184;
         public const long DualOrbitWaterAndAir = 69211;
         public const long DualOrbitAirAndEarth = 69246;
