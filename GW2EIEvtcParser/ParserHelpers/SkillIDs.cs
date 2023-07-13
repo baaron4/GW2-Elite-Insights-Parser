@@ -43,6 +43,7 @@
         public const long VirtuosoBlades = -25;
         public const long RuneOfNightmare = -26;
         public const long BlinkOrPhaseRetreat = -27;
+        public const long RangerPetSpawned = -28;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;

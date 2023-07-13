@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
+            new MinionSpawnCastFinder(RangerPetSpawned, NonSpiritMinions.ToList()).UsingNotAccurate(true),
         };
 
 
@@ -308,6 +309,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileWolf,
             (int)MinionID.JuvenileHyena
         };
+
         internal static bool IsKnownMinionID(long id)
         {
             return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
