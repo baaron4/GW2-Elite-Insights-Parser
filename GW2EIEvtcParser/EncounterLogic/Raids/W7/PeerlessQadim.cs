@@ -473,43 +473,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        protected override void SetInstanceBuffs(ParsedEvtcLog log)
-        {
-            base.SetInstanceBuffs(log);
-
-            if (log.FightData.Success)
-            {
-                IReadOnlyList<AbstractBuffEvent> powerSurge = log.CombatData.GetBuffData(AchievementEligibilityPowerSurge);
-                bool hasPowerSurgeBeenAdded = false;
-                if (powerSurge.Any())
-                {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityPowerSurge, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
-                            hasPowerSurgeBeenAdded = true;
-                            break;
-                        }
-                    }
-                }
-                if (!hasPowerSurgeBeenAdded && CustomCheckPowerSurgeEligibility(log))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
-                }
-            }
-        }
-
-        private static bool CustomCheckPowerSurgeEligibility(ParsedEvtcLog log)
-        {
-            IReadOnlyList<AgentItem> anomalies = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TrashID.EntropicDistortion);
-            
-            foreach (AgentItem anomaly in anomalies)
-            {
-                // If == 0, true, else false.
-                return GetFilteredList(log.CombatData, SappingSurge, log.FindActor(anomaly), true, true).Count == 0;
-            }
-            return false;
-        }
     }
 }
