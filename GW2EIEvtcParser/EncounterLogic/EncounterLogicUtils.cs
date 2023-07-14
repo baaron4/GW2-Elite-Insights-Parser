@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 toCopy.Add(lastRotationToCopy);
             }
             CombatItem lastVelocityToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastRotationToCopy != null)
+            if (lastVelocityToCopy != null)
             {
                 toCopy.Add(lastVelocityToCopy);
             }
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 toCopy.Add(lastBreakbarUpdateToCopy);
             }
             CombatItem lastBarrierUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastBreakbarUpdateToCopy != null)
+            if (lastBarrierUpdateToCopy != null)
             {
                 toCopy.Add(lastBarrierUpdateToCopy);
             }
