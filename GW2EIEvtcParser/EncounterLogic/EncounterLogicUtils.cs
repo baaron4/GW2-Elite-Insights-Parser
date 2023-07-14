@@ -118,7 +118,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 combatData.Add(cExtra);
             }
             // Copy attack targets
-            foreach (CombatItem c in combatData.Where(x =>  x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)))
+            var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
+            foreach (CombatItem c in attackTargets)
             {
                 var cExtra = new CombatItem(c);
                 cExtra.OverrideTime(to.FirstAware);
