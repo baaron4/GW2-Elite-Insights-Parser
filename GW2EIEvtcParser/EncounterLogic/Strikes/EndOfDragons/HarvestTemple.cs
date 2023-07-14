@@ -383,7 +383,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra,
                         (evt, from, to) =>
                         {
-                            if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.SrcMatchesAgent(from, extensions))
+                            if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 // Regenerating back to full HP

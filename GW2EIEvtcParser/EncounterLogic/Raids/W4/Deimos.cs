@@ -106,15 +106,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 RedirectAllEvents(combatData, extensions, agentData, gadget, deimos, 
                     (evt, from, to) => {
-                        if (evt.HasTime(extensions) && evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
+                        // skip events before last aware that are not attack target related
+                        if (evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
                         {
                             return false;
                         }
-                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1500)
+                        // Deimos can't go above 10% hp during that phase
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
                         {
                             return false;
                         }
-                        if (evt.HasTime(extensions) && evt.Time < to.FirstAware)
+                        if (evt.Time < to.FirstAware)
                         {
                             evt.OverrideTime(to.FirstAware);
                         }
