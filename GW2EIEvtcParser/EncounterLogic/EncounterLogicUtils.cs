@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
         /// <param name="stateCopyFroms">AgentItems from where last known states (hp, position, etc) will be copied from</param>
         /// <param name="to">AgentItem the events need to be redirected to</param>
-        /// <param name="extraRedirections"></param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
         internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, ExtraRedirection extraRedirections = null)
         {
             // Redirect combat events
@@ -44,15 +44,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (to.InAwareTimes(evt.Time))
                 {
+                    var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                    var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
                     if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
                     {
                         continue;
                     }
-                    if (evt.SrcMatchesAgent(redirectFrom, extensions))
+                    if (srcMatchesAgent)
                     {
                         evt.OverrideSrcAgent(to.Agent);
                     }
-                    if (evt.DstMatchesAgent(redirectFrom, extensions))
+                    if (dstMatchesAgent)
                     {
                         evt.OverrideDstAgent(to.Agent);
                     }
@@ -152,21 +154,27 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="agentData"></param>
         /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
         /// <param name="to">AgentItem the events need to be redirected to</param>
-        /// <param name="extraRedirections"></param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
         internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection extraRedirections = null)
         {
             // Redirect combat events
             foreach (CombatItem evt in combatData)
             {
+                var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                if (!dstMatchesAgent && !srcMatchesAgent)
+                {
+                    continue;
+                }
                 if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
                 {
                     continue;
                 }
-                if (evt.SrcMatchesAgent(redirectFrom, extensions))
+                if (srcMatchesAgent)
                 {
                     evt.OverrideSrcAgent(to.Agent);
                 }
-                if (evt.DstMatchesAgent(redirectFrom, extensions))
+                if (dstMatchesAgent)
                 {
                     evt.OverrideDstAgent(to.Agent);
                 }
