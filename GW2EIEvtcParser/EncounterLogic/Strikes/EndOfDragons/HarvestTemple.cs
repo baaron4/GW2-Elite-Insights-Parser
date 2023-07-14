@@ -347,6 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
+                var copyEventsFrom = new List<AgentItem>() { dragonVoid };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 var targetables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent) && x.Time > 2000).ToList();
@@ -377,49 +378,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         end = targetOff.Time;
                     }
-                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
                     ulong lastHPUpdate = ulong.MaxValue;
-                    foreach (CombatItem c in combatData)
-                    {
-                        if (extra.InAwareTimes(c.Time))
+                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra,
+                        (evt, from, to) =>
                         {
-                            if (c.SrcMatchesAgent(dragonVoid, extensions))
+                            if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.SrcMatchesAgent(from, extensions))
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
-                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
+                                // Regenerating back to full HP
+                                if (evt.DstAgent > lastHPUpdate && evt.DstAgent > 9900)
                                 {
-                                    // Regenerating back to full HP
-                                    if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
-                                    {
-                                        continue;
-                                    }
-                                    // Remember last hp
-                                    lastHPUpdate = c.DstAgent;
+                                    return false;
                                 }
-                                c.OverrideSrcAgent(extra.Agent);
+                                // Remember last hp
+                                lastHPUpdate = evt.DstAgent;
                             }
-                            // Redirect effects from attack target to main body
-                            if (c.IsStateChange == ArcDPSEnums.StateChange.Effect && c.SrcMatchesAgent(atAgent, extensions))
-                            {
-                                c.OverrideSrcAgent(extra.Agent);
-                            }
-                            if (c.DstMatchesAgent(dragonVoid, extensions))
-                            {
-                                c.OverrideDstAgent(extra.Agent);
-                            }
+                            return true;
                         }
-                    }
-                    var attackTargetCopy = new CombatItem(at);
-                    attackTargetCopy.OverrideTime(extra.FirstAware);
-                    attackTargetCopy.OverrideDstAgent(extra.Agent);
-                    combatData.Add(attackTargetCopy);
-                    foreach (CombatItem c in posFacingHPEventsToCopy)
-                    {
-                        var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideSrcAgent(extra.Agent);
-                        combatData.Add(cExtra);
-                    }
+                    );
+                    copyEventsFrom.Add(extra);
                 }
             }
             //

@@ -65,12 +65,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                var copyEventsFrom = new List<AgentItem>() { hand };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(hand) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem posEvt = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
                 if (posEvt != null)
                 {
@@ -89,27 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData)
-                    {
-                        if (extra.InAwareTimes(c.Time))
-                        {
-                            if (c.SrcMatchesAgent(hand, extensions))
-                            {
-                                c.OverrideSrcAgent(extra.Agent);
-                            }
-                            if (c.DstMatchesAgent(hand, extensions))
-                            {
-                                c.OverrideDstAgent(extra.Agent);
-                            }
-                        }
-                    }
-                    foreach (CombatItem c in posFacingHP)
-                    {
-                        var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideSrcAgent(extra.Agent);
-                        combatData.Add(cExtra);
-                    }
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra);
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);

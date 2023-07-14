@@ -100,38 +100,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private static void MergeWithGadgets(AgentItem deimos, HashSet<AgentItem> gadgets, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            foreach (CombatItem c in combatData)
+            foreach (AgentItem gadget in gadgets)
             {
-                if (c.HasTime(extensions) && c.Time < target.LastAware && c.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && c.IsStateChange != ArcDPSEnums.StateChange.Targetable)
-                {
-                    continue;
-                }
-                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                {
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
-                    {
-                        continue;
+                RedirectAllEvents(combatData, extensions, agentData, gadget, deimos, 
+                    (evt, from, to) => {
+                        if (evt.HasTime(extensions) && evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
+                        {
+                            return false;
+                        }
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1500)
+                        {
+                            return false;
+                        }
+                        if (evt.HasTime(extensions) && evt.Time < to.FirstAware)
+                        {
+                            evt.OverrideTime(to.FirstAware);
+                        }
+                        return true;
                     }
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
-                    {
-                        continue;
-                    }
-                    c.OverrideSrcAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
-                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                {
-                    c.OverrideDstAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
+                );
             }
         }
 
@@ -215,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<ulong> gadgetAgents)
+        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<AgentItem> gadgetAgents)
         {
             if (targetable == null)
             {
@@ -237,11 +226,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return 0;
             }
-            gadgetAgents.Add(deimosStructBody.Agent);
+            gadgetAgents.Add(deimosStructBody);
             CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
             if (armDeimosDamageEvent != null)
             {
-                gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
+                gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
             }
             return firstAware;
         }
@@ -350,7 +339,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Deimos gadgets
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware);
-            var gadgetAgents = new HashSet<ulong>();
+            var gadgetAgents = new HashSet<AgentItem>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
             if (firstAware == 0)
@@ -362,14 +351,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (deimosGadgets.Count > 0)
                     {
                         firstAware = deimosGadgets.Max(x => x.FirstAware);
-                        gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                        gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
                     }
                 }
             }
             if (gadgetAgents.Count > 0)
             {
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
-                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
+                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, agentData, extensions);
                 // Add custom spawn event
                 combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             }

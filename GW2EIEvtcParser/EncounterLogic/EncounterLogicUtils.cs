@@ -16,23 +16,161 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
-                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                agentData.SwapMasters(new HashSet<AgentItem>(agents), newTargetAgent);
                 agentData.ReplaceAgentsFromID(newTargetAgent);
-                foreach (CombatItem c in combatItems)
+                foreach (AgentItem agentItem in agents)
                 {
-                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
+                    RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
+                }
+            }
+        }
+
+        internal delegate bool ExtraRedirection(CombatItem evt, AgentItem from, AgentItem to);
+        /// <summary>
+        /// Method used to redirect a subset of events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="stateCopyFroms">AgentItems from where last known states (hp, position, etc) will be copied from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections"></param>
+        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                if (to.InAwareTimes(evt.Time))
+                {
+                    if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
                     {
-                        c.OverrideSrcAgent(newTargetAgent.Agent);
+                        continue;
                     }
-                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent(extensions))
+                    if (evt.SrcMatchesAgent(redirectFrom, extensions))
                     {
-                        c.OverrideDstAgent(newTargetAgent.Agent);
+                        evt.OverrideSrcAgent(to.Agent);
+                    }
+                    if (evt.DstMatchesAgent(redirectFrom, extensions))
+                    {
+                        evt.OverrideDstAgent(to.Agent);
                     }
                 }
             }
+            var toCopy = new List<CombatItem>();
+            Func<CombatItem, bool> canCopy = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x)); 
+            CombatItem lastBreakbarStateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBreakbarStateToCopy != null)
+            {
+                toCopy.Add(lastBreakbarStateToCopy);
+            }
+            CombatItem lastPositionToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastPositionToCopy != null)
+            {
+                toCopy.Add(lastPositionToCopy);
+            }
+            CombatItem lastRotationToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Rotation && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastRotationToCopy != null)
+            {
+                toCopy.Add(lastRotationToCopy);
+            }
+            CombatItem lastVelocityToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastRotationToCopy != null)
+            {
+                toCopy.Add(lastVelocityToCopy);
+            }
+            CombatItem lastMaxHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastMaxHealthUpdateToCopy != null)
+            {
+                toCopy.Add(lastMaxHealthUpdateToCopy);
+            }
+            CombatItem lastHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastHealthUpdateToCopy != null)
+            {
+                toCopy.Add(lastHealthUpdateToCopy);
+            }
+            CombatItem lastBreakbarUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBreakbarUpdateToCopy != null)
+            {
+                toCopy.Add(lastBreakbarUpdateToCopy);
+            }
+            CombatItem lastBarrierUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBreakbarUpdateToCopy != null)
+            {
+                toCopy.Add(lastBarrierUpdateToCopy);
+            }
+            CombatItem lastCombatStatusUpdateToCopy = combatData.LastOrDefault(x => (x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat || x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat) && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastCombatStatusUpdateToCopy != null)
+            {
+                toCopy.Add(lastCombatStatusUpdateToCopy);
+            }
+            CombatItem lastStatusEventToCopy = combatData.LastOrDefault(x => (x.IsStateChange == ArcDPSEnums.StateChange.Spawn || x.IsStateChange == ArcDPSEnums.StateChange.Despawn || x.IsStateChange == ArcDPSEnums.StateChange.ChangeDead || x.IsStateChange == ArcDPSEnums.StateChange.ChangeDown || x.IsStateChange == ArcDPSEnums.StateChange.ChangeUp) && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastStatusEventToCopy != null)
+            {
+                toCopy.Add(lastStatusEventToCopy);
+            }
+            foreach (CombatItem c in toCopy)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideSrcAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Copy attack targets
+            foreach (CombatItem c in combatData.Where(x =>  x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)))
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideDstAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Redirect NPC masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+            // Redirect Gadget masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method used to redirect all events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections"></param>
+        internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
+                {
+                    continue;
+                }
+                if (evt.SrcMatchesAgent(redirectFrom, extensions))
+                {
+                    evt.OverrideSrcAgent(to.Agent);
+                }
+                if (evt.DstMatchesAgent(redirectFrom, extensions))
+                {
+                    evt.OverrideDstAgent(to.Agent);
+                }
+            }
+            agentData.SwapMasters(redirectFrom, to);
         }
 
         internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)

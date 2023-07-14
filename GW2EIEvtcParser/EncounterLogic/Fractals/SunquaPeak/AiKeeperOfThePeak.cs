@@ -164,59 +164,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long darkModeStart = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
-                    long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
-                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(lastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    // Redirect combat events
-                    foreach (CombatItem evt in combatData)
-                    {
-                        if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
-                        {
-                            if (evt.SrcMatchesAgent(aiAgent, extensions))
-                            {
-                                evt.OverrideSrcAgent(darkAiAgent.Agent);
-                            }
-                            if (evt.DstMatchesAgent(aiAgent, extensions))
-                            {
-                                evt.OverrideDstAgent(darkAiAgent.Agent);
-                            }
-                        }
-                    }
-                    CombatItem healthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime);
-                    if (healthUpdateToCopy != null)
-                    {
-                        //
-                        {
-                            var elAI0HP = new CombatItem(healthUpdateToCopy);
-                            elAI0HP.OverrideDstAgent(0);
-                            elAI0HP.OverrideTime(lastAwareTime);
-                            combatData.Add(elAI0HP);
-                        }
-                        //
-                        {
-                            var darkAI0HP = new CombatItem(healthUpdateToCopy);
-                            darkAI0HP.OverrideDstAgent(0);
-                            darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
-                            darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
-                            combatData.Add(darkAI0HP);
-                        }
-                    }
-                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
-                    // Redirect NPC masters
-                    foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
-                    {
-                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
-                        {
-                            ag.SetMaster(darkAiAgent);
-                        }
-                    }
-                    // Redirect Gadget masters
-                    foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
-                    {
-                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
-                        {
-                            ag.SetMaster(darkAiAgent);
-                        }
-                    }
+                    long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
+                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, new List<AgentItem> { aiAgent}, darkAiAgent);
+                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, elementalLastAwareTime);
                 }
                 else
                 {

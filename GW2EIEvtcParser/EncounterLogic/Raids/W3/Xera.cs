@@ -251,19 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _xeraSecondPhaseStartTime = secondXera.FirstAware;
                 }
                 firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
-                agentData.SwapMasters(secondXera, firstXera);
-                // update combat data
-                foreach (CombatItem c in combatData)
-                {
-                    if (c.SrcMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideSrcAgent(firstXera.Agent);
-                    }
-                    if (c.DstMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideDstAgent(firstXera.Agent);
-                    }
-                }
+                RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
 
