@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
         // Engineer
-        public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE";
+        public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
@@ -142,6 +142,7 @@ namespace GW2EIEvtcParser
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
         public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
+        public const string SoulbeastEternalBond = "BF0A5B11A4076A4F98C6E1D655D507B1"; // has owner & target
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
         public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";
