@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
 
         public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
         {
-            if (_deads == null)
+            if (_breakbarNones == null)
             {
                 _breakbarNones = new List<Segment>();
                 _breakbarActives = new List<Segment>();
