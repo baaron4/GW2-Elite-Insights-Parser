@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -256,6 +257,164 @@ namespace GW2EIEvtcParser
                 final = final.InnerException;
             }
             return final;
+        }
+
+
+
+        internal delegate bool ExtraRedirection(CombatItem evt, AgentItem from, AgentItem to);
+        /// <summary>
+        /// Method used to redirect a subset of events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="stateCopyFroms">AgentItems from where last known states (hp, position, etc) will be copied from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
+        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                if (to.InAwareTimes(evt.Time))
+                {
+                    var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                    var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                    if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
+                    {
+                        continue;
+                    }
+                    if (srcMatchesAgent)
+                    {
+                        evt.OverrideSrcAgent(to.Agent);
+                    }
+                    if (dstMatchesAgent)
+                    {
+                        evt.OverrideDstAgent(to.Agent);
+                    }
+                }
+            }
+            var toCopy = new List<CombatItem>();
+            Func<CombatItem, bool> canCopy = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
+            CombatItem lastBreakbarStateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BreakbarState && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBreakbarStateToCopy != null)
+            {
+                toCopy.Add(lastBreakbarStateToCopy);
+            }
+            CombatItem lastPositionToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Position && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastPositionToCopy != null)
+            {
+                toCopy.Add(lastPositionToCopy);
+            }
+            CombatItem lastRotationToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Rotation && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastRotationToCopy != null)
+            {
+                toCopy.Add(lastRotationToCopy);
+            }
+            CombatItem lastVelocityToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Velocity && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastVelocityToCopy != null)
+            {
+                toCopy.Add(lastVelocityToCopy);
+            }
+            CombatItem lastMaxHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.MaxHealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastMaxHealthUpdateToCopy != null)
+            {
+                toCopy.Add(lastMaxHealthUpdateToCopy);
+            }
+            CombatItem lastHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastHealthUpdateToCopy != null)
+            {
+                toCopy.Add(lastHealthUpdateToCopy);
+            }
+            CombatItem lastBreakbarUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BreakbarPercent && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBreakbarUpdateToCopy != null)
+            {
+                toCopy.Add(lastBreakbarUpdateToCopy);
+            }
+            CombatItem lastBarrierUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BarrierUpdate && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastBarrierUpdateToCopy != null)
+            {
+                toCopy.Add(lastBarrierUpdateToCopy);
+            }
+            CombatItem lastCombatStatusUpdateToCopy = combatData.LastOrDefault(x => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat) && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastCombatStatusUpdateToCopy != null)
+            {
+                toCopy.Add(lastCombatStatusUpdateToCopy);
+            }
+            CombatItem lastStatusEventToCopy = combatData.LastOrDefault(x => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp) && canCopy(x) && x.Time <= to.FirstAware);
+            if (lastStatusEventToCopy != null)
+            {
+                toCopy.Add(lastStatusEventToCopy);
+            }
+            foreach (CombatItem c in toCopy)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideSrcAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Copy attack targets
+            var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
+            foreach (CombatItem c in attackTargets)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideDstAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Redirect NPC masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+            // Redirect Gadget masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method used to redirect all events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
+        internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                if (!dstMatchesAgent && !srcMatchesAgent)
+                {
+                    continue;
+                }
+                if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
+                {
+                    continue;
+                }
+                if (srcMatchesAgent)
+                {
+                    evt.OverrideSrcAgent(to.Agent);
+                }
+                if (dstMatchesAgent)
+                {
+                    evt.OverrideDstAgent(to.Agent);
+                }
+            }
+            agentData.SwapMasters(redirectFrom, to);
         }
 
         /// <summary>
