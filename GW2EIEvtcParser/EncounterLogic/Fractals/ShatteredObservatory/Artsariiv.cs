@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstBuffApplyMechanic(CorporealReassignment, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Skull","Exploding Skull mechanic application","Corporeal Reassignment",0),
-            new PlayerDstHitMechanic(Vault, "Vault", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault","Vault from Big Adds", "Vault (Add)",0),
+            new PlayerDstHitMechanic(VaultArtsariiv, "Vault", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault","Vault from Big Adds", "Vault (Add)",0),
             new PlayerDstHitMechanic(SlamArtsariiv, "Slam", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam","Slam (Vault) from Boss", "Vault (Arts)",0),
             new PlayerDstHitMechanic(TeleportLunge, "Teleport Lunge", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump","Triple Jump Mid->Edge", "Triple Jump",0),
             new PlayerDstHitMechanic(AstralSurge, "Astral Surge", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle","Different sized spiraling circles", "1000 Circles",0),

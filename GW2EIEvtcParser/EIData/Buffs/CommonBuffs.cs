@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
             new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
             new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
+            new Buff("Downed (Pet)", DownedPet, Source.Common, BuffClassification.Other, BuffImages.HealingPowerAttribute),
             new Buff("Exhaustion", Exhaustion, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.Exhaustion),
             new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.Stealth),

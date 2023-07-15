@@ -195,6 +195,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Magic Blast", MagicBlast, Source.FightSpecific, BuffStackType.Stacking, 35, BuffClassification.Other, BuffImages.MagicBlast),
             new Buff("Gaining Power", GainingPower, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Unbreakable", Unbreakable, Source.FightSpecific, BuffStackType.Stacking, 2, BuffClassification.Other, BuffImages.XerasEmbrace),
+            new Buff("Spatial Denial", SpatialDenial, Source.FightSpecific, BuffClassification.Other, BuffImages.PhantasmalWarlock),
             // Twisted Castle
             new Buff("Spatial Distortion", SpatialDistortion, Source.FightSpecific, BuffClassification.Other, BuffImages.BloodstoneBlessed),
             new Buff("Madness", Madness, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Madness),

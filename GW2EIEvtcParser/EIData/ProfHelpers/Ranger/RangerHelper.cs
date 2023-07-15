@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sic 'Em!", SicEmEffect, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),
             new Buff("Sic 'Em! (PvP)", SicEmEffectPvP, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),
             new Buff("Sharpening Stones", SharpeningStonesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpeningStone),
-            new Buff("Sharpen Spines", SharpenSpinesEffect, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
+            new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
             new Buff("Guard!", GuardEffect, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
             new Buff("Search and Rescue!", SearchAndRescueEffect, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),

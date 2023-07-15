@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(MoaStanceSkill, MoaStanceEffect), // Moa Stance
             new BuffGiveCastFinder(VultureStanceSkill, VultureStanceEffect), // Vulture Stance
             //
-            new BuffGainCastFinder(SharpenSpinesBeastmode, SharpenSpinesEffect), // Beastmode Sharpen Spines
+            new BuffGainCastFinder(SharpenSpinesBeastmode, SharpenSpinesBuff), // Beastmode Sharpen Spines
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -72,6 +72,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stout", Stout, Source.Soulbeast, BuffClassification.Other, BuffImages.StoutArchetype),
             new Buff("Unstoppable Union", UnstoppableUnion, Source.Soulbeast, BuffClassification.Other, BuffImages.UnstoppableUnion),
             new Buff("Twice as Vicious", TwiceAsVicious, Source.Soulbeast, BuffClassification.Other, BuffImages.TwiceAsVicious),
+            new Buff("Unflinching Fortitude", UnflinchingFortitudeBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.UnflinchingFortitude),
+            new Buff("Defy Pain", DefyPainSoulbeastBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.DefyPain),
+            new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Soulbeast, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.SharpenSpines),
         };
 
     }
