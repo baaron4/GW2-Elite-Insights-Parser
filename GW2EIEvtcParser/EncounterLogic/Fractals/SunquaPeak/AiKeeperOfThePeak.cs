@@ -186,14 +186,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
-            if (_hasElementalMode && _hasDarkMode)
-            {
-                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcMatchesAgent(aiAgent));
-                if (aiMaxHP != null)
-                {
-                    darkAi.SetManualHealth((int)aiMaxHP.DstAgent);
-                }
-            }
             if (_hasDarkMode)
             {
                 int sorrowCount = 0;
