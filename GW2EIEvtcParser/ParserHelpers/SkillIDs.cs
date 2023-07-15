@@ -2038,7 +2038,7 @@
         public const long LastGraspJudgment = 47635;
         public const long ArcingAffliction = 47646;
         public const long CorsairMaintenanceOil = 47734;
-        public const long ChargeGazelleMergeSkill = 45743; // travel damage, impact is differen cast
+        public const long ChargeGazelleMergeSkill = 45743; // travel damage, impact is different cast
         public const long WurmSpit = 47756;
         public const long EnergyThresholdRiver = 47758;
         public const long FrozenWind = 47776;
