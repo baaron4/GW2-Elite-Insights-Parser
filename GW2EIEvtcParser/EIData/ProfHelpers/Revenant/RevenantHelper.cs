@@ -135,11 +135,11 @@ namespace GW2EIEvtcParser.EIData
             return _legendSwaps.Contains(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
-            (long)MinionID.VentariTablet
+            (int)MinionID.VentariTablet
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

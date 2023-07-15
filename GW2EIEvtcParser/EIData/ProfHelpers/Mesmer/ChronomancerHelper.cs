@@ -78,8 +78,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
         };
 
-        private static HashSet<long> NonCloneMinions = new HashSet<long>();
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> NonCloneMinions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id);
         }

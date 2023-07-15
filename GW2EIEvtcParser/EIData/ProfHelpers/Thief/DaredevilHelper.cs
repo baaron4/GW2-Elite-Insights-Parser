@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Weakening Strikes", WeakeningStrikes, Source.Daredevil, BuffClassification.Other, BuffImages.WeakeningStrikes).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.Daredevil1,
             (int)MinionID.Daredevil2,
@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Daredevil9,
             (int)MinionID.Daredevil10,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new PlayerDstHitMechanic(PylonDebrisField, "Pylon Debris Field", new MechanicPlotlySetting(Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", 0),
                 new PlayerDstHitMechanic(EnergizedAffliction, "Energized Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
-                new PlayerDstHitMechanic(ForceOfRetaliation, "Force of Retaliation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(ForceOfRetaliation, "Force of Retaliation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(ExponentialRepercussionPylon, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", 1000),
                 new PlayerDstHitMechanic(ExponentialRepercussionQadimShield, "Exponential Repercussion", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkPurple), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", 1000),
                 new PlayerDstHitMechanic(ForceOfHavoc, "Force of Havoc", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
-                            float direction = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
+                            float direction = RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
                             replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position)));
                             for (int i = 0; i < subdivisions; i++)
                             {
@@ -473,43 +473,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        protected override void SetInstanceBuffs(ParsedEvtcLog log)
-        {
-            base.SetInstanceBuffs(log);
-
-            if (log.FightData.Success)
-            {
-                IReadOnlyList<AbstractBuffEvent> powerSurge = log.CombatData.GetBuffData(AchievementEligibilityPowerSurge);
-                bool hasPowerSurgeBeenAdded = false;
-                if (powerSurge.Any())
-                {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityPowerSurge, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
-                            hasPowerSurgeBeenAdded = true;
-                            break;
-                        }
-                    }
-                }
-                if (!hasPowerSurgeBeenAdded && CustomCheckPowerSurgeEligibility(log))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityPowerSurge], 1));
-                }
-            }
-        }
-
-        private static bool CustomCheckPowerSurgeEligibility(ParsedEvtcLog log)
-        {
-            IReadOnlyList<AgentItem> anomalies = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TrashID.EntropicDistortion);
-            
-            foreach (AgentItem anomaly in anomalies)
-            {
-                // If == 0, true, else false.
-                return GetFilteredList(log.CombatData, SappingSurge, log.FindActor(anomaly), true, true).Count == 0;
-            }
-            return false;
-        }
     }
 }

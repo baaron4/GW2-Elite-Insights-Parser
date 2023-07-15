@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] { FulgorSphere1, FulgorSphere2 }, "Fulgor Sphere", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
             new PlayerDstHitMechanic(VolatileWind, "Volatile Wind", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
             new PlayerDstHitMechanic(WindBurst, "Wind Burst", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
-            new PlayerDstHitMechanic(WindBurst, "Wind Burst Launch", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(WindBurst, "Wind Burst Launch", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
             new PlayerDstHitMechanic(CallOfStorms , "Call of Storms", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs","Call of Storms", "Call of Storms",0),
             new EnemyDstBuffApplyMechanic(WhirlwindShield, "Whirlwind Shield",new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Magenta), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
             // Fire
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(AquaticBurst, "Aquatic Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
             new EnemyDstBuffApplyMechanic(TidalBarrier, "Tidal Barrier", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
             new PlayerDstBuffApplyMechanic(TidalBargain, "Tidal Bargain", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0),
-            new PlayerDstBuffRemoveMechanic(TidalBargain, "Tidal Bargain Downed", new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerDstBuffRemoveMechanic(TidalBargain, "Tidal Bargain Downed", new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             // Dark
             new PlayerDstHitMechanic(new long[] { EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9 }, 
                 "Empathic Manipulation", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Emp.Mnp.","Empathic Manipulation", "Empathic Manipulation",0),
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(NegativeBurst, "Negative Burst", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.","Negative Burst", "Negative Burst",500),
             new PlayerDstHitMechanic(Terrorstorm, "Terrorstorm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm","Terrorstorm", "Terrorstorm",0),
             new PlayerDstBuffApplyMechanic(CrushingGuilt, "Crushing Guilt", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
-            new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ParserHelper.ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
+            new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             new EnemyCastStartMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
@@ -164,59 +164,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long darkModeStart = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
-                    long lastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
-                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(lastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    // Redirect combat events
-                    foreach (CombatItem evt in combatData)
-                    {
-                        if (evt.Time >= darkAiAgent.FirstAware && evt.Time <= darkAiAgent.LastAware)
-                        {
-                            if (evt.SrcMatchesAgent(aiAgent, extensions))
-                            {
-                                evt.OverrideSrcAgent(darkAiAgent.Agent);
-                            }
-                            if (evt.DstMatchesAgent(aiAgent, extensions))
-                            {
-                                evt.OverrideDstAgent(darkAiAgent.Agent);
-                            }
-                        }
-                    }
-                    CombatItem healthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(aiAgent) && x.Time <= lastAwareTime);
-                    if (healthUpdateToCopy != null)
-                    {
-                        //
-                        {
-                            var elAI0HP = new CombatItem(healthUpdateToCopy);
-                            elAI0HP.OverrideDstAgent(0);
-                            elAI0HP.OverrideTime(lastAwareTime);
-                            combatData.Add(elAI0HP);
-                        }
-                        //
-                        {
-                            var darkAI0HP = new CombatItem(healthUpdateToCopy);
-                            darkAI0HP.OverrideDstAgent(0);
-                            darkAI0HP.OverrideTime(darkAiAgent.FirstAware);
-                            darkAI0HP.OverrideSrcAgent(darkAiAgent.Agent);
-                            combatData.Add(darkAI0HP);
-                        }
-                    }
-                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, lastAwareTime);
-                    // Redirect NPC masters
-                    foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
-                    {
-                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
-                        {
-                            ag.SetMaster(darkAiAgent);
-                        }
-                    }
-                    // Redirect Gadget masters
-                    foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
-                    {
-                        if (ag.Master == aiAgent && ag.FirstAware >= aiAgent.LastAware)
-                        {
-                            ag.SetMaster(darkAiAgent);
-                        }
-                    }
+                    long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
+                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, new List<AgentItem> { aiAgent}, darkAiAgent);
+                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, elementalLastAwareTime);
                 }
                 else
                 {
@@ -235,14 +186,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
-            if (_hasElementalMode && _hasDarkMode)
-            {
-                CombatItem aiMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.SrcMatchesAgent(aiAgent));
-                if (aiMaxHP != null)
-                {
-                    darkAi.SetManualHealth((int)aiMaxHP.DstAgent);
-                }
-            }
             if (_hasDarkMode)
             {
                 int sorrowCount = 0;

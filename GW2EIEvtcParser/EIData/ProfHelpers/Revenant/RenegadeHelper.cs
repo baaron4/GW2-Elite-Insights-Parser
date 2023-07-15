@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.JasRazorclaw,
             (int)MinionID.ViskIcerazor,
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.EraBreakrazor,
             (int)MinionID.OfelaSoulcleave,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

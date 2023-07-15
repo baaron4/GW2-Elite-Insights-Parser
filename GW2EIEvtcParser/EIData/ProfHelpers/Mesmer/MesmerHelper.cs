@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
         };
 
-        private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
+        private static readonly HashSet<int> _cloneIDs = new HashSet<int>()
         {
             (int)MinionID.CloneSword,
             (int)MinionID.CloneScepter,
@@ -326,12 +326,12 @@ namespace GW2EIEvtcParser.EIData
             return _cloneIDs.Contains(agentItem.ID);
         }
 
-        private static bool IsClone(long id)
+        private static bool IsClone(int id)
         {
             return _cloneIDs.Contains(id);
         }
 
-        private static HashSet<long> NonCloneMinions = new HashSet<long>()
+        private static HashSet<int> NonCloneMinions = new HashSet<int>()
         {
             (int)MinionID.IllusionaryWarlock,
             (int)MinionID.IllusionaryWarden,
@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryAvenger,
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
         }

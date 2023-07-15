@@ -134,14 +134,14 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, BuffImages.ForceOfWill),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.BowOfTruth,
             (int)MinionID.HammerOfWisdom,
             (int)MinionID.ShieldOfTheAvenger,
             (int)MinionID.SwordOfJustice,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

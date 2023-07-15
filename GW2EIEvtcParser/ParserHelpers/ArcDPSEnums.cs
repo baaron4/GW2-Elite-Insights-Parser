@@ -70,6 +70,7 @@ namespace GW2EIEvtcParser
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
+            internal const int FunctionalTrackingIDsForEffects = int.MaxValue;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -256,6 +257,7 @@ namespace GW2EIEvtcParser
             LogStartNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
+            FractalScale = 50,
             Unknown
         };
 
@@ -864,7 +866,7 @@ namespace GW2EIEvtcParser
             VoidStormseer = 24677,
             VoidMelter = 24223,
             VoidGoliath = 24761,
-            DragonEnergyOrb = ArcDPSEnums.DragonOrb,
+            DragonEnergyOrb = DragonOrb,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,

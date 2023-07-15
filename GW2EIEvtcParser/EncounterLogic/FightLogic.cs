@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
 
-        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
+        protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
@@ -246,8 +246,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int i = 0;
                 IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
-                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
+                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == BreakbarState.Active).ToList();
+                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != BreakbarState.Active).ToList();
                 foreach (BreakbarStateEvent active in breakbarActiveEvents)
                 {
                     long start = Math.Max(active.Time - 2000, log.FightData.FightStart);
@@ -402,7 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);

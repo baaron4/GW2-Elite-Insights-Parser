@@ -114,6 +114,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SmokeAssaultMergeHit, "Smoke Assault (Multi Hit)" },
             { OneWolfPackDamage, "One Wolf Pack (Hit)" },
             { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
+            { RangerPetSpawned, "Ranger Pet Spawned" },
             // Revenant
 	        { EnergyExpulsion, "Energy Expulsion" },
             { RiftSlashRiftHit, "Rift Slash (Rift Hit)" },
@@ -348,6 +349,8 @@ namespace GW2EIEvtcParser.ParsedData
             { OneWolfPackDamage, "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png" },
             { PredatorsCunning, "https://wiki.guildwars2.com/images/c/cc/Predator%27s_Cunning.png" },
             { OverbearingSmashLeap, "https://wiki.guildwars2.com/images/9/9a/Overbearing_Smash.png" },
+            { RangerPetSpawned, "https://wiki.guildwars2.com/images/thumb/1/11/Activate_Pet.png/25px-Activate_Pet.png" },
+            { QuickDraw, BuffImages.QuickDraw },
             // Revenant
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
             { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },

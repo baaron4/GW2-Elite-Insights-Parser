@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         throw new MissingKeyActorsException("Mai Trin not found");
                     }
-                    BuffApplyEvent buffApply = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
+                    BuffApplyEvent buffApply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
                     if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                     {
                         fightData.SetSuccess(true, buffApply.Time);
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
                 long maiTrinEnd = lastHPUpdate.Time;
                 long maiTrinStart = 0;
-                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
+                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
                 if (buffRemove != null)
                 {
                     maiTrinStart = buffRemove.Time;
@@ -250,7 +250,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
                 {
-                    hpUpdates.LastOrDefault().OverrideSrcAgent(ParserHelper._unknownAgent.Agent);
+                    hpUpdates.LastOrDefault().OverrideSrcAgent(_unknownAgent.Agent);
                 }
             }
             foreach (NPC target in Targets)

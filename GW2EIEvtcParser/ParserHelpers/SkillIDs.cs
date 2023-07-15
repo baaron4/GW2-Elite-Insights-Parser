@@ -43,7 +43,8 @@
         public const long VirtuosoBlades = -25;
         public const long RuneOfNightmare = -26;
         public const long BlinkOrPhaseRetreat = -27;
-        public const long HealingMistOrSoothingDetonation = -28;
+        public const long RangerPetSpawned = -28;
+        public const long HealingMistOrSoothingDetonation = -29;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -3272,6 +3273,7 @@
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
         public const long DualOrbitFireAndEarth = 69164;
+        public const long LesserGuardSkill = 69183;
         public const long DualOrbitFireAndWater = 69184;
         public const long DualOrbitWaterAndAir = 69211;
         public const long DualOrbitAirAndEarth = 69246;

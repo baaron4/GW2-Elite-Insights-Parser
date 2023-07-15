@@ -130,6 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
+                    var copyEventsFrom = new List<AgentItem>() { mushroom };
                     var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                     var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
                     var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
@@ -147,14 +148,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             lastDeadTime = deadEvent.Time;
                         }
                         AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                        // We only need to copy metadata
-                        foreach (CombatItem c in posFacingHP)
-                        {
-                            var cExtra = new CombatItem(c);
-                            cExtra.OverrideTime(aliveMushroom.FirstAware);
-                            cExtra.OverrideSrcAgent(aliveMushroom.Agent);
-                            combatData.Add(cExtra);
-                        }
+                        RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom);
+                        copyEventsFrom.Add(aliveMushroom);
                     }
                 }
                 agentData.Refresh();

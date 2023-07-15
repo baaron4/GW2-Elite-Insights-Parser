@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.LesserAirElemental,
             (int)MinionID.LesserEarthElemental,
@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.FireElemental,
             (int)MinionID.IceElemental,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

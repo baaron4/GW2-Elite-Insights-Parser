@@ -15,6 +15,69 @@ namespace GW2EIEvtcParser.EIData
     internal static class RangerHelper
     {
 
+        private static HashSet<int> NonSpiritMinions = new HashSet<int>()
+        {
+            (int)MinionID.JuvenileAlpineWolf,
+            (int)MinionID.JuvenileArctodus,
+            (int)MinionID.JuvenileArmorFish,
+            (int)MinionID.JuvenileBlackBear,
+            (int)MinionID.JuvenileBlackMoa,
+            (int)MinionID.JuvenileBlackWidowSpider,
+            (int)MinionID.JuvenileBlueJellyfish,
+            (int)MinionID.JuvenileBlueMoa,
+            (int)MinionID.JuvenileBoar,
+            (int)MinionID.JuvenileBristleback,
+            (int)MinionID.JuvenileBrownBear,
+            (int)MinionID.JuvenileCarrionDevourer,
+            (int)MinionID.JuvenileCaveSpider,
+            (int)MinionID.JuvenileCheetah,
+            (int)MinionID.JuvenileEagle,
+            (int)MinionID.JuvenileEletricWywern,
+            (int)MinionID.JuvenileFangedIboga,
+            (int)MinionID.JuvenileFernHound,
+            (int)MinionID.JuvenileFireWywern,
+            (int)MinionID.JuvenileForestSpider,
+            (int)MinionID.JuvenileHawk,
+            (int)MinionID.JuvenileIceDrake,
+            (int)MinionID.JuvenileJacaranda,
+            (int)MinionID.JuvenileJaguar,
+            (int)MinionID.JuvenileJungleSpider,
+            (int)MinionID.JuvenileJungleStalker,
+            (int)MinionID.JuvenileKrytanDrakehound,
+            (int)MinionID.JuvenileLashtailDevourer,
+            (int)MinionID.JuvenileLynx,
+            (int)MinionID.JuvenileMarshDrake,
+            (int)MinionID.JuvenileMurellow,
+            (int)MinionID.JuvenileOwl,
+            (int)MinionID.JuvenilePhoenix,
+            (int)MinionID.JuvenilePig,
+            (int)MinionID.JuvenilePinkMoa,
+            (int)MinionID.JuvenilePolarBear,
+            (int)MinionID.JuvenileRainbowJellyfish,
+            (int)MinionID.JuvenileRaven,
+            (int)MinionID.JuvenileRedJellyfish,
+            (int)MinionID.JuvenileRedMoa,
+            (int)MinionID.JuvenileReefDrake,
+            (int)MinionID.JuvenileRiverDrake,
+            (int)MinionID.JuvenileRockGazelle,
+            (int)MinionID.JuvenileSalamanderDrake,
+            (int)MinionID.JuvenileSandLion,
+            (int)MinionID.JuvenileShark,
+            (int)MinionID.JuvenileSiamoth,
+            (int)MinionID.JuvenileSiegeTurtle,
+            (int)MinionID.JuvenileSmokescale,
+            (int)MinionID.JuvenileSnowLeopard,
+            (int)MinionID.JuvenileTiger,
+            (int)MinionID.JuvenileWallow,
+            (int)MinionID.JuvenileWarthog,
+            (int)MinionID.JuvenileWhiptailDevourer,
+            (int)MinionID.JuvenileWhiteMoa,
+            (int)MinionID.JuvenileWhiteRaven,
+            (int)MinionID.JuvenileWhiteTiger,
+            (int)MinionID.JuvenileWolf,
+            (int)MinionID.JuvenileHyena
+        };
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
@@ -24,15 +87,18 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
             new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesEffect),
+            new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true),
             new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
             new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond),
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
-            new BuffGiveCastFinder(GuardSkill, GuardEffect),
+            new BuffGiveCastFinder(GuardSkill, GuardEffect).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
+            new BuffGiveCastFinder(LesserGuardSkill, GuardEffect).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueEffect).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
+            new MinionSpawnCastFinder(RangerPetSpawned, NonSpiritMinions.ToList()).UsingNotAccurate(true),
         };
 
 
@@ -149,7 +215,8 @@ namespace GW2EIEvtcParser.EIData
             // Skirmishing
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
             new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
-            new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance),
+            new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking || log.CombatData.GetBreakbarStateEvents(x.To).LastOrDefault(y => y.Time <= x.Time)?.State != BreakbarState.None , ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
             new BuffDamageModifier(LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.LightOnYourFeet, DamageModifierMode.All),
             // Nature Magic
             // We can't check buffs on minions yet
@@ -235,7 +302,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private static readonly HashSet<long> SpiritIDs = new HashSet<long>()
+        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
         {
             (int)MinionID.FrostSpirit,
             (int)MinionID.StoneSpirit,
@@ -245,69 +312,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.SpiritOfNatureRenewal,
         };
 
-        private static HashSet<long> NonSpiritMinions = new HashSet<long>()
-        {
-            (int)MinionID.JuvenileAlpineWolf,
-            (int)MinionID.JuvenileArctodus,
-            (int)MinionID.JuvenileArmorFish,
-            (int)MinionID.JuvenileBlackBear,
-            (int)MinionID.JuvenileBlackMoa,
-            (int)MinionID.JuvenileBlackWidowSpider,
-            (int)MinionID.JuvenileBlueJellyfish,
-            (int)MinionID.JuvenileBlueMoa,
-            (int)MinionID.JuvenileBoar,
-            (int)MinionID.JuvenileBristleback,
-            (int)MinionID.JuvenileBrownBear,
-            (int)MinionID.JuvenileCarrionDevourer,
-            (int)MinionID.JuvenileCaveSpider,
-            (int)MinionID.JuvenileCheetah,
-            (int)MinionID.JuvenileEagle,
-            (int)MinionID.JuvenileEletricWywern,
-            (int)MinionID.JuvenileFangedIboga,
-            (int)MinionID.JuvenileFernHound,
-            (int)MinionID.JuvenileFireWywern,
-            (int)MinionID.JuvenileForestSpider,
-            (int)MinionID.JuvenileHawk,
-            (int)MinionID.JuvenileIceDrake,
-            (int)MinionID.JuvenileJacaranda,
-            (int)MinionID.JuvenileJaguar,
-            (int)MinionID.JuvenileJungleSpider,
-            (int)MinionID.JuvenileJungleStalker,
-            (int)MinionID.JuvenileKrytanDrakehound,
-            (int)MinionID.JuvenileLashtailDevourer,
-            (int)MinionID.JuvenileLynx,
-            (int)MinionID.JuvenileMarshDrake,
-            (int)MinionID.JuvenileMurellow,
-            (int)MinionID.JuvenileOwl,
-            (int)MinionID.JuvenilePhoenix,
-            (int)MinionID.JuvenilePig,
-            (int)MinionID.JuvenilePinkMoa,
-            (int)MinionID.JuvenilePolarBear,
-            (int)MinionID.JuvenileRainbowJellyfish,
-            (int)MinionID.JuvenileRaven,
-            (int)MinionID.JuvenileRedJellyfish,
-            (int)MinionID.JuvenileRedMoa,
-            (int)MinionID.JuvenileReefDrake,
-            (int)MinionID.JuvenileRiverDrake,
-            (int)MinionID.JuvenileRockGazelle,
-            (int)MinionID.JuvenileSalamanderDrake,
-            (int)MinionID.JuvenileSandLion,
-            (int)MinionID.JuvenileShark,
-            (int)MinionID.JuvenileSiamoth,
-            (int)MinionID.JuvenileSiegeTurtle,
-            (int)MinionID.JuvenileSmokescale,
-            (int)MinionID.JuvenileSnowLeopard,
-            (int)MinionID.JuvenileTiger,
-            (int)MinionID.JuvenileWallow,
-            (int)MinionID.JuvenileWarthog,
-            (int)MinionID.JuvenileWhiptailDevourer,
-            (int)MinionID.JuvenileWhiteMoa,
-            (int)MinionID.JuvenileWhiteRaven,
-            (int)MinionID.JuvenileWhiteTiger,
-            (int)MinionID.JuvenileWolf,
-            (int)MinionID.JuvenileHyena
-        };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }

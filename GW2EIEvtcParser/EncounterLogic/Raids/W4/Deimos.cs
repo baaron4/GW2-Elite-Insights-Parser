@@ -100,38 +100,29 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private static void MergeWithGadgets(AgentItem deimos, HashSet<AgentItem> gadgets, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            foreach (CombatItem c in combatData)
+            foreach (AgentItem gadget in gadgets)
             {
-                if (c.HasTime(extensions) && c.Time < target.LastAware && c.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && c.IsStateChange != ArcDPSEnums.StateChange.Targetable)
-                {
-                    continue;
-                }
-                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                {
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
-                    {
-                        continue;
+                RedirectAllEvents(combatData, extensions, agentData, gadget, deimos, 
+                    (evt, from, to) => {
+                        // skip events before last aware that are not attack target related
+                        if (evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
+                        {
+                            return false;
+                        }
+                        // Deimos can't go above 10% hp during that phase
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
+                        {
+                            return false;
+                        }
+                        if (evt.Time < to.FirstAware)
+                        {
+                            evt.OverrideTime(to.FirstAware);
+                        }
+                        return true;
                     }
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
-                    {
-                        continue;
-                    }
-                    c.OverrideSrcAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
-                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                {
-                    c.OverrideDstAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
+                );
             }
         }
 
@@ -143,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(SkillIDs.UnnaturalSignet);
+            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
             foreach (AbstractBuffEvent bfe in signets)
             {
                 if (bfe is BuffApplyEvent ba)
@@ -151,8 +142,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                     if (removal == null)
                     {
-                        res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
-                        res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
+                        res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
+                        res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
                     }
                 }
                 else if (bfe is BuffRemoveAllEvent)
@@ -160,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                     if (apply == null)
                     {
-                        res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
+                        res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
                     }
                 }
             }
@@ -193,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 // sanity check
-                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ParserHelper.ServerDelayConstant);
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
                 if (attackableEvent == null)
                 {
                     return;
@@ -215,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<ulong> gadgetAgents)
+        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<AgentItem> gadgetAgents)
         {
             if (targetable == null)
             {
@@ -223,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             long firstAware = targetable.Time;
             AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent, targetable.Time);
-            if (targetAgent == ParserHelper._unknownAgent)
+            if (targetAgent == _unknownAgent)
             {
                 return 0;
             }
@@ -233,15 +224,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent, attackTargetEvent.Time);
-            if (deimosStructBody == ParserHelper._unknownAgent)
+            if (deimosStructBody == _unknownAgent)
             {
                 return 0;
             }
-            gadgetAgents.Add(deimosStructBody.Agent);
+            gadgetAgents.Add(deimosStructBody);
             CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
             if (armDeimosDamageEvent != null)
             {
-                gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
+                gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
             }
             return firstAware;
         }
@@ -350,7 +341,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Deimos gadgets
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware);
-            var gadgetAgents = new HashSet<ulong>();
+            var gadgetAgents = new HashSet<AgentItem>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
             if (firstAware == 0)
@@ -362,14 +353,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (deimosGadgets.Count > 0)
                     {
                         firstAware = deimosGadgets.Max(x => x.FirstAware);
-                        gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                        gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
                     }
                 }
             }
             if (gadgetAgents.Count > 0)
             {
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
-                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
+                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, agentData, extensions);
                 // Add custom spawn event
                 combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             }
@@ -419,7 +410,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
 
             if (invulDei != null)
             {
@@ -427,7 +418,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
-                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > ParserHelper.PhaseTimeLimit)
+                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > PhaseTimeLimit)
                 {
                     var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
                     phase10to0.AddTarget(mainTarget);
@@ -630,7 +621,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 diffY = -1130;
                             }
                         }
-                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ParserHelper.ServerDelayConstant) + new Point3D(diffX, diffY);
+                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
                         replay.Decorations.Add(new LineDecoration(0, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
