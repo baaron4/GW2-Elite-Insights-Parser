@@ -5,7 +5,7 @@
 "use strict";
 //// ACTORS
 class IconDrawable {
-    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth) {
+    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth) {
         this.pos = pos;
         this.start = start;
         this.end = end;
@@ -19,6 +19,7 @@ class IconDrawable {
         this.dead = typeof dead !== "undefined" ? dead : null;
         this.down = typeof down !== "undefined" ? down : null;
         this.dc = typeof dc !== "undefined" ? dc : null;
+        this.breakbarActive = typeof breakbarActive !== "undefined" ? breakbarActive : null;
         this.hitboxWidth = hitboxWidth;
     }
 
@@ -63,6 +64,19 @@ class IconDrawable {
         var time = animator.reactiveDataStatus.time;
         for (let i = 0; i < this.dc.length; i += 2) {
             if (this.dc[i] <= time && this.dc[i + 1] >= time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isBreakbarActive() {
+        if (this.breakbarActive === null || this.breakbarActive.length === 0) {
+            return false;
+        }
+        var time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < this.breakbarActive.length; i += 2) {
+            if (this.breakbarActive[i] <= time && this.breakbarActive[i + 1] >= time) {
                 return true;
             }
         }
@@ -179,8 +193,8 @@ class IconDrawable {
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc, hitboxWidth) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth);
+    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc, breakbarActive, hitboxWidth) {
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
         this.group = group;
     }
 
@@ -191,8 +205,8 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, masterID, hitboxWidth) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, hitboxWidth);
+    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, breakbarActive, masterID, hitboxWidth) {
+        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
         this.masterID = typeof masterID === "undefined" ? -1 : masterID;
         this.master = null;
     }

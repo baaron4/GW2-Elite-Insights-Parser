@@ -297,55 +297,26 @@ namespace GW2EIEvtcParser
             }
             var toCopy = new List<CombatItem>();
             Func<CombatItem, bool> canCopy = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
-            CombatItem lastBreakbarStateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BreakbarState && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastBreakbarStateToCopy != null)
+            var stateChangeCopyConditions = new List<Func<CombatItem, bool>>()
             {
-                toCopy.Add(lastBreakbarStateToCopy);
-            }
-            CombatItem lastPositionToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Position && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastPositionToCopy != null)
+                (x) => x.IsStateChange == StateChange.BreakbarState,
+                (x) => x.IsStateChange == StateChange.Position,
+                (x) => x.IsStateChange == StateChange.Rotation,
+                (x) => x.IsStateChange == StateChange.Velocity,
+                (x) => x.IsStateChange == StateChange.MaxHealthUpdate,
+                (x) => x.IsStateChange == StateChange.HealthUpdate,
+                (x) => x.IsStateChange == StateChange.BreakbarPercent,
+                (x) => x.IsStateChange == StateChange.BarrierUpdate,
+                (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
+                (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
+            };
+            foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyConditions)
             {
-                toCopy.Add(lastPositionToCopy);
-            }
-            CombatItem lastRotationToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Rotation && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastRotationToCopy != null)
-            {
-                toCopy.Add(lastRotationToCopy);
-            }
-            CombatItem lastVelocityToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.Velocity && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastVelocityToCopy != null)
-            {
-                toCopy.Add(lastVelocityToCopy);
-            }
-            CombatItem lastMaxHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.MaxHealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastMaxHealthUpdateToCopy != null)
-            {
-                toCopy.Add(lastMaxHealthUpdateToCopy);
-            }
-            CombatItem lastHealthUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastHealthUpdateToCopy != null)
-            {
-                toCopy.Add(lastHealthUpdateToCopy);
-            }
-            CombatItem lastBreakbarUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BreakbarPercent && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastBreakbarUpdateToCopy != null)
-            {
-                toCopy.Add(lastBreakbarUpdateToCopy);
-            }
-            CombatItem lastBarrierUpdateToCopy = combatData.LastOrDefault(x => x.IsStateChange == StateChange.BarrierUpdate && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastBarrierUpdateToCopy != null)
-            {
-                toCopy.Add(lastBarrierUpdateToCopy);
-            }
-            CombatItem lastCombatStatusUpdateToCopy = combatData.LastOrDefault(x => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat) && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastCombatStatusUpdateToCopy != null)
-            {
-                toCopy.Add(lastCombatStatusUpdateToCopy);
-            }
-            CombatItem lastStatusEventToCopy = combatData.LastOrDefault(x => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp) && canCopy(x) && x.Time <= to.FirstAware);
-            if (lastStatusEventToCopy != null)
-            {
-                toCopy.Add(lastStatusEventToCopy);
+                CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopy(x) && x.Time <= to.FirstAware);
+                if (stateToCopy != null)
+                {
+                    toCopy.Add(stateToCopy);
+                }
             }
             foreach (CombatItem c in toCopy)
             {

@@ -44,6 +44,7 @@
         public const long RuneOfNightmare = -26;
         public const long BlinkOrPhaseRetreat = -27;
         public const long RangerPetSpawned = -28;
+        public const long HealingMistOrSoothingDetonation = -29;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -271,6 +272,7 @@
         public const long SigilOfHydromancy = 9428;
         public const long SigilOfEarth = 9433;
         public const long SigilOfDoom = 9441;
+        public const long FrozenBurstRuneOfIce = 9604;
         public const long BowlOfSimpleStirfry = 9733;
         public const long BowlOfGarlicSpinachSautee = 9734;
         public const long BowlOfAvocadoStirfry = 9736;
@@ -854,6 +856,7 @@
         public const long GlazedPeachTart = 15258;
         public const long OmnomberryGhost = 15259;
         public const long SpicyPumpkinCookie = 15260;
+        public const long HuntersCallRuneOfMadKing = 15266;
         public const long WeakPotionOfHalloweenSlaying = 15272;
         public const long MinorPotionOfHalloweenSlaying = 15274;
         public const long PotionOfHalloweenSlaying = 15276;
@@ -880,6 +883,7 @@
         public const long ShadowPortal = 16435;
         public const long ShadowPortalPreparedEffect = 16437;
         public const long ThrowGunkEttinGunk = 16460;
+        public const long ThrowNetUnderwaterNet = 16484;
         public const long BowlOfSaffronMangoIceCream = 16501;
         public const long BowlOfPeachRaspberrySwirlIceCream = 16502;
         public const long BowlOfMintChocolateChipIceCream = 16503;
@@ -903,6 +907,8 @@
         public const long Enraged1_Unknown = 18711;
         public const long FieryBlock = 18981;
         public const long IncreasedArmorOilMasteryIII = 19083;
+        public const long SmashBottle = 19152;
+        public const long ThrowBottle = 19153;
         public const long Torment = 19426;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
@@ -1125,6 +1131,7 @@
         public const long DefenseField = 30027;
         public const long EyeOfTheStormShout = 30047;
         public const long ReapersFrostExecutionersScythe = 30070;
+        public const long POV_SwapPets = 30084; // applied for 100ms, also used by eternal bond swap
         public const long BulwarkGyro = 30101;
         public const long InfusingTerrorEffect = 30129;
         public const long TimeAnchored = 30136;
@@ -1152,9 +1159,9 @@
         public const long PulmonaryImpactEffect = 30510;
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
-        public const long FeelTheBurn = 30662;
         public const long SoothingDetonation = 30564;
         public const long Vault = 30597;
+        public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
         public const long SignetOfHumility = 30739;
@@ -1814,6 +1821,7 @@
         public const long Chapter4ScorchedAftermath = 40015;
         public const long BearStance = 40045;
         public const long DesertShroudEffect = 40052;
+        public const long POV_StealResistanceEffect = 40059;
         public const long Supportive = 40069;
         public const long GarishPillarHit = 40071;
         public const long PortentOfFreedom = 40114;
@@ -1872,6 +1880,7 @@
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
         public const long TomeOfResolveSkill = 41780;
+        public const long POV_StealWarmthEffect = 41788;
         public const long PlateOfSugarRibRoast = 41809;
         public const long DolyakStanceEffect = 41815;
         public const long Chapter3ValiantBulwark = 41836;
@@ -1889,6 +1898,7 @@
         public const long PrimordialStanceEffect = 42086;
         public const long TailSpin = 42133;
         public const long OneWolfPackDamage = 42145;
+        public const long POV_StealPrecisionEffect = 42194;
         public const long Afterburner = 42210;
         public const long ManifestSandShadeSkill = 42297;
         public const long TomeOfCourageSkill = 42259;
@@ -1906,9 +1916,13 @@
         public const long UnravelEffect = 42683;
         public const long HiddenKiller = 42720;
         public const long DismissLieutenantSoulcleaveSkill = 42752;
+        public const long POV_StealDefensesEffect = 42762;
+        public const long POV_StealMobilityEffect = 42839;
         public const long Kneeling = 42869;
         public const long FireMinorAttunement = 42811;
         public const long OpeningPassage = 42864;
+        public const long Kneeling = 42869;
+        public const long POV_StealHealthEffect = 42870;
         public const long KallasFervor = 42883;
         public const long EpilogueAshesOfTheJust = 42898;
         public const long FlameSurge = 42924;
@@ -1964,6 +1978,7 @@
         public const long SightBeyondSightSkill = 43745;
         public const long SandCascadeBarrier = 43759;
         public const long EarthMajorAttunement = 43740;
+        public const long POV_StealDurabilityEffect = 43770;
         public const long SignetOfSpiteShroud = 43772;
         public const long IcerazorsIreHit = 43856;
         public const long SignetOfVampirismShroud = 43885;
@@ -1971,7 +1986,7 @@
         public const long SuperiorSigilOfSeverance = 43930;
         public const long OverheatSkill = 43937;
         public const long FullCounterBuff = 43949;
-        public const long ChargeGazelleMergeTravel = 43995;
+        public const long ChargeGazelleMergeImpact = 43995;
         public const long VoiceOfTruth = 44008;
         public const long ChargeGazelle = 44051;
         public const long MantraOfTruthCast = 44080;
@@ -1981,6 +1996,7 @@
         public const long ClarifiedConclusion = 44248;
         public const long LegendaryRenegadeStanceEffect = 44272;
         public const long TomeOfJusticeOpen = 44291;
+        public const long POV_StealTimeEffect = 45325;
         public const long Riptide = 44405;
         public const long LasersEdge = 44414;
         public const long GarishPillarSkill = 44428;
@@ -1994,6 +2010,7 @@
         public const long BowlOfSpicedRedLentilStew = 44639;
         public const long VultureStanceEffect = 44651;
         public const long DesertShroud = 44663;
+        public const long POV_StealStrengthEffect = 44674;
         public const long BreakrazorsBastionBuff = 44682;
         public const long PhantasmalForce = 44691;
         public const long Versatile = 44693;
@@ -2120,7 +2137,7 @@
         public const long LastGraspJudgment = 47635;
         public const long ArcingAffliction = 47646;
         public const long CorsairMaintenanceOil = 47734;
-        public const long ChargeGazelleMergeSkill = 45743;
+        public const long ChargeGazelleMergeSkill = 45743; // travel damage, impact is different cast
         public const long WurmSpit = 47756;
         public const long EnergyThresholdRiver = 47758;
         public const long FrozenWind = 47776;
@@ -2325,8 +2342,10 @@
         public const long SoulPastry = 53222;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;
+        public const long ArtilleryBarrageRuneofCitadel = 53337;
         public const long PotentLucentOil = 53374;
         public const long CanOfStewedOysters = 53384;
+        public const long HandOfGrenthRuneOfGrenth = 53406;
         public const long MarkedMistsArena = 53412;
         public const long AuroraBeam1 = 53445;
         public const long FrostPatch = 53446;
@@ -2701,6 +2720,7 @@
         public const long IceShatterWhisper2 = 59489;
         public const long ExplosiveTemper = 59528;
         public const long MinionCommandEffect = 59536; // applied to minion, from player for necro/ele, from pet for ranger, not used for mechanist
+        public const long EternalBondSkill = 59554;
         public const long ExplosiveEntranceSkill = 59562;
         public const long ExplosiveEntranceEffect = 59579;
         public const long InvokingTorment = 59591;

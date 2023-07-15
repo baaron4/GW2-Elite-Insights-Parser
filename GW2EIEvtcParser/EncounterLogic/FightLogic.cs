@@ -245,30 +245,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractSingleActor target in Targets)
             {
                 int i = 0;
-                IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == BreakbarState.Active).ToList();
-                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != BreakbarState.Active).ToList();
-                foreach (BreakbarStateEvent active in breakbarActiveEvents)
+                (_, IReadOnlyList<Segment> actives, _, _) = target.GetBreakbarStatus(log);
+                foreach (Segment active in actives)
                 {
-                    long start = Math.Max(active.Time - 2000, log.FightData.FightStart);
-                    BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
-                    long end;
-                    if (notActive == null)
-                    {
-                        DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-                        if (deadEvent == null)
-                        {
-                            end = Math.Min(target.LastAware, log.FightData.FightEnd);
-                        }
-                        else
-                        {
-                            end = Math.Min(deadEvent.Time, log.FightData.FightEnd);
-                        }
-                    }
-                    else
-                    {
-                        end = Math.Min(notActive.Time, log.FightData.FightEnd);
-                    }
+                    long start = Math.Max(active.Start - 2000, log.FightData.FightStart);
+                    long end = Math.Min(active.End, log.FightData.FightEnd);
                     var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                     {
                         BreakbarPhase = true,
