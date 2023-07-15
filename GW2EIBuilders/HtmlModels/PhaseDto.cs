@@ -174,13 +174,13 @@ namespace GW2EIBuilders.HtmlModels
             }
             StatisticsHelper statistics = log.StatisticsHelper;
 
-            DpsStats = PhaseDto.BuildDPSData(log, phase);
-            DpsStatsTargets = PhaseDto.BuildDPSTargetsData(log, phase);
-            OffensiveStatsTargets = PhaseDto.BuildOffensiveStatsTargetsData(log, phase);
-            OffensiveStats = PhaseDto.BuildOffensiveStatsData(log, phase);
-            GameplayStats = PhaseDto.BuildGameplayStatsData(log, phase);
-            DefStats = PhaseDto.BuildDefenseData(log, phase);
-            SupportStats = PhaseDto.BuildSupportData(log, phase);
+            DpsStats = BuildDPSData(log, phase);
+            DpsStatsTargets = BuildDPSTargetsData(log, phase);
+            OffensiveStatsTargets = BuildOffensiveStatsTargetsData(log, phase);
+            OffensiveStats = BuildOffensiveStatsData(log, phase);
+            GameplayStats = BuildGameplayStatsData(log, phase);
+            DefStats = BuildDefenseData(log, phase);
+            SupportStats = BuildSupportData(log, phase);
             //
             BoonStats = BuffData.BuildBuffUptimeData(log, statistics.PresentBoons, phase);
             BoonDictionaries = BuffData.BuildBuffDictionariesData(log, statistics.PresentBoons, phase);

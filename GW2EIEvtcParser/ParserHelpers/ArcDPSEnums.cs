@@ -866,7 +866,7 @@ namespace GW2EIEvtcParser
             VoidStormseer = 24677,
             VoidMelter = 24223,
             VoidGoliath = 24761,
-            DragonEnergyOrb = ArcDPSEnums.DragonOrb,
+            DragonEnergyOrb = DragonOrb,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,

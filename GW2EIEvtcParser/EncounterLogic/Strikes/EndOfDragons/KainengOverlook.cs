@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (cbtEnter != null)
                 {
-                    AbstractBuffEvent nextPhaseStartEvt = log.CombatData.GetBuffData(ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.BuffID == SkillIDs.Determined762 && x.Time > cbtEnter.Time);
+                    AbstractBuffEvent nextPhaseStartEvt = log.CombatData.GetBuffData(ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.BuffID == Determined762 && x.Time > cbtEnter.Time);
                     long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                     var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                     addPhase.AddTargets(targets);
@@ -178,7 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Minister Li not found");
             }
-            var buffApplies = combatData.GetBuffData(SkillIDs.Resurrection).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
+            var buffApplies = combatData.GetBuffData(Resurrection).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
             if (buffApplies.Any())
             {
                 fightData.SetSuccess(true, buffApplies[0].Time);

@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EIData
         {
             //
             _buffMap = new BuffDictionary();
-            if (Actor.AgentItem == ParserHelper._unknownAgent)
+            if (Actor.AgentItem == _unknownAgent)
             {
                 _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
                 return;

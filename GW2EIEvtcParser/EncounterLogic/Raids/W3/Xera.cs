@@ -137,10 +137,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent determined = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             if (determined == null)
             {
-                determined = log.CombatData.GetBuffData(SkillIDs.SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+                determined = log.CombatData.GetBuffData(SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             }
             return determined;
         }

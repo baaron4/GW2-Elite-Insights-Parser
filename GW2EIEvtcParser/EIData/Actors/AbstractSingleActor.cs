@@ -472,7 +472,7 @@ namespace GW2EIEvtcParser.EIData
             CastEvents.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ParserHelper.ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
+                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
                 {
                     CastEvents[CastEvents.Count - 1] = wepSwap;
                 }

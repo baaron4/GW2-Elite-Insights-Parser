@@ -88,12 +88,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Qadim,
-                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
-                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
-                (int)ArcDPSEnums.TrashID.WyvernPatriarch,
-                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
-                (int)ArcDPSEnums.TrashID.QadimLamp,
+                (int)TargetID.Qadim,
+                (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.WyvernMatriarch,
+                (int)TrashID.WyvernPatriarch,
+                (int)TrashID.ApocalypseBringer,
+                (int)TrashID.QadimLamp,
             };
         }
 
@@ -101,23 +101,23 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.Qadim,
-                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
-                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
-                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
-                (int)ArcDPSEnums.TrashID.WyvernPatriarch
+                (int)TargetID.Qadim,
+                (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.ApocalypseBringer,
+                (int)TrashID.WyvernMatriarch,
+                (int)TrashID.WyvernPatriarch
             };
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(ArcDPSEnums.TrashID.PyreGuardian);
+            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID(ArcDPSEnums.TrashID.QadimLamp);
+                lamp.OverrideID(TrashID.QadimLamp);
             }
             bool refresh = lampAgents.Count > 0;
             // Pyres
@@ -126,23 +126,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             var resolutionRetaliationPyrePositions = new List<Point3D> { new Point3D(-8951, 9429), new Point3D(-5716, 9325), new Point3D(-7846, 10612) };
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
                 if (positionEvt != null)
                 {
                     Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
                     if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianProtect);
+                        pyre.OverrideID(TrashID.PyreGuardianProtect);
                         refresh = true;
                     }
                     else if (stabilityPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianStab);
+                        pyre.OverrideID(TrashID.PyreGuardianStab);
                         refresh = true;
                     }
                     else if (resolutionRetaliationPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
+                        pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal);
                         refresh = true;
                     }
                 }
@@ -154,19 +154,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianProtect))
+                if (target.IsSpecies(TrashID.PyreGuardianProtect))
                 {
                     target.OverrideName("Protect " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianRetal))
+                if (target.IsSpecies(TrashID.PyreGuardianRetal))
                 {
                     target.OverrideName("Retal " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianResolution))
+                if (target.IsSpecies(TrashID.PyreGuardianResolution))
                 {
                     target.OverrideName("Resolution " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianStab))
+                if (target.IsSpecies(TrashID.PyreGuardianStab))
                 {
                     target.OverrideName("Stab " + target.Character);
                 }
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -229,11 +229,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var pyresFirstAware = new List<long>();
                     var pyres = new List<ArcDPSEnums.TrashID>
                         {
-                            ArcDPSEnums.TrashID.PyreGuardian,
-                            ArcDPSEnums.TrashID.PyreGuardianProtect,
-                            ArcDPSEnums.TrashID.PyreGuardianStab,
-                            ArcDPSEnums.TrashID.PyreGuardianRetal,
-                            ArcDPSEnums.TrashID.PyreGuardianResolution,
+                            TrashID.PyreGuardian,
+                            TrashID.PyreGuardianProtect,
+                            TrashID.PyreGuardianStab,
+                            TrashID.PyreGuardianRetal,
+                            TrashID.PyreGuardianResolution,
                         };
                     foreach (int pyreId in pyres)
                     {
@@ -249,25 +249,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     var ids = new List<int>
                         {
-                           (int) ArcDPSEnums.TrashID.WyvernMatriarch,
-                           (int) ArcDPSEnums.TrashID.WyvernPatriarch,
-                           (int) ArcDPSEnums.TrashID.AncientInvokedHydra,
-                           (int) ArcDPSEnums.TrashID.ApocalypseBringer,
-                           (int) ArcDPSEnums.TrashID.QadimLamp
+                           (int) TrashID.WyvernMatriarch,
+                           (int) TrashID.WyvernPatriarch,
+                           (int) TrashID.AncientInvokedHydra,
+                           (int) TrashID.ApocalypseBringer,
+                           (int) TrashID.QadimLamp
                         };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         var phaseTarIDs = new HashSet<int>(phase.Targets.Select(x => x.ID));
-                        if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.AncientInvokedHydra))
+                        if (phaseTarIDs.Contains((int)TrashID.AncientInvokedHydra))
                         {
                             phase.Name = "Hydra";
                         }
-                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.ApocalypseBringer))
+                        else if (phaseTarIDs.Contains((int)TrashID.ApocalypseBringer))
                         {
                             phase.Name = "Apocalypse";
                         }
-                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernMatriarch))
+                        else if (phaseTarIDs.Contains((int)TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)TrashID.WyvernMatriarch))
                         {
                             phase.Name = "Wyvern";
                         }
@@ -286,65 +286,65 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.LavaElemental1,
-                ArcDPSEnums.TrashID.LavaElemental2,
-                ArcDPSEnums.TrashID.IcebornHydra,
-                ArcDPSEnums.TrashID.GreaterMagmaElemental1,
-                ArcDPSEnums.TrashID.GreaterMagmaElemental2,
-                ArcDPSEnums.TrashID.FireElemental,
-                ArcDPSEnums.TrashID.FireImp,
-                ArcDPSEnums.TrashID.PyreGuardian,
-                ArcDPSEnums.TrashID.PyreGuardianProtect,
-                ArcDPSEnums.TrashID.PyreGuardianRetal,
-                ArcDPSEnums.TrashID.PyreGuardianResolution,
-                ArcDPSEnums.TrashID.PyreGuardianStab,
-                ArcDPSEnums.TrashID.ReaperOfFlesh,
-                ArcDPSEnums.TrashID.DestroyerTroll,
-                ArcDPSEnums.TrashID.IceElemental,
-                ArcDPSEnums.TrashID.AngryZommoros,
-                ArcDPSEnums.TrashID.AssaultCube,
-                ArcDPSEnums.TrashID.AwakenedSoldier,
-                ArcDPSEnums.TrashID.Basilisk,
-                ArcDPSEnums.TrashID.BlackMoa,
-                ArcDPSEnums.TrashID.BrandedCharr,
-                ArcDPSEnums.TrashID.BrandedDevourer,
-                ArcDPSEnums.TrashID.ChakDrone,
-                ArcDPSEnums.TrashID.CrazedKarkaHatchling,
-                ArcDPSEnums.TrashID.FireImpLamp,
-                ArcDPSEnums.TrashID.GhostlyPirateFighter,
-                ArcDPSEnums.TrashID.GiantBrawler,
-                ArcDPSEnums.TrashID.GiantHunter,
-                ArcDPSEnums.TrashID.GoldOoze,
-                ArcDPSEnums.TrashID.GrawlBascher,
-                ArcDPSEnums.TrashID.GrawlTrapper,
-                ArcDPSEnums.TrashID.GuildInitiateModusSceleris,
-                ArcDPSEnums.TrashID.IcebroodAtrocity,
-                ArcDPSEnums.TrashID.IcebroodKodan,
-                ArcDPSEnums.TrashID.IcebroodQuaggan,
-                ArcDPSEnums.TrashID.Jotun,
-                ArcDPSEnums.TrashID.JungleWurm,
-                ArcDPSEnums.TrashID.Karka,
-                ArcDPSEnums.TrashID.MinotaurBull,
-                ArcDPSEnums.TrashID.ModnirrBerserker,
-                ArcDPSEnums.TrashID.MoltenDisaggregator,
-                ArcDPSEnums.TrashID.MoltenProtector,
-                ArcDPSEnums.TrashID.MoltenReverberant,
-                ArcDPSEnums.TrashID.MordremVinetooth,
-                ArcDPSEnums.TrashID.Murellow,
-                ArcDPSEnums.TrashID.NightmareCourtier,
-                ArcDPSEnums.TrashID.OgreHunter,
-                ArcDPSEnums.TrashID.PirareSkrittSentry,
-                ArcDPSEnums.TrashID.PolarBear,
-                ArcDPSEnums.TrashID.Rabbit,
-                ArcDPSEnums.TrashID.ReefSkelk,
-                ArcDPSEnums.TrashID.RisenKraitDamoss,
-                ArcDPSEnums.TrashID.RottingAncientOakheart,
-                ArcDPSEnums.TrashID.RottingDestroyer,
-                ArcDPSEnums.TrashID.ShadowSkelk,
-                ArcDPSEnums.TrashID.SpiritOfExcess,
-                ArcDPSEnums.TrashID.TamedWarg,
-                ArcDPSEnums.TrashID.TarElemental,
-                ArcDPSEnums.TrashID.WindRider,
+                TrashID.LavaElemental1,
+                TrashID.LavaElemental2,
+                TrashID.IcebornHydra,
+                TrashID.GreaterMagmaElemental1,
+                TrashID.GreaterMagmaElemental2,
+                TrashID.FireElemental,
+                TrashID.FireImp,
+                TrashID.PyreGuardian,
+                TrashID.PyreGuardianProtect,
+                TrashID.PyreGuardianRetal,
+                TrashID.PyreGuardianResolution,
+                TrashID.PyreGuardianStab,
+                TrashID.ReaperOfFlesh,
+                TrashID.DestroyerTroll,
+                TrashID.IceElemental,
+                TrashID.AngryZommoros,
+                TrashID.AssaultCube,
+                TrashID.AwakenedSoldier,
+                TrashID.Basilisk,
+                TrashID.BlackMoa,
+                TrashID.BrandedCharr,
+                TrashID.BrandedDevourer,
+                TrashID.ChakDrone,
+                TrashID.CrazedKarkaHatchling,
+                TrashID.FireImpLamp,
+                TrashID.GhostlyPirateFighter,
+                TrashID.GiantBrawler,
+                TrashID.GiantHunter,
+                TrashID.GoldOoze,
+                TrashID.GrawlBascher,
+                TrashID.GrawlTrapper,
+                TrashID.GuildInitiateModusSceleris,
+                TrashID.IcebroodAtrocity,
+                TrashID.IcebroodKodan,
+                TrashID.IcebroodQuaggan,
+                TrashID.Jotun,
+                TrashID.JungleWurm,
+                TrashID.Karka,
+                TrashID.MinotaurBull,
+                TrashID.ModnirrBerserker,
+                TrashID.MoltenDisaggregator,
+                TrashID.MoltenProtector,
+                TrashID.MoltenReverberant,
+                TrashID.MordremVinetooth,
+                TrashID.Murellow,
+                TrashID.NightmareCourtier,
+                TrashID.OgreHunter,
+                TrashID.PirareSkrittSentry,
+                TrashID.PolarBear,
+                TrashID.Rabbit,
+                TrashID.ReefSkelk,
+                TrashID.RisenKraitDamoss,
+                TrashID.RottingAncientOakheart,
+                TrashID.RottingDestroyer,
+                TrashID.ShadowSkelk,
+                TrashID.SpiritOfExcess,
+                TrashID.TamedWarg,
+                TrashID.TarElemental,
+                TrashID.WindRider,
             };
         }
 
@@ -359,7 +359,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int ccRadius = 200;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Qadim:
+                case (int)TargetID.Qadim:
                     //CC
                     var breakbar = cls.Where(x => x.SkillId == QadimCC).ToList();
                     foreach (AbstractCastEvent c in breakbar)
@@ -395,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
+                case (int)TrashID.AncientInvokedHydra:
                     //CC
                     var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
@@ -418,7 +418,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.WyvernMatriarch:
+                case (int)TrashID.WyvernMatriarch:
                     //Wing Buffet
                     var wingBuffet = cls.Where(x => x.SkillId == WingBuffet).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
@@ -478,7 +478,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.WyvernPatriarch:
+                case (int)TrashID.WyvernPatriarch:
                     //CC
                     var patCC = cls.Where(x => x.SkillId == PatriarchCC).ToList();
                     foreach (AbstractCastEvent c in patCC)
@@ -527,7 +527,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.ApocalypseBringer:
+                case (int)TrashID.ApocalypseBringer:
                     var jumpShockwave = cls.Where(x => x.SkillId == ShatteredEarth).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
@@ -593,7 +593,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -604,7 +604,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(qadim.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library

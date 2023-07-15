@@ -316,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (CombatItem dragonOrbMaxHP in dragonOrbMaxHPs)
             {
                 AgentItem dragonOrb = agentData.GetAgent(dragonOrbMaxHP.SrcAgent, dragonOrbMaxHP.Time);
-                if (dragonOrb != ParserHelper._unknownAgent)
+                if (dragonOrb != _unknownAgent)
                 {
                     dragonOrb.OverrideName("Dragon Orb");
                     dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
@@ -1133,7 +1133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (voidMelters.Count > 5)
             {
                 long firstAware = voidMelters[0].FirstAware;
-                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ParserHelper.ServerDelayConstant) > 5)
+                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ServerDelayConstant) > 5)
                 {
                     return FightData.EncounterMode.CM;
                 }
