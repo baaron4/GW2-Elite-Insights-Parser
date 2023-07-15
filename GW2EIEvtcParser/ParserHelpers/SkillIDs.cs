@@ -1918,7 +1918,6 @@
         public const long DismissLieutenantSoulcleaveSkill = 42752;
         public const long POV_StealDefensesEffect = 42762;
         public const long POV_StealMobilityEffect = 42839;
-        public const long Kneeling = 42869;
         public const long FireMinorAttunement = 42811;
         public const long OpeningPassage = 42864;
         public const long Kneeling = 42869;

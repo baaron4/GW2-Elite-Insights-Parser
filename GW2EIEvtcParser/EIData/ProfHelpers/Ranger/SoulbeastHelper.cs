@@ -73,7 +73,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Twice as Vicious", TwiceAsVicious, Source.Soulbeast, BuffClassification.Other, BuffImages.TwiceAsVicious),
             new Buff("Unflinching Fortitude", UnflinchingFortitudeBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.UnflinchingFortitude),
             new Buff("Defy Pain", DefyPainSoulbeastBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.DefyPain),
-            new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Soulbeast, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.SharpenSpines),
         };
 
     }
