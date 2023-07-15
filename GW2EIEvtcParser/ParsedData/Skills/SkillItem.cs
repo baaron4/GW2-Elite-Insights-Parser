@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static System.Net.WebRequestMethods;
@@ -275,7 +276,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RestoringReprieveOrRejunevatingRespite, "https://i.imgur.com/RUJNIoM.png" },
             { OpeningPassageOrClarifiedConclusion, "https://i.imgur.com/2M93tOd.png" },
             { PotentHasteOrOverwhelmingCelerity, "https://i.imgur.com/vBBKfGz.png" },
-            { PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },            
+            { PortentOfFreedomOrUnhinderedDelivery, "https://i.imgur.com/b6RUVTr.png" },
             { RushingJusticeStrike, "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png" },
             { ExecutionersCallingDualStrike, "https://wiki.guildwars2.com/images/d/da/Executioner%27s_Calling.png" },
             { AdvancingStrikeSkill, "https://wiki.guildwars2.com/images/6/6b/Advancing_Strike.png" },
@@ -308,7 +309,18 @@ namespace GW2EIEvtcParser.ParsedData
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
             { RuggedGrowth, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
-            { AquaSurge, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            { AquaSurge_Player, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            { AquaSurge_WaterSpiritNPC, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
+            { SolarFlare_Player, "https://wiki.guildwars2.com/images/5/5c/Solar_Flare.png" },
+            { SolarFlare_SunSpiritNPC, "https://wiki.guildwars2.com/images/5/5c/Solar_Flare.png" },
+            { Quicksand_Player, "https://wiki.guildwars2.com/images/3/3b/Quicksand.png" },
+            { Quicksand_StoneSpiritNPC, "https://wiki.guildwars2.com/images/3/3b/Quicksand.png" },
+            { ColdSnap_Player, "https://wiki.guildwars2.com/images/f/f2/Cold_Snap.png" },
+            { ColdSnap_FrostSpiritNPC, "https://wiki.guildwars2.com/images/f/f2/Cold_Snap.png" },
+            { CallLightning_Player, "https://wiki.guildwars2.com/images/5/59/Call_Lightning_%28Ranger%29.png" },
+            { CallLightning_StormSpiritNPC, "https://wiki.guildwars2.com/images/5/59/Call_Lightning_%28Ranger%29.png" },
+            { NaturesRenewal_Player, "https://wiki.guildwars2.com/images/c/c1/Nature%27s_Renewal.png" },
+            { NaturesRenewal_SpiritOfNatureRenewalNPC, "https://wiki.guildwars2.com/images/c/c1/Nature%27s_Renewal.png" },
             { SignetOfRenewalEffect, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
             { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
             { SpiritOfNature, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },

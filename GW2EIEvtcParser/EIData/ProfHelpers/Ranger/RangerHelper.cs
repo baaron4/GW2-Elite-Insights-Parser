@@ -242,11 +242,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stone Spirit", StoneSpiritOld, Source.Ranger, BuffClassification.Defensive, BuffImages.StoneSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
             //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, BuffImages.StormSpirit),
             // Spirits reworked
-            new Buff("Water Spirit", WaterSpirit, Source.Ranger, BuffClassification.Defensive, BuffImages.WaterSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-            new Buff("Frost Spirit", FrostSpirit, Source.Ranger, BuffClassification.Offensive, BuffImages.FrostSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-            new Buff("Sun Spirit", SunSpirit, Source.Ranger, BuffClassification.Offensive, BuffImages.SunSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-            new Buff("Stone Spirit", StoneSpirit, Source.Ranger, BuffClassification.Defensive, BuffImages.StoneSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-            new Buff("Storm Spirit", StormSpirit, Source.Ranger, BuffClassification.Support, BuffImages.StormSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new Buff("Water Spirit", WaterSpiritBuff, Source.Ranger, BuffClassification.Defensive, BuffImages.WaterSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new Buff("Frost Spirit", FrostSpiritBuff, Source.Ranger, BuffClassification.Offensive, BuffImages.FrostSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new Buff("Sun Spirit", SunSpiritBuff, Source.Ranger, BuffClassification.Offensive, BuffImages.SunSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new Buff("Stone Spirit", StoneSpiritBuff, Source.Ranger, BuffClassification.Defensive, BuffImages.StoneSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, BuffImages.StormSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
             // Skills
             new Buff("Attack of Opportunity", AttackOfOpportunity, Source.Ranger, BuffClassification.Other, BuffImages.MomentOfClarity),
             new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, BuffImages.CallOfTheWild).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
