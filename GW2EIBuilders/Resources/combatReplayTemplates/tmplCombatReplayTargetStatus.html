@@ -57,7 +57,7 @@
                 return computeGradient(color, this.getHPPercent(time), 'black');
             },    
             getBreakbarGradient: function (time) {
-                var color = findState(this.breakbarStates, time / 1000.0, 0, this.breakbarStates.length - 1) ? "#20B2AA" : "#888888";
+                var color =  animator.getActorData(this.target.uniqueID).isBreakbarActive() ? "#20B2AA" : "#888888";
                 return computeGradient(color, this.getBreakbarPercent(time), 'black');
             },   
             getBarrierGradient: function (time, status) {
@@ -71,26 +71,6 @@
             },
         },
         computed: {
-            breakbarStates: function () {
-                if (this.breakbarPhases.length === 0) {
-                    return [[0, false]];
-                }
-                var res = [];
-                var phases = this.breakbarPhases;
-                for (var i = 0; i < phases.length; i++) {
-                    var phase = phases[i];
-                    if (i === 0 && phase.start > 0) {
-                        res.push([0, false]);
-                    }
-                    // 2 seconds for colors
-                    res.push([phase.start + 2, true]);
-                    res.push([phase.end, false]);
-                    if (i === phases.length - 1) {
-                        res.push([this.phase.end, false]);
-                    }
-                }
-                return res;
-            },
             breakbarPhases: function () {
                 if (!this.hasBreakbarPercent) {
                     return [];
@@ -101,8 +81,8 @@
                 return logData.phases[0];
             },
             status: function () {
-                var crPData = animator.getActorData(this.target.uniqueID);
-                var icon = crPData.getIcon(this.time);
+                var crTData = animator.getActorData(this.target.uniqueID);
+                var icon = crTData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
             healths: function () {
