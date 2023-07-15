@@ -600,7 +600,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent purificationZoneEffect in purificationZoneEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int start = (int)purificationZoneEffect.Time;
-                            int end = start + purificationZoneEffect.Duration;
+                            int end = (int)log.FightData.FightEnd;
                             int radius = 280;
                             if (voidShellRemovalOffset < voidShellRemovals.Count)
                             {
