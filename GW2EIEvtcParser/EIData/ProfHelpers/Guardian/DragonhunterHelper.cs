@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shield of Courage (Active)", ShieldOfCourageActive, Source.Dragonhunter, BuffClassification.Other, BuffImages.ShieldOfCourage),
             new Buff("Spear of Justice", SpearOfJustice, Source.Dragonhunter, BuffClassification.Other, BuffImages.SpearOfJustice),
             new Buff("Shield of Courage", ShieldOfCourage, Source.Dragonhunter, BuffClassification.Other, BuffImages.ShieldOfCourage),
-            new Buff("Wings of Resolve", WingsOfResolveEffect, Source.Dragonhunter, BuffClassification.Other, BuffImages.WingsOfResolve),
+            new Buff("Wings of Resolve", WingsOfResolveBuff, Source.Dragonhunter, BuffClassification.Other, BuffImages.WingsOfResolve),
             new Buff("Hunter's Mark", HuntersMark, Source.Dragonhunter, BuffClassification.Other, BuffImages.HuntersWard),
         };
 

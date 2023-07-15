@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
         {
             var res = new List<AnimatedCastEvent>();
             SkillItem skill = skillData.Get(FlowingResolveSkill);
-            var applies = combatData.GetBuffData(FlowingResolveEffect).OfType<BuffApplyEvent>().Where(x => x.To == willbender.AgentItem).ToList();
+            var applies = combatData.GetBuffData(FlowingResolveBuff).OfType<BuffApplyEvent>().Where(x => x.To == willbender.AgentItem).ToList();
             foreach (BuffApplyEvent bae in applies)
             {
                 res.Add(new AnimatedCastEvent(willbender.AgentItem, skill, bae.Time - 440, 500));
@@ -127,14 +127,14 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }).UsingApproximate(true).WithBuilds(GW2Builds.March2022Balance2),
             //
-            new BuffDamageModifier(RushingJusticeEffect, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, BuffImages.RushingJustice, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
+            new BuffDamageModifier(RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, 0, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, BuffImages.RushingJustice, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             // Virtues
-            new Buff("Rushing Justice", RushingJusticeEffect, Source.Willbender, BuffClassification.Other, BuffImages.RushingJustice),
-            new Buff("Flowing Resolve", FlowingResolveEffect, Source.Willbender, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FlowingResolve),
+            new Buff("Rushing Justice", RushingJusticeBuff, Source.Willbender, BuffClassification.Other, BuffImages.RushingJustice),
+            new Buff("Flowing Resolve", FlowingResolveBuff, Source.Willbender, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FlowingResolve),
             new Buff("Crashing Courage", CrashingCourage, Source.Willbender, BuffClassification.Other, BuffImages.CrashingCourage),
             //
             new Buff("Repose", Repose, Source.Willbender, BuffClassification.Other, BuffImages.Repose),

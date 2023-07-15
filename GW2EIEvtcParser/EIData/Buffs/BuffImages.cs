@@ -62,6 +62,7 @@
         internal const string AchillesBane = "https://wiki.guildwars2.com/images/5/55/Achilles_Bane.png";
         internal const string ReviveSickness = "https://wiki.guildwars2.com/images/9/91/Revive_Sickness.png";
         internal const string PowerAttribute = "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png";
+        internal const string HealingPowerAttribute = "https://wiki.guildwars2.com/images/0/0c/Healing_Power_attribute.png";
         // Auras
         internal const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
         internal const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
@@ -1514,6 +1515,9 @@
         internal const string GrimSpecter = "https://wiki.guildwars2.com/images/3/30/Grim_Specter.png";
         internal const string NaturalBalance = "https://wiki.guildwars2.com/images/3/3d/Natural_Balance.png";
         internal const string TempestuousAria = "https://wiki.guildwars2.com/images/2/28/Tempestuous_Aria.png";
+        internal const string UnflinchingFortitude = "https://wiki.guildwars2.com/images/d/d6/Unflinching_Fortitude.png";
+        internal const string DefyPain = "https://wiki.guildwars2.com/images/f/f9/Defy_Pain.png";
+        internal const string PhantasmalWarlock = "https://wiki.guildwars2.com/images/0/01/Phantasmal_Warlock.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

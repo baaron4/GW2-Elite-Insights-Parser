@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Palm Strike", PalmStrike, Source.Daredevil, BuffClassification.Other, BuffImages.PalmStrike),
-            new Buff("Pulmonary Impact", PulmonaryImpactEffect, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PalmStrike),
+            new Buff("Pulmonary Impact", PulmonaryImpactBuff, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PalmStrike),
             new Buff("Lotus Training", LotusTraining, Source.Daredevil, BuffClassification.Other, BuffImages.LotusTraining),
             new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, BuffImages.UnhinderedCombatant),
             new Buff("Bounding Dodger", BoundingDodger, Source.Daredevil, BuffClassification.Other, BuffImages.BoundingDodger),

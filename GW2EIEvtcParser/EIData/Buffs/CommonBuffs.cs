@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
             new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
             new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
+            new Buff("Downed (Pet)", DownedPet, Source.Common, BuffClassification.Other, BuffImages.HealingPowerAttribute),
             new Buff("Exhaustion", Exhaustion, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.Exhaustion),
             new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.Stealth),
@@ -91,7 +92,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
             new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             // Race
-            new Buff("Take Root", TakeRootEffect, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
+            new Buff("Take Root", TakeRootBufft, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
             new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
             new Buff("Become the Raven", BecomeTheRaven, Source.Common, BuffClassification.Other, BuffImages.BecomeRaven),
             new Buff("Become the Snow Leopard", BecomeTheSnowLeopard, Source.Common, BuffClassification.Other, BuffImages.BecomeLeopard),
@@ -106,22 +107,22 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Crystalline Heart", CrystallineHeart, Source.Common, BuffClassification.Other, BuffImages.CrystallineHeart),
             // Mounts
             new Buff("No Mount Use", NoMountUse, Source.Common, BuffClassification.Other, BuffImages.MountsDisabled),
-            new Buff("Bond of Life", BondOfLifeEffect, Source.Common, BuffClassification.Other, BuffImages.SynchronizedVitality),
-            new Buff("Bond of Vigor", BondOfVigorEffect, Source.Common, BuffClassification.Other, BuffImages.BondOfVigorEffect),
+            new Buff("Bond of Life", BondOfLifeBuff, Source.Common, BuffClassification.Other, BuffImages.SynchronizedVitality),
+            new Buff("Bond of Vigor", BondOfVigorBuff, Source.Common, BuffClassification.Other, BuffImages.BondOfVigorEffect),
             new Buff("Evasion (Bond of Faith)", EvasionBondOfFaith, Source.Common, BuffClassification.Other, BuffImages.SteelAndFury),
-            new Buff("Stealth (Mount Effect)", StealthMountEffect, Source.Common, BuffClassification.Other, BuffImages.StealthMountEffect),
+            new Buff("Stealth (Mount Buff)", StealthMountBuff, Source.Common, BuffClassification.Other, BuffImages.StealthMountEffect),
             new Buff("Siege Ammo Available", SiegeAmmoAvailable, Source.Common, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SiegeAmmoAvailable),
-            new Buff("Open Access", OpenAccessEffect, Source.Common, BuffClassification.Other, BuffImages.OpenAccessEffect),
+            new Buff("Open Access", OpenAccessBuff, Source.Common, BuffClassification.Other, BuffImages.OpenAccessEffect),
             // Gliding
             new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
             // Consumable Portal
             new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingWhiteMantleWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses (Xera/Watchwork)", PortalUsesWhiteMantleWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             // Consumable Summons
-            new Buff("Ogre Pet Whistle", OgrePetWhistleEffect, Source.Common, BuffClassification.Other, BuffImages.OgrePetWhistle),
-            new Buff("Fire Elemental Powder", FireElementalPowderEffect, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
-            new Buff("Sunspear Paragon Support", SunspearParagonSupportEffect, Source.Common, BuffClassification.Other, BuffImages.SunspearParagonSupport),
-            new Buff("Raven Spirit Shadow", RavenSpiritShadowEffect, Source.Common, BuffClassification.Other, BuffImages.RavenSpiritShadow),
+            new Buff("Ogre Pet Whistle", OgrePetWhistleBuff, Source.Common, BuffClassification.Other, BuffImages.OgrePetWhistle),
+            new Buff("Fire Elemental Powder", FireElementalPowderBuff, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
+            new Buff("Sunspear Paragon Support", SunspearParagonSupportBuff, Source.Common, BuffClassification.Other, BuffImages.SunspearParagonSupport),
+            new Buff("Raven Spirit Shadow", RavenSpiritShadowBuff, Source.Common, BuffClassification.Other, BuffImages.RavenSpiritShadow),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>
@@ -149,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superior Sigil of Doom", SigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
             new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfVision),
             new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
-            new Buff("Leech (Sigil / Runes)", LeechEffect, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
+            new Buff("Leech (Sigil / Runes)", LeechBuff, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
             // Runes
             new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk).WithBuilds(GW2Builds.November2018Rune, GW2Builds.EndOfLife),
             new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
