@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] {InevitableBetrayalFailSmall, InevitableBetrayalFailBig}, "Inevitable Betrayal", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl","Inevitable Betrayal (failed Green)", "Failed Green",0),
             new PlayerDstHitMechanic(EffigyPulse, "Effigy Pulse", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
             new PlayerDstHitMechanic(SpearImpact, "Spear Impact", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
-            new PlayerDstBuffApplyMechanic(BrutalizeEffect, "Brutalized", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)", "Brutalized",0),
+            new PlayerDstBuffApplyMechanic(BrutalizeBuff, "Brutalized", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)", "Brutalized",0),
             new EnemyCastEndMechanic(BrutalizeCast, "Brutalize (Jump End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal),"CC","Brutalize (Breakbar)", "Breakbar",0),
             new PlayerDstSkillMechanic(BrutalizeKill, "Brutalize (Killed)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Brutalize (Failed CC)", "CC Fail",0).UsingChecker((de, log) => de.HasKilled),
             new EnemyDstBuffRemoveMechanic(FanaticalResilience, "Brutalize (End)", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC End","Ended Brutalize", "CC Ended",0),

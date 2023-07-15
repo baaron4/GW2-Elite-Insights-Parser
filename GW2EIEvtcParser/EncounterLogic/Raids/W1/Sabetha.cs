@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
-            new PlayerDstBuffApplyMechanic(SapperBombEffect, "Sapper Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
+            new PlayerDstBuffApplyMechanic(SapperBombBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
             new PlayerDstBuffApplyMechanic(TimeBomb, "Time Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
             /*new PlayerBoonApplyMechanic(31324, "Time Bomb Hit", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
                 (ba, log) =>
@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, SapperBombEffect, p, true, true);
+            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, SapperBombBuff, p, true, true);
             int sapperStart = 0;
             foreach (AbstractBuffEvent c in sapperBombs)
             {

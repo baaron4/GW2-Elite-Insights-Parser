@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(EnterBeastMode, Supportive),
             new BuffLossCastFinder(ExitBeastMode, Supportive),
             // Stances
-            new BuffGiveCastFinder(DolyakStanceSkill, DolyakStanceEffect),
-            new BuffGiveCastFinder(MoaStanceSkill, MoaStanceEffect),
-            new BuffGiveCastFinder(VultureStanceSkill, VultureStanceEffect),
+            new BuffGiveCastFinder(DolyakStanceSkill, DolyakStanceBuff),
+            new BuffGiveCastFinder(MoaStanceSkill, MoaStanceBuff),
+            new BuffGiveCastFinder(VultureStanceSkill, VultureStanceBuff),
             //
             new BuffGainCastFinder(SharpenSpinesBeastmode, SharpenSpinesBuff),
             new EffectCastFinder(EternalBondSkill, EffectGUIDs.SoulbeastEternalBond)
@@ -58,12 +58,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Dolyak Stance", DolyakStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
+            new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
             new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.GriffonStance),
-            new Buff("Moa Stance", MoaStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.MoaStance),
-            new Buff("Vulture Stance", VultureStanceEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.VultureStance),
+            new Buff("Moa Stance", MoaStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.MoaStance),
+            new Buff("Vulture Stance", VultureStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.VultureStance),
             new Buff("Bear Stance", BearStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.BearStance),
-            new Buff("One Wolf Pack", OneWolfPackEffect, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.OneWolfPack),
+            new Buff("One Wolf Pack", OneWolfPackBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.OneWolfPack),
             new Buff("Deadly", Deadly, Source.Soulbeast, BuffClassification.Other, BuffImages.DeadlyArchetype),
             new Buff("Ferocious", Ferocious, Source.Soulbeast, BuffClassification.Other, BuffImages.FerociousArchetype),
             new Buff("Supportive", Supportive, Source.Soulbeast, BuffClassification.Other, BuffImages.SupportiveArchetype),

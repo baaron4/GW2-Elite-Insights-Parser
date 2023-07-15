@@ -12,13 +12,13 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishEffect),
+            new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishBuff),
             // Trail of Anguish? Unique effect?
             // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
             new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
             new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
-            new BuffGainCastFinder(DesertShroud, DesertShroudEffect).UsingDurationChecker(6000),
-            new BuffGainCastFinder(SandstormShroudSkill, DesertShroudEffect).UsingDurationChecker(3500),
+            new BuffGainCastFinder(DesertShroud, DesertShroudBuff).UsingDurationChecker(6000),
+            new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff).UsingDurationChecker(3500),
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
         };

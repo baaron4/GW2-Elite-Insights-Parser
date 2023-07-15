@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Arkk not found");
                 }
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
-                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartEffect && x.Time <= upperLimit + TimeThresholdConstant);
+                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
                 return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
             }

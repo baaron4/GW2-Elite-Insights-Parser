@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceEffect), // Legendary Renegade Stance
+            new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceBuff), // Legendary Renegade Stance
             new DamageCastFinder(CallOfTheRenegade, CallOfTheRenegade), // Call of the Renegade
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Renegade)
         };
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceEffect, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
+            new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
             new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),
             new Buff("Razorclaw's Rage", RazorclawsRageBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.RazorclawsRage),
             new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),

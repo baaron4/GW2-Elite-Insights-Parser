@@ -367,7 +367,7 @@ namespace GW2EIEvtcParser.ParsedData
             { CallLightning_StormSpiritNPC, "https://wiki.guildwars2.com/images/5/59/Call_Lightning_%28Ranger%29.png" },
             { NaturesRenewal_Player, "https://wiki.guildwars2.com/images/c/c1/Nature%27s_Renewal.png" },
             { NaturesRenewal_SpiritOfNatureRenewalNPC, "https://wiki.guildwars2.com/images/c/c1/Nature%27s_Renewal.png" },
-            { SignetOfRenewalEffect, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
+            { SignetOfRenewalBuff, "https://wiki.guildwars2.com/images/1/11/Signet_of_Renewal.png" },
             { EntangleDamage, "https://wiki.guildwars2.com/images/6/67/Entangle.png" },
             { SpiritOfNature, "https://wiki.guildwars2.com/images/a/a3/Spirit_of_Nature.png" },
             { ConsumingBite, "https://wiki.guildwars2.com/images/6/68/Consuming_Bite.png" },

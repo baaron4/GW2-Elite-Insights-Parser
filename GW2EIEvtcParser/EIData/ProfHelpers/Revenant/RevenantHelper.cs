@@ -15,14 +15,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceEffect), // Legendary Assassin Stance
-            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceEffect), // Legendary Demon Stance
-            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceEffect), // Legendary Dwarf Stance
-            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceEffect), // Legendary Centaur Stance
-            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsEffect).UsingICD(500), // Impossible Odds
-            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect).UsingICD(500), // Relinquish Power
-            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect), // Vengeful Hammers
-            new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect), // Release Hammers
+            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff), // Legendary Assassin Stance
+            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff), // Legendary Demon Stance
+            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff), // Legendary Dwarf Stance
+            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceBuff), // Legendary Centaur Stance
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff).UsingICD(500), // Impossible Odds
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff).UsingICD(500), // Relinquish Power
+            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff), // Vengeful Hammers
+            new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff), // Release Hammers
             new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness), // Release Hammers
             new DamageCastFinder(InvokingTorment, InvokingTorment).WithBuilds(GW2Builds.February2020Balance), // Invoking Torment
             new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
@@ -92,19 +92,19 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Vengeful Hammers", VengefulHammersEffect, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
+            new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
             new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
             new Buff("Rite of the Great Dwarf (Traited)", RiteOfTheGreatDwarfTraited, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
             new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, BuffImages.EmbraceTheDarkness),
             new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.EnchantedDaggers),
             new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PhaseTraversal),
             new Buff("Tranquil", Tranquil, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ProjectTranquility),
-            new Buff("Impossible Odds", ImpossibleOddsEffect, Source.Revenant, BuffClassification.Other, BuffImages.ImpossibleOdds),
+            new Buff("Impossible Odds", ImpossibleOddsBuff, Source.Revenant, BuffClassification.Other, BuffImages.ImpossibleOdds),
             new Buff("Jade", Jade, Source.Revenant, BuffClassification.Other, BuffImages.Stun),
-            new Buff("Legendary Centaur Stance", LegendaryCentaurStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryCentaurStance),
-            new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
-            new Buff("Legendary Demon Stance", LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
-            new Buff("Legendary Assassin Stance", LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
+            new Buff("Legendary Centaur Stance", LegendaryCentaurStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryCentaurStance),
+            new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
+            new Buff("Legendary Demon Stance", LegendaryDemonStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
+            new Buff("Legendary Assassin Stance", LegendaryAssassinStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
             new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBeta),
             new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBeta),
             // Traits

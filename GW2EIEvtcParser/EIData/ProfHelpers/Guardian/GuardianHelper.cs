@@ -16,18 +16,18 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect),
-            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0),
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameBuff).UsingICD(0),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
 
             // Meditations
             new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
-            new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfEffect)
+            new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfBuff)
                 .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
                 .UsingNotAccurate(true),
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfEffect)
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfBuff)
                 .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
@@ -89,16 +89,16 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {        
             // Skills
-            new Buff("Zealot's Flame", ZealotsFlameEffect, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),
+            new Buff("Zealot's Flame", ZealotsFlameBuff, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),
             new Buff("Purging Flames", PurgingFlames, Source.Guardian, BuffClassification.Other, BuffImages.PurgingFlames),
             new Buff("Litany of Wrath", LitanyOfWrath, Source.Guardian, BuffClassification.Other, BuffImages.LitanyOfWrath),
             new Buff("Renewed Focus", RenewedFocus, Source.Guardian, BuffClassification.Other, BuffImages.RenewedFocus),
-            new Buff("Shield of Wrath", ShieldOfWrathEffect, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ShieldOfWrath),
+            new Buff("Shield of Wrath", ShieldOfWrathBuff, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ShieldOfWrath),
             new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Banish),
-            new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
-            new Buff("Merciful Intervention (Target)", MercifulInterventionTargetEffect, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
             new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
             new Buff("Signet of Resolve (Shared)", SignetOfResolveShared, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfResolve).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bane Signet", BaneSignet, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.BaneSignet).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
-            new Buff("Signet of Judgment", SignetOfJudgmentEffect, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
+            new Buff("Signet of Judgment", SignetOfJudgmentBuff, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),
