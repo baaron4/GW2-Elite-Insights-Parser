@@ -70,7 +70,6 @@ namespace GW2EIEvtcParser
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
-            internal const int FunctionalTrackingIDsForEffects = int.MaxValue;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -252,12 +251,13 @@ namespace GW2EIEvtcParser
             InstanceStart = 42,
             TickRate = 43,
             Last90BeforeDown = 44,
-            Effect = 45,
+            Effect_45 = 45,
             EffectIDToGUID = 46,
             LogStartNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
             FractalScale = 50,
+            Effect_51 = 51,
             Unknown
         };
 

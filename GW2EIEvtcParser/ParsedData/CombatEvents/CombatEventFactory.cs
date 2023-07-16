@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
@@ -212,8 +213,24 @@ namespace GW2EIEvtcParser.ParsedData
                     statusEvents.Last90BeforeDownEvents.Add(last90Evt);
                     Add(statusEvents.Last90BeforeDownEventsBySrc, last90Evt.Src, last90Evt);
                     break;
-                case StateChange.Effect:
-                    var effectEvt = new EffectEvent(stateChangeEvent, agentData);
+                case StateChange.Effect_45:
+                case StateChange.Effect_51:
+                    EffectEvent effectEvt = null;
+                    switch(stateChangeEvent.IsStateChange)
+                    {
+                        case StateChange.Effect_45:
+                            effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
+                            break;
+                        case StateChange.Effect_51:
+                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData);
+                            if (effectEvt.TrackingID != 0)
+                            {
+                                Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
+                            }
+                            break;
+                        default:
+                            throw new InvalidDataException("Invalid effect state change");
+                    }
                     statusEvents.EffectEvents.Add(effectEvt);
                     Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     if (effectEvt.IsAroundDst)
@@ -223,12 +240,6 @@ namespace GW2EIEvtcParser.ParsedData
                     if (effectEvt.EffectID != 0)
                     {
                         Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
-                    }
-                    // Currently trackingID is not working properly so we leave the list empty
-                    // Update the value of the enum when things are okay
-                    if (effectEvt.TrackingID != 0 && evtcVersion >= ArcDPSBuilds.FunctionalTrackingIDsForEffects)
-                    {
-                        Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
                     }
                     break;
                 case StateChange.EffectIDToGUID:

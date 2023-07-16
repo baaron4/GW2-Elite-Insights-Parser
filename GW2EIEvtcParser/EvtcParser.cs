@@ -676,7 +676,7 @@ namespace GW2EIEvtcParser
                     return _enabledExtensions.ContainsKey(combatItem.Pad);
                 }
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.Effect)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && !combatItem.IsEffect)
             {
                 return false;
             }
