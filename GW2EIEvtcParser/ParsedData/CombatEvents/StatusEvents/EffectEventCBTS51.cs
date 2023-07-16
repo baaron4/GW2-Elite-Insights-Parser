@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class EffectEventCBTS51 : EffectEvent
     {
-        const float orientationConvertConstant = 1f/10000.0f;
+        const float OrientationConvertConstant = 1f/10000.0f;
 
         private static Point3D ReadOrientation(CombatItem evtcItem)
         {
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             var orientationInt = new int[3];
             Buffer.BlockCopy(orientationBytes, 0, orientationInt, 0, orientationBytes.Length);
 
-            return new Point3D(orientationInt[0], orientationInt[1], orientationInt[2]) * orientationConvertConstant;
+            return new Point3D(orientationInt[0], orientationInt[1], orientationInt[2]) * OrientationConvertConstant;
         }
 
         private static uint ReadDuration(CombatItem evtcItem)
