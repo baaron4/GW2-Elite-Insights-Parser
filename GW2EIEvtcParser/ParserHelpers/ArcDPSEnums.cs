@@ -12,8 +12,10 @@ namespace GW2EIEvtcParser
             internal const ulong StartOfLife = ulong.MinValue;
             //
             internal const ulong HoTRelease = 54485;
+            internal const ulong November2016NightmareRelease = 69591;
             internal const ulong February2017Balance = 72781;
             internal const ulong May2017Balance = 76706;
+            internal const ulong July2017ShatteredObservatoryRelease = 79873;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -54,7 +56,7 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
-            internal const ulong SOTOBeta = 147830;
+            internal const ulong SOTOBeta = 147830; // Silent Surf Release
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }

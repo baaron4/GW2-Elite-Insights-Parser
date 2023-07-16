@@ -180,6 +180,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
+            // Set manual FractalScale for old logs without the event
+            if (combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.FractalScale) == null)
+            {
+                ulong scale = 0;
+                if (gw2Build >= ArcDPSEnums.GW2Builds.September2020SunquaPeakRelease && gw2Build < ArcDPSEnums.GW2Builds.SOTOBeta)
+                {
+                    scale = 100;
+                }
+                else if (gw2Build >= ArcDPSEnums.GW2Builds.SOTOBeta)
+                {
+                    scale = 99;
+                }
+                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0));
+            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names
             AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
