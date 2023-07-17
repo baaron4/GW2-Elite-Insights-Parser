@@ -10,6 +10,8 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -90,6 +92,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.Archdiviner,
                 (int)ArcDPSEnums.TrashID.EliteBrazenGladiator
             };
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            // Set manual FractalScale for old logs without the event
+            if (combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale) == null)
+            {
+                ulong scale = 0;
+                if (gw2Build >= GW2Builds.July2017ShatteredObservatoryRelease && gw2Build < GW2Builds.September2020SunquaPeakRelease)
+                {
+                    scale = 100;
+                }
+                else if (gw2Build >= GW2Builds.September2020SunquaPeakRelease && gw2Build < GW2Builds.SOTOBeta)
+                {
+                    scale = 99;
+                }
+                else if (gw2Build >= GW2Builds.SOTOBeta)
+                {
+                    scale = 98;
+                }
+                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0));
+            }
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
         }
 
         private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
