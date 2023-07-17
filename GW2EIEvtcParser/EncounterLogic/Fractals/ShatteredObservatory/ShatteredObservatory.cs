@@ -8,6 +8,8 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -28,6 +30,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             var participatingPlayerAgents = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
             participatingPlayerAgents.UnionWith(combatData.GetDamageData(target.AgentItem).Where(x => playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.To.GetFinalMaster()));
             return participatingPlayerAgents;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            // Set manual FractalScale for old logs without the event
+            AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
+            {
+                ( GW2Builds.July2017ShatteredObservatoryRelease, 100),
+                ( GW2Builds.September2020SunquaPeakRelease, 99),
+                ( GW2Builds.SOTOBeta, 98),
+            });
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
         }
 
         /// <summary>

@@ -117,28 +117,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            // Set manual FractalScale for old logs without the event
-            if (combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale) == null)
-            {
-                ulong scale = 0;
-                if (gw2Build >= GW2Builds.November2016NightmareRelease && gw2Build < GW2Builds.July2017ShatteredObservatoryRelease)
-                {
-                    scale = 100;
-                }
-                else if (gw2Build >= GW2Builds.July2017ShatteredObservatoryRelease && gw2Build < GW2Builds.September2020SunquaPeakRelease)
-                {
-                    scale = 99;
-                }
-                else if (gw2Build >= GW2Builds.September2020SunquaPeakRelease && gw2Build < GW2Builds.SOTOBeta)
-                {
-                    scale = 98;
-                }
-                else if (gw2Build >= GW2Builds.SOTOBeta)
-                {
-                    scale = 97;
-                }
-                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0));
-            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {

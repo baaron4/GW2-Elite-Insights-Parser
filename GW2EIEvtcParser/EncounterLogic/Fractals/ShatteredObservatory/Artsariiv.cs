@@ -136,24 +136,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 agentData.Refresh();
             }
-            // Set manual FractalScale for old logs without the event
-            if (combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale) == null)
-            {
-                ulong scale = 0;
-                if (gw2Build >= GW2Builds.July2017ShatteredObservatoryRelease && gw2Build < GW2Builds.September2020SunquaPeakRelease)
-                {
-                    scale = 100;
-                }
-                else if (gw2Build >= GW2Builds.September2020SunquaPeakRelease && gw2Build < GW2Builds.SOTOBeta)
-                {
-                    scale = 99;
-                }
-                else if (gw2Build >= GW2Builds.SOTOBeta)
-                {
-                    scale = 98;
-                }
-                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0));
-            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             foreach (NPC trashMob in _trashMobs)
             {

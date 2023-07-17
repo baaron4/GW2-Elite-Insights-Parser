@@ -13,6 +13,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using System.Reflection;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -113,9 +114,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak,
-                (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2,
-                (int)ArcDPSEnums.TrashID.CCSorrowDemon,
+                (int)TargetID.AiKeeperOfThePeak,
+                (int)TargetID.AiKeeperOfThePeak2,
+                (int)TrashID.CCSorrowDemon,
             };
         }
 
@@ -123,16 +124,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.FearDemon,
-                ArcDPSEnums.TrashID.GuiltDemon,
-                ArcDPSEnums.TrashID.AiDoubtDemon,
-                ArcDPSEnums.TrashID.PlayerDoubtDemon,
-                ArcDPSEnums.TrashID.EnragedWaterSprite,
+                TrashID.FearDemon,
+                TrashID.GuiltDemon,
+                TrashID.AiDoubtDemon,
+                TrashID.PlayerDoubtDemon,
+                TrashID.EnragedWaterSprite,
                 // Transition sorrow demons
-                ArcDPSEnums.TrashID.TransitionSorrowDemon1,
-                ArcDPSEnums.TrashID.TransitionSorrowDemon2,
-                ArcDPSEnums.TrashID.TransitionSorrowDemon3,
-                ArcDPSEnums.TrashID.TransitionSorrowDemon4,
+                TrashID.TransitionSorrowDemon1,
+                TrashID.TransitionSorrowDemon2,
+                TrashID.TransitionSorrowDemon3,
+                TrashID.TransitionSorrowDemon4,
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -142,19 +143,19 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak,
-                (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak2,
+                (int)TargetID.AiKeeperOfThePeak,
+                (int)TargetID.AiKeeperOfThePeak2,
             };
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem aiAgent = agentData.GetNPCsByID(ArcDPSEnums.TargetID.AiKeeperOfThePeak).FirstOrDefault();
+            AgentItem aiAgent = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
             {
                 throw new MissingKeyActorsException("Ai not found");
             }
-            _china = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
+            _china = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
             CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
             _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == AiHasDarkModeCN_SurgeOfDarkness : x.SkillID == AiHasDarkMode_SurgeOfDarkness) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
@@ -163,16 +164,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (_hasElementalMode)
                 {
                     long darkModeStart = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
-                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(aiAgent));
+                    CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(aiAgent));
                     long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
-                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, ArcDPSEnums.TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, new List<AgentItem> { aiAgent}, darkAiAgent);
                     aiAgent.OverrideAwareTimes(aiAgent.FirstAware, elementalLastAwareTime);
                 }
                 else
                 {
                     Extension = "drkai";
-                    aiAgent.OverrideID(ArcDPSEnums.TargetID.AiKeeperOfThePeak2);
+                    aiAgent.OverrideID(TargetID.AiKeeperOfThePeak2);
                     agentData.Refresh();
                 }
             }
@@ -181,23 +182,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Extension = "elai";
             }
             // Set manual FractalScale for old logs without the event
-            if (combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.FractalScale) == null)
+            AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
             {
-                ulong scale = 0;
-                if (gw2Build >= ArcDPSEnums.GW2Builds.September2020SunquaPeakRelease && gw2Build < ArcDPSEnums.GW2Builds.SOTOBeta)
-                {
-                    scale = 100;
-                }
-                else if (gw2Build >= ArcDPSEnums.GW2Builds.SOTOBeta)
-                {
-                    scale = 99;
-                }
-                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0));
-            }
+                ( GW2Builds.September2020SunquaPeakRelease, 100),
+                ( GW2Builds.SOTOBeta, 99),
+            });
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names
-            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
+            AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
             darkAi?.OverrideName("Dark Ai");
             eleAi?.OverrideName("Elemental Ai");
             if (_hasDarkMode)
@@ -205,7 +198,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int sorrowCount = 0;
                 foreach (AbstractSingleActor target in Targets)
                 {
-                    if (target.IsSpecies(ArcDPSEnums.TrashID.CCSorrowDemon))
+                    if (target.IsSpecies(TrashID.CCSorrowDemon))
                     {
                         target.OverrideName(target.Character + " " + (++sorrowCount));
                     }
@@ -221,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak));
+            AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
             if (elementalAi == null)
             {
                 if (_hasElementalMode)
@@ -233,7 +226,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[0].AddTarget(elementalAi);
             }
-            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2));
+            AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
             if (darkAi == null)
             {
                 if (_hasDarkMode)
@@ -353,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case 3:
-                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.IsSpecies(ArcDPSEnums.TargetID.AiKeeperOfThePeak2)).AgentItem).FirstOrDefault();
+                    BuffApplyEvent darkInvul895Gain = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == Targets.FirstOrDefault(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2)).AgentItem).FirstOrDefault();
                     if (darkInvul895Gain != null)
                     {
                         fightData.SetSuccess(true, darkInvul895Gain.Time);
