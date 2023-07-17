@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+            if (evtcVersion >= ArcDPSBuilds.NewLogStart)
             {
                 // players may enter combat with knights or an invisible hitbox before
                 AgentItem mama = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // attempt to use mama combat enter to determine start
                     // logs that start with an outgoing/incoming hit on mama may not have combat enter for mama
                     // but logs that start with an earlier player combat enter should
-                    CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.Time >= startToUse);
+                    CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
                     if (enterCombat != null)
                     {
                         return enterCombat.Time;
@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MAMA));
+            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA));
             if (mama == null)
             {
                 throw new MissingKeyActorsException("MAMA not found");
@@ -126,9 +126,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     var ids = new List<int>
                     {
-                       (int) ArcDPSEnums.TrashID.GreenKnight,
-                       (int) ArcDPSEnums.TrashID.RedKnight,
-                       (int) ArcDPSEnums.TrashID.BlueKnight,
+                       (int) TrashID.GreenKnight,
+                       (int) TrashID.RedKnight,
+                       (int) TrashID.BlueKnight,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
@@ -150,10 +150,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.MAMA,
-                (int)ArcDPSEnums.TrashID.GreenKnight,
-                (int)ArcDPSEnums.TrashID.RedKnight,
-                (int)ArcDPSEnums.TrashID.BlueKnight
+                (int)TargetID.MAMA,
+                (int)TrashID.GreenKnight,
+                (int)TrashID.RedKnight,
+                (int)TrashID.BlueKnight
             };
         }
 
@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.TwistedHorror
+                TrashID.TwistedHorror
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -169,9 +169,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
         {
-            { (int)ArcDPSEnums.TrashID.GreenKnight, "Green Knight" },
-            { (int)ArcDPSEnums.TrashID.RedKnight, "Red Knight" },
-            { (int)ArcDPSEnums.TrashID.BlueKnight, "Blue Knight" }
+            { (int)TrashID.GreenKnight, "Green Knight" },
+            { (int)TrashID.RedKnight, "Red Knight" },
+            { (int)TrashID.BlueKnight, "Blue Knight" }
         };
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.MAMA:
+                case (int)TargetID.MAMA:
                     // AoE Knockback
                     var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
                     foreach (AbstractCastEvent c in blastwave)
@@ -266,9 +266,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
                     AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
-                case (int)ArcDPSEnums.TrashID.BlueKnight:
-                case (int)ArcDPSEnums.TrashID.RedKnight:
-                case (int)ArcDPSEnums.TrashID.GreenKnight:
+                case (int)TrashID.BlueKnight:
+                case (int)TrashID.RedKnight:
+                case (int)TrashID.GreenKnight:
                     // Knockback AoE
                     var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
                     foreach (AbstractCastEvent c in explosiveImpact)

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             new PlayerDstHitMechanic(VileSpit, "Vile Spit", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit","Vile Spit (green goo)", "Poison Spit",0),
             new PlayerDstHitMechanic(TailLashSiax, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new SpawnMechanic((int)ArcDPSEnums.TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
+            new SpawnMechanic((int)TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
             new PlayerDstHitMechanic(new long[] { CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
             new EnemyCastStartMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase","Phase Start", "Phase", 0),
             new EnemyCastEndMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0).UsingChecker((ce,log) => ce.ActualDuration >= 20649), //
@@ -49,8 +49,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.VolatileHallucinationSiax,
-                ArcDPSEnums.TrashID.NightmareHallucinationSiax
+                TrashID.VolatileHallucinationSiax,
+                TrashID.NightmareHallucinationSiax
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -59,8 +59,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Siax,
-                (int)ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                (int)TargetID.Siax,
+                (int)TrashID.EchoOfTheUnclean,
             };
         }
 
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Siax));
+            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax));
             if (siax == null)
             {
                 throw new MissingKeyActorsException("Siax not found");
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     var ids = new List<int>
                     {
-                       (int) ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                       (int) TrashID.EchoOfTheUnclean,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     phase.Name = "Caustic Explosion " + (i / 2);
@@ -142,11 +142,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TargetID.Siax))
+                if (target.IsSpecies(TargetID.Siax))
                 {
                     target.OverrideName("Siax the Corrupted");
                 }
-                else if (target.IsSpecies(ArcDPSEnums.TrashID.EchoOfTheUnclean))
+                else if (target.IsSpecies(TrashID.EchoOfTheUnclean))
                 {
                     AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
                 }
@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Siax:
+                case (int)TargetID.Siax:
                     // Siax's Breakbar
                     var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar).ToList();
                     foreach (AbstractCastEvent c in causticExplosionBreakbar)
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
                     AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
-                case (int)ArcDPSEnums.TrashID.EchoOfTheUnclean:
+                case (int)TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
                     foreach (AbstractCastEvent c in causticExplosionEcho)
                     {
@@ -272,9 +272,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.VolatileHallucinationSiax:
+                case (int)TrashID.VolatileHallucinationSiax:
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucinationSiax:
+                case (int)TrashID.NightmareHallucinationSiax:
                     break;
                 default: break;
             }

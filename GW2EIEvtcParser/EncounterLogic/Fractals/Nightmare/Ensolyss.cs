@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Ensolyss,
+                (int)TargetID.Ensolyss,
                 //(int)ArcDPSEnums.TrashID.NightmareAltar,
             };
         }
@@ -69,8 +69,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.NightmareHallucination1,
-                ArcDPSEnums.TrashID.NightmareHallucination2,
+                TrashID.NightmareHallucination1,
+                TrashID.NightmareHallucination2,
                 //ArcDPSEnums.TrashID.NightmareAltar,
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
             phases[0].AddTarget(enso);
             if (!requirePhases)
             {
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Ensolyss:
+                case (int)TargetID.Ensolyss:
                     IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
                     Segment percent66treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 66);
                     Segment percent15treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 15);
@@ -431,7 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucination1:
+                case (int)TrashID.NightmareHallucination1:
                     // Lunge (Dash)
                     var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination).ToList();
                     foreach (AbstractCastEvent c in lungeHallu)
@@ -454,7 +454,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucination2:
+                case (int)TrashID.NightmareHallucination2:
                     break;
                 default:
                     break;
