@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff).UsingDurationChecker(3500),
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
+            new BuffGainCastFinder(SadisticSearing, SadisticSearing),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

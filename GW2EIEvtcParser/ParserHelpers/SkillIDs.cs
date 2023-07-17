@@ -992,6 +992,7 @@
         public const long LightningRod = 24305;
         public const long PoisonMasterBuff = 24371;
         public const long RousingResilience = 24383;
+        public const long ThousandCuts = 24755;
         public const long BowlOfPricklyPearSorber = 24792;
         public const long PlateOfRoastedCactus = 24793;
         public const long LoafOfCandyCactusCornbread = 24797;

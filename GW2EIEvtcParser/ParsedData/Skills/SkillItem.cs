@@ -351,6 +351,7 @@ namespace GW2EIEvtcParser.ParsedData
             { DeathlyHaste, "https://wiki.guildwars2.com/images/9/9d/Deathly_Haste.png" },
             { DoomApproaches, "https://wiki.guildwars2.com/images/2/28/Doom_Approaches.png" },
             { UnstableExplosion, "https://wiki.guildwars2.com/images/c/c9/Mark_of_Horror.png" },
+            { SadisticSearing, BuffImages.SadisticSearing },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },

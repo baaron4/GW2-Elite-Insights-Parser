@@ -29,7 +29,9 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
             }).WithBuilds(GW2Builds.October2022Balance),
-            new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem).UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023Balance)
+            new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem).UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023Balance),
+            new DamageCastFinder(ThousandCuts, ThousandCuts).UsingICD(5000).UsingNotAccurate(true).UsingDisableWithEffectData(),
+            new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts),
         };
 
 
