@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, BuffImages.ShatteringBlow),
             new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-            new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.OtherConsumable, BuffImages.HeatTheSoul),
+            new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.Other, BuffImages.HeatTheSoul),
         };
 
     }
