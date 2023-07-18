@@ -1410,9 +1410,9 @@
         public const long ShardsOfRageAbomination = 34411;
         public const long Surrender = 34413;
         public const long Corruption1 = 34416;
-        public const long BloodFueled = 34422;
+        public const long BloodFueledPlayer = 34422;
         public const long AbominationTransformation = 34427;
-        public const long BloodFueledAbo = 34428;
+        public const long BloodFueledMatthias = 34428;
         public const long SnowstormMatthias = 34433;
         public const long NotTheBees = 34434;
         public const long LocustTrail = 34439;
@@ -3391,6 +3391,7 @@
         public const long DualOrbitFireAndWater = 69184;
         public const long DualOrbitWaterAndAir = 69211;
         public const long DualOrbitAirAndEarth = 69246;
+        public const long HeatTheSoulBuff = 69267;
         public const long NaturalBalance = 69314;
         public const long DualOrbitFireAndAir = 69341;
         public const long DualOrbitWaterAndEarth = 69413;
