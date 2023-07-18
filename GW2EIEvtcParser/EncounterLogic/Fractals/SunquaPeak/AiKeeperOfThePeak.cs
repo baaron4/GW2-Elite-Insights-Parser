@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
             {
                 ( GW2Builds.September2020SunquaPeakRelease, 100),
-                ( GW2Builds.SOTOBeta, 99),
+                ( GW2Builds.SOTOBetaAndSilentSurfNM, 99),
             });
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names

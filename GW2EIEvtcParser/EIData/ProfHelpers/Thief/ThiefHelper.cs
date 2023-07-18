@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
             new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShadowPortal),
-            new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, BuffImages.Kneel).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, BuffImages.Kneel).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Signets
             new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, BuffImages.SignetOfMalice),
             new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),

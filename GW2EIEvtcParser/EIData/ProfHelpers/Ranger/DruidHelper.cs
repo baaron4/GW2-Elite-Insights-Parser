@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
+            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
             new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
             new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),

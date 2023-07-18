@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ( GW2Builds.November2016NightmareRelease, 100),
                 ( GW2Builds.July2017ShatteredObservatoryRelease, 99),
                 ( GW2Builds.September2020SunquaPeakRelease, 98),
-                ( GW2Builds.SOTOBeta, 97),
+                ( GW2Builds.SOTOBetaAndSilentSurfNM, 97),
             });
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
         }
