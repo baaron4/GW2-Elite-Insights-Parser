@@ -45,6 +45,7 @@
         public const long BlinkOrPhaseRetreat = -27;
         public const long RangerPetSpawned = -28;
         public const long HealingMistOrSoothingDetonation = -29;
+        public const long SadisticSearingActivation = -30;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;

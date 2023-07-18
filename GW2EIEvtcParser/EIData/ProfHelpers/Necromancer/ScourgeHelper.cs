@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -22,6 +25,16 @@ namespace GW2EIEvtcParser.EIData
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
             new BuffGainCastFinder(SadisticSearing, SadisticSearing),
+            new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing).UsingChecker((blcf, combatData, agentData, skillData) => 
+            {
+                AbstractBuffEvent abe = combatData.GetBuffData(SadisticSearing).Where(buffEvent => buffEvent is BuffApplyEvent).LastOrDefault(x => x.Time < blcf.Time);
+                AbstractHealthDamageEvent ahde = combatData.GetDamageData(ManifestSandShadeShadeHit).LastOrDefault(x => x.Time < blcf.Time);
+                if (abe.Time < ahde.Time && ahde.Time < blcf.Time)
+                {
+                    return true;
+                }
+                return false;
+            }),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

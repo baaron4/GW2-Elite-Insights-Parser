@@ -103,6 +103,7 @@ namespace GW2EIEvtcParser.ParsedData
             { DesertEmpowerment, "Desert Empowerment" },
             { SandCascadeBarrier, "Sand Cascade (Barrier)" },
             { SandFlare, "Sand Cascade" },
+            { SadisticSearingActivation, "Sadistic Searing (Activation)" },
             // Ranger
             { WindborneNotes, "Windborne Notes" },
             { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
@@ -352,6 +353,7 @@ namespace GW2EIEvtcParser.ParsedData
             { DoomApproaches, "https://wiki.guildwars2.com/images/2/28/Doom_Approaches.png" },
             { UnstableExplosion, "https://wiki.guildwars2.com/images/c/c9/Mark_of_Horror.png" },
             { SadisticSearing, BuffImages.SadisticSearing },
+            { SadisticSearingActivation, BuffImages.SadisticSearing },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
