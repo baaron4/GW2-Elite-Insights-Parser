@@ -19,6 +19,7 @@
         internal const string EncounterIconArtsariiv = "https://i.imgur.com/aFlYs1I.png";
         internal const string EncounterIconArkk = "https://i.imgur.com/glLH8n8.png";
         internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
+        internal const string EncounterIconKanaxai = "https://i.imgur.com/9hY6JFz.jpg";
 
         // Instances
         internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
@@ -26,6 +27,7 @@
         internal const string InstanceIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
         internal const string InstanceIconDeepstone = "https://i.imgur.com/3fACTgN.jpg";
         internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
+        internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
 
         // Combat Replay Maps
         internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
@@ -35,6 +37,7 @@
         internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
         internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";
         internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
+        internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
 
         #endregion FRACTALS
 

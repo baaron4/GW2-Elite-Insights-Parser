@@ -33,6 +33,7 @@
             public static long NightmareMask = 0x000100;
             public static long ShatteredObservatoryMask = 0x000200;
             public static long SunquaPeakMask = 0x000300;
+            public static long SilentSurfMask = 0x000400;
         }
 
         public static class StrikeMasks

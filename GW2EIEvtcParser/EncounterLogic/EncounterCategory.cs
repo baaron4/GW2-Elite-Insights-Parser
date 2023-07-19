@@ -31,6 +31,7 @@
             Nightmare,
             ShatteredObservatory,
             SunquaPeak,
+            SilentSurf,
             // 
             Grothmar,
             Bjora,
@@ -114,6 +115,8 @@
                     return "Shattered Observatory";
                 case SubFightCategory.SunquaPeak:
                     return "Sunqua Peak";
+                case SubFightCategory.SilentSurf:
+                    return "Silent Surf";
                 // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
