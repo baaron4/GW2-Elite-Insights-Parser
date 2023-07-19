@@ -27,9 +27,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SadisticSearing, SadisticSearing),
             new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing).UsingChecker((blcf, combatData, agentData, skillData) => 
             {
-                AbstractBuffEvent abe = combatData.GetBuffData(SadisticSearing).Where(buffEvent => buffEvent is BuffApplyEvent).LastOrDefault(x => x.Time < blcf.Time);
-                AbstractHealthDamageEvent ahde = combatData.GetDamageData(ManifestSandShadeShadeHit).LastOrDefault(x => x.Time < blcf.Time);
-                if (abe.Time < ahde.Time && ahde.Time < blcf.Time)
+                long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
+                if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom == blcf.To && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time)) 
                 {
                     return true;
                 }
