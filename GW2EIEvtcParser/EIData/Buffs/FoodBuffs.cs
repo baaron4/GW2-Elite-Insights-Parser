@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> FoodProcs = new List<Buff>
         {
-            // Effect procs for On Kill Food
+            // Buff procs for On Kill Food
             new Buff("Nourishment (Bonus 40 Power)", NourishmentBonusPower40, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
             new Buff("Nourishment (Bonus 60 Power)", NourishmentBonusPower60, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
             new Buff("Nourishment (Bonus 100 Power)", NourishmentBonusPower100, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),

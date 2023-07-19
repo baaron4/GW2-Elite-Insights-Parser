@@ -137,10 +137,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent determined = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             if (determined == null)
             {
-                determined = log.CombatData.GetBuffData(SkillIDs.SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+                determined = log.CombatData.GetBuffData(SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             }
             return determined;
         }
@@ -251,19 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _xeraSecondPhaseStartTime = secondXera.FirstAware;
                 }
                 firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
-                agentData.SwapMasters(secondXera, firstXera);
-                // update combat data
-                foreach (CombatItem c in combatData)
-                {
-                    if (c.SrcMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideSrcAgent(firstXera.Agent);
-                    }
-                    if (c.DstMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideDstAgent(firstXera.Agent);
-                    }
-                }
+                RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
 

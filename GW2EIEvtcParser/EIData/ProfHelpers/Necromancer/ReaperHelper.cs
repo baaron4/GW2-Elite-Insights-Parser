@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
-            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorEffect),
+            new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorBuff),
             new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingDisableWithEffectData(),
             new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1)
                 .UsingSrcSpecChecker(Spec.Reaper)
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, BuffImages.ReapersShroud),
-            new Buff("Infusing Terror", InfusingTerrorEffect, Source.Reaper, BuffClassification.Other, BuffImages.InfusingTerror),
+            new Buff("Infusing Terror", InfusingTerrorBuff, Source.Reaper, BuffClassification.Other, BuffImages.InfusingTerror),
             new Buff("Dark Bond", DarkBond, Source.Reaper, BuffClassification.Other, BuffImages.Rise),
             new Buff("Reaper's Frost (Chilled to the Bone!)", ReapersFrostChilledToTheBone, Source.Reaper, BuffClassification.Other, BuffImages.ChilledToTheBone),
             new Buff("Reaper's Frost (Executioner's Scythe)", ReapersFrostExecutionersScythe, Source.Reaper, BuffClassification.Other, BuffImages.ChilledToTheBone),
@@ -64,11 +64,11 @@ namespace GW2EIEvtcParser.EIData
             return _reaperShroudTransform.Contains(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.ShamblingHorror,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

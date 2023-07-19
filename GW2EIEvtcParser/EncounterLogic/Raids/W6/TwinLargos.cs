@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastEndMechanic(AquaticBarrage, "Aquatic Barrage End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0),
             new PlayerDstHitMechanic(SeaSwell, "Sea Swell", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave","Sea Swell (Shockwave)", "Shockwave",0),
             new PlayerDstHitMechanic(Geyser, "Geyser", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch","Geyser (Launching Aoes)", "Launch Field",0),
-            new PlayerDstBuffApplyMechanic(TidalPoolEffect, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
+            new PlayerDstBuffApplyMechanic(TidalPoolBuff, "Tidal Pool", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison","Expanding Water Field", "Water Poison",0),
             new PlayerDstHitMechanic(AquaticDetainmentHit, "Aquatic Detainment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",6000),
             new PlayerDstHitMechanic(AquaticVortex, "Aquatic Vortex", new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado","Aquatic Vortex (Water Tornados)", "Tornado",0),
             new PlayerDstHitMechanic(VaporJet, "Vapor Jet", new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal","Vapor Jet (Boon Steal)", "Boon Steal",0),
@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
-            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, TidalPoolEffect, p, true, true);
+            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, TidalPoolBuff, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in waterToDrop)
             {
@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bubble (Aquatic Detainment)
-            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainmentEffect, p, true, true);
+            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainmentBuff, p, true, true);
             int bubbleStart = 0;
             foreach (AbstractBuffEvent c in bubble)
             {

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new PlayerDstHitMechanic(Groundshaker, "Groundshaker", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Grey), "Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit", 150),
                 new PlayerDstHitMechanic(Groundpiercer, "Groundpiercer", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.White), "Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown", 150),
-                new PlayerDstBuffApplyMechanic(UnrelentingPainEffect, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
+                new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
                 new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Trapped", "Trapped", "Trapped", 2500),
                 new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Enrage", "Enrage", "Enrage", 1 << 16),
                 new EnemyCastStartMechanic(DeadlySynergy, "Deadly Synergy", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Deadly Synergy", "Cast  Deadly Synergy", "Deadly Synergy", 10000),

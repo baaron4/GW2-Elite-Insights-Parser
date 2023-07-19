@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceEffect), // Legendary Renegade Stance
+            new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceBuff), // Legendary Renegade Stance
             new DamageCastFinder(CallOfTheRenegade, CallOfTheRenegade), // Call of the Renegade
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Renegade)
         };
@@ -28,15 +28,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceEffect, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
-            new Buff("Breakrazor's Bastion", BreakrazorsBastion, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),
-            new Buff("Razorclaw's Rage", RazorclawsRage, Source.Renegade, BuffClassification.Offensive, BuffImages.RazorclawsRage),
-            new Buff("Soulcleave's Summit", SoulcleavesSummit, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),
+            new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
+            new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),
+            new Buff("Razorclaw's Rage", RazorclawsRageBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.RazorclawsRage),
+            new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),
             new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
             new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.JasRazorclaw,
             (int)MinionID.ViskIcerazor,
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.EraBreakrazor,
             (int)MinionID.OfelaSoulcleave,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

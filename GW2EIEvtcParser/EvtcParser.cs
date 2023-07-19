@@ -68,14 +68,14 @@ namespace GW2EIEvtcParser
                 {
                     throw new EvtcFileException("File " + evtc.FullName + " does not exist");
                 }
-                if (!ParserHelper.IsSupportedFormat(evtc.Name))
+                if (!IsSupportedFormat(evtc.Name))
                 {
                     throw new EvtcFileException("Not EVTC");
                 }
                 ParsedEvtcLog evtcLog;
                 using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    if (ParserHelper.IsCompressedFormat(evtc.Name))
+                    if (IsCompressedFormat(evtc.Name))
                     {
                         using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                         {
@@ -386,12 +386,12 @@ namespace GW2EIEvtcParser
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
-                ParserHelper.Spec agentProf = ParserHelper.ProfToSpec(GetAgentProfString(prof, isElite, operation));
+                ParserHelper.Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation));
                 AgentItem.AgentType type;
                 ushort ID = 0;
                 switch (agentProf)
                 {
-                    case ParserHelper.Spec.NPC:
+                    case Spec.NPC:
                         // NPC
                         if (!ushort.TryParse(prof.ToString().PadLeft(5, '0'), out ID))
                         {
@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser
                         }
                         type = AgentItem.AgentType.NPC;
                         break;
-                    case ParserHelper.Spec.Gadget:
+                    case Spec.Gadget:
                         // Gadget
                         if (!ushort.TryParse((prof & 0x0000ffff).ToString().PadLeft(5, '0'), out ID))
                         {
@@ -676,7 +676,7 @@ namespace GW2EIEvtcParser
                     return _enabledExtensions.ContainsKey(combatItem.Pad);
                 }
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && combatItem.IsStateChange != ArcDPSEnums.StateChange.Effect)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && !combatItem.IsEffect)
             {
                 return false;
             }
@@ -710,10 +710,10 @@ namespace GW2EIEvtcParser
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-            if (master != ParserHelper._unknownAgent)
+            if (master != _unknownAgent)
             {
                 AgentItem minion = _agentData.GetAgent(minionAgent, logTime);
-                if (minion != ParserHelper._unknownAgent && minion.Master == null)
+                if (minion != _unknownAgent && minion.Master == null)
                 {
                     minion.SetMaster(master);
                 }
@@ -740,20 +740,8 @@ namespace GW2EIEvtcParser
                         if (p.Character == player.Character) // same character, can be fused
                         {
                             skip = true;
-                            ulong agent = p.AgentItem.Agent;
                             operation.UpdateProgressWithCancellationCheck("Merging player");
-                            foreach (CombatItem c in _combatItems)
-                            {
-                                if (c.DstMatchesAgent(player.AgentItem, _enabledExtensions))
-                                {
-                                    c.OverrideDstAgent(agent);
-                                }
-                                if (c.SrcMatchesAgent(player.AgentItem, _enabledExtensions))
-                                {
-                                    c.OverrideSrcAgent(agent);
-                                }
-                            }
-                            _agentData.SwapMasters(player.AgentItem, p.AgentItem);
+                            RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
                             break;
                         }

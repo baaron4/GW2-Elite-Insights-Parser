@@ -16,21 +16,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
-                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                agentData.SwapMasters(new HashSet<AgentItem>(agents), newTargetAgent);
                 agentData.ReplaceAgentsFromID(newTargetAgent);
-                foreach (CombatItem c in combatItems)
+                foreach (AgentItem agentItem in agents)
                 {
-                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                    {
-                        c.OverrideSrcAgent(newTargetAgent.Agent);
-                    }
-                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                    {
-                        c.OverrideDstAgent(newTargetAgent.Agent);
-                    }
+                    RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
                 }
             }
         }
@@ -113,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
         }

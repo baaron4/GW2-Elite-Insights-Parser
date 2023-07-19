@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
+        public IReadOnlyList<long> BreakbarActive { get; private set; }
 
         public long HitboxWidth { get; }
 
@@ -72,6 +73,19 @@ namespace GW2EIEvtcParser.EIData
             {
                 dc.Add(seg.Start);
                 dc.Add(seg.End);
+            }
+        }
+
+        protected void SetBreakbarStatus(ParsedEvtcLog log, AbstractSingleActor a)
+        {
+            var active = new List<long>();
+            BreakbarActive = active;
+            (_, IReadOnlyList<Segment> actives, _, _) = a.GetBreakbarStatus(log);
+
+            foreach (Segment seg in actives)
+            {
+                active.Add(seg.Start);
+                active.Add(seg.End);
             }
         }
 

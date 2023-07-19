@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.BlastGyro,
             (int)MinionID.BulwarkGyro,
@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.PurgeGyro,
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

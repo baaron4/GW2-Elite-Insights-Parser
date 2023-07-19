@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
 
 
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = ParserHelper.DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = DamageType.All)
         {
             if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
             {
@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (Segment seg in hps)
             {
-                if (seg.IntersectSegment(time - ParserHelper.ServerDelayConstant, time + ParserHelper.ServerDelayConstant))
+                if (seg.IntersectSegment(time - ServerDelayConstant, time + ServerDelayConstant))
                 {
                     return seg.Value;
                 }
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (Segment seg in hps)
             {
-                if (seg.IntersectSegment(time - ParserHelper.ServerDelayConstant, time + ParserHelper.ServerDelayConstant))
+                if (seg.IntersectSegment(time - ServerDelayConstant, time + ServerDelayConstant))
                 {
                     return seg.Value;
                 }

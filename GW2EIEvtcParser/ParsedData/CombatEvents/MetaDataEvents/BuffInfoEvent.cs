@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
         public byte CategoryByte { get; private set; }
 
         public byte StackingTypeByte { get; private set; } = 6;
-        public ArcDPSEnums.BuffStackType StackingType { get; private set; } = ArcDPSEnums.BuffStackType.Unknown;
+        public ArcDPSEnums.BuffStackType StackingType { get; private set; } = BuffStackType.Unknown;
 
         public bool ProbablyResistance { get; private set; }
 
@@ -40,10 +40,10 @@ namespace GW2EIEvtcParser.ParsedData
             }
             switch (evtcItem.IsStateChange)
             {
-                case ArcDPSEnums.StateChange.BuffFormula:
+                case StateChange.BuffFormula:
                     BuildFromBuffFormula(evtcItem, evtcVersion);
                     break;
-                case ArcDPSEnums.StateChange.BuffInfo:
+                case StateChange.BuffInfo:
                     BuildFromBuffInfo(evtcItem, evtcVersion);
                     break;
                 default:
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 StackingTypeByte = evtcItem.Pad1;
-                StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
+                StackingType = GetBuffStackType(StackingTypeByte);
             }
             ProbablyResistance = evtcItem.Pad2 > 0;
         }

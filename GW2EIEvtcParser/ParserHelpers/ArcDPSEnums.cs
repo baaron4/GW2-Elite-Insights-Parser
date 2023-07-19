@@ -12,8 +12,10 @@ namespace GW2EIEvtcParser
             internal const ulong StartOfLife = ulong.MinValue;
             //
             internal const ulong HoTRelease = 54485;
+            internal const ulong November2016NightmareRelease = 69591;
             internal const ulong February2017Balance = 72781;
             internal const ulong May2017Balance = 76706;
+            internal const ulong July2017ShatteredObservatoryRelease = 79873;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -54,7 +56,8 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
-            internal const ulong SOTOBeta = 147830;
+            internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
+            internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -251,11 +254,13 @@ namespace GW2EIEvtcParser
             InstanceStart = 42,
             TickRate = 43,
             Last90BeforeDown = 44,
-            Effect = 45,
+            Effect_45 = 45,
             EffectIDToGUID = 46,
             LogStartNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
+            FractalScale = 50,
+            Effect_51 = 51,
             Unknown
         };
 
@@ -864,7 +869,7 @@ namespace GW2EIEvtcParser
             VoidStormseer = 24677,
             VoidMelter = 24223,
             VoidGoliath = 24761,
-            DragonEnergyOrb = ArcDPSEnums.DragonOrb,
+            DragonEnergyOrb = DragonOrb,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,

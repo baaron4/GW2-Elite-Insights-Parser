@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayEffect),
+            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayBuff),
             new EffectCastFinderByDstFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone)
                 .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
                 .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
@@ -66,9 +66,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Rectifier Signet", RectifierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.RectifierSignet),
             new Buff("Barrier Signet", BarrierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),
             new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, BuffImages.ForceSignet),
-            new Buff("Shift Signet", ShiftSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.ShiftSignet),
+            new Buff("Shift Signet", ShiftSignetBuff, Source.Mechanist, BuffClassification.Other, BuffImages.ShiftSignet),
             new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, BuffImages.SuperconductingSignet),
-            new Buff("Overclock Signet", OverclockSignetEffect, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
+            new Buff("Overclock Signet", OverclockSignetBuff, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
             new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, BuffImages.MechanicalGenius),
             //
             //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
@@ -79,11 +79,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.JadeMech,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

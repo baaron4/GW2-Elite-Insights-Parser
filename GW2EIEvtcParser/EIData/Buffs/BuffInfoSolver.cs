@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return true;
                 }
-                if (formula.Attr1 == ArcDPSEnums.BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
+                if (formula.Attr1 == BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
                 {
                     if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
                     {
@@ -83,85 +83,85 @@ namespace GW2EIEvtcParser.EIData
         }
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.PhysRec2, GW2Builds.EODBeta3), Protection },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CondRec2, GW2Builds.EODBeta3), Resolution },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysRec2, GW2Builds.EODBeta3), Protection },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondRec2, GW2Builds.EODBeta3), Resolution },
             // CriticalChance
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.CriticalChance), Fury },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
             // Fishing Power      
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), PlateOfImperialPalaceSpecial },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), PlateOfCrispyFishPancakes },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), BowlOfJadeSeaBounty },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.FishingPower), BowlOfEchovaldHotpot },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfImperialPalaceSpecial },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfCrispyFishPancakes },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfJadeSeaBounty },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfEchovaldHotpot },
             // Life Leech      
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SiphonInc, GW2Builds.May2021Balance), KallasFervor },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SiphonInc, GW2Builds.May2021Balance), ImprovedKallasFervor },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.SiphonInc, GW2Builds.May2021Balance), Fury },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonInc, GW2Builds.May2021Balance), KallasFervor },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonInc, GW2Builds.May2021Balance), ImprovedKallasFervor },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.SiphonInc, GW2Builds.May2021Balance), Fury },
             // ConditionDurationIncrease
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDurationInc), Fury },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.ConditionDurationInc), Fury },
             // SkillRechargeSpeedIncrease
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SkillRechargeSpeedIncrease), Alacrity },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SkillRechargeSpeedIncrease), Alacrity },
             // HealingOutputFormula
-            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingOutputFormula), Regeneration },
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.HealingOutputFormula), Regeneration },
             // EnduranceRegeneration
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.EnduranceRegeneration), Vigor },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.EnduranceRegeneration), Vigor },
             // MovementSpeed
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeed), Swiftness },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeed), Swiftness },
             // DamageFormulaSquaredLevel
-            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DamageFormulaSquaredLevel, 0, GW2Builds.May2021Balance), Retaliation },
+            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormulaSquaredLevel, 0, GW2Builds.May2021Balance), Retaliation },
             // DamageFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DamageFormula), Bleeding },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DamageFormula), Burning },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DamageFormula), Poison },
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DamageFormula), Confusion },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Bleeding },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Burning },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Poison },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.DamageFormula), Confusion },
             // SkillActivationDamageFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.SkillActivationDamageFormula), Confusion },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.SkillActivationDamageFormula), Confusion },
             // MovementActivationDamageFormula
-            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, 0, 0, ArcDPSEnums.BuffAttribute.MovementActivationDamageFormula), Torment },
+            { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, 0, 0, BuffAttribute.MovementActivationDamageFormula), Torment },
             // IncomingHealingEffectiveness
-            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessRec), Poison },
+            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessRec), Poison },
             // GlancingBlow
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.GlancingBlow), Weakness },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.GlancingBlow), Weakness },
             // OutgoingHealingEffectivenessFlatInc
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessFlatInc), SuperiorRuneOfTheMonk },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessFlatInc), DeliciousRiceBall },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessFlatInc), InvokingHarmony },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessFlatInc), CelestialAvatar },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessFlatInc), NaturalMender },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessFlatInc), SuperiorRuneOfTheMonk },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessFlatInc), DeliciousRiceBall },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessFlatInc), InvokingHarmony },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessFlatInc), CelestialAvatar },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessFlatInc), NaturalMender },
             // Damage to HP
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.StrikeDamageToHP), BloodReckoning },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.StrikeDamageToHP), LitanyOfWrath },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), BloodReckoning },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), LitanyOfWrath },
             // Condition to HP
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageToHP), BloodReckoning },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ConditionDamageToHP), LitanyOfWrath },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), BloodReckoning },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), LitanyOfWrath },
             // BoonDurationIncrease
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.BoonDurationInc), WovenWater },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.BoonDurationInc), PerfectWeave },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationInc), WovenWater },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationInc), PerfectWeave },
             // Experience from kills
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), RareVeggiePizza },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), PlateOfBeefRendang },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), SoulPastry },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), BowlOfFireMeatChili },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), SuperiorSharpeningStone },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), ToxicFocusingCrystal },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), BowlOfSweetAndSpicyButternutSquashSoup },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromKills), MasterMaintenanceOil },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), RareVeggiePizza },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), PlateOfBeefRendang },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), SoulPastry },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), BowlOfFireMeatChili },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), SuperiorSharpeningStone },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), ToxicFocusingCrystal },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), BowlOfSweetAndSpicyButternutSquashSoup },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), MasterMaintenanceOil },
             // Experience from all
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
             // HealingEffectivenessRec2
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.HealingEffectivenessRec2), EternalOasis },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessRec2), EternalOasis },
             // MagicFind
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MagicFind), GuildItemResearch },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MagicFind), GuildItemResearch },
             // Stacking Movement Speed
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeedStacking), RisingMomentum },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeedStacking2), FormUpAndAdvance },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeedStacking2), UnseenBurden },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.MovementSpeedStacking2), Hamstrung },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking), RisingMomentum },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), FormUpAndAdvance },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), UnseenBurden },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), Hamstrung },
             // Maximum HP
-            {new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, MistlockInstabilityBoonOverload, 0, ArcDPSEnums.BuffAttribute.MaximumHP), Might },
+            {new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, MistlockInstabilityBoonOverload, 0, BuffAttribute.MaximumHP), Might },
             // Vitality Percent
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.VitalityPercent), ReinforcedArmor },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalityPercent), ReinforcedArmor },
             // Defense Percent
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, ArcDPSEnums.BuffAttribute.DefensePercent), ReinforcedArmor },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.DefensePercent), ReinforcedArmor },
         };
 
         public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)

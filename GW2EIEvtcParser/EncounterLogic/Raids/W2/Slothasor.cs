@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstHitMechanic(TantrumDamage, "Tantrum", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum","Tantrum (Triple Circles after Ground slamming)", "Tantrum",5000),
-            new PlayerDstBuffApplyMechanic(VolatilePoisonEffect, "Volatile Poison", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new PlayerDstBuffApplyMechanic(VolatilePoisonBuff, "Volatile Poison", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
             new PlayerDstHitMechanic(VolatilePoisonSkill, "Volatile Poison", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg","Stood in Volatile Poison", "Poison dmg",0),
             new PlayerDstHitMechanic(Halitosis, "Halitosis", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath","Halitosis (Flame Breath)", "Flame Breath",0),
             new PlayerDstHitMechanic(SporeRelease, "Spore Release", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake","Spore Release (Coconut Shake)", "Shake",0),
@@ -30,9 +30,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(FixatedSlothasor, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Slothasor", "Fixated",0),
             new PlayerDstHitMechanic(new long[] { ToxicCloud1, ToxicCloud2 }, "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0).UsingChecker((ba,log) => ba.AppliedDuration == 8000),
-            new EnemyDstBuffApplyMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new EnemyDstBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0).UsingChecker((br,log) => br.RemovedDuration > 120000),
-            new EnemyDstBuffRemoveMechanic(NarcolepsyEffect, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0).UsingChecker( (br,log) => br.RemovedDuration <= 120000),
+            new EnemyDstBuffApplyMechanic(NarcolepsyBuff, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0).UsingChecker((br,log) => br.RemovedDuration > 120000),
+            new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Narcolepsy (Breakbar broken)", "CCed",0).UsingChecker( (br,log) => br.RemovedDuration <= 120000),
             new PlayerDstBuffApplyMechanic(SlipperySlubling, "Slippery Slubling", new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb","Slippery Slubling", "Slippery Slubling",0),
             });
             Extension = "sloth";
@@ -130,6 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         continue;
                     }
+                    var copyEventsFrom = new List<AgentItem>() { mushroom };
                     var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                     var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
                     var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
@@ -147,14 +148,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             lastDeadTime = deadEvent.Time;
                         }
                         AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                        // We only need to copy metadata
-                        foreach (CombatItem c in posFacingHP)
-                        {
-                            var cExtra = new CombatItem(c);
-                            cExtra.OverrideTime(aliveMushroom.FirstAware);
-                            cExtra.OverrideSrcAgent(aliveMushroom.Agent);
-                            combatData.Add(cExtra);
-                        }
+                        RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom);
+                        copyEventsFrom.Add(aliveMushroom);
                     }
                 }
                 agentData.Refresh();
@@ -217,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Poison
-            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, VolatilePoisonEffect, p, true, true);
+            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, VolatilePoisonBuff, p, true, true);
             int toDropStart = 0;
             foreach (AbstractBuffEvent c in poisonToDrop)
             {

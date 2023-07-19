@@ -41,8 +41,8 @@ namespace GW2EIBuilders.JsonModels
                 Name = buff.Name,
                 Icon = buff.Link,
                 Stacking = buff.Type == Buff.BuffType.Intensity,
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
-                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
+                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
             BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
@@ -109,6 +109,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.UploadLinks = uploadLinks;
             jsonLog.Language = log.LogData.Language;
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
+            jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             jsonLog.IsCM = log.FightData.IsCM;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();

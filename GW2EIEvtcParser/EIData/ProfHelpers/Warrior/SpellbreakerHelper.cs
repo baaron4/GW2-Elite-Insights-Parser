@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightEffect), // Sight beyond Sight
+            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightBuff), // Sight beyond Sight
             new DamageCastFinder(LossAversion, LossAversion), // Loss Aversion
 
         };
@@ -53,8 +53,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Sight beyond Sight", SightBeyondSightEffect, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
-            new Buff("Full Counter", FullCounter, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),
+            new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
+            new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),
             new Buff("Disenchantment", Disenchantment, Source.Spellbreaker, BuffClassification.Other, BuffImages.WindsOfDisenchantment),
             new Buff("Attacker's Insight", AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.AttackersInsight),
             new Buff("Magebane Tether", MagebaneTether, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MagebaneTether),

@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
                 if(evt.Src.Spec != Spec.Virtuoso) {
                     return false;
                 }
-                if (!combatData.GetBuffData(DistortionEffect).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffData(DistortionBuff).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
                 {
                     return false;
                 }
@@ -92,8 +92,8 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        private static HashSet<long> Minions = new HashSet<long>();
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> Minions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

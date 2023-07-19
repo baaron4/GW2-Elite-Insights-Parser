@@ -40,10 +40,10 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-            new Buff("Ancestral Grace", AncestralGraceEffect, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
+            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-            new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
-            new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
+            new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
+            new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
             new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
             new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfEmpowermentCelestialAvatar).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.NaturalMender).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
