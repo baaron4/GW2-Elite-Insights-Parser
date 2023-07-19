@@ -26,13 +26,13 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness),
             new DamageCastFinder(InvokingTorment, InvokingTorment)
                 .WithBuilds(GW2Builds.February2020Balance)
-                .UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin),
             new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf),
             new DamageCastFinder(CallOfTheDemon, CallOfTheDemon),
             new DamageCastFinder(LesserBanishEnchantment, LesserBanishEnchantment)
                 .WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance)
-                .UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur),
             new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),

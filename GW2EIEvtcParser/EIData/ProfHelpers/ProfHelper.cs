@@ -14,13 +14,13 @@ namespace GW2EIEvtcParser.EIData
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
             new BreakbarDamageCastFinder(Technobabble, Technobabble),
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500).UsingSource(InstantCastFinder.InstantCastSource.Gear),
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500).UsingSource(InstantCastFinder.InstantCastSource.Gear),
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500).UsingSource(InstantCastFinder.InstantCastSource.Gear),
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500).UsingSource(InstantCastFinder.InstantCastSource.Gear),
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare).UsingSource(InstantCastFinder.InstantCastSource.Gear),
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),
         };

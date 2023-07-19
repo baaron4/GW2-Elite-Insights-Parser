@@ -11,14 +11,14 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class InstantCastFinder : IVersionable
     {
 
-        public enum InstantCastSource
+        public enum InstantCastOrigin
         {
             Skill,
             Trait,
             Gear
         }
 
-        public InstantCastSource CastSource { get; private set; } = InstantCastSource.Skill;
+        public InstantCastOrigin CastOrigin { get; private set; } = InstantCastOrigin.Skill;
 
         public delegate bool InstantCastEnableChecker(CombatData combatData);
         private List<InstantCastEnableChecker> _enableConditions { get; }
@@ -64,9 +64,9 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        internal InstantCastFinder UsingSource(InstantCastSource source)
+        internal InstantCastFinder UsingOrigin(InstantCastOrigin origin)
         {
-            CastSource = source;
+            CastOrigin = origin;
             return this;
         }
 

@@ -176,15 +176,15 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         skillData.NotAccurate.Add(icf.SkillID);
                     }
-                    switch(icf.CastSource)
+                    switch(icf.CastOrigin)
                     {
-                        case InstantCastFinder.InstantCastSource.Trait:
+                        case InstantCastFinder.InstantCastOrigin.Trait:
                             skillData.TraitProc.Add(icf.SkillID);
                             break;
-                        case InstantCastFinder.InstantCastSource.Gear:
+                        case InstantCastFinder.InstantCastOrigin.Gear:
                             skillData.GearProc.Add(icf.SkillID);
                             break;
-                        case InstantCastFinder.InstantCastSource.Skill:
+                        case InstantCastFinder.InstantCastOrigin.Skill:
                         default:
                             break;
                     }

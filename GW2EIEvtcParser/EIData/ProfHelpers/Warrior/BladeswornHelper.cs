@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),                
-            new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>
