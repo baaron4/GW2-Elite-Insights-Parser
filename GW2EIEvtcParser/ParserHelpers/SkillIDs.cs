@@ -3386,8 +3386,8 @@
         public const long BowlOfMistsInfusedFruitSaladWithMintGarnish = 69105;
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
-        public const long EquipSurveyGear = 69154;
         public const long AspectedVolleyTorment = 69152;
+        public const long EquipSurveyGear = 69154;
         public const long AspectedVolleyDeath = 69155;
         public const long DualOrbitFireAndEarth = 69164;
         public const long FrighteningSpeed = 69182;
