@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new BuffGainCastFinder(PortalExeunt, PortalUses),
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
-            new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Traits
             new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
             new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),

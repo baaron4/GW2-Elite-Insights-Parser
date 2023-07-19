@@ -14,9 +14,19 @@
                     <a class="nav-link" @click="hideSmallTime = !hideSmallTime"
                         :class="{active: hideSmallTime}">Hide < 10ms</a>
                 </li>
+            </ul>      
+            <ul class="nav nav-pills ml-1 mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
                         :class="{active: hideInstantCast}">Hide instant cast</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="hideGearProc = !hideGearProc"
+                        :class="{active: hideGearProc, disabled: hideInstantCast}">Hide gear procs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="hideTraitProc = !hideTraitProc"
+                        :class="{active: hideTraitProc, disabled: hideInstantCast}">Hide trait procs</a>
                 </li>
             </ul>
             <ul class="nav nav-pills ml-1 scale85">
@@ -72,6 +82,8 @@
                 smallAA: true,
                 hideInterruptedAA: false,
                 hideInstantCast: false,
+                hideTraitProc: true,
+                hideGearProc: false,
                 hideSmallTime: true,
             };
         },
@@ -91,7 +103,8 @@
                 return findSkill(false, id).isSwap;
             },
             showSkill: function (rota) {
-                var aa = this.getSkill(rota[1]).aa;
+                var skill = this.getSkill(rota[1]);
+                var aa = skill.aa;
                 if (aa) {
                     if (!this.autoattack) {
                         return false;
@@ -100,10 +113,19 @@
                         return false;
                     }
                 }
-                if (this.hideInstantCast && rota[3] === RotationStatus.INSTANT && !this.isSwap(rota[1])) {
-                    return false;
+                if (skill.isSwap) {
+                    return true;
                 }
-                if (this.hideSmallTime && rota[3] !== RotationStatus.INSTANT) {
+                var isInstant = rota[3] === RotationStatus.INSTANT;
+                if (isInstant) {
+                    if (this.hideInstantCast) {
+                        return false;
+                    } else if (this.hideGearProc && skill.gearProc) {
+                        return false;
+                    } else if (this.hideTraitProc && skill.traitProc) {
+                        return false;
+                    }
+                } else if (this.hideSmallTime) {
                     return rota[2] > 10;
                 }
                 return true;

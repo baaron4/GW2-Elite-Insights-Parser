@@ -31,10 +31,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(MistForm, MistForm),
             new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill).UsingDisableWithEffectData(),
             new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir).UsingDstBaseSpecChecker(Spec.Elementalist),
-            new DamageCastFinder(Sunspot, Sunspot),
-            new DamageCastFinder(EarthenBlast, EarthenBlast),
+            new DamageCastFinder(Sunspot, Sunspot).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(EarthenBlast, EarthenBlast).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new DamageCastFinder(LightningStrike, LightningStrike),
-            new DamageCastFinder(LightningRod, LightningRod), 
+            new DamageCastFinder(LightningRod, LightningRod).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), 
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
             new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1).UsingDstBaseSpecChecker(Spec.Elementalist),
             new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
@@ -49,19 +49,19 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBeta),
+            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBeta),
+            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBeta),
+            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBeta),
+            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
             // Arcane
             new BuffDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
             new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.December2018Balance),
-            new BuffDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All).WithBuilds(GW2Builds.SOTOBeta),
+            new BuffDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
 
@@ -152,10 +152,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerWater),
             new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthBuff, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerEarth),
             // Hammer
-            new Buff("Flame Wheel", FlameWheelBuff, Source.Elementalist, BuffClassification.Other, BuffImages.FlameWheel).WithBuilds(GW2Builds.SOTOBeta),
-            new Buff("Icy Coil", IcyCoilBuff, Source.Elementalist, BuffClassification.Other, BuffImages.IcyCoil).WithBuilds( GW2Builds.SOTOBeta),
-            new Buff("Crescent Wind", CrescentWindBuff, Source.Elementalist, BuffClassification.Other, BuffImages.CrescentWind).WithBuilds(GW2Builds.SOTOBeta),
-            new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RockyLoop).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Flame Wheel", FlameWheelBuff, Source.Elementalist, BuffClassification.Other, BuffImages.FlameWheel).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Icy Coil", IcyCoilBuff, Source.Elementalist, BuffClassification.Other, BuffImages.IcyCoil).WithBuilds( GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Crescent Wind", CrescentWindBuff, Source.Elementalist, BuffClassification.Other, BuffImages.CrescentWind).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RockyLoop).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
 

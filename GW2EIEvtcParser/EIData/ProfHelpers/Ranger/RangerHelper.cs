@@ -85,14 +85,14 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmBuff),
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmPvPBuff),
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
-            new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true),
-            new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
-            new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond),
+            new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
             new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
-            new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)),
+            new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
             new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
-            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Traits
             new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, BuffImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, BuffImages.OpeningStrike),

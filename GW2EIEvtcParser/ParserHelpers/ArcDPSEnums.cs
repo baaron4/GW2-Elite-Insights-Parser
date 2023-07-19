@@ -12,8 +12,10 @@ namespace GW2EIEvtcParser
             internal const ulong StartOfLife = ulong.MinValue;
             //
             internal const ulong HoTRelease = 54485;
+            internal const ulong November2016NightmareRelease = 69591;
             internal const ulong February2017Balance = 72781;
             internal const ulong May2017Balance = 76706;
+            internal const ulong July2017ShatteredObservatoryRelease = 79873;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -54,7 +56,8 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
-            internal const ulong SOTOBeta = 147830;
+            internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
+            internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -927,6 +930,15 @@ namespace GW2EIEvtcParser
             PlayerDoubtDemon = 23246,
             FearDemon = 23264,
             GuiltDemon = 23252,
+            // Kanaxai
+            AspectOfTorment = 25556,
+            AspectOfLethargy = 25561,
+            AspectOfExposure = 25562,
+            AspectOfDeath = 25580,
+            AspectOfFear = 25563,
+            LuxonMonkSpirit = 25571,
+            CaptainThess1 = 25554,
+            CaptainThess2 = 25557,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
@@ -1067,6 +1079,8 @@ namespace GW2EIEvtcParser
             TheVoice = 20497,
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
+            KanaxaiScytheOfHouseAurkusNM = 25572,
+            KanaxaiScytheOfHouseAurkusCM = 25577,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,

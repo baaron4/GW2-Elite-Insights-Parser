@@ -10,6 +10,8 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -33,8 +35,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(CosmicMeteor, "Cosmic Meteor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Temporal Realignment (Green) application", "Green",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new EnemyCastStartMechanic(ArkkBreakbarCast, "Breakbar Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar","Start Breakbar", "CC",0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0).UsingChecker((bae,log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0).UsingChecker((bae,log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0).UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0).UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
             new PlayerDstHitMechanic(OverheadSmashArchdiviner, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightRed), "A.Smsh","Overhead Smash (Arcdiviner)", "Smash (Add)",0),
             new PlayerDstHitMechanic(RollingChaos, "Rolling Chaos", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightRed), "KD Marble","Rolling Chaos (Arrow marble)", "KD Marble",0),
             new PlayerDstHitMechanic(SolarStomp, "Solar Stomp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Stomp","Solar Stomp (Evading Stomp)", "Evading Jump",0),
@@ -64,14 +66,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.TemporalAnomaly2,
-                ArcDPSEnums.TrashID.BLIGHT,
-                ArcDPSEnums.TrashID.Fanatic,
-                ArcDPSEnums.TrashID.SolarBloom,
-                ArcDPSEnums.TrashID.PLINK,
-                ArcDPSEnums.TrashID.DOC,
-                ArcDPSEnums.TrashID.CHOP,
-                ArcDPSEnums.TrashID.ProjectionArkk
+                TrashID.TemporalAnomaly2,
+                TrashID.BLIGHT,
+                TrashID.Fanatic,
+                TrashID.SolarBloom,
+                TrashID.PLINK,
+                TrashID.DOC,
+                TrashID.CHOP,
+                TrashID.ProjectionArkk
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -86,9 +88,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Arkk,
-                (int)ArcDPSEnums.TrashID.Archdiviner,
-                (int)ArcDPSEnums.TrashID.EliteBrazenGladiator
+                (int)TargetID.Arkk,
+                (int)TrashID.Archdiviner,
+                (int)TrashID.EliteBrazenGladiator
             };
         }
 
@@ -107,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Arkk));
+            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
             if (arkk == null)
             {
                 throw new MissingKeyActorsException("Arkk not found");
@@ -123,23 +125,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases[i].Name = "Phase " + i;
                 phases[i].AddTarget(arkk);
             }
-            GetMiniBossPhase((int)ArcDPSEnums.TrashID.Archdiviner, log, "Archdiviner", phases);
-            GetMiniBossPhase((int)ArcDPSEnums.TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+            GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
+            GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
             return phases;
         }
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem arkk = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Arkk).FirstOrDefault();
+                AgentItem arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault();
                 if (arkk == null)
                 {
                     throw new MissingKeyActorsException("Arkk not found");
                 }
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
                 CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
                 return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
@@ -153,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Arkk));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Arkk not found");

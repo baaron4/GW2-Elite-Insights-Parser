@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance),
+            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
             new BuffGainCastFinder(BalancedStanceSill, BalancedStanceBuff),
             new BuffGainCastFinder(EndurePainSkill, EnduringPainBuff),
@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
-            new EXTHealingCastFinder(MendingMight, MendingMight),
+            new EXTHealingCastFinder(MendingMight, MendingMight).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
             new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
-            new Buff("Flames of War", FlamesOfWar, Source.Warrior, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Flames of War", FlamesOfWar, Source.Warrior, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
             new Buff("Dolyak Signet", DolyakSignetBuff, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),

@@ -232,6 +232,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
                     Logic = new AiKeeperOfThePeak(id);
                     break;
+                case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    Logic = new Kanaxai(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
@@ -298,10 +301,6 @@ namespace GW2EIEvtcParser.ParsedData
         internal void SetFightName(CombatData combatData, AgentData agentData)
         {
             FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
-            if (combatData.GetFractalScaleEvent() != null)
-            {
-                FightName += " (" + combatData.GetFractalScaleEvent().Scale + ")";
-            }
         }
 
         public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
             new DamageCastFinder(SmiteCondition, SmiteCondition),
-            new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition),
+            new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             
             // Shouts
             new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
@@ -59,12 +59,12 @@ namespace GW2EIEvtcParser.EIData
 
             // Signets
             new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
-            new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath),
+            new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             
             //new DamageCastFinder(9097,9097), // Symbol of Blades
-            new DamageCastFinder(GlacialHeart, GlacialHeart),
-            new DamageCastFinder(ShatteredAegis, ShatteredAegis),
-            new EXTHealingCastFinder(SelflessDaring, SelflessDaring),
+            new DamageCastFinder(GlacialHeart, GlacialHeart).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
 

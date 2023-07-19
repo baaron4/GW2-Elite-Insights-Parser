@@ -13,13 +13,10 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff), // Legendary Alliance Stance
-            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect), // Legendary Alliance Stance (UW)
-            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance), // Call of the Alliance
-            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), // Urn of Saint Viktor
-            //new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath), // Forerunner of Death (Death Drop) 
-            //new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer), // Saint of zu Heltzer (Saint's Shield)
-            //new EXTHealingCastFinder(-1, -1), // Redemptor's Sermon
+            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff),
+            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect),
+            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance),
+            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), 
         };
 
         private static readonly HashSet<long> _dodges = new HashSet<long>
@@ -43,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Urn of Saint Viktor", UrnOfSaintViktorBuff, Source.Vindicator, BuffClassification.Other, BuffImages.UrnOfSaintViktor),
             new Buff("Saint of zu Heltzer", SaintOfzuHeltzer, Source.Vindicator, BuffClassification.Other, BuffImages.SaintOfZuHeltzer),
             new Buff("Forerunner of Death", ForerunnerOfDeath, Source.Vindicator, BuffClassification.Other, BuffImages.ForerunnerOfDeath),
-            new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBeta),
+            new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
         };
     }
 }

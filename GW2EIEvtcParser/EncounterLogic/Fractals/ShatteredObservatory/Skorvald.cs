@@ -96,6 +96,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            var manualFractalScaleSet = false;
+            if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
+            {
+                manualFractalScaleSet = true;
+            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
@@ -103,6 +108,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Skorvald not found");
             }
             skorvald.OverrideName("Skorvald");
+            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
+            {
+                // Remove manual scale from T1 to T3 for now
+                combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
+                // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
+            }
             
             int[] nameCount = new [] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)

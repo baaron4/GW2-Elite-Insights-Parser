@@ -9,7 +9,7 @@
                             {{instanceBuff.stack > 1 ? instanceBuff.stack + ' x' : ''}}
                             <img :data-original-title="instanceBuff.buff.name + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
                                  :src="instanceBuff.buff.icon" class="icon icon-hover" />
-                        </span>                      
+                        </span>
                     </div>
                     <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
                 </div>
@@ -18,11 +18,11 @@
                         <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
-                        <div v-if="target.health > 0" class="super-small" style="text-align:center;">                        
+                        <div v-if="target.health > 0" class="super-small" style="text-align:center;">
                             {{ target.health }} Health
                         </div>
-                        <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">     
-                        </div>                 
+                        <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
+                        </div>
                         <div class="small" style="text-align:center;">
                             {{ target.hpLeft ? target.hpLeft : 0 }}% remaining
                         </div>
@@ -31,6 +31,7 @@
                         Result: {{resultStatus.text}}
                     </div>
                     <div class="mb-2">Duration: {{ encounter.duration }}</div>
+                    <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                 </div>
             </div>
         </div>
@@ -70,6 +71,9 @@
                     targets: targets
                 };
                 return encounter;
+            },
+            fractalScale: function () {
+                return logData.fractalScale;
             },
             resultStatus: function () {
                 return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-warning"] };

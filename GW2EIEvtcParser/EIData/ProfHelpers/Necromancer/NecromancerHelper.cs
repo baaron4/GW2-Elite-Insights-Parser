@@ -17,15 +17,16 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
-            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble),
-            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers),
+            new DamageCastFinder(LesserEnfeeble, LesserEnfeeble).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
             // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
             new DamageCastFinder(UnholyBurst, UnholyBurst),
-            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData(),
+            new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData().UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
                 .UsingSrcBaseSpecChecker(Spec.Necromancer)
-                .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time)),
+                .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time))
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
             new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorBuff).WithBuilds(GW2Builds.December2018Balance),
             new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkOldBuff).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),

@@ -147,6 +147,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected static void AddFractalScaleEvent(ulong gw2Build, List<CombatItem> combatData, IReadOnlyList<(ulong build, byte scale)> scales)
+        {
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.FractalScale))
+            {
+                return;
+            }
+            var orderedScales = scales.OrderByDescending(x => x.build).ToList();
+            foreach ((ulong build, byte scale) in orderedScales)
+            {
+                if (gw2Build >= build)
+                {
+                    combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)ArcDPSEnums.StateChange.FractalScale, 0, 0, 0, 0));
+                    break;
+                }
+            }
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombEffects))

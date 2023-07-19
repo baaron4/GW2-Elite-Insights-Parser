@@ -15,21 +15,25 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff), // Legendary Assassin Stance
-            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff), // Legendary Demon Stance
-            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff), // Legendary Dwarf Stance
-            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceBuff), // Legendary Centaur Stance
-            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff).UsingICD(500), // Impossible Odds
-            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff).UsingICD(500), // Relinquish Power
-            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff), // Vengeful Hammers
-            new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff), // Release Hammers
-            new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness), // Release Hammers
-            new DamageCastFinder(InvokingTorment, InvokingTorment).WithBuilds(GW2Builds.February2020Balance), // Invoking Torment
-            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
-            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
-            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
-            new DamageCastFinder(LesserBanishEnchantment, LesserBanishEnchantment).WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance),
-            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
+            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff),
+            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff),
+            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff), 
+            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceBuff), 
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff).UsingICD(500), 
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff).UsingICD(500),
+            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff),
+            new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff), 
+            new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness),
+            new DamageCastFinder(InvokingTorment, InvokingTorment)
+                .WithBuilds(GW2Builds.February2020Balance)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin),
+            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf),
+            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon),
+            new DamageCastFinder(LesserBanishEnchantment, LesserBanishEnchantment)
+                .WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur),
             new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
@@ -105,8 +109,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
             new Buff("Legendary Demon Stance", LegendaryDemonStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
             new Buff("Legendary Assassin Stance", LegendaryAssassinStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
-            new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBeta),
-            new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBeta),
+            new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Traits
             new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
             new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
