@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeVermilion = "https://i.imgur.com/Lwz1Ypr.png";
         private const string TargetPrototypeArsenite = "https://i.imgur.com/tSD5Phl.png";
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
-        private const string TargetKanaxai = "https://i.imgur.com/naFQMuZ.png";
+        private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";
@@ -643,7 +643,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.PrototypeArseniteCM, TargetPrototypeArsenite },
             { ArcDPSEnums.TargetID.PrototypeIndigo, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.PrototypeIndigoCM, TargetPrototypeIndigo },
-            { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus, TargetKanaxai },
+            { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
         };
 
         /// <summary>
@@ -937,6 +937,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.AspectOfExposure, TrashAspects },
             { ArcDPSEnums.TrashID.AspectOfLethargy, TrashAspects },
             { ArcDPSEnums.TrashID.AspectOfTorment, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfFear, TrashAspects },
         };
 
         /// <summary>

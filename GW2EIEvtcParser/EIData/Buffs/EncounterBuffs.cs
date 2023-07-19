@@ -413,10 +413,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Determined to Destroy", DeterminedToDestroy, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (Kanaxai)", DeterminedKanaxai, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidAffliction),
-            new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffClassification.Other, BuffImages.IonShield),
+            new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Gathering Shadows", GatheringShadows, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.CaptainsInspiration),
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
-            new Buff("Dread Visage", DreadVisage, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall), // Temp image
             new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Achievement Eligibility: Unsundered", AchievementEligibilityUnsundered, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),

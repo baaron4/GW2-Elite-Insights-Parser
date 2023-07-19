@@ -21,8 +21,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(WorldCleaver, "World Cleaver", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "WorldClv.H", "Hit by World Cleaver", "World Cleaver Hit", 150),
-                new PlayerDstBuffApplyMechanic(DreadVisage, "Dread Visage", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Black), "DreadVis.A", "Applied Dread Visage", "Dread Visage Application", 2000),
+                new PlayerDstHitMechanic(RendingStorm, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
+                new PlayerDstHitMechanic(new long [] { HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment }, "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
+                new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
+                new PlayerDstBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
+                new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
+                new PlayerDstBuffApplyMechanic(Phantasmagoria, "Phantasmagoria", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
+                new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
             });
             Extension = "kanaxai";
             Icon = EncounterIconKanaxai;
@@ -41,7 +46,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus,
+                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
             };
         }
 
@@ -49,28 +54,24 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus,
+                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
                 (int)ArcDPSEnums.TrashID.AspectOfTorment,
                 (int)ArcDPSEnums.TrashID.AspectOfLethargy,
                 (int)ArcDPSEnums.TrashID.AspectOfExposure,
                 (int)ArcDPSEnums.TrashID.AspectOfDeath,
+                (int)ArcDPSEnums.TrashID.AspectOfFear,
             };
         }
 
-        //internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
-        //{
-        //    AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus));
-        //    if (kanaxai == null)
-        //    {
-        //        throw new MissingKeyActorsException("Kanaxai not found");
-        //    }
-        //    return kanaxai.GetHealth(combatData) > 25899216 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
-        //}
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return FightData.EncounterMode.CMNoName;
+        }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus));
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
             if (kanaxai == null)
             {
                 throw new MissingKeyActorsException("Kanaxai not found");
@@ -91,13 +92,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         newPhases[i].Name = "Phase 1";
                         break;
                     case 1:
-                        newPhases[i].Name = "Aspects 1";
+                        newPhases[i].Name = "World Cleaver 1";
                         break;
                     case 2:
                         newPhases[i].Name = "Phase 2";
                         break;
                     case 3:
-                        newPhases[i].Name = "Aspects 2";
+                        newPhases[i].Name = "World Cleaver 2";
                         break;
                     case 4:
                         newPhases[i].Name = "Phase 3";
@@ -114,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkus));
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
             if (kanaxai == null)
             {
                 throw new MissingKeyActorsException("Kanaxai not found");

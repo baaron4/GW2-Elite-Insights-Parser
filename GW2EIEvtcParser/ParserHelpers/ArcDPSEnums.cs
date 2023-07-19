@@ -930,6 +930,7 @@ namespace GW2EIEvtcParser
             AspectOfLethargy = 25561,
             AspectOfExposure = 25562,
             AspectOfDeath = 25580,
+            AspectOfFear = 25563,
             LuxonMonkSpirit = 25571,
             CaptainThess1 = 25554,
             CaptainThess2 = 25557,
@@ -1073,7 +1074,8 @@ namespace GW2EIEvtcParser
             TheVoice = 20497,
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
-            KanaxaiScytheOfHouseAurkus = 25572,
+            KanaxaiScytheOfHouseAurkusNM = 25572,
+            KanaxaiScytheOfHouseAurkusCM = 25577,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,
