@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
             new MinionSpawnCastFinder(Rise, (int)MinionID.ShamblingHorror)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.GetFinalMaster().Spec == Spec.Reaper),
-            new DamageCastFinder(ChillingNova, ChillingNova),
+            new DamageCastFinder(ChillingNova, ChillingNova).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

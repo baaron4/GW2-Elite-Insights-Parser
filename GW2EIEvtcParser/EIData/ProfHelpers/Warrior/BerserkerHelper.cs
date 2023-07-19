@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(KingOfFires, KingOfFires).WithBuilds(GW2Builds.July2019Balance), // King of Fires
+            new DamageCastFinder(KingOfFires, KingOfFires).WithBuilds(GW2Builds.July2019Balance).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>

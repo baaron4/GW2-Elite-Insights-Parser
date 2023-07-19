@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffLossCastFinder(ExitPhotonForge, PhotonForge).UsingBeforeWeaponSwap(true), // Deactivate Photon Forge - red or blue irrevelant
             new BuffGainCastFinder(OverheatSkill, OverheatBuff).UsingBeforeWeaponSwap(true), // Overheat
             new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff), // Spectrum Shield
-            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve), // Thermal Release Valve
+            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait), // Thermal Release Valve
             new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingDstSpecChecker(Spec.Holosmith),
         };
 

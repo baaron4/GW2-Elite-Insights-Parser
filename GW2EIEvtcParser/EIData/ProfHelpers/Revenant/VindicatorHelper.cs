@@ -13,13 +13,10 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff), // Legendary Alliance Stance
-            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect), // Legendary Alliance Stance (UW)
-            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance), // Call of the Alliance
-            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), // Urn of Saint Viktor
-            //new BuffGainCastFinder(DeathDropSkill, ForerunnerOfDeath), // Forerunner of Death (Death Drop) 
-            //new BuffGainCastFinder(SaintsShieldSkill, SaintOfzuHeltzer), // Saint of zu Heltzer (Saint's Shield)
-            //new EXTHealingCastFinder(-1, -1), // Redemptor's Sermon
+            new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff),
+            //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect),
+            new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance),
+            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), 
         };
 
         private static readonly HashSet<long> _dodges = new HashSet<long>

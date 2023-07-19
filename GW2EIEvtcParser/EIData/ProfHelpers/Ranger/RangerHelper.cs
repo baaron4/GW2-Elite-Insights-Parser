@@ -85,14 +85,14 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmBuff),
             new BuffGainWithMinionsCastFinder(SicEmSkill, SicEmPvPBuff),
             new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant), // Lesser Signet of Stone
+            new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait), // Lesser Signet of Stone
             new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
-            new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true),
-            new EXTHealingCastFinder(WindborneNotes, WindborneNotes),
-            new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond),
+            new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
             new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
-            new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)),
+            new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
             new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
             new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),

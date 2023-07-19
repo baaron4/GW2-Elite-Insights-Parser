@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff).WithBuilds(GW2Builds.February2020Balance),
+            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff).WithBuilds(GW2Builds.February2020Balance).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
             new BuffGainCastFinder(ElixirSSkill, ElixirSBuff),
             new BuffGainCastFinder(SlickShoesSkill, SlickShoesBuff),
             new BuffGainCastFinder(IncendiaryAmmoSkill, IncendiaryAmmoBuff),

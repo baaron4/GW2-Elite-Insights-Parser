@@ -15,10 +15,10 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
             new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
-            new DamageCastFinder(CascadingCorruption, CascadingCorruption).UsingDisableWithEffectData(),
-            new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption).UsingDstSpecChecker(Spec.Harbinger),
-            new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste).UsingDstSpecChecker(Spec.Harbinger),
-            new EffectCastFinderByDst(DoomApproaches, EffectGUIDs.HarbingerDoomApproaches).UsingDstSpecChecker(Spec.Harbinger),
+            new DamageCastFinder(CascadingCorruption, CascadingCorruption).UsingDisableWithEffectData().UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption).UsingDstSpecChecker(Spec.Harbinger).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste).UsingDstSpecChecker(Spec.Harbinger).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
+            new EffectCastFinderByDst(DoomApproaches, EffectGUIDs.HarbingerDoomApproaches).UsingDstSpecChecker(Spec.Harbinger).UsingSource(EIData.InstantCastFinder.InstantCastSource.Trait),
         };
 
 
