@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static Point3D ReadOrientation(CombatItem evtcItem)
         {
-            var orientationBytes = new byte[3 * sizeof(int)];
+            var orientationBytes = new byte[3 * sizeof(short)];
             int offset = 0;
             orientationBytes[offset++] = evtcItem.IsShields;
             orientationBytes[offset++] = evtcItem.IsOffcycle;
@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.ParsedData
             orientationBytes[offset++] = evtcItem.Pad4;
 
 
-            var orientationInt = new int[3];
+            var orientationInt = new short[3];
             Buffer.BlockCopy(orientationBytes, 0, orientationInt, 0, orientationBytes.Length);
 
             return new Point3D(orientationInt[0], orientationInt[1], orientationInt[2]) * OrientationConvertConstant;
