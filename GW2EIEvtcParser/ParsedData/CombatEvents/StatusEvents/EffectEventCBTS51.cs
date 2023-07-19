@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             var orientationInt = new short[3];
             Buffer.BlockCopy(orientationBytes, 0, orientationInt, 0, orientationBytes.Length);
 
-            return new Point3D(orientationInt[0], orientationInt[1], orientationInt[2]) * OrientationConvertConstant;
+            return new Point3D(orientationInt[0], orientationInt[1], -orientationInt[2]) * OrientationConvertConstant;
         }
 
         private static uint ReadDuration(CombatItem evtcItem)
