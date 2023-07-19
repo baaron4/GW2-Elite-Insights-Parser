@@ -232,6 +232,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
                     Logic = new AiKeeperOfThePeak(id);
                     break;
+                case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    Logic = new Kanaxai(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())

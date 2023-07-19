@@ -163,6 +163,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeVermilion = "https://i.imgur.com/Lwz1Ypr.png";
         private const string TargetPrototypeArsenite = "https://i.imgur.com/tSD5Phl.png";
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
+        private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";
@@ -338,6 +339,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTransitionSorrow = "https://i.imgur.com/2rrUxX7.png";
         private const string TrashEnragedWaterSprite = "https://i.imgur.com/TQ5vOrg.png";
         //private const string TrashBoulders = "https://i.imgur.com/OAFzpxC.png"; // For future usage - 100CM boulders
+        private const string TrashAspects = "https://i.imgur.com/ae06FSc.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -641,6 +643,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.PrototypeArseniteCM, TargetPrototypeArsenite },
             { ArcDPSEnums.TargetID.PrototypeIndigo, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.PrototypeIndigoCM, TargetPrototypeIndigo },
+            { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
         };
 
         /// <summary>
@@ -930,6 +933,11 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IcebroodElemental, TrashIcebroodElemental },
             { ArcDPSEnums.TrashID.FractalAvenger, TrashFractalAvenger },
             { ArcDPSEnums.TrashID.FractalVindicator, TrashFractalVindicator },
+            { ArcDPSEnums.TrashID.AspectOfDeath, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfExposure, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfLethargy, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfTorment, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfFear, TrashAspects },
         };
 
         /// <summary>

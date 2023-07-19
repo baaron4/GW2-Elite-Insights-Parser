@@ -365,6 +365,7 @@
         internal const string DiaphanousShielding = "https://wiki.guildwars2.com/images/5/57/Diaphanous_Shielding.png";
         internal const string PrimedBottle = "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png";
         internal const string CrowdFavor = "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png";
+        internal const string VoidAffliction = "https://wiki.guildwars2.com/images/f/f8/Void_Affliction.png";
         // Strikes
         internal const string Hypothermia = "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png";
         internal const string Frostbite = "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png";
