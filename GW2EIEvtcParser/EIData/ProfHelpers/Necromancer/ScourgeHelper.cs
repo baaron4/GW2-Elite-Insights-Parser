@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff).UsingDurationChecker(3500),
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
-            new BuffGainCastFinder(SadisticSearing, SadisticSearing),
+            new BuffGainCastFinder(SadisticSearing, SadisticSearing).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing).UsingChecker((blcf, combatData, agentData, skillData) => 
             {
                 long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
                     return true;
                 }
                 return false;
-            }),
+            }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
