@@ -28,6 +28,8 @@ namespace GW2EIBuilders.JsonModels
                 IsSwap = skill.IsSwap,
                 IsInstantCast = log.CombatData.GetInstantCastData(skill.ID).Any(),
                 IsNotAccurate = log.SkillData.IsNotAccurate(skill.ID),
+                IsGearProc = log.SkillData.IsGearProc(skill.ID),
+                IsTraitProc = log.SkillData.IsTraitProc(skill.ID),
                 ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
                 HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
             };

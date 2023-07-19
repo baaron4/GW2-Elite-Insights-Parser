@@ -11,12 +11,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData
         public bool Aa { get; set; }
         public bool IsSwap { get; set; }
         public bool NotAccurate { get; set; }
+        public bool TraitProc { get; set; }
+        public bool GearProc { get; set; }
 
         public SkillDto(SkillItem skill, ParsedEvtcLog log) : base(skill, log)
         {
             Aa = skill.AA;
             IsSwap = skill.IsSwap;
             NotAccurate = log.SkillData.IsNotAccurate(skill.ID);
+            GearProc = log.SkillData.IsGearProc(skill.ID);
+            TraitProc = log.SkillData.IsTraitProc(skill.ID);
         }
 
         public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)

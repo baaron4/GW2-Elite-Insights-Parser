@@ -10,6 +10,16 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class InstantCastFinder : IVersionable
     {
+
+        public enum InstantCastSource
+        {
+            Skill,
+            Trait,
+            Gear
+        }
+
+        public InstantCastSource CastSource { get; private set; } = InstantCastSource.Skill;
+
         public delegate bool InstantCastEnableChecker(CombatData combatData);
         private List<InstantCastEnableChecker> _enableConditions { get; }
 
@@ -51,6 +61,12 @@ namespace GW2EIEvtcParser.EIData
         internal InstantCastFinder UsingNotAccurate(bool notAccurate)
         {
             NotAccurate = notAccurate;
+            return this;
+        }
+
+        internal InstantCastFinder UsingSource(InstantCastSource source)
+        {
+            CastSource = source;
             return this;
         }
 

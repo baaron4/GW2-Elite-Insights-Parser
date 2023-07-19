@@ -51,6 +51,16 @@ namespace GW2EIJSON
             /// </summary>
             public bool IsInstantCast { get; set; }
             /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsTraitProc { get; set; }
+            /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsGearProc { get; set; }
+            /// <summary>
             /// True when the skill is an instant cast and the detection may have missed some
             /// </summary>
             public bool IsNotAccurate { get; set; }

@@ -176,6 +176,18 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         skillData.NotAccurate.Add(icf.SkillID);
                     }
+                    switch(icf.CastSource)
+                    {
+                        case InstantCastFinder.InstantCastSource.Trait:
+                            skillData.TraitProc.Add(icf.SkillID);
+                            break;
+                        case InstantCastFinder.InstantCastSource.Gear:
+                            skillData.GearProc.Add(icf.SkillID);
+                            break;
+                        case InstantCastFinder.InstantCastSource.Skill:
+                        default:
+                            break;
+                    }
                     res.AddRange(icf.ComputeInstantCast(this, skillData, agentData));
                 }
             }

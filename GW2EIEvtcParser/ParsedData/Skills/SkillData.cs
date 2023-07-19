@@ -34,6 +34,18 @@ namespace GW2EIEvtcParser.ParsedData
             return NotAccurate.Contains(ID);
         }
 
+        internal HashSet<long> GearProc = new HashSet<long>();
+        public bool IsGearProc(long ID)
+        {
+            return GearProc.Contains(ID);
+        }
+
+        internal HashSet<long> TraitProc = new HashSet<long>();
+        public bool IsTraitProc(long ID)
+        {
+            return TraitProc.Contains(ID);
+        }
+
         internal void Add(long id, string name)
         {
             if (!_skills.ContainsKey(id))
