@@ -156,8 +156,8 @@ namespace GW2EIEvtcParser.EIData
             // Matthias
             new Buff("Blood Shield Abo", BloodShieldAbo, Source.FightSpecific, BuffStackType.Stacking, 18, BuffClassification.Other, BuffImages.BloodShield),
             new Buff("Blood Shield", BloodShield, Source.FightSpecific, BuffStackType.Stacking, 18, BuffClassification.Other, BuffImages.BloodShield),
-            new Buff("Blood Fueled", BloodFueled, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Offensive, BuffImages.BloodFueled),
-            new Buff("Blood Fueled Abo", BloodFueledAbo, Source.FightSpecific, BuffStackType.Stacking, 15, BuffClassification.Offensive, BuffImages.BloodFueled),
+            new Buff("Blood Fueled (Player)", BloodFueledPlayer, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Offensive, BuffImages.BloodFueled),
+            new Buff("Blood Fueled (Matthias)", BloodFueledMatthias, Source.FightSpecific, BuffStackType.Stacking, 15, BuffClassification.Offensive, BuffImages.BloodFueled),
             new Buff("Unstable Blood Magic", UnstableBloodMagic, Source.FightSpecific, BuffClassification.Other, BuffImages.UnstableBloodMagic),
             new Buff("Corruption", Corruption1, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),
             new Buff("Corruption 2", Corruption2, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),

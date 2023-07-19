@@ -45,6 +45,7 @@
         public const long BlinkOrPhaseRetreat = -27;
         public const long RangerPetSpawned = -28;
         public const long HealingMistOrSoothingDetonation = -29;
+        public const long SadisticSearingActivation = -30;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -992,6 +993,7 @@
         public const long LightningRod = 24305;
         public const long PoisonMasterBuff = 24371;
         public const long RousingResilience = 24383;
+        public const long ThousandCuts = 24755;
         public const long BowlOfPricklyPearSorber = 24792;
         public const long PlateOfRoastedCactus = 24793;
         public const long LoafOfCandyCactusCornbread = 24797;
@@ -1409,9 +1411,9 @@
         public const long ShardsOfRageAbomination = 34411;
         public const long Surrender = 34413;
         public const long Corruption1 = 34416;
-        public const long BloodFueled = 34422;
+        public const long BloodFueledPlayer = 34422;
         public const long AbominationTransformation = 34427;
-        public const long BloodFueledAbo = 34428;
+        public const long BloodFueledMatthias = 34428;
         public const long SnowstormMatthias = 34433;
         public const long NotTheBees = 34434;
         public const long LocustTrail = 34439;
@@ -3404,6 +3406,7 @@
         public const long DualOrbitAirAndEarth = 69246;
         public const long DissectingDance = 69251;
         public const long DreadDefiance = 69263;
+        public const long HeatTheSoulBuff = 69267;
         public const long DeterminedToDestroy = 69275;
         public const long AspectedVolleyFear = 69282;
         public const long GrapplingHook = 69284;

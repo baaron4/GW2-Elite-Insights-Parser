@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class BerserkerHelper
     {
-        /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(KingOfFires, KingOfFires).WithBuilds(GW2Builds.July2019Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -38,8 +37,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, BuffImages.ShatteringBlow),
             new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+            new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.Other, BuffImages.HeatTheSoul),
         };
-
 
     }
 }

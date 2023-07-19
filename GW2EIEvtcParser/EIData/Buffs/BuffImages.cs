@@ -1519,6 +1519,7 @@
         internal const string UnflinchingFortitude = "https://wiki.guildwars2.com/images/d/d6/Unflinching_Fortitude.png";
         internal const string DefyPain = "https://wiki.guildwars2.com/images/f/f9/Defy_Pain.png";
         internal const string PhantasmalWarlock = "https://wiki.guildwars2.com/images/0/01/Phantasmal_Warlock.png";
+        internal const string HeatTheSoul = "https://wiki.guildwars2.com/images/5/58/Heat_the_Soul.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

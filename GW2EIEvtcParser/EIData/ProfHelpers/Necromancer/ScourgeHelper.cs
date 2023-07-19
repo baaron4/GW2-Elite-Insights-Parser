@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -21,6 +24,16 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff).UsingDurationChecker(3500),
             // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
             new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
+            new BuffGainCastFinder(SadisticSearing, SadisticSearing).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing).UsingChecker((blcf, combatData, agentData, skillData) => 
+            {
+                long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
+                if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom == blcf.To && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time)) 
+                {
+                    return true;
+                }
+                return false;
+            }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
