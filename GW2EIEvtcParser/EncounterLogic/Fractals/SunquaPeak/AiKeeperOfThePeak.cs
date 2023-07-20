@@ -17,7 +17,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class AiKeeperOfThePeak : FractalLogic
+    internal class AiKeeperOfThePeak : SunquaPeak
     {
         private bool _hasDarkMode = false;
         private bool _hasElementalMode = false;
@@ -181,12 +181,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            // Set manual FractalScale for old logs without the event
-            AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
-            {
-                ( GW2Builds.September2020SunquaPeakRelease, 100),
-                ( GW2Builds.SOTOBetaAndSilentSurfNM, 99),
-            });
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             // Manually set HP and names
             AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));

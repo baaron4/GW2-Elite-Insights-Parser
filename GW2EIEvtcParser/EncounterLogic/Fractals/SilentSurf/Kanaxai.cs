@@ -15,7 +15,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class Kanaxai : FractalLogic
+    internal class Kanaxai : SilentSurf
     {
         public Kanaxai(int triggerID) : base(triggerID)
         {
