@@ -64,6 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.FractalAvenger,
                 ArcDPSEnums.TrashID.FractalVindicator,
+                ArcDPSEnums.TrashID.TheMossman,
+                ArcDPSEnums.TrashID.InspectorEllenKiel,
+                ArcDPSEnums.TrashID.ChampionRabbit,
+                ArcDPSEnums.TrashID.JadeMawTentacle,
+                ArcDPSEnums.TrashID.AwakenedAbomination,
             };
         }
 
