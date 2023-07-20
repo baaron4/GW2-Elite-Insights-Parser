@@ -3420,9 +3420,9 @@
         public const long NaturalBalance = 69314;
         public const long AchievementEligibilityJadeSeaLegs = 69325;
         public const long DualOrbitFireAndAir = 69341;
-        public const long POV_DreadVisageEffect = 69343;
+        public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
-        public const long KanaxaiFallDownEffect = 69350; // applied when falling off the platform?
+        public const long KanaxaiFallDownBuff = 69350; // applied when falling off the platform?
         public const long HarrowshotExposure = 69353;
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed = 69356;
