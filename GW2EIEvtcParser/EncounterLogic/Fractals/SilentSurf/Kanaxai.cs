@@ -31,8 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "kanaxai";
             Icon = EncounterIconKanaxai;
-            EncounterCategoryInformation.SubCategory = SubFightCategory.SilentSurf;
-            EncounterID |= EncounterIDs.FractalMasks.SilentSurfMask | 0x000001;
+            EncounterID |= 0x000001;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

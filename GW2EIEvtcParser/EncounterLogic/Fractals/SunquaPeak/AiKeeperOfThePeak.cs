@@ -70,8 +70,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "ai";
             Icon = EncounterIconAi;
-            EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
-            EncounterID |= EncounterIDs.FractalMasks.SunquaPeakMask;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
