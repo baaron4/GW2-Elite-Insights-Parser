@@ -28,6 +28,36 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
                 new PlayerDstBuffApplyMechanic(Phantasmagoria, "Phantasmagoria", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
                 new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
+                new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, "Dread Visage", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Eye.D", "Died to Dread Visage (Eye)", "Dread Visage Death", 150)
+                    .UsingChecker((remove, log) =>
+                    {
+                        // 5s extreme vulnerability from dread visage
+                        const int duration = 5000;
+                        // find last apply
+                        var apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                            .OfType<BuffApplyEvent>()
+                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .MaxBy(e => e.Time);
+                        // check for removed duration, applied duration & death after
+                        return remove.RemovedDuration > ServerDelayConstant
+                            && Math.Abs(apply.AppliedDuration - duration) < ServerDelayConstant
+                            && log.CombatData.GetDeadEvents(remove.To).Any(dead => dead.Time >= remove.Time - ServerDelayConstant);
+                    }),
+                new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, "Frightening Speed", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", 150)
+                    .UsingChecker((remove, log) =>
+                    {
+                        // 60s extreme vulnerability from frightening speed
+                        const int duration = 60000;
+                        // find last apply
+                        var apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                            .OfType<BuffApplyEvent>()
+                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .MaxBy(e => e.Time);
+                        // check for removed duration, applied duration & death after
+                        return remove.RemovedDuration > ServerDelayConstant
+                            && Math.Abs(apply.AppliedDuration - duration) < ServerDelayConstant
+                            && log.CombatData.GetDeadEvents(remove.To).Any(e => e.Time >= remove.Time - ServerDelayConstant);
+                    })
             });
             Extension = "kanaxai";
             Icon = EncounterIconKanaxai;
