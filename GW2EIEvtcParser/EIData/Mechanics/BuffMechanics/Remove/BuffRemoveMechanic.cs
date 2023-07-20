@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (c is T brae && Keep(brae, log))
                     {
-                        AbstractSingleActor amp = MechanicHelper.FindEnemyActor(log, GetAgentItem(brae), regroupedMobs);
+                        AbstractSingleActor amp = GetActor(log, GetAgentItem(brae), regroupedMobs);
                         if (amp != null)
                         {
                             AddMechanic(log, mechanicLogs, brae, amp);
