@@ -878,6 +878,11 @@ namespace GW2EIEvtcParser
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,
+            JadeMawTentacle = 16721,
+            InspectorEllenKiel = 21566,
+            ChampionRabbit = 11329,
+            AwakenedAbomination = 21634,
+            TheMossman = 11277,
             // MAMA
             Arkk = 16902,
             GreenKnight = 16906,

@@ -3426,6 +3426,7 @@
         public const long HarrowshotExposure = 69353;
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed = 69356;
+        public const long KanaxaiSomethingBuff = 69363;
         public const long GatheringShadows = 69365;
         public const long BleedingEdge2 = 69371;
         public const long HarrowshotFear = 69398;
