@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 
     internal class PlayerStatusMechanic<T> : StatusMechanic<T> where T : AbstractStatusEvent
     {
-        public PlayerStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter, StatusChecker condition = null) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
+        public PlayerStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
         {
         }
 

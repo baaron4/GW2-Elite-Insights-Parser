@@ -4,17 +4,10 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class StatusMechanic<T> : Mechanic where T : AbstractStatusEvent
+    internal abstract class StatusMechanic<T> : CheckedMechanic<T>
     {
-        public delegate bool StatusChecker(T ce, ParsedEvtcLog log);
 
-        public delegate IReadOnlyList<T> StatusGetter(ParsedEvtcLog log, AgentItem a);
-
-        private readonly StatusChecker _triggerCondition = null;
-        protected bool Keep(T c, ParsedEvtcLog log)
-        {
-            return _triggerCondition == null || _triggerCondition(c, log);
-        }
+        public delegate IReadOnlyList<T> StatusGetter(ParsedEvtcLog log, AgentItem agent);
 
         private readonly StatusGetter _getter = null;
 
@@ -23,9 +16,8 @@ namespace GW2EIEvtcParser.EIData
             return _getter(log, a);
         }
 
-        public StatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter, StatusChecker condition = null) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public StatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerCondition = condition;
             _getter = getter;
             if (_getter == null)
             {
