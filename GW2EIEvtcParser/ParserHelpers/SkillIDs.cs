@@ -90,6 +90,7 @@
         public const long SignetOfStoneActive = 883;
         public const long Revealed = 890;
         public const long Determined895 = 895;
+        public const long PortalInteractCooldown = 901;
         public const long RighteousIndignation = 903;
         public const long NourishmentGuildBanquetTable = 937;
         public const long SkaleVenomConsumable = 972;
