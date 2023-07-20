@@ -196,6 +196,11 @@ namespace GW2EIEvtcParser.ParsedData
             { BigMagmaDrop, "Big Magma Drop" },
             // Voice and Claw
             { KodanTeleport, "Kodan Teleport" },
+            // Kanaxai
+            { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
+            { FrighteningSpeedReturn, "Frightening Speed (Return)" },
+            { DreadVisage, "Dread Visage" },
+            { DreadVisageIsland, "Dread Visage (Island)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
