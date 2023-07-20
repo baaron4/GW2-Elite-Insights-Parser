@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ErrorEvent>();
         }
 
-        protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
+        protected void AddTargetsToPhase(PhaseData phase, List<int> ids)
         {
             foreach (AbstractSingleActor target in Targets)
             {
@@ -295,6 +295,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.AddTarget(target);
                 }
             }
+        }
+
+        protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
+        {
+            AddTargetsToPhase(phase, ids);
             phase.OverrideTimes(log);
         }
 
