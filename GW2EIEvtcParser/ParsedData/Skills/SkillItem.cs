@@ -199,8 +199,8 @@ namespace GW2EIEvtcParser.ParsedData
             // Kanaxai
             { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
-            { DreadVisage, "Dread Visage" },
-            { DreadVisageIsland, "Dread Visage (Island)" },
+            { DreadVisageSkill, "Dread Visage" },
+            { DreadVisageSkillIsland, "Dread Visage (Island)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()

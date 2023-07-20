@@ -3388,7 +3388,7 @@
         public const long BowlOfMistsInfusedFruitSaladWithMintGarnish = 69105;
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
-        public const long DreadVisage = 69149;
+        public const long DreadVisageSkill = 69149;
         public const long AspectedVolleyTorment = 69152;
         public const long EquipSurveyGear = 69154;
         public const long AspectedVolleyDeath = 69155;
@@ -3420,7 +3420,7 @@
         public const long NaturalBalance = 69314;
         public const long AchievementEligibilityJadeSeaLegs = 69325;
         public const long DualOrbitFireAndAir = 69341;
-        public const long POV_DreadVisage = 69343;
+        public const long POV_DreadVisageEffect = 69343;
         public const long DissectingDance2 = 69345;
         public const long KanaxaiFallDownEffect = 69350; // applied when falling off the platform?
         public const long HarrowshotExposure = 69353;
@@ -3433,7 +3433,7 @@
         public const long HarrowshotTorment = 69406;
         public const long RendingStorm = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
-        public const long DreadVisageIsland = 69418;
+        public const long DreadVisageSkillIsland = 69418;
         public const long WorldCleaver = 69419;
         public const long ThesssWard = 69421;
         public const long TempestuousAria = 69427;
