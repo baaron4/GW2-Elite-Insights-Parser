@@ -596,7 +596,12 @@ namespace GW2EIEvtcParser.ParsedData
                 && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0 
                 && WeaponDescriptor.IsWeaponSlot(ApiSkill.Slot))
             {
-                _weaponDescriptor = new WeaponDescriptor(ApiSkill);
+                // Special handling of specter shroud as it is not done in the same way 
+                var isSpecterShroud = ApiSkill.Professions.Contains("Thief") && ApiSkill.Facts.Any(x => x.Text != null && x.Text.Contains("Tethered Ally"));
+                if (!isSpecterShroud)
+                {
+                    _weaponDescriptor = new WeaponDescriptor(ApiSkill);
+                }
             }
             AA = (ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1");
             if (AA)
