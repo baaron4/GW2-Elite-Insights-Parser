@@ -67,6 +67,34 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            var aspectCounts = new Dictionary<int, int>();
+            foreach (AbstractSingleActor actor in Targets)
+            {
+                switch(actor.ID)
+                {
+                    case (int)ArcDPSEnums.TrashID.AspectOfTorment:
+                    case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
+                    case (int)ArcDPSEnums.TrashID.AspectOfExposure:
+                    case (int)ArcDPSEnums.TrashID.AspectOfDeath:
+                    case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                        if (aspectCounts.TryGetValue(actor.ID, out int count))
+                        {
+                            actor.OverrideName(actor.Character + " " + count);
+                            aspectCounts[actor.ID] = count + 1;
+                        } 
+                        else
+                        {
+                            actor.OverrideName(actor.Character + " 1");
+                            aspectCounts[actor.ID] = 2;
+                        }
+                        break;
+                }
+            }
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -80,34 +108,109 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-
             // Phases
-            List<PhaseData> newPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
-            for (int i = 0; i < newPhases.Count; i++)
+            List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
+
+            var worldCleaverPhaseStarts = log.CombatData.GetBuffData(DeterminedToDestroy).OfType<BuffApplyEvent
+                >().Where(x => x.To == kanaxai.AgentItem).Select(x => x.Time).ToList();
+            int worldCleaverCount = 0;
+            int repeatedCount = 0;
+            var isRepeatedWorldCleaverPhase = new List<bool>();
+            for (int i = 0; i < encounterPhases.Count; i++)
             {
-                switch (i)
+                PhaseData curPhase = encounterPhases[i];
+                if (worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
                 {
-                    case 0:
-                        newPhases[i].Name = "Phase 1";
-                        break;
-                    case 1:
-                        newPhases[i].Name = "World Cleaver 1";
-                        break;
-                    case 2:
-                        newPhases[i].Name = "Phase 2";
-                        break;
-                    case 3:
-                        newPhases[i].Name = "World Cleaver 2";
-                        break;
-                    case 4:
-                        newPhases[i].Name = "Phase 3";
-                        break;
-                    default:
-                        break;
+                    var baseName = "World Cleaver ";
+                    long midPhase = (curPhase.Start + curPhase.End) / 2;
+                    if (kanaxai.GetCurrentHealthPercent(log, midPhase) > 50)
+                    {
+                        if (repeatedCount == 0)
+                        {
+                            isRepeatedWorldCleaverPhase.Add(false);
+                            curPhase.Name = baseName + (++worldCleaverCount);
+                        } 
+                        else
+                        {
+                            isRepeatedWorldCleaverPhase.Add(true);
+                            curPhase.Name = baseName + (worldCleaverCount) + " Repeated " + repeatedCount;
+                        }
+                        repeatedCount++;
+                    } 
+                    else if (kanaxai.GetCurrentHealthPercent(log, midPhase) > 25)
+                    {
+                        if (worldCleaverCount == 1)
+                        {
+                            repeatedCount = 0;
+                        }
+                        if (repeatedCount == 0)
+                        {
+                            isRepeatedWorldCleaverPhase.Add(false);
+                            curPhase.Name = baseName + (++worldCleaverCount);
+                        }
+                        else
+                        {
+                            isRepeatedWorldCleaverPhase.Add(true);
+                            curPhase.Name = baseName + (worldCleaverCount) + " Repeated " + repeatedCount;
+                        }
+                        repeatedCount++;
+                    } 
+                    else
+                    {
+                        // No hp update events, buggy log
+                        return phases;
+                    }
+                    foreach (AbstractSingleActor aspect in Targets)
+                    {
+                        switch (aspect.ID)
+                        {
+                            case (int)ArcDPSEnums.TrashID.AspectOfTorment:
+                            case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
+                            case (int)ArcDPSEnums.TrashID.AspectOfExposure:
+                            case (int)ArcDPSEnums.TrashID.AspectOfDeath:
+                            case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                                if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
+                                {
+                                    curPhase.AddTarget(aspect);
+                                }
+                                break;
+                        }
+                    }
+                    curPhase.AddTarget(kanaxai);
+                } 
+                else
+                {
+                    isRepeatedWorldCleaverPhase.Add(false);
                 }
-                newPhases[i].AddTarget(kanaxai);
             }
-            phases.AddRange(newPhases);
+            // Handle main phases after world cleave phases as we need to know if it is a repeated phase
+            int phaseCount = 0;
+            for (int i = 0; i < encounterPhases.Count; i++)
+            {
+                PhaseData curPhase = encounterPhases[i];
+                if (!worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
+                {
+                    var baseName = "Phase ";
+                    if (i < isRepeatedWorldCleaverPhase.Count - 1)
+                    {
+                        if (isRepeatedWorldCleaverPhase[i + 1])
+                        {
+                            curPhase.Name = baseName + (phaseCount) + " Repeated " + (++repeatedCount);
+                        } 
+                        else
+                        {
+                            curPhase.Name = baseName + (++phaseCount);
+                            repeatedCount = 0;
+                        }
+                    } 
+                    else
+                    {
+                        curPhase.Name = baseName + (++phaseCount);
+                    }
+                    curPhase.AddTarget(kanaxai);
+                }
+            }
+            phases.AddRange(encounterPhases);
 
             return phases;
         }
