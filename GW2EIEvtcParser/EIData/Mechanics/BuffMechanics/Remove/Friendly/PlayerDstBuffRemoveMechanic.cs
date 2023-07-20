@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic
+    internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic<BuffRemoveAllEvent>
     {
         public PlayerDstBuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
