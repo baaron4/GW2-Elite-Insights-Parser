@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class StatusMechanic<T> : CheckedMechanic<T> where T: AbstractStatusEvent
+    internal abstract class StatusMechanic<T> : CheckedMechanic<T> where T : AbstractStatusEvent
     {
 
         public delegate IReadOnlyList<T> StatusGetter(ParsedEvtcLog log, AgentItem agent);
