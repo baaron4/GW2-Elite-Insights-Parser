@@ -38,10 +38,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             .OfType<BuffApplyEvent>()
                             .Where(e => e.Time <= remove.Time && e.To == remove.To)
                             .MaxBy(e => e.Time);
-                        // check for removed duration, applied duration & death after
+                        // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
                             && Math.Abs(apply.AppliedDuration - duration) < ServerDelayConstant
-                            && log.CombatData.GetDeadEvents(remove.To).Any(dead => dead.Time >= remove.Time - ServerDelayConstant);
+                            && log.CombatData.GetDeadEvents(remove.To).Any(dead =>
+                            {
+                                long diff = dead.Time - remove.Time;
+                                return diff > -ServerDelayConstant && diff <= 1000;
+                            });
                     }),
                 new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, "Frightening Speed", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", 150)
                     .UsingChecker((remove, log) =>
@@ -53,10 +57,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             .OfType<BuffApplyEvent>()
                             .Where(e => e.Time <= remove.Time && e.To == remove.To)
                             .MaxBy(e => e.Time);
-                        // check for removed duration, applied duration & death after
+                        // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
                             && Math.Abs(apply.AppliedDuration - duration) < ServerDelayConstant
-                            && log.CombatData.GetDeadEvents(remove.To).Any(e => e.Time >= remove.Time - ServerDelayConstant);
+                            && log.CombatData.GetDeadEvents(remove.To).Any(dead =>
+                            {
+                                long diff = dead.Time - remove.Time;
+                                return diff > -ServerDelayConstant && diff <= 1000;
+                            });
                     })
             });
             Extension = "kanaxai";
