@@ -176,11 +176,11 @@
                     var player = this.players[i];
                     computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
                 }
-                this.updateVisibily(images, this.phase.start, this.phase.end);
                 this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
                 if (backUpXAxis) {
                     this.layout.xaxis = backUpXAxis;
                 }
+                this.updateVisibily(images, this.phase.start, this.phase.end);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
                 this.annotationsOffset = this.layout.annotations.length;
                 for (var i = 0; i < this.players.length; i++) {
