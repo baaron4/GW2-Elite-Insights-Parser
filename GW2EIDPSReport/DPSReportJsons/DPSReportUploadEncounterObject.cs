@@ -19,6 +19,8 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public long BossId { get; internal set; }
         [JsonProperty]
+        public string BossName { get; internal set; }
+        [JsonProperty]
         public bool IsCm { get; internal set; }
         [JsonProperty]
         public long Gw2Build { get; internal set; }
