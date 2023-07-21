@@ -95,6 +95,7 @@
         public const long NourishmentGuildBanquetTable = 937;
         public const long SkaleVenomConsumable = 972;
         public const long Resurrect = 1066;
+        public const long LevelUp = 1080;
         public const long Stability = 1122;
         public const long Encumbered = 1159;
         public const long Bandage = 1175;
@@ -912,6 +913,7 @@
         public const long SmashBottle = 19152;
         public const long ThrowBottle = 19153;
         public const long Torment = 19426;
+        public const long LevelUp2 = 19440;
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
         public const long POV_HauntBuff = 20229;

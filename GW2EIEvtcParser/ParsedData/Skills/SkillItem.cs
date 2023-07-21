@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -203,6 +203,8 @@ namespace GW2EIEvtcParser.ParsedData
             { WeaponSwap, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
             { Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" },
             { Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png" },
+            { LevelUp, "https://i.imgur.com/uf1VZEJ.png" },
+            { LevelUp2, "https://i.imgur.com/uf1VZEJ.png" },
             { ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png" },
             { ArcDPSDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ArcDPSGenericBreakbar20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png" },
