@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class CastFinderHelpers
     {
-        internal static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T: AbstractTimeCombatEvent
+        internal static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : AbstractTimeCombatEvent
         {
             return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
         }

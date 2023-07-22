@@ -196,13 +196,22 @@ namespace GW2EIEvtcParser.ParsedData
             { BigMagmaDrop, "Big Magma Drop" },
             // Voice and Claw
             { KodanTeleport, "Kodan Teleport" },
+            // Kanaxai
+            { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
+            { FrighteningSpeedReturn, "Frightening Speed (Return)" },
+            { DreadVisageSkill, "Dread Visage" },
+            { DreadVisageSkillIsland, "Dread Visage (Island)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             { WeaponSwap, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
+            { WeaponStow, "https://i.imgur.com/K7taOUe.png" },
+            { WeaponDraw, "https://i.imgur.com/7TAlNtd.png" },
             { Resurrect, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" },
             { Bandage, "https://wiki.guildwars2.com/images/0/0c/Bandage.png" },
+            { LevelUp, "https://i.imgur.com/uf1VZEJ.png" },
+            { LevelUp2, "https://i.imgur.com/uf1VZEJ.png" },
             { ArcDPSGenericBreakbar, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png" },
             { ArcDPSDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ArcDPSGenericBreakbar20220307, "https://wiki.guildwars2.com/images/a/ae/Unshakable.png" },
@@ -210,8 +219,6 @@ namespace GW2EIEvtcParser.ParsedData
             { WaterBlastCombo1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             { WaterBlastCombo2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             { WaterLeapCombo, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
-            { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },
-            { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
             { LightningStrikeSigil, "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png" },
             { FlameBlastSigil, "https://wiki.guildwars2.com/images/5/56/Superior_Sigil_of_Fire.png" },
             { SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
@@ -356,6 +363,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SadisticSearingActivation, BuffImages.SadisticSearing },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
+            { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
             { OpeningStrike, "https://wiki.guildwars2.com/images/9/9e/Opening_Strike.png" },
             { RuggedGrowth, "https://wiki.guildwars2.com/images/7/73/Rugged_Growth.png" },
             { AquaSurge_Player, "https://wiki.guildwars2.com/images/0/07/Aqua_Surge.png" },
@@ -468,6 +476,7 @@ namespace GW2EIEvtcParser.ParsedData
             { BoundHit, BuffImages.BoundingDodger },
             { ThievesGuildMinionDespawnSkill, BuffImages.Downed },
             // Warrior
+            { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },
             { LossAversion, "https://wiki.guildwars2.com/images/8/85/Loss_Aversion.png" },
             { KingOfFires, "https://wiki.guildwars2.com/images/7/70/King_of_Fires.png" },
             { DragonSlashBoost, "https://wiki.guildwars2.com/images/7/75/Dragon_Slash%E2%80%94Boost.png" },
@@ -488,11 +497,11 @@ namespace GW2EIEvtcParser.ParsedData
             // Silent Surf Fractal
             { GrapplingHook, "https://wiki.guildwars2.com/images/c/c8/Scorpion_Wire.png" },
             { Parachute, "https://wiki.guildwars2.com/images/f/fd/Feathers_%28skill%29.png" },
+            { BlackPowderCharge, "https://wiki.guildwars2.com/images/7/75/Powder_Keg_%28skill%29.png" },
+            { FlareSilentSurf, "https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png" },
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
-            { WeaponStow, "https://i.imgur.com/K7taOUe.png" },
-            { WeaponDraw, "https://i.imgur.com/7TAlNtd.png" },
             // - Icebrood Saga
             { SpiritNovaTier1, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
             { SpiritNovaTier2, "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png" },
