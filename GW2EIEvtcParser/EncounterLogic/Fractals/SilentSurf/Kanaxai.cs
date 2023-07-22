@@ -266,6 +266,37 @@ namespace GW2EIEvtcParser.EncounterLogic
                 fightData.SetSuccess(true, invul762Gain.Time);
             }
         }
+        
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            var tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
+            var tetherApplies = tethers.OfType<BuffApplyEvent>();
+            var tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
+            AgentItem tetherAspect = _unknownAgent;
+            foreach (var apply in tetherApplies)
+            {
+                tetherAspect = apply.By == _unknownAgent ? tetherAspect : apply.By;
+                int start = (int)apply.Time;
+                var replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
+                var remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
+                long end = Math.Min(replace?.Time ?? long.MaxValue, remove?.Time ?? long.MaxValue);
+                if (end != long.MaxValue)
+                {
+                    replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                }
+            }
 
+            var phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
+            var phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
+            foreach (var apply in phantasmagoria.OfType<BuffApplyEvent>())
+            {
+                int start = (int)apply.Time;
+                var remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
+                if (remove != null)
+                {
+                    replay.Decorations.Add(new LineDecoration(0, (start, (int)remove.Time), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
+                }
+            }
+        }
     }
 }
