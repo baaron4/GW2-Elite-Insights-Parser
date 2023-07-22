@@ -3078,7 +3078,7 @@
         public const long DragonsEndContributor4 = 64924;
         public const long RedfishSushi = 64931;
         public const long SlamZhaitan = 64932;
-        public const long ExposedEODStrike = 64936;
+        public const long ExposedPlayer = 64936;
         public const long DragonSlashBurst2 = 64940;
         public const long DeadlyAim = 64947;
         public const long DragonSlashWave = 64952;
