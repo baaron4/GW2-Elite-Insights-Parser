@@ -63,6 +63,7 @@
         internal const string ReviveSickness = "https://wiki.guildwars2.com/images/9/91/Revive_Sickness.png";
         internal const string PowerAttribute = "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png";
         internal const string HealingPowerAttribute = "https://wiki.guildwars2.com/images/0/0c/Healing_Power_attribute.png";
+        internal const string CooldownNegative = "https://wiki.guildwars2.com/images/c/c3/Aquatic_Ruins_Chest_Disabled.png";
         // Auras
         internal const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
         internal const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
