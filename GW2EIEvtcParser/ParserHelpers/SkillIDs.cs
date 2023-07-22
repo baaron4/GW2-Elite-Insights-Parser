@@ -3392,6 +3392,7 @@
         public const long AspectedVolleyTorment = 69152;
         public const long EquipSurveyGear = 69154;
         public const long AspectedVolleyDeath = 69155;
+        public const long AspectTetherBuff = 69161;
         public const long DualOrbitFireAndEarth = 69164;
         public const long FrighteningSpeedReturn = 69182;
         public const long LesserGuardSkill = 69183;
