@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal abstract class BuffRemoveMechanic : IDBasedMechanic<BuffRemoveAllEvent>
+    internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : AbstractBuffRemoveEvent
     {
 
         public BuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
@@ -15,10 +15,10 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        protected abstract AgentItem GetAgentItem(BuffRemoveAllEvent brae);
+        protected abstract AgentItem GetAgentItem(T brae);
         protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
-        protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffRemoveAllEvent brae, AbstractSingleActor actor)
+        protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, T brae, AbstractSingleActor actor)
         {
             mechanicLogs[this].Add(new MechanicEvent(brae.Time, this, actor));
         }
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
                 {
-                    if (c is BuffRemoveAllEvent brae && Keep(brae, log))
+                    if (c is T brae && Keep(brae, log))
                     {
                         AbstractSingleActor amp = GetActor(log, GetAgentItem(brae), regroupedMobs);
                         if (amp != null)

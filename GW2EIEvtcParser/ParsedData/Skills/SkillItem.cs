@@ -196,6 +196,11 @@ namespace GW2EIEvtcParser.ParsedData
             { BigMagmaDrop, "Big Magma Drop" },
             // Voice and Claw
             { KodanTeleport, "Kodan Teleport" },
+            // Kanaxai
+            { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
+            { FrighteningSpeedReturn, "Frightening Speed (Return)" },
+            { DreadVisageSkill, "Dread Visage" },
+            { DreadVisageSkillIsland, "Dread Visage (Island)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -492,6 +497,8 @@ namespace GW2EIEvtcParser.ParsedData
             // Silent Surf Fractal
             { GrapplingHook, "https://wiki.guildwars2.com/images/c/c8/Scorpion_Wire.png" },
             { Parachute, "https://wiki.guildwars2.com/images/f/fd/Feathers_%28skill%29.png" },
+            { BlackPowderCharge, "https://wiki.guildwars2.com/images/7/75/Powder_Keg_%28skill%29.png" },
+            { FlareSilentSurf, "https://wiki.guildwars2.com/images/2/21/Reclaimed_Energy.png" },
             // Special Action Keys
             // - Training Area
             { MushroomKingsBlessing, "https://wiki.guildwars2.com/images/8/86/Cap_Hop.png" },
