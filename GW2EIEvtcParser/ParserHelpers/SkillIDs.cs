@@ -3402,6 +3402,7 @@
         public const long HarrowshotDeath = 69199;
         public const long KanxaiBreakbarCast = 69205;
         public const long Phantasmagoria = 69206;
+        public const long RendingStormTargetBuff = 69208;
         public const long DualOrbitWaterAndAir = 69211;
         public const long BleedingEdge = 69214;
         public const long AchievementEligibilityTheFearlessFew = 69222;
@@ -3423,7 +3424,8 @@
         public const long DualOrbitFireAndAir = 69341;
         public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
-        public const long KanaxaiFallDownBuff = 69350; // applied when falling off the platform?
+        public const long FrighteningSpeedTargetBuff = 69346;
+        public const long KanaxaiUnknownBuff1 = 69350; // related to teleportation?
         public const long HarrowshotExposure = 69353;
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed = 69356;
