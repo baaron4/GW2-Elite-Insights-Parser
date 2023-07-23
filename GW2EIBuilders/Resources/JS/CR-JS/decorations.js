@@ -662,6 +662,9 @@ class IconDecorationDrawable extends MechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
