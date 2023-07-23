@@ -158,6 +158,7 @@
         public const long GlyphOfElementalPowerEarthBuff = 5742;
         public const long ElectrifiedTornado = 5749;
         public const long RenewalOfFire = 5764;
+        public const long ConeOfColdHealing = 5767;
         public const long MedKitSkill = 5802;
         public const long BombKit = 5812;
         public const long RifleTurretCast = 5818;
@@ -917,6 +918,7 @@
         public const long DragonsRevelryStarcake = 19451;
         public const long MistForm2 = 19718;
         public const long POV_HauntBuff = 20229;
+        public const long WaveOfHealing = 20462;
         public const long RuneOfTormenting = 20479;
         public const long PortalExitWhiteMantleWatchwork = 20851;
         public const long PortalUsesWhiteMantleWatchwork = 20852;
@@ -989,6 +991,7 @@
         public const long WeaponDraw = 23284;
         public const long WeaponStow = 23285;
         public const long Reflection2 = 24014;
+        public const long HealingRipple = 24061;
         public const long POV_DhuumfireCooldown = 24286;
         public const long SigilOfWater = 24241;
         public const long Critical = 24278;
@@ -1165,6 +1168,7 @@
         public const long WellOfCalamity = 30525;
         public const long FragmentsOfFaith = 30553;
         public const long SoothingDetonation = 30564;
+        public const long RapidRegeneration = 30581;
         public const long Vault = 30597;
         public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
@@ -1998,6 +2002,7 @@
         public const long PlagueSignetShroud = 44164;
         public const long FullCounterSkill = 44165;
         public const long ClarifiedConclusion = 44248;
+        public const long Chapter2RadiantRecoveryHealing = 44257;
         public const long LegendaryRenegadeStanceBuff = 44272;
         public const long TomeOfJusticeOpen = 44291;
         public const long POV_StealTimeBuff = 45325;
@@ -2201,7 +2206,8 @@
         public const long MindWrackAmmo = 49068;
         public const long SoulStoneVenomStrike = 49077;
         public const long SoulStoneVenomBuff = 49083;
-        public const long IllusionaryDefense = 49099;
+        public const long IllusionaryDefense = 49090;
+        public const long CompoundingChemicals = 49099;
         public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;

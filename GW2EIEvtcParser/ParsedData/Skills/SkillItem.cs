@@ -224,6 +224,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
             { SigilOfHydromancy, "https://wiki.guildwars2.com/images/3/33/Superior_Sigil_of_Hydromancy.png" },
             { SigilOfWater, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
+            { WaveOfHealing, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
             { RuneOfTormenting, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
             { RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png" },
             { FrozenBurstRuneOfIce, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png" },
@@ -277,6 +278,8 @@ namespace GW2EIEvtcParser.ParsedData
             { LightningJolt, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
             { ShatteringIceDamage, "https://wiki.guildwars2.com/images/6/63/Shattering_Ice.png" },
             { ArcaneShieldDamage, BuffImages.ArcaneShield },
+            { ConeOfColdHealing, "https://wiki.guildwars2.com/images/9/92/Cone_of_Cold.png" },
+            { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
@@ -291,6 +294,8 @@ namespace GW2EIEvtcParser.ParsedData
             { HeavySmashJadeMech, "https://wiki.guildwars2.com/images/9/98/Heavy_Smash_%28Mech%29.png" },
             { TwinStrikeJadeMech, "https://wiki.guildwars2.com/images/3/31/Twin_Strike_%28Mech%29.png" },
             { RecallMech_MechSkill, "https://wiki.guildwars2.com/images/5/56/Recall_Mech.png" },
+            { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
+            { CompoundingChemicals, "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
@@ -305,6 +310,7 @@ namespace GW2EIEvtcParser.ParsedData
             { Chapter1DesertBloomHeal, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png" },
             { Chapter1DesertBloomSkill, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png" },
             { Chapter2RadiantRecovery, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
+            { Chapter2RadiantRecoveryHealing, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
             { Chapter3AzureSun, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png" },
             { Chapter4ShiningRiver, "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png" },
             { EpilogueEternalOasis, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png" },
