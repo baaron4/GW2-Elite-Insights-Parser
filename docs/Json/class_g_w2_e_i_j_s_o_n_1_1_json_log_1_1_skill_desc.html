@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.55.0.0+</span>
+   &#160;<span id="projectnumber">2.56.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -119,6 +119,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a13d7651069e5ab1b535d7be826ef1570"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570">IsInstantCast</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a13d7651069e5ab1b535d7be826ef1570"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the skill is an instant cast  <a href="#a13d7651069e5ab1b535d7be826ef1570">More...</a><br /></td></tr>
 <tr class="separator:a13d7651069e5ab1b535d7be826ef1570"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fdf1a6737488ea50ca1cc783ee33cf9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2fdf1a6737488ea50ca1cc783ee33cf9">IsTraitProc</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2fdf1a6737488ea50ca1cc783ee33cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the skill represents a trait proc.\ <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570" title="True when the skill is an instant cast">IsInstantCast</a> is necessarily true.  <a href="#a2fdf1a6737488ea50ca1cc783ee33cf9">More...</a><br /></td></tr>
+<tr class="separator:a2fdf1a6737488ea50ca1cc783ee33cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2273f3ce574afd5f6241fa09cfc970de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2273f3ce574afd5f6241fa09cfc970de">IsGearProc</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2273f3ce574afd5f6241fa09cfc970de"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the skill represents a trait proc.\ <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570" title="True when the skill is an instant cast">IsInstantCast</a> is necessarily true.  <a href="#a2273f3ce574afd5f6241fa09cfc970de">More...</a><br /></td></tr>
+<tr class="separator:a2273f3ce574afd5f6241fa09cfc970de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a263adadb266370df3431a5a90e66f364"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364">IsNotAccurate</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a263adadb266370df3431a5a90e66f364"><td class="mdescLeft">&#160;</td><td class="mdescRight">True when the skill is an instant cast and the detection may have missed some  <a href="#a263adadb266370df3431a5a90e66f364">More...</a><br /></td></tr>
 <tr class="separator:a263adadb266370df3431a5a90e66f364"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,6 +258,30 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a2273f3ce574afd5f6241fa09cfc970de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2273f3ce574afd5f6241fa09cfc970de">&#9670;&nbsp;</a></span>IsGearProc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.SkillDesc.IsGearProc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True when the skill represents a trait proc.\ <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570" title="True when the skill is an instant cast">IsInstantCast</a> is necessarily true. </p>
+
+</div>
+</div>
 <a id="a13d7651069e5ab1b535d7be826ef1570"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a13d7651069e5ab1b535d7be826ef1570">&#9670;&nbsp;</a></span>IsInstantCast</h2>
 
@@ -321,6 +351,30 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>True if this skill can trigger on weapon swap sigils </p>
+
+</div>
+</div>
+<a id="a2fdf1a6737488ea50ca1cc783ee33cf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fdf1a6737488ea50ca1cc783ee33cf9">&#9670;&nbsp;</a></span>IsTraitProc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.SkillDesc.IsTraitProc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True when the skill represents a trait proc.\ <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570" title="True when the skill is an instant cast">IsInstantCast</a> is necessarily true. </p>
 
 </div>
 </div>
