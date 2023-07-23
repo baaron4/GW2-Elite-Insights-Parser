@@ -163,6 +163,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeVermilion = "https://i.imgur.com/Lwz1Ypr.png";
         private const string TargetPrototypeArsenite = "https://i.imgur.com/tSD5Phl.png";
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
+        private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";
@@ -337,7 +338,13 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashGuilt = "https://i.imgur.com/ko7137g.png";
         private const string TrashTransitionSorrow = "https://i.imgur.com/2rrUxX7.png";
         private const string TrashEnragedWaterSprite = "https://i.imgur.com/TQ5vOrg.png";
-        //private const string TrashBoulders = "https://i.imgur.com/OAFzpxC.png"; // For future usage - 100CM boulders
+        //private const string TrashBoulders = "https://i.imgur.com/OAFzpxC.png"; // For future usage - Sunqua Peak boulders
+        private const string TrashAspects = "https://i.imgur.com/mwqNEQo.png";
+        private const string TrashChampionRabbit = "https://i.imgur.com/czFbODR.png";
+        private const string TrashAwakenedAbomination = "https://i.imgur.com/NayYuGw.png";
+        private const string TrashTheMossman = "https://i.imgur.com/jwFEGFA.png";
+        private const string TrashJadeMawTentacle = "https://i.imgur.com/SfB9gJG.png";
+        private const string TrashInspectorEllenKiel = "https://i.imgur.com/TyYmSnn.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -649,6 +656,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.PrototypeArseniteCM, TargetPrototypeArsenite },
             { ArcDPSEnums.TargetID.PrototypeIndigo, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.PrototypeIndigoCM, TargetPrototypeIndigo },
+            { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
         };
 
         /// <summary>
@@ -938,6 +946,16 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IcebroodElemental, TrashIcebroodElemental },
             { ArcDPSEnums.TrashID.FractalAvenger, TrashFractalAvenger },
             { ArcDPSEnums.TrashID.FractalVindicator, TrashFractalVindicator },
+            { ArcDPSEnums.TrashID.AspectOfDeath, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfExposure, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfLethargy, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfTorment, TrashAspects },
+            { ArcDPSEnums.TrashID.AspectOfFear, TrashAspects },
+            { ArcDPSEnums.TrashID.ChampionRabbit, TrashChampionRabbit },
+            { ArcDPSEnums.TrashID.TheMossman, TrashTheMossman },
+            { ArcDPSEnums.TrashID.InspectorEllenKiel, TrashInspectorEllenKiel },
+            { ArcDPSEnums.TrashID.JadeMawTentacle, TrashJadeMawTentacle },
+            { ArcDPSEnums.TrashID.AwakenedAbomination, TrashAwakenedAbomination },
         };
 
         /// <summary>
@@ -994,6 +1012,13 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.CloneAxePistol, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxeSword, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneAxeFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneAxeShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDagger, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDaggerFocus, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDaggerPistol, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDaggerShield, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDaggerSword, MinionMesmerClone },
+            { ArcDPSEnums.MinionID.CloneDaggerTorch, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneDownstate, MinionMesmerClone },
             { ArcDPSEnums.MinionID.CloneUnknown, MinionMesmerClone },
             { ArcDPSEnums.MinionID.IllusionarySwordsman, MinionIllusionarySwordsman },

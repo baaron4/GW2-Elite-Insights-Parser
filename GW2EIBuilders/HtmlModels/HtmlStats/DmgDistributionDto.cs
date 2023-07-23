@@ -141,7 +141,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             double breakbarDamage = 0.0;
             if (breakbarLogsBySkill.TryGetValue(skill, out List<AbstractBreakbarDamageEvent> brList))
             {
-                breakbarDamage = brList.Sum(x => x.BreakbarDamage);
+                breakbarDamage = Math.Round(brList.Sum(x => x.BreakbarDamage), 1);
                 breakbarLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
@@ -214,7 +214,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 double breakbarDamage = 0.0;
                 if (breakbarLogsBySkill.TryGetValue(pair.Key, out List<AbstractBreakbarDamageEvent> brList))
                 {
-                    breakbarDamage = brList.Sum(x => x.BreakbarDamage);
+                    breakbarDamage = Math.Round(brList.Sum(x => x.BreakbarDamage), 1);
                     breakbarLogsBySkill.Remove(pair.Key);
                 }
 
@@ -253,7 +253,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 {
                     usedSkills.Add(pair.Key.ID, pair.Key);
                 }
-                double breakbarDamage = pair.Value.Sum(x => x.BreakbarDamage);
+                double breakbarDamage = Math.Round(pair.Value.Sum(x => x.BreakbarDamage), 1);
 
                 object[] skillData = {
                     false,

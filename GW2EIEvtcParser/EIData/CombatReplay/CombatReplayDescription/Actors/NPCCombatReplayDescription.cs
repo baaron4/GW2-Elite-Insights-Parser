@@ -13,7 +13,8 @@ namespace GW2EIEvtcParser.EIData
             if (log.FriendlyAgents.Contains(npc.AgentItem))
             {
                 SetStatus(log, npc);
-            }
+            } 
+            SetBreakbarStatus(log, npc);
             AgentItem master = npc.AgentItem.GetFinalMaster();
             // Don't put minions of NPC into the minion display system
             if (master != npc.AgentItem && master.IsPlayer)

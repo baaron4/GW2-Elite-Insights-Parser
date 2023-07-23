@@ -89,6 +89,9 @@ Ai, Elemental Only: 0x030302
 
 Ai, Dark Only: 0x030303
 
+### Silent Surf
+Kanaxai, Scythe of House Aurkus: 0x030401
+
 ## Strikes
 ### Festivals
 Freezie: 0x040101
@@ -145,7 +148,7 @@ Massive Golem 4M: 0x080102
 
 Massive Golem 1M: 0x080103
 
-Vital Golem: 0x040104
+Vital Golem: 0x080104
 
 Average Golem: 0x080105
 

@@ -14,11 +14,11 @@ namespace GW2EIEvtcParser.ParsedData
         internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
         {
             HealthDamage = evtcItem.BuffDmg;
-            IsAbsorbed = result == ArcDPSEnums.ConditionResult.InvulByBuff ||
-                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill1 ||
-                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill2 ||
-                result == ArcDPSEnums.ConditionResult.InvulByPlayerSkill3;
-            HasHit = result == ArcDPSEnums.ConditionResult.ExpectedToHit;
+            IsAbsorbed = result == ConditionResult.InvulByBuff ||
+                result == ConditionResult.InvulByPlayerSkill1 ||
+                result == ConditionResult.InvulByPlayerSkill2 ||
+                result == ConditionResult.InvulByPlayerSkill3;
+            HasHit = result == ConditionResult.ExpectedToHit;
             ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
             _cycle = GetBuffCycle(evtcItem.IsOffcycle);
             AgainstDowned = evtcItem.Pad1 == 1;

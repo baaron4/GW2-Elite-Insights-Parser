@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // General
                 new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
                 new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleCM}, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
-                new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidEffect, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
+                new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPoolNM, VoidPoolCM }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
                 new PlayerDstSkillMechanic(new [] { HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Spread mechanic", "Targeted Expulsion (Spread)", 150).UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
@@ -287,16 +287,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                     if (lastDamageTaken != null)
                     {
-                        if (!AtLeastOnePlayerAlive(combatData, fightData, Math.Min(targetOffs[1].Time + 200, fightData.FightEnd), playerAgents))
+                        bool isSuccess = false;
+                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time).ToList();
+                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                        foreach (AnimatedCastEvent liffOff in liftOffs)
                         {
-                            return;
+                            isSuccess = true;
+                            if (determinedApplies.Count(x => x.To == liffOff.Caster && Math.Abs(x.Time - liffOff.Time) < ServerDelayConstant) != 1)
+                            {
+                                isSuccess = false;
+                                break;
+                            }
                         }
-                        HealthUpdateEvent lastHPUpdate = combatData.GetHealthUpdateEvents(soowon.AgentItem).LastOrDefault();
-                        if (lastHPUpdate == null || lastHPUpdate.HPPercent > 0.01)
+                        if (isSuccess)
                         {
-                            return;
+                            fightData.SetSuccess(true, targetOffs[1].Time);
                         }
-                        fightData.SetSuccess(true, targetOffs[1].Time);
                     }
                 }
             }
@@ -310,7 +316,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (CombatItem dragonOrbMaxHP in dragonOrbMaxHPs)
             {
                 AgentItem dragonOrb = agentData.GetAgent(dragonOrbMaxHP.SrcAgent, dragonOrbMaxHP.Time);
-                if (dragonOrb != ParserHelper._unknownAgent)
+                if (dragonOrb != _unknownAgent)
                 {
                     dragonOrb.OverrideName("Dragon Orb");
                     dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
@@ -331,9 +337,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
             int index = 0;
+            attackTargetEvents = attackTargetEvents.OrderBy(x =>
+            {
+                AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
+                // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
+                var targetables = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable && y.SrcMatchesAgent(atAgent) && y.Time > 2000).ToList();
+                return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+            }).ToList();
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
+                var copyEventsFrom = new List<AgentItem>() { dragonVoid };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 var targetables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent) && x.Time > 2000).ToList();
@@ -364,59 +378,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         end = targetOff.Time;
                     }
-                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
                     ulong lastHPUpdate = ulong.MaxValue;
-                    foreach (CombatItem c in combatData)
-                    {
-                        if (extra.InAwareTimes(c.Time))
+                    AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra,
+                        (evt, from, to) =>
                         {
-                            if (c.SrcMatchesAgent(dragonVoid, extensions))
+                            if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
-                                if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
+                                // Regenerating back to full HP
+                                if (evt.DstAgent > lastHPUpdate && evt.DstAgent > 9900)
                                 {
-                                    // Regenerating back to full HP, override to 0
-                                    if (c.DstAgent > lastHPUpdate && c.DstAgent > 9900)
-                                    {
-                                        // All dragons go back to 100% when their phase ends
-                                        // In the particular situation of Soo-Won, it disappears roughly immediately if the fight was a failure at Targetable Off
-                                        // Otherwise it lingers at little bit
-                                        if (index == idsToUse.Count && extra.LastAware - c.Time < ServerDelayConstant)
-                                        {
-                                            c.OverrideDstAgent(lastHPUpdate);
-                                        } 
-                                        else
-                                        {
-                                            c.OverrideDstAgent(0);
-                                        }
-                                    }
-                                    // Remember last hp
-                                    lastHPUpdate = c.DstAgent;
+                                    return false;
                                 }
-                                c.OverrideSrcAgent(extra.Agent);
+                                // Remember last hp
+                                lastHPUpdate = evt.DstAgent;
                             }
-                            // Redirect effects from attack target to main body
-                            if (c.IsStateChange == ArcDPSEnums.StateChange.Effect && c.SrcMatchesAgent(atAgent, extensions))
-                            {
-                                c.OverrideSrcAgent(extra.Agent);
-                            }
-                            if (c.DstMatchesAgent(dragonVoid, extensions))
-                            {
-                                c.OverrideDstAgent(extra.Agent);
-                            }
+                            return true;
                         }
-                    }
-                    var attackTargetCopy = new CombatItem(at);
-                    attackTargetCopy.OverrideTime(extra.FirstAware);
-                    attackTargetCopy.OverrideDstAgent(extra.Agent);
-                    combatData.Add(attackTargetCopy);
-                    foreach (CombatItem c in posFacingHPEventsToCopy)
-                    {
-                        var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideSrcAgent(extra.Agent);
-                        combatData.Add(cExtra);
-                    }
+                    );
+                    copyEventsFrom.Add(extra);
                 }
             }
             //
@@ -619,7 +600,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent purificationZoneEffect in purificationZoneEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                         {
                             int start = (int)purificationZoneEffect.Time;
-                            int end = start + purificationZoneEffect.Duration;
+                            int end = (int)log.FightData.FightEnd;
                             int radius = 280;
                             if (voidShellRemovalOffset < voidShellRemovals.Count)
                             {
@@ -1152,7 +1133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (voidMelters.Count > 5)
             {
                 long firstAware = voidMelters[0].FirstAware;
-                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ParserHelper.ServerDelayConstant) > 5)
+                if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ServerDelayConstant) > 5)
                 {
                     return FightData.EncounterMode.CM;
                 }

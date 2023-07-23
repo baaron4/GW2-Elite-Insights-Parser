@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.Extensions
             Sieche,
             BreakingWave, 
             Riptide,
-            SoulcleavesSummit,
+            SoulcleavesSummitBuff,
             Claptosis,
             TransmuteFrost, 
             FacetOfNatureAssassin,

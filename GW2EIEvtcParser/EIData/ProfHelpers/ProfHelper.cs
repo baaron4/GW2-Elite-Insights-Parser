@@ -16,13 +16,13 @@ namespace GW2EIEvtcParser.EIData
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
             new BreakbarDamageCastFinder(Technobabble, Technobabble),
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500),
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500),
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500),
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500),
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare),
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),
         };
@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Minions that aren't profession-specific bound.
         /// </summary>
-        private static readonly HashSet<long> CommonMinions = new HashSet<long>()
+        private static readonly HashSet<int> CommonMinions = new HashSet<int>()
         {
             // Racial Summons
             (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
@@ -363,7 +363,7 @@ namespace GW2EIEvtcParser.EIData
             (int)ArcDPSEnums.MinionID.RavenSpiritShadow,
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return CommonMinions.Contains(id);
         }

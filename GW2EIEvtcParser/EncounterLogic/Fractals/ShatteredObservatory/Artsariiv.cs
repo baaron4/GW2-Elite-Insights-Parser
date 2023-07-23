@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -19,13 +20,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstBuffApplyMechanic(CorporealReassignment, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Skull","Exploding Skull mechanic application","Corporeal Reassignment",0),
-            new PlayerDstHitMechanic(Vault, "Vault", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault","Vault from Big Adds", "Vault (Add)",0),
+            new PlayerDstHitMechanic(VaultArtsariiv, "Vault", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault","Vault from Big Adds", "Vault (Add)",0),
             new PlayerDstHitMechanic(SlamArtsariiv, "Slam", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam","Slam (Vault) from Boss", "Vault (Arts)",0),
             new PlayerDstHitMechanic(TeleportLunge, "Teleport Lunge", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump","Triple Jump Mid->Edge", "Triple Jump",0),
             new PlayerDstHitMechanic(AstralSurge, "Astral Surge", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle","Different sized spiraling circles", "1000 Circles",0),
             new PlayerDstHitMechanic(new long[] { RedMarble1, RedMarble2 }, "Red Marble", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble","Red KD Marble after Jump", "Red Marble",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new SpawnMechanic((int)ArcDPSEnums.TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
+            new SpawnMechanic((int)TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
             });
             Extension = "arts";
             Icon = EncounterIconArtsariiv;
@@ -53,8 +54,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>()
             {
-                (int)ArcDPSEnums.TargetID.Artsariiv,
-                (int)ArcDPSEnums.TrashID.CloneArtsariiv
+                (int)TargetID.Artsariiv,
+                (int)TrashID.CloneArtsariiv
             };
         }
 
@@ -62,11 +63,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.TemporalAnomaly,
-                ArcDPSEnums.TrashID.Spark,
-                ArcDPSEnums.TrashID.SmallArtsariiv,
-                ArcDPSEnums.TrashID.MediumArtsariiv,
-                ArcDPSEnums.TrashID.BigArtsariiv,
+                TrashID.TemporalAnomaly,
+                TrashID.Spark,
+                TrashID.SmallArtsariiv,
+                TrashID.MediumArtsariiv,
+                TrashID.BigArtsariiv,
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Artsariiv));
+            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
             if (artsariiv == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");
@@ -95,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                       (int)ArcDPSEnums.TrashID.CloneArtsariiv,
+                       (int)TrashID.CloneArtsariiv,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                 }
@@ -122,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(ArcDPSEnums.TargetID.Artsariiv));
+            var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
             if (artsariivs.Any())
             {
                 artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
@@ -130,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     foreach (AgentItem subartsariiv in artsariivs)
                     {
-                        subartsariiv.OverrideID(ArcDPSEnums.TrashID.CloneArtsariiv);
+                        subartsariiv.OverrideID(TrashID.CloneArtsariiv);
                     }
                 }
                 agentData.Refresh();
@@ -138,15 +139,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             foreach (NPC trashMob in _trashMobs)
             {
-                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.SmallArtsariiv))
+                if (trashMob.IsSpecies(TrashID.SmallArtsariiv))
                 {
                     trashMob.OverrideName("Small " + trashMob.Character);
                 }
-                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.MediumArtsariiv))
+                if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
                 {
                     trashMob.OverrideName("Medium " + trashMob.Character);
                 }
-                if (trashMob.IsSpecies(ArcDPSEnums.TrashID.BigArtsariiv))
+                if (trashMob.IsSpecies(TrashID.BigArtsariiv))
                 {
                     trashMob.OverrideName("Big " + trashMob.Character);
                 }
@@ -158,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
             foreach (NPC target in _targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.CloneArtsariiv))
+                if (target.IsSpecies(TrashID.CloneArtsariiv))
                 {
                     string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
                     if (suffix != null && nameCount.ContainsKey(suffix))
@@ -177,7 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)ArcDPSEnums.TargetID.Artsariiv, Determined762);
+            return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)TargetID.Artsariiv, Determined762);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -188,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Artsariiv));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Artsariiv not found");

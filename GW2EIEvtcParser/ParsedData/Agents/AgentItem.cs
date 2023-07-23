@@ -259,6 +259,68 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
+        internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData, FightData fightData)
+        {
+            // State changes are not reliable
+            if (Type == AgentType.NonSquadPlayer)
+            {
+                return;
+            }
+            var status = new List<BreakbarStateEvent>();
+            status.AddRange(combatData.GetBreakbarStateEvents(this));
+            nones.Add(new Segment(long.MinValue, FirstAware, 1));
+            if (!status.Any())
+            {
+                nones.Add(new Segment(FirstAware, long.MaxValue, 1));
+                return;
+            }
+            status = status.OrderBy(x => x.Time).ToList();
+            for (int i = 0; i < status.Count - 1; i++)
+            {
+                BreakbarStateEvent cur = status[i];
+                BreakbarStateEvent next = status[i + 1];
+                switch (cur.State)
+                {
+                    case ArcDPSEnums.BreakbarState.Active:
+                        actives.Add(new Segment(cur.Time, next.Time, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.Immune:
+                        immunes.Add(new Segment(cur.Time, next.Time, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.None:
+                        nones.Add(new Segment(cur.Time, next.Time, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.Recover:
+                        recovering.Add(new Segment(cur.Time, next.Time, 1));
+                        break;
+                }
+            }
+            // check last value
+            if (status.Count > 0)
+            {
+                BreakbarStateEvent cur = status.Last();
+                switch(cur.State)
+                {
+                    case ArcDPSEnums.BreakbarState.Active:
+                        actives.Add(new Segment(cur.Time, LastAware, 1));
+                        actives.Add(new Segment(LastAware, long.MaxValue, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.Immune:
+                        immunes.Add(new Segment(cur.Time, LastAware, 1));
+                        immunes.Add(new Segment(LastAware, long.MaxValue, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.None:
+                        nones.Add(new Segment(cur.Time, LastAware, 1));
+                        nones.Add(new Segment(LastAware, long.MaxValue, 1));
+                        break;
+                    case ArcDPSEnums.BreakbarState.Recover:
+                        recovering.Add(new Segment(cur.Time, LastAware, 1));
+                        recovering.Add(new Segment(LastAware, long.MaxValue, 1));
+                        break;
+                }
+            }
+        }
+
         public AgentItem GetFinalMaster()
         {
             AgentItem cur = this;
@@ -377,6 +439,12 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentPosition(log, time);
+        }
+
+        public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentBreakbarState(log, time);
         }
 
         public bool IsSpecies(int id)

@@ -200,17 +200,18 @@ namespace GW2EIEvtcParser.ParsedData
                     a.SetMaster(to);
                 }
             }
-        }
-
-        internal void SwapMasters(AgentItem from, AgentItem to)
-        {
-            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
+            foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.Gadget))
             {
-                if (a.Master != null && a.Master == from)
+                if (a.Master != null && froms.Contains(a.Master))
                 {
                     a.SetMaster(to);
                 }
             }
+        }
+
+        internal void SwapMasters(AgentItem from, AgentItem to)
+        {
+            SwapMasters(new HashSet<AgentItem> { from }, to);
         }
     }
 }

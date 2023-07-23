@@ -17,6 +17,11 @@ namespace GW2EIEvtcParser.EIData
         private List<Segment> _dcs;
         //
         private List<DeathRecap> _deathRecaps;
+        //
+        private List<Segment> _breakbarNones;
+        private List<Segment> _breakbarActives;
+        private List<Segment> _breakbarImmunes;
+        private List<Segment> _breakbarRecoverings;
         //weaponslist
         private WeaponSets _weaponSets;
 
@@ -36,6 +41,19 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
+        }
+
+        public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
+        {
+            if (_breakbarNones == null)
+            {
+                _breakbarNones = new List<Segment>();
+                _breakbarActives = new List<Segment>();
+                _breakbarImmunes = new List<Segment>();
+                _breakbarRecoverings = new List<Segment>();
+                AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData, log.FightData);
+            }
+            return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);
         }
 
         public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)

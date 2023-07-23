@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
@@ -25,113 +26,113 @@ namespace GW2EIEvtcParser.ParsedData
         {
             switch (stateChangeEvent.IsStateChange)
             {
-                case ArcDPSEnums.StateChange.EnterCombat:
+                case StateChange.EnterCombat:
                     var enterCombatEvt = new EnterCombatEvent(stateChangeEvent, agentData);
                     Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                     break;
-                case ArcDPSEnums.StateChange.ExitCombat:
+                case StateChange.ExitCombat:
                     var exitCombatEvt = new ExitCombatEvent(stateChangeEvent, agentData);
                     Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                     break;
-                case ArcDPSEnums.StateChange.ChangeUp:
+                case StateChange.ChangeUp:
                     var aliveEvt = new AliveEvent(stateChangeEvent, agentData);
                     Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                     break;
-                case ArcDPSEnums.StateChange.ChangeDead:
+                case StateChange.ChangeDead:
                     var deadEvt = new DeadEvent(stateChangeEvent, agentData);
                     Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                     break;
-                case ArcDPSEnums.StateChange.ChangeDown:
+                case StateChange.ChangeDown:
                     var downEvt = new DownEvent(stateChangeEvent, agentData);
                     Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                     break;
-                case ArcDPSEnums.StateChange.Spawn:
+                case StateChange.Spawn:
                     var spawnEvt = new SpawnEvent(stateChangeEvent, agentData);
                     Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                     break;
-                case ArcDPSEnums.StateChange.Despawn:
+                case StateChange.Despawn:
                     var despawnEvt = new DespawnEvent(stateChangeEvent, agentData);
                     Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                     break;
-                case ArcDPSEnums.StateChange.HealthUpdate:
+                case StateChange.HealthUpdate:
                     var healthEvt = new HealthUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                     break;                
-                case ArcDPSEnums.StateChange.BarrierUpdate:
+                case StateChange.BarrierUpdate:
                     var barrierEvt = new BarrierUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
                     break;
-                case ArcDPSEnums.StateChange.InstanceStart:
+                case StateChange.InstanceStart:
                     metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent);
                     break;
-                case ArcDPSEnums.StateChange.LogStart:
+                case StateChange.LogStart:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
                     }
                     metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
                     break;
-                case ArcDPSEnums.StateChange.LogStartNPCUpdate:
+                case StateChange.LogStartNPCUpdate:
                     metaDataEvents.LogStartNPCUpdateEvents.Add(new LogStartNPCUpdateEvent(stateChangeEvent, agentData));
                     break;
-                case ArcDPSEnums.StateChange.LogEnd:
+                case StateChange.LogEnd:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
                     }
                     metaDataEvents.LogEndEvent = new LogEndEvent(stateChangeEvent);
                     break;
-                case ArcDPSEnums.StateChange.MaxHealthUpdate:
+                case StateChange.MaxHealthUpdate:
                     var maxHealthEvt = new MaxHealthUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                     break;
-                case ArcDPSEnums.StateChange.PointOfView:
+                case StateChange.PointOfView:
                     if (stateChangeEvent.SrcAgent == 0)
                     {
                         return;
                     }
                     metaDataEvents.PointOfViewEvent = new PointOfViewEvent(stateChangeEvent, agentData);
                     break;
-                case ArcDPSEnums.StateChange.Language:
+                case StateChange.Language:
                     metaDataEvents.LanguageEvent = new LanguageEvent(stateChangeEvent);
                     break;
-                case ArcDPSEnums.StateChange.GWBuild:
+                case StateChange.GWBuild:
                     if (stateChangeEvent.SrcAgent == 0)
                     {
                         return;
                     }
                     metaDataEvents.BuildEvent = new BuildEvent(stateChangeEvent);
                     break;
-                case ArcDPSEnums.StateChange.ShardId:
+                case StateChange.ShardId:
                     metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent));
                     break;
-                case ArcDPSEnums.StateChange.Reward:
+                case StateChange.Reward:
 #if !NO_REWARDS
                     rewardEvents.Add(new RewardEvent(stateChangeEvent));
 #endif
                     break;
-                case ArcDPSEnums.StateChange.TeamChange:
+                case StateChange.TeamChange:
                     var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData);
                     Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                     break;
-                case ArcDPSEnums.StateChange.AttackTarget:
+                case StateChange.AttackTarget:
                     var aTEvt = new AttackTargetEvent(stateChangeEvent, agentData);
                     Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                     Add(statusEvents.AttackTargetEventsByAttackTarget, aTEvt.AttackTarget, aTEvt);
                     break;
-                case ArcDPSEnums.StateChange.Targetable:
+                case StateChange.Targetable:
                     var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
                     Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                     break;
-                case ArcDPSEnums.StateChange.MapID:
+                case StateChange.MapID:
                     metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
                     break;
-                case ArcDPSEnums.StateChange.Guild:
+                case StateChange.Guild:
                     var gEvt = new GuildEvent(stateChangeEvent, agentData);
                     Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                     break;
-                case ArcDPSEnums.StateChange.BuffInfo:
-                case ArcDPSEnums.StateChange.BuffFormula:
+                case StateChange.BuffInfo:
+                case StateChange.BuffFormula:
                     if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out BuffInfoEvent buffInfoEvent))
                     {
                         buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent, evtcVersion);
@@ -141,7 +142,7 @@ namespace GW2EIEvtcParser.ParsedData
                         buffInfoEvent = new BuffInfoEvent(stateChangeEvent, evtcVersion);
                         metaDataEvents.BuffInfoEvents[stateChangeEvent.SkillID] = buffInfoEvent;
                     }
-                    if (stateChangeEvent.IsStateChange == ArcDPSEnums.StateChange.BuffInfo)
+                    if (stateChangeEvent.IsStateChange == StateChange.BuffInfo)
                     {
                         if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.CategoryByte, out List<BuffInfoEvent> bdEvtList))
                         {
@@ -153,8 +154,8 @@ namespace GW2EIEvtcParser.ParsedData
                         }
                     }
                     break;
-                case ArcDPSEnums.StateChange.SkillInfo:
-                case ArcDPSEnums.StateChange.SkillTiming:
+                case StateChange.SkillInfo:
+                case StateChange.SkillTiming:
                     if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out SkillInfoEvent skillInfoEvent))
                     {
                         skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent);
@@ -165,52 +166,71 @@ namespace GW2EIEvtcParser.ParsedData
                         metaDataEvents.SkillInfoEvents[stateChangeEvent.SkillID] = skillInfoEvent;
                     }
                     break;
-                case ArcDPSEnums.StateChange.BreakbarState:
+                case StateChange.BreakbarState:
                     var bSEvt = new BreakbarStateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BreakbarStateEvents, bSEvt.Src, bSEvt);
                     break;
-                case ArcDPSEnums.StateChange.BreakbarPercent:
+                case StateChange.BreakbarPercent:
                     var bPEvt = new BreakbarPercentEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
                     break;
-                case ArcDPSEnums.StateChange.Error:
+                case StateChange.Error:
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
-                case ArcDPSEnums.StateChange.Tag:
+                case StateChange.Tag:
                     var tagEvent = new TagEvent(stateChangeEvent, agentData);
                     Add(statusEvents.TagEvents, tagEvent.Src, tagEvent);
                     break;
-                case ArcDPSEnums.StateChange.Velocity:
+                case StateChange.Velocity:
                     var velEvt = new VelocityEvent(stateChangeEvent, agentData);
                     Add(statusEvents.MovementEvents, velEvt.Src, velEvt);
                     break;
-                case ArcDPSEnums.StateChange.Rotation:
+                case StateChange.Rotation:
                     var rotEvt = new RotationEvent(stateChangeEvent, agentData);
                     Add(statusEvents.MovementEvents, rotEvt.Src, rotEvt);
                     break;
-                case ArcDPSEnums.StateChange.Position:
+                case StateChange.Position:
                     var posEvt = new PositionEvent(stateChangeEvent, agentData);
                     Add(statusEvents.MovementEvents, posEvt.Src, posEvt);
                     break;
-                case ArcDPSEnums.StateChange.WeaponSwap:
+                case StateChange.WeaponSwap:
                     wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.StateChange.StackActive:
+                case StateChange.StackActive:
                     buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.StateChange.StackReset:
+                case StateChange.StackReset:
                     buffEvents.Add(new BuffStackResetEvent(stateChangeEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.StateChange.BuffInitial:
+                case StateChange.BuffInitial:
                     buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.StateChange.Last90BeforeDown:
+                case StateChange.TickRate:
+                    metaDataEvents.TickRateEvents.Add(new TickRateEvent(stateChangeEvent));
+                    break;
+                case StateChange.Last90BeforeDown:
                     var last90Evt = new Last90BeforeDownEvent(stateChangeEvent, agentData);
                     statusEvents.Last90BeforeDownEvents.Add(last90Evt);
                     Add(statusEvents.Last90BeforeDownEventsBySrc, last90Evt.Src, last90Evt);
                     break;
-                case ArcDPSEnums.StateChange.Effect:
-                    var effectEvt = new EffectEvent(stateChangeEvent, agentData);
+                case StateChange.Effect_45:
+                case StateChange.Effect_51:
+                    EffectEvent effectEvt = null;
+                    switch(stateChangeEvent.IsStateChange)
+                    {
+                        case StateChange.Effect_45:
+                            effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
+                            break;
+                        case StateChange.Effect_51:
+                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData);
+                            if (effectEvt.TrackingID != 0)
+                            {
+                                Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
+                            }
+                            break;
+                        default:
+                            throw new InvalidDataException("Invalid effect state change");
+                    }
                     statusEvents.EffectEvents.Add(effectEvt);
                     Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     if (effectEvt.IsAroundDst)
@@ -221,22 +241,18 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     }
-                    if (effectEvt.TrackingID != 0)
-                    {
-                        Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
-                    }
                     break;
-                case ArcDPSEnums.StateChange.EffectIDToGUID:
+                case StateChange.EffectIDToGUID:
                     if (evtcVersion >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                     {
-                        switch (ArcDPSEnums.GetContentLocal((byte)stateChangeEvent.OverstackValue))
+                        switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))
                         {
-                            case ArcDPSEnums.ContentLocal.Effect:
+                            case ContentLocal.Effect:
                                 var effectGUID = new EffectGUIDEvent(stateChangeEvent);
                                 metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
                                 metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
                                 break;
-                            case ArcDPSEnums.ContentLocal.Marker:
+                            case ContentLocal.Marker:
                                 var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
                                 metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
                                 metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
@@ -245,6 +261,14 @@ namespace GW2EIEvtcParser.ParsedData
                                 break;
                         }
                     }
+                    break;
+                case StateChange.FractalScale:
+                    // Sanity check
+                    if (stateChangeEvent.SrcAgent == 0)
+                    {
+                        return;
+                    }
+                    metaDataEvents.FractalScaleEvent = new FractalScaleEvent(stateChangeEvent);
                     break;
                 default:
                     break;
@@ -267,13 +291,13 @@ namespace GW2EIEvtcParser.ParsedData
         {
             switch (buffEvent.IsBuffRemove)
             {
-                case ArcDPSEnums.BuffRemove.Single:
+                case BuffRemove.Single:
                     buffEvents.Add(new BuffRemoveSingleEvent(buffEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.BuffRemove.All:
+                case BuffRemove.All:
                     buffEvents.Add(new BuffRemoveAllEvent(buffEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.BuffRemove.Manual:
+                case BuffRemove.Manual:
                     buffEvents.Add(new BuffRemoveManualEvent(buffEvent, agentData, skillData));
                     break;
             }
@@ -342,14 +366,14 @@ namespace GW2EIEvtcParser.ParsedData
 
         public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
         {
-            ArcDPSEnums.PhysicalResult result = ArcDPSEnums.GetPhysicalResult(damageEvent.Result);
+            ArcDPSEnums.PhysicalResult result = GetPhysicalResult(damageEvent.Result);
             switch (result)
             {
-                case ArcDPSEnums.PhysicalResult.BreakbarDamage:
+                case PhysicalResult.BreakbarDamage:
                     brkBarDamage.Add(new DirectBreakbarDamageEvent(damageEvent, agentData, skillData));
                     break;
-                case ArcDPSEnums.PhysicalResult.Activation:
-                case ArcDPSEnums.PhysicalResult.Unknown:
+                case PhysicalResult.Activation:
+                case PhysicalResult.Unknown:
                     break;
                 default:
                     hpDamage.Add(new DirectHealthDamageEvent(damageEvent, agentData, skillData, result));
@@ -359,13 +383,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
         {
-            ArcDPSEnums.ConditionResult result = ArcDPSEnums.GetConditionResult(damageEvent.Result);
+            ArcDPSEnums.ConditionResult result = GetConditionResult(damageEvent.Result);
             switch (result)
             {
                 /*case ArcDPSEnums.ConditionResult.BreakbarDamage:
                     brkBarDamage.Add(new NonDirectBreakbarDamageEvent(c, agentData, skillData));
                     break;*/
-                case ArcDPSEnums.ConditionResult.Unknown:
+                case ConditionResult.Unknown:
                     break;
                 default:
                     hpDamage.Add(new NonDirectHealthDamageEvent(damageEvent, agentData, skillData, result));

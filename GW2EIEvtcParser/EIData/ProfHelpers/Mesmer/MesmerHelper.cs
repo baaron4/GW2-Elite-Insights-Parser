@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightEffect)
+            new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
                 .UsingChecker((brae, combatData, agentData, skillData) => {
                      return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
                 })
@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new BuffGainCastFinder(PortalExeunt, PortalUses),
-            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender),
+            new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
                 var buffsLossToCheck = new List<long>
                 {
@@ -84,20 +84,20 @@ namespace GW2EIEvtcParser.EIData
             // fallback to blink or phase retreat
             new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
                 .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapEffect, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
                 .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
 
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionEffect).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionBuff).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
             new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) =>{
@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return false;
                 }
-                if (!combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
                 {
                     return false;
                 }
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return false;
                 }
-                if (!combatData.GetBuffData(DistortionEffect).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
                 {
                     return false;
                 }
@@ -189,20 +189,21 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
             new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfDomination),
             new Buff("Signet of Illusions", SignetOfIllusions, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfIllusions),
-            new Buff("Signet of Inspiration", SignetOfInspirationEffect, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfInspiration),
-            new Buff("Signet of Midnight", SignetOfMidnightEffect, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfMidnight),
+            new Buff("Signet of Inspiration", SignetOfInspirationBuff, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfInspiration),
+            new Buff("Signet of Midnight", SignetOfMidnightBuff, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfMidnight),
             new Buff("Signet of Humility", SignetOfHumility, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfHumility),
             // Skills
-            new Buff("Distortion", DistortionEffect, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Distortion),
+            new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Distortion),
             new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, BuffImages.Distortion),
             new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, BuffImages.Mirror),
             new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
-            new Buff("Illusionary Counter", IllusionaryCounter, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryCounter),
-            new Buff("Illusionary Riposte", IllusionaryRiposte, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryRiposte),
-            new Buff("Illusionary Leap", IllusionaryLeapEffect, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
+            new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryCounter),
+            new Buff("Illusionary Riposte", IllusionaryRiposteBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryRiposte),
+            new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
+            new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Traits
             new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
             new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
@@ -215,7 +216,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
         };
 
-        private static readonly HashSet<long> _cloneIDs = new HashSet<long>()
+        private static readonly HashSet<int> _cloneIDs = new HashSet<int>()
         {
             (int)MinionID.CloneSword,
             (int)MinionID.CloneScepter,
@@ -224,6 +225,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneStaff,
             (int)MinionID.CloneTrident,
             (int)MinionID.CloneSpear,
+            (int)MinionID.CloneDagger,
             (int)MinionID.CloneDownstate,
             (int)MinionID.CloneUnknown,
             (int)MinionID.CloneSwordTorch,
@@ -246,6 +248,12 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneAxePistol,
             (int)MinionID.CloneAxeSword,
             (int)MinionID.CloneAxeFocus,
+            (int)MinionID.CloneAxeShield,
+            (int)MinionID.CloneDaggerShield,
+            (int)MinionID.CloneDaggerPistol,
+            (int)MinionID.CloneDaggerFocus,
+            (int)MinionID.CloneDaggerTorch,
+            (int)MinionID.CloneDaggerSword,
         };
 
         internal static void AdjustMinionName(AgentItem minion)
@@ -294,7 +302,16 @@ namespace GW2EIEvtcParser.EIData
                 case (int)MinionID.CloneAxePistol:
                 case (int)MinionID.CloneAxeSword:
                 case (int)MinionID.CloneAxeFocus:
+                case (int)MinionID.CloneAxeShield:
                     minion.OverrideName("Axe " + minion.Name);
+                    break;
+                case (int)MinionID.CloneDagger:
+                case (int)MinionID.CloneDaggerShield:
+                case (int)MinionID.CloneDaggerPistol:
+                case (int)MinionID.CloneDaggerFocus:
+                case (int)MinionID.CloneDaggerTorch:
+                case (int)MinionID.CloneDaggerSword:
+                    minion.OverrideName("Dagger " + minion.Name);
                     break;
                 default:
                     break;
@@ -310,12 +327,12 @@ namespace GW2EIEvtcParser.EIData
             return _cloneIDs.Contains(agentItem.ID);
         }
 
-        private static bool IsClone(long id)
+        private static bool IsClone(int id)
         {
             return _cloneIDs.Contains(id);
         }
 
-        private static HashSet<long> NonCloneMinions = new HashSet<long>()
+        private static HashSet<int> NonCloneMinions = new HashSet<int>()
         {
             (int)MinionID.IllusionaryWarlock,
             (int)MinionID.IllusionaryWarden,
@@ -328,9 +345,10 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryDefender,
             (int)MinionID.IllusionaryMariner,
             (int)MinionID.IllusionaryWhaler,
+            (int)MinionID.IllusionaryAvenger,
         };
 
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
         }

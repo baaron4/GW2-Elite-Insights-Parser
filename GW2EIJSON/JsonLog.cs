@@ -51,6 +51,16 @@ namespace GW2EIJSON
             /// </summary>
             public bool IsInstantCast { get; set; }
             /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsTraitProc { get; set; }
+            /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsGearProc { get; set; }
+            /// <summary>
             /// True when the skill is an instant cast and the detection may have missed some
             /// </summary>
             public bool IsNotAccurate { get; set; }
@@ -223,7 +233,13 @@ namespace GW2EIJSON
         /// Language with which the evtc was generated
         /// </summary>
         public string Language { get; set; }
-        
+
+        /// <summary>
+        /// Scale of the fractal, only applicable for fractal encounters. \n
+        /// Valued at 0 if missing.
+        /// </summary>
+        public int FractalScale { get; set; }
+
         /// <summary>
         /// ID of the language
         /// </summary>

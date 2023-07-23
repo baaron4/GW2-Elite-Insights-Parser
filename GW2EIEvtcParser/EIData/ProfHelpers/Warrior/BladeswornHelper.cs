@@ -13,9 +13,9 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true), // Gunsaber sheath
-            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true), // Gunsaber                 
-            new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2), // Unseen Sword
+            new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),                
+            new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, BuffImages.CombatStimulant),
             new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.GunsAndGlory),
             new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, BuffImages.TacticalReload),
-            new Buff("Overcharged Cartridges", OverchargedCartridgesEffect, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
         };
 
 

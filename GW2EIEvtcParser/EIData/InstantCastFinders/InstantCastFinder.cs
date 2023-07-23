@@ -10,6 +10,16 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class InstantCastFinder : IVersionable
     {
+
+        public enum InstantCastOrigin
+        {
+            Skill,
+            Trait,
+            Gear
+        }
+
+        public InstantCastOrigin CastOrigin { get; private set; } = InstantCastOrigin.Skill;
+
         public delegate bool InstantCastEnableChecker(CombatData combatData);
         private List<InstantCastEnableChecker> _enableConditions { get; }
 
@@ -22,6 +32,7 @@ namespace GW2EIEvtcParser.EIData
         protected long TimeOffset { get; set; } = 0;
 
         protected bool BeforeWeaponSwap { get; set; } = false;
+        protected bool AfterWeaponSwap { get; set; } = false;
 
         protected long ICD { get; private set; } = DefaultICD;
 
@@ -53,6 +64,12 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal InstantCastFinder UsingOrigin(InstantCastOrigin origin)
+        {
+            CastOrigin = origin;
+            return this;
+        }
+
         internal InstantCastFinder UsingEnable(InstantCastEnableChecker checker)
         {
             _enableConditions.Add(checker);
@@ -73,18 +90,26 @@ namespace GW2EIEvtcParser.EIData
         internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
         {
             BeforeWeaponSwap = beforeWeaponSwap;
+            AfterWeaponSwap = false;
+            return this;
+        }
+
+        internal virtual InstantCastFinder UsingAfterWeaponSwap(bool afterWeaponSwap)
+        {
+            AfterWeaponSwap = afterWeaponSwap;
+            BeforeWeaponSwap = false;
             return this;
         }
 
         protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
         {
             long time = evt.Time +  TimeOffset;
-            if (BeforeWeaponSwap)
+            if (BeforeWeaponSwap || AfterWeaponSwap)
             {
                 var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();
                 if (wepSwaps.Any())
                 {
-                    return Math.Min(wepSwaps[0].Time - 1, time);
+                    return BeforeWeaponSwap ? Math.Min(wepSwaps[0].Time - 1, time) : Math.Max(wepSwaps[0].Time + 1, time);
                 }
             }
             return time;

@@ -10,7 +10,6 @@ namespace GW2EIEvtcParser.Extensions
         internal EXTNonDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             HealingDone = -evtcItem.BuffDmg;
-            AgainstDowned = evtcItem.Pad1 == 1;
         }
     }
 }

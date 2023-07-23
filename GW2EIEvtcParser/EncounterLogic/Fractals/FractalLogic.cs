@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced5;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstBuffApplyMechanic(FluxBombEffect, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
+            new PlayerDstBuffApplyMechanic(FluxBombBuff, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
             new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
             new SpawnMechanic((int)ArcDPSEnums.TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
@@ -64,6 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 ArcDPSEnums.TrashID.FractalAvenger,
                 ArcDPSEnums.TrashID.FractalVindicator,
+                ArcDPSEnums.TrashID.TheMossman,
+                ArcDPSEnums.TrashID.InspectorEllenKiel,
+                ArcDPSEnums.TrashID.ChampionRabbit,
+                ArcDPSEnums.TrashID.JadeMawTentacle,
+                ArcDPSEnums.TrashID.AwakenedAbomination,
             };
         }
 
@@ -143,6 +148,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new FacingPieDecoration((effectStart, effectEnd), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.2)"));
                         replay.Decorations.Add(new FacingPieDecoration((effectEnd, effectEnd + 200), new AgentConnector(p), replay.PolledRotations, radius, openingAngle, "rgba(0, 100, 0, 0.4)"));
                     }
+                }
+            }
+        }
+
+        protected static void AddFractalScaleEvent(ulong gw2Build, List<CombatItem> combatData, IReadOnlyList<(ulong build, byte scale)> scales)
+        {
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.FractalScale))
+            {
+                return;
+            }
+            var orderedScales = scales.OrderByDescending(x => x.build).ToList();
+            foreach ((ulong build, byte scale) in orderedScales)
+            {
+                if (gw2Build >= build)
+                {
+                    combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)ArcDPSEnums.StateChange.FractalScale, 0, 0, 0, 0));
+                    break;
                 }
             }
         }

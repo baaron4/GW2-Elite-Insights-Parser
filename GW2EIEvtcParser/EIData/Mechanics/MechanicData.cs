@@ -72,10 +72,7 @@ namespace GW2EIEvtcParser.EIData
         private void ComputeMechanics(ParsedEvtcLog log)
         {
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
-            foreach (Mechanic mech in _mechanicLogs.Keys.Where(x => !x.Keep(log)))
-            {
-                _mechanicLogs.Remove(mech);
-            }
+            _mechanicLogs.Keys.Where(x => !x.Keep(log)).ToList().ForEach(x => _mechanicLogs.Remove(x));
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);

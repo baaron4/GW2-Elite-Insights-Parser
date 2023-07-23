@@ -16,15 +16,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance),
-            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffect),
-            new BuffGainCastFinder(BalancedStanceSill, BalancedStanceEffect),
-            new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect),
+            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
+            new BuffGainCastFinder(BalancedStanceSill, BalancedStanceBuff),
+            new BuffGainCastFinder(EndurePainSkill, EnduringPainBuff),
             new BuffGainCastFinder(SignetOfFurySkill, SignetOfFuryActive),
             new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
             new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
-            new EXTHealingCastFinder(MendingMight, MendingMight),
+            new EXTHealingCastFinder(MendingMight, MendingMight).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -82,23 +82,24 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
             new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
+            new Buff("Flames of War", FlamesOfWar, Source.Warrior, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
-            new Buff("Dolyak Signet", DolyakSignetEffect, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
-            new Buff("Signet of Fury", SignetOfFuryEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
-            new Buff("Signet of Might", SignetOfMightEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
-            new Buff("Signet of Stamina", SignetOfStaminaEffect, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
+            new Buff("Dolyak Signet", DolyakSignetBuff, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
+            new Buff("Signet of Fury", SignetOfFuryBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
+            new Buff("Signet of Might", SignetOfMightBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
+            new Buff("Signet of Stamina", SignetOfStaminaBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
             new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
             // Banners
-            new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Tactics", BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Defense", BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Strength", BannerOfStrengthBuff, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Discipline", BannerOfDisciplineBuff, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Tactics", BannerOfTacticsBuff, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Defense", BannerOfDefenseBuff, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             // Stances
             new Buff("Shield Stance", ShieldStance, Source.Warrior, BuffClassification.Other, BuffImages.ShieldStance),
-            new Buff("Berserker's Stance", BerserkersStanceEffect, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
-            new Buff("Enduring Pain", EnduringPainEffect, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.EndurePain),
-            new Buff("Balanced Stance", BalancedStanceEffect, Source.Warrior, BuffClassification.Other, BuffImages.BalancedStance),
+            new Buff("Berserker's Stance", BerserkersStanceBuff, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
+            new Buff("Enduring Pain", EnduringPainBuff, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.EndurePain),
+            new Buff("Balanced Stance", BalancedStanceBuff, Source.Warrior, BuffClassification.Other, BuffImages.BalancedStance),
             new Buff("Defiant Stance", DefiantStance, Source.Warrior, BuffClassification.Other, BuffImages.DefiantStance),
             new Buff("Rampage", Rampage, Source.Warrior, BuffClassification.Other, BuffImages.Rampage),
             // Traits
@@ -144,10 +145,10 @@ namespace GW2EIEvtcParser.EIData
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
-            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthEffect, playerAgents),
-                defBanners = GetBannerAgents(combatData, BannerOfDefenseEffect, playerAgents),
-                disBanners = GetBannerAgents(combatData, BannerOfDisciplineEffect, playerAgents),
-                tacBanners = GetBannerAgents(combatData, BannerOfTacticsEffect, playerAgents);
+            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthBuff, playerAgents),
+                defBanners = GetBannerAgents(combatData, BannerOfDefenseBuff, playerAgents),
+                disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
+                tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
             //battleBanner = FindBattleStandards(buffData, playerAgents);
             var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
             // if only one warrior, could only be that one

@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // to keep the pre event as we need targets
             if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
             {
-                agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
                 needsRefresh = false;
             }
             if (needsRefresh)
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                if (mcLeod.FirstAware - fightData.LogStart > ParserHelper.MinimumInCombatDuration)
+                if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
                 } 

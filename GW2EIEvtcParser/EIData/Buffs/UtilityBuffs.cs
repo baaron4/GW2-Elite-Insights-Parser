@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> UtilityProcs = new List<Buff>
         {
-            // Effects on revival
+            // Buffs on revival
             new Buff("Ghoul's Grasp", GhoulsGrasp, Source.Item, BuffClassification.Support, BuffImages.GhoulsGrasp),
             new Buff("Feline Fury", FelineFury, Source.Item, BuffClassification.Support, BuffImages.FelineFury),
             new Buff("Pumpkin Prowess", PumpkinProwess, Source.Item, BuffClassification.Support, BuffImages.PumpkinProwess),

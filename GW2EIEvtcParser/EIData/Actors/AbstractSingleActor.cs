@@ -70,6 +70,11 @@ namespace GW2EIEvtcParser.EIData
             return _statusHelper.GetStatus(log);
         }
 
+        public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
+        {
+            return _statusHelper.GetBreakbarStatus(log);
+        }
+
         public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
         {
             return _statusHelper.GetTimeSpentInCombat(log, start, end);
@@ -93,6 +98,27 @@ namespace GW2EIEvtcParser.EIData
         {
             (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
             return dcs.Any(x => x.ContainsPoint(time));
+        }
+
+        public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+        {
+            (IReadOnlyList<Segment> nones, IReadOnlyList<Segment> actives, IReadOnlyList<Segment> immunes, IReadOnlyList<Segment> recoverings) = _statusHelper.GetBreakbarStatus(log);
+            if (nones.Any(x => x.ContainsPoint(time))) {
+                return ArcDPSEnums.BreakbarState.None;
+            }
+            if (actives.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Active;
+            }
+            if (immunes.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Immune;
+            }
+            if (recoverings.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Recover;
+            }
+            return ArcDPSEnums.BreakbarState.None;
         }
 
         //
@@ -472,7 +498,7 @@ namespace GW2EIEvtcParser.EIData
             CastEvents.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ParserHelper.ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
+                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
                 {
                     CastEvents[CastEvents.Count - 1] = wepSwap;
                 }

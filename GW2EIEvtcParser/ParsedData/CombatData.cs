@@ -177,6 +177,18 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         skillData.NotAccurate.Add(icf.SkillID);
                     }
+                    switch(icf.CastOrigin)
+                    {
+                        case InstantCastFinder.InstantCastOrigin.Trait:
+                            skillData.TraitProc.Add(icf.SkillID);
+                            break;
+                        case InstantCastFinder.InstantCastOrigin.Gear:
+                            skillData.GearProc.Add(icf.SkillID);
+                            break;
+                        case InstantCastFinder.InstantCastOrigin.Skill:
+                        default:
+                            break;
+                    }
                     res.AddRange(icf.ComputeInstantCast(this, skillData, agentData));
                 }
             }
@@ -191,8 +203,13 @@ namespace GW2EIEvtcParser.ParsedData
                     case ParserHelper.Spec.Willbender:
                         toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
                         break;
-                    case ParserHelper.Spec.Druid:
-                        toAdd.AddRange(DruidHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
+                    default:
+                        break;
+                }
+                switch(p.BaseSpec)
+                {
+                    case ParserHelper.Spec.Ranger:
+                        toAdd.AddRange(RangerHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
                         break;
                     default:
                         break;
@@ -615,6 +632,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.PointOfViewEvent;
         }
 
+        public FractalScaleEvent GetFractalScaleEvent()
+        {
+            return _metaDataEvents.FractalScaleEvent;
+        }
+
         public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem src)
         {
             if (_statusEvents.SpawnEvents.TryGetValue(src, out List<SpawnEvent> list))
@@ -717,6 +739,11 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyList<ShardEvent> GetShardEvents()
         {
             return _metaDataEvents.ShardEvents;
+        }
+
+        public IReadOnlyList<TickRateEvent> GetTickRateEvents()
+        {
+            return _metaDataEvents.TickRateEvents;
         }
 
         public BuffInfoEvent GetBuffInfoEvent(long buffID)
