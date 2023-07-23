@@ -201,7 +201,8 @@ namespace GW2EIEvtcParser.ParsedData
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
             { DreadVisageSkill, "Dread Visage" },
             { DreadVisageSkillIsland, "Dread Visage (Island)" },
-            { RendingStorm, "Rending Storm (Axe)" },
+            { RendingStormSkill, "Rending Storm (Axe)" },
+            { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()

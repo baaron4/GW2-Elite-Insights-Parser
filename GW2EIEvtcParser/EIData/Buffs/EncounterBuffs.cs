@@ -416,7 +416,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidAffliction),
             new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Kanaxai Something", KanaxaiSomethingBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Gathering Shadows", GatheringShadows, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.CaptainsInspiration),
+            new Buff("Gathering Shadows", GatheringShadowsBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.CaptainsInspiration),
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
             new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffStackType.CappedDuration, 999, BuffClassification.Other, BuffImages.Target),

@@ -3400,7 +3400,7 @@
         public const long FlareSilentSurf = 69189;
         public const long FrighteningSpeedWindup = 69194;
         public const long HarrowshotDeath = 69199;
-        public const long KanxaiBreakbarCast = 69205;
+        public const long GatheringShadowsSkill = 69205;
         public const long Phantasmagoria = 69206;
         public const long RendingStormTargetBuff = 69208;
         public const long DualOrbitWaterAndAir = 69211;
@@ -3430,11 +3430,11 @@
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed = 69356;
         public const long KanaxaiSomethingBuff = 69363;
-        public const long GatheringShadows = 69365;
+        public const long GatheringShadowsBuff = 69365;
         public const long BleedingEdge2 = 69371;
         public const long HarrowshotFear = 69398;
         public const long HarrowshotTorment = 69406;
-        public const long RendingStorm = 69410;
+        public const long RendingStormSkill = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
         public const long DreadVisageSkillIsland = 69418;
         public const long WorldCleaver = 69419;
