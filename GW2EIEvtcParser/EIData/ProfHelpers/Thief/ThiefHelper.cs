@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EIData
             List<IconDecoration> entranceDecorations = entrances.Select(effect =>
             {
                 int start = (int)effect.Time;
-                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
+                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedBuff).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 8000;
                 var decoration = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
                 replay.Decorations.Add(decoration);
@@ -136,7 +136,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (EffectEvent exit in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit))
             {
                 int start = (int)exit.Time;
-                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedEffect).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
+                var remove = log.CombatData.GetBuffData(ShadowPortalOpenedBuff).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
                 int end = (int?)remove?.Time ?? start + 8000;
                 var decoration = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, player, (start, end), new PositionConnector(exit.Position));
                 replay.Decorations.Add(decoration);
