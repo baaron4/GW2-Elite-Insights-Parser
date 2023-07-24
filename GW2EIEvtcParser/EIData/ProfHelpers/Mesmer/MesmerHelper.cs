@@ -357,13 +357,10 @@ namespace GW2EIEvtcParser.EIData
         {
             const string lineColor = "rgba(147, 112, 219, 0.5)";
 
-            // TODO: tracking ids seem broken in arc? using buff remove with hardcoded fallback for now
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive))
             {
-                int start = (int)effect.Time;
-                var remove = log.CombatData.GetBuffData(PortalWeaving).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
-                int end = (int?)remove?.Time ?? start + 60000;
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, 128, 0.5f, player, (start, end), new PositionConnector(effect.Position)));
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, 128, 0.5f, player, lifespan, new PositionConnector(effect.Position)));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive))
@@ -372,10 +369,8 @@ namespace GW2EIEvtcParser.EIData
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
-                    int start = (int)effect.Time;
-                    var remove = log.CombatData.GetBuffData(PortalUses).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
-                    int end = (int?)remove?.Time ?? start + 10000;
-                    var decoration = new IconDecoration(ParserIcons.PortalMesmerExeunt, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
+                    var decoration = new IconDecoration(ParserIcons.PortalMesmerExeunt, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {

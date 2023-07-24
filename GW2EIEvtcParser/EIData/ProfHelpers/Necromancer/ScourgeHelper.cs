@@ -57,10 +57,8 @@ namespace GW2EIEvtcParser.EIData
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
-                    int start = (int)effect.Time;
-                    var remove = log.CombatData.GetBuffData(PathUses).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
-                    int end = (int?)remove?.Time ?? start + 8000;
-                    var decoration = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
+                    var decoration = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {

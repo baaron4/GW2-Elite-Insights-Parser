@@ -264,10 +264,8 @@ namespace GW2EIEvtcParser.EIData
 
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive))
             {
-                int start = (int)effect.Time;
-                var remove = log.CombatData.GetBuffData(PortalWeavingWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
-                int end = (int?)remove?.Time ?? start + 60000;
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, player, (start, end), new PositionConnector(effect.Position)));
+                (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, player, lifespan, new PositionConnector(effect.Position)));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
@@ -276,10 +274,8 @@ namespace GW2EIEvtcParser.EIData
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
-                    int start = (int)effect.Time;
-                    var remove = log.CombatData.GetBuffData(PortalUsesWhiteMantleWatchwork).OfType<BuffRemoveAllEvent>().FirstOrDefault(x => x.Time >= start);
-                    int end = (int?)remove?.Time ?? start + 10000;
-                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, player, (start, end), new PositionConnector(effect.Position));
+                    (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
+                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {
@@ -383,6 +379,41 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Retrieves the end time of an effect.
+        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first and finally to default duration.
+        /// </summary>
+        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
+            {
+                return end;
+            }
+            if (associatedBuff != null)
+            {
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                    .OfType<BuffRemoveAllEvent>()
+                    .FirstOrDefault(x => x.To == agent && x.Time >= effect.Time);
+                if (remove != null)
+                {
+                    return remove.Time;
+                }
+            }
+            return effect.Time + defaultDuration;
+        }
+
+
+        /// <summary>
+        /// Computes the lifespan of an effect.
+        /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
+        /// </summary>
+        internal static (int, int) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            long start = effect.Time;
+            long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
+            return ((int) start, (int) end);
         }
     }
 }
