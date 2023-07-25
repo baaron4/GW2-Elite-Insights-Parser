@@ -414,7 +414,8 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// 
+        /// Reads the <see cref="CombatItem"/> binary.<br></br>
+        /// Old version when header[12] == 0.
         /// </summary>
         /// <param name="reader">Reads binary values from the evtc.</param>
         /// <returns><see cref="CombatItem"/></returns>
@@ -498,7 +499,8 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// 
+        /// Reads the <see cref="CombatItem"/> binary.<br></br>
+        /// Current version when header[12] == 1.
         /// </summary>
         /// <param name="reader">Reads binary values from the evtc.</param>
         /// <returns><see cref="CombatItem"/></returns>
@@ -674,10 +676,10 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// 
+        /// Sets an Agent InstID if not already set and updates its aware times.
         /// </summary>
-        /// <param name="ag"></param>
-        /// <param name="logTime"></param>
+        /// <param name="ag">Agent to update.</param>
+        /// <param name="logTime">Time to set as aware time.</param>
         /// <param name="instid"></param>
         /// <param name="checkInstid"></param>
         /// <returns></returns>
@@ -906,7 +908,7 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// 
+        /// Applies the EncounterStart offset to all time based related information (CombatEvent Time, First and Last Awares, etc.).
         /// </summary>
         private void OffsetEvtcData()
         {
