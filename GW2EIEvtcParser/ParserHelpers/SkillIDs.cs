@@ -2206,8 +2206,8 @@
         public const long MindWrackAmmo = 49068;
         public const long SoulStoneVenomStrike = 49077;
         public const long SoulStoneVenomBuff = 49083;
-        public const long IllusionaryDefense = 49090;
-        public const long CompoundingChemicals = 49099;
+        public const long CompoundingChemicals = 49090;
+        public const long IllusionaryDefense = 49099;
         public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
