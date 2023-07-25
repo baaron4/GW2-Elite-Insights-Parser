@@ -227,6 +227,7 @@ namespace GW2EIEvtcParser.ParsedData
             { WaveOfHealing, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
             { RuneOfTormenting, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
             { RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png" },
+            { SuperiorRuneOfTheDolyak, "https://wiki.guildwars2.com/images/2/28/Superior_Rune_of_the_Dolyak.png" },
             { FrozenBurstRuneOfIce, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png" },
             { HuntersCallRuneOfMadKing, "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png" },
             { ArtilleryBarrageRuneofCitadel, "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png" },
@@ -240,6 +241,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ThrowNetUnderwaterNet, "https://wiki.guildwars2.com/images/3/3d/Net_Shot.png" },
             { Chilled, BuffImages.Chilled },
             { WhirlingAssault, "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png" },
+            { LeechingBolt1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
+            { LeechingBolt2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png" },
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png" },
@@ -347,6 +350,7 @@ namespace GW2EIEvtcParser.ParsedData
             { WhirlingDefensesIllusionaryWarden, "https://wiki.guildwars2.com/images/e/e8/Whirling_Defense.png" },
             { CutterBurst, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { CutterBurstMindblade, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
+            { RestorativeMantras, "https://wiki.guildwars2.com/images/6/61/Restorative_Mantras.png" },
             // Necromancer
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             { ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
@@ -366,6 +370,8 @@ namespace GW2EIEvtcParser.ParsedData
             { UnstableExplosion, "https://wiki.guildwars2.com/images/c/c9/Mark_of_Horror.png" },
             { SadisticSearing, BuffImages.SadisticSearing },
             { SadisticSearingActivation, BuffImages.SadisticSearing },
+            { SoulEater, "https://wiki.guildwars2.com/images/6/6c/Soul_Eater.png" },
+            { LesserSignetOfVampirism, BuffImages.SignetOfVampirism },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
@@ -415,6 +421,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RootSlap, "https://wiki.guildwars2.com/images/7/7d/Root_Slap.png" },
             { Peck, "https://wiki.guildwars2.com/images/8/83/Peck.png" },
             { FrenziedAttack, "https://wiki.guildwars2.com/images/8/81/Frenzied_Attack.png" },
+            { SignetOfRenewalHeal, BuffImages.SignetOfRenewal },
             // Revenant
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
             { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
