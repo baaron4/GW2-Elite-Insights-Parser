@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Discord;
 using GW2EIDiscord;
 using GW2EIEvtcParser;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Setting;
 
@@ -531,7 +532,7 @@ namespace GW2EIParser
             {
                 AddTraceMessage("UI: Adding files from " + path);
                 var toAdd = new List<string>();
-                foreach (string format in ParserHelper.GetSupportedFormats())
+                foreach (string format in SupportedFileFormats.SupportedFormats)
                 {
                     try
                     {
@@ -584,7 +585,7 @@ namespace GW2EIParser
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
             AddTraceMessage("File Watcher: created " + e.FullPath);
-            if (ParserHelper.IsSupportedFormat(e.FullPath))
+            if (SupportedFileFormats.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -593,10 +594,10 @@ namespace GW2EIParser
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
             AddTraceMessage("File Watcher: renamed " + e.OldFullPath + " to " + e.FullPath);
-            if (ParserHelper.IsTemporaryCompressedFormat(e.OldFullPath) && ParserHelper.IsCompressedFormat(e.FullPath))
+            if (SupportedFileFormats.IsTemporaryCompressedFormat(e.OldFullPath) && SupportedFileFormats.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-            } else if (ParserHelper.IsTemporaryFormat(e.OldFullPath) && ParserHelper.IsSupportedFormat(e.FullPath))
+            } else if (SupportedFileFormats.IsTemporaryFormat(e.OldFullPath) && SupportedFileFormats.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
