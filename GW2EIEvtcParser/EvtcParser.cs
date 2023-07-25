@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
@@ -14,7 +15,7 @@ using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static GW2EIEvtcParser.ParserHelper;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIEvtcParser
 {
     public class EvtcParser
@@ -49,16 +50,18 @@ namespace GW2EIEvtcParser
             _enabledExtensions = new Dictionary<uint, AbstractExtensionHandler>();
         }
 
-        //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
+        #region Main Parse Method
+
         /// <summary>
-        /// Parses the given log. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
-        /// <see cref="ParsingFailureReason"/>
+        /// Parses the given log. <br></br>
+        /// On parsing failure, <see cref="ParsingFailureReason"/> will be filled with the reason of the failure and the method will return <see langword="null"/>.
         /// </summary>
-        /// <param name="operation">Operation object bound to the UI</param>
-        /// <param name="evtc">The path to the log to parse</param>
-        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
-        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading </param>
-        /// <returns>the ParsedEvtcLog</returns>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <param name="evtc">The path to the log to parse.</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
+        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
+        /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
+        /// <exception cref="EvtcFileException"></exception>
         public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
@@ -68,14 +71,14 @@ namespace GW2EIEvtcParser
                 {
                     throw new EvtcFileException("File " + evtc.FullName + " does not exist");
                 }
-                if (!IsSupportedFormat(evtc.Name))
+                if (!SupportedFileFormats.IsSupportedFormat(evtc.Name))
                 {
                     throw new EvtcFileException("Not EVTC");
                 }
                 ParsedEvtcLog evtcLog;
                 using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    if (IsCompressedFormat(evtc.Name))
+                    if (SupportedFileFormats.IsCompressedFormat(evtc.Name))
                     {
                         using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                         {
@@ -109,14 +112,14 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// Parses from the given stream. On parsing failure, parsingFailureReason will be filled with the reason of the failure and the method will return null
-        /// <see cref="ParsingFailureReason"/>
+        /// Parses the given log. <br></br>
+        /// On parsing failure, <see cref="ParsingFailureReason"/> will be filled with the reason of the failure and the method will return <see langword="null"/>.
         /// </summary>
-        /// <param name="operation">Operation object bound to the UI</param>
-        /// <param name="evtcStream">The stream of the log</param>
-        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable</param>
-        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading </param>
-        /// <returns>the ParsedEvtcLog</returns>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <param name="evtcStream">The stream of the log.</param>
+        /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
+        /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
+        /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
         public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
@@ -224,27 +227,16 @@ namespace GW2EIEvtcParser
             }
         }
 
-        /*private bool TryRead(Stream stream, byte[] data)
-        {
-            int offset = 0;
-            int count = data.Length;
-            while (count > 0)
-            {
-                int bytesRead = stream.Read(data, offset, count);
-                if (bytesRead == 0)
-                {
-                    return false;
-                }
-                offset += bytesRead;
-                count -= bytesRead;
-            }
-            return true;
-        }*/
+        #endregion Main Parse Method
 
-        //sub Parse methods
+        #region Sub Parse Methods
+
         /// <summary>
-        /// Parses fight related data
+        /// Parses fight related data.
         /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <exception cref="EvtcFileException"></exception>
         private void ParseFightData(BinaryReader reader, ParserController operation)
         {
             // 12 bytes: arc build version
@@ -265,72 +257,57 @@ namespace GW2EIEvtcParser
             // 1 byte: skip
             _ = reader.ReadByte();
         }
+
+        /// <summary>
+        /// Get the Agent Profession as <see cref="string"/>.
+        /// </summary>
+        /// <param name="prof"></param>
+        /// <param name="elite"></param>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <returns></returns>
+        /// <exception cref="EvtcAgentException"></exception>
         private string GetAgentProfString(uint prof, uint elite, ParserController operation)
         {
-            // non player
+            // Non player agents - Gadgets = GDG
             if (elite == 0xFFFFFFFF)
             {
-                if ((prof & 0xffff0000) == 0xffff0000)
-                {
-                    return "GDG";
-                }
-                else
-                {
-                    return "NPC";
-                }
+                return (prof & 0xffff0000) == 0xffff0000 ? "GDG" : "NPC";
             }
-            // base profession
+            // Old way - Base Profession
             else if (elite == 0)
             {
                 switch (prof)
                 {
-                    case 1:
-                        return "Guardian";
-                    case 2:
-                        return "Warrior";
-                    case 3:
-                        return "Engineer";
-                    case 4:
-                        return "Ranger";
-                    case 5:
-                        return "Thief";
-                    case 6:
-                        return "Elementalist";
-                    case 7:
-                        return "Mesmer";
-                    case 8:
-                        return "Necromancer";
-                    case 9:
-                        return "Revenant";
+                    case 1: return "Guardian";
+                    case 2: return "Warrior";
+                    case 3: return "Engineer";
+                    case 4: return "Ranger";
+                    case 5: return "Thief";
+                    case 6: return "Elementalist";
+                    case 7: return "Mesmer";
+                    case 8: return "Necromancer";
+                    case 9: return "Revenant";
+                    default: return "Unknown";
                 }
             }
-            // old elite
+            // Old way - Elite Specialization (HoT)
             else if (elite == 1)
             {
                 switch (prof)
                 {
-                    case 1:
-                        return "Dragonhunter";
-                    case 2:
-                        return "Berserker";
-                    case 3:
-                        return "Scrapper";
-                    case 4:
-                        return "Druid";
-                    case 5:
-                        return "Daredevil";
-                    case 6:
-                        return "Tempest";
-                    case 7:
-                        return "Chronomancer";
-                    case 8:
-                        return "Reaper";
-                    case 9:
-                        return "Herald";
+                    case 1: return "Dragonhunter";
+                    case 2: return "Berserker";
+                    case 3: return "Scrapper";
+                    case 4: return "Druid";
+                    case 5: return "Daredevil";
+                    case 6: return "Tempest";
+                    case 7: return "Chronomancer";
+                    case 8: return "Reaper";
+                    case 9: return "Herald";
+                    default: return "Unknown";
                 }
-
             }
-            // new way
+            // Current way
             else
             {
                 GW2APISpec spec = _apiController.GetAPISpec((int)elite);
@@ -339,23 +316,19 @@ namespace GW2EIEvtcParser
                     operation.UpdateProgressWithCancellationCheck("Missing or outdated GW2 API Cache or unknown player spec");
                     return "Unknown";
                 }
-                if (spec.Elite)
-                {
-                    return spec.Name;
-                }
-                else
-                {
-                    return spec.Profession;
-                }
+                return spec.Elite ? spec.Name : spec.Profession;
             }
             throw new EvtcAgentException("Unexpected profession pattern in evtc");
         }
 
         /// <summary>
-        /// Parses agent related data
+        /// Parses agent related data.
         /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="operation">Operation object bound to the UI.</param>
         private void ParseAgentData(BinaryReader reader, ParserController operation)
-        {        // 4 bytes: player count
+        {
+            // 4 bytes: player count
             uint agentCount = reader.ReadUInt32();
 
             operation.UpdateProgressWithCancellationCheck("Agent Count " + agentCount);
@@ -386,7 +359,7 @@ namespace GW2EIEvtcParser
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
-                ParserHelper.Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation));
+                Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation));
                 AgentItem.AgentType type;
                 ushort ID = 0;
                 switch (agentProf)
@@ -419,9 +392,10 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// Parses skill related data
         /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="operation">Operation object bound to the UI.</param>
         private void ParseSkillData(BinaryReader reader, ParserController operation)
         {
-
             _skillData = new SkillData(_apiController, _evtcVersion);
             // 4 bytes: player count
             uint skillCount = reader.ReadUInt32();
@@ -439,6 +413,11 @@ namespace GW2EIEvtcParser
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <returns><see cref="CombatItem"/></returns>
         private static CombatItem ReadCombatItem(BinaryReader reader)
         {
             // 8 bytes: time
@@ -518,6 +497,11 @@ namespace GW2EIEvtcParser
                 isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, 0);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <returns><see cref="CombatItem"/></returns>
         private static CombatItem ReadCombatItemRev1(BinaryReader reader)
         {
             // 8 bytes: time
@@ -597,8 +581,13 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// Parses combat related data
+        /// Parses combat related data.
         /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <exception cref="EvtcCombatEventException"></exception>
+        /// <exception cref="TooShortException"></exception>
+        /// <exception cref="TooLongException"></exception>
         private void ParseCombatList(BinaryReader reader, ParserController operation)
         {
             // 64 bytes: each combat
@@ -644,10 +633,11 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// Returns true if the combat item contains valid data and should be used, false otherwise
+        /// Checks if the <see cref="CombatItem"/> contains valid data and should be used.
         /// </summary>
-        /// <param name="combatItem"></param>
-        /// <returns>true if the combat item is valid</returns>
+        /// <param name="combatItem"><see cref="CombatItem"/> data to validate.</param>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
         private bool IsValid(CombatItem combatItem, ParserController operation)
         {
             if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
@@ -682,6 +672,15 @@ namespace GW2EIEvtcParser
             }
             return IsSupportedStateChange(combatItem.IsStateChange);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ag"></param>
+        /// <param name="logTime"></param>
+        /// <param name="instid"></param>
+        /// <param name="checkInstid"></param>
+        /// <returns></returns>
         private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool checkInstid)
         {       
             if (instid != 0)
@@ -707,6 +706,12 @@ namespace GW2EIEvtcParser
             return true;
         }
 
+        /// <summary>
+        /// Find the master of a minion.
+        /// </summary>
+        /// <param name="logTime">Log time.</param>
+        /// <param name="masterInstid">Id of the master.</param>
+        /// <param name="minionAgent"></param>
         private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
         {
             AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
@@ -720,6 +725,10 @@ namespace GW2EIEvtcParser
             }
         }
 
+        /// <summary>
+        /// Complete the players agent data.
+        /// </summary>
+        /// <param name="operation">Operation object bound to the UI.</param>
         private void CompletePlayers(ParserController operation)
         {
             //Fix Disconnected players
@@ -769,6 +778,12 @@ namespace GW2EIEvtcParser
             }
         }
 
+        /// <summary>
+        /// Complete the agents data.
+        /// </summary>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <exception cref="InvalidDataException"></exception>
+        /// <exception cref="EvtcAgentException"></exception>
         private void CompleteAgents(ParserController operation)
         {
             var allAgentValues = new HashSet<ulong> ( _combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent) );
@@ -890,6 +905,9 @@ namespace GW2EIEvtcParser
             CompletePlayers(operation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void OffsetEvtcData()
         {
             long offset = _fightData.Logic.GetFightOffset(_evtcVersion, _fightData, _agentData, _combatItems);
@@ -910,8 +928,11 @@ namespace GW2EIEvtcParser
         }
 
         /// <summary>
-        /// Pre process evtc data for EI
+        /// Pre process evtc data for EI.
         /// </summary>
+        /// <param name="operation">Operation object bound to the UI.</param>
+        /// <exception cref="EvtcAgentException"></exception>
+        /// <exception cref="MissingKeyActorsException"></exception>
         private void PreProcessEvtcData(ParserController operation)
         {
             operation.UpdateProgressWithCancellationCheck("Offset time");
@@ -970,7 +991,13 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
         }
 
-        //
+        /// <summary>
+        /// Read bytes from the <paramref name="reader"/> and convert them to <see cref="string"/>.
+        /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="length">Length of bytes to read.</param>
+        /// <param name="nullTerminated"></param>
+        /// <returns><see cref="string"/> in <see cref="Encoding.UTF8"/>.</returns>
         private static string GetString(BinaryReader reader, int length, bool nullTerminated = true)
         {
             byte[] bytes = reader.ReadBytes(length);
@@ -985,12 +1012,20 @@ namespace GW2EIEvtcParser
                     }
                 }
             }
-            return System.Text.Encoding.UTF8.GetString(bytes, 0, length);
+            return Encoding.UTF8.GetString(bytes, 0, length);
         }
 
+        /// <summary>
+        /// Creates a <see cref="BinaryReader"/> of the <see cref="Stream"/> source.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns>Initialized <see cref="BinaryReader"/> in <see cref="UTF8Encoding"/>.</returns>
         private static BinaryReader CreateReader(Stream stream)
         {
-            return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
+            return new BinaryReader(stream, new UTF8Encoding(), leaveOpen: true);
         }
+
+        #endregion Sub Parse Methods
+
     }
 }
