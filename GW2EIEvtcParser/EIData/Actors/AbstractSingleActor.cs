@@ -55,8 +55,14 @@ namespace GW2EIEvtcParser.EIData
         {
             if (Health == -2)
             {
+                Health = -1;
                 IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
-                Health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : -1;
+                if (maxHpUpdates.Any())
+                {
+                    AbstractHealthDamageEvent firstDamage = combatData.GetDamageTakenData(AgentItem).FirstOrDefault(x => x.HealthDamage > 0);
+                    MaxHealthUpdateEvent hpEvent = maxHpUpdates.LastOrDefault(x => x.Time < (firstDamage != null ? firstDamage.Time + ServerDelayConstant : (FirstAware + LastAware) / 2));
+                    Health = hpEvent != null ? hpEvent.MaxHealth : maxHpUpdates.Max(x => x.MaxHealth);
+                }
             }
             return Health;
         }
