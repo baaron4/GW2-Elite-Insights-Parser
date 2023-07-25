@@ -769,57 +769,6 @@ namespace GW2EIEvtcParser
             return res;
         }
 
-
-        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
-        {
-            ".zevtc",
-            ".evtc.zip",
-        };
-
-        private static readonly HashSet<string> _tmpCompressedFiles = new HashSet<string>()
-        {
-            ".tmp.zip"
-        };
-
-        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
-        {
-            ""
-        };
-
-        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
-        {
-            ".evtc"
-        };
-
-        public static bool IsCompressedFormat(string fileName)
-        {
-            foreach (string format in _compressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static IReadOnlyList<string> GetSupportedFormats()
-        {
-            return new List<string>(_supportedFiles);
-        }
-
-        public static bool IsSupportedFormat(string fileName)
-        {
-            foreach (string format in _supportedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
         {
             int i = 0;
@@ -834,30 +783,5 @@ namespace GW2EIEvtcParser
             }
             return -1;
         }
-
-        public static bool IsTemporaryCompressedFormat(string fileName)
-        {
-            foreach (string format in _tmpCompressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool IsTemporaryFormat(string fileName)
-        {
-            foreach (string format in _tmpFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     }
 }
