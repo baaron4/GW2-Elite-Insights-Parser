@@ -3053,7 +3053,7 @@
         public const long DragonsEndContributor3 = 64250;
         public const long TargetedExpulsion = 64277;
         public const long JadeLob1 = 64282;
-        public const long SharedDestructionLi = 64300;
+        public const long POV_SharedDestructionLi = 64300;
         public const long BrandedArtillery = 64317;
         public const long BowlOfJadeSeaBounty = 64357;
         public const long TailSlap = 64360;
@@ -3314,7 +3314,7 @@
         public const long Debilitated = 67972;
         public const long TargetedExpulsionCM = 67982;
         public const long VolatileExpulsion4 = 67999;
-        public const long SharedDestructionLiCM = 68004;
+        public const long POV_SharedDestructionLiCM = 68004;
         public const long ElectricRain = 68006;
         public const long FallOfTheAxe2 = 68015;
         public const long StormOfSwords6 = 68016;
