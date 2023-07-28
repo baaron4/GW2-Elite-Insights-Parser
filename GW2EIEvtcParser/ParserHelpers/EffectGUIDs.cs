@@ -194,6 +194,11 @@ namespace GW2EIEvtcParser
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
+        // Silent Surf Fractal
+        public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
+        public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
+        public const string AxeGroundAoE2 = "CE91D2D4CD6C4141B3977FA70FFE05BB";
+        public const string HarrowshotAoE = "3AE17719B3D7374BAC4899DA0A3E7DF9";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
