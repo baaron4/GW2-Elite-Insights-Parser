@@ -302,19 +302,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // Axe AoE attached to players
-            IEnumerable<Segment> buffs69195 = player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            IEnumerable<Segment> buffs69208 = player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             var axes = new List<Segment>();
-            axes.AddRange(buffs69208);
-            axes.AddRange(buffs69195);
+            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
             foreach (Segment segment in axes)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
                 replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
-            // Numbers spread AoEs
+            // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
@@ -326,7 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
-            // Red AoE during Frightening Speed attack
+            // Frightening Speed - Red AoE
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out IReadOnlyList<EffectEvent> frighteningSpeedRedAoEs))
             {
                 foreach (EffectEvent aoe in frighteningSpeedRedAoEs)
@@ -339,36 +337,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // Axe AoE
+            // Rending Storm - Red Axe AoE
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out IReadOnlyList<EffectEvent> axeAoEs))
             {
+                // Get World Cleaver casts
+                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+                IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                
+                // Get Axe AoE Buffs
+                var axes = new List<AbstractBuffEvent>();
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1));
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2));
+                var orderedAxes = axes.OfType<BuffRemoveAllEvent>().OrderBy(x => x.Time).ToList();
+
                 foreach (EffectEvent aoe in axeAoEs)
                 {
-                    // Get World Cleaver casts and find the first cast time event present after the AoE effect time
-                    AgentItem agentKanaxai = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM);
-                    var kanaxai = new NPC(agentKanaxai);
-                    IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    // Find the first cast time event present after the AoE effect time
                     AbstractCastEvent cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
                     long worldCleaverTime = cast != null ? cast.Time : 0;
-
-                    // Get Axe AoE Buffs
-                    IReadOnlyList<AbstractBuffEvent> buffs69195 = log.CombatData.GetBuffData(RendingStormAxeTargetBuff1);
-                    IReadOnlyList<AbstractBuffEvent> buffs69208 = log.CombatData.GetBuffData(RendingStormAxeTargetBuff2);
-                    var axes = new List<AbstractBuffEvent>();
-                    axes.AddRange(buffs69208);
-                    axes.AddRange(buffs69195);
-                    var orderedAxes = axes.OrderBy(x => x.Time).ToList();
 
                     // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
                     // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
                     if (worldCleaverTime != 0)
                     {
-                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime && buff is BuffRemoveAllEvent);
+                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
                         AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
                     }
                     else
                     {
-                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time && buff is BuffRemoveAllEvent);
+                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time);
                         AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
                     }
                 }
@@ -409,7 +406,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             int start = (int)aoe.Time;
             int effectEnd = start + duration;
-
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
             EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
         }
