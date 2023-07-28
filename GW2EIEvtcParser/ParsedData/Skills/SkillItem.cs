@@ -79,6 +79,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MedBlasterHeal, "Med Blaster (Heal)" },
             { SoothingDetonation, "Soothing Detonation" },
             { HealingTurretHeal, "Healing Turret (Heal)" },
+            { BladeBurstOrParticleAccelerator, "Blade Burst or Particle Accelerator" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -298,6 +299,7 @@ namespace GW2EIEvtcParser.ParsedData
             { TwinStrikeJadeMech, "https://wiki.guildwars2.com/images/3/31/Twin_Strike_%28Mech%29.png" },
             { RecallMech_MechSkill, "https://wiki.guildwars2.com/images/5/56/Recall_Mech.png" },
             { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
+            { BladeBurstOrParticleAccelerator, "https://i.imgur.com/09MY813.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
