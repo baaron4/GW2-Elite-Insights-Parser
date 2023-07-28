@@ -335,6 +335,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)aoe.Time;
                     int effectEnd = start + duration;
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
                 }
             }
 
@@ -410,6 +411,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int effectEnd = start + duration;
 
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
+            EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
         }
     }
 }
