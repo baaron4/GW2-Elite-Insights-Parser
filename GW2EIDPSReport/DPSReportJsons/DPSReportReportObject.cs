@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class DPSReportObject
+    public class DPSReportReportObject
     {
         [JsonProperty]
         public bool Anonymous { get; internal set; }
