@@ -148,7 +148,7 @@ namespace GW2EIDPSReport
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traces.Add(requestName + " tentative");
+                traces.Add("DPSReport: " + requestName + " tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -176,13 +176,13 @@ namespace GW2EIDPSReport
                             ContractResolver = DefaultJsonContractResolver,
                             StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
-                        traces.Add(requestName + " tentative successful");
+                        traces.Add("DPSReport: " + requestName + " tentative successful");
                         return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    traces.Add(requestName + " tentative failed: " + e.Message);
+                    traces.Add("DPSReport: " + requestName + " tentative failed: " + e.Message);
                 }
                 finally
                 {
@@ -199,7 +199,7 @@ namespace GW2EIDPSReport
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traces.Add("Upload tentative");
+                traces.Add("DPSReport: Upload tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -238,13 +238,13 @@ namespace GW2EIDPSReport
                         {
                             throw new InvalidOperationException(item.Error);
                         }
-                        traces.Add("Upload tentative successful");
+                        traces.Add("DPSReport: Upload tentative successful");
                         return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    traces.Add("Upload tentative failed: " + e.Message);
+                    traces.Add("DPSReport: Upload tentative failed: " + e.Message);
                 }
                 finally
                 {
