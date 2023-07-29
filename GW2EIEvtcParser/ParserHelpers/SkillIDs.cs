@@ -3416,9 +3416,11 @@
         public const long DualOrbitFireAndWater = 69184;
         public const long FlareSilentSurf = 69189;
         public const long FrighteningSpeedWindup = 69194;
+        public const long RendingStormAxeTargetBuff1 = 69195;
         public const long HarrowshotDeath = 69199;
         public const long KanxaiBreakbarCast = 69205;
         public const long Phantasmagoria = 69206;
+        public const long RendingStormAxeTargetBuff2 = 69208;
         public const long DualOrbitWaterAndAir = 69211;
         public const long BleedingEdge = 69214;
         public const long AchievementEligibilityTheFearlessFew = 69222;
@@ -3426,6 +3428,7 @@
         public const long DeterminedKanaxai = 69236;
         public const long DualOrbitAirAndEarth = 69246;
         public const long DissectingDance = 69251;
+        public const long POV_KanaxaiAxeAoeBuff = 69261;
         public const long DreadDefiance = 69263;
         public const long HeatTheSoulBuff = 69267;
         public const long DeterminedToDestroy = 69275;
@@ -3440,13 +3443,15 @@
         public const long DualOrbitFireAndAir = 69341;
         public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
-        public const long KanaxaiFallDownBuff = 69350; // applied when falling off the platform?
+        public const long KanaxaiSpreadOrangeAoEBuff = 69346;
+        public const long SomethingKanaxaiBuff = 69350;
         public const long HarrowshotExposure = 69353;
         public const long ScouringBlade = 69354;
         public const long FrighteningSpeed = 69356;
         public const long KanaxaiSomethingBuff = 69363;
         public const long GatheringShadows = 69365;
         public const long BleedingEdge2 = 69371;
+        public const long POV_KanaxaiOffPlatformDeathBuff = 69391;
         public const long HarrowshotFear = 69398;
         public const long HarrowshotTorment = 69406;
         public const long RendingStorm = 69410;

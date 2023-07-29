@@ -65,7 +65,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 long diff = dead.Time - remove.Time;
                                 return diff > -ServerDelayConstant && diff <= 1000;
                             });
-                    })
+                    }),
+                new PlayerDstBuffApplyMechanic(new long [] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targetted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
             });
             Extension = "kanaxai";
             Icon = EncounterIconKanaxai;
@@ -111,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var aspectCounts = new Dictionary<int, int>();
             foreach (AbstractSingleActor actor in Targets)
             {
-                switch(actor.ID)
+                switch (actor.ID)
                 {
                     case (int)ArcDPSEnums.TrashID.AspectOfTorment:
                     case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
@@ -122,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             actor.OverrideName(actor.Character + " " + count);
                             aspectCounts[actor.ID] = count + 1;
-                        } 
+                        }
                         else
                         {
                             actor.OverrideName(actor.Character + " 1");
@@ -167,14 +168,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             isRepeatedWorldCleaverPhase.Add(false);
                             curPhase.Name = baseName + (++worldCleaverCount);
-                        } 
+                        }
                         else
                         {
                             isRepeatedWorldCleaverPhase.Add(true);
                             curPhase.Name = baseName + (worldCleaverCount) + " Repeated " + repeatedCount;
                         }
                         repeatedCount++;
-                    } 
+                    }
                     else if (kanaxai.GetCurrentHealthPercent(log, midPhase) > 25)
                     {
                         if (worldCleaverCount == 1)
@@ -192,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             curPhase.Name = baseName + (worldCleaverCount) + " Repeated " + repeatedCount;
                         }
                         repeatedCount++;
-                    } 
+                    }
                     else
                     {
                         // No hp update events, buggy log
@@ -215,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     curPhase.AddTarget(kanaxai);
-                } 
+                }
                 else
                 {
                     isRepeatedWorldCleaverPhase.Add(false);
@@ -234,13 +235,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (isRepeatedWorldCleaverPhase[i + 1])
                         {
                             curPhase.Name = baseName + (phaseCount) + " Repeated " + (++repeatedCount);
-                        } 
+                        }
                         else
                         {
                             curPhase.Name = baseName + (++phaseCount);
                             repeatedCount = 0;
                         }
-                    } 
+                    }
                     else
                     {
                         curPhase.Name = baseName + (++phaseCount);
@@ -266,9 +267,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 fightData.SetSuccess(true, invul762Gain.Time);
             }
         }
-        
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Orange Tether from Aspect to player
             IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
             IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
@@ -286,6 +288,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
+            // Blue tether from Aspect to player, appears when the player gains phantasmagoria
+            // Custom decoration not visible in game
             IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
             foreach (BuffApplyEvent apply in phantasmagoria.OfType<BuffApplyEvent>())
@@ -297,6 +301,113 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new LineDecoration(0, (start, (int)remove.Time), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
                 }
             }
+
+            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
+            var axes = new List<Segment>();
+            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            foreach (Segment segment in axes)
+            {
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+            }
+
+            // Frightening Speed - Numbers spread AoEs
+            IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment spreadSegment in spreads)
+            {
+                replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Frightening Speed - Red AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out IReadOnlyList<EffectEvent> frighteningSpeedRedAoEs))
+            {
+                foreach (EffectEvent aoe in frighteningSpeedRedAoEs)
+                {
+                    int duration = 1500;
+                    int start = (int)aoe.Time;
+                    int effectEnd = start + duration;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+                }
+            }
+
+            // Rending Storm - Red Axe AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out IReadOnlyList<EffectEvent> axeAoEs))
+            {
+                // Get World Cleaver casts
+                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+                IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                
+                // Get Axe AoE Buffs
+                var axes = new List<AbstractBuffEvent>();
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1));
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2));
+                var orderedAxes = axes.OfType<BuffRemoveAllEvent>().OrderBy(x => x.Time).ToList();
+
+                foreach (EffectEvent aoe in axeAoEs)
+                {
+                    // Find the first cast time event present after the AoE effect time
+                    AbstractCastEvent cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
+                    long worldCleaverTime = cast != null ? cast.Time : 0;
+
+                    // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
+                    // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
+                    if (worldCleaverTime != 0)
+                    {
+                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
+                    }
+                    else
+                    {
+                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
+                    }
+                }
+            }
+
+            // Harrowshot - Boonstrip AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarrowshotAoE, out IReadOnlyList<EffectEvent> harrowshots))
+            {
+                foreach (EffectEvent harrowshot in harrowshots)
+                {
+                    int duration = 3000;
+                    int start = (int)harrowshot.Time;
+                    int end = (int)harrowshot.Time + duration;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the Axe AoE decoration.<br></br>
+        /// If the next orange AoE <see cref="BuffRemoveAllEvent"/> on players is after <see cref="WorldCleaver"/> cast time or not present,<br></br>
+        /// utilise the <see cref="WorldCleaver"/> cast time or <see cref="FightData.LogEnd"/>.
+        /// </summary>
+        /// <param name="aoe">Effect of the AoE.</param>
+        /// <param name="axeBuffRemoval">Buff removal of the orange AoE.</param>
+        /// <param name="time">Last time possible.</param>
+        private void AddAxeAoeDecoration(EffectEvent aoe, AbstractBuffEvent axeBuffRemoval, long time)
+        {
+            int duration;
+            if (axeBuffRemoval != null)
+            {
+                duration = (int)(axeBuffRemoval.Time - aoe.Time);
+            }
+            else
+            {
+                duration = (int)(time - aoe.Time);
+            }
+            int start = (int)aoe.Time;
+            int effectEnd = start + duration;
+            EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
+            EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
         }
     }
 }
