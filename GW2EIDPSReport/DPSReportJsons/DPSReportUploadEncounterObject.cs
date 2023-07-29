@@ -2,7 +2,7 @@
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class UploadEncounterObject
+    public class DPSReportUploadEncounterObject
     {
         [JsonProperty]
         public string UniqueId { get; internal set; }
