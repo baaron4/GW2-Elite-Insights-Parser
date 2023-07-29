@@ -353,6 +353,7 @@ namespace GW2EIEvtcParser.ParsedData
             { CutterBurst, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { CutterBurstMindblade, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { RestorativeMantras, "https://wiki.guildwars2.com/images/6/61/Restorative_Mantras.png" },
+            { SignetOfTheEtherHeal, BuffImages.SignetOfTheEther },
             // Necromancer
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             { ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
@@ -447,6 +448,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { LesserBanishEnchantment, "https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" },
+            { BalanceInDiscord, "https://wiki.guildwars2.com/images/a/a2/Balance_in_Discord.png" },
             // Thief
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
             { DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png" },

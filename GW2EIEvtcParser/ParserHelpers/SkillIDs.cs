@@ -2216,6 +2216,7 @@
         public const long SoulStoneVenomBuff = 49083;
         public const long CompoundingChemicals = 49090;
         public const long IllusionaryDefense = 49099;
+        public const long SignetOfTheEtherHeal = 49103;
         public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
@@ -2908,6 +2909,7 @@
         public const long FortifiedEarth = 62858;
         public const long ImperialImpactSkill = 62859;
         public const long GunsaberSheath = 62861;
+        public const long BalanceInDiscord = 62863;
         public const long UrnOfSaintViktorBuff = 62864;
         public const long GrandFinale = 62876;
         public const long SaintsShieldDodge = 62879;
