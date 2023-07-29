@@ -236,8 +236,7 @@ namespace GW2EIDPSReport
                         });
                         if (item.Error != null)
                         {
-                            traces.Add("DPSReport: Upload tentative failed - " + item.Error);
-                            return null;
+                            throw new InvalidOperationException(item.Error);
                         }
                         traces.Add("DPSReport: Upload tentative successful");
                         return item;
