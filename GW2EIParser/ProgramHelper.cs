@@ -13,6 +13,8 @@ using GW2EIBuilders;
 using GW2EIDiscord;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
+using GW2EIWingman;
+using GW2EIWingman.WingmanUploadJsons;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
@@ -116,19 +118,28 @@ namespace GW2EIParser
             string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                traces.Add("Uploading to DPSReports using EI");
+                traces.Add("Uploading to DPSReport using EI");
                 UploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
                 log.ParserSettings.AnonymousPlayers,
                 log.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
+                // Only upload supported 5 men, 10 men and golem logs, without anonymous players
+                if (false && !log.ParserSettings.AnonymousPlayers && (
+                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
+                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
+                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
+                        )
+                    )
+                {
+                    traces.Add("Uploading to Wingman using DPSReport url");
+                    WingmanController.UploadToWingmanUsingImportLogQueued(uploadresult[0], traces, ParserVersion);
+                }
+                else
+                {
+                    traces.Add("Can not upload to Wingman using DPSReport url: unsupported log");
+                }
             }
-            /*if (settings.UploadToRaidar)
-            {
-                traces.Add("Uploading to Raidar");
-                uploadresult[2] = UploadController.UploadRaidar();
-                traces.Add("Raidar: " + uploadresult[2]);
-            }*/
             return uploadresult;
         }
 
