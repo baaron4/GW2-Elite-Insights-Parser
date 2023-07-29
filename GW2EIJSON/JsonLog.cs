@@ -301,7 +301,19 @@ namespace GW2EIJSON
         /// If the fight is in challenge mode
         /// </summary>
         public bool IsCM { get; set; }
-        
+
+        /// <summary>
+        /// If the log was parsed in anonymous mode
+        /// </summary>
+        public bool Anonymous { get; set; }
+
+
+        /// <summary>
+        /// If the log was parsed in detailed mode. \n
+        /// Only for WvW logs
+        /// </summary>
+        public bool DetailedWvW { get; set; }
+
         /// <summary>
         /// The list of targets
         /// </summary>

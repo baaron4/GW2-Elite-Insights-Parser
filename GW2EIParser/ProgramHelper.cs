@@ -110,7 +110,7 @@ namespace GW2EIParser
             return false;
         }
 
-        private static string[] UploadOperation(List<string> traces, FileInfo fInfo)
+        private static string[] UploadOperation(List<string> traces, FileInfo fInfo, ParsedEvtcLog log)
         {
             //Upload Process
             string[] uploadresult = new string[2] { "", "" };
@@ -118,8 +118,8 @@ namespace GW2EIParser
             {
                 traces.Add("Uploading to DPSReports using EI");
                 UploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
-                Properties.Settings.Default.Anonymous,
-                Properties.Settings.Default.DetailledWvW);
+                log.ParserSettings.AnonymousPlayers,
+                log.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
             }
@@ -161,7 +161,7 @@ namespace GW2EIParser
                 }
                 operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
                 var externalTraces = new List<string>();
-                string[] uploadStrings = UploadOperation(externalTraces, fInfo);
+                string[] uploadStrings = UploadOperation(externalTraces, fInfo, log);
                 foreach (string trace in externalTraces)
                 {
                     operation.UpdateProgressWithCancellationCheck(trace);
