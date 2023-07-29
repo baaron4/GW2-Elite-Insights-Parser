@@ -2,7 +2,7 @@
 
 namespace GW2EIWingman.WingmanUploadJsons
 {
-    public class CheckLogQueuedOrDBObject : CheckLogQueuedObject
+    public class WingmanCheckLogQueuedOrDBObject : WingmanCheckLogQueuedObject
     {
         [JsonProperty]
         public bool InDB { get; internal set; }

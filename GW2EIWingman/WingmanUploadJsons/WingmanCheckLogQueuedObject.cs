@@ -2,7 +2,7 @@
 
 namespace GW2EIWingman.WingmanUploadJsons
 {
-    public class CheckLogQueuedObject
+    public class WingmanCheckLogQueuedObject
     {
         [JsonProperty]
         public string Link { get; internal set; }

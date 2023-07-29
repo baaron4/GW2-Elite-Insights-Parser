@@ -80,37 +80,37 @@ namespace GW2EIWingman
         }
         //
 
-        public static CheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, List<string> traces, Version parserVersion)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traces))
             {
                 return null;
             }
-            return GetWingmanResponse<CheckLogQueuedOrDBObject>("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traces, parserVersion);
+            return GetWingmanResponse<WingmanCheckLogQueuedOrDBObject>("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traces, parserVersion);
         }
 
-        public static CheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traces))
             {
                 return null;
             }
-            return GetWingmanResponse<CheckLogQueuedObject>("CheckLogQueued", GetCheckLogQueuedURL(dpsReportLink), traces, parserVersion);
+            return GetWingmanResponse<WingmanCheckLogQueuedObject>("CheckLogQueued", GetCheckLogQueuedURL(dpsReportLink), traces, parserVersion);
         }
 
-        public static ImportLogQueuedObject ImportLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traces))
             {
                 return null;
             }
-            return GetWingmanResponse<ImportLogQueuedObject>("ImportLogQueued", GetImportLogQueuedURL(dpsReportLink), traces, parserVersion);
+            return GetWingmanResponse<WingmanImportLogQueuedObject>("ImportLogQueued", GetImportLogQueuedURL(dpsReportLink), traces, parserVersion);
         }
 
         public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
         {
             // Check if the URL is already present on Wingman
-            CheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traces, parserVersion);
+            WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traces, parserVersion);
             if (wingmanCheck != null)
             {
                 if (wingmanCheck.InDB || wingmanCheck.InQueue)
@@ -120,7 +120,7 @@ namespace GW2EIWingman
                 }
                 else
                 {
-                    ImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traces, parserVersion);
+                    WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traces, parserVersion);
                     if (wingmanUpload != null)
                     {
                         if (wingmanUpload.Success != 1)
