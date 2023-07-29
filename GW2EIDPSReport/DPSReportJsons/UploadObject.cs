@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class DPSReportUploadObject
+    public class UploadObject
     {
         [JsonProperty]
         public string Id { get; internal set; }
@@ -30,13 +30,13 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public string Error { get; internal set; }
         [JsonProperty]
-        public DPSReportUploadEncounterObject Encounter { get; internal set; }
+        public UploadEncounterObject Encounter { get; internal set; }
         [JsonProperty]
-        public DPSReportUploadEvtcObject Evtc { get; internal set; }
+        public UploadEvtcObject Evtc { get; internal set; }
         [JsonProperty]
-        public Dictionary<string, DPSReportUploadPlayerObject> Players { get; internal set; }
+        public Dictionary<string, UploadPlayerObject> Players { get; internal set; }
         [JsonProperty]
-        public DPSReportReportObject Report { get; internal set; }
+        public ReportObject Report { get; internal set; }
         [JsonProperty]
         public string TempApiId { get; internal set; }
     }

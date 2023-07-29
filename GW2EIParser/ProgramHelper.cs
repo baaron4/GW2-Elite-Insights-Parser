@@ -117,7 +117,7 @@ namespace GW2EIParser
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 traces.Add("Uploading to DPSReports using EI");
-                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
+                UploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
                 Properties.Settings.Default.Anonymous,
                 Properties.Settings.Default.DetailledWvW);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";

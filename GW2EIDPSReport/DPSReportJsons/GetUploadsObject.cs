@@ -2,7 +2,7 @@
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class DPSReportGetUploadsObject
+    public class GetUploadsObject
     {
         [JsonProperty]
         public int Pages { get; internal set; }
@@ -15,6 +15,6 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public string UserToken { get; internal set; }
         [JsonProperty]
-        public DPSReportUploadObject[] Uploads { get; internal set; }
+        public UploadObject[] Uploads { get; internal set; }
     }
 }

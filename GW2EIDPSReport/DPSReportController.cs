@@ -91,14 +91,14 @@ namespace GW2EIDPSReport
             return GetURL(url, userToken);
         }
         ///////////////// APIs
-        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
+        public static UploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
             return UploadToDPSR(fi, GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traces);
         }
 
-        public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
+        public static GetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
         {
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traces);
+            return GetDPSReportResponse<GetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traces);
         }
         public static string GenerateUserToken(List<string> traces)
         {
@@ -109,21 +109,21 @@ namespace GW2EIDPSReport
             }
             return "";
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
+        public static UploadObject GetUploadMetaDataWithID(string id, List<string> traces)
         {
             if (id == null || id.Length == 0)
             {
                 throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
+            return GetDPSReportResponse<UploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
+        public static UploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
         {
             if (permalink == null || permalink.Length == 0)
             {
                 throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
+            return GetDPSReportResponse<UploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
         }
 
         public static T GetJsonWithID<T>(string id, List<string> traces)
@@ -192,7 +192,7 @@ namespace GW2EIDPSReport
             }
             return default;
         }
-        private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
+        private static UploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -228,7 +228,7 @@ namespace GW2EIDPSReport
                     {
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        DPSReportUploadObject item = JsonConvert.DeserializeObject<DPSReportUploadObject>(stringContents, new JsonSerializerSettings
+                        UploadObject item = JsonConvert.DeserializeObject<UploadObject>(stringContents, new JsonSerializerSettings
                         {
                             NullValueHandling = NullValueHandling.Ignore,
                             ContractResolver = DefaultJsonContractResolver,

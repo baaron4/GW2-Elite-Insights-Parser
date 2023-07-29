@@ -2,7 +2,7 @@
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class DPSReportUploadEvtcObject
+    public class UploadEvtcObject
     {
         [JsonProperty]
         public string Type { get; internal set; }

@@ -2,7 +2,7 @@
 
 namespace GW2EIDPSReport.DPSReportJsons
 {
-    public class DPSReportUploadPlayerObject
+    public class UploadPlayerObject
     {
         [JsonProperty(PropertyName = "display_name")]
         public string DisplayName { get; internal set; }
