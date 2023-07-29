@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EncounterLogic
 {
-    public static class EncounterIDs
+    internal static class EncounterIDs
     {
 
         public const long Unknown = 0x0;

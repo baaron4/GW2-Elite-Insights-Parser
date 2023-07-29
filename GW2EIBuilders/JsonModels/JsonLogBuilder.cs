@@ -115,7 +115,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             jsonLog.IsCM = log.FightData.IsCM;
             jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
-            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && (log.FightData.Logic.EncounterID & EncounterIDs.EncounterMasks.WvWMask) > 0;
+            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();
             var buffMap = new Dictionary<string, BuffDesc>();
