@@ -182,7 +182,7 @@ namespace GW2EIDPSReport
                 }
                 catch (Exception e)
                 {
-                    traces.Add("DPSReport: " + requestName + " tentative failed: " + e.Message);
+                    traces.Add("DPSReport: " + requestName + " tentative failed - " + e.Message);
                 }
                 finally
                 {
@@ -236,7 +236,8 @@ namespace GW2EIDPSReport
                         });
                         if (item.Error != null)
                         {
-                            throw new InvalidOperationException(item.Error);
+                            traces.Add("DPSReport: Upload tentative failed - " + item.Error);
+                            return null;
                         }
                         traces.Add("DPSReport: Upload tentative successful");
                         return item;
@@ -244,7 +245,7 @@ namespace GW2EIDPSReport
                 }
                 catch (Exception e)
                 {
-                    traces.Add("DPSReport: Upload tentative failed: " + e.Message);
+                    traces.Add("DPSReport: Upload tentative failed - " + e.Message);
                 }
                 finally
                 {
