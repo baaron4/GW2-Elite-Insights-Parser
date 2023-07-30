@@ -12,6 +12,9 @@ using Newtonsoft.Json.Serialization;
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIDPSReport
 {
+    /// <summary>
+    /// https://dps.report/api
+    /// </summary>
     public static class DPSReportController
     {
 
