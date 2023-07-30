@@ -100,6 +100,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.EliteInsightsVersion = parserVersion.ToString();
             jsonLog.ArcVersion = log.LogData.ArcVersion;
             jsonLog.RecordedBy = log.LogData.PoVName;
+            jsonLog.RecordedAccountBy = log.LogData.PoVAccount;
             jsonLog.TimeStart = log.LogData.LogStart;
             jsonLog.TimeEnd = log.LogData.LogEnd;
             jsonLog.TimeStartStd = log.LogData.LogStartStd;
