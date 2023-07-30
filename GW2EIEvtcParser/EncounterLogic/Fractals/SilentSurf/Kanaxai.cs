@@ -320,6 +320,40 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
+                    foreach (AbstractCastEvent c in worldCleaver)
+                    {
+                        int duration = 26320;
+                        int start = (int)c.Time;
+                        IEnumerable<AbstractHealthDamageEvent> hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
+                        if (hits.Any())
+                        {
+                            AddWorldCleaverDecoration(target, replay, start, (int)hits.FirstOrDefault(x => x.Time > c.Time).Time, start + duration);
+                        }
+                        else
+                        {
+                            AddWorldCleaverDecoration(target, replay, start, start + duration, start + duration);
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.AspectOfTorment:
+                case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
+                case (int)ArcDPSEnums.TrashID.AspectOfExposure:
+                case (int)ArcDPSEnums.TrashID.AspectOfDeath:
+                case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
@@ -408,6 +442,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             int effectEnd = start + duration;
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
             EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+        }
+
+        /// <summary>
+        /// Adds the World Cleaver decoration.
+        /// </summary>
+        /// <param name="target">Kanaxai.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="start">Start of the cast.</param>
+        /// <param name="end">End of the cast.</param>
+        /// <param name="growing">Duration of the channel.</param>
+        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
+        {
+            replay.Decorations.Add(new CircleDecoration(true, 0, 1100, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new CircleDecoration(true, growing, 1100, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
         }
     }
 }
