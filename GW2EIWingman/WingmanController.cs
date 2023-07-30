@@ -27,6 +27,7 @@ namespace GW2EIWingman
             NamingStrategy = new CamelCaseNamingStrategy()
         };
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+        private static readonly HttpClient HTTPClient = new HttpClient();
 
         ///////////////// URL Utilities
         private const string BaseURL = "https://gw2wingman.nevermindcreations.de/";
@@ -218,10 +219,9 @@ namespace GW2EIWingman
                     requestMessage.Content = content;
                 }
 
-                var httpClient = new HttpClient();
                 try
                 {
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
                     HttpResponseMessage httpResponse = httpRequest.Result;
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
@@ -245,7 +245,6 @@ namespace GW2EIWingman
                 }
                 finally
                 {
-                    httpClient.Dispose();
                     requestMessage.Dispose();
                 }
             }
@@ -276,10 +275,9 @@ namespace GW2EIWingman
                     requestMessage.Content = content;
                 }
 
-                var httpClient = new HttpClient();
                 try
                 {
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
                     HttpResponseMessage httpResponse = httpRequest.Result;
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
@@ -309,7 +307,6 @@ namespace GW2EIWingman
                 }
                 finally
                 {
-                    httpClient.Dispose();
                     requestMessage.Dispose();
                 }
             }

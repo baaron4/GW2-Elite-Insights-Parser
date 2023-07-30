@@ -25,6 +25,8 @@ namespace GW2EIDPSReport
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
+        private static readonly  HttpClient HTTPClient = new HttpClient();
+
         private class DPSReportUserTokenResponse
         {
             public string UserToken { get; set; }
@@ -173,11 +175,9 @@ namespace GW2EIDPSReport
                 {
                     requestMessage.Content = content;
                 }
-
-                var httpClient = new HttpClient();
                 try
                 {
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
                     HttpResponseMessage httpResponse = httpRequest.Result;
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
@@ -207,7 +207,6 @@ namespace GW2EIDPSReport
                 }
                 finally
                 {
-                    httpClient.Dispose();
                     requestMessage.Dispose();
                 }
             }
