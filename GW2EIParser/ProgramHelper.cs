@@ -155,7 +155,7 @@ namespace GW2EIParser
                 else
                 {
                     string accName = log.LogData.PoV != null ? log.LogData.PoVAccount : null;
-                    if (true || WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
                     {
                         try
                         {
