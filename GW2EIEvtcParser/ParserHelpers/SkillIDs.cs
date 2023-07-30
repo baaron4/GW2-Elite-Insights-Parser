@@ -956,6 +956,7 @@
         public const long SummonMinions2 = 21862;
         public const long NetTurretDamageUW = 22137;
         public const long SuperiorSigilOfMomentum = 22144;
+        public const long ExplodeLastLaugh = 22202;
         public const long MistlockInstabilityImpairedImmunity = 22221;
         public const long MistlockInstabilityAfflicted = 22228;
         public const long MistlockInstabilityStormyWeather = 22231;
@@ -2388,11 +2389,13 @@
         public const long MistlockInstabilityBoonOverload = 53673;
         public const long MistlockInstabilityStickTogether = 53932;
         public const long AuroraBeam3 = 53954;
+        public const long WeBleedFireSmall = 54053;
         public const long SocialAwkwardnessImmunity = 54073;
         public const long MistlockInstabilityOutflanked = 54084;
         public const long EvasionBondOfFaith = 54118;
         public const long MistlockInstabilityBirds = 54131;
         public const long MistlockInstabilitySugarRush = 54237;
+        public const long WeBleedFireBig = 54348;
         public const long NotStickingTogetherBuff = 54378;
         public const long MistlockInstabilityFrailty = 54477;
         public const long MistlockInstabilitySlipperySlope1 = 54559;
