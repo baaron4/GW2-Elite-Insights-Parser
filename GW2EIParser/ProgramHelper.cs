@@ -40,7 +40,7 @@ namespace GW2EIParser
 
         internal static int GetMaxParallelRunning()
         {
-            if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
+            if (Properties.Settings.Default.SendEmbedToWebhook || Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToWingman)
             {
                 return Math.Max(Environment.ProcessorCount / 2, 1);
             }
@@ -130,7 +130,8 @@ namespace GW2EIParser
                 log.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
-                if (false)
+                /*
+                if (Properties.Settings.Default.UploadToWingman)
                 {
                     if (isWingmanCompatible)
                     {
@@ -142,9 +143,11 @@ namespace GW2EIParser
                         traces.Add("Can not upload to Wingman using DPSReport url: unsupported log");
                     }
                 }
+                */
             }
-            if (false)
+            if (Properties.Settings.Default.UploadToWingman)
             {
+#if !DEBUG
                 if (!isWingmanCompatible)
                 {
                     traces.Add("Can not upload to Wingman: unsupported log");
@@ -201,6 +204,7 @@ namespace GW2EIParser
                         }
                     }
                 }
+#endif
 
             }
             return uploadresult;
