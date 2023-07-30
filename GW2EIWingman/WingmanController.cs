@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GW2EIWingman.WingmanUploadJsons;
@@ -25,6 +26,7 @@ namespace GW2EIWingman
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
+        private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
         ///////////////// URL Utilities
 
@@ -64,19 +66,26 @@ namespace GW2EIWingman
         }
 
         // Connection checking
-        private static bool CheckConnection()
+        private static bool CheckConnection(List<string> traces)
         {
-            return false;
+            return _GetWingmanResponse<string>("CheckConnection", TestConnectionURL, traces) == "True";
         }
 
-        private static bool IsEIVersionValid(Version parserVersion)
+        private static bool IsEIVersionValid(Version parserVersion, List<string> traces)
         {
-            return false;
+            string returnedVersion = _GetWingmanResponse<string>("EIVersionURL", TestConnectionURL, traces);
+            if (returnedVersion == null)
+            {
+                return false;
+            }
+            returnedVersion = returnedVersion.Replace("v", "");
+            var expectedVersion = new Version(returnedVersion);
+            return parserVersion.CompareTo(expectedVersion) >= 0;
         }
 
-        public static bool CanBeUsed(Version parserVersion)
+        public static bool CanBeUsed(Version parserVersion, List<string> traces)
         {
-            return CheckConnection() && IsEIVersionValid(parserVersion);
+            return CheckConnection(traces) && IsEIVersionValid(parserVersion, traces);
         }
         //
 
@@ -140,13 +149,62 @@ namespace GW2EIWingman
             return false;
         }
 
-        private static T GetWingmanResponse<T>(string requestName, string url, List<string> traces, Version parserVersion)
+        public static bool CheckUploadPossible(FileInfo fi, string account, List<string> traces, Version parserVersion)
         {
-            if (!CanBeUsed(parserVersion))
+            string fileName = fi.Name;
+            byte[] fileContents = File.ReadAllBytes(fi.FullName);
+            using (var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary"))
             {
-                traces.Add("Wingman: Not available");
-                return default;
+                using (var byteArrayContent = new ByteArrayContent(fileContents))
+                {
+                    byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                    multiPartContent.Add(byteArrayContent, "file", fileName);
+                    using (var creationContent = new StringContent(fi.CreationTime.ToString(), NoBOMEncodingUTF8, "text/plain"))
+                    {
+                        multiPartContent.Add(creationContent, "timestamp");
+                        using (var sizeContent = new StringContent(fi.Length.ToString(), NoBOMEncodingUTF8, "text/plain"))
+                        {
+                            multiPartContent.Add(sizeContent, "filesize");
+                            using (var accountContent = new StringContent(account, NoBOMEncodingUTF8, "text/plain"))
+                            {
+                                multiPartContent.Add(accountContent, "account");
+                                return GetWingmanResponse<string>("CheckUploadPossible", CheckUploadURL, traces, parserVersion, multiPartContent) == "True";
+                            }
+                        }
+                    }
+                }
             }
+        }
+        public static bool UploadProcessed(FileInfo fi, string account, string jsonString, string htmlString, List<string> traces, Version parserVersion)
+        {
+            string fileName = fi.Name;
+            byte[] fileContents = File.ReadAllBytes(fi.FullName);
+            using (var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary"))
+            {
+                using (var byteArrayContent = new ByteArrayContent(fileContents))
+                {
+                    byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                    multiPartContent.Add(byteArrayContent, "file", fileName);
+                    using (var jsonContent = new StringContent(jsonString, NoBOMEncodingUTF8, "application/json"))
+                    {
+                        multiPartContent.Add(jsonContent, "jsonfile");
+                        using (var htmlContent = new StringContent(htmlString, NoBOMEncodingUTF8, "text/html"))
+                        {
+                            multiPartContent.Add(htmlContent, "htmlfile");
+                            using (var accountContent = new StringContent(account, NoBOMEncodingUTF8, "text/plain"))
+                            {
+                                multiPartContent.Add(accountContent, "account");
+                                return GetWingmanResponse<GW2EIJSON.JsonLog>("UploadProcessed", CheckUploadURL, traces, parserVersion, multiPartContent) != null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        ///
+        private static T _GetWingmanResponse<T>(string requestName, string url, List<string> traces, HttpContent content = null)
+        {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
@@ -154,6 +212,11 @@ namespace GW2EIWingman
                 var webService = new Uri(@url);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
+
+                if (content != null)
+                {
+                    requestMessage.Content = content;
+                }
 
                 var httpClient = new HttpClient();
                 try
@@ -193,6 +256,15 @@ namespace GW2EIWingman
                 }
             }
             return default;
+        }
+
+        private static T GetWingmanResponse<T>(string requestName, string url, List<string> traces, Version parserVersion, HttpContent content = null)
+        {
+            if (!CanBeUsed(parserVersion, traces))
+            {
+                return default;
+            }
+            return _GetWingmanResponse<T>(requestName, url, traces, content);
         } 
 
     }

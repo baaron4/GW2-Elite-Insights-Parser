@@ -114,6 +114,12 @@ namespace GW2EIParser
 
         private static string[] UploadOperation(List<string> traces, FileInfo fInfo, ParsedEvtcLog log)
         {
+            // Only upload supported 5 men, 10 men and golem logs, without anonymous players
+            var isWingmanCompatible = !log.ParserSettings.AnonymousPlayers && (
+                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
+                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
+                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
+                            );
             //Upload Process
             string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
@@ -124,21 +130,78 @@ namespace GW2EIParser
                 log.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
                 traces.Add("DPSReports using EI: " + uploadresult[0]);
-                // Only upload supported 5 men, 10 men and golem logs, without anonymous players
-                if (false && !log.ParserSettings.AnonymousPlayers && (
-                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
-                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
-                        log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
-                        )
-                    )
+                if (false)
                 {
-                    traces.Add("Uploading to Wingman using DPSReport url");
-                    WingmanController.UploadToWingmanUsingImportLogQueued(uploadresult[0], traces, ParserVersion);
+                    if (isWingmanCompatible)
+                    {
+                        traces.Add("Uploading to Wingman using DPSReport url");
+                        WingmanController.UploadToWingmanUsingImportLogQueued(uploadresult[0], traces, ParserVersion);
+                    }
+                    else
+                    {
+                        traces.Add("Can not upload to Wingman using DPSReport url: unsupported log");
+                    }
                 }
+            }
+            if (false)
+            {
+                if (!isWingmanCompatible)
+                {
+                    traces.Add("Can not upload to Wingman: unsupported log");
+                } 
                 else
                 {
-                    traces.Add("Can not upload to Wingman using DPSReport url: unsupported log");
+                    string accName = log.LogData.PoV != null ? log.LogData.PoVAccount : null;
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
+                    {
+                        try
+                        {
+                            var expectedSettings = new EvtcParserSettings(Properties.Settings.Default.Anonymous,
+                                                            Properties.Settings.Default.SkipFailedTries,
+                                                            true,
+                                                            true,
+                                                            true,
+                                                            Properties.Settings.Default.CustomTooShort,
+                                                            Properties.Settings.Default.DetailledWvW);
+                            ParsedEvtcLog logToUse = log;
+                            if (log.ParserSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
+                                log.ParserSettings.ParsePhases != expectedSettings.ParsePhases ||
+                                log.ParserSettings.ParseCombatReplay != expectedSettings.ParseCombatReplay)
+                            {
+                                // We need to create a parser that matches Wingman's expected settings
+                                var parser = new EvtcParser(expectedSettings, APIController);
+                                logToUse = parser.ParseLog(new ConsoleOperationController(fInfo.FullName), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
+                            }
+                            string jsonString, htmlString;
+                            var uploadResult = new UploadResults();
+                            {
+                                var ms = new MemoryStream();
+                                var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
+                                var builder = new RawFormatBuilder(logToUse, new RawFormatSettings(true), ParserVersion, uploadResult);
+
+                                builder.CreateJSON(sw, false);
+                                sw.Close();
+
+                                jsonString = Encoding.UTF8.GetString(ms.ToArray());
+                            }
+                            {
+                                var ms = new MemoryStream();
+                                var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
+                                var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false), htmlAssets, ParserVersion, uploadResult);
+
+                                builder.CreateHTML(sw, null);
+                                sw.Close();
+                                htmlString = Encoding.UTF8.GetString(ms.ToArray());
+                            }
+                            WingmanController.UploadProcessed(fInfo, accName, jsonString, htmlString, traces, ParserVersion);
+                        }
+                        catch (Exception e)
+                        {
+                            traces.Add("Can not upload to Wingman: " + e.Message);
+                        }
+                    }
                 }
+
             }
             return uploadresult;
         }
