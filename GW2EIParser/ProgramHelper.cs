@@ -147,7 +147,7 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.UploadToWingman)
             {
-#if !DEBUG
+#if !DEBUG2
                 if (!isWingmanCompatible)
                 {
                     traces.Add("Can not upload to Wingman: unsupported log");
@@ -155,7 +155,7 @@ namespace GW2EIParser
                 else
                 {
                     string accName = log.LogData.PoV != null ? log.LogData.PoVAccount : null;
-                    if (WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
+                    if (true || WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
                     {
                         try
                         {
@@ -202,6 +202,10 @@ namespace GW2EIParser
                         {
                             traces.Add("Can not upload to Wingman: " + e.Message);
                         }
+                    } 
+                    else
+                    {
+                        traces.Add("Can not upload to Wingman: log already uploaded");
                     }
                 }
 #endif
