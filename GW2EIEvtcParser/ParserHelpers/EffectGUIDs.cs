@@ -127,6 +127,8 @@ namespace GW2EIEvtcParser
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string ScrapperBypassCoating = "D2307A69B227BE4B831C2AA1DAAE646A"; // player is owner
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";
+        public const string HolosmitBladeBurstParticleAccelerator1 = "9D2A5C8FF1E67547A41B72D91F4355E7";
+        public const string HolosmitBladeBurstParticleAccelerator2 = "5635C8217573C449905554A1BE38044B"; // happens at the same time as the other on Dst
         public const string MechanistCrashDownImpact = "80E1A21E07C03A43A21E470B95075A5A"; // happens at spawn location, no owner, no target, ~800ms after spawn
         public const string MechanistMechEyeGlow = "CDF749672C01964BAEF64CCB3D431DEE"; // used with e.g. crash down (delayed), crisis zone
         public const string MechanistDischargeArray = "5AAD58AD0259604AADA18AFD3AE0DDFD"; // likely the white radius indicator
@@ -194,6 +196,11 @@ namespace GW2EIEvtcParser
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
+        // Silent Surf Fractal
+        public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
+        public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
+        public const string AxeGroundAoE2 = "CE91D2D4CD6C4141B3977FA70FFE05BB";
+        public const string HarrowshotAoE = "3AE17719B3D7374BAC4899DA0A3E7DF9";
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";

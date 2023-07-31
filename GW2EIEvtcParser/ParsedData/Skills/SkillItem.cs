@@ -79,6 +79,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MedBlasterHeal, "Med Blaster (Heal)" },
             { SoothingDetonation, "Soothing Detonation" },
             { HealingTurretHeal, "Healing Turret (Heal)" },
+            { BladeBurstOrParticleAccelerator, "Blade Burst or Particle Accelerator" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -300,6 +301,7 @@ namespace GW2EIEvtcParser.ParsedData
             { TwinStrikeJadeMech, "https://wiki.guildwars2.com/images/3/31/Twin_Strike_%28Mech%29.png" },
             { RecallMech_MechSkill, "https://wiki.guildwars2.com/images/5/56/Recall_Mech.png" },
             { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
+            { BladeBurstOrParticleAccelerator, "https://i.imgur.com/09MY813.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
@@ -353,6 +355,7 @@ namespace GW2EIEvtcParser.ParsedData
             { CutterBurst, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { CutterBurstMindblade, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { RestorativeMantras, "https://wiki.guildwars2.com/images/6/61/Restorative_Mantras.png" },
+            { SignetOfTheEtherHeal, BuffImages.SignetOfTheEther },
             // Necromancer
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             { ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
@@ -447,6 +450,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { LesserBanishEnchantment, "https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" },
+            { BalanceInDiscord, "https://wiki.guildwars2.com/images/a/a2/Balance_in_Discord.png" },
             // Thief
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
             { DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png" },

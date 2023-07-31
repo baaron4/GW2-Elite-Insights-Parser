@@ -46,6 +46,7 @@
         public const long RangerPetSpawned = -28;
         public const long HealingMistOrSoothingDetonation = -29;
         public const long SadisticSearingActivation = -30;
+        public const long BladeBurstOrParticleAccelerator = -31;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -2215,6 +2216,7 @@
         public const long SoulStoneVenomBuff = 49083;
         public const long CompoundingChemicals = 49090;
         public const long IllusionaryDefense = 49099;
+        public const long SignetOfTheEtherHeal = 49103;
         public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
@@ -2907,6 +2909,7 @@
         public const long FortifiedEarth = 62858;
         public const long ImperialImpactSkill = 62859;
         public const long GunsaberSheath = 62861;
+        public const long BalanceInDiscord = 62863;
         public const long UrnOfSaintViktorBuff = 62864;
         public const long GrandFinale = 62876;
         public const long SaintsShieldDodge = 62879;
@@ -3053,7 +3056,7 @@
         public const long DragonsEndContributor3 = 64250;
         public const long TargetedExpulsion = 64277;
         public const long JadeLob1 = 64282;
-        public const long SharedDestructionLi = 64300;
+        public const long POV_SharedDestructionLi = 64300;
         public const long BrandedArtillery = 64317;
         public const long BowlOfJadeSeaBounty = 64357;
         public const long TailSlap = 64360;
@@ -3314,7 +3317,7 @@
         public const long Debilitated = 67972;
         public const long TargetedExpulsionCM = 67982;
         public const long VolatileExpulsion4 = 67999;
-        public const long SharedDestructionLiCM = 68004;
+        public const long POV_SharedDestructionLiCM = 68004;
         public const long ElectricRain = 68006;
         public const long FallOfTheAxe2 = 68015;
         public const long StormOfSwords6 = 68016;
@@ -3415,10 +3418,11 @@
         public const long DualOrbitFireAndWater = 69184;
         public const long FlareSilentSurf = 69189;
         public const long FrighteningSpeedWindup = 69194;
+        public const long RendingStormAxeTargetBuff1 = 69195;
         public const long HarrowshotDeath = 69199; // harrowshot is the boon steal attack
         public const long GatheringShadowsSkill = 69205;
         public const long Phantasmagoria = 69206;
-        public const long RendingStormTargetBuff = 69208;
+        public const long RendingStormAxeTargetBuff2 = 69208;
         public const long DualOrbitWaterAndAir = 69211;
         public const long BleedingEdge = 69214;
         public const long AchievementEligibilityTheFearlessFew = 69222;
@@ -3426,6 +3430,7 @@
         public const long DeterminedKanaxai = 69236;
         public const long DualOrbitAirAndEarth = 69246;
         public const long DissectingDance = 69251;
+        public const long POV_KanaxaiAxeAoeBuff = 69261;
         public const long DreadDefiance = 69263;
         public const long AspectTetherSkill = 69265;
         public const long HeatTheSoulBuff = 69267;
@@ -3443,7 +3448,7 @@
         public const long DualOrbitFireAndAir = 69341;
         public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
-        public const long FrighteningSpeedTargetBuff = 69346;
+        public const long KanaxaiSpreadOrangeAoEBuff = 69346;
         public const long KanaxaiUnknownBuff1 = 69350; // related to teleportation?
         public const long HarrowshotExposure = 69353;
         public const long ScouringBlade = 69354;
@@ -3452,11 +3457,9 @@
         public const long GatheringShadowsBuff = 69365;
         public const long BleedingEdge2 = 69371;
         public const long AspectIslandBuff = 69386; // after successful tether while on island?
-        public const long HarrowshotFear = 69398;
+        public const long POV_KanaxaiOffPlatformDeathBuff = 69391;
         public const long HarrowshotTorment = 69406;
-        public const long RendingStormSkill = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
-        public const long DreadVisageSkillIsland = 69418;
         public const long WorldCleaver = 69419;
         public const long ThesssWard = 69421;
         public const long TempestuousAria = 69427;
