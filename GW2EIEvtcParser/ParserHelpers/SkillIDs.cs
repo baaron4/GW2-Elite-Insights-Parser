@@ -3469,8 +3469,8 @@
         public const long ScouringBlade2 = 69435;
         public const long AspectedVolleyExposure = 69436;
         public const long BlackPowderCharge = 69438;
-        public const long AspectOfExposureNoTetherBuff = 69440; // aspect no tether buff prevents aspect from tethering?
-        public const long AspectOfDeathBaseBuff = 69441; // aspect base buff applied on spawn, base buff?
+        public const long AspectOfExposureNoTetherBuff = 69440; // prevents aspect from tethering?
+        public const long AspectOfDeathBaseBuff = 69441; // applied on spawn, base aspect buff?
         public const long AspectOfLethargyBaseBuff = 69442;
         public const long AspectOfFearNoTetherBuff = 69449;
         public const long AspectOfFearBuff1 = 69451;
