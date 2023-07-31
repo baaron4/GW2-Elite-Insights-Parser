@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
-            // Blue tether from Aspect to player, appears when the player gains phantasmagoria
+            // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
             IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
             }
 
-            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
+            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targeting
             var axes = new List<Segment>();
             axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
             axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
@@ -319,6 +319,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Tether casts performed by Aspects
             IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
             foreach (AnimatedCastEvent cast in tetherCasts)
             {
@@ -326,7 +327,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
                 replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
             }
-
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

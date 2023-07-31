@@ -3473,8 +3473,8 @@
         public const long AspectOfDeathBaseBuff = 69441; // applied on spawn, base aspect buff?
         public const long AspectOfLethargyBaseBuff = 69442;
         public const long AspectOfFearNoTetherBuff = 69449;
-        public const long AspectOfFearBuff1 = 69451;
-        public const long AspectOfDeathBuff2 = 69453;
+        public const long AspectOfFearBaseBuff = 69451;
+        public const long AspectOfDeathNoTetherBuff = 69453;
         public const long AspectOfTormentBaseBuff = 69456;
         public const long AspectOfLethargyNoTetherBuff = 69458;
         public const long AspectOfExposureBaseBuff = 69464;

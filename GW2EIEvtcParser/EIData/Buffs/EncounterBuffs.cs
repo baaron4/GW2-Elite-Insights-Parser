@@ -427,7 +427,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fear Tether Unavailable", AspectOfFearNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
             new Buff("Torment Tether Unavailable", AspectOfTormentNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
             new Buff("Exposure Tether Unavailable", AspectOfExposureNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
-            new Buff("Death Tether Unavailable", AspectOfDeathBuff2, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
+            new Buff("Death Tether Unavailable", AspectOfDeathNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
             new Buff("Lethargy Tether Unavailable", AspectOfLethargyNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ExtremeVulnerability),
             new Buff("Achievement Eligibility: Unsundered", AchievementEligibilityUnsundered, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
