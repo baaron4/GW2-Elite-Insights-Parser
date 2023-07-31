@@ -159,13 +159,13 @@
 .cr-breakbar-display {
     font-size: 0.65rem;
     min-height: 16px;
-    width: 250px;
+    width: 180px;
 }
 
 .cr-breakbar-bar {
     color: #DDDDDD;
-    width: 200px;
-} 
+    width: 130px;
+}
 
 .cr-hp-display-player {
     left: 0%;
