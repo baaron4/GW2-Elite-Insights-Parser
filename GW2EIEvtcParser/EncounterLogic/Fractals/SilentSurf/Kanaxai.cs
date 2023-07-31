@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(RendingStorm, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
+                new PlayerDstHitMechanic(RendingStormSkill, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
                 new PlayerDstHitMechanic(new long [] { HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment }, "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
                 new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
                 new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
@@ -270,6 +270,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            long maxEnd = log.FightData.FightEnd;
+
             // Orange Tether from Aspect to player
             IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
@@ -281,14 +283,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int start = (int)apply.Time;
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                long end = Math.Min(replace?.Time ?? long.MaxValue, remove?.Time ?? long.MaxValue);
-                if (end != long.MaxValue)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
-                }
+                long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
+                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
-            // Blue tether from Aspect to player, appears when the player gains phantasmagoria
+            // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
             IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
@@ -296,13 +295,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)apply.Time;
                 BuffRemoveAllEvent remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                if (remove != null)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, (start, (int)remove.Time), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
-                }
+                long end = remove?.Time ?? maxEnd;
+                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
             }
 
-            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
+            // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targeting
             var axes = new List<Segment>();
             axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
             axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
@@ -348,10 +345,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.AspectOfExposure:
                 case (int)ArcDPSEnums.TrashID.AspectOfDeath:
                 case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                    // Tether casts performed by Aspects
+                    IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
+                    foreach (AnimatedCastEvent cast in tetherCasts)
+                    {
+                        int start = (int)cast.Time;
+                        int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                    }
                     break;
                 default:
                     break;
-            }
+
+            
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
