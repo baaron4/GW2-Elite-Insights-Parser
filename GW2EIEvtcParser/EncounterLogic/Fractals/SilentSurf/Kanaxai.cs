@@ -356,8 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
-
-            
+            }
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
