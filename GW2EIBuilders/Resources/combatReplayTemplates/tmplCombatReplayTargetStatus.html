@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getHPGradient(time, status)}">
+        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select">
             <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
-                <img :src="target.icon" height="18" width="18">
+                <img :src="target.icon" height="18" width="18"/>
                 {{target.name}}
             </h6>
             <p class="text-right cr-hp-display cr-hp-display-target">
@@ -69,6 +69,9 @@
                 sliderDelimiter.max = max;
                 sliderDelimiter.name = name;
             },
+            select() {
+                animator.selectActor(this.target.uniqueID);
+            }
         },
         computed: {
             breakbarPhases: function () {
