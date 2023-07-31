@@ -3399,28 +3399,31 @@
         public const long DualOrbitFireAndWater = 69184;
         public const long FlareSilentSurf = 69189;
         public const long FrighteningSpeedWindup = 69194;
-        public const long HarrowshotDeath = 69199;
+        public const long HarrowshotDeath = 69199; // harrowshot is the boon steal attack
         public const long GatheringShadowsSkill = 69205;
         public const long Phantasmagoria = 69206;
         public const long RendingStormTargetBuff = 69208;
         public const long DualOrbitWaterAndAir = 69211;
         public const long BleedingEdge = 69214;
         public const long AchievementEligibilityTheFearlessFew = 69222;
-        public const long AspectedVolleyLethargy = 69224;
+        public const long AspectedVolleyLethargy = 69224; // aspected volley is the basic attack
         public const long DeterminedKanaxai = 69236;
         public const long DualOrbitAirAndEarth = 69246;
         public const long DissectingDance = 69251;
         public const long DreadDefiance = 69263;
+        public const long AspectTetherSkill = 69265;
         public const long HeatTheSoulBuff = 69267;
         public const long DeterminedToDestroy = 69275;
         public const long AspectedVolleyFear = 69282;
         public const long GrapplingHook = 69284;
+        public const long AspectUnknownBuff1 = 69285; // enables aspect ability to tether?
         public const long Parachute = 69286;
         public const long HarrowshotLethargy = 69294;
         public const long SpiritFang = 69305;
         public const long AchievementEligibilityPeaceAndQuiet = 69312;
         public const long NaturalBalance = 69314;
         public const long AchievementEligibilityJadeSeaLegs = 69325;
+        public const long AspectUnknownBuff2 = 69327; // while on main platform, removed when tethering successfully?
         public const long DualOrbitFireAndAir = 69341;
         public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
@@ -3432,6 +3435,7 @@
         public const long KanaxaiSomethingBuff = 69363;
         public const long GatheringShadowsBuff = 69365;
         public const long BleedingEdge2 = 69371;
+        public const long AspectUnknownBuff3 = 69386; // after successful tether while on island?
         public const long HarrowshotFear = 69398;
         public const long HarrowshotTorment = 69406;
         public const long RendingStormSkill = 69410;
@@ -3443,6 +3447,17 @@
         public const long ScouringBlade2 = 69435;
         public const long AspectedVolleyExposure = 69436;
         public const long BlackPowderCharge = 69438;
+        public const long AspectOfExposureBuff2 = 69440; // aspect buff2 prevents aspect from tethering?
+        public const long AspectOfDeathBuff1 = 69441; // aspect buff1 applied on spawn, base buff?
+        public const long AspectOfLethargyBuff1 = 69442;
+        public const long AspectOfFearBuff2 = 69449;
+        public const long AspectOfFearBuff1 = 69451;
+        public const long AspectOfDeathBuff2 = 69453;
+        public const long AspectOfTormentBuff1 = 69456;
+        public const long AspectOfLethargyBuff2 = 69458;
+        public const long AspectOfExposureBuff1 = 69464;
+        public const long AspectOfTormentBuff2 = 69468;
     }
 
 }
+ 
