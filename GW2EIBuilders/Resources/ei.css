@@ -118,6 +118,7 @@
     color: #DDDDDD;
     width: 130px;
     height: 35px;
+    cursor: pointer;
 }
 
 .actor-rotation {
@@ -127,8 +128,9 @@
 
 .target-status {
     color: #DDDDDD;
-    width: 250px;
+    width: 180px;
     height: 35px;
+    cursor: pointer;
 }
 
 .cr-hp-display {
@@ -153,14 +155,14 @@
     position: relative;
     width: 100%;
     height: 100%;
-    top: -96px;
+    top: -97px;
 }
 
 .cr-breakbar-display {
     font-size: 0.65rem;
     max-height: 35px;
     height: 12px;
-    width: 200px;
+    width: 130px;
 }
 
 .cr-hp-display-player {
@@ -176,7 +178,7 @@
 }
 
 .cr-barrier-display-target {
-    left: 77%;
+    left: 70%;
 }
 
 h6.actor-shorten {
