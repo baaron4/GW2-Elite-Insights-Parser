@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.InstantCastFinder;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -53,7 +55,9 @@ namespace GW2EIEvtcParser.EIData
         public bool IsAchievementEligibility { get; private set; }
 
         public delegate bool Keeper(ParsedEvtcLog log);
-        private List<Keeper> _keepers { get; }
+        private List<Keeper> _enableConditions { get; }
+        private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
 
         /// <summary>
         /// Full constructor without special checks
@@ -73,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
             Description = description;
             InternalCooldown = internalCoolDown;
             ShowOnTable = true;
-            _keepers = new List<Keeper>();
+            _enableConditions = new List<Keeper>();
         }
 
         internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
@@ -99,24 +103,41 @@ namespace GW2EIEvtcParser.EIData
             IsAchievementEligibility = isAchievementEligibility;
             if (isAchievementEligibility)
             {
-                _keepers.Add(EligibilityKeeper);
+                _enableConditions.Add(EligibilityKeeper);
             } 
             else
             {
-                _keepers.Remove(EligibilityKeeper);
+                _enableConditions.Remove(EligibilityKeeper);
             }
             return this;
         }
 
-        internal Mechanic UsingKeeper(Keeper keeper)
+        internal Mechanic UsingEnable(Keeper keeper)
         {
-            _keepers.Add(keeper);
+            _enableConditions.Add(keeper);
             return this;
         }
 
-        internal bool Keep(ParsedEvtcLog log)
+        internal Mechanic UsingDisableWithEffectData()
         {
-            return _keepers.All(keeper => keeper(log));
+            return UsingEnable(log => !log.CombatData.HasEffectData);
+        }
+
+        internal Mechanic WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
+        {
+            _maxBuild = maxBuild;
+            _minBuild = minBuild;
+            return this;
+        }
+
+        internal bool Available(ParsedEvtcLog log)
+        {
+            if (!_enableConditions.All(checker => checker(log)))
+            {
+                return false;
+            }
+            ulong gw2Build = log.CombatData.GetBuildEvent().Build;
+            return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
         internal bool KeepIfEmpty(ParsedEvtcLog log)
