@@ -298,17 +298,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long end = remove?.Time ?? maxEnd;
                 replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
             }
-        }
-
-        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
-        {
-            IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
-            foreach (AnimatedCastEvent cast in tetherCasts)
-            {
-                int start = (int)cast.Time;
-                int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
-            }
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             var axes = new List<Segment>();
@@ -326,6 +315,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
+            foreach (AnimatedCastEvent cast in tetherCasts)
+            {
+                int start = (int)cast.Time;
+                int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+            }
+
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
