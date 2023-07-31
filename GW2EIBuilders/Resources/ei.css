@@ -368,9 +368,19 @@ img.icon-l {
     height: 24px;
 }
 
+
 .empty-icon-l {
     width: 24px;
     height: 24px;
+}
+img.icon-sl {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-icon-sl {
+    width: 32px;
+    height: 32px;
 }
 
 .empty-icon-ll {
