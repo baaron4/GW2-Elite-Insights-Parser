@@ -1,16 +1,13 @@
 <template>
     <div class="d-flex align-items-center actor-rotation">
         <div v-if="rotation.current">
-            <img :src="rotation.current.skill.icon" :alt="rotation.current.skill.name"
-                :title="rotation.current.skill.name" class="icon-ll"
-                :class="{'rot-cancelled': rotation.current.type === 2, 'rot-unknown': rotation.current.type === 0, 'rot-animfull': rotation.current.type === 3, 'rot-instant': rotation.current.type === 4}">
+            <img class="icon-ll" :class="getRotationClass(rotation.current)" :src="rotation.current.skill.icon" :data-original-title="getTooltip(rotation.current)"/>
         </div>
         <div v-else class="empty-icon-ll">
 
         </div>
         <div v-for="next in rotation.nexts">
-            <img :src="next.skill.icon" :alt="next.skill.name" :title="next.skill.name" class="icon-l"
-                :class="{'rot-cancelled': next.type === 2, 'rot-unknown': next.type === 0, 'rot-animfull': next.type === 3, 'rot-instant': next.type === 4}">
+            <img class="icon-l" :class="getRotationClass(next)" :src="next.skill.icon" :data-original-title="getTooltip(next)"/>
         </div>
     </div>
 </template>
@@ -50,6 +47,22 @@
                 } else {
                     return id;
                 }
+            },
+            getRotationClass(cast) {
+                return {
+                    'rot-cancelled': cast.type === RotationStatus.CANCEL,
+                    'rot-unknown': cast.type === RotationStatus.UNKNOWN,
+                    'rot-animfull': cast.type === RotationStatus.FULL,
+                    'rot-instant': cast.type === RotationStatus.INSTANT
+                };
+            },
+            getTooltip(cast) {
+                var tooltip = `${cast.skill.name} at ${cast.time}s`;
+                if (cast.type === RotationStatus.INSTANT) {
+                    return tooltip;
+                } else {
+                    return tooltip + ` for ${cast.duration}ms`;
+                }
             }
         },
         computed: {
@@ -85,7 +98,9 @@
                 var duration = item[2] / 1000.0;
                 if (x <= time && time <= x + duration) {
                     res.current = {
+                        time: item[0],
                         skill: findSkill(false, item[1]),
+                        duration: item[2],
                         type: item[3]
                     };
                     id++;
@@ -94,7 +109,9 @@
                     var next = this.actorRotation[j];
                     if (next[0] >= time) {
                         res.nexts.push({
+                            time: next[0],
                             skill: findSkill(false, next[1]),
+                            duration: next[2],
                             type: next[3]
                         });
                     }
