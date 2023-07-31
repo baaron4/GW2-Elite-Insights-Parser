@@ -1,5 +1,10 @@
 <template>
     <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale85">
+            <li class="nav-item">
+                <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Show Rotation</a>
+            </li>
+        </ul>  
         <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1 scale65">
             <li v-for="(buffType, index) in possibleBuffs" class="ml-1 mr-1">
                 <input :id="'crtar-possibleBuffs-' + index" type="checkbox" :value="buffType" v-model="buffsToShow" />
@@ -9,8 +14,7 @@
         <div class="mt-1 combat-actor-status-container scrollable-y">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <div v-for="status in targets" v-if="alive(status)" class="target-data ml-1 mr-1" :class="{active: selectedtargetid === status.target.uniqueID}">
-                    <combat-replay-target-stats-component :time="time" :targetindex="status.target.id" :buffstoshow="buffsToShow">
-                    </combat-replay-target-stats-component>
+                    <combat-replay-target-stats-component :time="time" :targetindex="status.target.id" :rotation="rotation" :buffstoshow="buffsToShow"/>
                 </div>
             </div>
         </div>
@@ -23,6 +27,7 @@
         template: `${template}`,
         data: function () {
             return {
+                rotation: false,
                 buffsToShow: ["Others", "Boons", "Fight Specifics", "Conditions"]
             }
         },
