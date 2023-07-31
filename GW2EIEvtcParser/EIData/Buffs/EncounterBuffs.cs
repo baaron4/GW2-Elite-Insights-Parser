@@ -413,7 +413,7 @@ namespace GW2EIEvtcParser.EIData
             // Kanaxai, Scythe of House Aurkus
             new Buff("Determined to Destroy", DeterminedToDestroy, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (Kanaxai)", DeterminedKanaxai, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
-            new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidAffliction),
+            new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Debuff, BuffImages.VoidAffliction),
             new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Kanaxai Something", KanaxaiSomethingBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Gathering Shadows", GatheringShadowsBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.CaptainsInspiration),
