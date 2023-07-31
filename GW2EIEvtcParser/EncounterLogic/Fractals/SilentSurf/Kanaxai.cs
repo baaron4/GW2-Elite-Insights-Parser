@@ -301,7 +301,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AnimatedCastEvent cast in tetherCasts)
             {
                 int start = (int)cast.Time;
-                int end = (int)cast.ExpectedEndTime;
+                int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
                 replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
             }
         }
