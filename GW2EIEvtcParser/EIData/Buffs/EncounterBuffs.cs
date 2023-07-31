@@ -420,8 +420,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
             new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffStackType.CappedDuration, 999, BuffClassification.Other, BuffImages.Target),
-            new Buff("Rending Storm Target", RendingStormTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target2),
-            new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
             new Buff("Rending Storm Target (Axe 1)", RendingStormAxeTargetBuff1, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
             new Buff("Rending Storm Target (Axe 2)", RendingStormAxeTargetBuff2, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
             new Buff("Spread AoE", KanaxaiSpreadOrangeAoEBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),

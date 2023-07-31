@@ -3458,8 +3458,11 @@
         public const long BleedingEdge2 = 69371;
         public const long AspectIslandBuff = 69386; // after successful tether while on island?
         public const long POV_KanaxaiOffPlatformDeathBuff = 69391;
+        public const long HarrowshotFear = 69398;
         public const long HarrowshotTorment = 69406;
+        public const long RendingStormSkill = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
+        public const long DreadVisageSkillIsland = 69418;
         public const long WorldCleaver = 69419;
         public const long ThesssWard = 69421;
         public const long TempestuousAria = 69427;
