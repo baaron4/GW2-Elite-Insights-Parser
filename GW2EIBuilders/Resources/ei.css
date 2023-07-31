@@ -147,10 +147,6 @@
     width: 45px;
 }
 
-.cr-breakbar-bar {
-    color: #DDDDDD;
-}
-
 .cr-barrier { 
     position: relative;
     width: 100%;
@@ -160,8 +156,12 @@
 
 .cr-breakbar-display {
     font-size: 0.65rem;
-    max-height: 35px;
-    height: 12px;
+    width: 250px;
+}
+
+.cr-breakbar-bar {
+    color: #DDDDDD;
+    height: 15px;
     width: 200px;
 }
 
