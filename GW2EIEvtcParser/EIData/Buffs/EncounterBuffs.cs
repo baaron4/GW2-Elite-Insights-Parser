@@ -460,6 +460,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Freezie
             new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IcyBarrier),
+            new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Mai Trin
             new Buff("Shared Destruction (Mai Trin)", SharedDestructionMaiTrin, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Shared Destruction CM (Mai Trin)", SharedDestructionMaiTrinCM, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
@@ -469,7 +470,6 @@ namespace GW2EIEvtcParser.EIData
             //new Buff("Mai Trin ???", 63858, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Mai Trin ?????", MaiTrinSomething, Source.FightSpecific, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Chaos and Destruction", ChaosAndDestruction, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Exposed (EOD Strike)", ExposedEODStrike, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             new Buff("Photon Saturation", PhotonSaturation, Source.FightSpecific, BuffClassification.Other, BuffImages.PhotonSaturation),
             new Buff("Laser Target (Green)", MaiTrinCMBeamsTargetGreen, Source.FightSpecific, BuffClassification.Other, BuffImages.SynergeticLightAttunementGreen),
             new Buff("Laser Target (Red)", MaiTrinCMBeamsTargetRed, Source.FightSpecific, BuffClassification.Other, BuffImages.StaticLightAttunementRed),

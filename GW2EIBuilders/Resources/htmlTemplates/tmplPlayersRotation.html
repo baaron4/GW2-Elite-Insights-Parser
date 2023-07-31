@@ -4,7 +4,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Players" style="font-size: 1.1em;">
                 Players <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu p-2 font-weight-normal" style="min-width: 145px; max-width: 145px;">
+            <ul class="dropdown-menu p-2 font-weight-normal" style="min-width: 165px; max-width: 165px;">
                 <div class="d-flex flex-column justify-content-center align-items-center mb-1"
                     style="border-bottom: 2px solid #bbb;">
                     <li>
@@ -20,7 +20,8 @@
                     <input :id="'rotations-player-' + index  + '-' + phaseindex" type="checkbox"
                         v-model="selectedPlayers[index].selected" @click.stop="stopClickEvent" />
                     <label :for="'rotations-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                        style="font-size: 0.8em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 110px; margin-top: 2px; margin-left: 5px; position: absolute;">
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">         
+                        <img class="icon" :src="player.icon">
                         {{player.name}}
                     </label>
                 </li>
@@ -176,11 +177,11 @@
                     var player = this.players[i];
                     computeRotationData(player.details.rotation[this.phaseindex], images, this.data, this.phase, player, i);
                 }
-                this.updateVisibily(images, this.phase.start, this.phase.end);
                 this.layout = getActorsRotationLayout(images, this.light ? '#495057' : '#cccccc', this.players, this.phase);
                 if (backUpXAxis) {
                     this.layout.xaxis = backUpXAxis;
                 }
+                this.updateVisibily(images, this.phase.start, this.phase.end);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
                 this.annotationsOffset = this.layout.annotations.length;
                 for (var i = 0; i < this.players.length; i++) {

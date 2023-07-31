@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -29,6 +30,19 @@ namespace GW2EIDPSReport
         {
             public string UserToken { get; set; }
         }
+        public class GetUploadsParameters
+        {
+            public int Page { get; set; } = 1;
+            public int PerPage { get; set; } = 25;
+            public uint Since { get; set; } = 0;
+            public uint SinceEncounter { get; set; } = 0;
+            public uint UntilEncounter { get; set; } = 0;
+            public GetUploadsParameters()
+            {
+
+            }
+        }
+        ///////////////// URL Utilities
 
         private static string BaseUploadContentURL { get; } = "https://dps.report/uploadContent?json=1";
         private static string BaseGetUploadsURL { get; } = "https://dps.report/getUploads?page=";
@@ -46,7 +60,7 @@ namespace GW2EIDPSReport
             return url;
         }
 
-        private static string GetUploadURL(string baseURL, string userToken, bool anonymous = false, bool detailedWvW = false)
+        private static string GetUploadContentURL(string baseURL, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
             string url = GetURL(baseURL, userToken);
             if (anonymous)
@@ -59,15 +73,32 @@ namespace GW2EIDPSReport
             }
             return url;
         }
-
+        private static string GetGetUploadsURL(GetUploadsParameters parameters, string userToken)
+        {
+            string url = BaseGetUploadsURL + parameters.Page + "&perPage=" + parameters.PerPage;
+            if (parameters.Since > 0)
+            {
+                url += "&since=" + parameters.Since;
+            }
+            if (parameters.SinceEncounter > 0)
+            {
+                url += "&sinceEncounter=" + parameters.SinceEncounter;
+            }
+            if (parameters.UntilEncounter > 0)
+            {
+                url += "&untilEncounter=" + parameters.UntilEncounter;
+            }
+            return GetURL(url, userToken);
+        }
+        ///////////////// APIs
         public static DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
-            return UploadToDPSR(fi, GetUploadURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traces);
+            return UploadToDPSR(fi, GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traces);
         }
 
-        public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, int page = 1)
+        public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
         {
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetURL(BaseGetUploadsURL + page, userToken), traces);
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traces);
         }
         public static string GenerateUserToken(List<string> traces)
         {
@@ -111,48 +142,7 @@ namespace GW2EIDPSReport
             }
             return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traces);
         }
-
-        /*private static string UploadRaidar(FileInfo fi)
-        {
-            //string fileName = fi.Name;
-            //byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            //Uri webService = new Uri(@"https://www.gw2raidar.com/api/v2/encounters/new");
-            //HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
-            //requestMessage.Headers.ExpectContinue = false;
-
-            //MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
-            //ByteArrayContent byteArrayContent = new ByteArrayContent(fileContents);
-            //byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-            //multiPartContent.Add(byteArrayContent, "file", fileName);
-            //requestMessage.Content = multiPartContent;
-
-            //HttpClient httpClient = new HttpClient();
-            //try
-            //{
-            //    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
-            //    HttpResponseMessage httpResponse = httpRequest.Result;
-            //    HttpStatusCode statusCode = httpResponse.StatusCode;
-            //    HttpContent responseContent = httpResponse.Content;
-
-            //    if (responseContent != null)
-            //    {
-            //        Task<String> stringContentsTask = responseContent.ReadAsStringAsync();
-            //        String stringContents = stringContentsTask.Result;
-            //        int first = stringContents.IndexOf('{');
-            //        int length = stringContents.LastIndexOf('}') - first + 1;
-            //        String JSONFormat = stringContents.Substring(first, length);
-            //        DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat);
-            //        String logLink = item.permalink;
-            //        return logLink;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return ex.Message;
-            //    // Console.WriteLine(ex.Message);
-            //}
-            return "";
-        }*/
+        ///////////////// Response Utilities
         private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
         {
             const int tentatives = 5;

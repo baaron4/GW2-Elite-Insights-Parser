@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(RendingStormSkill, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
                 new PlayerDstHitMechanic(new long [] { HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment }, "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
                 new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
-                new PlayerDstBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
+                new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
                 new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
                 new PlayerDstBuffApplyMechanic(Phantasmagoria, "Phantasmagoria", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
                 new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 5s extreme vulnerability from dread visage
                         const int duration = 5000;
                         // find last apply
-                        var apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
                             .OfType<BuffApplyEvent>()
                             .Where(e => e.Time <= remove.Time && e.To == remove.To)
                             .MaxBy(e => e.Time);
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 60s extreme vulnerability from frightening speed
                         const int duration = 60000;
                         // find last apply
-                        var apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
                             .OfType<BuffApplyEvent>()
                             .Where(e => e.Time <= remove.Time && e.To == remove.To)
                             .MaxBy(e => e.Time);
@@ -274,7 +274,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
             IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
             AgentItem tetherAspect = _unknownAgent;
-            foreach (var apply in tetherApplies)
+            foreach (BuffApplyEvent apply in tetherApplies)
             {
                 tetherAspect = apply.By == _unknownAgent ? tetherAspect : apply.By;
                 int start = (int)apply.Time;
@@ -284,9 +284,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
-            var phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
-            var phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
-            foreach (var apply in phantasmagoria.OfType<BuffApplyEvent>())
+            IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
+            IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
+            foreach (BuffApplyEvent apply in phantasmagoria.OfType<BuffApplyEvent>())
             {
                 int start = (int)apply.Time;
                 BuffRemoveAllEvent remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
