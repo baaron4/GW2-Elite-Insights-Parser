@@ -14,6 +14,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "EliteInsightsVersion", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a131ac0acbf7ea98cb8d8f19ff6951f91", null ],
     [ "FightIcon", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab39cc6c413503e7aab1d30ba935ffda2", null ],
     [ "FightName", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab27aa1635469fe3020b5d104b12772e4", null ],
+    [ "FractalScale", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac075875f8eb8fb8be5a415655a951459", null ],
     [ "GW2Build", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b", null ],
     [ "IsCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8", null ],
     [ "Language", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1644dfa11424c9f28b64347bf56dd00c", null ],

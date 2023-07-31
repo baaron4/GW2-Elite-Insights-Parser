@@ -79,6 +79,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MedBlasterHeal, "Med Blaster (Heal)" },
             { SoothingDetonation, "Soothing Detonation" },
             { HealingTurretHeal, "Healing Turret (Heal)" },
+            { BladeBurstOrParticleAccelerator, "Blade Burst or Particle Accelerator" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -224,8 +225,10 @@ namespace GW2EIEvtcParser.ParsedData
             { SigilOfEarth, "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png" },
             { SigilOfHydromancy, "https://wiki.guildwars2.com/images/3/33/Superior_Sigil_of_Hydromancy.png" },
             { SigilOfWater, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
+            { WaveOfHealing, "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png" },
             { RuneOfTormenting, "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png" },
             { RuneOfNightmare, "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png" },
+            { SuperiorRuneOfTheDolyak, "https://wiki.guildwars2.com/images/2/28/Superior_Rune_of_the_Dolyak.png" },
             { FrozenBurstRuneOfIce, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png" },
             { HuntersCallRuneOfMadKing, "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png" },
             { ArtilleryBarrageRuneofCitadel, "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png" },
@@ -239,6 +242,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ThrowNetUnderwaterNet, "https://wiki.guildwars2.com/images/3/3d/Net_Shot.png" },
             { Chilled, BuffImages.Chilled },
             { WhirlingAssault, "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png" },
+            { LeechingBolt1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
+            { LeechingBolt2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
             //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png" },
             //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png" },
@@ -277,6 +282,8 @@ namespace GW2EIEvtcParser.ParsedData
             { LightningJolt, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
             { ShatteringIceDamage, "https://wiki.guildwars2.com/images/6/63/Shattering_Ice.png" },
             { ArcaneShieldDamage, BuffImages.ArcaneShield },
+            { ConeOfColdHealing, "https://wiki.guildwars2.com/images/9/92/Cone_of_Cold.png" },
+            { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
@@ -291,6 +298,8 @@ namespace GW2EIEvtcParser.ParsedData
             { HeavySmashJadeMech, "https://wiki.guildwars2.com/images/9/98/Heavy_Smash_%28Mech%29.png" },
             { TwinStrikeJadeMech, "https://wiki.guildwars2.com/images/3/31/Twin_Strike_%28Mech%29.png" },
             { RecallMech_MechSkill, "https://wiki.guildwars2.com/images/5/56/Recall_Mech.png" },
+            { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
+            { BladeBurstOrParticleAccelerator, "https://i.imgur.com/09MY813.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
@@ -305,6 +314,7 @@ namespace GW2EIEvtcParser.ParsedData
             { Chapter1DesertBloomHeal, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png" },
             { Chapter1DesertBloomSkill, "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png" },
             { Chapter2RadiantRecovery, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
+            { Chapter2RadiantRecoveryHealing, "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png" },
             { Chapter3AzureSun, "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png" },
             { Chapter4ShiningRiver, "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png" },
             { EpilogueEternalOasis, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png" },
@@ -342,6 +352,8 @@ namespace GW2EIEvtcParser.ParsedData
             { WhirlingDefensesIllusionaryWarden, "https://wiki.guildwars2.com/images/e/e8/Whirling_Defense.png" },
             { CutterBurst, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
             { CutterBurstMindblade, "https://wiki.guildwars2.com/images/4/4c/Flying_Cutter.png" },
+            { RestorativeMantras, "https://wiki.guildwars2.com/images/6/61/Restorative_Mantras.png" },
+            { SignetOfTheEtherHeal, BuffImages.SignetOfTheEther },
             // Necromancer
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
             { ChillingNova, "https://wiki.guildwars2.com/images/8/82/Chilling_Nova.png" },
@@ -361,6 +373,8 @@ namespace GW2EIEvtcParser.ParsedData
             { UnstableExplosion, "https://wiki.guildwars2.com/images/c/c9/Mark_of_Horror.png" },
             { SadisticSearing, BuffImages.SadisticSearing },
             { SadisticSearingActivation, BuffImages.SadisticSearing },
+            { SoulEater, "https://wiki.guildwars2.com/images/6/6c/Soul_Eater.png" },
+            { LesserSignetOfVampirism, BuffImages.SignetOfVampirism },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
@@ -410,6 +424,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RootSlap, "https://wiki.guildwars2.com/images/7/7d/Root_Slap.png" },
             { Peck, "https://wiki.guildwars2.com/images/8/83/Peck.png" },
             { FrenziedAttack, "https://wiki.guildwars2.com/images/8/81/Frenzied_Attack.png" },
+            { SignetOfRenewalHeal, BuffImages.SignetOfRenewal },
             // Revenant
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
             { UnrelentingAssaultMultihit, "https://wiki.guildwars2.com/images/e/e9/Unrelenting_Assault.png" },
@@ -433,6 +448,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SaintsShieldDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { ImperialImpactDodge, "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png" },
             { LesserBanishEnchantment, "https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" },
+            { BalanceInDiscord, "https://wiki.guildwars2.com/images/a/a2/Balance_in_Discord.png" },
             // Thief
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
             { DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png" },

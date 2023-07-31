@@ -18,6 +18,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff), // Spectrum Shield
             new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Thermal Release Valve
             new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingDstSpecChecker(Spec.Holosmith),
+            new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1).UsingDstSpecChecker(Spec.Holosmith)
+                .UsingSecondaryEffectChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2),
         };
 
         private static readonly HashSet<long> _photonForgeCast = new HashSet<long>
