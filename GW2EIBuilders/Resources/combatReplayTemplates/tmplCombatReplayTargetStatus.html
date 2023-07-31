@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column justify-content-center align-items-center">
         <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select">
             <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
                 <img :src="target.icon" height="18" width="18"/>
@@ -15,7 +15,7 @@
         </div>
         <div v-if="hasBreakbarPercent" class="cr-breakbar-display d-flex flex-column align-items-center">
             <div class="cr-breakbar-bar" :style="{'background': getBreakbarGradient(time)}">
-                <p class="text-center">
+                <p class="text-center" style="margin: 0;">
                     {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
                 </p>
             </div>

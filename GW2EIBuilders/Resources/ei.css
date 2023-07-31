@@ -119,6 +119,7 @@
     width: 130px;
     height: 35px;
     cursor: pointer;
+    user-select: none;
 }
 
 .actor-rotation {
@@ -131,6 +132,7 @@
     width: 250px;
     height: 35px;
     cursor: pointer;
+    user-select: none;
 }
 
 .cr-hp-display {
@@ -156,14 +158,14 @@
 
 .cr-breakbar-display {
     font-size: 0.65rem;
+    min-height: 16px;
     width: 250px;
 }
 
 .cr-breakbar-bar {
     color: #DDDDDD;
-    height: 15px;
     width: 200px;
-}
+} 
 
 .cr-hp-display-player {
     left: 0%;
