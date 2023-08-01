@@ -87,6 +87,8 @@ namespace GW2EIEvtcParser
         public const string RevenantNaturalHarmonyEnergyRelease = "E239BA17214B4943A4EC2D6B43F6175F";
         public const string RevenantPurifyingEssence = "D2B388E8DB721544A110979C3A384977";
         public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
+        public const string RevenantInspiringReinforcement = "09171204F3936841813E518123E2F867";
+        public const string RevenantInspiringReinforcementPart = "E6D6CD56B9A61E40A86F982C60421625";
         public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
         // Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment

@@ -8,11 +8,14 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using System;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal static class RevenantHelper
     {
+        public static readonly Color ProfColor = Colors.DarkRed;
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff),
@@ -165,5 +168,24 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = ProfColor;
+
+            // Inspiring Reinforcement
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation, lifespan, color.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player));
+            }
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/a/a1/Inspiring_Reinforcement.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+        }
     }
 }
