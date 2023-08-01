@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EIData
             Enhancement,
             Nourishment,
             OtherConsumable,
+            Hidden,
             Unknown
         };
 
