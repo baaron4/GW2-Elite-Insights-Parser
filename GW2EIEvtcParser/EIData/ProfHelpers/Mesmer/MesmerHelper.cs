@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
@@ -360,17 +360,17 @@ namespace GW2EIEvtcParser.EIData
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive))
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, 128, 0.5f, player, lifespan, new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, 128, 0.5f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive))
             {
-                IconDecoration first = null;
+                GenericAttachedDecoration first = null;
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
-                    var decoration = new IconDecoration(ParserIcons.PortalMesmerExeunt, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration(ParserIcons.PortalMesmerExeunt, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {

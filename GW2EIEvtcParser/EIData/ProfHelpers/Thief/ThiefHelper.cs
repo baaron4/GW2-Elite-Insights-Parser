@@ -123,10 +123,10 @@ namespace GW2EIEvtcParser.EIData
             const string lineColor = "rgba(169, 108, 108, 0.5)";
 
             List<EffectEvent> entrances = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance).ToList();
-            List<IconDecoration> entranceDecorations = entrances.Select(effect =>
+            List<GenericAttachedDecoration> entranceDecorations = entrances.Select(effect =>
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, ShadowPortalOpenedBuff);
-                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
+                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
                 replay.Decorations.Add(decoration);
                 return decoration;
             }).ToList();
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (EffectEvent exit in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit))
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
-                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, player, lifespan, new PositionConnector(exit.Position));
+                var decoration = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, lifespan, new PositionConnector(exit.Position)).UsingSkillMode(player);
                 replay.Decorations.Add(decoration);
 
                 int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);

@@ -265,17 +265,17 @@ namespace GW2EIEvtcParser.EIData
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive))
             {
                 (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, player, lifespan, new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player));
             }
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
             {
-                IconDecoration first = null;
+                GenericAttachedDecoration first = null;
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
-                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {

@@ -53,12 +53,12 @@ namespace GW2EIEvtcParser.EIData
 
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal))
             {
-                IconDecoration first = null;
+                GenericAttachedDecoration first = null;
                 for (int i = 0; i < group.Count; i++)
                 {
                     EffectEvent effect = group[i];
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
-                    var decoration = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, player, lifespan, new PositionConnector(effect.Position));
+                    var decoration = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
                     replay.Decorations.Add(decoration);
                     if (i == 0)
                     {
