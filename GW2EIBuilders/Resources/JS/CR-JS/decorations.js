@@ -22,6 +22,7 @@ class MechanicDrawable {
     }
 
     draw() {
+        console.error("Draw should be overriden");
         // to override
     }
 
@@ -685,5 +686,34 @@ class IconDecorationDrawable extends MechanicDrawable {
         ctx.globalAlpha = this.opacity;
         ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
         ctx.restore();
+    }
+}
+
+class IconOverheadDecorationDrawable extends IconDecorationDrawable {
+    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo, image, pixelSize, worldSize, opacity);
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
+            return this.worldSize;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
+    getPosition() {
+        const pos = super.getPosition();
+        if (!pos) {
+            return null;
+        }
+        if (!this.master) {
+            console.error('Invalid IconOverhead decoration');
+            return null; 
+        }
+        const masterSize = this.master.getSize();
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1 : animator.scale;
+        pos.y -= masterSize/2 + this.getSize()/4 + 10 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        return pos;
     }
 }
