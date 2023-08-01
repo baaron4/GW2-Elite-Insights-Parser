@@ -1,6 +1,7 @@
 <template>
     <div class="d-flex d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getHPGradient(time, status)}">
+        <div class="target-status" :style="{'background': getHPGradient(time, status)}"
+                           @click="selectActor();">
             <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
                 <img :src="target.icon" height="18" width="18">
                 {{target.name}}
@@ -36,7 +37,10 @@
     Vue.component("combat-replay-target-status-component", {
         props: ["targetindex", "time"],
         template: `${template}`,
-        methods: {
+        methods: {    
+            selectActor: function (id) {
+                animator.selectActor(this.target.uniqueID);
+            },
             getBreakbarPercent: function (time) {
                 if (!this.hasBreakbarPercent) {
                     return 100.0;

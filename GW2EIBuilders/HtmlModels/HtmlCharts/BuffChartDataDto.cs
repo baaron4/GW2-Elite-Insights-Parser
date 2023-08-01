@@ -97,6 +97,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             BuildBoonGraphData(footList, log.StatisticsHelper.PresentOtherConsumables, buffGraphData, phase, usedBuffs);
             foreach (BuffsGraphModel bgm in buffGraphData.Values)
             {
+                if (bgm.Buff.Classification == Buff.BuffClassification.Hidden)
+                {
+                    continue;
+                }
                 BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
                 if (graph != null)
                 {

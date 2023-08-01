@@ -1,5 +1,6 @@
 <template>
-    <div class="player-status" :style="{'background': getHPGradient(time, status)}">
+    <div class="player-status" :style="{'background': getHPGradient(time, status)}" 
+                           @click="selectActor();">
         <h6 class="actor-shorten text-center" :title="player.name">
             <img :src="player.icon" :alt="player.profession" height="18" width="18">
             {{player.name}}
@@ -21,6 +22,9 @@
         props: ["playerindex", "time"],
         template: `${template}`,
         methods: {         
+            selectActor: function (id) {
+                animator.selectActor(this.player.uniqueID);
+            },
             getHPPercent: function (time) {
                 if (!this.hasHealth) {
                     return 100;
