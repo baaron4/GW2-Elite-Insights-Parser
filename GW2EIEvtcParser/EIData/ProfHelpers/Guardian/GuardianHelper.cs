@@ -14,6 +14,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class GuardianHelper
     {
+        public static readonly Color ProfColor = Colors.LightBlue;
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
@@ -146,5 +148,27 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = ProfColor;
+
+            // Wall of Reflection
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/6/6d/Wall_of_Reflection.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+
+            // Sanctuary
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ed/Sanctuary.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+        }
     }
 }

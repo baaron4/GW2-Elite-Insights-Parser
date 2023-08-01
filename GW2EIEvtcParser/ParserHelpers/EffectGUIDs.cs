@@ -93,6 +93,7 @@ namespace GW2EIEvtcParser
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
+        public const string GuardianSanctuary = "A96093E9CB3D7F468C5235C81537301E";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // used with all shouts
         public const string GuardianSaveYourselves = "68F2C378E6C80548B5A3C89870C5DD86";
         public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
@@ -101,6 +102,7 @@ namespace GW2EIEvtcParser
         public const string GuardianMercifulIntervention = "B45E7BD66E424A4CA695DE63DC13E93F"; // delayed, when reaching target?
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
+        public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";

@@ -293,6 +293,15 @@ namespace GW2EIEvtcParser.EIData
 
             switch (player.Spec)
             {
+                case Spec.Guardian:
+                case Spec.Dragonhunter:
+                case Spec.Willbender:
+                    GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Firebrand:
+                    GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    FirebrandHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Scourge:
                     ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;

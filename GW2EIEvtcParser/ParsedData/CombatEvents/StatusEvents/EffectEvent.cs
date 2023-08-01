@@ -1,5 +1,6 @@
 ﻿using System;
 using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -18,6 +19,9 @@ namespace GW2EIEvtcParser.ParsedData
 
         public long Duration { get; protected set; }
 
+        /// <summary>The effect's rotation around the z-axis in degrees</summary>
+        public float Rotation => RadianToDegreeF(Orientation.Z);
+
         internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             EffectID = evtcItem.SkillID;
@@ -34,6 +38,5 @@ namespace GW2EIEvtcParser.ParsedData
                );
             }
         }
-
     }
 }
