@@ -7,11 +7,10 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class Color
     {
-        public int R;
-        public int G
-        ;
-        public int B;
-        public float A;
+        public int R { get; set; }
+        public int G { get; set; }
+        public int B { get; set; }
+        public float A { get; set; }
 
         public Color(int r, int g, int b, float a = 1.0f)
         {
