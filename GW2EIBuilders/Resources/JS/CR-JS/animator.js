@@ -198,28 +198,31 @@ class Animator {
                 let decoration = null;
                 switch (actor.type) {
                     case "Circle":
-                        decoration =new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
+                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
                         break;
                     case "Rectangle":
-                        decoration =new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
+                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
                         break;
                     case "RotatedRectangle":
-                        decoration =new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
+                        decoration = new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
                         break;
                     case "Doughnut":
-                        decoration =new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
+                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
                         break;
                     case "Pie":
-                        decoration =new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
+                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
                         break;
                     case "Line":
-                        decoration =new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
+                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
                         break;
                     case "FacingRectangle":
-                        decoration =new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
+                        decoration = new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
                         break;
                     case "FacingPie":
-                        decoration =new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        break;
+                    case "IconDecoration":
+                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, this.inchToPixel * actor.size, actor.opacity);
                         break;
                     default:
                         throw "Unknown decoration type";

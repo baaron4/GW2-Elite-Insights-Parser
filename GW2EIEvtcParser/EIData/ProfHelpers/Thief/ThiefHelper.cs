@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -14,6 +15,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ThiefHelper
     {
+        public static readonly Color ProfColor = new Color(169, 108, 108);
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(Shadowstep, Infiltration),
@@ -111,10 +114,40 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Thief21,
             (int)MinionID.Thief22,
         };
+
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = ProfColor;
+
+            // Shadow Portal locations
+            var entrances = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance).ToList();
+            var entranceDecorations = entrances.Select(effect =>
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                replay.Decorations.Add(icon);
+                return icon;
+            }).ToList();
+            foreach (EffectEvent exit in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                var connector = new PositionConnector(exit.Position);
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);
+                if (index > -1)
+                {
+                    replay.Decorations.Add(entranceDecorations[index].LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                }
+                replay.Decorations.Add(icon);
+            }
+        }
     }
 }
