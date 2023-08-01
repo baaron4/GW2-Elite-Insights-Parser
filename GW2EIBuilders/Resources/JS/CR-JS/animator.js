@@ -222,7 +222,7 @@ class Animator {
                         decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
                         break;
                     case "IconDecoration":
-                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, this.inchToPixel * actor.size, actor.opacity);
+                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
                         break;
                     default:
                         throw "Unknown decoration type";

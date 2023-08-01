@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
                 replay.Decorations.Add(icon);
                 return icon;
             }).ToList();
@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(exit.Position);
                 replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
                 int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);
                 if (index > -1)
                 {

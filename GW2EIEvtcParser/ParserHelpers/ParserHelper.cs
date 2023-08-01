@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser
         internal static readonly AgentItem _unknownAgent = new AgentItem();
 
         public const int CombatReplayPollingRate = 150;
+        internal const int CombatReplaySkillSizeInPixel = 22;
 
         public const int MinionLimit = 1500;
 

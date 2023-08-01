@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillSizeInPixel, 90, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
             {
@@ -278,7 +278,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, false));
-                    GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
                     if (first == null)
                     {
                         first = decoration;
