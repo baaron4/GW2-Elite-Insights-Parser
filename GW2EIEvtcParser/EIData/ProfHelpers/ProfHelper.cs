@@ -260,31 +260,34 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            const string lineColor = "rgba(0, 0, 255, 0.5)";
+            Color color = Colors.Blue;
 
+            // White Mantle Portal Device portal locations
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive))
             {
                 (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player));
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
-
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive))
             {
                 GenericAttachedDecoration first = null;
-                for (int i = 0; i < group.Count; i++)
+                foreach (EffectEvent effect in group)
                 {
-                    EffectEvent effect = group[i];
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
-                    var decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
-                    replay.Decorations.Add(decoration);
-                    if (i == 0)
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, false));
+                    GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    if (first == null)
                     {
                         first = decoration;
                     }
                     else
                     {
-                        replay.Decorations.Add(first.LineTo(decoration, 0, lineColor));
+                        replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, false));
                     }
+                    replay.Decorations.Add(decoration);
                 }
             }
 

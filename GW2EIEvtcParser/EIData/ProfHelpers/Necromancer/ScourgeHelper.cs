@@ -49,25 +49,27 @@ namespace GW2EIEvtcParser.EIData
 
          internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            const string lineColor = "rgba(30, 193, 110, 0.5)";
+            Color color = NecromancerHelper.ProfColor;
 
+            // Sand Swell portal locations
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal))
             {
                 GenericAttachedDecoration first = null;
-                for (int i = 0; i < group.Count; i++)
+                foreach (EffectEvent effect in group)
                 {
-                    EffectEvent effect = group[i];
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
-                    var decoration = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, lifespan, new PositionConnector(effect.Position)).UsingSkillMode(player);
-                    replay.Decorations.Add(decoration);
-                    if (i == 0)
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    if (first == null)
                     {
-                        first = decoration;
+                        first = icon;
                     }
                     else
                     {
-                        replay.Decorations.Add(first.LineTo(decoration, 0, lineColor));
+                        replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
                     }
+                    replay.Decorations.Add(icon);
                 }
             }
         }

@@ -13,6 +13,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class NecromancerHelper
     {
+        public static readonly Color ProfColor = new Color(30, 193, 110);
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
