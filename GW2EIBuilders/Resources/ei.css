@@ -26,14 +26,17 @@
 
 .scrollable-y {
     overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .scrollable-x {
     overflow-x: auto;
+    scrollbar-width: thin;
 }
 
 .theme-yeti ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: #DDDDDD;
 }
 
@@ -49,6 +52,7 @@
 
 .theme-slate ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: #888888;
 }
 
