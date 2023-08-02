@@ -125,28 +125,34 @@ namespace GW2EIEvtcParser.EIData
             Color color = ProfColor;
 
             // Shadow Portal locations
-            var entrances = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance).ToList();
-            var entranceDecorations = entrances.Select(effect =>
+            var entranceDecorations = new List<GenericAttachedDecoration>();
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out IReadOnlyList<EffectEvent> shadowPortalActiveEntrance))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, ShadowPortalOpenedBuff);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
-                replay.Decorations.Add(icon);
-                return icon;
-            }).ToList();
-            foreach (EffectEvent exit in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit))
-            {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
-                var connector = new PositionConnector(exit.Position);
-                replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
-                int index = entrances.FindIndex(effect => Math.Abs(exit.Time - effect.Time) < ServerDelayConstant);
-                if (index > -1)
+                foreach (EffectEvent enter in shadowPortalActiveEntrance)
                 {
-                    replay.Decorations.Add(entranceDecorations[index].LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, enter, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    var connector = new PositionConnector(enter.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    replay.Decorations.Add(icon);
+                    entranceDecorations.Add(icon);
                 }
-                replay.Decorations.Add(icon);
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit, out IReadOnlyList<EffectEvent> shadowPortalActiveExit))
+            {
+                foreach (EffectEvent exit in shadowPortalActiveExit)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    var connector = new PositionConnector(exit.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
+                    if (entranceDecoration != null)
+                    {
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                    }
+                    replay.Decorations.Add(icon);
+                }
             }
         }
     }

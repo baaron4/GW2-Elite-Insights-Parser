@@ -1054,21 +1054,24 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>Returns effect events for the given agent and effect GUID.</summary>
-        internal IEnumerable<EffectEvent> GetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID)
+        public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
+            effectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
-                return effects.Where(effect => effect.Src == agent);
+                effectEvents = effects.Where(effect => effect.Src == agent).ToList();
+                return true;
             }
-            return new List<EffectEvent>();
+            return false;
         }
 
         /// <summary>
         /// Returns effect events for the given agent and effect GUID.
         /// The same effects happening within epsilon milliseconds are grouped together.
         /// </summary>
-        internal List<List<EffectEvent>> GetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, long epsilon = ServerDelayConstant)
+        public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
         {
             var effectGroups = new List<List<EffectEvent>>();
+            groupedEffectEvents = effectGroups;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
                 var processedTimes = new HashSet<long>();
                 foreach (EffectEvent first in effects)
@@ -1078,7 +1081,7 @@ namespace GW2EIEvtcParser.ParsedData
                         {
                             continue;
                         }
-                        List<EffectEvent> group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                        var group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
                         foreach (EffectEvent effect in group)
                         {
                             processedTimes.Add(effect.Time);
@@ -1087,8 +1090,9 @@ namespace GW2EIEvtcParser.ParsedData
                         effectGroups.Add(group);
                     }
                 }
+                return true;
             }
-            return effectGroups;
+            return false;
         }
 
         public IReadOnlyList<EffectEvent> GetEffectEvents()
