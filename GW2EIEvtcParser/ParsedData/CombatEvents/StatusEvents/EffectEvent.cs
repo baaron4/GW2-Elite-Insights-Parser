@@ -22,9 +22,8 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         public Point3D Position { get; } = new Point3D(0, 0, 0);
 
-
         /// <summary>
-        /// Whether the effect location is following <see cref="Dst"/> or located at fixed position <see cref="Position"/>.
+        /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
         /// </summary>
         public bool IsAroundDst => Dst != null;
 
@@ -39,7 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
         public long EffectID { get; }
 
         /// <summary>
-        /// Whether the event marks the end of a previous effect identified by <see cref="TrackingID"/> .
+        /// Unique id for tracking a created effect with regard to <see cref="IsEnd"/> events.
         /// </summary>
         public long TrackingID { get; protected set; }
 
