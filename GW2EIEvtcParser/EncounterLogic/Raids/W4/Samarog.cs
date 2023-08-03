@@ -208,20 +208,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // big bomb
-            var bigbomb = p.GetBuffStatus(log, InevitableBetrayalBig, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in bigbomb)
+            var bigbomb = log.CombatData.GetBuffData(InevitableBetrayalBig).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in bigbomb)
             {
-                int bigStart = (int)seg.Start;
-                int bigEnd = (int)seg.End;
+                int bigStart = (int)c.Time;
+                int bigEnd = bigStart + 6000;
                 replay.Decorations.Add(new CircleDecoration(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
             }
             // small bomb
-            var smallbomb = p.GetBuffStatus(log, InevitableBetrayalSmall, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in smallbomb)
+            var smallbomb = log.CombatData.GetBuffData(InevitableBetrayalSmall).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            foreach (AbstractBuffEvent c in smallbomb)
             {
-                int smallStart = (int)seg.Start;
-                int smallEnd = (int)seg.End;
+                int smallStart = (int)c.Time;
+                int smallEnd = smallStart + 6000;
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated
