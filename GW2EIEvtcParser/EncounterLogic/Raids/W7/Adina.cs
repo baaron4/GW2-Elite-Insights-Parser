@@ -107,18 +107,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> radiantBlindnesses = GetFilteredList(log.CombatData, RadiantBlindness, p, true, true);
-            int radiantBlindnessStart = 0;
-            foreach (AbstractBuffEvent c in radiantBlindnesses)
+            var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in radiantBlindnesses)
             {
-                if (c is BuffApplyEvent)
-                {
-                    radiantBlindnessStart = (int)c.Time;
-                }
-                else
-                {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (radiantBlindnessStart, (int)c.Time), "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
-                }
+                int start = (int)seg.Start;
+                int end = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -170,18 +164,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                     }
                     //
-                    List<AbstractBuffEvent> diamondPalisades = GetFilteredList(log.CombatData, DiamondPalisade, target, true, true);
-                    int diamondPalisadeStart = 0;
-                    foreach (AbstractBuffEvent c in diamondPalisades)
+                    var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment c in diamondPalisades)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            diamondPalisadeStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, (diamondPalisadeStart, (int)c.Time), "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
-                        }
+                        int diamondPalisadeStart = (int)c.Start;
+                        int diamondPalisadeEnd = (int)c.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, (diamondPalisadeStart, diamondPalisadeEnd), "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
