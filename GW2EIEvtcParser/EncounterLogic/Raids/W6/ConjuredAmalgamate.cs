@@ -167,20 +167,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldCAStart = 0;
-                    foreach (AbstractBuffEvent c in shieldCA)
+                    var shieldCA = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0).ToList();
+                    int CAShieldRadius = 500;
+                    foreach (Segment seg in shieldCA)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldCAStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 500;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldCAStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        int shieldCAStart = (int)seg.Start;
+                        int shieldEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, (shieldCAStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.CALeftArm:
@@ -189,20 +182,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldStart = 0;
-                    foreach (AbstractBuffEvent c in shield)
+                    var shieldShield = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0).ToList();
+                    int ShieldShieldRadius = 100;
+                    foreach (Segment seg in shieldShield)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 100;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        int shieldStart = (int)seg.Start;
+                        int shieldEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
