@@ -217,8 +217,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, toDropStart + 8000, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, toDropStart + 8000, 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
                 ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
                 ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
                 if (poisonNextPos != null || poisonPrevPos != null)
@@ -230,17 +230,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in slubTrans)
             {
-                int transfoStart = (int)seg.Start;
-                int transfoEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
             }
             // fixated
             var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSloth)
             {
-                int fixatedSlothStart = (int)seg.Start;
-                int fixatedSlothEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             }
         }
     }

@@ -279,10 +279,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in kcOrbCollect)
                     {
-                        int kcOrbStart = (int)seg.Start;
-                        int kcOrbEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -405,10 +403,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in xeraFury)
             {
-                int xeraFuryStart = (int)seg.Start;
-                int xeraFuryEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 550, seg, "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
 
             }
             //fixated Statue

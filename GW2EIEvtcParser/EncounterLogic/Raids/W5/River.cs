@@ -169,9 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment asylum in asylums)
                     {
-                        int asylumStart = (int)asylum.Start;
-                        int asylumEnd = (int)asylum.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (asylumStart, asylumEnd), "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:

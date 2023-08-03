@@ -171,9 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int CAShieldRadius = 500;
                     foreach (Segment seg in shieldCA)
                     {
-                        int shieldCAStart = (int)seg.Start;
-                        int shieldEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, (shieldCAStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.CALeftArm:
@@ -186,9 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int ShieldShieldRadius = 100;
                     foreach (Segment seg in shieldShield)
                     {
-                        int shieldStart = (int)seg.Start;
-                        int shieldEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:

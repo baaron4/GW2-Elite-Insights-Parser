@@ -536,9 +536,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in signets)
                     {
-                        int sigStart = (int)seg.Start;
-                        int sigEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Gambler:
@@ -621,10 +619,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in tpDeimos)
             {
-                int tpStart = (int)seg.Start;
-                int tpEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
             }
         }
 

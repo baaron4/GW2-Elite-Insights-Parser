@@ -189,9 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in brutalize)
                     {
-                        int brutStart = (int)seg.Start;
-                        int brutEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, (brutStart, brutEnd), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Rigom:
@@ -228,34 +226,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSam)
             {
-                int fixatedSamStart = (int)seg.Start;
-                int fixatedSamEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 80, (fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             }
             //fixated Ghuldem
             var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedGuldhem)
             {
-                int fixationGuldhemStart = (int)seg.Start;
-                int fixationGuldhemEnd = (int)seg.End;
-                int mid = (fixationGuldhemEnd + fixationGuldhemStart) / 2;
+                long mid = (seg.Start + seg.End) / 2;
                 AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (guldhem != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(0, (fixationGuldhemStart, fixationGuldhemEnd), "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
                 }
             }
             //fixated Rigom
             var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedGuldhem)
             {
-                int fixationRigomStart = (int)seg.Start;
-                int fixationRigomEnd = (int)seg.End;
-                int mid = (fixationRigomEnd + fixationRigomStart) / 2;
+                long mid = (seg.Start + seg.End) / 2;
                 AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (rigom != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(0, (fixationRigomStart, fixationRigomEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
                 }
             }
         }

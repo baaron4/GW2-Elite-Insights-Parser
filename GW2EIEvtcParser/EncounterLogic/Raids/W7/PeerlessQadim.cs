@@ -347,25 +347,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixated)
             {
-                int fixatedStart = (int)seg.Start;
-                int fixatedEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             }
             // Chaos Corrosion
             var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in chaosCorrosion)
             {
-                int corrosionStart = (int)seg.Start;
-                int corrosionEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (corrosionStart, corrosionEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
             }
             // Critical Mass, debuff while carrying an orb
             var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in criticalMass)
             {
-                int criticalMassStart = (int)seg.Start;
-                int criticalMassEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, 200, (criticalMassStart, criticalMassEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(false, 0, 200, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
             }
             // Magma drop
             var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -375,10 +369,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             int magmaColor = 0;
             foreach (Segment seg in magmaDrop)
             {
-                int magmaDropStart = (int)seg.Start;
                 int magmaDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, seg, "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, seg, "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
                 ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
                 ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
                 if (magmaNextPos != null || magmaPrevPos != null)

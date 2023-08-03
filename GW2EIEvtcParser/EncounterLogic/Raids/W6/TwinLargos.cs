@@ -315,8 +315,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
                 ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
                 ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
                 if (poisonNextPos != null || poisonPrevPos != null)
@@ -326,13 +326,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Bubble (Aquatic Detainment)
-            var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList(); 
+            var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            int bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {
-                int radius = 100;
-                int bubbleStart = (int)seg.Start;
-                int bubbleEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, radius, (bubbleStart, bubbleEnd), "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
             }
         }
 

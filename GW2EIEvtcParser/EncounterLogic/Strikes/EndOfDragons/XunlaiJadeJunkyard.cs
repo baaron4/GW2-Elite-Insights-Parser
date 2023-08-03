@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (segment.Value > 0)
                         {
-                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 12, 1, ((int)segment.Start, (int)segment.End), new AgentConnector(target)));
+                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 12, 1, segment, new AgentConnector(target)));
                         }
                     }
                     break;
@@ -418,8 +418,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (segment != null && segment.Start > 0 && segment.Value == 1)
                     {
                         // AoE on player
-                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                         // Logs without effects
                         if (deathsHandOnPlayerGUID == null)
                         {

@@ -307,15 +307,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (target.Value > 0)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, ((int)target.Start, (int)target.End), new AgentConnector(player)));
+                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, target, new AgentConnector(player)));
                 }
             }
         }

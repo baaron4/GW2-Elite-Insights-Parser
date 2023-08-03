@@ -133,10 +133,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             int boltBreakRadius = 180;
             foreach (Segment seg in boltBreaks)
             {
-                int boltBreakStart = (int)seg.Start;
-                int boltBreakEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, boltBreakRadius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, boltBreakEnd, boltBreakRadius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -151,16 +149,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in repulsionFields)
                     {
-                        int repulsionFieldStart = (int)seg.Start;
-                        int repulsionFieldEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, (repulsionFieldStart, repulsionFieldEnd), "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                     }
                     var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in ionShields)
                     {
-                        int ionShieldStart = (int)seg.Start;
-                        int ionShieldEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, (ionShieldStart, ionShieldEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();

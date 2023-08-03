@@ -110,9 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in radiantBlindnesses)
             {
-                int start = (int)seg.Start;
-                int end = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -165,11 +163,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     //
                     var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    foreach (Segment c in diamondPalisades)
+                    foreach (Segment seg in diamondPalisades)
                     {
-                        int diamondPalisadeStart = (int)c.Start;
-                        int diamondPalisadeEnd = (int)c.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, (diamondPalisadeStart, diamondPalisadeEnd), "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();

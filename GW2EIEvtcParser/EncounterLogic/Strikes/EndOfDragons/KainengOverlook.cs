@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (target.Value > 0)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, ((int)target.Start, (int)target.End), new AgentConnector(player)));
+                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, target, new AgentConnector(player)));
                 }
             }
         }

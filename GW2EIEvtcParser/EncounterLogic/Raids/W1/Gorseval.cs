@@ -107,9 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in eggs)
             {
-                int eggStart = (int)seg.Start;
-                int eggEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (eggStart, eggEnd), "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -260,9 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in protection)
                     {
-                        int protectionStart = (int)seg.Start;
-                        int protectionEnd = (int)seg.End;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, seg, "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedSoul:
