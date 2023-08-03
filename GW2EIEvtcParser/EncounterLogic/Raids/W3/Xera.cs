@@ -83,6 +83,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return;
             }
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (fightData.Success && fightData.FightEnd < _xeraSecondPhaseStartTime)
+            {
+                fightData.SetSuccess(false, fightData.LogEnd);
+            }
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
