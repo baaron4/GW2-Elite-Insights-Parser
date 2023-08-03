@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z) - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, kickEffect.Rotation.Z - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
                         }
                     }
 

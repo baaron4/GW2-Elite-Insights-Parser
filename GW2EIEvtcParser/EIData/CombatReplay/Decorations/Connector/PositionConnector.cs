@@ -17,6 +17,9 @@ namespace GW2EIEvtcParser.EIData
             return new float[2] { x, y };
         }
 
+        /// <summary>
+        /// Creates a new <see cref="PositionConnector"/> offset by the specified amount in the orientation given in <b>radians</b>. 
+        /// </summary>
         public PositionConnector WithOffset(float orientation, float amount)
         {
             Point3D offset = amount * new Point3D(-(float)Math.Sin(orientation), (float)Math.Cos(orientation));
