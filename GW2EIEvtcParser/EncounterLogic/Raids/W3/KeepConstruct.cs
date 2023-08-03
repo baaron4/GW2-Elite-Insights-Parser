@@ -276,20 +276,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, XerasBoon, target, true, true);
-                    int kcOrbStart = 0, kcOrbEnd = 0;
-                    foreach (AbstractBuffEvent c in kcOrbCollect)
+                    var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in kcOrbCollect)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            kcOrbStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            kcOrbEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        }
+                        int kcOrbStart = (int)seg.Start;
+                        int kcOrbEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -409,20 +402,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
-            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, XerasFury, p, true, true);
-            int xeraFuryStart = 0;
-            foreach (AbstractBuffEvent c in xeraFury)
+            var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in xeraFury)
             {
-                if (c is BuffApplyEvent)
-                {
-                    xeraFuryStart = (int)c.Time;
-                }
-                else
-                {
-                    int xeraFuryEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
-                }
+                int xeraFuryStart = (int)seg.Start;
+                int xeraFuryEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
 
             }
             //fixated Statue

@@ -328,20 +328,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
                 case (int)ArcDPSEnums.TrashID.UnderworldReaper:
-                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, Stealth, target, true, true);
-                    int stealthStart = 0;
-                    int stealthEnd = 0;
-                    foreach (AbstractBuffEvent c in stealths)
+                    var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in stealths)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            stealthStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            stealthEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
-                        }
+                        int stealthStart = (int)seg.Start;
+                        int stealthEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                     }
                     if (!_isBugged)
                     {
@@ -428,20 +420,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, ArcingAffliction, p, true, true);
-            int bombDhuumStart = 0;
-            foreach (AbstractBuffEvent c in bombDhuum)
+            var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in bombDhuum)
             {
-                if (c is BuffApplyEvent)
-                {
-                    bombDhuumStart = (int)c.Time;
-                }
-                else
-                {
-                    int bombDhuumEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
-                }
+                int bombDhuumStart = (int)seg.Start;
+                int bombDhuumEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
             }
             // shackles connection
             var shackles = GetFilteredList(log.CombatData, DhuumShacklesApplication, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();

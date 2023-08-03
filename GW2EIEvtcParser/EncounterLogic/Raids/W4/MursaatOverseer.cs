@@ -90,20 +90,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, MursaatOverseersShield, target, true, true);
-                    int shieldStart = 0;
+                    var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     int shieldRadius = 100;
-                    foreach (AbstractBuffEvent c in shield)
+                    foreach (Segment seg in shields)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                        }
+                        int shieldStart = (int)seg.Start;
+                        int shieldEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)

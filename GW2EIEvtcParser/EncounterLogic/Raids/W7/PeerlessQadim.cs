@@ -344,80 +344,51 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // fixated
-            List<AbstractBuffEvent> fixated = GetFilteredList(log.CombatData, FixatedQadimThePeerless, p, true, true);
-            int fixatedStart = 0;
-            foreach (AbstractBuffEvent c in fixated)
+            var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in fixated)
             {
-                if (c is BuffApplyEvent)
-                {
-                    fixatedStart = Math.Max((int)c.Time, 0);
-                }
-                else
-                {
-                    int fixatedEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-                }
+                int fixatedStart = (int)seg.Start;
+                int fixatedEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedStart, fixatedEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             }
             // Chaos Corrosion
-            List<AbstractBuffEvent> chaosCorrosion = GetFilteredList(log.CombatData, ChaosCorrosion, p, true, true);
-            int corrosionStart = 0;
-            foreach (AbstractBuffEvent c in chaosCorrosion)
+            var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in chaosCorrosion)
             {
-                if (c is BuffApplyEvent)
-                {
-                    corrosionStart = (int)c.Time;
-                }
-                else
-                {
-                    int corrosionEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (corrosionStart, corrosionEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
-                }
+                int corrosionStart = (int)seg.Start;
+                int corrosionEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (corrosionStart, corrosionEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
             }
             // Critical Mass, debuff while carrying an orb
-            List<AbstractBuffEvent> criticalMass = GetFilteredList(log.CombatData, CriticalMass, p, true, true);
-            int criticalMassStart = 0;
-            foreach (AbstractBuffEvent c in criticalMass)
+            var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in criticalMass)
             {
-                if (c is BuffApplyEvent)
-                {
-                    criticalMassStart = (int)c.Time;
-                }
-                else
-                {
-                    int criticalMassEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 200, (criticalMassStart, criticalMassEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
-                }
+                int criticalMassStart = (int)seg.Start;
+                int criticalMassEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(false, 0, 200, (criticalMassStart, criticalMassEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
             }
             // Magma drop
-            List<AbstractBuffEvent> magmaDrop = GetFilteredList(log.CombatData, MagmaDrop, p, true, true);
-            int magmaDropStart = 0;
+            var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             int magmaRadius = 420;
             int magmaOffset = 4000;
             string[] magmaColors = { "255, 215, 0", "255, 130, 50" };
             int magmaColor = 0;
-            foreach (AbstractBuffEvent c in magmaDrop)
+            foreach (Segment seg in magmaDrop)
             {
-                if (c is BuffApplyEvent)
+                int magmaDropStart = (int)seg.Start;
+                int magmaDropEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
+                ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
+                ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
+                if (magmaNextPos != null || magmaPrevPos != null)
                 {
-                    magmaDropStart = (int)c.Time;
+                    string colorToUse = magmaColors[magmaColor];
+                    magmaColor = (magmaColor + 1) % 2;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                    replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                 }
-                else
-                {
-                    int magmaDropEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, (magmaDropStart, magmaDropEnd), "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
-                    ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
-                    ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
-                    if (magmaNextPos != null || magmaPrevPos != null)
-                    {
-                        string colorToUse = magmaColors[magmaColor];
-                        magmaColor = (magmaColor + 1) % 2;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba("+ colorToUse + ", 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                    }
-                }
-
             }
             //sapping surge, bad red tether
             List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, SappingSurge, p, true, true);
