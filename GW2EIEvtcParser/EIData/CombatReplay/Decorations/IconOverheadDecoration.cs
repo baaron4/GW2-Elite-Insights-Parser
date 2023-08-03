@@ -9,6 +9,10 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
+        public IconOverheadDecoration(string icon, int pixelSize, float opacity, Segment lifespan, AgentConnector connector) : base(icon, pixelSize, (int)connector.Agent.HitboxWidth, opacity, lifespan, connector)
+        {
+        }
+
         public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, bool drawOnSelect = true)
         {
             return this;

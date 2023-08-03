@@ -21,6 +21,14 @@ namespace GW2EIEvtcParser.EIData
             WorldSize = worldSize;
         }
 
+        public IconDecoration(string icon, int pixelSize, float opacity, Segment lifespan, Connector connector) : this(icon, pixelSize, opacity, ((int)lifespan.Start, (int) lifespan.End), connector)
+        {
+        }
+
+        public IconDecoration(string icon, int pixelSize, int worldSize, float opacity, Segment lifespan, Connector connector) : this(icon, pixelSize, worldSize, opacity, ((int)lifespan.Start, (int)lifespan.End), connector)
+        {
+        }
+
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new IconDecorationCombatReplayDescription(log, this, map);
