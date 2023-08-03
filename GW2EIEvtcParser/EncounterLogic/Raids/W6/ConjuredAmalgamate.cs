@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    var shieldCA = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0).ToList();
+                    var shieldCA = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     int CAShieldRadius = 500;
                     foreach (Segment seg in shieldCA)
                     {
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    var shieldShield = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0).ToList();
+                    var shieldShield = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     int ShieldShieldRadius = 100;
                     foreach (Segment seg in shieldShield)
                     {
