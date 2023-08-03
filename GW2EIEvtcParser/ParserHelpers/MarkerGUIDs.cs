@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser
 {
@@ -27,6 +28,15 @@ namespace GW2EIEvtcParser
         public const string PurpleCatmanderTag = "7224A4AF710E4243BFE032629E17CA6E";
         public const string PinkCatmanderTag = "4387BE6146D43246AA7B333168EA58EA";
         public const string WhiteCatmanderTag = "A0B0EC076BC83B40A293C1CDEC4A7DE7";
+        // Overhead Squad Markers
+        public const string ArrowOverhead = "C3A56F1E045E3848B07CBAC5BBDD2C32";
+        public const string CircleOverhead = "73c880ae-431c-9f4d-8a59-72acf7066f4e";
+        public const string HeartOverhead = "185008e2-437b-184d-8fda-d647dd972d9f";
+        public const string SquareOverhead = "6e599745-7b3f-6a45-b984-c613806fa72a";
+        public const string StarOverhead = "51401256-57c6-084d-9422-6c8ec0216649";
+        public const string SwirlOverhead = "ebbe113a-e2e5-3f4e-96f3-e92fb1353ece";
+        public const string TriangleOverhead = "46ebc439-7f8a-3740-b900-333b591f6183";
+        public const string XOverhead = "8bdcf5c4-7f8a-8340-a251-f102af3b5905";
 
         /// <summary>
         /// HashSet containing the types of Commander Tag GUIDs.
@@ -51,6 +61,36 @@ namespace GW2EIEvtcParser
             PurpleCatmanderTag,
             PinkCatmanderTag,
             WhiteCatmanderTag,
+        };
+
+        /// <summary>
+        /// HashSet containing the types of Squad Marker GUIDs.
+        /// </summary>
+        public static IReadOnlyCollection<string> SquadOverheadMarkersGUIDs { get; set; } = new HashSet<string>()
+        {
+            ArrowOverhead,
+            CircleOverhead,
+            HeartOverhead,
+            SquareOverhead,
+            StarOverhead,
+            SwirlOverhead,
+            TriangleOverhead,
+            XOverhead
+        };
+
+        /// <summary>
+        /// Matches the Squad Marker GUIDs to the relative icons.
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> SquadMarkerToIcon { get; set; } = new Dictionary<string, string>()
+        {
+            { ArrowOverhead, ParserIcons.ArrowSquadMarkerOverhead },
+            { CircleOverhead, ParserIcons.CircleSquadMarkerOverhead },
+            { HeartOverhead, ParserIcons.HeartSquadMarkerOverhead },
+            { SquareOverhead, ParserIcons.SquareSquadMarkerOverhead },
+            { StarOverhead, ParserIcons.StarSquadMarkerOverhead },
+            { SwirlOverhead, ParserIcons.SwirlSquadMarkerOverhead },
+            { TriangleOverhead, ParserIcons.TriangleSquadMarkerOverhead },
+            { XOverhead, ParserIcons.XSquadMarkerOverhead },
         };
     }
 
