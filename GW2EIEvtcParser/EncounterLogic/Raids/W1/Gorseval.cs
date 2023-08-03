@@ -104,19 +104,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> eggs = GetFilteredList(log.CombatData, GhastlyPrison, p, true, true);
-            int eggStart = 0;
-            foreach (AbstractBuffEvent c in eggs)
+            var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in eggs)
             {
-                if (c is BuffApplyEvent)
-                {
-                    eggStart = (int)c.Time;
-                }
-                else
-                {
-                    int eggEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (eggStart, eggEnd), "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
-                }
+                int eggStart = (int)seg.Start;
+                int eggEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (eggStart, eggEnd), "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -264,19 +257,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<AbstractBuffEvent> protection = GetFilteredList(log.CombatData, ProtectiveShadow, target, true, true);
-                    int protectionStart = 0;
-                    foreach (AbstractBuffEvent c in protection)
+                    var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in protection)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            protectionStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int protectionEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
-                        }
+                        int protectionStart = (int)seg.Start;
+                        int protectionEnd = (int)seg.End;
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (protectionStart, protectionEnd), "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedSoul:
