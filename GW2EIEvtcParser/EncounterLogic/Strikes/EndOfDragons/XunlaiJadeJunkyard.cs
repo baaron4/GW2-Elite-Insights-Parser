@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -308,7 +309,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // One also happens during death's embrace so we filter that one out
                                 if (!deathsEmbraces.Any(x => x.Time <= deathsHandEffect.Time && x.Time + deathsEmbraceCastDuration >= deathsHandEffect.Time))
                                 {
-
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
@@ -316,6 +316,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, deathsHandOnPlayerRadius, deathsHandOnPlayerDuration);
                             }
+                        }
+                    }
+
+                    // Power of the Void
+                    IReadOnlyList<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd);
+                    foreach(Segment segment in potvSegments)
+                    {
+                        if (segment.Value > 0)
+                        {
+                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 12, 1, ((int)segment.Start, (int)segment.End), new AgentConnector(target)));
                         }
                     }
                     break;

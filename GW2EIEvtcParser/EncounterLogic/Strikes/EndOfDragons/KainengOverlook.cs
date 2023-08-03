@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -189,6 +190,34 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
             return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Target Order Overhead
+            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder1Overhead);
+            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder2Overhead);
+            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder3Overhead);
+            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder4Overhead);
+            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder5Overhead);
+        }
+
+        /// <summary>
+        /// Adds the Target Order overhead decoration.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="targets">The <see cref="Segment"/> where the Target Order buff appears.</param>
+        /// <param name="icon">The icon related to the respective Target Order buff.</param>
+        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IReadOnlyList<Segment> targets, string icon)
+        {
+            foreach (Segment target in targets)
+            {
+                if (target.Value > 0)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, ((int)target.Start, (int)target.End), new AgentConnector(player)));
+                }
+            }
         }
     }
 }

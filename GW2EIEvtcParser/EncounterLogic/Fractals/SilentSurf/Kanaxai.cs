@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -303,9 +304,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
-            var axes = new List<Segment>();
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
@@ -318,6 +317,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
+
+            // Target Order Overhead
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder1Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder2Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder3Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder4Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder5Overhead);
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -408,6 +414,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             int effectEnd = start + duration;
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
             EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+        }
+
+        /// <summary>
+        /// Adds the Target Order overhead decoration.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="targets">The <see cref="Segment"/> where the Target Order buff appears.</param>
+        /// <param name="icon">The icon related to the respective Target Order buff.</param>
+        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IReadOnlyList<Segment> targets, string icon)
+        {
+            foreach (Segment target in targets)
+            {
+                if (target.Value > 0)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, ((int)target.Start, (int)target.End), new AgentConnector(player)));
+                }
+            }
         }
     }
 }
