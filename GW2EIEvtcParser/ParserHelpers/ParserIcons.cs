@@ -507,6 +507,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string TidalPoolOverhead = "https://wiki.guildwars2.com/images/e/e7/Tidal_Pool_%28overhead_icon%29.png";
         internal const string SkullOverhead = "https://wiki.guildwars2.com/images/f/f6/Jade_Maw_agony_attack.png";
         internal const string PowerOfTheVoidOverhead = "https://wiki.guildwars2.com/images/f/f4/Power_of_the_Void_%28overhead_icon%29.png";
+        internal const string SpectralDarkness = "https://wiki.guildwars2.com/images/f/f6/Spectral_Darkness_%28overhead_icon%29.png";
+        // - Sensors
+        internal const string SensorBlue = "https://wiki.guildwars2.com/images/a/aa/Sensor_Tracking_icon_%28blue%29.png";
+        internal const string SensorGreen = "https://wiki.guildwars2.com/images/1/18/Sensor_Tracking_icon_%28green%29.png";
+        internal const string SensorRed = "https://wiki.guildwars2.com/images/3/38/Sensor_Tracking_icon_%28red%29.png";
         // - Target Orders
         internal const string TargetOrder1Overhead = "https://wiki.guildwars2.com/images/6/6f/Target_Order-1_%28overhead_icon%29.png";
         internal const string TargetOrder2Overhead = "https://wiki.guildwars2.com/images/8/87/Target_Order-2_%28overhead_icon%29.png";

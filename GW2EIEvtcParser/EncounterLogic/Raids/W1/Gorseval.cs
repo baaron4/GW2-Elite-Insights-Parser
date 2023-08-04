@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -46,7 +47,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(HauntingAura, HauntingAura), // Haunting Aura
+                new DamageCastFinder(HauntingAura, HauntingAura),
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -104,10 +105,18 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Ghastly Prison - Eggs AoEs
             var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in eggs)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
+            }
+
+            // Spectral Darkness - Orbs Debuff Overhead
+            IEnumerable<Segment> segments = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in segments)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarkness, 12, 1, segment, new AgentConnector(p)));
             }
         }
 
