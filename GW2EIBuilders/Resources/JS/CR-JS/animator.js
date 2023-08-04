@@ -34,7 +34,7 @@ function ToRadians(degrees) {
 
 const resolutionMultiplier = 2.0;
 
-const maxOverheadAnimationFrame = 90;
+const maxOverheadAnimationFrame = 60;
 let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
 let overheadAnimationIncrement = 1;
 

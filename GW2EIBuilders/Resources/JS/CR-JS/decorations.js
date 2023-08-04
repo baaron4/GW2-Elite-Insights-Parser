@@ -712,8 +712,8 @@ class IconOverheadDecorationDrawable extends IconDecorationDrawable {
             return null; 
         }
         const masterSize = this.master.getSize();
-        const scale = animator.displaySettings.useActorHitboxWidth ? 1 : animator.scale;
-        pos.y -= masterSize/2 + this.getSize()/4 + 10 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1/animator.inchToPixel : animator.scale;
+        pos.y -= masterSize/2 + this.getSize()/4 + 5 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
         return pos;
     }
 }
