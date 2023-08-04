@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -12,7 +13,6 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (target.Value > 0)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, target, new AgentConnector(player)));
+                    replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, target, new AgentConnector(player)));
                 }
             }
         }

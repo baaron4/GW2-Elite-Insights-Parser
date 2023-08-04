@@ -3,12 +3,12 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -194,29 +194,28 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            // Target Order Overhead
-            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder1Overhead);
-            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder2Overhead);
-            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder3Overhead);
-            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder4Overhead);
-            AddTargetOrderDecoration(p, replay, p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder5Overhead);
+            // Target Order
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder1Overhead);
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder2Overhead);
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder3Overhead);
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder4Overhead);
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder5Overhead);
+            // Fixation
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.FixationPurpleOverhead);
         }
 
         /// <summary>
-        /// Adds the Target Order overhead decoration.
+        /// Adds the overhead decorations.
         /// </summary>
         /// <param name="player">Player for the decoration.</param>
         /// <param name="replay">Combat Replay.</param>
-        /// <param name="targets">The <see cref="Segment"/> where the Target Order buff appears.</param>
-        /// <param name="icon">The icon related to the respective Target Order buff.</param>
-        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IReadOnlyList<Segment> targets, string icon)
+        /// <param name="buffSegments">The <see cref="Segment"/> where the buff appears.</param>
+        /// <param name="icon">The icon related to the respective buff.</param>
+        private static void AddOverheadDecorations(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> buffSegments, string icon)
         {
-            foreach (Segment target in targets)
+            foreach (Segment segment in buffSegments)
             {
-                if (target.Value > 0)
-                {
-                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, target, new AgentConnector(player)));
-                }
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, segment, new AgentConnector(player)));
             }
         }
     }

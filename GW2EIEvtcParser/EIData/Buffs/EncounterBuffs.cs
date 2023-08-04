@@ -162,6 +162,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Corruption", Corruption1, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),
             new Buff("Corruption 2", Corruption2, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),
             new Buff("Sacrifice", MatthiasSacrifice, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Sacrifice Selection", MatthiasSacrificeSelection, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Unbalanced", Unbalanced, Source.FightSpecific, BuffClassification.Other, BuffImages.Unbalanced),
             new Buff("Zealous Benediction", ZealousBenediction, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
             new Buff("Snowstorm", SnowstormBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Snowstorm),
@@ -247,6 +248,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Form Up and Advance!", FormUpAndAdvance, Source.FightSpecific, BuffClassification.Other, BuffImages.FormUpAndAdvance),
             new Buff("Devour", Devour, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Devour),
             new Buff("Unseen Burden (Deimos)", UnseenBurdenDeimos, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.UnseenBurdenDeimos),
+            new Buff("Green Selection", DeimosSelectedByGreen, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             //////////////////////////////////////////////
             // Soulless Horror
             new Buff("Exile's Embrace", ExilesEmbrace, Source.FightSpecific, BuffClassification.Other, BuffImages.ExilesEmbrace),
@@ -383,9 +385,11 @@ namespace GW2EIEvtcParser.EIData
             // Shattered Observatory
             new Buff("Achievement Eligibility: Be Dynamic", AchievementEligibilityBeDynamic, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Cosmic Energy", CosmicEnergy, Source.FightSpecific, BuffClassification.Other, BuffImages.BreakOut),
+            // Skorvald
+            new Buff("Skorvald's Ire", SkorvaldsIre, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             // Artsariiv
             new Buff("Enraged (Fractal)", EnragedFractal, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Corporeal Reassignment", CorporealReassignment, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
+            new Buff("Corporeal Reassignment", CorporealReassignmentBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Blinding Radiance", BlindingRadiance, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Determination (Viirastra)", DeterminationViirastra, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
             // Arkk 

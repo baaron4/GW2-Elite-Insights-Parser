@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -62,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BrutalAura , BrutalAura ), // Brutal aura
+                new DamageCastFinder(BrutalAura, BrutalAura),
             };
         }
 
@@ -227,6 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in fixatedSam)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, seg, new AgentConnector(p)));
             }
             //fixated Ghuldem
             var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();

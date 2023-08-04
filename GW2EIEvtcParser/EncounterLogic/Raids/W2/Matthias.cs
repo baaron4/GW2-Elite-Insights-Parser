@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -316,8 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
-            var corruptedMatthias = p.GetBuffStatus(log, Corruption1, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            corruptedMatthias.AddRange(p.GetBuffStatus(log, Corruption2, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
+            IEnumerable<Segment> corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (Segment seg in corruptedMatthias)
             {
                 int corruptedMatthiasEnd = (int)seg.End;
@@ -329,6 +329,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                     replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                 }
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.CorruptionOverhead, 20, 1, seg, new AgentConnector(p)));
             }
             // Well of profane
             var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -343,6 +344,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
                 }
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.VolatilePoisonOverhead, 20, 1, seg, new AgentConnector(p)));
+            }
+            // Sacrifice Selection
+            IEnumerable<Segment> sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in sacrificeSelection)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.RedArrowOverhead, 20, 1, segment, new AgentConnector(p)));
             }
             // Sacrifice
             var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -359,6 +367,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int zealousEnd = zealousStart + 5000;
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+            }
+            // Unbalanced
+            IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in unbalanced)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.UnbalancedOverhead, 20, 1, segment, new AgentConnector(p)));
             }
         }
 

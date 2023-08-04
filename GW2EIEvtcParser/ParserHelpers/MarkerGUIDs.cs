@@ -92,6 +92,31 @@ namespace GW2EIEvtcParser
             { TriangleOverhead, ParserIcons.TriangleSquadMarkerOverhead },
             { XOverhead, ParserIcons.XSquadMarkerOverhead },
         };
+
+        /// <summary>
+        /// Matches the Commander/Catmander Tag GUIDs to the relative icons.
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> CommanderTagToIcon { get; set; } = new Dictionary<string, string>()
+        {
+            { RedCommanderTag, ParserIcons.RedCommanderTagOverhead },
+            { OrangeCommanderTag, ParserIcons.OrangeCommanderTagOverhead },
+            { YellowCommanderTag, ParserIcons.YellowCommanderTagOverhead },
+            { GreenCommanderTag, ParserIcons.GreenCommanderTagOverhead },
+            { CyanCommanderTag, ParserIcons.CyanCommanderTagOverhead },
+            { BlueCommanderTag, ParserIcons.BlueCommanderTagOverhead },
+            { PurpleCommanderTag, ParserIcons.PurpleCommanderTagOverhead },
+            { PinkCommanderTag, ParserIcons.PinkCommanderTagOverhead },
+            { WhiteCommanderTag, ParserIcons.WhiteCommanderTagOverhead },
+            { RedCatmanderTag, ParserIcons.RedCatmanderTagOverhead },
+            { OrangeCatmanderTag, ParserIcons.OrangeCatmanderTagOverhead },
+            { YellowCatmanderTag, ParserIcons.YellowCatmanderTagOverhead },
+            { GreenCatmanderTag, ParserIcons.GreenCatmanderTagOverhead },
+            { CyanCatmanderTag, ParserIcons.CyanCatmanderTagOverhead },
+            { BlueCatmanderTag, ParserIcons.BlueCatmanderTagOverhead },
+            { PurpleCatmanderTag, ParserIcons.PurpleCatmanderTagOverhead },
+            { PinkCatmanderTag, ParserIcons.PinkCatmanderTagOverhead },
+            { WhiteCatmanderTag, ParserIcons.WhiteCatmanderTagOverhead },
+        };
     }
 
 }

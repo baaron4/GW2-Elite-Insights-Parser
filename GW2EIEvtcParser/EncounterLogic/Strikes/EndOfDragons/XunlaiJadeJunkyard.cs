@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (segment.Value > 0)
                         {
-                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 12, 1, segment, new AgentConnector(target)));
+                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 20, 1, segment, new AgentConnector(target)));
                         }
                     }
                     break;
@@ -451,6 +451,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new LineDecoration(0, (lichTetherStart, tetherEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(lichTetherSource)));
                     }
                 }
+            }
+            // Reanimated Hatred Fixation
+            IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in hatredFixations)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, segment, new AgentConnector(p)));
             }
         }
 

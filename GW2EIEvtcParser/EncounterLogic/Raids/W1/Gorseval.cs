@@ -4,12 +4,12 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> segments = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in segments)
             {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarkness, 12, 1, segment, new AgentConnector(p)));
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarkness, 20, 1, segment, new AgentConnector(p)));
             }
         }
 
