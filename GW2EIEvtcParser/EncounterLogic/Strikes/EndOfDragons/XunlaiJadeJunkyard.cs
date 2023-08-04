@@ -320,13 +320,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Power of the Void
-                    IReadOnlyList<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd);
+                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
                     foreach(Segment segment in potvSegments)
                     {
-                        if (segment.Value > 0)
-                        {
-                            replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 20, 1, segment, new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 20, 1, segment, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
