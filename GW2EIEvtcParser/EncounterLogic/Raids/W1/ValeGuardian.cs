@@ -243,9 +243,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Attunements Overhead
-            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorBlue);
-            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorGreen);
-            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorRed);
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorBlueOverhead);
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorGreenOverhead);
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorRedOverhead);
         }
 
         /// <summary>

@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> segments = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in segments)
             {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarkness, 20, 1, segment, new AgentConnector(p)));
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarknessOverhead, 20, 1, segment, new AgentConnector(p)));
             }
         }
 
