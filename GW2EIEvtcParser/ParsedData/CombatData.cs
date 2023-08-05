@@ -498,13 +498,6 @@ namespace GW2EIEvtcParser.ParsedData
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
             //
-            /*healing_data = allCombatItems.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            healing_received_data = allCombatItems.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetBuildEvent().Build);
@@ -972,17 +965,6 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return new List<AbstractBreakbarDamageEvent>();
         }
-
-        /*public IReadOnlyList<CombatItem> getHealingData()
-        {
-            return _healingData;
-        }
-
-        public IReadOnlyList<CombatItem> getHealingReceivedData()
-        {
-            return _healingReceivedData;
-        }*/
-
 
         public IReadOnlyList<AbstractMovementEvent> GetMovementData(AgentItem src)
         {
