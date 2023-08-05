@@ -195,28 +195,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Target Order
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder1Overhead);
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder2Overhead);
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder3Overhead);
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder4Overhead);
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder5Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
             // Fixation
-            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.FixationPurpleOverhead);
-        }
-
-        /// <summary>
-        /// Adds the overhead decorations.
-        /// </summary>
-        /// <param name="player">Player for the decoration.</param>
-        /// <param name="replay">Combat Replay.</param>
-        /// <param name="buffSegments">The <see cref="Segment"/> where the buff appears.</param>
-        /// <param name="icon">The icon related to the respective buff.</param>
-        private static void AddOverheadDecorations(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> buffSegments, string icon)
-        {
-            foreach (Segment segment in buffSegments)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, segment, new AgentConnector(player)));
-            }
+            replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

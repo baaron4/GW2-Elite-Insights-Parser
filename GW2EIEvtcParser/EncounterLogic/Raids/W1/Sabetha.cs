@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 5000, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.BombOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
             }
         }
 

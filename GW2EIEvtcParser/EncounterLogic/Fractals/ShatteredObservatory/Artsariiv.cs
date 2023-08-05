@@ -202,10 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Corporeal Reassignment
             IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in corpReass)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SkullOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
         }
     }
 }

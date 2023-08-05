@@ -293,10 +293,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             IEnumerable<Segment> fixations = player.GetBuffStatus(log, FixatedSH, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in fixations)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, segment, new AgentConnector(player)));
-            }
+            replay.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

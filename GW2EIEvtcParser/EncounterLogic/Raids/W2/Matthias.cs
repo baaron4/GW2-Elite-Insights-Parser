@@ -344,14 +344,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
                 }
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.VolatilePoisonOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
             // Sacrifice Selection
             IEnumerable<Segment> sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in sacrificeSelection)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.RedArrowOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
             // Sacrifice
             var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in sacrificeMatthias)
@@ -370,10 +367,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Unbalanced
             IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in unbalanced)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.UnbalancedOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
         }
 
     }

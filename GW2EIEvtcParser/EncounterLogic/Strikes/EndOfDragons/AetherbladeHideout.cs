@@ -116,11 +116,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bomb Selection
-            var bomb = player.GetBuffStatus(log, new long[] { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment segment in bomb)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.BombOverhead, 20, 1, segment, new AgentConnector(player)));
-            }
+            var bombs = player.GetBuffStatus(log, new long[] { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            replay.AddOverheadIcons(bombs, player, ParserIcons.BombOverhead);
         }
 
         private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)

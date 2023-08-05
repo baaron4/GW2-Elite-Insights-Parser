@@ -113,11 +113,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Spectral Darkness - Orbs Debuff Overhead
-            IEnumerable<Segment> segments = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in segments)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.SpectralDarknessOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            IEnumerable<Segment> spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(spectralDarknesses, p, ParserIcons.SpectralDarknessOverhead);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

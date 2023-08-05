@@ -581,10 +581,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in fixations)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)

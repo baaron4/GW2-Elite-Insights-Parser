@@ -334,20 +334,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
-            IEnumerable<Segment> derangement = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in derangement)
+            IEnumerable<Segment> derangements = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in derangements)
             {
                 if (segment.Value >= 90)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementRedOverhead, 20, 1, segment, new AgentConnector(player)));
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
                 }
                 else if (segment.Value >= 60)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementGoldOverhead, 20, 1, segment, new AgentConnector(player)));
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementGoldOverhead);
                 }
                 else if (segment.Value >= 30)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementSilverOverhead, 20, 1, segment, new AgentConnector(player)));
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
                 }
             }
         }

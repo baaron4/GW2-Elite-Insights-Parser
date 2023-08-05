@@ -321,10 +321,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     // Power of the Void
                     IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-                    foreach(Segment segment in potvSegments)
-                    {
-                        replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.PowerOfTheVoidOverhead, 20, 1, segment, new AgentConnector(target)));
-                    }
+                    replay.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
                     break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
                     // Wall of Fear
@@ -451,10 +448,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Reanimated Hatred Fixation
             IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in hatredFixations)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)

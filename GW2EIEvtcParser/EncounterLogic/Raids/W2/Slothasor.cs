@@ -226,7 +226,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     replay.Decorations.Add(new CircleDecoration(true, toDropStart + 90000, 900, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
                 }
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.VolatilePoisonOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
             // Transformation
             var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in fixatedSloth)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
         }
     }

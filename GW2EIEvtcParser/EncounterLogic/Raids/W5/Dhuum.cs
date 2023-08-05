@@ -424,7 +424,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 13000, 100, seg, "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.BombTimerFullOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection
             var shackles = GetFilteredList(log.CombatData, DhuumShacklesApplication, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();

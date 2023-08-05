@@ -263,10 +263,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            foreach (Segment segment in fixations)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, segment, new AgentConnector(p)));
-            }
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

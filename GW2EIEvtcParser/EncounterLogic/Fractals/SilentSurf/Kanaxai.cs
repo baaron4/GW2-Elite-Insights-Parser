@@ -319,11 +319,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Target Order Overhead
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder1Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder2Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder3Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder4Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder5Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -414,21 +414,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             int effectEnd = start + duration;
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
             EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
-        }
-
-        /// <summary>
-        /// Adds the Target Order overhead decoration.
-        /// </summary>
-        /// <param name="player">Player for the decoration.</param>
-        /// <param name="replay">Combat Replay.</param>
-        /// <param name="targets">The <see cref="Segment"/> where the Target Order buff appears.</param>
-        /// <param name="icon">The icon related to the respective Target Order buff.</param>
-        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> targets, string icon)
-        {
-            foreach (Segment target in targets)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, target, new AgentConnector(player)));
-            }
         }
     }
 }

@@ -274,23 +274,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Attunements Overhead
-            AddAttunementDecoration(p, replay, p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.CrimsonAttunementOverhead);
-            AddAttunementDecoration(p, replay, p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.RadiantAttunementOverhead);
-        }
-
-        /// <summary>
-        /// Adds the Attunement overhead decoration.
-        /// </summary>
-        /// <param name="player">Player for the decoration.</param>
-        /// <param name="replay">Combat Replay.</param>
-        /// <param name="segments">The <see cref="Segment"/> where the Attunement buff appears.</param>
-        /// <param name="icon">The icon related to the respective Attunement buff.</param>
-        private static void AddAttunementDecoration(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> segments, string icon)
-        {
-            foreach (Segment segment in segments)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, segment, new AgentConnector(player)));
-            }
+            replay.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
         }
     }
 }

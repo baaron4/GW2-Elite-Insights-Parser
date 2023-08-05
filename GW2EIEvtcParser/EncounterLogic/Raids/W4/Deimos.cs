@@ -624,11 +624,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // Tear Instability
-            IEnumerable<Segment> tearInstab = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-            foreach (Segment seg in tearInstab)
-            {
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.TearInstabilityOverhead, 20, 1, seg, new AgentConnector(p)));
-            }
+            IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

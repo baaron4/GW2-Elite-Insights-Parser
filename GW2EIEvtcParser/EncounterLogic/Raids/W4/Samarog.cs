@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in fixatedSam)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
             //fixated Ghuldem
             var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
