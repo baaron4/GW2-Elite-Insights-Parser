@@ -284,12 +284,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Fixation
-            IEnumerable<AbstractBuffEvent> fixatedVermillion = log.CombatData.GetBuffData(FixatedOldLionsCourt)
-                .Where(buff => buff.To == p.AgentItem && (buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)));
-            IEnumerable<AbstractBuffEvent> fixatedArsenite = log.CombatData.GetBuffData(FixatedOldLionsCourt)
-                .Where(buff => buff.To == p.AgentItem && (buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)));
-            IEnumerable<AbstractBuffEvent> fixatedIndigo = log.CombatData.GetBuffData(FixatedOldLionsCourt)
-                .Where(buff => buff.To == p.AgentItem && (buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)));
+            IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffData(FixatedOldLionsCourt).Where(buff => buff.To == p.AgentItem);
+            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM));
+            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM));
+            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM));
 
             AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
             AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);

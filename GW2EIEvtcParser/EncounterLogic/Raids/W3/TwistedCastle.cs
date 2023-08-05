@@ -112,17 +112,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> madness = player.GetBuffStatus(log, Madness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in madness)
             {
-                if (segment.Value >= 30)
+                if (segment.Value >= 90)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessSilverOverhead, 20, 1, segment, new AgentConnector(player)));
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessRedOverhead, 20, 1, segment, new AgentConnector(player)));
                 }
                 else if (segment.Value >= 60)
                 {
                     replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessGoldOverhead, 20, 1, segment, new AgentConnector(player)));
                 }
-                else if (segment.Value >= 90)
+                else if (segment.Value >= 30)
                 {
-                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessRedOverhead, 20, 1, segment, new AgentConnector(player)));
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessSilverOverhead, 20, 1, segment, new AgentConnector(player)));
                 }
             }
         }
