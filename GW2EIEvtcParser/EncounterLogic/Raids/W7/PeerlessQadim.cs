@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -67,26 +68,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 new DamageCastFinder(UnbrearablePower, UnbrearablePower), // Unbearable Power
             };
-        }
-        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
-        {
-            var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> sappingSurges = combatData.GetBuffData(SappingSurge);
-            var sappingSurgeByDst = sappingSurges.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
-            {
-                var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
-                foreach (AbstractBuffEvent sglRemoval in sglRemovals)
-                {
-                    AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
-                    if (ba != null)
-                    {
-                        res.Add(new BuffRemoveAllEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 0, int.MaxValue));
-                        res.Add(new BuffRemoveManualEvent(sglRemoval.CreditedBy, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
-                    }
-                }
-            }
-            return res;
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -298,26 +279,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
                     //sapping surge, red tether
-                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, SappingSurge, target, true, true);
-                    int surgeStart = 0;
-                    AbstractSingleActor source = null;
-                    foreach (AbstractBuffEvent c in sappingSurge)
-                    {
-                        if (c is BuffApplyEvent)
-                        {
-                            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
-                            surgeStart = (int)c.Time;
-                            source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
-                        }
-                        else
-                        {
-                            int surgeEnd = (int)c.Time;
-                            if (source != null)
-                            {
-                                replay.Decorations.Add(new LineDecoration(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(target), new AgentConnector(source)));
-                            }
-                        }
-                    }
+                    AddTetherDecorations(log, target, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
                     Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstEntropicPosition != null)
                     {
@@ -348,6 +310,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in fixated)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
             // Chaos Corrosion
             var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -384,48 +347,37 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             //sapping surge, bad red tether
-            List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, SappingSurge, p, true, true);
-            int surgeStart = 0;
-            AbstractSingleActor source = null;
-            foreach (AbstractBuffEvent c in sappingSurge)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
-                    surgeStart = (int)c.Time;
-                    source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? qadim;
-                }
-                else
-                {
-                    int surgeEnd = (int)c.Time;
-                    if (source != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.4)", new AgentConnector(p), new AgentConnector(source)));
-                    }
-                }
-            }
+            AddTetherDecorations(log, p, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
             // kinetic abundance, good (blue) tether
-            List<AbstractBuffEvent> kineticAbundance = GetFilteredList(log.CombatData, KineticAbundance, p, true, true);
-            int kinStart = 0;
-            AbstractSingleActor kinSource = null;
-            foreach (AbstractBuffEvent c in kineticAbundance)
+            AddTetherDecorations(log, p, replay, KineticAbundance, "rgba(0, 255, 0, 0.4)");
+        }
+
+        private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, string color)
+        {
+            var sappingSurge = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
+            var sappingSurgeApplies = sappingSurge.OfType<BuffApplyEvent>().ToList();
+            var sappingSurgeRemoves = new HashSet<AbstractBuffRemoveEvent>(sappingSurge.OfType<AbstractBuffRemoveEvent>());
+            foreach (BuffApplyEvent bae in sappingSurgeApplies)
             {
-                if (c is BuffApplyEvent)
+                AbstractSingleActor src = log.FindActor(bae.CreditedBy);
+                if (src != null)
                 {
-                    kinStart = (int)c.Time;
-                    //kinSource = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
-                    kinSource = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy) ?? TrashMobs.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int kinEnd = (int)c.Time;
-                    if (kinSource != null)
+                    int surgeStart = (int)bae.Time;
+                    AbstractBuffRemoveEvent abre = sappingSurgeRemoves.FirstOrDefault(x => x.Time >= surgeStart);
+                    int surgeEnd;
+                    if (abre != null)
                     {
-                        replay.Decorations.Add(new LineDecoration(0, (kinStart, kinEnd), "rgba(0, 0, 255, 0.4)", new AgentConnector(p), new AgentConnector(kinSource)));
+                        surgeEnd = (int)abre.Time;
+                        sappingSurgeRemoves.Remove(abre);
                     }
+                    else
+                    {
+                        surgeEnd = (int)log.FightData.FightEnd;
+                    }
+                    replay.Decorations.Add(new LineDecoration(0, (surgeStart, surgeEnd), color, new AgentConnector(actor), new AgentConnector(src)));
                 }
             }
-        }
+        } 
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
