@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -102,6 +103,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 //    break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Madness - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
+            IEnumerable<Segment> madness = player.GetBuffStatus(log, Madness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in madness)
+            {
+                if (segment.Value >= 90)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessRedOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
+                else if (segment.Value >= 60)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessGoldOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
+                else if (segment.Value >= 30)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.MadnessSilverOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
             }
         }
 

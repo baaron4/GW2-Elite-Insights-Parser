@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -254,6 +255,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Sapper bombs
+            var sapperBombs = player.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in sapperBombs)
+            {
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 5000, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player)));
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.BombOverhead, 20, 1, seg, new AgentConnector(player)));
             }
         }
 

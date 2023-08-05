@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -324,6 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Conjured Protection - Shield AoE
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
             foreach (AbstractCastEvent c in shieldCast)
@@ -339,6 +341,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
                 }
             }
+            // Shields and Greatswords Overheads
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), ParserIcons.ConjuredShieldEmptyOverhead);
+            AddOverheadDecorations(p, replay, p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), ParserIcons.GreatswordPowerEmptyOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -349,6 +354,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
             return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        /// <summary>
+        /// Adds the overhead decorations.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="buffSegments">The <see cref="Segment"/> where the buff appears.</param>
+        /// <param name="icon">The icon related to the respective buff.</param>
+        private static void AddOverheadDecorations(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> buffSegments, string icon)
+        {
+            foreach (Segment segment in buffSegments)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, segment, new AgentConnector(player)));
+            }
         }
     }
 }

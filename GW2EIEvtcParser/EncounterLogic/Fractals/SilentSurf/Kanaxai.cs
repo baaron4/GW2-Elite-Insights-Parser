@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -12,7 +13,6 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -319,11 +319,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Target Order Overhead
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder1Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder2Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder3Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder4Overhead);
-            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd), ParserIcons.TargetOrder5Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder1Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder2Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder3Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder4Overhead);
+            AddTargetOrderDecoration(player, replay, player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.TargetOrder5Overhead);
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -423,14 +423,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="replay">Combat Replay.</param>
         /// <param name="targets">The <see cref="Segment"/> where the Target Order buff appears.</param>
         /// <param name="icon">The icon related to the respective Target Order buff.</param>
-        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IReadOnlyList<Segment> targets, string icon)
+        private static void AddTargetOrderDecoration(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> targets, string icon)
         {
             foreach (Segment target in targets)
             {
-                if (target.Value > 0)
-                {
-                    replay.Decorations.Add(new IconOverheadDecoration(icon, 12, 1, target, new AgentConnector(player)));
-                }
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, target, new AgentConnector(player)));
             }
         }
     }

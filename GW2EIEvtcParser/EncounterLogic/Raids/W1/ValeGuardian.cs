@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -236,6 +237,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Attunements Overhead
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorBlueOverhead);
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorGreenOverhead);
+            AddPylonAttunementDecoration(p, replay, p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), ParserIcons.SensorRedOverhead);
+        }
+
+        /// <summary>
+        /// Adds the Pylon Attunement overhead decoration.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="segments">The <see cref="Segment"/> where the Pylon Attunement buff appears.</param>
+        /// <param name="icon">The icon related to the respective Pylon Attunement buff.</param>
+        private static void AddPylonAttunementDecoration(AbstractPlayer player, CombatReplay replay, IEnumerable<Segment> segments, string icon)
+        {
+            foreach (Segment segment in segments)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, segment, new AgentConnector(player)));
             }
         }
     }

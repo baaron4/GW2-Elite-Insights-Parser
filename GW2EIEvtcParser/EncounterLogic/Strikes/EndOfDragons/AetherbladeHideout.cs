@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -110,6 +111,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
             }
 
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Bomb Selection
+            var bomb = player.GetBuffStatus(log, new long[] { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment segment in bomb)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.BombOverhead, 20, 1, segment, new AgentConnector(player)));
+            }
         }
 
         private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)

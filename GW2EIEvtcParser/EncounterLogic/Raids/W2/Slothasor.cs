@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -83,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(VolatileAura, VolatileAura), // Volatile Aura
+                new DamageCastFinder(VolatileAura, VolatileAura),
             };
         }
 
@@ -225,6 +226,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     replay.Decorations.Add(new CircleDecoration(true, toDropStart + 90000, 900, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
                 }
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.VolatilePoisonOverhead, 20, 1, seg, new AgentConnector(p)));
             }
             // Transformation
             var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -232,11 +234,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
             }
-            // fixated
+            // Fixated
             var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSloth)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationPurpleOverhead, 20, 1, seg, new AgentConnector(p)));
             }
         }
     }

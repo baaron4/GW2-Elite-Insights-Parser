@@ -1421,6 +1421,7 @@
         public const long VolatilePoisonBuff = 34387;
         public const long Targeted = 34392;
         public const long Target = 34393;
+        public const long MatthiasSacrificeSelection = 34399;
         public const long ShardsOfRageHuman = 34404;
         public const long Eat = 34408;
         public const long ShardsOfRageAbomination = 34411;
@@ -1753,7 +1754,7 @@
         public const long DeterminationViirastra = 38841;
         public const long OverheadSmash = 38844;
         public const long MistChargedChop = 38846;
-        public const long CorporealReassignment = 38880;
+        public const long CorporealReassignmentBuff = 38880;
         public const long PunishingKickSkorvald = 38896;
         public const long RadiantFury = 38926;
         public const long VaultArtsariiv = 38977;
@@ -1777,7 +1778,7 @@
         public const long CosmicEnergy = 39237;
         public const long FocusedAnger = 39257;
         public const long CosmicMeteor = 39268;
-        public const long CorporealReassignment2 = 39275;
+        public const long CorporealReassignmentSkill = 39275;
         public const long SolarStomp = 39298;
         public const long HorizonStrikeNormal = 39297;
         public const long FriedOysters = 39302;

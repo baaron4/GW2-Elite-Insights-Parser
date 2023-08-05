@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(DemonicAura, DemonicAura ), // Demonic Aura
+                new DamageCastFinder(DemonicAura, DemonicAura),
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -621,6 +622,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+            }
+            // Tear Instability
+            IEnumerable<Segment> tearInstab = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            foreach (Segment seg in tearInstab)
+            {
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.TearInstabilityOverhead, 20, 1, seg, new AgentConnector(p)));
             }
         }
 

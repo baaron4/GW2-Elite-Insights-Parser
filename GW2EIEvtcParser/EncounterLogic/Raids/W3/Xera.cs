@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -327,6 +328,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
+            IEnumerable<Segment> derangement = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in derangement)
+            {
+                if (segment.Value >= 90)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementRedOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
+                else if (segment.Value >= 60)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementGoldOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
+                else if (segment.Value >= 30)
+                {
+                    replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.DerangementSilverOverhead, 20, 1, segment, new AgentConnector(player)));
+                }
             }
         }
     }
