@@ -354,27 +354,27 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, string color)
         {
-            var sappingSurge = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
-            var sappingSurgeApplies = sappingSurge.OfType<BuffApplyEvent>().ToList();
-            var sappingSurgeRemoves = new HashSet<AbstractBuffRemoveEvent>(sappingSurge.OfType<AbstractBuffRemoveEvent>());
-            foreach (BuffApplyEvent bae in sappingSurgeApplies)
+            var tethers = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
+            var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
+            var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
+            foreach (BuffApplyEvent bae in tethersApplies)
             {
                 AbstractSingleActor src = log.FindActor(bae.CreditedBy);
                 if (src != null)
                 {
-                    int surgeStart = (int)bae.Time;
-                    AbstractBuffRemoveEvent abre = sappingSurgeRemoves.FirstOrDefault(x => x.Time >= surgeStart);
-                    int surgeEnd;
+                    int tetherStart = (int)bae.Time;
+                    AbstractBuffRemoveEvent abre = tethersRemoves.FirstOrDefault(x => x.Time >= tetherStart);
+                    int tetherEnd;
                     if (abre != null)
                     {
-                        surgeEnd = (int)abre.Time;
-                        sappingSurgeRemoves.Remove(abre);
+                        tetherEnd = (int)abre.Time;
+                        tethersRemoves.Remove(abre);
                     }
                     else
                     {
-                        surgeEnd = (int)log.FightData.FightEnd;
+                        tetherEnd = (int)log.FightData.FightEnd;
                     }
-                    replay.Decorations.Add(new LineDecoration(0, (surgeStart, surgeEnd), color, new AgentConnector(actor), new AgentConnector(src)));
+                    replay.Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(actor), new AgentConnector(src)));
                 }
             }
         } 
