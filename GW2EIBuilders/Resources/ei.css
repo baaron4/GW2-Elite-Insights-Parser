@@ -169,6 +169,11 @@
     width: 130px;
 }
 
+.cr-breakbar-phase-display {
+    font-size: 0.65rem;
+    width: 180px;
+}
+
 .cr-hp-display-player {
     left: 0%;
 }
