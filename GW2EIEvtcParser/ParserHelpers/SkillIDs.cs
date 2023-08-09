@@ -219,7 +219,7 @@
         public const long LesserSmiteCondition = 9101;
         public const long ZealotsFlameBuff = 9103;
         public const long ZealotsFlameSkill = 9104;
-        public const long HolyStrike = 9108;
+        public const long FaithfulStrike = 9108;
         public const long TrueStrike = 9109;
         public const long SymbolOfFaith = 9111;
         public const long VirtueOfCourage = 9113;
@@ -228,7 +228,7 @@
         public const long VirtueOfResolve = 9119;
         public const long ProtectorsStrikeCounterHit = 9121;
         public const long ShieldOfWrathBuff = 9123;
-        public const long FaithfulStrike = 9140;
+        public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
