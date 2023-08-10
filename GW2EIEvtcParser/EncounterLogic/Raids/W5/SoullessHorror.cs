@@ -35,6 +35,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastStartMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0).UsingChecker((ce, log) => ce.ActualDuration <= 6800),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0).UsingChecker((ce,log) => ce.ActualDuration > 6800),
+            new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(ArcDPSEnums.TrashID.TormentedDead)),
 
             });
             Extension = "sh";
