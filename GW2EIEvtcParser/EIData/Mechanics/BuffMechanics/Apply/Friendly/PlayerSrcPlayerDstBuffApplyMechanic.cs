@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, AbstractSingleActor actor)
         {
-            AbstractSingleActor dst = MechanicHelper.FindPlayerActor(log, ba.CreditedBy);
+            AbstractSingleActor dst = MechanicHelper.FindPlayerActor(log, ba.To);
             if (dst != null)
             {
                 mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, actor));
