@@ -219,7 +219,7 @@
         public const long LesserSmiteCondition = 9101;
         public const long ZealotsFlameBuff = 9103;
         public const long ZealotsFlameSkill = 9104;
-        public const long HolyStrike = 9108;
+        public const long FaithfulStrike = 9108;
         public const long TrueStrike = 9109;
         public const long SymbolOfFaith = 9111;
         public const long VirtueOfCourage = 9113;
@@ -228,7 +228,7 @@
         public const long VirtueOfResolve = 9119;
         public const long ProtectorsStrikeCounterHit = 9121;
         public const long ShieldOfWrathBuff = 9123;
-        public const long FaithfulStrike = 9140;
+        public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
@@ -1421,6 +1421,7 @@
         public const long VolatilePoisonBuff = 34387;
         public const long Targeted = 34392;
         public const long Target = 34393;
+        public const long MatthiasSacrificeSelection = 34399;
         public const long ShardsOfRageHuman = 34404;
         public const long Eat = 34408;
         public const long ShardsOfRageAbomination = 34411;
@@ -1753,7 +1754,7 @@
         public const long DeterminationViirastra = 38841;
         public const long OverheadSmash = 38844;
         public const long MistChargedChop = 38846;
-        public const long CorporealReassignment = 38880;
+        public const long CorporealReassignmentBuff = 38880;
         public const long PunishingKickSkorvald = 38896;
         public const long RadiantFury = 38926;
         public const long VaultArtsariiv = 38977;
@@ -1777,7 +1778,7 @@
         public const long CosmicEnergy = 39237;
         public const long FocusedAnger = 39257;
         public const long CosmicMeteor = 39268;
-        public const long CorporealReassignment2 = 39275;
+        public const long CorporealReassignmentSkill = 39275;
         public const long SolarStomp = 39298;
         public const long HorizonStrikeNormal = 39297;
         public const long FriedOysters = 39302;
@@ -2216,6 +2217,7 @@
         public const long SoulStoneVenomBuff = 49083;
         public const long CompoundingChemicals = 49090;
         public const long IllusionaryDefense = 49099;
+        public const long SignetOfTheEtherHeal = 49103;
         public const long ImpossibleOddsHit = 49108;
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
@@ -2908,6 +2910,7 @@
         public const long FortifiedEarth = 62858;
         public const long ImperialImpactSkill = 62859;
         public const long GunsaberSheath = 62861;
+        public const long BalanceInDiscord = 62863;
         public const long UrnOfSaintViktorBuff = 62864;
         public const long GrandFinale = 62876;
         public const long SaintsShieldDodge = 62879;

@@ -8,11 +8,14 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using System;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal static class NecromancerHelper
     {
+        public static readonly Color ProfColor = new Color(30, 193, 110);
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
@@ -25,6 +28,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData().UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
                 .UsingSrcBaseSpecChecker(Spec.Necromancer)
+                .UsingChecker((evt, combatData, skillData, agentData) => !FindRelatedEvents(combatData.GetBuffData(DesertShroudBuff).OfType<BuffRemoveAllEvent>(), evt.Time, 50).Any()) // collides with sandstorm shroud
                 .UsingChecker((evt, combatData, skillData, agentData) => !HasRelatedHit(combatData, UnholyBurst, evt.Src, evt.Time))
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 

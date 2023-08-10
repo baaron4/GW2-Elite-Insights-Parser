@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -308,7 +309,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // One also happens during death's embrace so we filter that one out
                                 if (!deathsEmbraces.Any(x => x.Time <= deathsHandEffect.Time && x.Time + deathsEmbraceCastDuration >= deathsHandEffect.Time))
                                 {
-
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
@@ -318,6 +318,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+
+                    // Power of the Void
+                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+                    replay.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
                     break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
                     // Wall of Fear
@@ -408,8 +412,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (segment != null && segment.Start > 0 && segment.Value == 1)
                     {
                         // AoE on player
-                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                         // Logs without effects
                         if (deathsHandOnPlayerGUID == null)
                         {
@@ -442,6 +446,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            // Reanimated Hatred Fixation
+            IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)

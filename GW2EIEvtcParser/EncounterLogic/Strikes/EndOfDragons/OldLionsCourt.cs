@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -277,6 +278,38 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     }
                 }
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Fixation
+            IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffData(FixatedOldLionsCourt).Where(buff => buff.To == p.AgentItem);
+            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM));
+            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM));
+            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM));
+
+            AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
+            AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
+            AddFixatedDecorations(p, log, replay, fixatedIndigo, ParserIcons.FixationBlueOverhead);
+        }
+
+        /// <summary>
+        /// Adds the Fixated decorations.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="fixations">The <see cref="AbstractBuffEvent"/> where the buff appears.</param>
+        /// <param name="icon">The icon related to the respective buff.</param>
+        private static void AddFixatedDecorations(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractBuffEvent> fixations, string icon)
+        {
+            IEnumerable<AbstractBuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
+            IEnumerable<AbstractBuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
+            foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
+            {
+                long start = bae.Time;
+                long end = removals.FirstOrDefault(x => x.Time > start) != null ? removals.FirstOrDefault(x => x.Time > start).Time : log.FightData.LogEnd;
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -47,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ChillingAura, ChillingAura), // Chilling Aura
+                new DamageCastFinder(ChillingAura, ChillingAura),
             };
         }
 
@@ -287,6 +288,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
             }
 
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IEnumerable<Segment> fixations = player.GetBuffStatus(log, FixatedSH, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

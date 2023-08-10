@@ -4,6 +4,7 @@ using System;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -29,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] { StarbustCascade1, StarbustCascade2 }, "Starburst Cascade", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
             new PlayerDstHitMechanic(HorizonStrikeNormal, "Horizon Strike Normal", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm","Horizon Strike (normal)", "Horizon Strike (normal)",0),
             new PlayerDstHitMechanic(OverheadSmash, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash","Overhead Smash","Overhead Smash",0),
-            new PlayerDstBuffApplyMechanic(CorporealReassignment, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
+            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
             new PlayerDstHitMechanic(ExplodeArkk, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode","Hit by Solar Bloom explosion", "Bloom Explosion",0),
             new PlayerDstBuffApplyMechanic(new long[] {FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4}, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstBuffApplyMechanic(CosmicMeteor, "Cosmic Meteor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Temporal Realignment (Green) application", "Green",0),
@@ -194,6 +195,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityBeDynamic], 1));
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Corporeal Reassignment
+            IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+            // Fixations
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

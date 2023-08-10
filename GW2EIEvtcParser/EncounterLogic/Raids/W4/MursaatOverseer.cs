@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -56,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(PunishementAura, PunishementAura ), // PunishementAura
+                new DamageCastFinder(PunishementAura, PunishementAura),
             };
         }
 
@@ -90,20 +91,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, MursaatOverseersShield, target, true, true);
-                    int shieldStart = 0;
+                    var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     int shieldRadius = 100;
-                    foreach (AbstractBuffEvent c in shield)
+                    foreach (Segment seg in shields)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
@@ -119,6 +111,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 default:
                     break;
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IEnumerable<Segment> claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -15,6 +16,8 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class MesmerHelper
     {
+        public static readonly Color ProfColor = new Color(147, 112, 219);
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
@@ -350,6 +353,47 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
+        }
+        
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = ProfColor;
+
+            // Portal locations
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
+            {
+                foreach (EffectEvent effect in portalInactives)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, 90, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> portalActives))
+            {
+                foreach (IReadOnlyList<EffectEvent> group in portalActives)
+                {
+                    GenericAttachedDecoration first = null;
+                    foreach (EffectEvent effect in group)
+                    {
+                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        if (first == null)
+                        {
+                            first = icon;
+                        }
+                        else
+                        {
+                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                        }
+                        replay.Decorations.Add(icon);
+                    }
+                }
+            }
         }
     }
 }

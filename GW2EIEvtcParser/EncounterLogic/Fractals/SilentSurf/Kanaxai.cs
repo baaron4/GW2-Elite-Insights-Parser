@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -303,21 +304,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
-            var axes = new List<Segment>();
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
+
+            // Target Order Overhead
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

@@ -34,6 +34,10 @@ function ToRadians(degrees) {
 
 const resolutionMultiplier = 2.0;
 
+const maxOverheadAnimationFrame = 50;
+let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
+let overheadAnimationIncrement = 1;
+
 var animator = null;
 // reactive structures
 var reactiveAnimationData = {
@@ -82,6 +86,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
         this.skillMechanicActorData = [];
         this.actorOrientationData = new Map();
@@ -162,6 +167,7 @@ class Animator {
         this.trashMobData.clear();
         this.friendlyMobData.clear();
         this.actorOrientationData.clear();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
@@ -191,6 +197,9 @@ class Animator {
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                         break;
+                    case "IconOverheadDecoration":
+                        this.overheadActorData.push(new IconOverheadDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                        break;
                     default:
                         throw "Unknown decoration type";
                 }
@@ -198,28 +207,31 @@ class Animator {
                 let decoration = null;
                 switch (actor.type) {
                     case "Circle":
-                        decoration =new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
+                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
                         break;
                     case "Rectangle":
-                        decoration =new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
+                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
                         break;
                     case "RotatedRectangle":
-                        decoration =new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
+                        decoration = new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
                         break;
                     case "Doughnut":
-                        decoration =new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
+                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
                         break;
                     case "Pie":
-                        decoration =new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
+                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
                         break;
                     case "Line":
-                        decoration =new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
+                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
                         break;
                     case "FacingRectangle":
-                        decoration =new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
+                        decoration = new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
                         break;
                     case "FacingPie":
-                        decoration =new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        break;
+                    case "IconDecoration":
+                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
                         break;
                     default:
                         throw "Unknown decoration type";
@@ -692,6 +704,9 @@ class Animator {
             this.selectedActor.draw();     
             this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
         }
+        for (let i = 0; i < this.overheadActorData.length; i++) {
+            this.overheadActorData[i].draw();
+        }
     }
 
     draw() {
@@ -701,6 +716,10 @@ class Animator {
         //
         this._drawBGCanvas();
         this._drawMainCanvas();
+        if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
+            overheadAnimationIncrement *= -1;
+        }
+        overheadAnimationFrame += overheadAnimationIncrement;
     }
 }
 

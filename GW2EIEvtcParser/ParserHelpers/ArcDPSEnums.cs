@@ -73,6 +73,7 @@ namespace GW2EIEvtcParser
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
+            internal const int FunctionalEffect2Events = 20230719;
             //
             internal const int EndOfLife = int.MaxValue;
         }

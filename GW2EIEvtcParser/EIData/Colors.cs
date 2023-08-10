@@ -7,22 +7,28 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class Color
     {
-        private readonly int _r;
-        private readonly int _g;
-        private readonly int _b;
-        private readonly float _a;
+        public int R { get; set; }
+        public int G { get; set; }
+        public int B { get; set; }
+        public float A { get; set; }
 
         public Color(int r, int g, int b, float a = 1.0f)
         {
-            _r = r;
-            _g = g;
-            _b = b;
-            _a = a;
+            R = r;
+            G = g;
+            B = b;
+            A = a;
         }
 
-        public string ToString(bool withAlpha)
+        /// <summary>Creates a new color with adjusted alpha value</summary>
+        public Color WithAlpha(float alpha)
         {
-            return withAlpha ? "rgba(" + _r + ", " + _g + ", " + _b + ", " + _a + "}" : "rgb(" + _r + ", " + _g + ", " + _b + "}";
+            return new Color(R, G, B, alpha);
+        }
+
+        public string ToString(bool withAlpha = true)
+        {
+            return withAlpha ? $"rgba({R}, {G}, {B}, {A})" : $"rgb({R}, {G}, {B})";
         }
     }
 
