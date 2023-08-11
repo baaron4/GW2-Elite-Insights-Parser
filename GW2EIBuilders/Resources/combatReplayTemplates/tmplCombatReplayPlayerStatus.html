@@ -1,6 +1,5 @@
 <template>
-    <div class="player-status" :style="{'background': getHPGradient(time, status)}" 
-                           @click="selectActor();">
+    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select">
         <h6 class="actor-shorten text-center" :title="player.name">
             <img :src="player.icon" :alt="player.profession" height="18" width="18">
             {{player.name}}
@@ -21,10 +20,7 @@
     Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${template}`,
-        methods: {         
-            selectActor: function (id) {
-                animator.selectActor(this.player.uniqueID);
-            },
+        methods: {
             getHPPercent: function (time) {
                 if (!this.hasHealth) {
                     return 100;
@@ -40,10 +36,13 @@
             getHPGradient: function (time, status) {
                 var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
                 return computeGradient(color, this.getHPPercent(time), 'black');
-            },    
+            },
             getBarrierGradient: function (time) {
                 return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
-            }, 
+            },
+            select() {
+                animator.selectActor(this.player.uniqueID);
+            }
         },
         computed: {
             phase: function () {

@@ -1,9 +1,9 @@
 ﻿<template>
     <div>
-        <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"></combat-replay-actor-buffs-stats-component>
-        <div class="d-flex mb-1 mt-1 align-items-center">
-            <combat-replay-target-status-component :time="time" :targetindex="targetindex"></combat-replay-target-status-component>
-            <combat-replay-actor-rotation-component :time="time" :actorindex="targetindex" :enemy="true"></combat-replay-actor-rotation-component>
+        <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"/>
+        <div class="d-flex mb-1 mt-1">
+            <combat-replay-target-status-component :time="time" :targetindex="targetindex"/>
+            <combat-replay-actor-rotation-component :time="time" :actorindex="targetindex" :enemy="true"/>
         </div> 
         <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">         
             <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
