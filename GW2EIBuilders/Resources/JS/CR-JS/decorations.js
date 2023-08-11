@@ -22,6 +22,7 @@ class MechanicDrawable {
     }
 
     draw() {
+        console.error("Draw should be overriden");
         // to override
     }
 
@@ -648,5 +649,71 @@ class MovingPlatformDrawable extends BackgroundDrawable {
             angle: (this.positions[i - 1][3] * (1 - progress) + this.positions[i][3] * progress),
             opacity: (this.positions[i - 1][4] * (1 - progress) + this.positions[i][4] * progress),
         };
+    }
+}
+
+class IconDecorationDrawable extends MechanicDrawable {
+    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo);
+        this.image = new Image();
+        this.image.src = image;
+        this.image.onload = () => animateCanvas(noUpdateTime);
+        this.pixelSize = pixelSize;
+        this.worldSize = worldSize;
+        this.opacity = opacity;
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
+            return this.worldSize;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
+    draw() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        if (pos === null) {
+            return;
+        }
+        
+        const ctx = animator.mainContext;
+        const size = this.getSize();
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
+        ctx.restore();
+    }
+}
+
+class IconOverheadDecorationDrawable extends IconDecorationDrawable {
+    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo, image, pixelSize, worldSize, opacity);
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
+            return this.worldSize;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
+    getPosition() {
+        const pos = super.getPosition();
+        if (!pos) {
+            return null;
+        }
+        if (!this.master) {
+            console.error('Invalid IconOverhead decoration');
+            return null; 
+        }
+        const masterSize = this.master.getSize();
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1/animator.inchToPixel : animator.scale;
+        pos.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        return pos;
     }
 }

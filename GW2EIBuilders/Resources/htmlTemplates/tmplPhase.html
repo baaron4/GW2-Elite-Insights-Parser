@@ -8,7 +8,7 @@
         </ul>
         <div v-if="hasBreakbarPhases" class="d-flex flex-row justify-content-center align-items-center">
             <span class="mr-1">Breakbar Phases: </span>
-            <div style="max-width: 1200px; overflow-x: auto;" class="d-flex flex-row align-items-center">
+            <div style="max-width: 1200px;" class="d-flex flex-row align-items-center scrollable-x">
                 <div v-for="data in breakbarPhasesPerTarget"
                 class="d-flex flex-row flex-nowrap  align-items-center mr-1 ml-1">
                 <img class="icon-sl mr-2" :src="getTargetData(data.targetId).icon"

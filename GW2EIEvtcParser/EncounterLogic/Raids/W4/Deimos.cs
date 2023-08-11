@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(DemonicAura, DemonicAura ), // Demonic Aura
+                new DamageCastFinder(DemonicAura, DemonicAura),
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -450,23 +451,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, UnnaturalSignet, mainTarget, true, true);
-            long sigStart = 0;
+            var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             int burstID = 1;
-            for (int i = 0; i < signets.Count; i++)
+            foreach (Segment signet in signets)
             {
-                AbstractBuffEvent signet = signets[i];
-                if (signet is BuffApplyEvent)
-                {
-                    sigStart = Math.Max(signet.Time, 0);
-                }
-                else
-                {
-                    long sigEnd = Math.Min(signet.Time, log.FightData.FightEnd);
-                    var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
-                    burstPhase.AddTarget(mainTarget);
-                    phases.Add(burstPhase);
-                }
+                long sigStart = Math.Max(signet.Start, log.FightData.FightStart);
+                long sigEnd = Math.Min(signet.End, log.FightData.FightEnd);
+                var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
+                burstPhase.AddTarget(mainTarget);
+                phases.Add(burstPhase);
             }
             return phases;
         }
@@ -541,20 +534,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, UnnaturalSignet, target, true, true);
-                    int sigStart = 0;
-                    int sigEnd = 0;
-                    foreach (AbstractBuffEvent signet in signets)
+                    var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in signets)
                     {
-                        if (signet is BuffApplyEvent)
-                        {
-                            sigStart = (int)signet.Time;
-                        }
-                        else
-                        {
-                            sigEnd = (int)signet.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Gambler:
@@ -634,21 +617,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // teleport zone
-            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, DeimosSelectedByGreen, p, true, true);
-            int tpStart = 0;
-            foreach (AbstractBuffEvent c in tpDeimos)
+            var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in tpDeimos)
             {
-                if (c is BuffApplyEvent)
-                {
-                    tpStart = (int)c.Time;
-                }
-                else
-                {
-                    int tpEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
             }
+            // Tear Instability
+            IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

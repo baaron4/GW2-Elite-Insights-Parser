@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -83,6 +84,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return;
             }
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (fightData.Success && fightData.FightEnd < _xeraSecondPhaseStartTime)
+            {
+                fightData.SetSuccess(false, fightData.LogEnd);
+            }
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -323,6 +328,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
+            IEnumerable<Segment> derangements = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in derangements)
+            {
+                if (segment.Value >= 90)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
+                }
+                else if (segment.Value >= 60)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementGoldOverhead);
+                }
+                else if (segment.Value >= 30)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
+                }
             }
         }
     }

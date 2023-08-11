@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -256,9 +258,63 @@ namespace GW2EIEvtcParser.EIData
             return instantCastFinders;
         }
 
-        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            return;
+            Color color = Colors.Blue;
+
+            // White Mantle Portal Device portal locations
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive, out IReadOnlyList<EffectEvent> whiteMantlePortalInactive))
+            {
+                foreach (EffectEvent effect in whiteMantlePortalInactive)
+                {
+                    (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> whiteMantlePortalActive))
+            {
+                foreach (IReadOnlyList<EffectEvent> group in whiteMantlePortalActive)
+                {
+                    GenericAttachedDecoration first = null;
+                    foreach (EffectEvent effect in group)
+                    {
+                        (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, false));
+                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        if (first == null)
+                        {
+                            first = decoration;
+                        }
+                        else
+                        {
+                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, false));
+                        }
+                        replay.Decorations.Add(decoration);
+                    }
+                }
+            }
+
+            switch (player.Spec)
+            {
+                case Spec.Scourge:
+                    ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Mesmer:
+                case Spec.Chronomancer:
+                case Spec.Mirage:
+                case Spec.Virtuoso:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Thief:
+                case Spec.Daredevil:
+                case Spec.Deadeye:
+                case Spec.Specter:
+                    ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+            }
         }
 
         internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -266,7 +322,6 @@ namespace GW2EIEvtcParser.EIData
             var knownEffects = new HashSet<long>();
             CombatReplay.DebugEffects(p, log, replay, knownEffects);
         }
-
 
         private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
         {
@@ -333,6 +388,41 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Retrieves the end time of an effect.
+        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first and finally to default duration.
+        /// </summary>
+        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
+            {
+                return end;
+            }
+            if (associatedBuff != null)
+            {
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                    .OfType<BuffRemoveAllEvent>()
+                    .FirstOrDefault(x => x.To == agent && x.Time >= effect.Time);
+                if (remove != null)
+                {
+                    return remove.Time;
+                }
+            }
+            return effect.Time + defaultDuration;
+        }
+
+
+        /// <summary>
+        /// Computes the lifespan of an effect.
+        /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
+        /// </summary>
+        internal static (int, int) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            long start = effect.Time;
+            long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
+            return ((int) start, (int) end);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser
 {
@@ -27,6 +28,15 @@ namespace GW2EIEvtcParser
         public const string PurpleCatmanderTag = "7224A4AF710E4243BFE032629E17CA6E";
         public const string PinkCatmanderTag = "4387BE6146D43246AA7B333168EA58EA";
         public const string WhiteCatmanderTag = "A0B0EC076BC83B40A293C1CDEC4A7DE7";
+        // Overhead Squad Markers
+        public const string ArrowOverhead = "C3A56F1E045E3848B07CBAC5BBDD2C32";
+        public const string CircleOverhead = "73C880AE431C9F4D8A5972ACF7066F4E";
+        public const string HeartOverhead = "185008E2437B184D8FDAD647DD972D9F";
+        public const string SquareOverhead = "6E5997457B3F6A45B984C613806FA72A";
+        public const string StarOverhead = "5140125657C6084D94226C8EC0216649";
+        public const string SwirlOverhead = "EBBE113AE2E53F4E96F3E92FB1353ECE";
+        public const string TriangleOverhead = "46EBC4397F8A3740B900333B591F6183";
+        public const string XOverhead = "8BDCF5C47F8A8340A251F102AF3B5905";
 
         /// <summary>
         /// HashSet containing the types of Commander Tag GUIDs.
@@ -51,6 +61,61 @@ namespace GW2EIEvtcParser
             PurpleCatmanderTag,
             PinkCatmanderTag,
             WhiteCatmanderTag,
+        };
+
+        /// <summary>
+        /// HashSet containing the types of Squad Marker GUIDs.
+        /// </summary>
+        public static IReadOnlyCollection<string> SquadOverheadMarkersGUIDs { get; set; } = new HashSet<string>()
+        {
+            ArrowOverhead,
+            CircleOverhead,
+            HeartOverhead,
+            SquareOverhead,
+            StarOverhead,
+            SwirlOverhead,
+            TriangleOverhead,
+            XOverhead
+        };
+
+        /// <summary>
+        /// Matches the Squad Marker GUIDs to the relative icons.
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> SquadMarkerToIcon { get; set; } = new Dictionary<string, string>()
+        {
+            { ArrowOverhead, ParserIcons.ArrowSquadMarkerOverhead },
+            { CircleOverhead, ParserIcons.CircleSquadMarkerOverhead },
+            { HeartOverhead, ParserIcons.HeartSquadMarkerOverhead },
+            { SquareOverhead, ParserIcons.SquareSquadMarkerOverhead },
+            { StarOverhead, ParserIcons.StarSquadMarkerOverhead },
+            { SwirlOverhead, ParserIcons.SwirlSquadMarkerOverhead },
+            { TriangleOverhead, ParserIcons.TriangleSquadMarkerOverhead },
+            { XOverhead, ParserIcons.XSquadMarkerOverhead },
+        };
+
+        /// <summary>
+        /// Matches the Commander/Catmander Tag GUIDs to the relative icons.
+        /// </summary>
+        public static IReadOnlyDictionary<string, string> CommanderTagToIcon { get; set; } = new Dictionary<string, string>()
+        {
+            { RedCommanderTag, ParserIcons.RedCommanderTagOverhead },
+            { OrangeCommanderTag, ParserIcons.OrangeCommanderTagOverhead },
+            { YellowCommanderTag, ParserIcons.YellowCommanderTagOverhead },
+            { GreenCommanderTag, ParserIcons.GreenCommanderTagOverhead },
+            { CyanCommanderTag, ParserIcons.CyanCommanderTagOverhead },
+            { BlueCommanderTag, ParserIcons.BlueCommanderTagOverhead },
+            { PurpleCommanderTag, ParserIcons.PurpleCommanderTagOverhead },
+            { PinkCommanderTag, ParserIcons.PinkCommanderTagOverhead },
+            { WhiteCommanderTag, ParserIcons.WhiteCommanderTagOverhead },
+            { RedCatmanderTag, ParserIcons.RedCatmanderTagOverhead },
+            { OrangeCatmanderTag, ParserIcons.OrangeCatmanderTagOverhead },
+            { YellowCatmanderTag, ParserIcons.YellowCatmanderTagOverhead },
+            { GreenCatmanderTag, ParserIcons.GreenCatmanderTagOverhead },
+            { CyanCatmanderTag, ParserIcons.CyanCatmanderTagOverhead },
+            { BlueCatmanderTag, ParserIcons.BlueCatmanderTagOverhead },
+            { PurpleCatmanderTag, ParserIcons.PurpleCatmanderTagOverhead },
+            { PinkCatmanderTag, ParserIcons.PinkCatmanderTagOverhead },
+            { WhiteCatmanderTag, ParserIcons.WhiteCatmanderTagOverhead },
         };
     }
 

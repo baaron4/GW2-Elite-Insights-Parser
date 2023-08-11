@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -253,23 +254,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> shields = GetFilteredList(log.CombatData, buffID, target, true, true);
-            int start = 0;
-            for (int i = 0; i < shields.Count; i++)
+            var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in shields)
             {
-                AbstractBuffEvent buffEvent = shields[i];
-                if (buffEvent is BuffApplyEvent)
-                {
-                    start = (int)buffEvent.Time;
-                    if (i == shields.Count - 1)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)start, (int)log.FightData.FightEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                    }
-                } 
-                else
-                {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)start, (int)buffEvent.Time), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 250, seg, "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
             }
         }
 
@@ -329,65 +317,44 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Corruption
-            List<AbstractBuffEvent> corruptedMatthias = GetFilteredList(log.CombatData, Corruption1, p, true, true);
-            corruptedMatthias.AddRange(GetFilteredList(log.CombatData, Corruption2, p, true, true));
-            int corruptedMatthiasStart = 0;
-            foreach (AbstractBuffEvent c in corruptedMatthias)
+            IEnumerable<Segment> corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            foreach (Segment seg in corruptedMatthias)
             {
-                if (c is BuffApplyEvent)
+                int corruptedMatthiasEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
+                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
+                if (wellNextPosition != null || wellPrevPosition != null)
                 {
-                    corruptedMatthiasStart = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
+                    replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                 }
-                else
-                {
-                    int corruptedMatthiasEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
-                    ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
-                    ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
-                    if (wellNextPosition != null || wellPrevPosition != null)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
-                        replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
-                    }
-                }
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.CorruptionOverhead, 20, 1, seg, new AgentConnector(p)));
             }
             // Well of profane
-            List<AbstractBuffEvent> wellMatthias = GetFilteredList(log.CombatData, UnstableBloodMagic, p, true, true);
-            int wellMatthiasStart = 0;
-            foreach (AbstractBuffEvent c in wellMatthias)
+            var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in wellMatthias)
             {
-                if (c is BuffApplyEvent)
+                int wellMatthiasEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(false, 0, 120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 9000, 120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
+                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
+                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
+                if (wellNextPosition != null || wellPrevPosition != null)
                 {
-                    wellMatthiasStart = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
                 }
-                else
-                {
-                    int wellMatthiasEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, wellMatthiasStart + 9000, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                    ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
-                    ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
-                    if (wellNextPosition != null || wellPrevPosition != null)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
-                    }
-                }
+                replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
+            // Sacrifice Selection
+            IEnumerable<Segment> sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
             // Sacrifice
-            List<AbstractBuffEvent> sacrificeMatthias = GetFilteredList(log.CombatData, MatthiasSacrifice, p, true, true);
-            int sacrificeMatthiasStart = 0;
-            foreach (AbstractBuffEvent c in sacrificeMatthias)
+            var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in sacrificeMatthias)
             {
-                if (c is BuffApplyEvent)
-                {
-                    sacrificeMatthiasStart = (int)c.Time;
-                }
-                else
-                {
-                    int sacrificeMatthiasEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, sacrificeMatthiasStart + 10000, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 10000, 120, seg, "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
             }
             // Bombs
             var zealousBenediction = log.CombatData.GetBuffData(ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
@@ -398,6 +365,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                 replay.Decorations.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
             }
+            // Unbalanced
+            IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
         }
 
     }
