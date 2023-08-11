@@ -26,6 +26,7 @@ namespace GW2EIEvtcParser.Extensions
         internal abstract bool DstIsAgent(CombatItem c);
 
         internal abstract bool IsDamage(CombatItem c);
+        internal abstract bool IsDamagingDamage(CombatItem c);
         internal abstract bool IsSkillID(CombatItem c);
 
         internal abstract void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData);
