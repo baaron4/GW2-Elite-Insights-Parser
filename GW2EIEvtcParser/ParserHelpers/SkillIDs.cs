@@ -2933,6 +2933,7 @@
         public const long DeployJadeSphereAir = 62940;
         public const long DragonSlashReach = 62951;
         public const long SwiftCut = 62966;
+        public const long FlowStabilizer = 62967;
         public const long RockyLoopSkill = 62975;
         public const long DragonSlashBoost = 62980;
         public const long InvigoratingAirSkill = 62982;
