@@ -159,6 +159,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
             {
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];
+                if (buff.Classification == Buff.BuffClassification.Hidden)
+                {
+                    continue;
+                }
                 if (!buffDesc.ContainsKey("b" + pair.Key))
                 {
                     buffDesc["b" + pair.Key] = JsonLogBuilder.BuildBuffDesc(buff, log);
@@ -201,6 +205,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
             {
                 Buff buff = log.Buffs.BuffsByIds[pair.Key];
+                if (buff.Classification == Buff.BuffClassification.Hidden)
+                {
+                    continue;
+                }
                 var data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < phases.Count; i++)
                 {

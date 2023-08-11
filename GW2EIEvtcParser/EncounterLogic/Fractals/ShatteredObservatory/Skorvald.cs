@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -574,6 +575,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
                 }
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Fixations
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)

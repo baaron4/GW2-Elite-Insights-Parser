@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -227,20 +228,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
             }
             // Sapper bombs
-            List<AbstractBuffEvent> sapperBombs = GetFilteredList(log.CombatData, SapperBombBuff, p, true, true);
-            int sapperStart = 0;
-            foreach (AbstractBuffEvent c in sapperBombs)
+            var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in sapperBombs)
             {
-                if (c is BuffApplyEvent)
-                {
-                    sapperStart = (int)c.Time;
-                }
-                else
-                {
-                    int sapperEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, sapperStart + 5000, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 5000, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -62,8 +63,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(NikareAquaticAura , NikareAquaticAura ), // Nikare Aquatic Aura
-                new DamageCastFinder(KenutAquaticAura , KenutAquaticAura ), // Kenut Aquatic Aura
+                new DamageCastFinder(NikareAquaticAura, NikareAquaticAura),
+                new DamageCastFinder(KenutAquaticAura, KenutAquaticAura),
             };
         }
 
@@ -306,47 +307,32 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Water "Poison Bomb"
-            List<AbstractBuffEvent> waterToDrop = GetFilteredList(log.CombatData, TidalPoolBuff, p, true, true);
-            int toDropStart = 0;
-            foreach (AbstractBuffEvent c in waterToDrop)
+            var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in waterToDrop)
             {
                 int timer = 5000;
                 int duration = 83000;
                 int debuffRadius = 100;
                 int radius = 500;
-                if (c is BuffApplyEvent)
+                int toDropStart = (int)seg.Start;
+                int toDropEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
+                ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
+                if (poisonNextPos != null || poisonPrevPos != null)
                 {
-                    toDropStart = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(100, 100, 100, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
+                    replay.Decorations.Add(new CircleDecoration(false, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(230, 230, 230, 0.4)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
                 }
-                else
-                {
-                    int toDropEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, (toDropStart, toDropEnd), "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                    ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
-                    ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
-                    if (poisonNextPos != null || poisonPrevPos != null)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(100, 100, 100, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
-                        replay.Decorations.Add(new CircleDecoration(false, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(230, 230, 230, 0.4)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
-                    }
-                }
+                replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
             // Bubble (Aquatic Detainment)
-            List<AbstractBuffEvent> bubble = GetFilteredList(log.CombatData, AquaticDetainmentBuff, p, true, true);
-            int bubbleStart = 0;
-            foreach (AbstractBuffEvent c in bubble)
+            var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            int bubbleRadius = 100;
+            foreach (Segment seg in bubble)
             {
-                int radius = 100;
-                if (c is BuffApplyEvent)
-                {
-                    bubbleStart = Math.Max((int)c.Time, 0);
-                }
-                else
-                {
-                    int bubbleEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, radius, (bubbleStart, bubbleEnd), "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
             }
         }
 

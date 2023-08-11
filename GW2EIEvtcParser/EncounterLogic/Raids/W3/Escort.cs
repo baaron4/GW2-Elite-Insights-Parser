@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Exceptions;
-using System;
-using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -74,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "McLeod Split " + (i) / 2;
                     AbstractSingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
                     AbstractSingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
-                    phase.AddTarget(whiteMcLeod); 
+                    phase.AddTarget(whiteMcLeod);
                     phase.AddTarget(redMcLeod);
                     phase.OverrideTimes(log);
                 }
@@ -112,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 preEventPhase.AddTargets(preEventWargs);
                 preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
                 phases.Add(preEventPhase);
-            } 
+            }
             phases.AddRange(GetMcLeodPhases(mcLeod, log));
             var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware).ToList();
             if (mcLeodWargs.Any())
@@ -126,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.OverrideTimes(log);
                 phases.Add(phase);
             }
-            
+
             return phases;
         }
 
@@ -190,7 +191,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
-                } 
+                }
                 else
                 {
                     startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
@@ -221,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>() { 
+            return new List<ArcDPSEnums.TrashID>() {
                 ArcDPSEnums.TrashID.MushroomCharger,
                 ArcDPSEnums.TrashID.MushroomKing,
                 ArcDPSEnums.TrashID.MushroomSpikeThrower,
@@ -269,5 +270,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Attunements Overhead
+            replay.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+        }
     }
 }
+

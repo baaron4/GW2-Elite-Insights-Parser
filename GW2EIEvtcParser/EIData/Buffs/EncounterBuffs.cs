@@ -162,6 +162,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Corruption", Corruption1, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),
             new Buff("Corruption 2", Corruption2, Source.FightSpecific, BuffClassification.Other, BuffImages.LocustTrail),
             new Buff("Sacrifice", MatthiasSacrifice, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Sacrifice Selection", MatthiasSacrificeSelection, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Unbalanced", Unbalanced, Source.FightSpecific, BuffClassification.Other, BuffImages.Unbalanced),
             new Buff("Zealous Benediction", ZealousBenediction, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
             new Buff("Snowstorm", SnowstormBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Snowstorm),
@@ -247,6 +248,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Form Up and Advance!", FormUpAndAdvance, Source.FightSpecific, BuffClassification.Other, BuffImages.FormUpAndAdvance),
             new Buff("Devour", Devour, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Devour),
             new Buff("Unseen Burden (Deimos)", UnseenBurdenDeimos, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.UnseenBurdenDeimos),
+            new Buff("Green Selection", DeimosSelectedByGreen, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             //////////////////////////////////////////////
             // Soulless Horror
             new Buff("Exile's Embrace", ExilesEmbrace, Source.FightSpecific, BuffClassification.Other, BuffImages.ExilesEmbrace),
@@ -383,9 +385,11 @@ namespace GW2EIEvtcParser.EIData
             // Shattered Observatory
             new Buff("Achievement Eligibility: Be Dynamic", AchievementEligibilityBeDynamic, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Cosmic Energy", CosmicEnergy, Source.FightSpecific, BuffClassification.Other, BuffImages.BreakOut),
+            // Skorvald
+            new Buff("Skorvald's Ire", SkorvaldsIre, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             // Artsariiv
             new Buff("Enraged (Fractal)", EnragedFractal, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Corporeal Reassignment", CorporealReassignment, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
+            new Buff("Corporeal Reassignment", CorporealReassignmentBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Blinding Radiance", BlindingRadiance, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Determination (Viirastra)", DeterminationViirastra, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
             // Arkk 
@@ -413,16 +417,21 @@ namespace GW2EIEvtcParser.EIData
             // Kanaxai, Scythe of House Aurkus
             new Buff("Determined to Destroy", DeterminedToDestroy, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (Kanaxai)", DeterminedKanaxai, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
-            new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidAffliction),
-            new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.IonShield),
-            new Buff("Kanaxai Something", KanaxaiSomethingBuff, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Gathering Shadows", GatheringShadows, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.CaptainsInspiration),
+            new Buff("Phantasmagoria", Phantasmagoria, Source.FightSpecific, BuffClassification.Debuff, BuffImages.VoidAffliction),
+            new Buff("Dread Defiance", DreadDefiance, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
+            new Buff("Gathering Shadows", GatheringShadowsBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.CaptainsInspiration),
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
             new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
-            new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+            new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffStackType.CappedDuration, 999, BuffClassification.Other, BuffImages.Target),
             new Buff("Rending Storm Target (Axe 1)", RendingStormAxeTargetBuff1, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
             new Buff("Rending Storm Target (Axe 2)", RendingStormAxeTargetBuff2, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
-            new Buff("Spread AoE", KanaxaiSpreadOrangeAoEBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Kanaxai Spread AoE", KanaxaiSpreadOrangeAoEBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
+            new Buff("Aspect Tether Available", AspectTetherAvailableBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.PowerOfTheVoid),
+            new Buff("Aspect Tether Unavailable (Fear)", AspectOfFearNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Exhaustion),
+            new Buff("Aspect Tether Unavailable (Torment)", AspectOfTormentNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Exhaustion),
+            new Buff("Aspect Tether Unavailable (Exposure)", AspectOfExposureNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Exhaustion),
+            new Buff("Aspect Tether Unavailable (Death)", AspectOfDeathNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Exhaustion),
+            new Buff("Aspect Tether Unavailable (Lethargy)", AspectOfLethargyNoTetherBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Exhaustion),
             new Buff("Achievement Eligibility: Unsundered", AchievementEligibilityUnsundered, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Peace and Quiet", AchievementEligibilityPeaceAndQuiet, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),

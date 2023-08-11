@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(RendingStorm, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
+                new PlayerDstHitMechanic(RendingStormSkill, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
                 new PlayerDstHitMechanic(new long [] { HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment }, "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
                 new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
                 new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
@@ -270,6 +271,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            long maxEnd = log.FightData.FightEnd;
+
             // Orange Tether from Aspect to player
             IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
@@ -281,14 +284,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int start = (int)apply.Time;
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                long end = Math.Min(replace?.Time ?? long.MaxValue, remove?.Time ?? long.MaxValue);
-                if (end != long.MaxValue)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
-                }
+                long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
+                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
-            // Blue tether from Aspect to player, appears when the player gains phantasmagoria
+            // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
             IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
             IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
@@ -296,27 +296,72 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)apply.Time;
                 BuffRemoveAllEvent remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                if (remove != null)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, (start, (int)remove.Time), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
-                }
+                long end = remove?.Time ?? maxEnd;
+                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
             }
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
-            var axes = new List<Segment>();
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
-            axes.AddRange(player.GetBuffStatus(log, RendingStormAxeTargetBuff2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0));
+            IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, ((int)segment.Start, (int)segment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, ((int)spreadSegment.Start, (int)spreadSegment.End), "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+            }
+
+            // Target Order Overhead
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+            replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
+                    foreach (AbstractCastEvent c in worldCleaver)
+                    {
+                        int duration = 26320;
+                        int start = (int)c.Time;
+                        IEnumerable<AbstractHealthDamageEvent> hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
+                        if (hits.Any())
+                        {
+                            AddWorldCleaverDecoration(target, replay, start, (int)hits.FirstOrDefault(x => x.Time > c.Time).Time, start + duration);
+                        }
+                        else
+                        {
+                            AddWorldCleaverDecoration(target, replay, start, start + duration, start + duration);
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.AspectOfTorment:
+                case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
+                case (int)ArcDPSEnums.TrashID.AspectOfExposure:
+                case (int)ArcDPSEnums.TrashID.AspectOfDeath:
+                case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                    // Tether casts performed by Aspects
+                    IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
+                    foreach (AnimatedCastEvent cast in tetherCasts)
+                    {
+                        int start = (int)cast.Time;
+                        int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -408,6 +453,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             int effectEnd = start + duration;
             EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
             EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+        }
+
+        /// <summary>
+        /// Adds the World Cleaver decoration.
+        /// </summary>
+        /// <param name="target">Kanaxai.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="start">Start of the cast.</param>
+        /// <param name="end">End of the cast.</param>
+        /// <param name="growing">Duration of the channel.</param>
+        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
+        {
+            replay.Decorations.Add(new CircleDecoration(true, 0, 1100, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new CircleDecoration(true, growing, 1100, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
         }
     }
 }

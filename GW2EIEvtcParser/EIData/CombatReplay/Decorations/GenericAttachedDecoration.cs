@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
@@ -10,6 +12,14 @@
         protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
         {
             ConnectedTo = connector;
+        }
+
+        /// <summary>Creates a new line towards the other decoration</summary>
+        public LineDecoration LineTo(GenericAttachedDecoration other, int growing, string color)
+        {
+            int start = Math.Max(this.Lifespan.start, other.Lifespan.start);
+            int end = Math.Min(this.Lifespan.end, other.Lifespan.end);
+            return new LineDecoration(growing, (start, end), color, this.ConnectedTo, other.ConnectedTo);
         }
 
         /// <summary>
