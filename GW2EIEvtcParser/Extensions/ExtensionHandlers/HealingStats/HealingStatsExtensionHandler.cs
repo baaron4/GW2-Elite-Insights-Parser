@@ -254,6 +254,11 @@ namespace GW2EIEvtcParser.Extensions
             return SrcIsAgent(c);
         }
 
+        internal override bool IsDamagingDamage(CombatItem c)
+        {
+            return IsDamage(c);
+        }
+
         internal override void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData)
         {
             bool isHealing = IsHealingEvent(c);

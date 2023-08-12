@@ -1,9 +1,8 @@
 <template>
-    <div class="d-flex d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getHPGradient(time, status)}"
-                           @click="selectActor();">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select">
             <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
-                <img :src="target.icon" height="18" width="18">
+                <img :src="target.icon" height="18" width="18"/>
                 {{target.name}}
             </h6>
             <p class="text-right cr-hp-display cr-hp-display-target">
@@ -16,7 +15,7 @@
         </div>
         <div v-if="hasBreakbarPercent" class="cr-breakbar-display">
             <div class="cr-breakbar-bar" :style="{'background': getBreakbarGradient(time)}">
-                <p class="text-center">
+                <p class="text-center" style="margin: 0;">
                     {{(Math.round(100*getBreakbarPercent(time))/100).toFixed(2)}} %
                 </p>
             </div>
@@ -28,8 +27,8 @@
     Vue.component("combat-replay-target-status-component", {
         props: ["targetindex", "time"],
         template: `${template}`,
-        methods: {    
-            selectActor: function (id) {
+        methods: {
+            select() {
                 animator.selectActor(this.target.uniqueID);
             },
             getBreakbarPercent: function (time) {
