@@ -3412,7 +3412,7 @@
         public const long BowlOfMistsInfusedFruitSaladWithMintGarnish = 69105;
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
         public const long MistsInfusedPeppercornCrustedSousVideSteak = 69141;
-        public const long DreadVisageSkill = 69149;
+        public const long DreadVisageKanaxaiSkill = 69149;
         public const long AspectedVolleyTorment = 69152;
         public const long EquipSurveyGear = 69154;
         public const long AspectedVolleyDeath = 69155;
@@ -3421,6 +3421,7 @@
         public const long FrighteningSpeedReturn = 69182;
         public const long LesserGuardSkill = 69183;
         public const long DualOrbitFireAndWater = 69184;
+        public const long DreadVisageAspectSkill = 69185;
         public const long FlareSilentSurf = 69189;
         public const long FrighteningSpeedWindup = 69194;
         public const long RendingStormAxeTargetBuff1 = 69195;
@@ -3467,7 +3468,7 @@
         public const long HarrowshotTorment = 69406;
         public const long RendingStormSkill = 69410;
         public const long DualOrbitWaterAndEarth = 69413;
-        public const long DreadVisageSkillIsland = 69418;
+        public const long DreadVisageKanaxaiSkillIsland = 69418;
         public const long WorldCleaver = 69419;
         public const long ThesssWard = 69421;
         public const long TempestuousAria = 69427;
@@ -3487,4 +3488,3 @@
     }
 
 }
- 

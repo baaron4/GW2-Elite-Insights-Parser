@@ -330,6 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    // World Cleaver
                     var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
                     foreach (AbstractCastEvent c in worldCleaver)
                     {
@@ -345,6 +346,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                             AddWorldCleaverDecoration(target, replay, start, start + duration, start + duration);
                         }
                     }
+                    // Dread Visage
+                    var dreadVisage = casts.Where(x => x.SkillId == DreadVisageKanaxaiSkill || x.SkillId == DreadVisageKanaxaiSkillIsland).ToList();
+                    foreach (AbstractCastEvent c in dreadVisage)
+                    {
+                        int castDuration = 5400;
+                        int expectedEndCastTime = (int)c.Time + castDuration;
+                        Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
+                        if (quickness != null)
+                        {
+                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
+                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
+                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                        }
+                        else
+                        {
+                            replay.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.AspectOfTorment:
                 case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
@@ -358,6 +377,55 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
                         replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                    }
+                    // Dread Visage
+                    var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
+                    bool hasSugarRush = false;
+
+                    // Check if the log contains Sugar Rush
+                    foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
+                    {
+                        if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer) && fractalInstability.ID == MistlockInstabilitySugarRush)
+                        {
+                            hasSugarRush = !hasSugarRush;
+                        }
+                    }
+
+                    foreach (AbstractCastEvent c in dreadVisageAspects)
+                    {
+                        int castDuration = 5400;
+                        int expectedEndCastTime = (int)c.Time + castDuration;
+                        
+                        Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
+
+                        // If the aspect has Sugar Rush AND Quickness
+                        if (hasSugarRush && quickness != null)
+                        {
+                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
+                            double castTimeWithSugarRush = castDuration * 0.8;
+                            double actualFinalDuration = castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
+                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualFinalDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                        }
+
+                        // If the aspect has Sugar rush AND NOT Quickness
+                        if (hasSugarRush && quickness == null)
+                        {
+                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)Math.Ceiling(castDuration * 0.8), 1), target, ParserIcons.EyeOverhead, 30);
+                        }
+
+                        // If the aspect DOESN'T have Sugar rush but HAS Quickness
+                        if (!hasSugarRush && quickness != null)
+                        {
+                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
+                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
+                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                        }
+
+                        // If the aspect DOESN'T have Sugar Rush and Quickness
+                        if (!hasSugarRush && quickness == null)
+                        {
+                            replay.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                        }
                     }
                     break;
                 default:
