@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(adina) && evt.Value > 0 && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
                 {
                     return new Adina((int)ArcDPSEnums.TargetID.Adina);
                 }
@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamage() && x.Value > 0);
+                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamagingDamage());
                     if (firstDamageEvent != null)
                     {
                         return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);
