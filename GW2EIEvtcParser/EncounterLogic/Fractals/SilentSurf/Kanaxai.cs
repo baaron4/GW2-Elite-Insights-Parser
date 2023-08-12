@@ -380,16 +380,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
-                    bool hasSugarRush = false;
-
                     // Check if the log contains Sugar Rush
-                    foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
-                    {
-                        if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer) && fractalInstability.ID == MistlockInstabilitySugarRush)
-                        {
-                            hasSugarRush = !hasSugarRush;
-                        }
-                    }
+                    bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
                     foreach (AbstractCastEvent c in dreadVisageAspects)
                     {
