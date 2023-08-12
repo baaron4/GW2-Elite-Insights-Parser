@@ -410,7 +410,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // If the aspect has Sugar rush AND NOT Quickness
                         if (hasSugarRush && quickness == null)
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)Math.Ceiling(castDuration * 0.8), 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)Math.Ceiling((int)c.Time + castDuration * 0.8), 1), target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect DOESN'T have Sugar rush but HAS Quickness
