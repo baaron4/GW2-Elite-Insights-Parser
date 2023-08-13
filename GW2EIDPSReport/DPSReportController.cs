@@ -99,21 +99,22 @@ namespace GW2EIDPSReport
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            using(var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary"))
+            Func<HttpContent> contentCreator = () =>
             {
-                using(var byteArrayContent = new ByteArrayContent(fileContents))
-                {
-                    byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-                    multiPartContent.Add(byteArrayContent, "file", fileName);
-                    DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + " & generator=ei", traces, multiPartContent);
-                    if (response != null && response.Error != null)
-                    {
-                        traces.Add("DPSReport: UploadUsingEI failed - " + response.Error);
-                        return null;
-                    }
-                    return response;
-                }
+                var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
+                var byteArrayContent = new ByteArrayContent(fileContents);
+                byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                multiPartContent.Add(byteArrayContent, "file", fileName);
+                return multiPartContent;
+            };
+
+            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + " & generator=ei", traces, contentCreator);
+            if (response != null && response.Error != null)
+            {
+                traces.Add("DPSReport: UploadUsingEI failed - " + response.Error);
+                return null;
             }
+            return response;
             
         }
 
@@ -164,7 +165,7 @@ namespace GW2EIDPSReport
             return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traces);
         }
         ///////////////// Response Utilities
-        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces, HttpContent content = null)
+        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
@@ -176,7 +177,7 @@ namespace GW2EIDPSReport
 
                 if (content != null)
                 {
-                    requestMessage.Content = content;
+                    requestMessage.Content = content();
                 }
                 try
                 {

@@ -196,41 +196,36 @@ namespace GW2EIWingman
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
             var data = new Dictionary<string, string> { { "account", account }, { "filesize", fi.Length.ToString() }, { "timestamp", creationTime }, { "file", fi.Name } };
-            using (var dataContent = new FormUrlEncodedContent(data))
+            Func<HttpContent> contentCreator = () =>
             {
-                return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, dataContent) == "True";
-            }
+                return new FormUrlEncodedContent(data);
+            };
+            return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, contentCreator) == "True";
         }
-        public static bool UploadProcessed(FileInfo fi, string account, Stream jsonFile, Stream htmlFile, List<string> traces, Version parserVersion)
+        public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, List<string> traces, Version parserVersion)
         {
             //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
-            //byte[] fileBytes = File.ReadAllBytes(fi.FullName);
-            using (var multiPartContent = new MultipartFormDataContent())
+            byte[] fileBytes = File.ReadAllBytes(fi.FullName);
+            Func<HttpContent> contentCreator = () =>
             {
-                using (var fileContent = new StreamContent(File.OpenRead(fi.FullName)))
-                {
-                    multiPartContent.Add(fileContent, "file");
-                    using (var jsonContent = new StreamContent(jsonFile))
-                    {
-                        multiPartContent.Add(jsonContent, "jsonfile");
-                        using (var htmlContent = new StreamContent(htmlFile))
-                        {
-                            multiPartContent.Add(htmlContent, "htmlfile");
-                            var data = new Dictionary<string, string> { { "account", account } };
-                            using (var dataContent = new FormUrlEncodedContent(data))
-                            {
-                                //multiPartContent.Add(dataContent);
-                                string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traces, parserVersion, HttpMethod.Post, multiPartContent);
-                                return response != null && response != "False";
-                            }
-                        }
-                    }
-                }
-            }
+                var multiPartContent = new MultipartFormDataContent();
+                var fileContent = new ByteArrayContent(fileBytes);
+                multiPartContent.Add(fileContent, "file");
+                var jsonContent = new ByteArrayContent(jsonFile);
+                multiPartContent.Add(jsonContent, "jsonfile");
+                var htmlContent = new ByteArrayContent(htmlFile);
+                multiPartContent.Add(htmlContent, "htmlfile");
+                var data = new Dictionary<string, string> { { "account", account } };
+                var dataContent = new FormUrlEncodedContent(data);
+                return multiPartContent;
+            };
+
+            string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traces, parserVersion, HttpMethod.Post, contentCreator);
+            return response != null && response != "False";
         }
 
         //
-        private static string _GetWingmanResponse(string requestName, string url, List<string> traces, HttpMethod method, HttpContent content = null)
+        private static string _GetWingmanResponse(string requestName, string url, List<string> traces, HttpMethod method, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
@@ -242,7 +237,7 @@ namespace GW2EIWingman
 
                 if (content != null)
                 {
-                    requestMessage.Content = content;
+                    requestMessage.Content = content();
                 }
 
                 try
@@ -278,7 +273,7 @@ namespace GW2EIWingman
         }
 
 
-        private static string GetWingmanResponse(string requestName, string url, List<string> traces, Version parserVersion, HttpMethod method, HttpContent content = null)
+        private static string GetWingmanResponse(string requestName, string url, List<string> traces, Version parserVersion, HttpMethod method, Func<HttpContent> content = null)
         {
             if (!CanBeUsed(parserVersion, traces))
             {

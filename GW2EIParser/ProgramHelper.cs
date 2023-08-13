@@ -175,7 +175,7 @@ namespace GW2EIParser
                                 var parser = new EvtcParser(expectedSettings, APIController);
                                 logToUse = parser.ParseLog(new ConsoleOperationController(fInfo.FullName), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
                             }
-                            MemoryStream jsonFile, htmlFile;
+                            byte[] jsonFile, htmlFile;
                             var uploadResult = new UploadResults();
                             {
                                 var ms = new MemoryStream();
@@ -185,7 +185,7 @@ namespace GW2EIParser
                                 builder.CreateJSON(sw, false);
                                 sw.Close();
 
-                                jsonFile = new MemoryStream(ms.ToArray());
+                                jsonFile = ms.ToArray();
                             }
                             {
                                 var ms = new MemoryStream();
@@ -194,11 +194,9 @@ namespace GW2EIParser
 
                                 builder.CreateHTML(sw, null);
                                 sw.Close();
-                                htmlFile = new MemoryStream(ms.ToArray());
+                                htmlFile = ms.ToArray();
                             }
                             WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, traces, ParserVersion);
-                            jsonFile.Close();
-                            htmlFile.Close();
                         }
                         catch (Exception e)
                         {
