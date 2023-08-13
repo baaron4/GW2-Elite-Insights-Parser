@@ -200,8 +200,9 @@ namespace GW2EIEvtcParser.ParsedData
             // Kanaxai
             { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
-            { DreadVisageSkill, "Dread Visage" },
-            { DreadVisageSkillIsland, "Dread Visage (Island)" },
+            { DreadVisageKanaxaiSkill, "Dread Visage (Kanaxai)" },
+            { DreadVisageKanaxaiSkillIsland, "Dread Visage (Kanaxai Island)" },
+            { DreadVisageAspectSkill, "Dead Visage (Aspect)" },
             { RendingStormSkill, "Rending Storm (Axe)" },
             { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
         };
