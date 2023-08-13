@@ -5,6 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
@@ -28,6 +30,7 @@ namespace GW2EIWingman
         };
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
         private static readonly HttpClient HTTPClient = new HttpClient();
+       
 
         ///////////////// URL Utilities
         private const string BaseURL = "https://gw2wingman.nevermindcreations.de/";
@@ -191,49 +194,32 @@ namespace GW2EIWingman
 
         public static bool CheckUploadPossible(FileInfo fi, string account, List<string> traces, Version parserVersion)
         {
-            string fileName = fi.Name;
-            string length = fi.Length.ToString();
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
-            using (var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary"))
+            var data = new Dictionary<string, string> { { "account", account }, { "filesize", fi.Length.ToString() }, { "timestamp", creationTime }, { "file", fi.Name } };
+            using (var dataContent = new FormUrlEncodedContent(data))
             {
-                using (var fileContent = new StringContent(fileName, NoBOMEncodingUTF8, "text/plain"))
-                {
-                    multiPartContent.Add(fileContent, "file", fileName);
-                    using (var creationContent = new StringContent(creationTime, NoBOMEncodingUTF8, "text/plain"))
-                    {
-                        multiPartContent.Add(creationContent, "timestamp");
-                        using (var sizeContent = new StringContent(length, NoBOMEncodingUTF8, "text/plain"))
-                        {
-                            multiPartContent.Add(sizeContent, "filesize");
-                            using (var accountContent = new StringContent(account, NoBOMEncodingUTF8, "text/plain"))
-                            {
-                                multiPartContent.Add(accountContent, "account");
-                                return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, multiPartContent) == "True";
-                            }
-                        }
-                    }
-                }
+                return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, dataContent) == "True";
             }
         }
-        public static bool UploadProcessed(FileInfo fi, string account, string jsonString, string htmlString, List<string> traces, Version parserVersion)
+        public static bool UploadProcessed(FileInfo fi, string account, Stream jsonFile, Stream htmlFile, List<string> traces, Version parserVersion)
         {
-            string fileName = fi.Name;
-            byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            using (var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary"))
+            //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
+            //byte[] fileBytes = File.ReadAllBytes(fi.FullName);
+            using (var multiPartContent = new MultipartFormDataContent())
             {
-                using (var byteArrayContent = new ByteArrayContent(fileContents))
+                using (var fileContent = new StreamContent(File.OpenRead(fi.FullName)))
                 {
-                    byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-                    multiPartContent.Add(byteArrayContent, "file", fileName);
-                    using (var jsonContent = new StringContent(jsonString, NoBOMEncodingUTF8, "application/json"))
+                    multiPartContent.Add(fileContent, "file");
+                    using (var jsonContent = new StreamContent(jsonFile))
                     {
                         multiPartContent.Add(jsonContent, "jsonfile");
-                        using (var htmlContent = new StringContent(htmlString, NoBOMEncodingUTF8, "text/html"))
+                        using (var htmlContent = new StreamContent(htmlFile))
                         {
                             multiPartContent.Add(htmlContent, "htmlfile");
-                            using (var accountContent = new StringContent(account, NoBOMEncodingUTF8, "text/plain"))
+                            var data = new Dictionary<string, string> { { "account", account } };
+                            using (var dataContent = new FormUrlEncodedContent(data))
                             {
-                                multiPartContent.Add(accountContent, "account");
+                                //multiPartContent.Add(dataContent);
                                 string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traces, parserVersion, HttpMethod.Post, multiPartContent);
                                 return response != null && response != "False";
                             }
