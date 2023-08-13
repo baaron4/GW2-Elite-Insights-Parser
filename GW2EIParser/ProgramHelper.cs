@@ -190,7 +190,7 @@ namespace GW2EIParser
                             {
                                 var ms = new MemoryStream();
                                 var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-                                var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false), htmlAssets, ParserVersion, uploadResult);
+                                var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false, null, null, true), htmlAssets, ParserVersion, uploadResult);
 
                                 builder.CreateHTML(sw, null);
                                 sw.Close();

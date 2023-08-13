@@ -206,17 +206,20 @@ namespace GW2EIWingman
         {
             //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
             byte[] fileBytes = File.ReadAllBytes(fi.FullName);
+            string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + ".json";
+            string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + ".html";
             Func<HttpContent> contentCreator = () =>
             {
                 var multiPartContent = new MultipartFormDataContent();
                 var fileContent = new ByteArrayContent(fileBytes);
                 multiPartContent.Add(fileContent, "file");
-                var jsonContent = new ByteArrayContent(jsonFile);
+                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile), Encoding.UTF8, "text/plain");
                 multiPartContent.Add(jsonContent, "jsonfile");
-                var htmlContent = new ByteArrayContent(htmlFile);
+                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile), Encoding.UTF8, "text/plain");
                 multiPartContent.Add(htmlContent, "htmlfile");
                 var data = new Dictionary<string, string> { { "account", account } };
                 var dataContent = new FormUrlEncodedContent(data);
+                multiPartContent.Add(dataContent);
                 return multiPartContent;
             };
 
