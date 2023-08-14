@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, color.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player));
             }
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement))
             {
