@@ -15,8 +15,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ThiefHelper
     {
-        public static readonly Color ProfColor = new Color(169, 108, 108);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(Shadowstep, Infiltration),
@@ -122,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Thief;
 
             // Shadow Portal locations
             var entrances = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance).ToList();

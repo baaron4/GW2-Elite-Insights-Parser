@@ -14,8 +14,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class GuardianHelper
     {
-        public static readonly Color ProfColor = Colors.LightBlue;
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
@@ -150,7 +148,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Guardian;
 
             // Wall of Reflection
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection))

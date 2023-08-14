@@ -16,8 +16,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class MesmerHelper
     {
-        public static readonly Color ProfColor = new Color(147, 112, 219);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
@@ -357,7 +355,7 @@ namespace GW2EIEvtcParser.EIData
         
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Mesmer;
 
             // Portal locations
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive))

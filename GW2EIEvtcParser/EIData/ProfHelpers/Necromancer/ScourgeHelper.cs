@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
 
          internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = NecromancerHelper.ProfColor;
+            Color color = Colors.Necromancer;
 
             // Sand Swell portal locations
             foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal))
