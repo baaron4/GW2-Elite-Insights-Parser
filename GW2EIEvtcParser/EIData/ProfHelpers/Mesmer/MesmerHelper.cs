@@ -391,7 +391,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
                 var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/6/69/Feedback.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
         }

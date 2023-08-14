@@ -155,7 +155,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
                 var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/6/6d/Wall_of_Reflection.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
 
@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
                 var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ed/Sanctuary.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
         }
