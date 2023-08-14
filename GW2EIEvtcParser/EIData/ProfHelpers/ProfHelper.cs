@@ -302,8 +302,23 @@ namespace GW2EIEvtcParser.EIData
                     GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     FirebrandHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
+                case Spec.Necromancer:
+                case Spec.Reaper:
+                case Spec.Harbinger:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Scourge:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Ranger:
+                case Spec.Soulbeast:
+                case Spec.Untamed:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Druid:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
                 case Spec.Chronomancer:
@@ -322,6 +337,9 @@ namespace GW2EIEvtcParser.EIData
                 case Spec.Deadeye:
                 case Spec.Specter:
                     ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Spellbreaker:
+                    SpellbreakerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
             }
         }

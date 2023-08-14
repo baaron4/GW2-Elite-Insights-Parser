@@ -51,6 +51,7 @@ namespace GW2EIEvtcParser
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
         public const string NecromancerPlagueSignet = "E78ED095E97F1D4A8BEB901796449E2F"; // might be pov only?
+        public const string NecromancerCorrosivePoisonCloud = "68D13E0EBB247A40B2F131B2C729443E";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -79,6 +80,7 @@ namespace GW2EIEvtcParser
         public const string WarriorSignetOfMight = "75EF160EAFC0394CACC436CF89819148";
         public const string WarriorSignetOfStamina = "1E720C4D42448D45BDCB6307869D3D66"; // not actually instant cast, just for reference
         public const string WarriorDolyakSignet = "D7F8FA5695F8714B99A51EE72EF6E178";
+        public const string SpellbreakerWindsOfDisenchantment = "926917599B6B6E498AD62B812001B823";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
@@ -145,10 +147,13 @@ namespace GW2EIEvtcParser
         public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
+        public const string RangerHunkerDown = "FAE87ED17A43E54AA3ABB3EAA2FDB754";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
         public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
+        public const string DruidSublimeConversion1 = "5707A4A2BFFAD048BBDEC9CA0F2A61E1";
+        public const string DruidSublimeConversion2 = "2F74AC468871444BB66AF5D8B25EC870";
         public const string SoulbeastEternalBond = "BF0A5B11A4076A4F98C6E1D655D507B1"; // has owner & target
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";

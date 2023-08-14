@@ -317,5 +317,18 @@ namespace GW2EIEvtcParser.EIData
             return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Ranger;
+
+            // Siege Turtle Hunker Down
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/e5/Hunker_Down_%28turtle%29.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+        }
     }
 }
