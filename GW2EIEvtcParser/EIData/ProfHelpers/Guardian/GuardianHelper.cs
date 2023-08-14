@@ -167,6 +167,15 @@ namespace GW2EIEvtcParser.EIData
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ed/Sanctuary.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
+
+            // Shield of the Avenger
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/2/2c/Shield_of_the_Avenger.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
         }
     }
 }
