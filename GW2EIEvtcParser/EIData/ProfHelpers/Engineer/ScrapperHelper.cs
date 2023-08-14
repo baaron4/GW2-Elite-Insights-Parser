@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -43,6 +44,20 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
+        }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Warrior;
+
+            // Defense Field
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperDefenseField))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/c/c1/Defense_Field.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
         }
     }
 }

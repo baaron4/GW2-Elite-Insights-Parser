@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EIData
                 if (sublimeEffects.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant)) {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 420, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 400, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/4/4b/Sublime_Conversion.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }

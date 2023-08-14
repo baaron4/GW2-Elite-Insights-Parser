@@ -293,6 +293,9 @@ namespace GW2EIEvtcParser.EIData
 
             switch (player.Spec)
             {
+                case Spec.Scrapper:
+                    ScrapperHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Guardian:
                 case Spec.Dragonhunter:
                 case Spec.Willbender:
