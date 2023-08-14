@@ -329,7 +329,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                     replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                 }
-                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.CorruptionOverhead, 20, 1, seg, new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
             }
             // Well of profane
             var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
