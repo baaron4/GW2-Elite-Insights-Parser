@@ -418,10 +418,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Retrieves the end time of an effect.
-        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first and finally to default duration.
+        /// Computes the end time of an effect.
+        /// <br/>
+        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
+        /// Afterwards the effect duration is used, if greater 0 and less than max duration.
+        /// Finally, it defaults to max duration.
         /// </summary>
-        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
         {
             if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
             {
@@ -437,9 +440,12 @@ namespace GW2EIEvtcParser.EIData
                     return remove.Time;
                 }
             }
-            return effect.Time + defaultDuration;
+            if (effect.Duration > 0 && effect.Duration < maxDuration)
+            {
+                return effect.Time + effect.Duration;
+            }
+            return effect.Time + maxDuration;
         }
-
 
         /// <summary>
         /// Computes the lifespan of an effect.
