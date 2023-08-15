@@ -150,6 +150,24 @@ namespace GW2EIEvtcParser.EIData
         {
             Color color = Colors.Guardian;
 
+            // Ring of Warding (Hammer 5)
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/4/46/Ring_of_Warding.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            
+            // Line of Warding (Staff 5)
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/5/59/Line_of_Warding.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+
             // Wall of Reflection
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection))
             {

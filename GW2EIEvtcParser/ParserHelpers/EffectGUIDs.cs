@@ -96,6 +96,8 @@ namespace GW2EIEvtcParser
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
+        public const string GuardianRingOfWarding = "5A54592448836A46B30BC93A544A0E47";
+        public const string GuardianLineOfWarding = "F8BE013B34366E458640B47BF43F257D";
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
         public const string GuardianSanctuary = "A96093E9CB3D7F468C5235C81537301E";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // used with all shouts
