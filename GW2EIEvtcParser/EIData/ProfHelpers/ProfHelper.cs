@@ -282,15 +282,15 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, false));
-                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                         if (first == null)
                         {
                             first = decoration;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, false));
+                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
                         }
                         replay.Decorations.Add(decoration);
                     }

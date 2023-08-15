@@ -6,7 +6,7 @@
 
         public object Owner { get; }
 
-        public bool DrawOnSelect { get; }
+        public uint Category { get; }
 
         internal GenericAttachedDecorationCombatReplayDescription(ParsedEvtcLog log, GenericAttachedDecoration decoration, CombatReplayMap map) : base(decoration)
         {
@@ -15,7 +15,7 @@
             if (decoration.Owner != null)
             {
                 Owner = decoration.Owner.GetConnectedTo(map, log);
-                DrawOnSelect = decoration.DrawOnSelect;
+                Category = (uint)decoration.SkillCategory;
             }
         }
     }
