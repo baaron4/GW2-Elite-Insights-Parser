@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -317,5 +318,18 @@ namespace GW2EIEvtcParser.EIData
             return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Ranger;
+
+            // Siege Turtle Hunker Down
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHunkerDown, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+            }
+        }
     }
 }

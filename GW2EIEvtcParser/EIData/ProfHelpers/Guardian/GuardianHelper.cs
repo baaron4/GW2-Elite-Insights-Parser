@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -146,5 +147,50 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Guardian;
+
+            // Ring of Warding (Hammer 5)
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Line of Warding (Staff 5)
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Wall of Reflection
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+            }
+            // Sanctuary
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Shield of the Avenger
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+        }
     }
 }

@@ -1046,6 +1046,15 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
+        /// <summary>Returns effect events for the given agent <b>including</b> minions and the given effect GUID.</summary>
+        internal IEnumerable<EffectEvent> GetEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID)
+        {
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+                return effects.Where(effect => effect.Src.GetFinalMaster() == agent);
+            }
+            return new List<EffectEvent>();
+        }
+
         /// <summary>
         /// Returns effect events for the given agent and effect GUID.
         /// The same effects happening within epsilon milliseconds are grouped together.

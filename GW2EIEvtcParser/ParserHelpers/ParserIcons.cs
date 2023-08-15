@@ -476,6 +476,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionSunspreadParagon = "https://i.imgur.com/QXbFenF.png";
         private const string MinionRavenSpiritShadow = "https://i.imgur.com/dbLzIiY.png";
 
+        // Portal icons
         internal const string PortalMesmerEntre = "https://i.imgur.com/TILHQ1u.png";
         internal const string PortalMesmerExeunt = "https://i.imgur.com/7gsObHV.png";
         internal const string PortalShadowPortalPrepare = "https://i.imgur.com/oDpQcea.png";
@@ -483,6 +484,33 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string PortalSandswell = "https://i.imgur.com/15kzkcj.png";
         internal const string PortalWhiteMantleItem = "https://i.imgur.com/FcO9n7c.png";
         internal const string PortalWhiteMantleSkill = "https://i.imgur.com/qf99SF9.png";
+
+        // Skill effect decoration icons
+        internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";
+        internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
+        internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
+        internal const string EffectHunkerDown = "https://i.imgur.com/KkFFoJa.png";
+        internal const string EffectInspiringReinforcement = "https://i.imgur.com/OItlXSb.png";
+        internal const string EffectLineOfWarding = "https://i.imgur.com/XSix0GV.png";
+        internal const string EffectShade = "https://i.imgur.com/tIBkK5d.png";
+        internal const string EffectNullField = "https://i.imgur.com/wwaavul.png";
+        internal const string EffectPlaguelands = "https://i.imgur.com/FsENhPT.png";
+        internal const string EffectRainOfSwords = "https://i.imgur.com/BITK6dS.png";
+        internal const string EffectRingOfWarding = "https://i.imgur.com/TK6tL8x.png";
+        internal const string EffectSanctuary = "https://i.imgur.com/odR5akI.png";
+        internal const string EffectSealArea = "https://i.imgur.com/OXGdr7m.png";
+        internal const string EffectShadowRefuge = "https://i.imgur.com/ghU8kz0.png";
+        internal const string EffectShieldOfTheAvenger = "https://i.imgur.com/O6cTek5.png";
+        internal const string EffectSublimeConversion = "https://i.imgur.com/RhNsDFz.png";
+        internal const string EffectThousandCuts = "https://i.imgur.com/5Fll0GH.png";
+        internal const string EffectValiantBulwark = "https://i.imgur.com/cQCtl85.png";
+        internal const string EffectVeil = "https://i.imgur.com/k8sVoEk.png";
+        internal const string EffectWallOfReflection = "https://i.imgur.com/dc81qhc.png";
+        internal const string EffectWellOfBlood = "https://i.imgur.com/j9JBLJO.png";
+        internal const string EffectWellOfCorruption = "https://i.imgur.com/agcWjKA.png";
+        internal const string EffectWellOfDarkness = "https://i.imgur.com/hfaRt5e.png";
+        internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
+        internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
 
         // Overhead icons
         // - Fixations

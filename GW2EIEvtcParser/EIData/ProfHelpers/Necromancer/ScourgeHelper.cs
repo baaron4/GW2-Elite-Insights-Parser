@@ -47,9 +47,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
         };
 
-         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = NecromancerHelper.ProfColor;
+            Color color = Colors.Necromancer;
 
             // Sand Swell portal locations
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal, out IReadOnlyList<IReadOnlyList<EffectEvent>> sandswellPortals))
@@ -75,6 +75,14 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
 
+            }
+            // Shade
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
         }
     }

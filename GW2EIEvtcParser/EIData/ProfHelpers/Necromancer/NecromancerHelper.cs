@@ -1,21 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using System;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal static class NecromancerHelper
     {
-        public static readonly Color ProfColor = new Color(30, 193, 110);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
@@ -127,6 +126,70 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
+        }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Necromancer;
+
+            // Well of Blood
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+            }
+            // Well of Suffering
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Well of Darkness
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Well of Corruption
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Corrosive Poison Cloud
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Plaguelands
+            IEnumerable<EffectEvent> plaguelandsPulses = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse1)
+                .Concat(log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse2))
+                .Concat(log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse3));
+            foreach (EffectEvent effect in plaguelandsPulses)
+            {
+                int start = (int)effect.Time - 500;
+                int end = (int)effect.Time;
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, end), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+            }
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
         }
     }
 }

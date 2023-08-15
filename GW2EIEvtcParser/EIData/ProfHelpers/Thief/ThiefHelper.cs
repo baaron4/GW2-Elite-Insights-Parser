@@ -15,8 +15,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ThiefHelper
     {
-        public static readonly Color ProfColor = new Color(169, 108, 108);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(Shadowstep, Infiltration),
@@ -122,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Thief;
 
             // Shadow Portal locations
             var entranceDecorations = new List<GenericAttachedDecoration>();
@@ -153,6 +151,23 @@ namespace GW2EIEvtcParser.EIData
                     }
                     replay.Decorations.Add(icon);
                 }
+            }
+
+            // Seal Area
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+            }
+            // Shadow Refuge
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
             }
         }
     }
