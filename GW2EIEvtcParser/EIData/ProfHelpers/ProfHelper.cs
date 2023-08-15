@@ -326,8 +326,11 @@ namespace GW2EIEvtcParser.EIData
                 case Spec.Mesmer:
                 case Spec.Chronomancer:
                 case Spec.Mirage:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Virtuoso:
                     MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    VirtuosoHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Revenant:
                 case Spec.Herald:

@@ -155,7 +155,14 @@ namespace GW2EIEvtcParser.EIData
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
                 replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/5/53/Seal_Area.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
-
+            // Shadow Refuge
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/f/f4/Shadow_Refuge.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
         }
     }
 }

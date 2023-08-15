@@ -25,6 +25,8 @@ namespace GW2EIEvtcParser
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
+        public const string MesmerVeil = "6B29E895E2EB9341B560FFD3A78F78F2";
+        public const string MesmerNullField = "D8E8B086ACCF7549B8F50CF1AF177039";
         public const string MesmerTeleport = "C34E250B01FF534292EE6AB36D768337"; // used by blink, phase retreat, swap (illusionary leap)
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
         public const string MesmerPortalActive = "3C346BE32EFB9E40BE39E379B061C803";
@@ -41,7 +43,9 @@ namespace GW2EIEvtcParser
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
+        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91";
         public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
+        public const string VirtuosoRainOfSwords = "83834EDBA8E79946A6D5665E3519B72C";
         public const string VirtuosoThousandCuts = "E4002B7AD7DF024394D0184B47A316E7";
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
@@ -51,7 +55,15 @@ namespace GW2EIEvtcParser
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
         public const string NecromancerPlagueSignet = "E78ED095E97F1D4A8BEB901796449E2F"; // might be pov only?
+        public const string NecromancerWellOfBlood = "159515DADB2DFB46A980A2A661BD881B";
+        public const string NecromancerWellOfSuffering = "E24BA6F2CCB8374CB7F5BE829BC7228E";
+        public const string NecromancerWellOfDarkness = "824EF999A0B6D14D9AC2EC843C6984D5";
+        public const string NecromancerWellOfCorruption = "FF96BAE8EC4D5A4CBF6E13C15649F3DA";
         public const string NecromancerCorrosivePoisonCloud = "68D13E0EBB247A40B2F131B2C729443E";
+        public const string NecromancerPlaguelands = "883D5C97F3673843A8423D01B97ED78F";
+        public const string NecromancerPlaguelandsPulse1 = "7E12B3B1896BC748AE50333267CDBFB9";
+        public const string NecromancerPlaguelandsPulse2 = "A442AE5DFE73D04BBC19B050540E000A";
+        public const string NecromancerPlaguelandsPulse3 = "253ADDAEC2009A499FA29C44E1D73F05";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -177,6 +189,7 @@ namespace GW2EIEvtcParser
         public const string ThiefThousandNeedlesAoE1 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
         public const string ThiefThousandNeedlesAoE2 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
         public const string ThiefSealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
+        public const string ThiefShadowRefuge = "1708CD9EDF419E41B40822C52E487E1E";
         public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
         public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";

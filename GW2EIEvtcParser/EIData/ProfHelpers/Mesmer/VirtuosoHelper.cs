@@ -98,5 +98,20 @@ namespace GW2EIEvtcParser.EIData
         {
             return Minions.Contains(id);
         }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Mesmer;
+
+            // Thousand Cuts
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, -600.0f);
+                // 30 units width is a guess
+                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 30, 1200, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/3/34/Thousand_Cuts.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+        }
     }
 }
