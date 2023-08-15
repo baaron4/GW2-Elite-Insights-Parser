@@ -394,28 +394,37 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Feedback
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out IReadOnlyList<EffectEvent> feedbacks))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in feedbacks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
             // Veil
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out IReadOnlyList<EffectEvent> veils))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in veils)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
             // Null Field
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent>  nullFields))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000); // 6s with trait
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in nullFields)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000); // 6s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
         }
     }

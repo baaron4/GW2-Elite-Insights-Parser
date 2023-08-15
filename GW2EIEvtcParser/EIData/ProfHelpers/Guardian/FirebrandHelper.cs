@@ -104,12 +104,15 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Guardian;
 
             // Valiant Bulwark
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark, out IReadOnlyList<EffectEvent> valiantBulwarks))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in valiantBulwarks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
         }
     }

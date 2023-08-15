@@ -154,20 +154,26 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Seal Area
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in sealAreaAoEs)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
             // Shadow Refuge
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out IReadOnlyList<EffectEvent> shadowRefuges))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in shadowRefuges)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
         }
     }

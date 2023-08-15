@@ -77,12 +77,15 @@ namespace GW2EIEvtcParser.EIData
 
             }
             // Shade
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> scourgeShades))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in scourgeShades)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
         }
     }

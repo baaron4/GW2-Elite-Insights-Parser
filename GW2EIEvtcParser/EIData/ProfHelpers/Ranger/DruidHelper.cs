@@ -58,14 +58,20 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Ranger;
 
             // Sublime Conversion
-            IEnumerable<EffectEvent> sublimeEffects = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2);
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out IReadOnlyList<EffectEvent> sublimeConversions2))
             {
-                if (sublimeEffects.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant)) {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 400, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out IReadOnlyList<EffectEvent> sublimeConversions1))
+                {
+                    foreach (EffectEvent effect in sublimeConversions1)
+                    {
+                        if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                            var connector = new PositionConnector(effect.Position);
+                            replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 400, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                        }
+                    }
                 }
             }
         }

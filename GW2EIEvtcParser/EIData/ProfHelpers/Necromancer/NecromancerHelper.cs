@@ -133,62 +133,83 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Necromancer;
 
             // Well of Blood
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> wellOfBloods))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in wellOfBloods)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
             // Well of Suffering
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering, out IReadOnlyList<EffectEvent> wellOfSufferings))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in wellOfSufferings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
             // Well of Darkness
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness, out IReadOnlyList<EffectEvent> wellOfDarknesses))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in wellOfDarknesses)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
             // Well of Corruption
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption, out IReadOnlyList<EffectEvent> wellOfCorruptions))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in wellOfCorruptions)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
             // Corrosive Poison Cloud
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud, out IReadOnlyList<EffectEvent> poisonClouds))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in poisonClouds)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
             // Plaguelands
-            IEnumerable<EffectEvent> plaguelandsPulses = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse1)
-                .Concat(log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse2))
-                .Concat(log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse3));
-            foreach (EffectEvent effect in plaguelandsPulses)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { 
+                            EffectGUIDs.NecromancerPlaguelandsPulse1, 
+                            EffectGUIDs.NecromancerPlaguelandsPulse2,EffectGUIDs.NecromancerPlaguelandsPulse3
+                            } , out IReadOnlyList<EffectEvent> plaguelandPulses))
             {
-                int start = (int)effect.Time - 500;
-                int end = (int)effect.Time;
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, end), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in plaguelandPulses)
+                {
+                    int start = (int)effect.Time - 500;
+                    int end = (int)effect.Time;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, end), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                }
             }
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands, out IReadOnlyList<EffectEvent> plaguelands))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                foreach (EffectEvent effect in plaguelands)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
         }
     }

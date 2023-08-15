@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -172,18 +172,24 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Revenant;
 
             // Inspiring Reinforcement
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out IReadOnlyList<EffectEvent> inspiringReinforcementParts))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in inspiringReinforcementParts)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player, false));
+                }
             }
-            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out IReadOnlyList<EffectEvent> inspiringReinforcements))
             {
-                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
-                replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                foreach (EffectEvent effect in inspiringReinforcements)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
             }
         }
     }
