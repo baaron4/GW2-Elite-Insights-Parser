@@ -206,17 +206,19 @@ namespace GW2EIWingman
         {
             //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
             byte[] fileBytes = File.ReadAllBytes(fi.FullName);
+            string name = fi.Name;
             string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + ".json";
             string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + ".html";
             Func<HttpContent> contentCreator = () =>
             {
                 var multiPartContent = new MultipartFormDataContent();
                 var fileContent = new ByteArrayContent(fileBytes);
-                multiPartContent.Add(fileContent, "file");
-                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile), Encoding.UTF8, "text/plain");
-                multiPartContent.Add(jsonContent, "jsonfile");
-                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile), Encoding.UTF8, "text/plain");
-                multiPartContent.Add(htmlContent, "htmlfile");
+                fileContent.Headers.Add("Content-Type", "application/octet-stream");
+                multiPartContent.Add(fileContent, "file", name);
+                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile));
+                multiPartContent.Add(jsonContent, "jsonfile", jsonName);
+                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile));
+                multiPartContent.Add(htmlContent, "htmlfile", htmlName);
                 var data = new Dictionary<string, string> { { "account", account } };
                 var dataContent = new FormUrlEncodedContent(data);
                 multiPartContent.Add(dataContent);
