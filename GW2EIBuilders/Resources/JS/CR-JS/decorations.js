@@ -100,8 +100,8 @@ class MechanicDrawable {
                 return false;
             }
             let renderMask = animator.displaySettings.skillMechanicsMask;
-            let drawOnSelect = (renderMask & SkillDecorationCategory.ShowOnSelect) > 0;
-            renderMask &= ~SkillDecorationCategory.ShowOnSelect;
+            let drawOnSelect = (renderMask & SkillDecorationCategory["Show On Select"]) > 0;
+            renderMask &= ~SkillDecorationCategory["Show On Select"];
             if ((this.category & renderMask) > 0) {
                 return true;
             } else if (drawOnSelect && this.owner.isSelected()) {
