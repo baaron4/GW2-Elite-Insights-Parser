@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
                 }
             }
             // Well of Suffering
@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
             // Well of Darkness
@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
             // Well of Corruption
@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
             // Corrosive Poison Cloud
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
             // Plaguelands
@@ -208,7 +208,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
         }

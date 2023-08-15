@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
                     replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
                 }
             }
         }

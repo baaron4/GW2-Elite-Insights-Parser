@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EIData
                             (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                             var connector = new PositionConnector(effect.Position);
                             replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 400, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
                         }
                     }
                 }
