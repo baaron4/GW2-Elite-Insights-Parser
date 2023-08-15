@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -156,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/4/46/Ring_of_Warding.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Line of Warding (Staff 5)
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding))
@@ -164,7 +165,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/5/59/Line_of_Warding.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Wall of Reflection
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection))
@@ -172,7 +173,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/6/6d/Wall_of_Reflection.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
             }
             // Sanctuary
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary))
@@ -180,7 +181,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ed/Sanctuary.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Shield of the Avenger
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger))
@@ -188,7 +189,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/2/2c/Shield_of_the_Avenger.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
         }
     }

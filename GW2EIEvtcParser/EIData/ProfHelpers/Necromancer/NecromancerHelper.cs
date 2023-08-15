@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -135,7 +136,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/80/Well_of_Blood.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
             }
             // Well of Suffering
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering))
@@ -143,7 +144,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ee/Well_of_Suffering.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Well of Darkness
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness))
@@ -151,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/1/1d/Well_of_Darkness.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Well of Corruption
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption))
@@ -159,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/0/0a/Well_of_Corruption.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Corrosive Poison Cloud
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud))
@@ -167,7 +168,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/3/3e/Corrosive_Poison_Cloud.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
             // Plaguelands
             IEnumerable<EffectEvent> plaguelandsPulses = log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelandsPulse1)
@@ -185,7 +186,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/a/a3/Plaguelands.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, 128, 0.5f, lifespan, connector).UsingSkillMode(player));
             }
         }
     }

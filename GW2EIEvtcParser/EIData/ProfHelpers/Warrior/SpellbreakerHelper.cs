@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -70,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/e1/Winds_of_Disenchantment.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
             }
         }
     }

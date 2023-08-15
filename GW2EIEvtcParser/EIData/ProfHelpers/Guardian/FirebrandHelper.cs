@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -108,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
                 (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/7/73/Chapter_3-_Valiant_Bulwark.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, 128, 0.5f, lifespan, connector).UsingSkillMode(player, false));
             }
         }
     }
