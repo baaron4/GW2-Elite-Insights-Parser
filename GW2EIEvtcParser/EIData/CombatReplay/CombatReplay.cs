@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -209,6 +210,35 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Add an overhead icon decoration
+        /// </summary>
+        /// <param name="segment">Lifespan interval</param>
+        /// <param name="actor">actor to which the decoration will be attached to</param>
+        /// <param name="icon">URL of the icon</param>
+        /// <param name="pixelSize">Size in pixel of the icon</param>
+        /// <param name="opacity">Opacity of the icon</param>
+        internal void AddOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        {
+            Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
+        }
+
+        /// <summary>
+        /// Add overhead icon decorations
+        /// </summary>
+        /// <param name="segments">Lifespan intervals</param>
+        /// <param name="actor">actor to which the decoration will be attached to</param>
+        /// <param name="icon">URL of the icon</param>
+        /// <param name="pixelSize">Size in pixel of the icon</param>
+        /// <param name="opacity">Opacity of the icon</param>
+        internal void AddOverheadIcons(IEnumerable<Segment> segments, AbstractSingleActor actor, string icon, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        {
+            foreach (Segment segment in segments)
+            {
+                AddOverheadIcon(segment, actor, icon, pixelSize, opacity);
+            }
         }
 
         internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)

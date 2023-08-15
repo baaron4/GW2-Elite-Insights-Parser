@@ -9,8 +9,7 @@
         <div class="mt-1 combat-actor-status-container scrollable-y">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <div v-for="status in targets" v-if="alive(status)" class="target-data ml-1 mr-1" :class="{active: selectedtargetid === status.target.uniqueID}">
-                    <combat-replay-target-stats-component :time="time" :targetindex="status.target.id" :buffstoshow="buffsToShow">
-                    </combat-replay-target-stats-component>
+                    <combat-replay-target-stats-component :time="time" :targetindex="status.target.id" :buffstoshow="buffsToShow"/>
                 </div>
             </div>
         </div>

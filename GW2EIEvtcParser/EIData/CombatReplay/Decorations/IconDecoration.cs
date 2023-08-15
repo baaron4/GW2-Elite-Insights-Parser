@@ -1,18 +1,32 @@
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class IconDecoration : GenericAttachedDecoration
     {
         public string Image { get; }
-        public int Size { get; }
+        public int PixelSize { get; }
+        public int WorldSize { get; }
         public float Opacity { get; }
 
-        public IconDecoration(string icon, int size, float opacity, (int start, int end) lifespan, Connector connector) : base(lifespan, connector)
+        public IconDecoration(string icon, int pixelSize, float opacity, (int start, int end) lifespan, Connector connector) : base(lifespan, connector)
         {
             Image = icon;
-            Size = size;
+            PixelSize = pixelSize;
             Opacity = opacity;
+        }
+
+        public IconDecoration(string icon, int pixelSize, int worldSize, float opacity, (int start, int end) lifespan, Connector connector) : this(icon, pixelSize, opacity, lifespan, connector)
+        {
+            WorldSize = worldSize;
+        }
+
+        public IconDecoration(string icon, int pixelSize, float opacity, Segment lifespan, Connector connector) : this(icon, pixelSize, opacity, ((int)lifespan.Start, (int) lifespan.End), connector)
+        {
+        }
+
+        public IconDecoration(string icon, int pixelSize, int worldSize, float opacity, Segment lifespan, Connector connector) : this(icon, pixelSize, worldSize, opacity, ((int)lifespan.Start, (int)lifespan.End), connector)
+        {
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)

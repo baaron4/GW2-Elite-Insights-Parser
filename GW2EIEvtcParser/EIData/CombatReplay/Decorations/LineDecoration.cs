@@ -10,6 +10,10 @@
             ConnectedFrom = targetConnector;
         }
 
+        public LineDecoration(int growing, Segment lifespan, string color, Connector connector, Connector targetConnector) : this(growing, ((int)lifespan.Start, (int)lifespan.End), color, connector, targetConnector)
+        {
+        }
+
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new LineDecorationCombatReplayDescription(log, this, map);

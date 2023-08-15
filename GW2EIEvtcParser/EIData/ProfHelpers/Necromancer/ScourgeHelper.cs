@@ -52,25 +52,29 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Necromancer;
 
             // Sand Swell portal locations
-            foreach (List<EffectEvent> group in log.CombatData.GetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal))
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal, out IReadOnlyList<IReadOnlyList<EffectEvent>> sandswellPortals))
             {
-                GenericAttachedDecoration first = null;
-                foreach (EffectEvent effect in group)
+                foreach (IReadOnlyList<EffectEvent> group in sandswellPortals)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, 128, 0.7f, lifespan, connector).UsingSkillMode(player, false);
-                    if (first == null)
+                    GenericAttachedDecoration first = null;
+                    foreach (EffectEvent effect in group)
                     {
-                        first = icon;
+                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        if (first == null)
+                        {
+                            first = icon;
+                        }
+                        else
+                        {
+                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                        }
+                        replay.Decorations.Add(icon);
                     }
-                    else
-                    {
-                        replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
-                    }
-                    replay.Decorations.Add(icon);
                 }
+
             }
             // Shade
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade))

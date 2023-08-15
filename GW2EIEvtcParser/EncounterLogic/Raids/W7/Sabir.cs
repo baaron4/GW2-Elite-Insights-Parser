@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(adina) && evt.Value > 0 && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
                 {
                     return new Adina((int)ArcDPSEnums.TargetID.Adina);
                 }
@@ -129,21 +129,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> boltBreaks = GetFilteredList(log.CombatData, BoltBreak, p, true, true);
-            int boltBreakStart = 0;
-            foreach (AbstractBuffEvent c in boltBreaks)
+            var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            int boltBreakRadius = 180;
+            foreach (Segment seg in boltBreaks)
             {
-                if (c is BuffApplyEvent)
-                {
-                    boltBreakStart = (int)c.Time;
-                }
-                else
-                {
-                    int boltBreakEnd = (int)c.Time;
-                    int radius = 180;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, radius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, boltBreakEnd, radius, (boltBreakStart, boltBreakEnd), "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -155,33 +146,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Sabir:
-                    List<AbstractBuffEvent> repulsionFields = GetFilteredList(log.CombatData, RepulsionField, target, true, true);
-                    int repulsionFieldStart = 0;
-                    foreach (AbstractBuffEvent c in repulsionFields)
+                    var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in repulsionFields)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            repulsionFieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int repulsionFieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (repulsionFieldStart, repulsionFieldEnd), "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractBuffEvent> ionShields = GetFilteredList(log.CombatData, IonShield, target, true, true);
-                    int ionShieldStart = 0;
-                    foreach (AbstractBuffEvent c in ionShields)
+                    var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in ionShields)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            ionShieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int ionShieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (ionShieldStart, ionShieldEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
@@ -239,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamage() && x.Value > 0);
+                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamagingDamage());
                     if (firstDamageEvent != null)
                     {
                         return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);

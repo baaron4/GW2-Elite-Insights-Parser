@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -83,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(VolatileAura, VolatileAura), // Volatile Aura
+                new DamageCastFinder(VolatileAura, VolatileAura),
             };
         }
 
@@ -212,56 +213,33 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Poison
-            List<AbstractBuffEvent> poisonToDrop = GetFilteredList(log.CombatData, VolatilePoisonBuff, p, true, true);
-            int toDropStart = 0;
-            foreach (AbstractBuffEvent c in poisonToDrop)
+            var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in poisonToDrop)
             {
-                if (c is BuffApplyEvent)
+                int toDropStart = (int)seg.Start;
+                int toDropEnd = (int)seg.End;
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, toDropStart + 8000, 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
+                ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
+                ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
+                if (poisonNextPos != null || poisonPrevPos != null)
                 {
-                    toDropStart = (int)c.Time;
+                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + 90000, 900, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
                 }
-                else
-                {
-                    int toDropEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + 8000, 180, (toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)", new AgentConnector(p)));
-                    ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
-                    ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
-                    if (poisonNextPos != null || poisonPrevPos != null)
-                    {
-                        replay.Decorations.Add(new CircleDecoration(true, toDropStart + 90000, 900, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), 180));
-                    }
-                }
+                replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
             // Transformation
-            List<AbstractBuffEvent> slubTrans = GetFilteredList(log.CombatData, MagicTransformation, p, true, true);
-            int transfoStart = 0;
-            foreach (AbstractBuffEvent c in slubTrans)
+            var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in slubTrans)
             {
-                if (c is BuffApplyEvent)
-                {
-                    transfoStart = (int)c.Time;
-                }
-                else
-                {
-                    int transfoEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
             }
-            // fixated
-            List<AbstractBuffEvent> fixatedSloth = GetFilteredList(log.CombatData, FixatedSlothasor, p, true, true);
-            int fixatedSlothStart = 0;
-            foreach (AbstractBuffEvent c in fixatedSloth)
+            // Fixated
+            var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in fixatedSloth)
             {
-                if (c is BuffApplyEvent)
-                {
-                    fixatedSlothStart = (int)c.Time;
-                }
-                else
-                {
-                    int fixatedSlothEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
         }
     }

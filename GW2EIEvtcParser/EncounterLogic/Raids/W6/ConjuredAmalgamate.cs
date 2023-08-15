@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -167,20 +168,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldCAStart = 0;
-                    foreach (AbstractBuffEvent c in shieldCA)
+                    var shieldCA = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    int CAShieldRadius = 500;
+                    foreach (Segment seg in shieldCA)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldCAStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 500;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldCAStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.CALeftArm:
@@ -189,20 +181,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldStart = 0;
-                    foreach (AbstractBuffEvent c in shield)
+                    var shieldShield = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    int ShieldShieldRadius = 100;
+                    foreach (Segment seg in shieldShield)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 100;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -228,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return;
                 }
                 SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken == null)
                 {
                     return;
@@ -342,6 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Conjured Protection - Shield AoE
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
             foreach (AbstractCastEvent c in shieldCast)
@@ -357,6 +341,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
                 }
             }
+            // Shields and Greatswords Overheads
+            replay.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

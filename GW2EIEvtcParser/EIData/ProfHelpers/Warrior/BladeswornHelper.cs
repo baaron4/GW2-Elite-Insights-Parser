@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -14,8 +17,13 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
-            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),                
+            new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
             new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new BuffGainCastFinder(FlowStabilizer, PositiveFlow)
+                .UsingChecker((bae, combatData, agentData, skillData) =>
+                {
+                    return 2 == FindRelatedEvents(combatData.GetBuffData(PositiveFlow).OfType<BuffApplyEvent>(), bae.Time).Count(apply => apply.By == bae.To && apply.To == bae.To);
+                }),
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>

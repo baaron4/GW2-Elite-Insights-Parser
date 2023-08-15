@@ -338,6 +338,26 @@ namespace GW2EIEvtcParser.EIData
         {
             return _buffHelper.GetBuffStatus(log, buffId, time);
         }
+
+        /// <summary>
+        /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIds"/> in input.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="buffIds">Buff IDs of which to find the <see cref="Segment"/> of.</param>
+        /// <param name="start">Start time to search.</param>
+        /// <param name="end">End time to search.</param>
+        /// <returns><see cref="IReadOnlyList{T}"/> with the <see cref="Segment"/>s found.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIds, long start, long end)
+        {
+            var result = new List<Segment>();
+            foreach(long id in buffIds)
+            {
+                result.AddRange(_buffHelper.GetBuffStatus(log, id, start, end));
+            }
+            return result;
+        }
+
         public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
         {
             return _buffHelper.GetBuffStatus(log, by, buffId, start, end);

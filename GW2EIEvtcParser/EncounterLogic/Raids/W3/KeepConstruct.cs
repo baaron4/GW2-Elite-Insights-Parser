@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ConstructAura, ConstructAura), // Construct Aura
+                new DamageCastFinder(ConstructAura, ConstructAura),
             };
         }
 
@@ -276,20 +277,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, XerasBoon, target, true, true);
-                    int kcOrbStart = 0, kcOrbEnd = 0;
-                    foreach (AbstractBuffEvent c in kcOrbCollect)
+                    var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in kcOrbCollect)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            kcOrbStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            kcOrbEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -409,20 +401,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
-            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, XerasFury, p, true, true);
-            int xeraFuryStart = 0;
-            foreach (AbstractBuffEvent c in xeraFury)
+            var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in xeraFury)
             {
-                if (c is BuffApplyEvent)
-                {
-                    xeraFuryStart = (int)c.Time;
-                }
-                else
-                {
-                    int xeraFuryEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 550, seg, "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
 
             }
             //fixated Statue
@@ -445,6 +428,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            // Fixation Overhead
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            // Attunements Overhead
+            IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, new long[] { CrimsonAttunementPhantasm, CrimsonAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
+            IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, new long[] { RadiantAttunementPhantasm, RadiantAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
         }
 
         protected override void SetInstanceBuffs(ParsedEvtcLog log)

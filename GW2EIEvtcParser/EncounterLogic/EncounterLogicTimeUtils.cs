@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target not found");
             }
-            CombatItem firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamage() && x.Time >= upperLimit - ParserHelper.ServerDelayConstant);
+            CombatItem firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage() && x.Time >= upperLimit - ParserHelper.ServerDelayConstant);
             if (firstDamageEvent != null)
             {
                 return firstDamageEvent.Time;

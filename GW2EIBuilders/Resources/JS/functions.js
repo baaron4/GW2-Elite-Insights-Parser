@@ -306,7 +306,8 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(1.2);
-            rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
+            var text = `${name} at ${x}s`;
+            rotaTrace.text.push(endType === RotationStatus.INSTANT ? text : text + ` for ${originalDuration}ms`);
             rotaTrace.width.push(aa ? 0.5 : 1.0);
             rotaTrace.marker.color.push(fillColor);
 

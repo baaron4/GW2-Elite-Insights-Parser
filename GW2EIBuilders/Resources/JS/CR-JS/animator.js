@@ -34,6 +34,10 @@ function ToRadians(degrees) {
 
 const resolutionMultiplier = 2.0;
 
+const maxOverheadAnimationFrame = 50;
+let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
+let overheadAnimationIncrement = 1;
+
 var animator = null;
 // reactive structures
 var reactiveAnimationData = {
@@ -82,6 +86,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
         this.skillMechanicActorData = [];
         this.actorOrientationData = new Map();
@@ -162,6 +167,7 @@ class Animator {
         this.trashMobData.clear();
         this.friendlyMobData.clear();
         this.actorOrientationData.clear();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
@@ -190,6 +196,9 @@ class Animator {
                         break;
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
+                        break;
+                    case "IconOverheadDecoration":
+                        this.overheadActorData.push(new IconOverheadDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
                         break;
                     default:
                         throw "Unknown decoration type";
@@ -222,7 +231,7 @@ class Animator {
                         decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
                         break;
                     case "IconDecoration":
-                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, this.inchToPixel * actor.size, actor.opacity);
+                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
                         break;
                     default:
                         throw "Unknown decoration type";
@@ -695,6 +704,9 @@ class Animator {
             this.selectedActor.draw();     
             this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
         }
+        for (let i = 0; i < this.overheadActorData.length; i++) {
+            this.overheadActorData[i].draw();
+        }
     }
 
     draw() {
@@ -704,6 +716,10 @@ class Animator {
         //
         this._drawBGCanvas();
         this._drawMainCanvas();
+        if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
+            overheadAnimationIncrement *= -1;
+        }
+        overheadAnimationFrame += overheadAnimationIncrement;
     }
 }
 

@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string BaseResRanger = "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
         private const string BaseResMechanist = "https://wiki.guildwars2.com/images/thumb/8/8a/Mechanist_tango_icon_200px.png/20px-Mechanist_tango_icon_200px.png";
         private const string BaseResHolosmith = "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
-        private const string BaseResScrapper = "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
+        private const string BaseResScrapper = "https://wiki.guildwars2.com/images/b/be/Scrapper_tango_icon_20px.png";
         private const string BaseResEngineer = "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
         private const string BaseResSpecter = "https://wiki.guildwars2.com/images/5/5c/Specter_tango_icon_20px.png";
         private const string BaseResDeadeye = "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
@@ -476,6 +476,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionSunspreadParagon = "https://i.imgur.com/QXbFenF.png";
         private const string MinionRavenSpiritShadow = "https://i.imgur.com/dbLzIiY.png";
 
+        // Portal icons
         internal const string PortalMesmerEntre = "https://i.imgur.com/TILHQ1u.png";
         internal const string PortalMesmerExeunt = "https://i.imgur.com/7gsObHV.png";
         internal const string PortalShadowPortalPrepare = "https://i.imgur.com/oDpQcea.png";
@@ -484,6 +485,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string PortalWhiteMantleItem = "https://i.imgur.com/FcO9n7c.png";
         internal const string PortalWhiteMantleSkill = "https://i.imgur.com/qf99SF9.png";
 
+        // Skill effect decoration icons
         internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";
         internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
         internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
@@ -509,6 +511,80 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfDarkness = "https://i.imgur.com/hfaRt5e.png";
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
+
+        // Overhead icons
+        // - Fixations
+        internal const string FixationBlueOverhead = "https://i.imgur.com/EUoDTln.png";
+        internal const string FixationGreenOverhead = "https://i.imgur.com/cDmJWrY.png";
+        internal const string FixationPurpleOverhead = "https://i.imgur.com/UImUF0H.png";
+        internal const string FixationRedOverhead = "https://i.imgur.com/wIYRfY6.png";
+        // - Squad Markers
+        internal const string ArrowSquadMarkerOverhead = "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
+        internal const string CircleSquadMarkerOverhead = "https://wiki.guildwars2.com/images/6/60/Commander_circle_marker.png";
+        internal const string HeartSquadMarkerOverhead = "https://wiki.guildwars2.com/images/3/32/Commander_heart_marker.png";
+        internal const string SwirlSquadMarkerOverhead = "https://wiki.guildwars2.com/images/0/00/Commander_spiral_marker.png";
+        internal const string SquareSquadMarkerOverhead = "https://wiki.guildwars2.com/images/0/01/Commander_square_marker.png";
+        internal const string StarSquadMarkerOverhead = "https://wiki.guildwars2.com/images/3/31/Commander_star_marker.png";
+        internal const string TriangleSquadMarkerOverhead = "https://wiki.guildwars2.com/images/e/ea/Commander_triangle_marker.png";
+        internal const string XSquadMarkerOverhead = "https://wiki.guildwars2.com/images/b/b9/Commander_x_marker.png";
+        // - Commander Tags
+        internal const string BlueCommanderTagOverhead = "https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png";
+        internal const string CyanCommanderTagOverhead = "https://wiki.guildwars2.com/images/2/2b/Commander_tag_%28cyan%29.png";
+        internal const string GreenCommanderTagOverhead = "https://wiki.guildwars2.com/images/5/5e/Commander_tag_%28green%29.png";
+        internal const string PinkCommanderTagOverhead = "https://wiki.guildwars2.com/images/b/ba/Commander_tag_%28magenta%29.png";
+        internal const string OrangeCommanderTagOverhead = "https://wiki.guildwars2.com/images/1/1c/Commander_tag_%28orange%29.png";
+        internal const string PurpleCommanderTagOverhead = "https://wiki.guildwars2.com/images/c/cb/Commander_tag_%28purple%29.png";
+        internal const string RedCommanderTagOverhead = "https://wiki.guildwars2.com/images/4/40/Commander_tag_%28red%29.png";
+        internal const string WhiteCommanderTagOverhead = "https://wiki.guildwars2.com/images/f/f1/Commander_tag_%28white%29.png";
+        internal const string YellowCommanderTagOverhead = "https://wiki.guildwars2.com/images/c/cb/Commander_tag_%28yellow%29.png";
+        // - Catmander Tags
+        internal const string BlueCatmanderTagOverhead = "https://wiki.guildwars2.com/images/1/16/Catmander_tag_%28blue%29.png";
+        internal const string CyanCatmanderTagOverhead = "https://wiki.guildwars2.com/images/9/9d/Catmander_tag_%28cyan%29.png";
+        internal const string GreenCatmanderTagOverhead = "https://wiki.guildwars2.com/images/f/fd/Catmander_tag_%28green%29.png";
+        internal const string PinkCatmanderTagOverhead = "https://wiki.guildwars2.com/images/9/94/Catmander_tag_%28magenta%29.png";
+        internal const string OrangeCatmanderTagOverhead = "https://wiki.guildwars2.com/images/2/2a/Catmander_tag_%28orange%29.png";
+        internal const string PurpleCatmanderTagOverhead = "https://wiki.guildwars2.com/images/f/ff/Catmander_tag_%28purple%29.png";
+        internal const string RedCatmanderTagOverhead = "https://wiki.guildwars2.com/images/5/59/Catmander_tag_%28red%29.png";
+        internal const string WhiteCatmanderTagOverhead = "https://wiki.guildwars2.com/images/5/51/Catmander_tag_%28white%29.png";
+        internal const string YellowCatmanderTagOverhead = "https://wiki.guildwars2.com/images/a/a3/Catmander_tag_%28yellow%29.png";
+        // - Miscellaneous
+        internal const string RedArrowOverhead = "https://wiki.guildwars2.com/images/3/33/Generic_red_arrow_down.png";
+        internal const string EnragedOverhead = "https://wiki.guildwars2.com/images/thumb/8/8e/Enraged_%28overhead_icon%29.png/120px-Enraged_%28overhead_icon%29.png";
+        internal const string BombOverhead = "https://wiki.guildwars2.com/images/d/da/Bomb_%28overhead_icon%29.png";
+        internal const string VolatilePoisonOverhead = "https://wiki.guildwars2.com/images/d/db/Volatile_Poison_IG.png";
+        internal const string UnbalancedOverhead = "https://wiki.guildwars2.com/images/0/0e/Unbalanced_%28overhead_icon%29.png";
+        internal const string RadiantAttunementOverhead = "https://wiki.guildwars2.com/images/c/ce/Radiant_Attunement_overhead_icon.png";
+        internal const string CrimsonAttunementOverhead = "https://wiki.guildwars2.com/images/1/13/Crimson_Attunement_overhead_icon.png";
+        internal const string TearInstabilityOverhead = "https://wiki.guildwars2.com/images/7/7d/Tear_Instability_%28overhead_icon%29.png";
+        internal const string TidalPoolOverhead = "https://wiki.guildwars2.com/images/e/e7/Tidal_Pool_%28overhead_icon%29.png";
+        internal const string SkullOverhead = "https://wiki.guildwars2.com/images/f/f6/Jade_Maw_agony_attack.png";
+        internal const string PowerOfTheVoidOverhead = "https://wiki.guildwars2.com/images/f/f4/Power_of_the_Void_%28overhead_icon%29.png";
+        internal const string SpectralDarknessOverhead = "https://wiki.guildwars2.com/images/f/f6/Spectral_Darkness_%28overhead_icon%29.png";
+        internal const string CorruptionOverhead = "https://wiki.guildwars2.com/images/2/2d/Disarm_Poison_Gas_Mine.png";
+        internal const string ConjuredShieldEmptyOverhead = "https://wiki.guildwars2.com/images/4/41/Conjured_Shield_%28overhead_icon%29.png";
+        internal const string GreatswordPowerEmptyOverhead = "https://wiki.guildwars2.com/images/c/c1/Greatsword_Power_%28overhead_icon%29.png";
+        internal const string EyeOverhead = "https://i.imgur.com/OBfLywE.png";
+        // - Bomb Timer
+        internal const string BombTimerEmptyOverhead = "https://wiki.guildwars2.com/images/a/a0/Timer_empty_%28overhead_icon%29.png";
+        internal const string BombTimerFullOverhead = "https://wiki.guildwars2.com/images/d/d9/Timer_full_%28overhead_icon%29.png";
+        // - Madness
+        internal const string MadnessSilverOverhead = "https://wiki.guildwars2.com/images/a/a8/Madness_%28overhead_icon_silver%29.png";
+        internal const string MadnessGoldOverhead = "https://wiki.guildwars2.com/images/c/ce/Madness_%28overhead_icon_gold%29.png";
+        internal const string MadnessRedOverhead = "https://wiki.guildwars2.com/images/f/f4/Madness_%28overhead_icon_red%29.png";
+        // - Derangement
+        internal const string DerangementSilverOverhead = "https://wiki.guildwars2.com/images/4/44/Derangement_%28overhead_icon_white%29.png";
+        internal const string DerangementGoldOverhead = "https://wiki.guildwars2.com/images/c/cb/Derangement_%28overhead_icon_yellow%29.png";
+        internal const string DerangementRedOverhead = "https://wiki.guildwars2.com/images/a/a1/Derangement_%28overhead_icon_red%29.png";
+        // - Sensors
+        internal const string SensorBlueOverhead = "https://wiki.guildwars2.com/images/a/aa/Sensor_Tracking_icon_%28blue%29.png";
+        internal const string SensorGreenOverhead = "https://wiki.guildwars2.com/images/1/18/Sensor_Tracking_icon_%28green%29.png";
+        internal const string SensorRedOverhead = "https://wiki.guildwars2.com/images/3/38/Sensor_Tracking_icon_%28red%29.png";
+        // - Target Orders
+        internal const string TargetOrder1Overhead = "https://wiki.guildwars2.com/images/6/6f/Target_Order-1_%28overhead_icon%29.png";
+        internal const string TargetOrder2Overhead = "https://wiki.guildwars2.com/images/8/87/Target_Order-2_%28overhead_icon%29.png";
+        internal const string TargetOrder3Overhead = "https://wiki.guildwars2.com/images/d/d8/Target_Order-3_%28overhead_icon%29.png";
+        internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
+        internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
 
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.

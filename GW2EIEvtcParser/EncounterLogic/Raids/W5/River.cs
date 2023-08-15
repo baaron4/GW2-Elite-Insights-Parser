@@ -136,19 +136,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(brokenKing) && evt.Value > 0)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(brokenKing))))
                 {
                     return new StatueOfIce((int)ArcDPSEnums.TargetID.BrokenKing);
                 }
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(soulEater) && evt.Value > 0)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(soulEater))))
                 {
                     return new StatueOfDeath((int)ArcDPSEnums.TargetID.EaterOfSouls);
                 }
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfFate) && evt.Value > 0)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfFate))))
                 {
                     return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
                 }
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamage() && evt.DstMatchesAgent(eyeOfJudgement) && evt.Value > 0)))
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfJudgement))))
                 {
                     return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfJudgement);
                 }
@@ -166,19 +166,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Desmina:
-                    List<AbstractBuffEvent> asylums = GetFilteredList(log.CombatData, FollowersAsylum, target, true, true);
-                    int asylumStart = 0;
-                    foreach (AbstractBuffEvent asylum in asylums)
+                    var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment asylum in asylums)
                     {
-                        if (asylum is BuffApplyEvent)
-                        {
-                            asylumStart = (int)asylum.Time;
-                        }
-                        else
-                        {
-                            int asylumEnd = (int)asylum.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (asylumStart, asylumEnd), "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
