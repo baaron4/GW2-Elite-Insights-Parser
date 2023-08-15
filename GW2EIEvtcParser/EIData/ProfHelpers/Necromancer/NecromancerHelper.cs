@@ -129,38 +129,38 @@ namespace GW2EIEvtcParser.EIData
         {
             Color color = Colors.Necromancer;
 
-            // // Well of Blood
-            // foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood))
-            // {
-            //     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-            //     var connector = new PositionConnector(effect.Position);
-            //     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-            //     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/80/Well_of_Blood.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
-            // }
-            // // Well of Suffering
-            // foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering))
-            // {
-            //     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
-            //     var connector = new PositionConnector(effect.Position);
-            //     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-            //     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ee/Well_of_Suffering.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
-            // }
-            // // Well of Darkness
-            // foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness))
-            // {
-            //     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-            //     var connector = new PositionConnector(effect.Position);
-            //     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-            //     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/1/1d/Well_of_Darkness.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
-            // }
-            // // Well of Corruption
-            // foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption))
-            // {
-            //     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-            //     var connector = new PositionConnector(effect.Position);
-            //     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-            //     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/0/0a/Well_of_Corruption.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
-            // }
+            // Well of Blood
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/8/80/Well_of_Blood.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Well of Suffering
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/e/ee/Well_of_Suffering.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Well of Darkness
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/1/1d/Well_of_Darkness.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
+            // Well of Corruption
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/0/0a/Well_of_Corruption.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
             // Corrosive Poison Cloud
             foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud))
             {

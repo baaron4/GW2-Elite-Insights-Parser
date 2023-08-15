@@ -72,14 +72,14 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(icon);
                 }
             }
-            // // Shade
-            // foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade))
-            // {
-            //     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
-            //     var connector = new PositionConnector(effect.Position);
-            //     replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
-            //     replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
-            // }
+            // Shade
+            foreach (EffectEvent effect in log.CombatData.GetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade))
+            {
+                (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                var connector = new PositionConnector(effect.Position);
+                replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                replay.Decorations.Add(new IconDecoration("https://wiki.guildwars2.com/images/a/a4/Manifest_Sand_Shade.png", 128, 0.5f, lifespan, connector).UsingSkillMode(player));
+            }
         }
     }
 }
