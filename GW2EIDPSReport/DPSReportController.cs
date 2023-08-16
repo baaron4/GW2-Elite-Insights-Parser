@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -13,6 +12,9 @@ using Newtonsoft.Json.Serialization;
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIDPSReport
 {
+    /// <summary>
+    /// https://dps.report/api
+    /// </summary>
     public static class DPSReportController
     {
 
@@ -25,6 +27,8 @@ namespace GW2EIDPSReport
         {
             NamingStrategy = new CamelCaseNamingStrategy()
         };
+
+        private static readonly HttpClient HTTPClient = new HttpClient();
 
         private class DPSReportUserTokenResponse
         {
@@ -93,7 +97,25 @@ namespace GW2EIDPSReport
         ///////////////// APIs
         public static DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
-            return UploadToDPSR(fi, GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traces);
+            string fileName = fi.Name;
+            byte[] fileContents = File.ReadAllBytes(fi.FullName);
+            Func<HttpContent> contentCreator = () =>
+            {
+                var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
+                var byteArrayContent = new ByteArrayContent(fileContents);
+                byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                multiPartContent.Add(byteArrayContent, "file", fileName);
+                return multiPartContent;
+            };
+
+            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + " & generator=ei", traces, contentCreator);
+            if (response != null && response.Error != null)
+            {
+                traces.Add("DPSReport: UploadUsingEI failed - " + response.Error);
+                return null;
+            }
+            return response;
+
         }
 
         public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
@@ -143,20 +165,23 @@ namespace GW2EIDPSReport
             return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traces);
         }
         ///////////////// Response Utilities
-        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces)
+        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traces.Add(requestName + " tentative");
+                traces.Add("DPSReport: " + requestName + " tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
 
-                var httpClient = new HttpClient();
+                if (content != null)
+                {
+                    requestMessage.Content = content();
+                }
                 try
                 {
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
                     HttpResponseMessage httpResponse = httpRequest.Result;
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
@@ -176,84 +201,20 @@ namespace GW2EIDPSReport
                             ContractResolver = DefaultJsonContractResolver,
                             StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
-                        traces.Add(requestName + " tentative successful");
+                        traces.Add("DPSReport: " + requestName + " tentative successful");
                         return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    traces.Add(requestName + " tentative failed: " + e.Message);
+                    traces.Add("DPSReport: " + requestName + " tentative failed - " + e.Message);
                 }
                 finally
                 {
-                    httpClient.Dispose();
                     requestMessage.Dispose();
                 }
             }
             return default;
-        }
-        private static DPSReportUploadObject UploadToDPSR(FileInfo fi, string URI, List<string> traces)
-        {
-            string fileName = fi.Name;
-            byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            const int tentatives = 5;
-            for (int i = 0; i < tentatives; i++)
-            {
-                traces.Add("Upload tentative");
-                var webService = new Uri(@URI);
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
-                requestMessage.Headers.ExpectContinue = false;
-
-                var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
-                var byteArrayContent = new ByteArrayContent(fileContents);
-                byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-                multiPartContent.Add(byteArrayContent, "file", fileName);
-                //multiPartContent.Add(new StringContent("generator=ei"), "gen", "ei");
-                requestMessage.Content = multiPartContent;
-
-                var httpClient = new HttpClient();
-                try
-                {
-                    Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
-                    HttpResponseMessage httpResponse = httpRequest.Result;
-                    HttpStatusCode statusCode = httpResponse.StatusCode;
-                    HttpContent responseContent = httpResponse.Content;
-
-                    if (statusCode != HttpStatusCode.OK)
-                    {
-                        throw new HttpRequestException(statusCode.ToString());
-                    }
-
-                    if (responseContent != null)
-                    {
-                        Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
-                        string stringContents = stringContentsTask.Result;
-                        DPSReportUploadObject item = JsonConvert.DeserializeObject<DPSReportUploadObject>(stringContents, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore,
-                            ContractResolver = DefaultJsonContractResolver,
-                            StringEscapeHandling = StringEscapeHandling.EscapeHtml
-                        });
-                        if (item.Error != null)
-                        {
-                            throw new InvalidOperationException(item.Error);
-                        }
-                        traces.Add("Upload tentative successful");
-                        return item;
-                    }
-                }
-                catch (Exception e)
-                {
-                    traces.Add("Upload tentative failed: " + e.Message);
-                }
-                finally
-                {
-                    byteArrayContent.Dispose();
-                    httpClient.Dispose();
-                    requestMessage.Dispose();
-                }
-            }
-            return null;
         }
 
     }
