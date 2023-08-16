@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIBuilders.JsonModels.JsonActors;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
@@ -99,6 +100,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.EliteInsightsVersion = parserVersion.ToString();
             jsonLog.ArcVersion = log.LogData.ArcVersion;
             jsonLog.RecordedBy = log.LogData.PoVName;
+            jsonLog.RecordedAccountBy = log.LogData.PoVAccount;
             jsonLog.TimeStart = log.LogData.LogStart;
             jsonLog.TimeEnd = log.LogData.LogEnd;
             jsonLog.TimeStartStd = log.LogData.LogStartStd;
@@ -113,6 +115,8 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
             jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             jsonLog.IsCM = log.FightData.IsCM;
+            jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
+            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();
             var buffMap = new Dictionary<string, BuffDesc>();

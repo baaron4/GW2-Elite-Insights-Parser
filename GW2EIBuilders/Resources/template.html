@@ -116,7 +116,7 @@
                 <span>Used Extensions: </span>
                 <span v-for="(usedExtension, id) in usedExtensions">{{(id > 0 ? "|" : "") + usedExtension}}</span>
             </div>
-            <div class="mb-2">File recorded by: {{getLogData().recordedBy}}</div>
+            <div class="mb-2">File recorded by: {{getLogData().recordedBy}} - {{getLogData().recordedAccountBy}}</div>
         </div>
     </div>
 </body>

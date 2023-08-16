@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.Extensions
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
                 operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
-            int running = RunningExtensionInternal.Count;
+            int running = Math.Max(RunningExtensionInternal.Count, 1);
             operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
             //
             operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");

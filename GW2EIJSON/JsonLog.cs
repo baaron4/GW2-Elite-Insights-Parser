@@ -249,7 +249,12 @@ namespace GW2EIJSON
         /// The player who recorded the fight
         /// </summary>
         public string RecordedBy { get; set; }
-        
+
+        /// <summary>
+        /// The account name of the player who recorded the fight
+        /// </summary>
+        public string RecordedAccountBy { get; set; }
+
         /// <summary>
         /// DEPRECATED: use TimeStartStd instead \n
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
@@ -301,7 +306,19 @@ namespace GW2EIJSON
         /// If the fight is in challenge mode
         /// </summary>
         public bool IsCM { get; set; }
-        
+
+        /// <summary>
+        /// If the log was parsed in anonymous mode
+        /// </summary>
+        public bool Anonymous { get; set; }
+
+
+        /// <summary>
+        /// If the log was parsed in detailed mode. \n
+        /// Only for WvW logs
+        /// </summary>
+        public bool DetailedWvW { get; set; }
+
         /// <summary>
         /// The list of targets
         /// </summary>
