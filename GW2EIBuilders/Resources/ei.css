@@ -144,6 +144,7 @@
     position: relative;
     top: -12px;
     width: 45px;
+    pointer-events: none;
 }
 
 .cr-barrier-display {
@@ -151,6 +152,7 @@
     top: -43px;
     position: relative;
     width: 45px;
+    pointer-events: none;
 }
 
 .cr-barrier { 
@@ -158,6 +160,7 @@
     width: 100%;
     height: 100%;
     top: -97px;
+    pointer-events: none;
 }
 
 .cr-breakbar-display {

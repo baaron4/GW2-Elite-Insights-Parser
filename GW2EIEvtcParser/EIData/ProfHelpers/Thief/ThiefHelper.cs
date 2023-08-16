@@ -15,8 +15,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class ThiefHelper
     {
-        public static readonly Color ProfColor = new Color(169, 108, 108);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(Shadowstep, Infiltration),
@@ -122,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Thief;
 
             // Shadow Portal locations
             var entranceDecorations = new List<GenericAttachedDecoration>();
@@ -132,8 +130,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, enter, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(enter.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                     replay.Decorations.Add(icon);
                     entranceDecorations.Add(icon);
                 }
@@ -144,14 +142,37 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(exit.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                     GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                     if (entranceDecoration != null)
                     {
-                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
                     }
                     replay.Decorations.Add(icon);
+                }
+            }
+
+            // Seal Area
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
+            {
+                foreach (EffectEvent effect in sealAreaAoEs)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+            // Shadow Refuge
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out IReadOnlyList<EffectEvent> shadowRefuges))
+            {
+                foreach (EffectEvent effect in shadowRefuges)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
                 }
             }
         }

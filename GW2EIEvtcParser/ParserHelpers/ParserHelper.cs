@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser
 
         public const int CombatReplayPollingRate = 150;
         internal const int CombatReplaySkillDefaultSizeInPixel = 22;
+        internal const int CombatReplaySkillDefaultSizeInWorld = 90;
         internal const int CombatReplayOverheadDefaultSizeInPixel = 20;
         internal const float CombatReplayOverheadDefaultOpacity = 1.0f;
 

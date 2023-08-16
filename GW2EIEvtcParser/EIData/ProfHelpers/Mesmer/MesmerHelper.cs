@@ -16,8 +16,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class MesmerHelper
     {
-        public static readonly Color ProfColor = new Color(147, 112, 219);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
@@ -357,7 +355,7 @@ namespace GW2EIEvtcParser.EIData
         
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = ProfColor;
+            Color color = Colors.Mesmer;
 
             // Portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
@@ -367,7 +365,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, 90, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
 
@@ -380,18 +378,52 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                         if (first == null)
                         {
                             first = icon;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
                         }
                         replay.Decorations.Add(icon);
                     }
+                }
+            }
+
+            // Feedback
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out IReadOnlyList<EffectEvent> feedbacks))
+            {
+                foreach (EffectEvent effect in feedbacks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+            // Veil
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out IReadOnlyList<EffectEvent> veils))
+            {
+                foreach (EffectEvent effect in veils)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                }
+            }
+            // Null Field
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent>  nullFields))
+            {
+                foreach (EffectEvent effect in nullFields)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000); // 6s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
                 }
             }
         }

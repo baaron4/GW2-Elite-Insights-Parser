@@ -25,6 +25,8 @@ namespace GW2EIEvtcParser
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
         public const string MesmerFeedback = "D6C8F406E4DEE04AB16A215BE068E910";
+        public const string MesmerVeil = "6B29E895E2EB9341B560FFD3A78F78F2";
+        public const string MesmerNullField = "D8E8B086ACCF7549B8F50CF1AF177039";
         public const string MesmerTeleport = "C34E250B01FF534292EE6AB36D768337"; // used by blink, phase retreat, swap (illusionary leap)
         public const string MesmerPortalInactive = "F3CD4D9BFC8EAD45AAA1EA7A3AB148BF";
         public const string MesmerPortalActive = "3C346BE32EFB9E40BE39E379B061C803";
@@ -41,7 +43,9 @@ namespace GW2EIEvtcParser
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
+        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91";
         public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
+        public const string VirtuosoRainOfSwords = "83834EDBA8E79946A6D5665E3519B72C";
         public const string VirtuosoThousandCuts = "E4002B7AD7DF024394D0184B47A316E7";
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
@@ -51,6 +55,15 @@ namespace GW2EIEvtcParser
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
         public const string NecromancerPlagueSignet = "E78ED095E97F1D4A8BEB901796449E2F"; // might be pov only?
+        public const string NecromancerWellOfBlood = "159515DADB2DFB46A980A2A661BD881B";
+        public const string NecromancerWellOfSuffering = "E24BA6F2CCB8374CB7F5BE829BC7228E";
+        public const string NecromancerWellOfDarkness = "824EF999A0B6D14D9AC2EC843C6984D5";
+        public const string NecromancerWellOfCorruption = "FF96BAE8EC4D5A4CBF6E13C15649F3DA";
+        public const string NecromancerCorrosivePoisonCloud = "68D13E0EBB247A40B2F131B2C729443E";
+        public const string NecromancerPlaguelands = "883D5C97F3673843A8423D01B97ED78F";
+        public const string NecromancerPlaguelandsPulse1 = "7E12B3B1896BC748AE50333267CDBFB9";
+        public const string NecromancerPlaguelandsPulse2 = "A442AE5DFE73D04BBC19B050540E000A";
+        public const string NecromancerPlaguelandsPulse3 = "253ADDAEC2009A499FA29C44E1D73F05";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -79,6 +92,7 @@ namespace GW2EIEvtcParser
         public const string WarriorSignetOfMight = "75EF160EAFC0394CACC436CF89819148";
         public const string WarriorSignetOfStamina = "1E720C4D42448D45BDCB6307869D3D66"; // not actually instant cast, just for reference
         public const string WarriorDolyakSignet = "D7F8FA5695F8714B99A51EE72EF6E178";
+        public const string SpellbreakerWindsOfDisenchantment = "926917599B6B6E498AD62B812001B823";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
@@ -87,12 +101,17 @@ namespace GW2EIEvtcParser
         public const string RevenantNaturalHarmonyEnergyRelease = "E239BA17214B4943A4EC2D6B43F6175F";
         public const string RevenantPurifyingEssence = "D2B388E8DB721544A110979C3A384977";
         public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
+        public const string RevenantInspiringReinforcement = "09171204F3936841813E518123E2F867";
+        public const string RevenantInspiringReinforcementPart = "E6D6CD56B9A61E40A86F982C60421625";
         public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
         // Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
+        public const string GuardianRingOfWarding = "5A54592448836A46B30BC93A544A0E47";
+        public const string GuardianLineOfWarding = "F8BE013B34366E458640B47BF43F257D";
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
+        public const string GuardianSanctuary = "A96093E9CB3D7F468C5235C81537301E";
         public const string GuardianShout = "122BA55CCDF2B643929F6C4A97226DC9"; // used with all shouts
         public const string GuardianSaveYourselves = "68F2C378E6C80548B5A3C89870C5DD86";
         public const string GuardianSmiteCondition = "8CBE6348BB8C9646B210AEE4BA9BCCA3"; // also lesser smite condition
@@ -101,6 +120,8 @@ namespace GW2EIEvtcParser
         public const string GuardianMercifulIntervention = "B45E7BD66E424A4CA695DE63DC13E93F"; // delayed, when reaching target?
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
+        public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
+        public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";
@@ -141,10 +162,13 @@ namespace GW2EIEvtcParser
         public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
+        public const string RangerHunkerDown = "FAE87ED17A43E54AA3ABB3EAA2FDB754";
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
         public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
+        public const string DruidSublimeConversion1 = "5707A4A2BFFAD048BBDEC9CA0F2A61E1";
+        public const string DruidSublimeConversion2 = "2F74AC468871444BB66AF5D8B25EC870";
         public const string SoulbeastEternalBond = "BF0A5B11A4076A4F98C6E1D655D507B1"; // has owner & target
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
@@ -165,6 +189,7 @@ namespace GW2EIEvtcParser
         public const string ThiefThousandNeedlesAoE1 = "9AF103E33FC235498190448A9496C98A"; // ~280ms delayed
         public const string ThiefThousandNeedlesAoE2 = "B8DC8C6736C8E0439295A9DBBADC6296"; // ~280ms delayed
         public const string ThiefSealAreaAoE = "92A7634C2C7F2746AFDA88E1AD9AE886";
+        public const string ThiefShadowRefuge = "1708CD9EDF419E41B40822C52E487E1E";
         public const string ThiefShadowPortalArmedInactive = "97AF46D347914E4FBDB37BFEC91C4711"; // unarmed portal has no effect, is this pov only?
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
         public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";

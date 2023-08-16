@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, bool drawOnSelect = true)
+        public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             return this;
         }

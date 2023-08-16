@@ -47,9 +47,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
         };
 
-         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
-            Color color = NecromancerHelper.ProfColor;
+            Color color = Colors.Necromancer;
 
             // Sand Swell portal locations
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal, out IReadOnlyList<IReadOnlyList<EffectEvent>> sandswellPortals))
@@ -61,20 +61,31 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
-                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, false);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                         if (first == null)
                         {
                             first = icon;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, false));
+                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
                         }
                         replay.Decorations.Add(icon);
                     }
                 }
 
+            }
+            // Shade
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> scourgeShades))
+            {
+                foreach (EffectEvent effect in scourgeShades)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
             }
         }
     }

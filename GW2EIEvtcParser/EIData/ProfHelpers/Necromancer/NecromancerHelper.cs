@@ -1,21 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using System;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal static class NecromancerHelper
     {
-        public static readonly Color ProfColor = new Color(30, 193, 110);
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
@@ -127,6 +126,91 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
+        }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Necromancer;
+
+            // Well of Blood
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> wellOfBloods))
+            {
+                foreach (EffectEvent effect in wellOfBloods)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Heal));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Heal));
+                }
+            }
+            // Well of Suffering
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering, out IReadOnlyList<EffectEvent> wellOfSufferings))
+            {
+                foreach (EffectEvent effect in wellOfSufferings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Well of Darkness
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness, out IReadOnlyList<EffectEvent> wellOfDarknesses))
+            {
+                foreach (EffectEvent effect in wellOfDarknesses)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Well of Corruption
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption, out IReadOnlyList<EffectEvent> wellOfCorruptions))
+            {
+                foreach (EffectEvent effect in wellOfCorruptions)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Corrosive Poison Cloud
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud, out IReadOnlyList<EffectEvent> poisonClouds))
+            {
+                foreach (EffectEvent effect in poisonClouds)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Plaguelands
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { 
+                            EffectGUIDs.NecromancerPlaguelandsPulse1, 
+                            EffectGUIDs.NecromancerPlaguelandsPulse2,EffectGUIDs.NecromancerPlaguelandsPulse3
+                            } , out IReadOnlyList<EffectEvent> plaguelandPulses))
+            {
+                foreach (EffectEvent effect in plaguelandPulses)
+                {
+                    int start = (int)effect.Time - 500;
+                    int end = (int)effect.Time;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, end, 240, (start, end), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands, out IReadOnlyList<EffectEvent> plaguelands))
+            {
+                foreach (EffectEvent effect in plaguelands)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
         }
     }
 }

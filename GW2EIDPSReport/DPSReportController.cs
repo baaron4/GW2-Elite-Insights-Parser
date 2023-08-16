@@ -28,7 +28,7 @@ namespace GW2EIDPSReport
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
-        private static readonly  HttpClient HTTPClient = new HttpClient();
+        private static readonly HttpClient HTTPClient = new HttpClient();
 
         private class DPSReportUserTokenResponse
         {
@@ -115,7 +115,6 @@ namespace GW2EIDPSReport
                 return null;
             }
             return response;
-            
         }
 
         public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
