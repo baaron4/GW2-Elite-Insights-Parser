@@ -1045,6 +1045,58 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
+        /// <summary>Returns effect events for the given agent and effect GUIDs.</summary>
+        public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            var result = new List<EffectEvent>();
+            var found = false;
+            foreach (string effectGUID in effectGUIDs)
+            {
+                if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+                {
+                    result.AddRange(effects.Where(effect => effect.Src == agent));
+                    found = true;
+                }
+            }
+            if (found)
+            {
+                effectEvents = result;
+            }
+            return found;
+        }
+
+        /// <summary>Returns effect events for the given agent <b>including</b> minions and the given effect GUID.</summary>
+        public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                effectEvents = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
+                return true;
+            }
+            return false;
+        }
+
+        public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            var result = new List<EffectEvent>();
+            var found = false;
+            foreach (string effectGUID in effectGUIDs)
+            {
+                if (TryGetEffectEventsByMasterWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects))
+                {
+                    result.AddRange(effects.Where(effect => effect.Src == agent));
+                    found = true;
+                }
+            }
+            if (found)
+            {
+                effectEvents = result;
+            }
+            return found;
+        }
 
         /// <summary>
         /// Returns effect events for the given agent and effect GUID.

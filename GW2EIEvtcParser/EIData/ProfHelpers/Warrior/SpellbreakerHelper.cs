@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -60,6 +61,21 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Magebane Tether", MagebaneTether, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MagebaneTether),
         };
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Warrior;
 
+            // Winds of Disenchantment
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpellbreakerWindsOfDisenchantment, out IReadOnlyList<EffectEvent> windsOfDisenchantments))
+            {
+                foreach (EffectEvent effect in windsOfDisenchantments)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
+            }
+        }
     }
 }

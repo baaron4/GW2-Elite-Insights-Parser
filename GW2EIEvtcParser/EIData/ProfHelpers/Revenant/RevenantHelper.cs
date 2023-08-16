@@ -8,6 +8,8 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using System;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -165,5 +167,30 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Revenant;
+
+            // Inspiring Reinforcement
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out IReadOnlyList<EffectEvent> inspiringReinforcementParts))
+            {
+                foreach (EffectEvent effect in inspiringReinforcementParts)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player, false));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out IReadOnlyList<EffectEvent> inspiringReinforcements))
+            {
+                foreach (EffectEvent effect in inspiringReinforcements)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
+            }
+        }
     }
 }

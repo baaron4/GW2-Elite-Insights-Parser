@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
                 }
             }
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> whiteMantlePortalActive))
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EIData
                         (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
                         replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
-                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, 90, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
+                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
                         if (first == null)
                         {
                             first = decoration;
@@ -299,20 +299,59 @@ namespace GW2EIEvtcParser.EIData
 
             switch (player.Spec)
             {
+                case Spec.Scrapper:
+                    ScrapperHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Guardian:
+                case Spec.Dragonhunter:
+                case Spec.Willbender:
+                    GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Firebrand:
+                    GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    FirebrandHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Necromancer:
+                case Spec.Reaper:
+                case Spec.Harbinger:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Scourge:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Ranger:
+                case Spec.Soulbeast:
+                case Spec.Untamed:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Druid:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
                 case Spec.Chronomancer:
                 case Spec.Mirage:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Virtuoso:
                     MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    VirtuosoHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Revenant:
+                case Spec.Herald:
+                case Spec.Renegade:
+                case Spec.Vindicator:
+                    RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Thief:
                 case Spec.Daredevil:
                 case Spec.Deadeye:
                 case Spec.Specter:
                     ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
+                case Spec.Spellbreaker:
+                    SpellbreakerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
             }
         }
@@ -391,10 +430,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Retrieves the end time of an effect.
-        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first and finally to default duration.
+        /// Computes the end time of an effect.
+        /// <br/>
+        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
+        /// Afterwards the effect duration is used, if greater 0 and less than max duration.
+        /// Finally, it defaults to max duration.
         /// </summary>
-        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
         {
             if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
             {
@@ -410,9 +452,12 @@ namespace GW2EIEvtcParser.EIData
                     return remove.Time;
                 }
             }
-            return effect.Time + defaultDuration;
+            if (effect.Duration > 0 && effect.Duration < maxDuration)
+            {
+                return effect.Time + effect.Duration;
+            }
+            return effect.Time + maxDuration;
         }
-
 
         /// <summary>
         /// Computes the lifespan of an effect.

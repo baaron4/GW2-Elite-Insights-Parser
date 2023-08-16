@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -146,5 +147,66 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Guardian;
+
+            // Ring of Warding (Hammer 5)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding, out IReadOnlyList<EffectEvent> ringOfWardings))
+            {
+                foreach (EffectEvent effect in ringOfWardings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Line of Warding (Staff 5)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding, out IReadOnlyList<EffectEvent> lineOfWardings))
+            {
+                foreach (EffectEvent effect in lineOfWardings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Wall of Reflection
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection, out IReadOnlyList<EffectEvent> wallOfReflections))
+            {
+                foreach (EffectEvent effect in wallOfReflections)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, false));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, false));
+                }
+            }
+            // Sanctuary
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary, out IReadOnlyList<EffectEvent> sanctuaries))
+            {
+                foreach (EffectEvent effect in sanctuaries)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+            // Shield of the Avenger
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out IReadOnlyList<EffectEvent> shieldOfTheAvengers
+                ))
+            {
+                foreach (EffectEvent effect in shieldOfTheAvengers)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                }
+            }
+        }
     }
 }
