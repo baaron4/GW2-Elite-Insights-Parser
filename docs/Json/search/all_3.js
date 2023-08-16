@@ -20,6 +20,7 @@ var searchData=
   ['defenses',['Defenses',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#aa8f35fd179469b86532c12892edbd9ec',1,'GW2EIJSON::JsonActor']]],
   ['description',['Description',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#ad65136405552afedb13cd36bf35246d3',1,'GW2EIJSON.JsonLog.DamageModDesc.Description()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#a6d53762d78ddefb9173498e83de6c4e8',1,'GW2EIJSON.JsonMechanics.Description()']]],
   ['descriptions',['Descriptions',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a6df6ae0a11c99ae057b2b422eac1e5db',1,'GW2EIJSON::JsonLog::BuffDesc']]],
+  ['detailedwvw',['DetailedWvW',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a57f5f727058e2781c39b18d280196783',1,'GW2EIJSON::JsonLog']]],
   ['directdamagecount',['DirectDamageCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a245ec103eb4a3cea3106937122a17b3b',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
   ['directdmg',['DirectDmg',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#af147dd4e34eb4f89885721b9f08d9a85',1,'GW2EIJSON::JsonStatistics::JsonGameplayStats']]],
   ['disttocom',['DistToCom',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a92a02508d55fa0f30b561a263f660300',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],

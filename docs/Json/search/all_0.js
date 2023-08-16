@@ -33,6 +33,7 @@ var searchData=
   ['alliedhealingdist',['AlliedHealingDist',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html#ada0b902d40986af04cf62c31cc7fced9',1,'GW2EIJSON.EXTJsonMinionsHealingStats.AlliedHealingDist()'],['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#a289ff281d579e91768c86616e2b782b5',1,'GW2EIJSON.EXTJsonPlayerHealingStats.AlliedHealingDist()']]],
   ['alliedhealingpowerhealing1s',['AlliedHealingPowerHealing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#afa53093336398f72effdf8ad01ae910e',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
   ['alliedhybridhealing1s',['AlliedHybridHealing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#afc5891f5cd2955976623caa72b499a33',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
+  ['anonymous',['Anonymous',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a43a0aac09135663213e64ed1614c8d5c',1,'GW2EIJSON::JsonLog']]],
   ['approximate',['Approximate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#a09b0116189f887de21e778cb683453de',1,'GW2EIJSON::JsonLog::DamageModDesc']]],
   ['arcversion',['ArcVersion',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad',1,'GW2EIJSON::JsonLog']]],
   ['autoattack',['AutoAttack',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a01f5fc7100a0de67cc1e83bf2bd3637b',1,'GW2EIJSON::JsonLog::SkillDesc']]],
