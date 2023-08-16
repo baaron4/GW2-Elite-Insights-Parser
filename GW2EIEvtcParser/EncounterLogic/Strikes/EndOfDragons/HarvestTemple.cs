@@ -423,7 +423,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Add missing agents
             for (int i = index; i < idsToUse.Count; i++)
             {
-                agentData.AddCustomNPCAgent(long.MaxValue - idsToUse.Count + i, long.MaxValue, "Dragonvoid", Spec.NPC, idsToUse[i], false);
+                agentData.AddCustomNPCAgent(int.MaxValue - idsToUse.Count + i, int.MaxValue, "Dragonvoid", Spec.NPC, idsToUse[i], false);
             }
             //
             ComputeFightTargets(agentData, combatData, extensions);
