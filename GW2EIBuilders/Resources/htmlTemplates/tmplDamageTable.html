@@ -7,19 +7,19 @@
                     <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
                     <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
                     <th :class="getHeaderClass('Account')" @click="sortBy('Account')">Account</th>
-                    <th v-show="!targetless" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)" data-original-title="Power + Condition" class="damage-cell">
+                    <th v-if="!targetless" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)" data-original-title="Power + Condition" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
                             class="icon">
                     </th>
-                    <th v-show="!targetless" :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1)" data-original-title="Power" class="damage-cell">
+                    <th v-if="!targetless" :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1)" data-original-title="Power" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
                              class="icon">
                     </th>
-                    <th v-show="!targetless" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)" data-original-title="Condition" class="damage-cell">
+                    <th v-if="!targetless" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)" data-original-title="Condition" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
                         class="icon">
                     </th>
-                    <th v-show="!targetless" :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)" v-if="hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
+                    <th :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)" v-if="!targetless && hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
                         Target <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
                         class="icon">
                     </th>
@@ -50,16 +50,16 @@
                     </td>
                     <td :class="getBodyClass('Name')" class="text-left">{{row.player.name}}</td>
                     <td :class="getBodyClass('Account')">{{row.player.acc}}</td>
-                    <td v-show="!targetless" :class="getBodyClass('Data', 0)"
+                    <td v-if="!targetless" :class="getBodyClass('Data', 0)"
                         :data-original-title="getPlayerTooltip(0, row, tableData.sums)">
                         {{getPlayerCell(0, row)}}</td>
-                    <td v-show="!targetless" :class="getBodyClass('Data', 1)"
+                    <td v-if="!targetless" :class="getBodyClass('Data', 1)"
                         :data-original-title="getPlayerTooltip(1, row, tableData.sums)">
                         {{getPlayerCell(1, row)}}</td>
-                    <td v-show="!targetless" :class="getBodyClass('Data', 2)"
+                    <td v-if="!targetless" :class="getBodyClass('Data', 2)"
                         :data-original-title="getPlayerTooltip(2, row, tableData.sums)">
                         {{getPlayerCell(2, row)}}</td>
-                    <td v-show="!targetless" v-if="hasBreakbarDamage" :class="getBodyClass('Data', 3)"
+                    <td v-if="!targetless && hasBreakbarDamage" :class="getBodyClass('Data', 3)"
                         :data-original-title="computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
                         {{round1(row.dps[3])}}
                     </td>
@@ -85,13 +85,13 @@
                     <td></td>
                     <td class="text-left">{{sum.name}}</td>
                     <td></td>
-                    <td v-show="!targetless" :data-original-title="getSumTooltip(0, sum)">
+                    <td v-if="!targetless" :data-original-title="getSumTooltip(0, sum)">
                         {{getSumCell(0, sum)}}</td>
-                    <td v-show="!targetless" :data-original-title="getSumTooltip(1, sum)">
+                    <td v-if="!targetless" :data-original-title="getSumTooltip(1, sum)">
                         {{getSumCell(1, sum)}}</td>
-                    <td v-show="!targetless" :data-original-title="getSumTooltip(2, sum)">
+                    <td v-if="!targetless" :data-original-title="getSumTooltip(2, sum)">
                         {{getSumCell(2, sum)}}</td>
-                    <td v-show="!targetless" v-if="hasBreakbarDamage">
+                    <td v-if="!targetless && hasBreakbarDamage">
                         {{round1(sum.dps[3])}}
                     </td>
                     <td :data-original-title="getSumTooltip(4, sum)">

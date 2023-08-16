@@ -73,6 +73,7 @@ class Animator {
             displaySelectedMinions: true,
             displayMechanics: true,
             displaySkillMechanics: true,
+            skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
             useActorHitboxWidth: false,
         };     
@@ -238,7 +239,7 @@ class Animator {
                 }
                 if (decoration) {
                     if (actor.owner) {
-                        decoration.usingSkillMode(actor.owner, actor.drawOnSelect);
+                        decoration.usingSkillMode(actor.owner, actor.category);
                         this.skillMechanicActorData.push(decoration);
                     } else {
                         this.mechanicActorData.push(decoration);
@@ -367,6 +368,15 @@ class Animator {
 
     toggleSkills() {
         this.displaySettings.displaySkillMechanics = !this.displaySettings.displaySkillMechanics;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleSkillCategoryMask(mask) {
+        if ( (this.displaySettings.skillMechanicsMask & mask) > 0) {           
+            this.displaySettings.skillMechanicsMask &= ~mask;
+        } else {
+            this.displaySettings.skillMechanicsMask |= mask;
+        }
         animateCanvas(noUpdateTime);
     }
 
@@ -704,8 +714,10 @@ class Animator {
             this.selectedActor.draw();     
             this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
         }
-        for (let i = 0; i < this.overheadActorData.length; i++) {
-            this.overheadActorData[i].draw();
+        if (this.displaySettings.displayMechanics) {
+            for (let i = 0; i < this.overheadActorData.length; i++) {
+                this.overheadActorData[i].draw();
+            }
         }
     }
 

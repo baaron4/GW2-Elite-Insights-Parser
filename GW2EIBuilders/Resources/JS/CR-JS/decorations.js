@@ -12,12 +12,12 @@ class MechanicDrawable {
         this.master = null;
         this.ownerID = null;
         this.owner = null;
-        this.drawOnSelect = false;
+        this.category = 0;
     }
 
-    usingSkillMode(ownerID, drawOnSelect) {
+    usingSkillMode(ownerID, category) {
         this.ownerID = ownerID;
-        this.drawOnSelect = drawOnSelect;
+        this.category = category;
         return this;
     }
 
@@ -99,9 +99,15 @@ class MechanicDrawable {
             if (!this.owner) {
                 return false;
             }
-            if (this.drawOnSelect && !this.owner.isSelected()) {
-                return false;
+            let renderMask = animator.displaySettings.skillMechanicsMask;
+            let drawOnSelect = (renderMask & SkillDecorationCategory["Show On Select"]) > 0;
+            renderMask &= ~SkillDecorationCategory["Show On Select"];
+            if ((this.category & renderMask) > 0) {
+                return true;
+            } else if (drawOnSelect && this.owner.isSelected()) {
+                return true;
             }
+            return false;
         }
         return true;
     }

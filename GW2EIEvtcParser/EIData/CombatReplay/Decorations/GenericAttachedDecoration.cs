@@ -4,10 +4,24 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
+        [Flags]
+        public enum SkillModeCategory : uint
+        {
+            NotApplicable = 0,
+            ShowOnSelect = 1 << 0,
+            ImportantBuffs = 1 << 1,
+            ProjectileManagement = 1 << 2,
+            Heal = 1 << 3,
+            Cleanse = 1 << 4,
+            Strip = 1 << 5,
+            Portal = 1 << 6,
+        }
+
+
         public Connector ConnectedTo { get; }
 
         public AgentConnector Owner { get; private set; }
-        public bool DrawOnSelect { get; private set; }
+        public SkillModeCategory SkillCategory { get; private set; }
 
         protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
         {
@@ -26,19 +40,21 @@ namespace GW2EIEvtcParser.EIData
         /// 
         /// </summary>
         /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
-        /// <param name="drawOnSelect"></param>
+        /// <param name="category"></param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, bool drawOnSelect = true)
+        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             if (owner == null)
             {
                 Owner = null;
+                SkillCategory = SkillModeCategory.NotApplicable;
             } 
             else
             {
                 Owner = new AgentConnector(owner.AgentItem.GetFinalMaster());
+                SkillCategory = category;
+                SkillCategory |= SkillModeCategory.ShowOnSelect;
             }
-            DrawOnSelect = drawOnSelect;
             return this;
         }
 
