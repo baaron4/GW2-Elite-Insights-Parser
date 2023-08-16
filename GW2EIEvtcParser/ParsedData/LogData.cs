@@ -19,7 +19,6 @@ namespace GW2EIEvtcParser.ParsedData
         public AgentItem PoV { get; private set; } = null;
         public string PoVAccount { get; private set; } = "N/A";
         public string PoVName { get; private set; } = "N/A";
-        public string PoVAccount { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
         private readonly string _dateFormatStd = "yyyy-MM-dd HH:mm:ss zzz";
         public string LogStart { get; private set; } = DefaultTimeValue;
