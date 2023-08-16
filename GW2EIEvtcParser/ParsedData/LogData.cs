@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
         public LanguageEvent.LanguageEnum LanguageID { get; }
         public ulong GW2Build { get; } = 0;
         public AgentItem PoV { get; private set; } = null;
+        public string PoVAccount { get; private set; } = "N/A";
         public string PoVName { get; private set; } = "N/A";
         public string PoVAccount { get; private set; } = "N/A";
         private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
