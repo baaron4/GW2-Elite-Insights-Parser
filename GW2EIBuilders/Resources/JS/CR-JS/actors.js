@@ -126,7 +126,7 @@ class IconDrawable {
     }
 
     getPosition() {
-        if (this.pos === null || this.pos.length === 0 || this.disconnected() || !this.canDraw()) {
+        if (this.pos === null || this.pos.length === 0 || this.disconnected()) {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
@@ -154,6 +154,9 @@ class IconDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;

@@ -104,7 +104,7 @@ class MechanicDrawable {
             renderMask &= ~SkillDecorationCategory["Show On Select"];
             if ((this.category & renderMask) > 0) {
                 return true;
-            } else if (drawOnSelect && this.owner.isSelected()) {
+            } else if (drawOnSelect && (this.owner.isSelected() || (this.owner.master && this.owner.master.isSelected()))) {
                 return true;
             }
             return false;
