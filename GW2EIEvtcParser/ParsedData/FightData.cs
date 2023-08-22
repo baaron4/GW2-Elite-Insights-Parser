@@ -213,6 +213,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.Dagda:
                     Logic = new CosmicObservatory(id);
                     break;
+                case ArcDPSEnums.TargetID.Cerus:
+                    Logic = new TempleOfFebe(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);

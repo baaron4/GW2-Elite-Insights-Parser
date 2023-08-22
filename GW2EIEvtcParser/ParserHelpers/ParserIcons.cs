@@ -165,6 +165,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
         private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
         private const string TargetDagda = "";
+        private const string TargetCerus = "";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";
@@ -761,6 +762,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.PrototypeIndigoCM, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
             { ArcDPSEnums.TargetID.Dagda, TargetDagda },
+            { ArcDPSEnums.TargetID.Cerus, TargetCerus },
         };
 
         /// <summary>
