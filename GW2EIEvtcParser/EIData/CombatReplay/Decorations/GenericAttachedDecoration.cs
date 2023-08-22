@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
         /// <param name="category"></param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable, ParserHelper.Spec spec = ParserHelper.Spec.Unknown, long skillID = 0)
+        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec spec = ParserHelper.Spec.Unknown, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             if (owner == null)
             {
