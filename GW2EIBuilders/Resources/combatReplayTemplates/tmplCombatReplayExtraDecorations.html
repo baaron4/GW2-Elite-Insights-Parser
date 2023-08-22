@@ -17,7 +17,7 @@
                     :checked="getAnimator().displaySettings.displayMechanics" v-on:change="getAnimator().toggleMechanics()">
                 <label class="form-check-label" for="mechanicsCheck">Mechanics</label>
             </div>
-            <div v-if="showSkills" class="form-check mb-2">
+            <div v-if="showSkills" class="form-check mb-2 mr-7">
                 <input type="checkbox" class="form-check-input" id="skillsCheck" 
                     :checked="getAnimator().displaySettings.displaySkillMechanics" v-on:change="getAnimator().toggleSkills()">
                 <label class="form-check-label" for="skillsCheck">Skills</label>
