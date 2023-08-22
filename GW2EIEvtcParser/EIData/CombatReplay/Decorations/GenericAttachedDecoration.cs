@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,6 +24,10 @@ namespace GW2EIEvtcParser.EIData
         public AgentConnector Owner { get; private set; }
         public SkillModeCategory SkillCategory { get; private set; }
 
+        public ParserHelper.Spec Spec { get; private set; }
+
+        public long SkillID { get; private set; }
+
         protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
         {
             ConnectedTo = connector;
@@ -42,18 +47,22 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
         /// <param name="category"></param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable, ParserHelper.Spec spec = ParserHelper.Spec.Unknown, long skillID = 0)
         {
             if (owner == null)
             {
                 Owner = null;
                 SkillCategory = SkillModeCategory.NotApplicable;
+                Spec = ParserHelper.Spec.Unknown;
+                SkillID = 0;
             } 
             else
             {
                 Owner = new AgentConnector(owner.AgentItem.GetFinalMaster());
                 SkillCategory = category;
                 SkillCategory |= SkillModeCategory.ShowOnSelect;
+                Spec = spec;
+                SkillID = skillID;
             }
             return this;
         }
