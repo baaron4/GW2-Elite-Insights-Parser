@@ -23,9 +23,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = EncounterIconTempleOfFebe;
             Extension = "tmpfeb";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000002;
+        }
+
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap(CombatReplayTempleOfFebe,
+                            // TODO
+                            (1008, 1008),
+                            (-1420, 3010, 1580, 6010));
+        }
+
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Temple of Febe";
         }
     }
 }

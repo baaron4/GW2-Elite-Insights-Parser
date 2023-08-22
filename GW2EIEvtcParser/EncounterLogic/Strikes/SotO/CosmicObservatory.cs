@@ -23,9 +23,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             }
             );
+            Icon = EncounterIconCosmicObservatory;
             Extension = "cosobs";
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
+        }
+
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap(CombatReplayCosmicObservatory,
+                            // TODO
+                            (1008, 1008),
+                            (-1420, 3010, 1580, 6010));
+        }
+
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Cosmic Observatory";
         }
     }
 }

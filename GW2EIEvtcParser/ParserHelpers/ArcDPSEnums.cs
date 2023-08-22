@@ -1072,6 +1072,7 @@ namespace GW2EIEvtcParser
             PrototypeVermilionCM = 25414,
             PrototypeArseniteCM = 25416,
             PrototypeIndigoCM = 25423,
+            Dagda = 25705,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
