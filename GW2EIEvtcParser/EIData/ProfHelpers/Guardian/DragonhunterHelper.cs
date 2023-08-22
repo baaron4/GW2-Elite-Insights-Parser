@@ -43,12 +43,7 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem dst = x.To;
                 return CheckTether(log, src, dst, x.Time);
             }),
-            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.February2020Balance, GW2Builds.November2022Balance).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AgentItem dst = x.To;
-                return CheckTether(log, src, dst, x.Time);
-            }),
-            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.November2022Balance, GW2Builds.May2023Balance).UsingChecker((x, log) => {
+            new BuffDamageModifierTarget(JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2023Balance).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 return CheckTether(log, src, dst, x.Time);
