@@ -228,8 +228,10 @@
         public const long VirtueOfResolve = 9119;
         public const long ProtectorsStrikeCounterHit = 9121;
         public const long ShieldOfWrathBuff = 9123;
+        public const long SanctuaryGuardian = 9128;
         public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
+        public const long LineOfWarding = 9144;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
         public const long SignetOfJudgmentSkill = 9120;
@@ -239,7 +241,9 @@
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
         public const long POV_AegisTimer = 9177; // guardian passive aegis
+        public const long ShieldOfTheAvenger = 9182;
         public const long SymbolOfSpears = 9192;
+        public const long RingOfWarding = 9195;
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
@@ -606,6 +610,7 @@
         public const long MindSpike = 10172;
         public const long IllusionaryLeapSkill = 10173;
         public const long MorphedPolymorphMoa = 10179;
+        public const long Veil = 10187;
         public const long CryOfFrustration = 10190;
         public const long MindWrack = 10191;
         public const long DistortionSkill = 10192;
@@ -613,6 +618,7 @@
         public const long PortalWeaving = 10198;
         public const long PortalExeunt = 10199;
         public const long Blink = 10200;
+        public const long NullField = 10203;
         public const long MantraOfDistraction = 10204;
         public const long PowerLock = 10206;
         public const long MantraOfResolve = 10207;
@@ -2857,6 +2863,7 @@
         public const long ExecutionersCallingSkill = 62525;
         public const long RushingJusticeBuff = 62529;
         public const long ExitHarbingerShroud = 62540;
+        public const long RainOfSwords = 62553;
         public const long CutterBurst = 62554;
         public const long DoomApproaches = 62558;
         public const long EnterHarbingerShroud = 62567;
