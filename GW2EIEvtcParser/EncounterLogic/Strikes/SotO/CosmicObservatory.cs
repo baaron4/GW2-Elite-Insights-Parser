@@ -31,11 +31,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
-            return null;
             return new CombatReplayMap(CombatReplayCosmicObservatory,
                             // TODO
                             (1008, 1008),
-                            (-1420, 3010, 1580, 6010));
+                            (0,0,0,0));
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
