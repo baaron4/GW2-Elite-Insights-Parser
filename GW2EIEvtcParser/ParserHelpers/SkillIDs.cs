@@ -1591,7 +1591,7 @@
         public const long Incoming = 35140;
         public const long AchievementEligibilityMineControl = 35148;
         public const long SplishSplash = 35153;
-        public const long PortalEntranceWhiteMantleWatchwork = 35153;
+        public const long PortalEntranceWhiteMantleWatchwork = 35155;
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
