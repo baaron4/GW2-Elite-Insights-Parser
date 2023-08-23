@@ -155,6 +155,10 @@
         internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
         // Relics
         internal const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
+        internal const string RelicOfTheAristocracy = "https://wiki.guildwars2.com/images/6/60/Relic_of_the_Aristocracy.png";
+        internal const string RelicOfTheMonk = "https://wiki.guildwars2.com/images/c/c9/Relic_of_the_Monk.png";
+        internal const string RelicOfFireworks = "https://wiki.guildwars2.com/images/6/6c/Relic_of_Fireworks.png";
+        internal const string RelicOfTheThief = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Thief.png";
         #endregion Gear
 
         #region Fractal

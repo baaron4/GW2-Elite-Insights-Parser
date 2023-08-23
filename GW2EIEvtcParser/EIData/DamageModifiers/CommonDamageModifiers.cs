@@ -45,6 +45,8 @@ namespace GW2EIEvtcParser.EIData
                 var tst = log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfTheDragonhunter, x.Time);
                 return tst;
             }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
+            new BuffDamageModifier(RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, BuffImages.RelicOfTheThief, DamageModifierMode.All),
+            new BuffDamageModifier(RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.All),
         };
         internal static readonly List<DamageModifier> SharedDamageModifiers = new List<DamageModifier>
         {
