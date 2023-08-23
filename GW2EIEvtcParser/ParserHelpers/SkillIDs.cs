@@ -806,6 +806,7 @@
         public const long IceDrakeVenomSkill = 13096;
         public const long ShadowReturn = 13106;
         public const long TwistingFangs = 13110;
+        public const long ShadowRefuge = 13117;
         public const long BasiliskVenomSkill = 13132;
         public const long BasiliskVenomBuff = 13133;
         public const long DaggerStorm = 13134;
