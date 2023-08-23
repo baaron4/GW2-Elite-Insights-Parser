@@ -559,7 +559,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Static-Dynamic Synergy", AchievementEligibilityStaticDynamicSynergy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Empowered (Cerus)", EmpoweredCerus, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered (Temple of Febe)", EmpoweredTempleOfFebe, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Empowered Envy (Cerus)", EmpoweredEnvyCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Empowered Malice (Cerus)", EmpoweredMaliceCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Empowered Malice", EmpoweredMalice, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
