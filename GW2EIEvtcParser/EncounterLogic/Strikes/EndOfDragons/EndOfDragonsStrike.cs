@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.EoDStrikeReward);
+            RewardEvent reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);

@@ -98,7 +98,7 @@ namespace GW2EIEvtcParser
             internal const int OldRaidReward1 = 55821; // On each kill
             internal const int OldRaidReward2 = 60685; // On each kill
             internal const int CurrentRaidReward = 22797; // Once per week
-            internal const int EoDStrikeReward = 29453;
+            internal const int PostEoDStrikeReward = 29453;
         }
 
         /// <summary>
