@@ -2072,6 +2072,7 @@
         public const long POV_SandShade1 = 45225;
         public const long NarcoticSpores = 45262;
         public const long PerfectWeave = 45267;
+        public const long WindsOfDisenchantment = 45333;
         public const long POV_TrailOfAnguishMovingBuff = 45424; // reapplied as you move, 150ms duration
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
