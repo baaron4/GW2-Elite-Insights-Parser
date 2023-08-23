@@ -131,8 +131,8 @@
         internal const string EncounterIconKainengOverlook = "https://i.imgur.com/7OutZup.png";
         internal const string EncounterIconHarvestTemple = "https://i.imgur.com/gZRqzlr.png";
         internal const string EncounterIconOldLionsCourt = "https://i.imgur.com/Q2g9aLD.png";
-        internal const string EncounterIconCosmicObservatory = "";
-        internal const string EncounterIconTempleOfFebe = "";
+        internal const string EncounterIconCosmicObservatory = "https://i.imgur.com/v6vjRsH.png";
+        internal const string EncounterIconTempleOfFebe = "https://i.imgur.com/1cGN1UT.png";
 
         // Combat Replay Maps
         internal const string CombatReplayFreezie = "";
