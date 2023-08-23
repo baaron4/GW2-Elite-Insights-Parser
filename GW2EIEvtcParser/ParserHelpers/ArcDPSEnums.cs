@@ -872,6 +872,14 @@ namespace GW2EIEvtcParser
             VoidMelter = 24223,
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
+            // Temple of Febe
+            EmbodimentOfGluttony = 25677,
+            EmbodimentOfRage = 25686,
+            EmbodimentOfDespair = 26034,
+            EmbodimentOfRegret = 26049,
+            EmbodimentOfEnvy = 25967,
+            EmbodimentOfMalice = 25700,
+            MaliciousShadow = 25747,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,

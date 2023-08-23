@@ -557,6 +557,18 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Aether Aversion", AchievementEligibilityAetherAversion, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Fear Not This Knight", AchievementEligibilityFearNotThisKnight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Static-Dynamic Synergy", AchievementEligibilityStaticDynamicSynergy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Temple of Febe
+            new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered (Cerus)", EmpoweredCerus, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Envy (Cerus)", EmpoweredEnvyCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Malice (Cerus)", EmpoweredMaliceCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Malice", EmpoweredMalice, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Envy", EmpoweredEnvy, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Rage", EmpoweredRage, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Regret", EmpoweredRegret, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Gluttony", EmpoweredGluttony, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Empowered Despair", EmpoweredDespair, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Kryptis-Possessed", KryptisPossessed, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),

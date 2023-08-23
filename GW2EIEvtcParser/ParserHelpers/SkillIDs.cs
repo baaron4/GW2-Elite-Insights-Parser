@@ -3485,7 +3485,23 @@
         public const long AspectOfLethargyNoTetherBuff = 69458;
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
+        public const long EmpoweredEnvy = 69479;
+        public const long EmpoweredCerus = 69550;
+        public const long KryptisPossessed = 69647;
+        public const long RelicOfTheAristocracy = 69795;
+        public const long RelicOfFireworks = 69855;
+        public const long EmpoweredRage = 70181;
+        public const long Insatiable = 70253;
         public const long RelicOfTheDragonhunter = 70350;
+        public const long POV_Petrify = 70504; // could be POV only
+        public const long EmpoweredRegret = 70544;
+        public const long EmpoweredMalice = 70621;
+        public const long EmpoweredGluttony = 70687;
+        public const long RelicOfTheThief = 70767;
+        public const long EmpoweredEnvyCerus = 70974;
+        public const long EmpoweredMaliceCerus = 71073;
+        public const long RelicOfTheMonk = 71132;
+        public const long EmpoweredDespair = 71276;
     }
 
 }
