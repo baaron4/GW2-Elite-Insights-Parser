@@ -37,6 +37,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (0,0,0,0));
         }
 
+        protected override List<int> GetTargetsIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Cerus,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfDespair,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfMalice,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfRage,
+                (int)ArcDPSEnums.TrashID.EmbodimentOfRegret,
+            };
+        }
+
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>() { ArcDPSEnums.TrashID.MaliciousShadow };
+        }
+
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Temple of Febe";

@@ -1062,6 +1062,12 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.InspectorEllenKiel, TrashInspectorEllenKiel },
             { ArcDPSEnums.TrashID.JadeMawTentacle, TrashJadeMawTentacle },
             { ArcDPSEnums.TrashID.AwakenedAbomination, TrashAwakenedAbomination },
+            { ArcDPSEnums.TrashID.EmbodimentOfDespair, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfEnvy, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfGluttony, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashGenericRedEnemySkull },
         };
 
         /// <summary>
