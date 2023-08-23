@@ -1245,6 +1245,7 @@
         public const long TimeBomb = 31485;
         public const long StaticCharge = 31487;
         public const long SapperBombSkill = 31488;
+        public const long SublimeConversion = 31496;
         public const long SpectralDarkness = 31498;
         public const long CelestialAvatar = 31508;
         public const long WingSwipeWyvern = 31520;
@@ -3158,6 +3159,7 @@
         public const long DragonsEndContributor1 = 65384;
         public const long HardenedShell = 65396;
         public const long NightmareDevastationOW1 = 65410;
+        public const long HunkerDownPetTurtle = 65418;
         public const long CosmicMeteorJormag = 65416;
         public const long EnhancedDestructiveAuraSkill1 = 65423;
         public const long LavaSlam = 65427;
