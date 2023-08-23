@@ -667,6 +667,10 @@
         public const long DamageBonus5 = 10493;
         public const long SpeedBonus15 = 10495;
         public const long DamageReduction5 = 10496;
+        public const long WellOfBlood = 10527;
+        public const long WellOfCorruption = 10545;
+        public const long WellOfSuffering = 10546;
+        public const long Plaguelands = 10549;
         public const long LifeLeech = 10560;
         public const long PlagueSignetSkill = 10562;
         public const long LifeSiphon = 10563;
@@ -681,6 +685,7 @@
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
         public const long Epidemic = 10606;
+        public const long WellOfDarkness = 10607;
         public const long SignetOfUndeath = 10610;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
@@ -692,6 +697,7 @@
         public const long SpectralWalkSkill = 10685;
         public const long SpectralWalkTeleportBuff = 10686;
         public const long SpectralRecallSkill = 10687;
+        public const long CorrosivePoisonCloud = 10689;
         public const long UnholyFeast = 10701;
         public const long Technobabble = 12318;
         public const long PowerSuit = 12326;
@@ -1949,6 +1955,7 @@
         public const long POV_StealHealthBuff = 42870;
         public const long KallasFervor = 42883;
         public const long EpilogueAshesOfTheJust = 42898;
+        public const long SandSwell = 42917;
         public const long FlameSurge = 42924;
         public const long EpilogueEternalOasis = 42925;
         public const long EnterPhotonForge = 42938;
