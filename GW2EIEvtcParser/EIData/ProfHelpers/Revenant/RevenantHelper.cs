@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, BuffImages.EmbraceTheDarkness),
             new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.EnchantedDaggers),
             new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PhaseTraversal),
-            new Buff("Tranquil", Tranquil, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ProjectTranquility),
+            new Buff("Tranquil", Tranquil, Source.Revenant, BuffClassification.Other, BuffImages.ProjectTranquility),
             new Buff("Impossible Odds", ImpossibleOddsBuff, Source.Revenant, BuffClassification.Other, BuffImages.ImpossibleOdds),
             new Buff("Jade", Jade, Source.Revenant, BuffClassification.Other, BuffImages.Stun),
             new Buff("Legendary Centaur Stance", LegendaryCentaurStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryCentaurStance),

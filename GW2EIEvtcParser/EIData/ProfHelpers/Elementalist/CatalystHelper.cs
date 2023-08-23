@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Elemental Celerity", ElementalCelerity, Source.Catalyst, BuffClassification.Other, BuffImages.ElementalCelerity),
             new Buff("Soothing Water", SoothingWaterBuff, Source.Catalyst, BuffClassification.Other, BuffImages.SoothingWater),
             new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElementalEmpowerment),
-            new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
+            new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
             new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),
         };
     }
