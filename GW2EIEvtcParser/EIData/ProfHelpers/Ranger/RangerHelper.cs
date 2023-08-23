@@ -76,7 +76,8 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileWhiteRaven,
             (int)MinionID.JuvenileWhiteTiger,
             (int)MinionID.JuvenileWolf,
-            (int)MinionID.JuvenileHyena
+            (int)MinionID.JuvenileHyena,
+            (int)MinionID.JuvenileAetherHunter
         };
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
