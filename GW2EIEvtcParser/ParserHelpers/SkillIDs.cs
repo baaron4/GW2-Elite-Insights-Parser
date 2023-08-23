@@ -1107,6 +1107,7 @@
         public const long LegendaryDwarfStanceSkill = 28419;
         public const long VentarisWill = 28427;
         public const long LegendaryDemonStanceSkill = 28494;
+        public const long InspiringReinforcement = 28516;
         public const long EnchantedDaggers = 28557;
         public const long HardeningPersistence = 28957;
         public const long RiftSlashSkill = 28964;
