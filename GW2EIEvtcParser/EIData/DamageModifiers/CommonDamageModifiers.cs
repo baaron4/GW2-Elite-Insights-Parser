@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -21,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
         };
         internal static readonly List<DamageModifier> GearDamageModifiers = new List<DamageModifier>
         {
+            // Runes
             new DamageLogDamageModifier("Scholar Rune", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.All ).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
             new DamageLogDamageModifier("Scholar Rune", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.All ).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
             new DamageLogDamageModifier("Eagle Rune", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear,"https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png", (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
@@ -33,7 +35,16 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(NumberOfBoons, "Spellbreaker Rune", "7% on boonless target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             new BuffDamageModifierTarget(Chilled, "Ice Rune", "7% on chilled target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             new BuffDamageModifier(Fury, "Rage Rune", "5% under fury",  DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png", DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            // Sigils
             new BuffDamageModifierTarget(new long[] { Stun, Knockdown }, "Impact Sigil", "7% on stunned or knocked-down target",  DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png", DamageModifierMode.All),
+            // Relics
+            new BuffDamageModifierTarget(RelicOfTheDragonhunter, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDragonhunter, DamageModifierMode.All).UsingChecker((x, log) =>
+            {
+                AgentItem src = x.From;
+                AgentItem dst = x.To;
+                var tst = log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfTheDragonhunter, x.Time);
+                return tst;
+            }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         };
         internal static readonly List<DamageModifier> SharedDamageModifiers = new List<DamageModifier>
         {

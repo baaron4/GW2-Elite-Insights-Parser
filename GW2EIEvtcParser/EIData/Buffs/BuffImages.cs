@@ -153,6 +153,8 @@
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
         internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
         internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
+        // Relics
+        internal const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
         #endregion Gear
 
         #region Fractal

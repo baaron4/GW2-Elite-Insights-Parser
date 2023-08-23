@@ -153,15 +153,17 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
             new Buff("Leech (Sigil / Runes)", LeechBuff, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
             // Runes
-            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk).WithBuilds(GW2Builds.November2018Rune, GW2Builds.EndOfLife),
-            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier),
-            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation),
-            new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical),
+            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             // Exotic Halloween Upgrades
             new Buff("Spectral Countenance", SpectralCountenance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Ghastly Appearance", GhastlyAppearance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Gourd Vibrations", GourdVibrations, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
+            // Relics
+            new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunter, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Other, BuffImages.RelicOfTheDragonhunter), // Applied on target
         };
 
     }

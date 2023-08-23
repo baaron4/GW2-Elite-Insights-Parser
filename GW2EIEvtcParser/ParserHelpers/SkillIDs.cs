@@ -3485,6 +3485,7 @@
         public const long AspectOfLethargyNoTetherBuff = 69458;
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
+        public const long RelicOfTheDragonhunter = 70350;
     }
 
 }

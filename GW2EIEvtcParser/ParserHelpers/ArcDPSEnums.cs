@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
-            CappedDuration = 2,
+            StackingSomething = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
             Regeneration = 3,
             Stacking = 4,
             Force = 5,
