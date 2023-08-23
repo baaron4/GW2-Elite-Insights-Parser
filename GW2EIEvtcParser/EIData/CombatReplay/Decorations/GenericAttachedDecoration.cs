@@ -41,11 +41,14 @@ namespace GW2EIEvtcParser.EIData
             return new LineDecoration(growing, (start, end), color, this.ConnectedTo, other.ConnectedTo);
         }
 
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
-        /// <param name="category"></param>
+        /// <param name="spec">Spec of the skill, put Unknown for skills not specific to a certain spec</param>
+        /// <param name="skillID">ID of the skill</param>
+        /// <param name="category">Category of the skill</param>
         /// <returns></returns>
         public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
@@ -67,6 +70,13 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        /// <summary>
+        /// No Spec version of UsingSkillMode
+        /// </summary>
+        /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
+        /// <param name="skillID">ID of the skill</param>
+        /// <param name="category">Category of the skill</param>
+        /// <returns></returns>
         public GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             return UsingSkillMode(owner, ParserHelper.Spec.Unknown, skillID, category);
