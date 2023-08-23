@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
+            return null;
             return new CombatReplayMap(CombatReplayCosmicObservatory,
                             // TODO
                             (1008, 1008),
