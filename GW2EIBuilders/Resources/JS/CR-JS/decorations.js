@@ -68,7 +68,7 @@ class MechanicDrawable {
         this.connectedTo = connectedTo;
         if (connectedTo.interpolationMethod >= 0) {
             this.positionFetcher = interpolatedPositionFetcher;
-        } else if (connectedTo instanceof array) {
+        } else if (connectedTo instanceof Array) {
             this.positionFetcher = staticPositionFetcher;
         } else {
             this.positionFetcher = masterPositionFetcher;
