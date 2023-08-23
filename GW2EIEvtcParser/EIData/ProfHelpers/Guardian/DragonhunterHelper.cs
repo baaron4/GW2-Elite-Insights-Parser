@@ -54,8 +54,8 @@ namespace GW2EIEvtcParser.EIData
                 return CheckTether(log, src, dst, x.Time);
             }),
             //         
-            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Heavy Light", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, BuffImages.HeavyLight, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
-            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Heavy Light", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, BuffImages.HeavyLight, DamageModifierMode.All)
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, BuffImages.HeavyLight, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
+            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, BuffImages.HeavyLight, DamageModifierMode.All)
                 .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None).UsingApproximate(true).WithBuilds(GW2Builds.November2022Balance),
         };
 
