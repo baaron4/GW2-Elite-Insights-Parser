@@ -3488,6 +3488,7 @@
         public const long EmpoweredEnvy = 69479;
         public const long EmpoweredTempleOfFebe = 69550;
         public const long KryptisPossessed = 69647;
+        public const long InvulnerabilityCerus = 69722;
         public const long RelicOfTheAristocracy = 69795;
         public const long RelicOfFireworks = 69855;
         public const long EmpoweredRage = 70181;

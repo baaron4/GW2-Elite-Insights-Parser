@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
                 {
                     phase.AddTarget(target);
                 }

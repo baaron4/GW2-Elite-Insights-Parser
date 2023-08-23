@@ -51,6 +51,47 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+        {
+            List<PhaseData> phases = GetInitialPhase(log);
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cerus));
+            if (mainTarget == null)
+            {
+                throw new MissingKeyActorsException("Cerus not found");
+            }
+            phases[0].AddTarget(mainTarget);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            // Invul check
+            phases.AddRange(GetPhasesByInvul(log, InvulnerabilityCerus, mainTarget, true, true));
+            for (int i = 1; i < phases.Count; i++)
+            {
+                PhaseData phase = phases[i];
+                if (i % 2 == 0)
+                {
+                    phase.Name = "Split " + (i) / 2;
+                    var ids = new List<int>
+                    {
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfDespair,
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy,
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony,
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfMalice,
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfRage,
+                        (int)ArcDPSEnums.TrashID.EmbodimentOfRegret,
+                    };
+                    AddTargetsToPhaseAndFit(phase, ids, log);
+                }
+                else
+                {
+                    phase.Name = "Phase " + (i + 1) / 2;
+                    phase.AddTarget(mainTarget);
+                }
+            }
+            return phases;
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>() { ArcDPSEnums.TrashID.MaliciousShadow };
