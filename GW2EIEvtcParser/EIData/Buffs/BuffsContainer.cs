@@ -169,9 +169,9 @@ namespace GW2EIEvtcParser.EIData
             return _buffsByName.TryGetValue(name, out buff);
         }
 
-        internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)
+        internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, uint buffInstance)
         {
-            return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID);
+            return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID, buffInstance);
         }
 
         // Non shareable buffs

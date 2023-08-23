@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (!_sourceFinderRan && By == ParserHelper._unknownAgent)
             {
                 _sourceFinderRan = true;
-                By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID);
+                By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance);
             }
         }
 
