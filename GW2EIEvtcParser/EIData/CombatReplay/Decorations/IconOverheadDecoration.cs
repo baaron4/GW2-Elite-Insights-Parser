@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec Spec = ParserHelper.Spec.Unknown, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec Spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             return this;
         }
