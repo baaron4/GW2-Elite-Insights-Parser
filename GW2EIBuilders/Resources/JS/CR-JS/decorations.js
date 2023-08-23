@@ -4,12 +4,77 @@
 /*global animator, ToRadians, facingIcon, animateCanvas, noUpdateTime*/
 "use strict";
 //// BASE MECHANIC
+
+function interpolatedPositionFetcher(connection, master) {
+    var index = -1;
+    var totalPoints = connection.positions.length / 3;
+    for (var i = 0; i < totalPoints; i++) {
+        var posTime = connection.positions[3 * i + 2];
+        if (time < posTime) {
+            break;
+        }
+        index = i;
+    }
+    if (index === -1) {
+        return {
+            x: connection.positions[0],
+            y: connection.positions[1]
+        };
+    } else if (index === totalPoints - 1) {
+        return {
+            x: connection.positions[3 * index],
+            y: connection.positions[3 * index + 1]
+        };
+    } else {
+        var cur = {
+            x: connection.positions[3 * index],
+            y: connection.positions[3 * index + 1]
+        };
+        var curTime = connection.positions[3 * index + 2];
+        var next = {
+            x: connection.positions[3 * (index + 1)],
+            y: connection.positions[3 * (index + 1) + 1]
+        };
+        var nextTime = connection.positions[3 * (index + 1) + 2];
+        var pt = {
+            x: 0,
+            y: 0
+        };
+        pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
+        pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
+        return pt;
+    }
+}
+
+function staticPositionFetcher(connection, master) {
+    return {
+        x: connection[0],
+        y: connection[1]
+    };
+}
+
+function masterPositionFetcher(connection, master) {
+    if (!master) {
+        return null;
+    }
+    return master.getPosition();
+}
+
 class MechanicDrawable {
     constructor(start, end, connectedTo) {
         this.start = start;
         this.end = end;
+        this.positionFetcher = null;
         this.connectedTo = connectedTo;
+        if (connectedTo.interpolationMethod >= 0) {
+            this.positionFetcher = interpolatedPositionFetcher;
+        } else if (connectedTo instanceof array) {
+            this.positionFetcher = staticPositionFetcher;
+        } else {
+            this.positionFetcher = masterPositionFetcher;
+        }
         this.master = null;
+        // Skill mode
         this.ownerID = null;
         this.owner = null;
         this.category = 0;
@@ -31,66 +96,21 @@ class MechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.connectedTo.interpolationMethod >= 0) {
-            // only linear support for now
-            var index = -1;
-            var totalPoints = this.connectedTo.positions.length / 3;
-            for (var i = 0; i < totalPoints; i++) {
-                var posTime = this.connectedTo.positions[3 * i + 2];
-                if (time < posTime) {
-                    break;
-                }
-                index = i;
-            }
-            if (index === -1) {
-                return {
-                    x: this.connectedTo.positions[0],
-                    y: this.connectedTo.positions[1]
-                }; 
-            } else if (index === totalPoints - 1) {
-                return {
-                    x: this.connectedTo.positions[3 * index],
-                    y: this.connectedTo.positions[3 * index + 1]
-                }; 
-            } else {
-                var cur = {
-                    x: this.connectedTo.positions[3 * index ],
-                    y: this.connectedTo.positions[3 * index + 1]
-                };
-                var curTime = this.connectedTo.positions[3 * index + 2];
-                var next = {
-                    x: this.connectedTo.positions[3 * (index + 1) ],
-                    y: this.connectedTo.positions[3 * (index + 1) + 1]
-                };
-                var nextTime = this.connectedTo.positions[3 * (index + 1) + 2];
-                var pt = {
-                    x: 0,
-                    y: 0
-                };                    
-                pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
-                pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
-                return pt;
-            }
-        }else if (this.connectedTo instanceof Array) {
-            return {
-                x: this.connectedTo[0],
-                y: this.connectedTo[1]
-            };
-        } else {
-            if (this.master === null) {
-                let masterId = this.connectedTo;
-                this.master = animator.getActorData(masterId);
-            }
-            if (!this.master) {
-                return null;
-            }
-            return this.master.getPosition();
-        }
+        return this.positionFetcher(this.connectedTo, this.master);
     }
 
     canDraw() {
         if (this.connectedTo === null) {
             return false;
+        }
+        if (this.positionFetcher === masterPositionFetcher) {
+            if (this.master === null) {
+                let masterId = this.connectedTo;
+                this.master = animator.getActorData(masterId);
+            }
+            if (this.master && !this.master.canDraw()) {
+                return false;
+            }
         }
         if (this.ownerID !== null) {
             if (this.owner === null) {
@@ -468,7 +488,15 @@ class LineMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, connectedFrom, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.connectedFrom = connectedFrom;
-        this.endmaster = null;
+        this.targetPositionFetcher = null;
+        if (connectedFrom.interpolationMethod >= 0) {
+            this.targetPositionFetcher = interpolatedPositionFetcher;
+        } else if (connectedFrom instanceof array) {
+            this.targetPositionFetcher = staticPositionFetcher;
+        } else {
+            this.targetPositionFetcher = masterPositionFetcher;
+        }
+        this.endMaster = null;
     }
 
     getTargetPosition() {
@@ -476,26 +504,21 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.connectedFrom instanceof Array) {
-            return {
-                x: this.connectedFrom[0],
-                y: this.connectedFrom[1]
-            };
-        } else {
-            if (this.endmaster === null) {
-                let masterId = this.connectedFrom;
-                this.endmaster = animator.getActorData(masterId);
-            }       
-            if (!this.endmaster) {
-                return null;
-            }
-            return this.endmaster.getPosition();
-        }
+        return this.targetPositionFetcher(this.connectedFrom, this.endMaster);
     }
     
     canDraw() {
         if (this.connectedFrom === null) {
             return false;
+        }
+        if (this.targetPositionFetcher === masterPositionFetcher) {
+            if (this.endMaster === null) {
+                let masterId = this.connectedFrom;
+                this.endMaster = animator.getActorData(masterId);
+            }
+            if (this.endMaster && !this.endMaster.canDraw()) {
+                return false;
+            }
         }
         return super.canDraw();
     }
