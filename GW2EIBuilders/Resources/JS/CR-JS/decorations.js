@@ -108,7 +108,7 @@ class MechanicDrawable {
                 let masterId = this.connectedTo;
                 this.master = animator.getActorData(masterId);
             }
-            if (this.master && !this.master.canDraw()) {
+            if (!this.master || !this.master.canDraw()) {
                 return false;
             }
         }
@@ -516,7 +516,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
                 let masterId = this.connectedFrom;
                 this.endMaster = animator.getActorData(masterId);
             }
-            if (this.endMaster && !this.endMaster.canDraw()) {
+            if (!this.endMaster || !this.endMaster.canDraw()) {
                 return false;
             }
         }
