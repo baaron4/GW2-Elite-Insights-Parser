@@ -24,6 +24,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return 2 == FindRelatedEvents(combatData.GetBuffData(PositiveFlow).OfType<BuffApplyEvent>(), bae.Time).Count(apply => apply.By == bae.To && apply.To == bae.To);
                 }),
+            new EffectCastFinder(DragonspikeMineSkill, EffectGUIDs.BladeswornDragonspikeMine).UsingSrcSpecChecker(Spec.Bladesworn),
         };
 
         private static readonly HashSet<long> _gunsaberForm = new HashSet<long>

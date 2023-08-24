@@ -2935,6 +2935,7 @@
         public const long EmpoweringAuras = 62939;
         public const long DeployJadeSphereAir = 62940;
         public const long DragonSlashReach = 62951;
+        public const long DragonspikeMineSkill = 62960;
         public const long SwiftCut = 62966;
         public const long FlowStabilizer = 62967;
         public const long RockyLoopSkill = 62975;

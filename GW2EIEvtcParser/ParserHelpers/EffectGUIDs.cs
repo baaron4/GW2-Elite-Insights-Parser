@@ -93,6 +93,7 @@ namespace GW2EIEvtcParser
         public const string WarriorSignetOfStamina = "1E720C4D42448D45BDCB6307869D3D66"; // not actually instant cast, just for reference
         public const string WarriorDolyakSignet = "D7F8FA5695F8714B99A51EE72EF6E178";
         public const string SpellbreakerWindsOfDisenchantment = "926917599B6B6E498AD62B812001B823";
+        public const string BladeswornDragonspikeMine = "B5BE541DBF290E4AA381E1E52A2A3525";
         // Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
