@@ -872,6 +872,11 @@ namespace GW2EIEvtcParser
             VoidMelter = 24223,
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
+            // Cosmic Observatory
+            TheTormented1 = 25829,
+            TheTormented2 = 26000,
+            TheTormented3 = 26016,
+            SoulFeast = 26069,
             // Temple of Febe
             EmbodimentOfGluttony = 25677,
             EmbodimentOfRage = 25686,
