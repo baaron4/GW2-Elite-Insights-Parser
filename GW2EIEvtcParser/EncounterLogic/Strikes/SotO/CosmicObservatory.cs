@@ -78,12 +78,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (tormentedAgentToBeGrouped.FirstAware >= currentReferenceTormented.FirstAware && tormentedAgentToBeGrouped.FirstAware <= currentReferenceTormented.LastAware)
                     {
                         group.Add(tormentedAgentToBeGrouped);
+                        processedAgents.Add(tormentedAgentToBeGrouped);
                         currentReferenceTormented = tormentedAgentToBeGrouped;
                     }
-                }
-                foreach (AgentItem agent in group)
-                {
-                    processedAgents.Add(agent);
                 }
                 tormentedGroups.Add(group);
             }
