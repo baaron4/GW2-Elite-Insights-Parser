@@ -135,6 +135,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            int curTormented = 1;
+            foreach (AbstractSingleActor target in Targets)
+            {
+                if (target.IsSpecies(ArcDPSEnums.TrashID.TheTormented1) || target.IsSpecies(ArcDPSEnums.TrashID.TheTormented2) || target.IsSpecies(ArcDPSEnums.TrashID.TheTormented3))
+                {
+                    target.OverrideName(target.Character + " " + curTormented++);
+                }
+            }
+        }
+
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>()
