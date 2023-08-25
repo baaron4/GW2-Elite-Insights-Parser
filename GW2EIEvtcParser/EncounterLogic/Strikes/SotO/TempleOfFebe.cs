@@ -92,6 +92,44 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            int curDespair = 1;
+            int curEnvy = 1;
+            int curGluttony = 1;
+            int curMalice = 1;
+            int curRage = 1;
+            int curRegret = 1;
+            foreach (AbstractSingleActor target in Targets)
+            {
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfDespair))
+                {
+                    target.OverrideName(target.Character + " " + curDespair++);
+                }
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfEnvy))
+                {
+                    target.OverrideName(target.Character + " " + curEnvy++);
+                }
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfGluttony))
+                {
+                    target.OverrideName(target.Character + " " + curGluttony++);
+                }
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfMalice))
+                {
+                    target.OverrideName(target.Character + " " + curMalice++);
+                }
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRage))
+                {
+                    target.OverrideName(target.Character + " " + curRage++);
+                }
+                if (target.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRegret))
+                {
+                    target.OverrideName(target.Character + " " + curRegret++);
+                }
+            }
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>() { ArcDPSEnums.TrashID.MaliciousShadow };
