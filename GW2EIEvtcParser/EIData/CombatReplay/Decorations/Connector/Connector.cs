@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
         private Point3D Translation { get; set; }
 
         private bool TranslationAfterRotation { get; set; }
-        public class ConnectorDescriptor
+        public abstract class ConnectorDescriptor
         {
             public IReadOnlyList<float> Translation { get; private set; }
             public bool TranslationAfterRotation { get; private set; }
