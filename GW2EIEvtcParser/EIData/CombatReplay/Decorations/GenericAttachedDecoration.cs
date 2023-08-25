@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,6 +24,10 @@ namespace GW2EIEvtcParser.EIData
         public AgentConnector Owner { get; private set; }
         public SkillModeCategory SkillCategory { get; private set; }
 
+        public ParserHelper.Spec Spec { get; private set; }
+
+        public long SkillID { get; private set; }
+
         protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
         {
             ConnectedTo = connector;
@@ -36,26 +41,45 @@ namespace GW2EIEvtcParser.EIData
             return new LineDecoration(growing, (start, end), color, this.ConnectedTo, other.ConnectedTo);
         }
 
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
-        /// <param name="category"></param>
+        /// <param name="spec">Spec of the skill, put Unknown for skills not specific to a certain spec</param>
+        /// <param name="skillID">ID of the skill</param>
+        /// <param name="category">Category of the skill</param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
         {
             if (owner == null)
             {
                 Owner = null;
                 SkillCategory = SkillModeCategory.NotApplicable;
+                Spec = ParserHelper.Spec.Unknown;
+                SkillID = 0;
             } 
             else
             {
                 Owner = new AgentConnector(owner.AgentItem.GetFinalMaster());
                 SkillCategory = category;
                 SkillCategory |= SkillModeCategory.ShowOnSelect;
+                Spec = spec;
+                SkillID = skillID;
             }
             return this;
+        }
+
+        /// <summary>
+        /// No Spec version of UsingSkillMode
+        /// </summary>
+        /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
+        /// <param name="skillID">ID of the skill</param>
+        /// <param name="category">Category of the skill</param>
+        /// <returns></returns>
+        public GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        {
+            return UsingSkillMode(owner, ParserHelper.Spec.Unknown, skillID, category);
         }
 
     }
