@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -11,19 +12,19 @@ namespace GW2EIEvtcParser.EIData
             Position = position;
         }
 
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        protected class PositionConnectorDescriptor : ConnectorDescriptor
         {
-            (float x, float y) = map.GetMapCoord(Position.X, Position.Y);
-            return new float[2] { x, y };
+            public IReadOnlyList<float> Position { get; private set; }
+            public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
+            {
+                (float x, float y) = map.GetMapCoord(connector.Position.X, connector.Position.Y);
+                Position = new List<float>() { x, y };
+            }
         }
 
-        /// <summary>
-        /// Creates a new <see cref="PositionConnector"/> offset by the specified amount in the orientation given in <b>radians</b>. 
-        /// </summary>
-        public PositionConnector WithOffset(float orientation, float amount)
+        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            Point3D offset = amount * new Point3D(-(float)Math.Sin(orientation), (float)Math.Cos(orientation));
-            return new PositionConnector(Position + offset);
+            return new PositionConnectorDescriptor(this, map);
         }
     }
 }

@@ -8,6 +8,7 @@
 function interpolatedPositionFetcher(connection, master) {
     var index = -1;
     var totalPoints = connection.positions.length / 3;
+    var time = animator.reactiveDataStatus.time;
     for (var i = 0; i < totalPoints; i++) {
         var posTime = connection.positions[3 * i + 2];
         if (time < posTime) {
@@ -48,8 +49,22 @@ function interpolatedPositionFetcher(connection, master) {
 
 function staticPositionFetcher(connection, master) {
     return {
-        x: connection[0],
-        y: connection[1]
+        x: connection.position[0],
+        y: connection.position[1]
+    };
+}
+
+function noOffsetFetcher(connection) {
+    return {
+        x: 0,
+        y: 0
+    };
+}
+
+function staticOffsetFetcher(connection) {
+    return {
+        x: connection.translation[0],
+        y: connection.translation[1]
     };
 }
 
@@ -60,20 +75,49 @@ function masterPositionFetcher(connection, master) {
     return master.getPosition();
 }
 
+function noAngleFetcher(connection, master) {
+    return 0;
+}
+
+function staticAngleFetcher(connection, master) {
+    return connection.angle;
+}
+
+function masterRotationFetcher(connection, master) {
+    if (!master) {
+        return null;
+    }
+    return master.getRotation();
+}
+
 class MechanicDrawable {
-    constructor(start, end, connectedTo) {
+    constructor(start, end, connectedTo, rotationConnectedTo) {
         this.start = start;
         this.end = end;
         this.positionFetcher = null;
         this.connectedTo = connectedTo;
         if (connectedTo.interpolationMethod >= 0) {
             this.positionFetcher = interpolatedPositionFetcher;
-        } else if (connectedTo instanceof Array) {
+        } else if (connectedTo.position) {
             this.positionFetcher = staticPositionFetcher;
-        } else {
+        } else if (connectedTo.masterId >= 0) {         
             this.positionFetcher = masterPositionFetcher;
         }
+        this.offsetFetcher = noOffsetFetcher;
+        if (connectedTo.translation) {
+            this.offsetFetcher = staticOffsetFetcher;
+        }
+        this.rotationFetcher = noAngleFetcher;
+        this.rotationConnectedTo = rotationConnectedTo;
+        if (rotationConnectedTo) {
+            if (rotationConnectedTo.angles) {
+                this.rotationFetcher = staticAngleFetcher;
+            } else if (rotationConnectedTo.masterId) {
+                this.rotationFetcher = masterRotationFetcher;
+            }
+        }
         this.master = null;
+        this.rotationMaster = null;
         // Skill mode
         this.ownerID = null;
         this.owner = null;
@@ -91,6 +135,22 @@ class MechanicDrawable {
         // to override
     }
 
+    getOffset() {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
+            return null;
+        }
+        return this.offsetFetcher(this.connectedTo);
+    }
+
+    getRotation() {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
+            return null;
+        }
+        return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster);
+    }
+
     getPosition() {
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
@@ -105,10 +165,19 @@ class MechanicDrawable {
         }
         if (this.positionFetcher === masterPositionFetcher) {
             if (this.master === null) {
-                let masterId = this.connectedTo;
+                let masterId = this.connectedTo.masterId;
                 this.master = animator.getActorData(masterId);
             }
             if (!this.master || !this.master.canDraw()) {
+                return false;
+            }
+        }
+        if (this.rotationMaster === masterRotationFetcher) {
+            if (this.rotationMaster === null) {
+                let masterId = this.rotationConnectedTo.masterId;
+                this.rotationMaster = animator.getActorData(masterId);
+            }
+            if (!this.rotationMaster || !this.rotationMaster.canDraw()) {
                 return false;
             }
         }
@@ -135,8 +204,8 @@ class MechanicDrawable {
 }
 //// FACING
 class FacingMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, facingData) {
-        super(start, end, connectedTo);
+    constructor(start, end, connectedTo, rotationConnectedTo, facingData) {
+        super(start, end, connectedTo, rotationConnectedTo);
         this.facingData = facingData;
     }
 
@@ -218,8 +287,8 @@ class FacingMechanicDrawable extends MechanicDrawable {
 }
 
 class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
-    constructor(start, end, connectedTo, facingData, width, height, translation, color) {
-        super(start, end, connectedTo, facingData);
+    constructor(start, end, connectedTo, rotationConnectedTo, facingData, width, height, translation, color) {
+        super(start, end, connectedTo, rotationConnectedTo, facingData);
         this.width = width;
         this.height = height;
         this.translation = translation;
@@ -249,8 +318,8 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
 }
 
 class FacingPieMechanicDrawable extends FacingMechanicDrawable {
-    constructor(start, end, connectedTo, facingData, openingAngle, radius, color) {
-        super(start, end, connectedTo, facingData);
+    constructor(start, end, connectedTo, rotationConnectedTo, facingData, openingAngle, radius, color) {
+        super(start, end, connectedTo, rotationConnectedTo, facingData);
         this.openingAngle = ToRadians(openingAngle);
         this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
@@ -282,8 +351,8 @@ class FacingPieMechanicDrawable extends FacingMechanicDrawable {
 }
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, connectedTo) {
-        super(start, end, connectedTo);
+    constructor(start, end, fill, growing, color, connectedTo, rotationConnectedTo) {
+        super(start, end, connectedTo, rotationConnectedTo);
         this.fill = fill;
         this.growing = growing;
         this.color = color;
@@ -303,8 +372,8 @@ class FormMechanicDrawable extends MechanicDrawable {
 }
 
 class CircleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, radius, connectedTo, minRadius) {
-        super(start, end, fill, growing, color, connectedTo);
+    constructor(start, end, fill, growing, color, radius, connectedTo, rotationConnectedTo, minRadius) {
+        super(start, end, fill, growing, color, connectedTo, rotationConnectedTo);
         this.radius = radius;
         this.minRadius = minRadius;
     }
@@ -332,8 +401,8 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo) {
-        super(start, end, fill, growing, color, connectedTo);
+    constructor(start, end, fill, growing, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growing, color, connectedTo, rotationConnectedTo);
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
@@ -370,8 +439,8 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height, connectedTo) {
-        super(start, end, fill, growing, color, connectedTo);
+    constructor(start, end, fill, growing, color, width, height, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growing, color, connectedTo, rotationConnectedTo);
         this.height = height;
         this.width = width;
     }
@@ -400,8 +469,8 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo) {
-        super(start, end, fill, growing, color, width, height, connectedTo);
+    constructor(start, end, fill, growing, color, width, height, rotation, translation, spinangle, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growing, color, width, height, connectedTo, rotationConnectedTo);
         this.rotation = ToRadians(-rotation); // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.translation = translation;
         this.spinangle = ToRadians(-spinangle); // positive mathematical direction, reversed since JS has downwards increasing y axis
@@ -449,8 +518,8 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
 }
 
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo) {
-        super(start, end, fill, growing, color, connectedTo);
+    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growing, color, connectedTo, rotationConnectedTo);
         this.direction = ToRadians(-direction); // positive mathematical direction, reversed since JS has downwards increasing y axis
         this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
         this.radius = radius;
@@ -486,7 +555,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
 
 class LineMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, connectedFrom, connectedTo) {
-        super(start, end, fill, growing, color, connectedTo);
+        super(start, end, fill, growing, color, connectedTo, null);
         this.connectedFrom = connectedFrom;
         this.targetPositionFetcher = null;
         if (connectedFrom.interpolationMethod >= 0) {
@@ -682,8 +751,8 @@ class MovingPlatformDrawable extends BackgroundDrawable {
 }
 
 class IconDecorationDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
-        super(start, end, connectedTo);
+    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo, rotationConnectedTo);
         this.image = new Image();
         this.image.src = image;
         this.image.onload = () => animateCanvas(noUpdateTime);
@@ -700,6 +769,10 @@ class IconDecorationDrawable extends MechanicDrawable {
         }
     }
 
+    getSecondaryOffset() {
+        return null;
+    }
+
     draw() {
         if (!this.canDraw()) {
             return;
@@ -708,19 +781,24 @@ class IconDecorationDrawable extends MechanicDrawable {
         if (pos === null) {
             return;
         }
+        const secondaryOffset = this.getSecondaryOffset();
         
         const ctx = animator.mainContext;
         const size = this.getSize();
         ctx.save();
+        ctx.translate(pos.x, pos.y);
         ctx.globalAlpha = this.opacity;
-        ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
+        if (secondaryOffset) {        
+            ctx.translate(secondaryOffset.x, secondaryOffset.y);
+        }
+        ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
     }
 }
 
 class IconOverheadDecorationDrawable extends IconDecorationDrawable {
-    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
-        super(start, end, connectedTo, image, pixelSize, worldSize, opacity);
+    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity);
     }
 
     getSize() {
@@ -731,18 +809,18 @@ class IconOverheadDecorationDrawable extends IconDecorationDrawable {
         }
     }
 
-    getPosition() {
-        const pos = super.getPosition();
-        if (!pos) {
-            return null;
-        }
+    getSecondaryOffset() {
         if (!this.master) {
             console.error('Invalid IconOverhead decoration');
             return null; 
         }
         const masterSize = this.master.getSize();
         const scale = animator.displaySettings.useActorHitboxWidth ? 1/animator.inchToPixel : animator.scale;
-        pos.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
-        return pos;
+        let offset = {
+            x: 0,
+            y: 0,
+        };
+        offset.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        return offset;
     }
 }

@@ -16,9 +16,18 @@ namespace GW2EIEvtcParser.EIData
             Agent = agent;
         }
 
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        protected class AgentConnectorDescriptor : ConnectorDescriptor
         {
-            return Agent.UniqueID;
+            public int MasterId { get; private set; }
+            public AgentConnectorDescriptor(AgentConnector connector, CombatReplayMap map) : base(connector, map)
+            {
+                MasterId = connector.Agent.UniqueID;
+            }
+        }
+
+        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        {
+            return new AgentConnectorDescriptor(this, map);
         }
     }
 }

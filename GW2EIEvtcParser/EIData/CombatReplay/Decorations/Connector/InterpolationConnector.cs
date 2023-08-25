@@ -19,15 +19,15 @@ namespace GW2EIEvtcParser.EIData
             _method = interpolationMethod;
         }
 
-        internal class InterpolationDescriptor
+        protected class InterpolationConnectorDescriptor : ConnectorDescriptor
         {
-            public int InterpolationMethod { get; set; }
-            public IReadOnlyList<float> Positions { get; set; }
-            public InterpolationDescriptor(IReadOnlyList<ParametricPoint3D> points, InterpolationMethod interpolationMethod, CombatReplayMap map)
+            public int InterpolationMethod { get; private set; }
+            public IReadOnlyList<float> Positions { get; private set; }
+            public InterpolationConnectorDescriptor(InterpolationConnector connector, CombatReplayMap map) : base(connector, map)
             {
-                InterpolationMethod = (int)interpolationMethod;
+                InterpolationMethod = (int)connector._method;
                 var positions = new List<float>();
-                foreach (ParametricPoint3D pos in points)
+                foreach (ParametricPoint3D pos in connector.Positions)
                 {
                     (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
                     positions.Add(x);
@@ -38,9 +38,9 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new InterpolationDescriptor(Positions, _method, map);
+            return new InterpolationConnectorDescriptor(this, map);
         }
     }
 }

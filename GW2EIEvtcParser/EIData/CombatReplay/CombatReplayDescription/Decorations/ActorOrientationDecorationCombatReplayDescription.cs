@@ -2,11 +2,13 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class ActorOrientationDecorationCombatReplayDescription : FacingDecorationCombatReplayDescription
+    public class ActorOrientationDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
     {
 
-        internal ActorOrientationDecorationCombatReplayDescription(ParsedEvtcLog log, FacingDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        public IReadOnlyList<float> FacingData { get; }
+        internal ActorOrientationDecorationCombatReplayDescription(ParsedEvtcLog log, ActorOrientationDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
+            FacingData = decoration.Angles;
             Type = "ActorOrientation";
             IsMechanicOrSkill = false;
         }
