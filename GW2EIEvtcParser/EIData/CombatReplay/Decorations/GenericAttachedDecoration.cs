@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EIData
 
 
         public Connector ConnectedTo { get; }
+        public RotationConnector RotationConnectedTo { get; protected set; }
 
         public AgentConnector Owner { get; private set; }
         public SkillModeCategory SkillCategory { get; private set; }
@@ -36,9 +37,15 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>Creates a new line towards the other decoration</summary>
         public LineDecoration LineTo(GenericAttachedDecoration other, int growing, string color)
         {
-            int start = Math.Max(this.Lifespan.start, other.Lifespan.start);
-            int end = Math.Min(this.Lifespan.end, other.Lifespan.end);
-            return new LineDecoration(growing, (start, end), color, this.ConnectedTo, other.ConnectedTo);
+            int start = Math.Max(Lifespan.start, other.Lifespan.start);
+            int end = Math.Min(Lifespan.end, other.Lifespan.end);
+            return new LineDecoration(growing, (start, end), color, ConnectedTo, other.ConnectedTo);
+        }
+
+        public virtual GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
+        {
+            RotationConnectedTo = rotationConnectedTo;
+            return this;
         }
 
 

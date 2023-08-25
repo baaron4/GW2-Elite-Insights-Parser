@@ -8,7 +8,7 @@
         internal PieDecorationCombatReplayDescription(ParsedEvtcLog log, PieDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "Pie";
-            Direction = decoration.Direction;
+            Direction = -decoration.Direction;
             OpeningAngle = decoration.OpeningAngle;
         }
 

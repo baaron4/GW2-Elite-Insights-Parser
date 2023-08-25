@@ -11,6 +11,6 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        public abstract RotationConnectorDescriptor GetRotationConnectedTo(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract RotationConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log);
     }
 }

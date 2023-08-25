@@ -649,8 +649,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)voidZoneEffect.Time;
                             int end = start + 5000;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 90, 230, voidZoneEffect.Rotation.Z, (start, end), "rgba(150, 0, 150, 0.2)", new PositionConnector(voidZoneEffect.Position)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, end, 90, 230, voidZoneEffect.Rotation.Z, (start, end), "rgba(250, 0, 250, 0.3)", new PositionConnector(voidZoneEffect.Position)));
+                            var connector = new PositionConnector(voidZoneEffect.Position);
+                            var rotationConnector = new AngleConnector(voidZoneEffect.Rotation.Z);
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 90, 230, (start, end), "rgba(150, 0, 150, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(true, end, 90, 230, (start, end), "rgba(250, 0, 250, 0.3)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     //
@@ -660,7 +662,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)beeLaunchEffect.Time;
                             int end = start + 3000;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 380, 30, beeLaunchEffect.Rotation.Z, 190, (start, end), "rgba(250, 50, 0, 0.4)", new PositionConnector(beeLaunchEffect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 380, 30, (start, end), "rgba(250, 50, 0, 0.4)", new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z)));
                             replay.Decorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
                             replay.Decorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position)));
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);

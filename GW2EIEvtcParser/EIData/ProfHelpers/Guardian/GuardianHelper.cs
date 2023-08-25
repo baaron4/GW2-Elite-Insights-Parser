@@ -169,7 +169,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, LineOfWarding));
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    replay.Decorations.Add(new RectangleDecoration(false, 0, 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Guardian, LineOfWarding));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, LineOfWarding));
                 }
             }
@@ -180,7 +181,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, WallOfReflection, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    replay.Decorations.Add(new RectangleDecoration(false, 0, 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Guardian, WallOfReflection, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, WallOfReflection, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                 }
             }

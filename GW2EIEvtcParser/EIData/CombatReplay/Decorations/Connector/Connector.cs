@@ -5,25 +5,25 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class Connector
     {
-        private Point3D Translation { get; set; }
+        private Point3D Offset { get; set; }
 
-        private bool TranslationAfterRotation { get; set; }
+        private bool OffsetAfterRotation { get; set; }
         public abstract class ConnectorDescriptor
         {
-            public IReadOnlyList<float> Translation { get; private set; }
-            public bool TranslationAfterRotation { get; private set; }
+            public IReadOnlyList<float> Offset { get; private set; }
+            public bool OffesetAfterRotation { get; private set; }
 
             public ConnectorDescriptor(Connector connector, CombatReplayMap map)
             {
-                TranslationAfterRotation = connector.TranslationAfterRotation;
+                OffesetAfterRotation = connector.OffsetAfterRotation;
                 //
-                if (connector.Translation != null)
+                if (connector.Offset != null)
                 {
                     var positions = new List<float>();
-                    (float x, float y) = map.GetMapCoord(connector.Translation.X, connector.Translation.Y);
+                    (float x, float y) = map.GetMapCoord(connector.Offset.X, connector.Offset.Y);
                     positions.Add(x);
                     positions.Add(y);
-                    Translation = positions;
+                    Offset = positions;
                 }
             }
         }
@@ -34,8 +34,8 @@ namespace GW2EIEvtcParser.EIData
         public Connector WithOffset(float orientation, float amount, bool afterRotation = false)
         {
             Point3D offset = amount * new Point3D(-(float)Math.Sin(orientation), (float)Math.Cos(orientation));
-            Translation = offset;
-            TranslationAfterRotation = afterRotation;
+            Offset = offset;
+            OffsetAfterRotation = afterRotation;
             return this;
         }
 
@@ -44,8 +44,8 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         public Connector WithOffset(Point3D offset, bool afterRotation = false)
         {
-            Translation = offset;
-            TranslationAfterRotation = afterRotation;
+            Offset = offset;
+            OffsetAfterRotation = afterRotation;
             return this;
         }
 

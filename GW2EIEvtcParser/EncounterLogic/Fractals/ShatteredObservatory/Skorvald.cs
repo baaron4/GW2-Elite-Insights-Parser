@@ -412,7 +412,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, kickEffect.Rotation.Z - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
                         }
                     }
 
@@ -633,12 +633,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float rotation, int translation, int cascadeCount)
         {
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            var rotationConnector = new AngleConnector(rotation);
+            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
+            replay.Decorations.Add(new RectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
 
             for (int i = 0; i < cascadeCount; i++)
             {
-                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
                 attackEnd += 300;
                 translation += 300;
             }

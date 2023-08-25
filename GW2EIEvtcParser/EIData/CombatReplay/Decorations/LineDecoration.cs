@@ -18,5 +18,9 @@
         {
             return new LineDecorationCombatReplayDescription(log, this, map);
         }
+        public override GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
+        {
+            return this;
+        }
     }
 }

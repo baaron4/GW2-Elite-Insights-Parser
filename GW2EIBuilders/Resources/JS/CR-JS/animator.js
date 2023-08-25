@@ -193,7 +193,7 @@ class Animator {
                         this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                         break;
                     case "ActorOrientation":
-                        this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.facingData));
+                        this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo));
                         break;
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
@@ -213,9 +213,6 @@ class Animator {
                     case "Rectangle":
                         decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo, actor.rotationConnectedTo);
                         break;
-                    case "RotatedRectangle":
-                        decoration = new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo, actor.rotationConnectedTo);
-                        break;
                     case "Doughnut":
                         decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
@@ -224,12 +221,6 @@ class Animator {
                         break;
                     case "Line":
                         decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
-                        break;
-                    case "FacingRectangle":
-                        decoration = new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
-                        break;
-                    case "FacingPie":
-                        decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
                         break;
                     case "IconDecoration":
                         decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);

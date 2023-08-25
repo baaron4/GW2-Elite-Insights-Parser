@@ -225,9 +225,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         double radian = Math.Atan2(point.X, point.Y);
                         float degree = RadianToDegreeF(radian);
+                        var connector = new PositionConnector(indicator.Position);
+                        var rotationConnector = new AngleConnector(-degree);
 
-                        replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, width - 5, height - 5, -degree, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(indicator.Position)));
-                        replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, -degree, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position)));
+                        replay.Decorations.Add(new RectangleDecoration(false, 0, width - 5, height - 5, (start, end), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                     }
                 }
             }

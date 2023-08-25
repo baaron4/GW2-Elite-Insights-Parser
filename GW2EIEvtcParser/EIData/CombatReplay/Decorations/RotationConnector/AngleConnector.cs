@@ -7,18 +7,18 @@ namespace GW2EIEvtcParser.EIData
     {
         protected float StartAngle { get; set; }
 
-        protected float RotationSpeed { get; set; }
+        protected float SpinAngle { get; set; }
 
         public AngleConnector(float startAngle)
         {
             StartAngle = startAngle;
-            RotationSpeed = startAngle;
+            SpinAngle = 0;
         }
 
-        public AngleConnector(float startAngle, float rotationSpeed)
+        public AngleConnector(float startAngle, float spinAngle)
         {
             StartAngle = startAngle;
-            RotationSpeed = rotationSpeed;
+            SpinAngle = spinAngle;
         }
 
         public class AngleConnectorDescriptor : RotationConnectorDescriptor
@@ -27,13 +27,13 @@ namespace GW2EIEvtcParser.EIData
             public AngleConnectorDescriptor(AngleConnector connector, CombatReplayMap map) : base(connector, map)
             {
                 Angles = new List<float>() { 
-                    connector.StartAngle,
-                    connector.RotationSpeed,
+                    -connector.StartAngle,
+                    -connector.SpinAngle,
                 };
             }
         }
 
-        public override RotationConnectorDescriptor GetRotationConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override RotationConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new AngleConnectorDescriptor(this, map);
         }
