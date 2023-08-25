@@ -557,6 +557,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Aether Aversion", AchievementEligibilityAetherAversion, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Fear Not This Knight", AchievementEligibilityFearNotThisKnight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Static-Dynamic Synergy", AchievementEligibilityStaticDynamicSynergy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Cosmic Observatory       
+            new Buff("Residual Anxiety", ResidualAnxiety, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Beam of Light Duration", BeamOfLightDuration, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Dagda Castin Something", DagdaCastingSomething, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Empowered (Temple of Febe)", EmpoweredTempleOfFebe, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),

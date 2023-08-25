@@ -166,6 +166,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunter, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Gear, BuffImages.RelicOfTheDragonhunter), // Applied on target
             new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, BuffImages.RelicOfTheAristocracy),
             new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheMonk),
+            new Buff("Relic of the Brawler", RelicOfTheBrawler, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheBrawler),
             new Buff("Relic of the Thief", RelicOfTheThief, Source.Gear, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheThief),
             new Buff("Relic of Fireworks", RelicOfFireworks, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfFireworks),
         };

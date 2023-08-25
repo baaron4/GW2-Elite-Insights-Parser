@@ -3494,12 +3494,16 @@
         public const long RelicOfFireworks = 69855;
         public const long EmpoweredRage = 70181;
         public const long Insatiable = 70253;
+        public const long ResidualAnxiety = 70283;
         public const long RelicOfTheDragonhunter = 70350;
         public const long POV_Petrify = 70504; // could be POV only
+        public const long DagdaCastingSomething = 70516;
+        public const long BeamOfLightDuration = 70525;
         public const long EmpoweredRegret = 70544;
         public const long EmpoweredMalice = 70621;
         public const long EmpoweredGluttony = 70687;
         public const long RelicOfTheThief = 70767;
+        public const long RelicOfTheBrawler = 70913;
         public const long EmpoweredEnvyCerus = 70974;
         public const long EmpoweredMaliceCerus = 71073;
         public const long RelicOfTheMonk = 71132;

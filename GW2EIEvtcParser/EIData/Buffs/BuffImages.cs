@@ -159,6 +159,7 @@
         internal const string RelicOfTheMonk = "https://wiki.guildwars2.com/images/c/c9/Relic_of_the_Monk.png";
         internal const string RelicOfFireworks = "https://wiki.guildwars2.com/images/6/6c/Relic_of_Fireworks.png";
         internal const string RelicOfTheThief = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Thief.png";
+        internal const string RelicOfTheBrawler = "https://wiki.guildwars2.com/images/3/30/Relic_of_the_Brawler.png";
         #endregion Gear
 
         #region Fractal
