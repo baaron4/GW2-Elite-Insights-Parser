@@ -92,6 +92,12 @@ function masterRotationFetcher(connection, master, start, end) {
     return master.getRotation();
 }
 
+const RotationOffsetMode = {
+    addToMaster: 0,
+    absoluteOrientation: 1,
+    rotateAfterTranslationOffset: 2,
+};
+
 class MechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo) {
         this.start = start;
@@ -111,11 +117,15 @@ class MechanicDrawable {
         }
         this.rotationFetcher = noAngleFetcher;
         this.rotationConnectedTo = rotationConnectedTo;
+        this.rotationOffset = 0;
+        this.rotationOffsetMode = RotationOffsetMode.addToMaster;
         if (rotationConnectedTo) {
             if (rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
             } else if (rotationConnectedTo.masterId) {
                 this.rotationFetcher = masterRotationFetcher;
+                this.rotationOffset = rotationConnectedTo.rotationOffset;
+                this.rotationOffsetMode = rotationConnectedTo.rotationOffsetMode;
             }
         }
         this.master = null;
@@ -163,6 +173,7 @@ class MechanicDrawable {
 
     moveContext(ctx, pos, rot) {
         const angle = ToRadians(rot);
+        const offsetAngle = ToRadians(this.rotationOffset);
         const offset = this.getOffset();
         const offsetAfterRotation = this.connectedTo.offesetAfterRotation;
         ctx.translate(pos.x, pos.y);
@@ -170,8 +181,18 @@ class MechanicDrawable {
             ctx.translate(offset.x, offset.y);   
         }
         ctx.rotate(angle);
+        if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.addToMaster) {
+            ctx.rotate(offsetAngle);
+        }
         if (offsetAfterRotation) {       
             ctx.translate(offset.x, offset.y);   
+        }
+        if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.rotateAfterTranslationOffset) {
+            ctx.rotate(offsetAngle);
+        }
+        if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.absoluteOrientation) {
+            ctx.rotate(-angle);
+            ctx.rotate(offsetAngle);
         }
     }
 
@@ -668,7 +689,8 @@ class IconDecorationDrawable extends MechanicDrawable {
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        this.moveContext(ctx, {x: 0, y: 0}, -rot);
+        // Don't rotate the icon
+        ctx.rotate(-ToRadians(rot + this.rotationOffset));
         ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
     }
