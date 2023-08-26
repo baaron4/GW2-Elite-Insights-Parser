@@ -125,12 +125,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing != null)
                         {
-                            float initialAngle = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            var rotationConnector = new AngleConnector(initialAngle);
+                            var rotationConnector = new AngleConnector(facing);
                             replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(initialAngle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
                     var wave = cls.Where(x => x.SkillId == GravityWave).ToList();

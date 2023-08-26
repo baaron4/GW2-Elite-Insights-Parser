@@ -431,9 +431,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int span = 2400;
                         if (facing != null)
                         {
-                            float angle = Point3D.GetRotationFromFacing(facing);
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(range / 2, 0), true);
-                            var rotationConnextor = new AngleConnector(angle);
+                            var rotationConnextor = new AngleConnector(facing);
                             replay.Decorations.Add(new RectangleDecoration(true, 0, range, span, (start, start + preCast), "rgba(0,100,255,0.2)", positionConnector).UsingRotationConnector(rotationConnextor));
                             replay.Decorations.Add(new RectangleDecoration(true, 0, range, span, (start + preCast, start + duration), "rgba(0,100,255,0.5)", positionConnector).UsingRotationConnector(rotationConnextor));
                         }

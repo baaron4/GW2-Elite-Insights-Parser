@@ -200,12 +200,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
-                            float angle = RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
-                                replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(angle)));
+                                replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             }
                         }
                     }

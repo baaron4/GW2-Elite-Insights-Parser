@@ -220,13 +220,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    ParametricPoint3D point = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
-                    if (point != null)
+                    ParametricPoint3D rotation = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
+                    if (rotation != null)
                     {
-                        double radian = Math.Atan2(point.X, point.Y);
-                        float degree = RadianToDegreeF(radian);
                         var connector = new PositionConnector(indicator.Position);
-                        var rotationConnector = new AngleConnector(-degree);
+                        var rotationConnector = new AngleConnector(rotation);
 
                         replay.Decorations.Add(new RectangleDecoration(false, 0, width - 5, height - 5, (start, end), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                         replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));

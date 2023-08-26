@@ -27,14 +27,6 @@ namespace GW2EIEvtcParser.EIData
             OpeningAngle = openingAngle;
         }
 
-        //using starting point and end point (center of the circle and middle of the curved circle segment line)
-
-        public PieDecoration(bool fill, int growing, Point3D startPoint, Point3D endPoint, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, connector)
-        {
-            Direction = Point3D.GetRotationFromFacing(endPoint - startPoint);
-            OpeningAngle = openingAngle;
-        }
-
         //
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)

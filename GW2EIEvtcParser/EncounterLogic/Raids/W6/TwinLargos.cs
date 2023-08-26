@@ -293,9 +293,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
                         if (facing != null)
                         {
-                            float angle = Point3D.GetRotationFromFacing(facing);
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            var rotationConnextor = new AngleConnector(angle);
+                            var rotationConnextor = new AngleConnector(facing);
                             replay.Decorations.Add(new RectangleDecoration(false, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.8)", positionConnector).UsingRotationConnector(rotationConnextor));
                             replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnextor));
                         }

@@ -15,9 +15,19 @@ namespace GW2EIEvtcParser.EIData
             SpinAngle = 0;
         }
 
-        public AngleConnector(float startAngle, float spinAngle)
+        public AngleConnector(Point3D rotationVector)
         {
-            StartAngle = startAngle;
+            StartAngle = Point3D.GetRotationFromFacing(rotationVector);
+            SpinAngle = 0;
+        }
+
+        public AngleConnector(float startAngle, float spinAngle) : this(startAngle)
+        {
+            SpinAngle = spinAngle;
+        }
+
+        public AngleConnector(Point3D rotationVector, float spinAngle) : this(rotationVector)
+        {
             SpinAngle = spinAngle;
         }
 
