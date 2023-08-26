@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Adds an offset by the specified amount in the orientation given in <b>radians</b>. 
         /// </summary>
-        public Connector WithOffset(float orientation, float amount, bool afterRotation = false)
+        public Connector WithOffset(float orientation, float amount, bool afterRotation)
         {
             Point3D offset = amount * new Point3D(-(float)Math.Sin(orientation), (float)Math.Cos(orientation));
             Offset = offset;
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Adds an offset by the specified Point3D. 
         /// </summary>
-        public Connector WithOffset(Point3D offset, bool afterRotation = false)
+        public Connector WithOffset(Point3D offset, bool afterRotation)
         {
             Offset = offset;
             OffsetAfterRotation = afterRotation;
