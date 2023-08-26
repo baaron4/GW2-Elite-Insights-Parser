@@ -4,7 +4,6 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class PieDecoration : CircleDecoration
     {
-        public float Direction { get; } //angle in degrees, growing clockwise and x-axis being 0
         public float OpeningAngle { get; } //in degrees
 
 

@@ -901,12 +901,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonClaw, out IReadOnlyList<EffectEvent> sooWonClawEffects))
                     {
+                        var rotationConnector = new AngleConnector(99.6f);
                         foreach (EffectEvent effect in sooWonClawEffects)
                         {
                             int start = (int)effect.Time;
                             int end = start + 2300;
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new PieDecoration(true, end, 1060, 99.6f, 145, (start, end), "rgba(200, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                            var connector = new PositionConnector(effect.Position);
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1060, 145, (start, end), "rgba(200, 0, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, end, 1060, 145, (start, end), "rgba(200, 0, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> bouncingOrbClawEffects))

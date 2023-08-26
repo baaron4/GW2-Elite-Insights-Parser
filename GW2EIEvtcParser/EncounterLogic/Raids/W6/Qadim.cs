@@ -470,11 +470,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
+                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                float rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
 
                             }
                         }
@@ -521,11 +523,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
+                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                float rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -580,11 +584,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
+                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {
-                                float rotation = Point3D.GetRotationFromFacing(facing);
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", new AgentConnector(target)));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), rotation - (i * angleIncrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)));
+                                var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector));
+                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
