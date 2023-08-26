@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AgentConnector : Connector
+    internal class AgentConnector : GeographicalConnector
     {
         public AgentItem Agent { get; }
 
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             Agent = agent;
         }
 
-        protected class AgentConnectorDescriptor : ConnectorDescriptor
+        protected class AgentConnectorDescriptor : GeographicalConnectorDescriptor
         {
             public int MasterId { get; private set; }
             public AgentConnectorDescriptor(AgentConnector connector, CombatReplayMap map) : base(connector, map)
@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new AgentConnectorDescriptor(this, map);
         }

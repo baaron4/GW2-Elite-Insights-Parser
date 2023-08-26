@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class PositionConnector : Connector
+    internal class PositionConnector : GeographicalConnector
     {
         protected Point3D Position { get; set; }
 
@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
             Position = position;
         }
 
-        protected class PositionConnectorDescriptor : ConnectorDescriptor
+        protected class PositionConnectorDescriptor : GeographicalConnectorDescriptor
         {
             public IReadOnlyList<float> Position { get; private set; }
             public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new PositionConnectorDescriptor(this, map);
         }

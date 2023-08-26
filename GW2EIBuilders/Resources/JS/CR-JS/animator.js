@@ -193,13 +193,13 @@ class Animator {
                         this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                         break;
                     case "ActorOrientation":
-                        this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo));
+                        this.actorOrientationData.set(actor.connectedTo.masterId, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo));
                         break;
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                         break;
                     case "IconOverheadDecoration":
-                        this.overheadActorData.push(new IconOverheadDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                        this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
                         break;
                     default:
                         throw "Unknown decoration type";
@@ -223,7 +223,7 @@ class Animator {
                         decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
                         break;
                     case "IconDecoration":
-                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
+                        decoration = new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
                         break;
                     default:
                         throw "Unknown decoration type";

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class InterpolationConnector : Connector
+    internal class InterpolationConnector : GeographicalConnector
     {
         protected IReadOnlyList<ParametricPoint3D> Positions { get; set; }
 
@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             _method = interpolationMethod;
         }
 
-        protected class InterpolationConnectorDescriptor : ConnectorDescriptor
+        protected class InterpolationConnectorDescriptor : GeographicalConnectorDescriptor
         {
             public int InterpolationMethod { get; private set; }
             public IReadOnlyList<float> Positions { get; private set; }
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override ConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new InterpolationConnectorDescriptor(this, map);
         }

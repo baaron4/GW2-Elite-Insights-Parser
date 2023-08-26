@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public override RotationConnectorDescriptor GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
             return new AngleConnectorDescriptor(this, map);
         }

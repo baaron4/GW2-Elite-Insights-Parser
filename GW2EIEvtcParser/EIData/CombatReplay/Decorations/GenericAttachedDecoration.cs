@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
         public Connector ConnectedTo { get; }
         public RotationConnector RotationConnectedTo { get; protected set; }
 
-        public AgentConnector Owner { get; private set; }
+        public SkillConnector Owner { get; private set; }
         public SkillModeCategory SkillCategory { get; private set; }
 
         public ParserHelper.Spec Spec { get; private set; }
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
             } 
             else
             {
-                Owner = new AgentConnector(owner.AgentItem.GetFinalMaster());
+                Owner = new SkillConnector(owner.AgentItem.GetFinalMaster());
                 SkillCategory = category;
                 SkillCategory |= SkillModeCategory.ShowOnSelect;
                 Spec = spec;

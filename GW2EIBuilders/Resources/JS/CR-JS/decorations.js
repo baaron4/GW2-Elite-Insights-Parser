@@ -63,8 +63,8 @@ function noOffsetFetcher(connection) {
 
 function staticOffsetFetcher(connection) {
     return {
-        x: connection.offset[0],
-        y: connection.offset[1]
+        x: animator.inchToPixel * connection.offset[0],
+        y: animator.inchToPixel * connection.offset[1]
     };
 }
 
@@ -175,7 +175,7 @@ class MechanicDrawable {
         const angle = ToRadians(rot);
         const offsetAngle = ToRadians(this.rotationOffset);
         const offset = this.getOffset();
-        const offsetAfterRotation = this.connectedTo.offesetAfterRotation;
+        const offsetAfterRotation = this.connectedTo.offsetAfterRotation;
         ctx.translate(pos.x, pos.y);
         if (!offsetAfterRotation) {       
             ctx.translate(offset.x, offset.y);   
@@ -209,7 +209,7 @@ class MechanicDrawable {
                 return false;
             }
         }
-        if (this.rotationMaster === masterRotationFetcher) {
+        if (this.rotationFetcher === masterRotationFetcher) {
             if (this.rotationMaster === null) {
                 let masterId = this.rotationConnectedTo.masterId;
                 this.rotationMaster = animator.getActorData(masterId);
@@ -243,13 +243,6 @@ class MechanicDrawable {
 class FacingMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo) {
         super(start, end, connectedTo, rotationConnectedTo);
-    }
-
-    canDraw() {
-        if (this.facingData.length === 0) {
-            return false;
-        }
-        return super.canDraw();
     }
 
     draw() {
@@ -399,6 +392,7 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
         var ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
+        ctx.beginPath();
         ctx.rect( - 0.5 * percent * this.width, - 0.5 * percent * this.height, percent * this.width, percent * this.height);
         if (this.fill) {
             ctx.fillStyle = this.color;
@@ -460,6 +454,10 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         } else {
             this.targetPositionFetcher = masterPositionFetcher;
         }
+        this.targetOffsetFetcher = noOffsetFetcher;
+        if (connectedFrom.offset) {
+            this.targetOffsetFetcher = staticOffsetFetcher;
+        }
         this.endMaster = null;
     }
 
@@ -468,7 +466,14 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        return this.targetPositionFetcher(this.connectedFrom, this.endMaster);
+        var pos = this.targetPositionFetcher(this.connectedFrom, this.endMaster);
+        if (!pos) {
+            return null;
+        }
+        var offset = this.targetOffsetFetcher(this.connectedFrom);
+        pos.x += offset.x;
+        pos.y += offset.y;
+        return pos;
     }
     
     canDraw() {
@@ -477,7 +482,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         }
         if (this.targetPositionFetcher === masterPositionFetcher) {
             if (this.endMaster === null) {
-                let masterId = this.connectedFrom;
+                let masterId = this.connectedFrom.masterId;
                 this.endMaster = animator.getActorData(masterId);
             }
             if (!this.endMaster || !this.endMaster.canDraw()) {
@@ -501,6 +506,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         ctx.save();
         this.moveContext(ctx, pos, 0);
         ctx.beginPath();
+        ctx.moveTo(0, 0);
         ctx.lineTo(percent * (target.x - pos.x), percent * (target.y - pos.y));
         ctx.lineWidth = (2 / animator.scale).toString();
         ctx.strokeStyle = this.color;
@@ -647,7 +653,7 @@ class MovingPlatformDrawable extends BackgroundDrawable {
     }
 }
 
-class IconDecorationDrawable extends MechanicDrawable {
+class IconMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
         super(start, end, connectedTo, rotationConnectedTo);
         this.image = new Image();
@@ -696,7 +702,7 @@ class IconDecorationDrawable extends MechanicDrawable {
     }
 }
 
-class IconOverheadDecorationDrawable extends IconDecorationDrawable {
+class IconOverheadMechanicDrawable extends IconMechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
         super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity);
     }
