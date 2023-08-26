@@ -3526,7 +3526,7 @@
         public const long RelicOfTheDeadeye = 70282;
         public const long ResidualAnxiety = 70283;
         public const long RelicOfTheDefender = 70319;
-        public const long RelicOfTheDragonhunterNPCBuff = 70350;
+        public const long RelicOfTheDragonhunterTargetBuff = 70350;
         public const long RelicOfLyhr = 70353;
         public const long RelicOfTheWeaver = 70390;
         public const long RelicOfTheZephyrite = 70460;
@@ -3541,7 +3541,7 @@
         public const long EmpoweredGluttony = 70687;
         public const long RelicOfTheFlock = 70765;
         public const long RelicOfTheThief = 70767;
-        public const long RelicOfIsgarrenNPCBuff = 70806;
+        public const long RelicOfIsgarrenTargetBuff = 70806;
         public const long RelicOfTheDaredevil = 70839;
         public const long RelicOfTheBrawler = 70913;
         public const long EmpoweredEnvyCerus = 70974;
