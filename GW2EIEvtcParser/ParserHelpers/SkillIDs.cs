@@ -3512,7 +3512,7 @@
         public const long KryptisPossessed = 69647;
         public const long InvulnerabilityCerus = 69722;
         public const long RelicOfTheAristocracy = 69795;
-        public const long RelicTargetPlayerBuff = 69813; // Same for Isgarren and Peitha
+        public const long RelicTargetPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long RelicOfTheNightmare = 69849;
         public const long RelicOfFireworks = 69855;
         public const long RelicOfCerusBuff = 69867;
