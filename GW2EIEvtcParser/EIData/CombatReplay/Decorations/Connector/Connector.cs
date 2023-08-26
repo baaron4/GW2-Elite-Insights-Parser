@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     internal abstract class Connector
     {
