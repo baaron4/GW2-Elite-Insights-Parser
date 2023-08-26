@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingPieDecoration((start, attackEnd), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (start, attackEnd), "rgba(250, 120, 0, 0.2)",new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 
