@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        float degree = Point3D.GetRotationFromFacing(facingDirection);
 
                         // Horizon Strike starting at Skorvald's facing point
                         if (c.SkillId == HorizonStrikeSkorvald4)
@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        float degree = Point3D.GetRotationFromFacing(facingDirection);
 
                         if (c.SkillId == CrimsonDawnSkorvaldCM2)
                         {

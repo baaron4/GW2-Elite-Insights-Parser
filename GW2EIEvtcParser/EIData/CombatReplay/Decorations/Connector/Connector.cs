@@ -11,11 +11,11 @@ namespace GW2EIEvtcParser.EIData
         public abstract class ConnectorDescriptor
         {
             public IReadOnlyList<float> Offset { get; private set; }
-            public bool OffesetAfterRotation { get; private set; }
+            public bool OffsetAfterRotation { get; private set; }
 
             public ConnectorDescriptor(Connector connector, CombatReplayMap map)
             {
-                OffesetAfterRotation = connector.OffsetAfterRotation;
+                OffsetAfterRotation = connector.OffsetAfterRotation;
                 //
                 if (connector.Offset != null)
                 {
