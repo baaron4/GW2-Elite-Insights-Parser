@@ -217,7 +217,7 @@ class Animator {
                         decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Pie":
-                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
+                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Line":
                         decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);

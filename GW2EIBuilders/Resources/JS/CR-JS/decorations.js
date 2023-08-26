@@ -391,13 +391,11 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 }
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growing, color, direction, openingAngle, radius, connectedTo, rotationConnectedTo) {
+    constructor(start, end, fill, growing, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
         super(start, end, fill, growing, color, connectedTo, rotationConnectedTo);
-        this.direction = ToRadians(direction);
-        this.halfOpeningAngle = ToRadians(0.5 * openingAngle);
+        this.openingAngleRadians = ToRadians(openingAngle);
+        this.halfOpeningAngle = 0.5 * openingAngle;
         this.radius = radius;
-        this.dx = Math.cos(this.direction - this.halfOpeningAngle) * this.radius;
-        this.dy = Math.sin(this.direction - this.halfOpeningAngle) * this.radius;
     }
 
     draw() {
@@ -412,10 +410,10 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         var ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.save();
-        this.moveContext(ctx, pos, rot);
+        this.moveContext(ctx, pos, rot + this.halfOpeningAngle);
         ctx.beginPath();
-        ctx.lineTo(this.dx * percent, this.dy * percent);
-        ctx.arc(0, 0, percent * this.radius, this.direction - this.halfOpeningAngle, this.direction + this.halfOpeningAngle);
+        ctx.arc(0, 0, percent * this.radius, -this.openingAngleRadians, 0, false);
+        ctx.arc(0, 0, 0, 0, this.openingAngleRadians, true);
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;

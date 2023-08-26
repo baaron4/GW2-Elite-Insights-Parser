@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 
@@ -413,7 +413,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 

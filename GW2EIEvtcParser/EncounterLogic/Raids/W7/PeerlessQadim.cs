@@ -255,10 +255,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int aimTime = (int)((double)c.ExpectedDuration*ratio);
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
+                            var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
+                            var rotationConnector = new AgentFacingConnector(target);
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                                replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             }
                         }
                     }
