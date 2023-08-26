@@ -1318,6 +1318,7 @@
         internal const string IllusionaryRiposte = "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png";
         internal const string IllusionaryLeap = "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png";
         internal const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+        internal const string IllusionaryMembrane = "https://wiki.guildwars2.com/images/b/bf/Illusionary_Membrane.png";
         internal const string PortalEnter = "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png";
         internal const string IllusionOfLife = "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png";
         internal const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
