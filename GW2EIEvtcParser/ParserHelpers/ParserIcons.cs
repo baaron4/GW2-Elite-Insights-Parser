@@ -164,8 +164,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeArsenite = "https://i.imgur.com/tSD5Phl.png";
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
         private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
-        private const string TargetDagda = "https://i.imgur.com/cCcIIvN.png";
-        private const string TargetCerus = "https://i.imgur.com/0SZleKS.png";
+        private const string TargetDagda = "https://i.imgur.com/k6rQdML.png";
+        private const string TargetCerus = "https://i.imgur.com/wDdN8O3.png";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";

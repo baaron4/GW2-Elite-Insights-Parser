@@ -428,6 +428,11 @@
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";
         internal const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
         internal const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
+        // Cosmic Observatory
+        internal const string ResidualAnxiety = "https://wiki.guildwars2.com/images/6/61/Throw_Cursed_Artifact.png";
+        // Temple of Febe
+        internal const string EmpoweredTempleOfFebe = "https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png";
+        internal const string Insatiable = "https://wiki.guildwars2.com/images/b/b8/Void_Corruption.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
@@ -1329,6 +1334,7 @@
         internal const string IllusionaryRiposte = "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png";
         internal const string IllusionaryLeap = "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png";
         internal const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+        internal const string IllusionaryMembrane = "https://wiki.guildwars2.com/images/b/bf/Illusionary_Membrane.png";
         internal const string PortalEnter = "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png";
         internal const string IllusionOfLife = "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png";
         internal const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
