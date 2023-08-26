@@ -163,12 +163,29 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Gourd Vibrations", GourdVibrations, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             // Relics
-            new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunter, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Gear, BuffImages.RelicOfTheDragonhunter), // Applied on target
+            new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetPlayerBuff, Source.Gear, BuffClassification.Gear, BuffImages.Unknown),
+            new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterNPCBuff, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Gear, BuffImages.RelicOfTheDragonhunter), // Applied on target
             new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, BuffImages.RelicOfTheAristocracy),
             new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheMonk),
             new Buff("Relic of the Brawler", RelicOfTheBrawler, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheBrawler),
             new Buff("Relic of the Thief", RelicOfTheThief, Source.Gear, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheThief),
             new Buff("Relic of Fireworks", RelicOfFireworks, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfFireworks),
+            new Buff("Relic of the Daredevil", RelicOfTheDaredevil, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDaredevil),
+            new Buff("Relic of the Deadeye", RelicOfTheDeadeye, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDeadeye),
+            new Buff("Relic of the Defender", RelicOfTheDefender, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDefender),
+            new Buff("Relic of the Firebrand", RelicOfTheFirebrand, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheFirebrand),
+            new Buff("Relic of the Herald", RelicOfTheHerald, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheHerald),
+            new Buff("Relic of the Scourge", RelicOfTheScourge, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheScourge),
+            new Buff("Relic of the Weaver", RelicOfTheWeaver, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheWeaver),
+            new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheZephyrite),
+            new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfCerus),
+            new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfDagda),
+            new Buff("Relic of Isgarren", RelicOfIsgarrenNPCBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfIsgarren),
+            new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfLyhr),
+            new Buff("Mabon's Strength", MabonsStrength, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfMabon),
+            new Buff("Relic of Mabon", RelicOfMabon, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfMabon),
+            new Buff("Relic of Peitha", RelicOfPeitha, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfPeitha),
+            new Buff("Relic of Vass", RelicOfVass, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, BuffImages.RelicOfVass),
         };
 
     }

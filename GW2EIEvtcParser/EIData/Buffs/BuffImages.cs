@@ -160,6 +160,22 @@
         internal const string RelicOfFireworks = "https://wiki.guildwars2.com/images/6/6c/Relic_of_Fireworks.png";
         internal const string RelicOfTheThief = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Thief.png";
         internal const string RelicOfTheBrawler = "https://wiki.guildwars2.com/images/3/30/Relic_of_the_Brawler.png";
+        internal const string RelicOfTheDaredevil = "https://wiki.guildwars2.com/images/9/9f/Relic_of_the_Daredevil.png";
+        internal const string RelicOfTheDeadeye = "https://wiki.guildwars2.com/images/0/08/Relic_of_the_Deadeye.png";
+        internal const string RelicOfTheDefender = "https://wiki.guildwars2.com/images/2/20/Relic_of_the_Defender.png";
+        internal const string RelicOfTheFirebrand = "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Firebrand.png";
+        internal const string RelicOfTheHerald = "https://wiki.guildwars2.com/images/6/64/Relic_of_the_Herald.png";
+        internal const string RelicOfTheScourge = "https://wiki.guildwars2.com/images/2/28/Relic_of_the_Scourge.png";
+        internal const string RelicOfTheWeaver = "https://wiki.guildwars2.com/images/e/e5/Relic_of_the_Weaver.png";
+        internal const string RelicOfTheZephyrite = "https://wiki.guildwars2.com/images/e/e4/Relic_of_the_Zephyrite.png";
+        internal const string RelicOfCerus = "https://wiki.guildwars2.com/images/2/29/Relic_of_Cerus.png";
+        internal const string RelicOfDagda = "https://wiki.guildwars2.com/images/a/a7/Relic_of_Dagda.png";
+        internal const string RelicOfIsgarren = "https://wiki.guildwars2.com/images/9/91/Relic_of_Isgarren.png";
+        internal const string RelicOfLyhr = "https://wiki.guildwars2.com/images/f/f4/Relic_of_Lyhr.png";
+        internal const string RelicOfMabon = "https://wiki.guildwars2.com/images/c/c4/Relic_of_Mabon.png";
+        internal const string RelicOfPeitha = "https://wiki.guildwars2.com/images/4/4f/Relic_of_Peitha.png";
+        internal const string RelicOfTheAstralWard = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Astral_Ward.png";
+        internal const string RelicOfVass = "https://wiki.guildwars2.com/images/f/f2/Relic_of_Vass.png";
         #endregion Gear
 
         #region Fractal
