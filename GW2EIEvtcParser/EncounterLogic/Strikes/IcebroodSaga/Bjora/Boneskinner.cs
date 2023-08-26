@@ -121,12 +121,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         ParametricPoint3D lastDirection = replay.PolledRotations.LastOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
                         if (lastDirection != null)
                         {
-                            var direction = new Point3D(lastDirection.X, lastDirection.Y);
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
-                            replay.Decorations.Add(new PieDecoration(true, endHitTime, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, endHitTime, radius, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                             // Lingering AoE to match in game display
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     // Crushing Cruelty

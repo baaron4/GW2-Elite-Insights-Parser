@@ -111,11 +111,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             int growingQuarter = start + quarterHit;
             if (attackEnd >= endQuarter) // If the attack started
             {
-                replay.Decorations.Add(new PieDecoration(true, growingQuarter, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                var connector = new AgentConnector(target);
+                var rotationConnector = new AngleConnector(point);
+                replay.Decorations.Add(new PieDecoration(true, growingQuarter, 700, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 700, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Standard
                 if (endQuarter == growingQuarter) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                    replay.Decorations.Add(new PieDecoration(true, 0, 700, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
             }
         }
@@ -125,19 +127,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (attackEnd >= end) // If the attack started
             {
                 Point3D flipPoint = -1 * point;
+                var connector = new AgentConnector(target);
+                var rotationConnector = new AngleConnector(point);
                 // Frontal
-                replay.Decorations.Add(new PieDecoration(true, growing, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                replay.Decorations.Add(new PieDecoration(true, growing, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Standard
                 if (end == growing) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
                 // Retro
-                replay.Decorations.Add(new PieDecoration(true, growing, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                var flippedRotationConnector = new AngleConnector(flipPoint);
+                replay.Decorations.Add(new PieDecoration(true, growing, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Growing
+                replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Standard
                 if (end == growing) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Lingering
                 }
             }
         }

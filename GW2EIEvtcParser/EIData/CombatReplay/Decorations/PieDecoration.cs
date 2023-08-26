@@ -7,23 +7,11 @@ namespace GW2EIEvtcParser.EIData
         public float Direction { get; } //angle in degrees, growing clockwise and x-axis being 0
         public float OpeningAngle { get; } //in degrees
 
-        // constructors
-
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 
-        public PieDecoration(bool fill, int growing, int radius, Point3D rotation, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
+        public PieDecoration(bool fill, int growing, int radius, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
         {
-            Direction = Point3D.GetRotationFromFacing(rotation);
-            OpeningAngle = openingAngle;
-        }
-
-
-        //using simple direction/opening angle definition 
-
-        public PieDecoration(bool fill, int growing, int radius, float direction, float openingAngle, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, radius, lifespan, color, connector)
-        {
-            Direction = (float)Math.Round(direction, ParserHelper.CombatReplayDataDigit);
             OpeningAngle = openingAngle;
         }
 

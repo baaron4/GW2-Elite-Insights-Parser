@@ -232,8 +232,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = start + 250;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
-                        replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                        if (facing != null)
+                        {
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(facing);
+                            replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
+                        }
                     }
                     foreach (AbstractCastEvent c in causticChaos)
                     {

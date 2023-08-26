@@ -332,8 +332,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             degree += 270;
                         }
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        var connector = new AgentConnector(target);
+                        var rotationConnector = new AngleConnector(degree);
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                     }
 
                     // Punishing Kick
@@ -586,15 +588,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)
         {
-            float front = degree;
-            float flip = degree + 180;
-
+            var connector = new AgentConnector(target);
+            var frontRotationConnector = new AngleConnector(degree);
+            var flipRotationConnector = new AngleConnector(degree + 180);
             // Indicator
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, front, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, flip, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
             // Attack hit
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, front, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, flip, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
         }
 
         private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
