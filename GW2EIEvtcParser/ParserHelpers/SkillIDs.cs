@@ -3506,7 +3506,7 @@
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
         public const long EmpoweredEnvy = 69479;
-        public const long EmpoweredTempleOfFebe = 69550;
+        public const long EmpoweredCerus = 69550;
         public const long KryptisPossessed = 69647;
         public const long InvulnerabilityCerus = 69722;
         public const long RelicOfTheAristocracy = 69795;
