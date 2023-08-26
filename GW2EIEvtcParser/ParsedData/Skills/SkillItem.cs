@@ -247,9 +247,18 @@ namespace GW2EIEvtcParser.ParsedData
             { WhirlingAssault, "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png" },
             { LeechingBolt1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             { LeechingBolt2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
-            //{41243, "https://wiki.guildwars2.com/images/f/fb/Full_Counter.png" },
-            //{10281, "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png" },
-            //{38769, "https://wiki.guildwars2.com/images/4/48/Phantasmal_Swordsman.png" },
+            // Relics
+            { RelicOfTheAfflicted, "https://wiki.guildwars2.com/images/9/91/Relic_of_the_Afflicted.png" },
+            { RelicOfTheCitadel, "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Citadel.png" },
+            { RelicOfTheFlock, "https://wiki.guildwars2.com/images/1/1b/Relic_of_the_Flock.png" },
+            { RelicOfTheIce, "https://wiki.guildwars2.com/images/5/55/Relic_of_the_Ice.png" },
+            { RelicOfTheKrait, "https://wiki.guildwars2.com/images/7/7e/Relic_of_the_Krait.png" },
+            { RelicOfTheNightmare, "https://wiki.guildwars2.com/images/5/51/Relic_of_the_Nightmare.png" },
+            { RelicOfTheSunless, "https://wiki.guildwars2.com/images/b/b6/Relic_of_the_Sunless.png" },
+            { RelicOfAkeem, "https://wiki.guildwars2.com/images/5/50/Relic_of_Akeem.png" },
+            { RelicOfCerusHit, BuffImages.RelicOfCerus },
+            { RelicOfDagdaHit, BuffImages.RelicOfDagda },
+            { RelicOfTheWizardsTower, "https://wiki.guildwars2.com/images/e/ea/Relic_of_the_Wizard%27s_Tower.png" },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Escort
