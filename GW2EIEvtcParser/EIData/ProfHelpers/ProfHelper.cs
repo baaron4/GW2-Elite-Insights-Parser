@@ -56,11 +56,9 @@ namespace GW2EIEvtcParser.EIData
             //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out IReadOnlyList<EffectEvent> effects);
             //    return effects != null && effects.Any(x => x.Time > evt.Time);
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
-            {
-                combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheWizardsTower, out IReadOnlyList<EffectEvent> effects);
-                return effects != null && effects.Any(x => x.Time >= evt.Time && x.Src == evt.Src);
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
