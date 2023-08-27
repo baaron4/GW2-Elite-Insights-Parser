@@ -32,19 +32,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
             }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-
-            new BuffGainCastFinder(RelicOfPeithaTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-            {
-                return combatData.GetBuffData(RelicOfPeithaTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-
             new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
             {
                 return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
             }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce).UsingICD(1000).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
@@ -63,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheWizardsTower, out IReadOnlyList<EffectEvent> effects);
-                return effects != null && effects.Any(x => x.Time >= evt.Time);
+                return effects != null && effects.Any(x => x.Time >= evt.Time && x.Src == evt.Src);
             }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         };
 

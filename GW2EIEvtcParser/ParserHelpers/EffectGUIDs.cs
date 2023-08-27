@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser
         public const string RelicOfTheKrait = "0685880038B8F441B191439DB678A5F8";
         public const string RelicOfTheSunless = "B1FFFAEFC0A3C74D96851E07C75B3FC7";
         public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
+        public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         // Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
