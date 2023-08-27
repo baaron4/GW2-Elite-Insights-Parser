@@ -47,6 +47,7 @@
         public const long HealingMistOrSoothingDetonation = -29;
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
+        public const long RelicOfFireworksBuffLoss = -32;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -3516,7 +3517,7 @@
         public const long RelicOfTheNightmare = 69849;
         public const long RelicOfFireworks = 69855;
         public const long RelicOfCerusBuff = 69867;
-        public const long RelicOfPeitha = 69882;
+        public const long RelicOfPeithaTargetBuff = 69882;
         public const long RelicOfVass = 69961;
         public const long RelicOfMabon = 69992;
         public const long RelicOfAkeem = 70044;

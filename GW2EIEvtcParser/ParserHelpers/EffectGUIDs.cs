@@ -20,6 +20,20 @@ namespace GW2EIEvtcParser
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
         public const string WhiteMantlePortalInactive = "D43373FEFA19A54DA2A2B6BB7834A338";
         public const string WhiteMantlePortalActive = "388CF9246218A34DB2F8107E19FCA471";
+        // Relics
+        public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
+        public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
+        public const string RelicOfCerusEye2 = "521b6C72BF291E4E8A895A0827AF1727";
+        public const string RelicOfCerusBeam = "513AEEF08C217942A798831BD9F4903E"; // 1 second delayed
+        public const string RelicOfCerusBeam2 = "43F06D75DF774C4DBB1383B8621B1047"; // 1 second delayed
+        public const string RelicOfIce = "54F2B4920F7E2D4FAA56CED739BA2C41";
+        public const string RelicOfTheCitadelExplosion = "DE4373D3B08DE04E903B99B6F9194F74"; // 2.5 seconds delayed
+        public const string RelicOfFireworks = "2BC033D40C0AEB40A77EEF28D51AE263";
+        public const string RelicOfTheNightmare = "0FCF4B1F75575949AA4997365FAE0288";
+        public const string RelicOfTheKrait = "0685880038B8F441B191439DB678A5F8";
+        public const string RelicOfTheSunless = "B1FFFAEFC0A3C74D96851E07C75B3FC7";
+        public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
+        public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         // Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
