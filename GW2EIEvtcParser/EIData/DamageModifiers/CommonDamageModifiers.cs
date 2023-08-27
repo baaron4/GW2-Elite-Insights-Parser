@@ -42,15 +42,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                var tst = log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfTheDragonhunterTargetBuff, x.Time);
-                return tst;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfTheDragonhunterTargetBuff, x.Time);
             }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
             new BuffDamageModifierTarget(RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfIsgarren, DamageModifierMode.All).UsingChecker((x, log) =>
             {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                var tst = log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfIsgarrenTargetBuff, x.Time);
-                return tst;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfIsgarrenTargetBuff, x.Time);
             }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
             new BuffDamageModifier(RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, BuffImages.RelicOfTheThief, DamageModifierMode.All),
             new BuffDamageModifier(RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.All),
