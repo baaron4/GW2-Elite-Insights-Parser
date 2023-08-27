@@ -112,6 +112,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return false;
                         }
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+                        {
+                            return false;
+                        }
                         // Deimos can't go above 10% hp during that phase
                         if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
                         {

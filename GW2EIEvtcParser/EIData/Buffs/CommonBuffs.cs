@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Gourd Vibrations", GourdVibrations, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             // Relics
-            new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetPlayerBuff, Source.Gear, BuffClassification.Hidden, BuffImages.Unknown),
+            new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetPlayerBuff, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterTargetBuff, Source.Gear, BuffStackType.StackingSomething, 999, BuffClassification.Gear, BuffImages.RelicOfTheDragonhunter), // Applied on target
             new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, BuffImages.RelicOfTheAristocracy),
             new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheMonk),
