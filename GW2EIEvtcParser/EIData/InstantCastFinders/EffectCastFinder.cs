@@ -92,5 +92,7 @@ namespace GW2EIEvtcParser.EIData
             }
             return res;
         }
+
+        internal void OverrideSrc() { }
     }
 }

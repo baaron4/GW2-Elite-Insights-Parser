@@ -54,6 +54,11 @@ namespace GW2EIEvtcParser.ParsedData
             { SmashBottle, "Smash (Bottle)" },
             { ThrowBottle, "Throw (Bottle)" },
             { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
+            // Relics
+            { RelicOfTheWizardsTower, "Relic of the Wizard's Tower" },
+            { RelicOfIsgarrenTargetBuff, "Relic of Isgarren" },
+            { RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter" },
+            { RelicOfPeithaTargetBuff, "Relic of Peitha" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -256,9 +261,15 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheNightmare, "https://wiki.guildwars2.com/images/5/51/Relic_of_the_Nightmare.png" },
             { RelicOfTheSunless, "https://wiki.guildwars2.com/images/b/b6/Relic_of_the_Sunless.png" },
             { RelicOfAkeem, "https://wiki.guildwars2.com/images/5/50/Relic_of_Akeem.png" },
+            { RelicOfTheWizardsTower, "https://wiki.guildwars2.com/images/e/ea/Relic_of_the_Wizard%27s_Tower.png" },
             { RelicOfCerusHit, BuffImages.RelicOfCerus },
             { RelicOfDagdaHit, BuffImages.RelicOfDagda },
-            { RelicOfTheWizardsTower, "https://wiki.guildwars2.com/images/e/ea/Relic_of_the_Wizard%27s_Tower.png" },
+            { RelicOfFireworks, BuffImages.RelicOfFireworks },
+            { RelicOfVass, BuffImages.RelicOfVass },
+            { RelicOfTheFirebrand, BuffImages.RelicOfTheFirebrand },
+            { RelicOfIsgarrenTargetBuff, BuffImages.RelicOfIsgarren },
+            { RelicOfTheDragonhunterTargetBuff, BuffImages.RelicOfTheDragonhunter },
+            { RelicOfPeithaTargetBuff, BuffImages.RelicOfPeitha },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Escort
