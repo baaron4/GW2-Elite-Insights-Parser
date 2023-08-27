@@ -28,33 +28,34 @@ namespace GW2EIEvtcParser.EIData
             // Relics
             new BuffGainCastFinder(RelicOfVass, RelicOfVass).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-            {
-                return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-            {
-                return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
+            //{
+            //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
+            //{
+            //    return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce).UsingICD(1000).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            //new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
-            {
-                combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
-                return effects != null && effects.Any(x => x.Time > evt.Time);
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheNightmare, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
-            {
-                combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheNightmare, out IReadOnlyList<EffectEvent> effects);
-                return effects != null && effects.Any(x => x.Time > evt.Time);
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheKrait, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
-            {
-                combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out IReadOnlyList<EffectEvent> effects);
-                return effects != null && effects.Any(x => x.Time > evt.Time);
-            }).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheNightmare, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheNightmare, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheKrait, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheWizardsTower, out IReadOnlyList<EffectEvent> effects);

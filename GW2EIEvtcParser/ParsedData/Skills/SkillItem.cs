@@ -59,6 +59,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfIsgarrenTargetBuff, "Relic of Isgarren" },
             { RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter" },
             { RelicOfPeithaTargetBuff, "Relic of Peitha" },
+            { RelicOfFireworksBuffLoss, "Relic of Fireworks (Buff Loss)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -270,6 +271,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfIsgarrenTargetBuff, BuffImages.RelicOfIsgarren },
             { RelicOfTheDragonhunterTargetBuff, BuffImages.RelicOfTheDragonhunter },
             { RelicOfPeithaTargetBuff, BuffImages.RelicOfPeitha },
+            { RelicOfFireworksBuffLoss, "https://i.imgur.com/o9suJSt.png" },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Escort

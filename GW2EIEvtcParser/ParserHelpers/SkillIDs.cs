@@ -47,6 +47,7 @@
         public const long HealingMistOrSoothingDetonation = -29;
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
+        public const long RelicOfFireworksBuffLoss = -32;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
