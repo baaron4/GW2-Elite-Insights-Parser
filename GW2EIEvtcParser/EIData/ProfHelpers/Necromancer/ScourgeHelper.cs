@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
             // Shade
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> scourgeShades))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade, out IReadOnlyList<EffectEvent> scourgeShades))
             {
                 foreach (EffectEvent effect in scourgeShades)
                 {
