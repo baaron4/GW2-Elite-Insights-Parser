@@ -815,6 +815,7 @@
         public const long ThievesGuildMinionDespawnSkill = 13139;
         public const long PersistingFlames = 13342;
         public const long ArcaneLightning = 13423;
+        public const long MedicalDispersionFieldHeal = 13515;
         public const long SelflessDaring = 13594;
         public const long LesserSymbolOfProtection = 13684;
         public const long RestorativeMantras = 13721;
