@@ -54,6 +54,16 @@ namespace GW2EIEvtcParser.ParsedData
             { SmashBottle, "Smash (Bottle)" },
             { ThrowBottle, "Throw (Bottle)" },
             { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
+            // Mounts
+            { BondOfLifeSkill, "Bond of Life" },
+            { BondOfVigorSkill, "Bond of Vigor" },
+            { BondOfFaithSkill, "Bond of Faith" },
+            { Stealth2Skill, "Stealth 2.0" },
+            // Skyscale
+            { SkyscaleSkill, "Skyscale" },
+            { SkyscaleFireballSkill, "Fireball" },
+            { SkyscaleBlastSkill, "Blast" },
+            { SkyscaleBlastDamage, "Blast (Damage)" },
             // Relics
             { RelicOfTheWizardsTower, "Relic of the Wizard's Tower" },
             { RelicOfIsgarrenTargetBuff, "Relic of Isgarren" },
@@ -253,6 +263,16 @@ namespace GW2EIEvtcParser.ParsedData
             { WhirlingAssault, "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png" },
             { LeechingBolt1, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
             { LeechingBolt2, "https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/30px-Healing.png" },
+            // Mounts
+            { BondOfLifeSkill, "https://wiki.guildwars2.com/images/2/23/Bond_of_Life.png" },
+            { BondOfVigorSkill, "https://wiki.guildwars2.com/images/6/60/Bond_of_Vigor.png" },
+            { BondOfFaithSkill, "https://wiki.guildwars2.com/images/c/c7/Bond_of_Faith.png" },
+            { Stealth2Skill, "https://wiki.guildwars2.com/images/5/51/Stealth_%28mount%29.png" },
+            // Skyscale
+            { SkyscaleSkill, "https://wiki.guildwars2.com/images/0/01/Skyscale_%28skill%29.png" },
+            { SkyscaleFireballSkill, "https://i.imgur.com/zPlzUia.png" },
+            { SkyscaleFireballDamage, "https://i.imgur.com/zPlzUia.png" },
+            { SkyscaleBlastSkill, "https://wiki.guildwars2.com/images/e/e7/Blast.png" },
             // Relics
             { RelicOfTheAfflicted, "https://wiki.guildwars2.com/images/9/91/Relic_of_the_Afflicted.png" },
             { RelicOfTheCitadel, "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Citadel.png" },
@@ -263,6 +283,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheSunless, "https://wiki.guildwars2.com/images/b/b6/Relic_of_the_Sunless.png" },
             { RelicOfAkeem, "https://wiki.guildwars2.com/images/5/50/Relic_of_Akeem.png" },
             { RelicOfTheWizardsTower, "https://wiki.guildwars2.com/images/e/ea/Relic_of_the_Wizard%27s_Tower.png" },
+            { RelicOfTheMirage, "https://wiki.guildwars2.com/images/d/d3/Relic_of_the_Mirage.png" },
             { RelicOfCerusHit, BuffImages.RelicOfCerus },
             { RelicOfDagdaHit, BuffImages.RelicOfDagda },
             { RelicOfFireworks, BuffImages.RelicOfFireworks },

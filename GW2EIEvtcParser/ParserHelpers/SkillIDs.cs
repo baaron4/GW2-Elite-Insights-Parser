@@ -2241,6 +2241,7 @@
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
         public const long EchosPickup = 49125;
+        public const long BondOfLifeSkill = 49128;
         public const long BowlOfPoultrySatay = 49296;
         public const long PlateOfBeefRendang = 49686;
         public const long Enraged1_100 = 50070;
@@ -2339,6 +2340,7 @@
         public const long BurningCrucible = 52522;
         public const long FlameSlash3 = 52528;
         public const long FlameArmor = 52568;
+        public const long BondOfVigorSkill = 52571;
         public const long Inferno = 52587;
         public const long FierySurge = 52588;
         public const long FieryDance1 = 52614;
@@ -2408,6 +2410,7 @@
         public const long MistlockInstabilityBoonOverload = 53673;
         public const long MistlockInstabilityStickTogether = 53932;
         public const long AuroraBeam3 = 53954;
+        public const long BondOfFaithSkill = 54032;
         public const long WeBleedFireSmall = 54053;
         public const long SocialAwkwardnessImmunity = 54073;
         public const long MistlockInstabilityOutflanked = 54084;
@@ -2431,6 +2434,9 @@
         public const long FeelNoPainSavageInstinct = 55030;
         public const long UnyieldingDevotion = 55044;
         public const long GlyphOfTheStars = 55048;
+        public const long SkyscaleBlastSkill = 55536;
+        public const long SkyscaleSkill = 55715;
+        public const long SkyscaleBlastDamage = 55716;
         public const long ChargedSoul = 56011;
         public const long EtherStrikes1 = 56012;
         public const long ForceOfHavoc2 = 56017;
@@ -2788,6 +2794,7 @@
         public const long Enraged4_200 = 60674;
         public const long Claw3 = 60842;
         public const long Enraged_300 = 61006;
+        public const long Stealth2Skill = 61081;
         public const long Enraged2_100 = 61138;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt2 = 61177;
@@ -3521,6 +3528,7 @@
         public const long RelicOfVass = 69961;
         public const long RelicOfMabon = 69992;
         public const long RelicOfAkeem = 70044;
+        public const long SkyscaleFireballDamage = 70087;
         public const long EmpoweredRage = 70181;
         public const long RelicOfTheAfflicted = 70223;
         public const long Insatiable = 70253;
@@ -3530,6 +3538,7 @@
         public const long RelicOfTheDragonhunterTargetBuff = 70350;
         public const long RelicOfLyhr = 70353;
         public const long RelicOfTheWeaver = 70390;
+        public const long SkyscaleFireballSkill = 70431;
         public const long RelicOfTheZephyrite = 70460;
         public const long RelicOfTheWizardsTower = 70491;
         public const long POV_Petrify = 70504; // could be POV only
@@ -3539,6 +3548,7 @@
         public const long EmpoweredRegret = 70544;
         public const long RelicOfTheSunless = 70617;
         public const long EmpoweredMalice = 70621;
+        public const long RelicOfTheMirage = 70622;
         public const long EmpoweredGluttony = 70687;
         public const long RelicOfTheFlock = 70765;
         public const long RelicOfTheThief = 70767;
