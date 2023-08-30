@@ -20,6 +20,12 @@ namespace GW2EIEvtcParser
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
         public const string WhiteMantlePortalInactive = "D43373FEFA19A54DA2A2B6BB7834A338";
         public const string WhiteMantlePortalActive = "388CF9246218A34DB2F8107E19FCA471";
+        // Skyscale
+        public const string SkyscaleLaunch = "F6A06D8222280F40B17A6984F9B5894F";
+        public const string SkyscaleFireball = "0325D55E6A772047981F4EEAA5CAE537";
+        public const string SkyscaleFireballExplosion = "BA8C9DDEAC761A48ACC53777F1D68C34";
+        public const string SkyscaleBlast1 = "4D30A7F374E56E4F806420A81EAEA03F";
+        public const string SkyscaleBlast2 = "E15FF7FD742AA24BB6C2BE38087CFC22";
         // Relics
         public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
         public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
@@ -31,9 +37,10 @@ namespace GW2EIEvtcParser
         public const string RelicOfFireworks = "2BC033D40C0AEB40A77EEF28D51AE263";
         public const string RelicOfTheNightmare = "0FCF4B1F75575949AA4997365FAE0288";
         public const string RelicOfTheKrait = "0685880038B8F441B191439DB678A5F8";
-        public const string RelicOfTheSunless = "B1FFFAEFC0A3C74D96851E07C75B3FC7";
+        public const string RelicOfTheSunless = "B1FFFAEFC0A3C74D96851E07C75B3FC7"; // Target Src
         public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
         public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
+        public const string RelicOfAkeem = "8181E21A43EAFB42BC8FFB001F02CF44"; // Target Src
         // Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
