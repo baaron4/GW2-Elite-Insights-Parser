@@ -59,6 +59,15 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
             .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Mounts
+            new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
+            new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
+            new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(Stealth2Skill, StealthMountBuff),
+            // Skyscale
+            new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),
+            new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
+            new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1).UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
