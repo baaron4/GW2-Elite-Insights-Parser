@@ -84,11 +84,11 @@ namespace GW2EIEvtcParser.EIData
                     {
                         remmovedInstance = 0;
                     }
-                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, true, remmovedInstance));
+                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, remmovedInstance));
                 }
                 else if (blade is BuffRemoveSingleEvent brse)
                 {
-                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, true, brse.BuffInstance));
+                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, brse.BuffInstance));
                 }
             }
             return res;
