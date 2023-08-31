@@ -58,6 +58,7 @@ namespace GW2EIEvtcParser
             internal const ulong June2023Balance = 147734;
             internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
+            internal const ulong SOTOReleaseAndBalance = 150431;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -97,7 +98,7 @@ namespace GW2EIEvtcParser
             internal const int OldRaidReward1 = 55821; // On each kill
             internal const int OldRaidReward2 = 60685; // On each kill
             internal const int CurrentRaidReward = 22797; // Once per week
-            internal const int EoDStrikeReward = 29453;
+            internal const int PostEoDStrikeReward = 29453;
         }
 
         /// <summary>
@@ -291,7 +292,7 @@ namespace GW2EIEvtcParser
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
-            CappedDuration = 2,
+            StackingSomething = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
             Regeneration = 3,
             Stacking = 4,
             Force = 5,
@@ -871,6 +872,19 @@ namespace GW2EIEvtcParser
             VoidMelter = 24223,
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
+            // Cosmic Observatory
+            TheTormented1 = 25829,
+            TheTormented2 = 26000,
+            TheTormented3 = 26016,
+            SoulFeast = 26069,
+            // Temple of Febe
+            EmbodimentOfGluttony = 25677,
+            EmbodimentOfRage = 25686,
+            EmbodimentOfDespair = 26034,
+            EmbodimentOfRegret = 26049,
+            EmbodimentOfEnvy = 25967,
+            EmbodimentOfMalice = 25700,
+            MaliciousShadow = 25747,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,
@@ -1071,6 +1085,8 @@ namespace GW2EIEvtcParser
             PrototypeVermilionCM = 25414,
             PrototypeArseniteCM = 25416,
             PrototypeIndigoCM = 25423,
+            Dagda = 25705,
+            Cerus = 25989,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
@@ -1280,6 +1296,7 @@ namespace GW2EIEvtcParser
             JuvenileWhiteTiger = 24298,
             JuvenileSiegeTurtle = 24796,
             JuvenilePhoenix = 25131,
+            JuvenileAetherHunter = 25652,
             // Guardian Weapon Summons
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,

@@ -120,6 +120,11 @@ Harvest Temple: 0x040304
 
 Old Lion's Court: 0x040305
 
+### Secret of the Obscure
+Cosmic Observatory: 0x040501
+
+Temple of Febe: 0x040502
+
 ## Open World
 Soo-Won: 0x050401
 

@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        float degree = Point3D.GetRotationFromFacing(facingDirection);
 
                         // Horizon Strike starting at Skorvald's facing point
                         if (c.SkillId == HorizonStrikeSkorvald4)
@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                        float degree = Point3D.GetRotationFromFacing(facingDirection);
 
                         if (c.SkillId == CrimsonDawnSkorvaldCM2)
                         {
@@ -332,8 +332,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             degree += 270;
                         }
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        var connector = new AgentConnector(target);
+                        var rotationConnector = new AngleConnector(degree);
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                     }
 
                     // Punishing Kick
@@ -412,7 +414,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, kickEffect.Rotation.Z - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
                         }
                     }
 
@@ -586,15 +588,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)
         {
-            float front = degree;
-            float flip = degree + 180;
-
+            var connector = new AgentConnector(target);
+            var frontRotationConnector = new AngleConnector(degree);
+            var flipRotationConnector = new AngleConnector(degree + 180);
             // Indicator
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, front, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, flip, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
             // Attack hit
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, front, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, flip, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
         }
 
         private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
@@ -633,12 +635,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float rotation, int translation, int cascadeCount)
         {
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            var rotationConnector = new AngleConnector(rotation);
+            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
+            replay.Decorations.Add(new RectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
 
             for (int i = 0; i < cascadeCount; i++)
             {
-                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
                 attackEnd += 300;
                 translation += 300;
             }

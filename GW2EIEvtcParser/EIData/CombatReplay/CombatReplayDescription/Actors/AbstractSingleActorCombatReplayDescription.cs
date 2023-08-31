@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
@@ -8,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
         public string Img { get; }
         public int ID { get; }
         public IReadOnlyList<float> Positions { get; }
+        public IReadOnlyList<float> Angles { get; }
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
@@ -40,6 +42,8 @@ namespace GW2EIEvtcParser.EIData
             ID = actor.UniqueID;
             var positions = new List<float>();
             Positions = positions;
+            var angles = new List<float>();
+            Angles = angles;
             Type = GetActorType(actor, log);
             HitboxWidth = actor.AgentItem.HitboxWidth;
             foreach (Point3D pos in replay.PolledPositions)
@@ -47,6 +51,10 @@ namespace GW2EIEvtcParser.EIData
                 (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
                 positions.Add(x);
                 positions.Add(y);
+            }
+            foreach (Point3D facing in replay.PolledRotations)
+            {
+                angles.Add(-Point3D.GetRotationFromFacing(facing));
             }
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)

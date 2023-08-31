@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int emboldenedStacks = (int)log.PlayerList.Select(x => {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
                 {
-                    return graph.BuffChart.Max(y => y.Value);
+                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, log.FightData.FightEnd)).Max(y => y.Value);
                 }
                 else
                 {
@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
                 {
                     phase.AddTarget(target);
                 }

@@ -49,6 +49,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000002;
         }
 
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Xunlai Jade Junkyard";
+        }
+
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayXunlaiJadeJunkyard,

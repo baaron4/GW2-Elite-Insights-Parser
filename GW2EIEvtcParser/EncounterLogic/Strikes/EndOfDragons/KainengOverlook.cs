@@ -82,6 +82,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Kaineng Overlook";
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>

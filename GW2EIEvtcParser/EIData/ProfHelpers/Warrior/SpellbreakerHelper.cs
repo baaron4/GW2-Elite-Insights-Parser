@@ -33,22 +33,12 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(MagebaneTether).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                    return x.Time - effectApply.Time < 8000;
-                }
-                return false;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(MagebaneTether).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                    return x.Time - effectApply.Time < 8000;
-                }
-                return false;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
             }).WithBuilds(GW2Builds.August2022Balance),
         };
 
@@ -72,8 +62,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                 }
             }
         }

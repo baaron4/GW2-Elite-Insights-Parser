@@ -164,6 +164,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetPrototypeArsenite = "https://i.imgur.com/tSD5Phl.png";
         private const string TargetPrototypeIndigo = "https://i.imgur.com/DRdLQSr.png";
         private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
+        private const string TargetDagda = "https://i.imgur.com/k6rQdML.png";
+        private const string TargetCerus = "https://i.imgur.com/wDdN8O3.png";
 
         // Trash NPC Icons
         private const string TrashCanach = "https://i.imgur.com/UuxqFko.png";
@@ -443,6 +445,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionJuvenileWhiteTiger = "https://i.imgur.com/B6wtfhQ.png";
         private const string MinionJuvenileWolf = "https://i.imgur.com/GQLiFky.png";
         private const string MinionJuvenileHyena = "https://i.imgur.com/XtYVyhH.png";
+        private const string MinionJuvenileAetherHunter = "https://i.imgur.com/qMVHHki.png";
         private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
         private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
         private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -759,6 +762,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TargetID.PrototypeIndigo, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.PrototypeIndigoCM, TargetPrototypeIndigo },
             { ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
+            { ArcDPSEnums.TargetID.Dagda, TargetDagda },
+            { ArcDPSEnums.TargetID.Cerus, TargetCerus },
         };
 
         /// <summary>
@@ -1058,6 +1063,15 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.InspectorEllenKiel, TrashInspectorEllenKiel },
             { ArcDPSEnums.TrashID.JadeMawTentacle, TrashJadeMawTentacle },
             { ArcDPSEnums.TrashID.AwakenedAbomination, TrashAwakenedAbomination },
+            { ArcDPSEnums.TrashID.EmbodimentOfDespair, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfEnvy, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfGluttony, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TheTormented1, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TheTormented2, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TheTormented3, TrashGenericRedEnemySkull },
         };
 
         /// <summary>
@@ -1207,6 +1221,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.MinionID.JuvenileWhiteTiger, MinionJuvenileWhiteTiger },
             { ArcDPSEnums.MinionID.JuvenileWolf, MinionJuvenileWolf },
             { ArcDPSEnums.MinionID.JuvenileHyena, MinionJuvenileHyena },
+            { ArcDPSEnums.MinionID.JuvenileAetherHunter, MinionJuvenileAetherHunter },
             { ArcDPSEnums.MinionID.BloodFiend, MinionBloodFiend },
             { ArcDPSEnums.MinionID.BoneFiend, MinionBoneFiend },
             { ArcDPSEnums.MinionID.FleshGolem, MinionFleshGolem },

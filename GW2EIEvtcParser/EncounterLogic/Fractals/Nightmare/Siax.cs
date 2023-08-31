@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -169,9 +170,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 1500;
                         int openingAngle = 144;
                         int radius = 600;
+                        int start = (int)c.Time;
+                        int end = start + duration;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingPieDecoration(((int)c.Time, (int)c.Time + duration), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
                     // 66% and 33% phases

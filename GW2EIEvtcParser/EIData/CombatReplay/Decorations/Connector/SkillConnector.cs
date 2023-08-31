@@ -2,16 +2,16 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AgentConnector : Connector
+    internal class SkillConnector : Connector
     {
         public AgentItem Agent { get; }
 
-        public AgentConnector(AbstractSingleActor agent)
+        public SkillConnector(AbstractSingleActor agent)
         {
             Agent = agent.AgentItem;
         }
 
-        public AgentConnector(AgentItem agent)
+        public SkillConnector(AgentItem agent)
         {
             Agent = agent;
         }

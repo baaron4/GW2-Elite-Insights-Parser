@@ -25,6 +25,49 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),
+            // Relics
+            new BuffGainCastFinder(RelicOfVass, RelicOfVass).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
+            //{
+            //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
+            //{
+            //    return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce).UsingICD(1000).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheNightmare, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheNightmare, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheKrait, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
+            //{
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out IReadOnlyList<EffectEvent> effects);
+            //    return effects != null && effects.Any(x => x.Time > evt.Time);
+            //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Mounts
+            new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
+            new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
+            new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(Stealth2Skill, StealthMountBuff),
+            // Skyscale
+            new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),
+            new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
+            new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1).UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
@@ -269,8 +312,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player, PortalEntranceWhiteMantleWatchwork));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, PortalEntranceWhiteMantleWatchwork));
                 }
             }
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> whiteMantlePortalActive))
@@ -282,15 +325,15 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
-                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal));
+                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal);
                         if (first == null)
                         {
                             first = decoration;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, GenericAttachedDecoration.SkillModeCategory.Portal));
+                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal));
                         }
                         replay.Decorations.Add(decoration);
                     }

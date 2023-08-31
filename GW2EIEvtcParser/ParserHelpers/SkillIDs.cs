@@ -47,6 +47,7 @@
         public const long HealingMistOrSoothingDetonation = -29;
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
+        public const long RelicOfFireworksBuffLoss = -32;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -228,8 +229,10 @@
         public const long VirtueOfResolve = 9119;
         public const long ProtectorsStrikeCounterHit = 9121;
         public const long ShieldOfWrathBuff = 9123;
+        public const long SanctuaryGuardian = 9128;
         public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
+        public const long LineOfWarding = 9144;
         public const long SymbolOfWrath = 9146;
         public const long BindingBlade = 9148;
         public const long SignetOfJudgmentSkill = 9120;
@@ -239,7 +242,9 @@
         public const long SymbolOfProtection = 9161;
         public const long SignetOfMercy = 9162;
         public const long POV_AegisTimer = 9177; // guardian passive aegis
+        public const long ShieldOfTheAvenger = 9182;
         public const long SymbolOfSpears = 9192;
+        public const long RingOfWarding = 9195;
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
         public const long BindingBladeSelf = 9225;
@@ -606,6 +611,7 @@
         public const long MindSpike = 10172;
         public const long IllusionaryLeapSkill = 10173;
         public const long MorphedPolymorphMoa = 10179;
+        public const long Veil = 10187;
         public const long CryOfFrustration = 10190;
         public const long MindWrack = 10191;
         public const long DistortionSkill = 10192;
@@ -613,6 +619,7 @@
         public const long PortalWeaving = 10198;
         public const long PortalExeunt = 10199;
         public const long Blink = 10200;
+        public const long NullField = 10203;
         public const long MantraOfDistraction = 10204;
         public const long PowerLock = 10206;
         public const long MantraOfResolve = 10207;
@@ -661,6 +668,10 @@
         public const long DamageBonus5 = 10493;
         public const long SpeedBonus15 = 10495;
         public const long DamageReduction5 = 10496;
+        public const long WellOfBlood = 10527;
+        public const long WellOfCorruption = 10545;
+        public const long WellOfSuffering = 10546;
+        public const long Plaguelands = 10549;
         public const long LifeLeech = 10560;
         public const long PlagueSignetSkill = 10562;
         public const long LifeSiphon = 10563;
@@ -675,6 +686,7 @@
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
         public const long Epidemic = 10606;
+        public const long WellOfDarkness = 10607;
         public const long SignetOfUndeath = 10610;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
@@ -686,6 +698,7 @@
         public const long SpectralWalkSkill = 10685;
         public const long SpectralWalkTeleportBuff = 10686;
         public const long SpectralRecallSkill = 10687;
+        public const long CorrosivePoisonCloud = 10689;
         public const long UnholyFeast = 10701;
         public const long Technobabble = 12318;
         public const long PowerSuit = 12326;
@@ -794,6 +807,7 @@
         public const long IceDrakeVenomSkill = 13096;
         public const long ShadowReturn = 13106;
         public const long TwistingFangs = 13110;
+        public const long ShadowRefuge = 13117;
         public const long BasiliskVenomSkill = 13132;
         public const long BasiliskVenomBuff = 13133;
         public const long DaggerStorm = 13134;
@@ -801,6 +815,7 @@
         public const long ThievesGuildMinionDespawnSkill = 13139;
         public const long PersistingFlames = 13342;
         public const long ArcaneLightning = 13423;
+        public const long MedicalDispersionFieldHeal = 13515;
         public const long SelflessDaring = 13594;
         public const long LesserSymbolOfProtection = 13684;
         public const long RestorativeMantras = 13721;
@@ -1095,6 +1110,7 @@
         public const long LegendaryDwarfStanceSkill = 28419;
         public const long VentarisWill = 28427;
         public const long LegendaryDemonStanceSkill = 28494;
+        public const long InspiringReinforcement = 28516;
         public const long EnchantedDaggers = 28557;
         public const long HardeningPersistence = 28957;
         public const long RiftSlashSkill = 28964;
@@ -1233,6 +1249,7 @@
         public const long TimeBomb = 31485;
         public const long StaticCharge = 31487;
         public const long SapperBombSkill = 31488;
+        public const long SublimeConversion = 31496;
         public const long SpectralDarkness = 31498;
         public const long CelestialAvatar = 31508;
         public const long WingSwipeWyvern = 31520;
@@ -1579,7 +1596,7 @@
         public const long Incoming = 35140;
         public const long AchievementEligibilityMineControl = 35148;
         public const long SplishSplash = 35153;
-        public const long PortalEntranceWhiteMantleWatchwork = 35153;
+        public const long PortalEntranceWhiteMantleWatchwork = 35155;
         public const long EscortSurveilled = 35157;
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
@@ -1943,6 +1960,7 @@
         public const long POV_StealHealthBuff = 42870;
         public const long KallasFervor = 42883;
         public const long EpilogueAshesOfTheJust = 42898;
+        public const long SandSwell = 42917;
         public const long FlameSurge = 42924;
         public const long EpilogueEternalOasis = 42925;
         public const long EnterPhotonForge = 42938;
@@ -2058,6 +2076,7 @@
         public const long POV_SandShade1 = 45225;
         public const long NarcoticSpores = 45262;
         public const long PerfectWeave = 45267;
+        public const long WindsOfDisenchantment = 45333;
         public const long POV_TrailOfAnguishMovingBuff = 45424; // reapplied as you move, 150ms duration
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
@@ -2223,6 +2242,7 @@
         public const long ThrowMagneticBomb = 49112;
         public const long UnstableArtifact = 49123;
         public const long EchosPickup = 49125;
+        public const long BondOfLifeSkill = 49128;
         public const long BowlOfPoultrySatay = 49296;
         public const long PlateOfBeefRendang = 49686;
         public const long Enraged1_100 = 50070;
@@ -2321,6 +2341,7 @@
         public const long BurningCrucible = 52522;
         public const long FlameSlash3 = 52528;
         public const long FlameArmor = 52568;
+        public const long BondOfVigorSkill = 52571;
         public const long Inferno = 52587;
         public const long FierySurge = 52588;
         public const long FieryDance1 = 52614;
@@ -2390,6 +2411,7 @@
         public const long MistlockInstabilityBoonOverload = 53673;
         public const long MistlockInstabilityStickTogether = 53932;
         public const long AuroraBeam3 = 53954;
+        public const long BondOfFaithSkill = 54032;
         public const long WeBleedFireSmall = 54053;
         public const long SocialAwkwardnessImmunity = 54073;
         public const long MistlockInstabilityOutflanked = 54084;
@@ -2413,6 +2435,9 @@
         public const long FeelNoPainSavageInstinct = 55030;
         public const long UnyieldingDevotion = 55044;
         public const long GlyphOfTheStars = 55048;
+        public const long SkyscaleBlastSkill = 55536;
+        public const long SkyscaleSkill = 55715;
+        public const long SkyscaleBlastDamage = 55716;
         public const long ChargedSoul = 56011;
         public const long EtherStrikes1 = 56012;
         public const long ForceOfHavoc2 = 56017;
@@ -2770,6 +2795,7 @@
         public const long Enraged4_200 = 60674;
         public const long Claw3 = 60842;
         public const long Enraged_300 = 61006;
+        public const long Stealth2Skill = 61081;
         public const long Enraged2_100 = 61138;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt2 = 61177;
@@ -2857,6 +2883,7 @@
         public const long ExecutionersCallingSkill = 62525;
         public const long RushingJusticeBuff = 62529;
         public const long ExitHarbingerShroud = 62540;
+        public const long RainOfSwords = 62553;
         public const long CutterBurst = 62554;
         public const long DoomApproaches = 62558;
         public const long EnterHarbingerShroud = 62567;
@@ -2935,6 +2962,7 @@
         public const long EmpoweringAuras = 62939;
         public const long DeployJadeSphereAir = 62940;
         public const long DragonSlashReach = 62951;
+        public const long DragonspikeMineSkill = 62960;
         public const long SwiftCut = 62966;
         public const long FlowStabilizer = 62967;
         public const long RockyLoopSkill = 62975;
@@ -3144,6 +3172,7 @@
         public const long DragonsEndContributor1 = 65384;
         public const long HardenedShell = 65396;
         public const long NightmareDevastationOW1 = 65410;
+        public const long HunkerDownPetTurtle = 65418;
         public const long CosmicMeteorJormag = 65416;
         public const long EnhancedDestructiveAuraSkill1 = 65423;
         public const long LavaSlam = 65427;
@@ -3485,6 +3514,60 @@
         public const long AspectOfLethargyNoTetherBuff = 69458;
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
+        public const long EmpoweredEnvy = 69479;
+        public const long EmpoweredCerus = 69550;
+        public const long RelicOfTheHerald = 69606;
+        public const long MabonsStrength = 69620;
+        public const long KryptisPossessed = 69647;
+        public const long InvulnerabilityCerus = 69722;
+        public const long RelicOfTheAristocracy = 69795;
+        public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
+        public const long RelicOfTheNightmare = 69849;
+        public const long RelicOfFireworks = 69855;
+        public const long RelicOfCerusBuff = 69867;
+        public const long RelicOfPeithaTargetBuff = 69882;
+        public const long RelicOfVass = 69961;
+        public const long RelicOfMabon = 69992;
+        public const long RelicOfAkeem = 70044;
+        public const long SkyscaleFireballDamage = 70087;
+        public const long EmpoweredRage = 70181;
+        public const long RelicOfTheAfflicted = 70223;
+        public const long Insatiable = 70253;
+        public const long RelicOfTheDeadeye = 70282;
+        public const long ResidualAnxiety = 70283;
+        public const long RelicOfTheDefender = 70319;
+        public const long RelicOfTheDragonhunterTargetBuff = 70350;
+        public const long RelicOfLyhr = 70353;
+        public const long RelicOfTheWeaver = 70390;
+        public const long SkyscaleFireballSkill = 70431;
+        public const long RelicOfTheZephyrite = 70460;
+        public const long RelicOfTheWizardsTower = 70491;
+        public const long POV_Petrify = 70504; // could be POV only
+        public const long DagdaCastingSomething = 70516;
+        public const long BeamOfLightDuration = 70525;
+        public const long RelicOfTheKrait = 70530;
+        public const long EmpoweredRegret = 70544;
+        public const long RelicOfTheSunless = 70617;
+        public const long EmpoweredMalice = 70621;
+        public const long RelicOfTheMirage = 70622;
+        public const long EmpoweredGluttony = 70687;
+        public const long RelicOfTheFlock = 70765;
+        public const long RelicOfTheThief = 70767;
+        public const long RelicOfIsgarrenTargetBuff = 70806;
+        public const long RelicOfTheDaredevil = 70839;
+        public const long RelicOfTheBrawler = 70913;
+        public const long EmpoweredEnvyCerus = 70974;
+        public const long RelicOfTheScourge = 70975;
+        public const long RelicOfTheIce = 71051;
+        public const long EmpoweredMaliceCerus = 71073;
+        public const long RelicOfTheMonk = 71132;
+        public const long RelicOfTheAstralWard = 71134;
+        public const long RelicOfDagdaBuff = 71139;
+        public const long RelicOfTheCitadel = 71166;
+        public const long RelicOfDagdaHit = 71202;
+        public const long RelicOfTheFirebrand = 71217;
+        public const long RelicOfCerusHit = 71252;
+        public const long EmpoweredDespair = 71276;
     }
 
 }

@@ -112,6 +112,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             return false;
                         }
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+                        {
+                            return false;
+                        }
                         // Deimos can't go above 10% hp during that phase
                         if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
                         {
@@ -523,14 +527,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
+                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        var connector = new AgentConnector(target);
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 900, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(false, 0, 900, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                            var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
+                            replay.Decorations.Add(new PieDecoration(true, 0, 900, 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(false, 0, 900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingRotationConnector(rotationConnector1));
                             if (i % 5 != 0)
                             {
-                                replay.Decorations.Add(new PieDecoration(true, 0, 900, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                                replay.Decorations.Add(new PieDecoration(false, 0, 900, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                                var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
+                                replay.Decorations.Add(new PieDecoration(true, 0, 900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(false, 0, 900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingRotationConnector(rotationConnector2));
                             }
                         }
                     }

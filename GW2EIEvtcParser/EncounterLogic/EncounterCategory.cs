@@ -37,6 +37,7 @@
             Bjora,
             Drizzlewood,
             Cantha,
+            SotO,
             //
             GreenAlpineBorderlands,
             BlueAlpineBorderlands,
@@ -142,6 +143,8 @@
                     return "Bjora Marches";
                 case SubFightCategory.Drizzlewood:
                     return "Drizzlewood Coast";
+                case SubFightCategory.SotO:
+                    return "Secret of the Obscure";
                 default:
                     return SubCategory.ToString();
             }

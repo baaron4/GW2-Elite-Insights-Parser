@@ -248,8 +248,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
             {
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
+                agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
+                agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
             var echoesOfScarlet = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarNM) || x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarCM)).ToList();

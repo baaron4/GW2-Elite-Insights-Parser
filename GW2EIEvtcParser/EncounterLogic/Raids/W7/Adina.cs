@@ -132,8 +132,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int width = 1100; int height = 60;
                         foreach (int angle in new List<int> { 90, 270 })
                         {
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, 360, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
+                            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
                     }
                     //
@@ -146,8 +147,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int width = 1100; int height = 60;
                         foreach (int angle in new List<int> { 30, 150, 270})
                         {
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, angle, width / 2, 360, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", new AgentConnector(target)));
+                            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
 
                     }

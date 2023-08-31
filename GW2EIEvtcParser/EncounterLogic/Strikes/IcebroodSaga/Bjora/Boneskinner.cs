@@ -121,12 +121,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         ParametricPoint3D lastDirection = replay.PolledRotations.LastOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
                         if (lastDirection != null)
                         {
-                            var direction = new Point3D(lastDirection.X, lastDirection.Y);
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
-                            replay.Decorations.Add(new PieDecoration(true, endHitTime, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, endHitTime, radius, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                             // Lingering AoE to match in game display
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     // Crushing Cruelty
@@ -220,14 +221,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    ParametricPoint3D point = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
-                    if (point != null)
+                    ParametricPoint3D rotation = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
+                    if (rotation != null)
                     {
-                        double radian = Math.Atan2(point.X, point.Y);
-                        float degree = RadianToDegreeF(radian);
+                        var connector = new PositionConnector(indicator.Position);
+                        var rotationConnector = new AngleConnector(rotation);
 
-                        replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, width - 5, height - 5, -degree, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(indicator.Position)));
-                        replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, -degree, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position)));
+                        replay.Decorations.Add(new RectangleDecoration(false, 0, width - 5, height - 5, (start, end), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                     }
                 }
             }

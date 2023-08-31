@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
-                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
             }
             // Don't put minions of NPC into the minion display system
             AgentItem master = AgentItem.GetFinalMaster();

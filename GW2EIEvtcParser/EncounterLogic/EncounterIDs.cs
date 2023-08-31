@@ -41,6 +41,8 @@
             public const long FestivalMask = 0x000100;
             public const long IBSMask = 0x000200;
             public const long EODMask = 0x000300;
+            public const long CoreMask = 0x000400;
+            public const long SotOMask = 0x000500;
         }
 
         public static class WvWMasks

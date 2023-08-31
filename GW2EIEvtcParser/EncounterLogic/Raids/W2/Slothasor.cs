@@ -179,10 +179,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
-                            float direction = Point3D.GetRotationFromFacing(facing);
-                            int angle = 60;
-                            replay.Decorations.Add(new PieDecoration(true, 0, range, direction, angle, (start, start + preCastTime), "rgba(255,200,0,0.1)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(true, 0, range, direction, angle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(facing);
+                            var openingAngle = 60;
+                            replay.Decorations.Add(new PieDecoration(true, 0, range, openingAngle, (start, start + preCastTime), "rgba(255,200,0,0.1)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, 0, range, openingAngle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     var tantrum = cls.Where(x => x.SkillId == TantrumSkill).ToList();
