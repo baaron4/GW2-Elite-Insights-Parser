@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class ActorOrientationDecoration : FacingDecoration
+    internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
 
-        public ActorOrientationDecoration((int start, int end) lifespan, AgentConnector connector, IReadOnlyList<ParametricPoint3D> facings) : base(lifespan, connector, facings)
+        public ActorOrientationDecoration((int start, int end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
         {
+            RotationConnectedTo = new AgentFacingConnector(agent);
         }
 
         //
@@ -17,6 +19,11 @@ namespace GW2EIEvtcParser.EIData
         }
 
         public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec Spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        {
+            return this;
+        }
+
+        public override GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
         {
             return this;
         }

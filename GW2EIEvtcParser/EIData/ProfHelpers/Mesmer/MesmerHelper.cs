@@ -413,7 +413,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    replay.Decorations.Add(new RectangleDecoration(false, 0, 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
                 }
             }

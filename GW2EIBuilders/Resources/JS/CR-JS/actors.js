@@ -5,8 +5,9 @@
 "use strict";
 //// ACTORS
 class IconDrawable {
-    constructor(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth) {
+    constructor(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth) {
         this.pos = pos;
+        this.angles = angles;
         this.start = start;
         this.end = end;
         this.img = new Image();
@@ -96,6 +97,28 @@ class IconDrawable {
         return this.img;
     }
 
+    getInterpolatedRotation(startIndex, currentIndex) {
+        const offsetedIndex = currentIndex - startIndex;
+        const initialAngle = this.angles[offsetedIndex];
+        const timeValue = animator.times[currentIndex];
+        var angle = 0;
+        var time = animator.reactiveDataStatus.time;
+        if (time - timeValue > 0 && offsetedIndex < this.angles.length - 1) {
+            const nextTimeValue = animator.times[currentIndex + 1];
+            let nextAngle = this.angles[offsetedIndex + 1];
+            // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
+            if (nextAngle - initialAngle < -180) {
+                nextAngle += 360.0;
+            } else if (nextAngle - initialAngle > 180) {
+                nextAngle -= 360.0;
+            }
+            angle = initialAngle + (time - timeValue) / (nextTimeValue - timeValue) * (nextAngle - initialAngle);
+        } else {
+            angle = initialAngle;
+        }
+        return angle;
+    }
+
     getInterpolatedPosition(startIndex, currentIndex) {
         const offsetedIndex = currentIndex - startIndex;
         const positionX = this.pos[2 * offsetedIndex];
@@ -123,6 +146,23 @@ class IconDrawable {
 
     canDraw() {
         return true;
+    }
+
+    getRotation() {
+        if (this.angles === null || this.angles.length === 0 || this.disconnected()) {
+            return null;
+        }
+        var time = animator.reactiveDataStatus.time;
+        if (this.start !== -1 && (this.start > time || this.end < time)) {
+            return null;
+        }
+        if (this.angles.length === 1) {
+            return this.angles[0];
+        }
+        const lastTime = animator.times[animator.times.length - 1];
+        const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
+        const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
+        return this.getInterpolatedRotation(startIndex, Math.max(currentIndex, startIndex));
     }
 
     getPosition() {
@@ -196,8 +236,8 @@ class IconDrawable {
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, group, pos, dead, down, dc, breakbarActive, hitboxWidth) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
+    constructor(start, end, imgSrc, pixelSize, group, pos, angles, dead, down, dc, breakbarActive, hitboxWidth) {
+        super(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
         this.group = group;
     }
 
@@ -208,8 +248,8 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos, dead, down, dc, breakbarActive, masterID, hitboxWidth) {
-        super(pos, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
+    constructor(start, end, imgSrc, pixelSize, pos, angles, dead, down, dc, breakbarActive, masterID, hitboxWidth) {
+        super(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
         this.masterID = typeof masterID === "undefined" ? -1 : masterID;
         this.master = null;
     }

@@ -200,11 +200,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
-                            float direction = RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength, roadWidth, direction, roadLength / 2 + 200, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
-                                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, roadLength/subdivisions, roadWidth, direction, (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset), (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position)));
+                                var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
+                                replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             }
                         }
                     }
@@ -232,8 +232,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = start + 250;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
-                        replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, facing, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                        if (facing != null)
+                        {
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(facing);
+                            replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
+                        }
                     }
                     foreach (AbstractCastEvent c in causticChaos)
                     {
@@ -254,10 +259,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int aimTime = (int)((double)c.ExpectedDuration*ratio);
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(255,100,0,0.3)"));
+                            var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
+                            var rotationConnector = new AgentFacingConnector(target);
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new FacingRectangleDecoration((start + aimTime, end), new AgentConnector(target), replay.PolledRotations, chaosLength, chaosWidth, chaosLength / 2, "rgba(100,100,100,0.7)"));
+                                replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             }
                         }
                     }

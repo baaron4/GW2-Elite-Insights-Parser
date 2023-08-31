@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new PieDecoration(true, start + cascading, radius, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls).ToList();

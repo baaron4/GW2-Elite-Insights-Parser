@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
             ProfHelper.ComputeProfessionCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
-                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
             }
         }
 

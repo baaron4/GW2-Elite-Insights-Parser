@@ -198,7 +198,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)replay.TimeOffsets.start;
                         int end = (int)replay.TimeOffsets.end;
-                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(target), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Enervator:
