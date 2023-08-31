@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new BuffGainCastFinder(MushroomKingsBlessing, MushroomKingsBlessingBuff).UsingICD(500),
+                new BuffGainCastFinder(MushroomKingsBlessing, POV_MushroomKingsBlessingBuff).UsingICD(500),
             };
         }
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return logStartNPCUpdate.Time;
+                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID);
             }
             return GetGenericFightOffset(fightData);
         }

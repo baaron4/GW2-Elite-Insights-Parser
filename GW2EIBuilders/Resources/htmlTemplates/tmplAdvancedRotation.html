@@ -1,5 +1,33 @@
 <template>
     <div>
+        <div style="position:absolute; margin-top: 60px;  margin-left: 145px; z-index: 1;">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Skills" style="font-size: 1.1em;">
+                Skills <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu p-2 font-weight-normal" style="min-width: 165px; max-width: 165px;">
+                <div class="d-flex flex-column justify-content-center align-items-center mb-1"
+                    style="border-bottom: 2px solid #bbb;">
+                    <li>
+                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="for (var i = 0; i < skillList.length; i++) {selectedSkills['s' + skillList[i].id] = true;}" @click.stop="stopClickEvent">Select all</button>
+                    </li>
+                    <li class="mb-1">
+                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="for (var i = 0; i < skillList.length; i++) {selectedSkills['s' + skillList[i].id] = false;}" @click.stop="stopClickEvent">Deselect all</button>
+                    </li>
+                </div>
+                <li v-for="(skill, index) in skillList" :key="index">
+                    <input :id="'advanced-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
+                        v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
+                    <label :for="'advanced-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">                                     
+                        <img class="icon" 
+                                :src="getSkill(skill.id).icon">
+                        {{skill.name}}
+                    </label>          
+                </li>
+            </ul>
+        </div>
         <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
         <rotation-legend-component></rotation-legend-component>
     </div>
@@ -48,7 +76,7 @@
         return layout;
     };
 
-    function computeAdvancedRotationData(rotationData, images, data, phase, actor, yAxis) {
+    function computeAdvancedRotationData(rotationData, images, data, phase, actor, selectedSkills) {
     if (rotationData) {
         var rotaTrace = {
             x: [],
@@ -96,6 +124,9 @@
                 name = skill.name;
                 swap = skill.isSwap;
             }
+            if (!swap && !selectedSkills['s'+skillId]) {
+                continue;
+            }
 
             if (!icon.includes("render") && !icon.includes("darthmaim")) {
                 icon = null;
@@ -141,7 +172,8 @@
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
             rotaTrace.y.push(0.6 - yOffset);
-            rotaTrace.text.push(name + ' at ' + x + 's for ' + originalDuration + 'ms');
+            var text = `${name} at ${x}s`;
+            rotaTrace.text.push(endType === RotationStatus.INSTANT ? text : text + ` for ${originalDuration}ms`);
             rotaTrace.width.push(aa ? 0.25 : 0.5);
             rotaTrace.marker.color.push(fillColor);
 
@@ -178,21 +210,51 @@
                     }
                     this.layout.datarevision = new Date().getTime();
                 }
+            },
+            selectedSkills: {
+                deep: true,
+                handler: function () {
+                    this.computeLayout();
+                }
             }
         },
+        data: function () {
+            var selectedSkills = {};
+            var skillList = [];
+            var rotation = this.target ? logData.targets[this.actorindex].details.rotation[this.phaseindex] : logData.players[this.actorindex].details.rotation[this.phaseindex];
+            for (var i = 0; i < rotation.length; i++) {
+                var rota = rotation[i];
+                var skillID = rota[1];
+                var skill = this.getSkill(skillID);
+                if (skill.isSwap || selectedSkills['s' + skillID]) {
+                    continue;
+                }
+                skillList.push({name: skill.name, id: skillID});
+                selectedSkills['s'+skillID] = true;
+            }
+            skillList.sort((x,y) => {
+                if (x.name < y.name) {
+                    return -1;
+                }
+                if (x.name > y.name) {
+                    return 1;
+                }
+                return 0;
+            });
+            return {
+                selectedSkills: selectedSkills,
+                skillList: skillList,
+            };
+        },
         created: function () {
-            this.data = [];
-            var images = [];
-            var nbLines = computeAdvancedRotationData(this.rotation, images, this.data, this.phase, this.actor);
-            this.layout = getAdvancedRotationLayout(images, this.light ? '#495057' : '#cccccc', nbLines);
-            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            this.computeLayout();
         },
         activated: function () {
             var div = document.getElementById(this.graphid);
-            var layout = this.layout;
-            var images = layout.images;
             var _this = this;
             div.on('plotly_relayout', function (evt) {
+                var layout = _this.layout;
+                var images = layout.images;
                 var x0 = layout.xaxis.range[0];
                 var x1 = layout.xaxis.range[1];
                 var y0 = layout.yaxis.range[0];
@@ -217,6 +279,28 @@
             rotation: function () {
                 return this.actor.details.rotation[this.phaseindex];
             }
+        },
+        methods: {       
+            computeLayout: function() {
+                var backUpXAxis = null;
+                if (this.layout) {
+                    backUpXAxis = this.layout.xaxis;
+                }
+                this.data = [];
+                var images = [];
+                var nbLines = computeAdvancedRotationData(this.rotation, images, this.data, this.phase, this.actor, this.selectedSkills);
+                this.layout = getAdvancedRotationLayout(images, this.light ? '#495057' : '#cccccc', nbLines);
+                if (backUpXAxis) {
+                    this.layout.xaxis = backUpXAxis;
+                }
+                this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            },
+            stopClickEvent: function (event) {
+                event.stopPropagation();
+            },
+            getSkill: function (id) {
+                return findSkill(false, id);
+            },
         }
     });
 </script>

@@ -42,6 +42,8 @@ namespace GW2EIEvtcParser
 
         public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension || IsStateChange == ArcDPSEnums.StateChange.ExtensionCombat;
 
+        public bool IsEffect => IsStateChange == ArcDPSEnums.StateChange.Effect_51 || IsStateChange == ArcDPSEnums.StateChange.Effect_45;
+
         // Constructor
         internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
@@ -124,7 +126,8 @@ namespace GW2EIEvtcParser
         {
             return SrcIsAgent()
                 || DstIsAgent()
-                || IsStateChange == ArcDPSEnums.StateChange.Reward;
+                || IsStateChange == ArcDPSEnums.StateChange.Reward
+                || IsStateChange == ArcDPSEnums.StateChange.TickRate;
         }
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -144,6 +147,14 @@ namespace GW2EIEvtcParser
                         ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
         }
 
+        internal bool IsDamagingDamage()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None &&
+                        IsActivation == ArcDPSEnums.Activation.None &&
+                        IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+                        ((IsBuff != 0 && Value == 0 && BuffDmg > 0) || (IsBuff == 0 && Value > 0));
+        }
+
         internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
@@ -151,6 +162,15 @@ namespace GW2EIEvtcParser
                 return handler.IsDamage(this);
             }
             return IsDamage();
+        }
+
+        internal bool IsDamagingDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out AbstractExtensionHandler handler))
+            {
+                return handler.IsDamagingDamage(this);
+            }
+            return IsDamagingDamage();
         }
 
         internal bool IsPhysicalDamage()
@@ -198,7 +218,8 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.Tag
                 || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
                 || IsStateChange == ArcDPSEnums.StateChange.Last90BeforeDown
-                || IsStateChange == ArcDPSEnums.StateChange.Effect
+                || IsStateChange == ArcDPSEnums.StateChange.Effect_45
+                || IsStateChange == ArcDPSEnums.StateChange.Effect_51
                 ;
         }
 
@@ -216,8 +237,9 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None
                 || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
-                || IsStateChange == ArcDPSEnums.StateChange.Effect
-                || IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate;
+                || IsStateChange == ArcDPSEnums.StateChange.Effect_45
+                || IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.Effect_51;
             ;
         }
 

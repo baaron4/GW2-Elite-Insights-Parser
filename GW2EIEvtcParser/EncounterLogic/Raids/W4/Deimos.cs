@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -30,7 +31,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-            new PlayerDstFirstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0, (ce, log) => {
+            new PlayerDstFirstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0).UsingChecker((ce, log) => {
                 AbstractSingleActor actor = log.FindActor(ce.To);
                 if (actor == null)
                 {
@@ -41,17 +42,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return !hitInDown;
             }),
             new EnemyCastStartMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0, (ce,log) => ce.ActualDuration >= 2200),
-            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0, (ce, log) => ce.ActualDuration < 2200),
+            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0).UsingChecker((ce,log) => ce.ActualDuration >= 2200),
+            new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0).UsingChecker((ce, log) => ce.ActualDuration < 2200),
             new EnemyCastStartMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0,(ce,log) => ce.ActualDuration >= 4400),
-            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0,(ce, log) => ce.ActualDuration < 4400),
+            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0).UsingChecker((ce,log) => ce.ActualDuration >= 4400),
+            new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0).UsingChecker((ce, log) => ce.ActualDuration < 4400),
             new PlayerDstHitMechanic(new long[] {Annihilate2, Annihilate1 }, "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
             new PlayerDstHitMechanic(DemonicShockWaveRight, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
             new PlayerDstHitMechanic(DemonicShockWaveLeft, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
             new PlayerDstHitMechanic(DemonicShockWaveCenter, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
             new PlayerDstBuffApplyMechanic(TearInstability, "Tear Instability", new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
-            new PlayerDstHitMechanic(MindCrush, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0, (de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(MindCrush, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0).UsingChecker( (de,log) => de.HealthDamage > 0),
             new PlayerDstBuffApplyMechanic(WeakMinded, "Weak Minded", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
             new PlayerDstBuffApplyMechanic(DeimosSelectedByGreen, "Chosen by Eye of Janthir", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
             new PlayerDstBuffApplyMechanic(GreenTeleport, "Teleported", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(DemonicAura, DemonicAura ), // Demonic Aura
+                new DamageCastFinder(DemonicAura, DemonicAura),
             };
         }
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -100,38 +101,33 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem target, HashSet<ulong> gadgetAgents, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private static void MergeWithGadgets(AgentItem deimos, HashSet<AgentItem> gadgets, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            foreach (CombatItem c in combatData)
+            foreach (AgentItem gadget in gadgets)
             {
-                if (c.HasTime(extensions) && c.Time < target.LastAware && c.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && c.IsStateChange != ArcDPSEnums.StateChange.Targetable)
-                {
-                    continue;
-                }
-                if (gadgetAgents.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                {
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
-                    {
-                        continue;
+                RedirectAllEvents(combatData, extensions, agentData, gadget, deimos, 
+                    (evt, from, to) => {
+                        // skip events before last aware that are not attack target related
+                        if (evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
+                        {
+                            return false;
+                        }
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+                        {
+                            return false;
+                        }
+                        // Deimos can't go above 10% hp during that phase
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
+                        {
+                            return false;
+                        }
+                        if (evt.Time < to.FirstAware)
+                        {
+                            evt.OverrideTime(to.FirstAware);
+                        }
+                        return true;
                     }
-                    if (c.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && c.DstAgent > 1500)
-                    {
-                        continue;
-                    }
-                    c.OverrideSrcAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
-                if (gadgetAgents.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                {
-                    c.OverrideDstAgent(target.Agent);
-                    if (c.Time < target.FirstAware)
-                    {
-                        c.OverrideTime(target.FirstAware);
-                    }
-                }
+                );
             }
         }
 
@@ -143,7 +139,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             var res = new List<AbstractBuffEvent>();
-            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(SkillIDs.UnnaturalSignet);
+            IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
             foreach (AbstractBuffEvent bfe in signets)
             {
                 if (bfe is BuffApplyEvent ba)
@@ -151,8 +147,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                     if (removal == null)
                     {
-                        res.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
-                        res.Add(new BuffRemoveManualEvent(ParserHelper._unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
+                        res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
+                        res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
                     }
                 }
                 else if (bfe is BuffRemoveAllEvent)
@@ -160,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                     if (apply == null)
                     {
-                        res.Add(new BuffApplyEvent(ParserHelper._unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
+                        res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
                     }
                 }
             }
@@ -193,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
                 // sanity check
-                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ParserHelper.ServerDelayConstant);
+                TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
                 if (attackableEvent == null)
                 {
                     return;
@@ -215,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<ulong> gadgetAgents)
+        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<AgentItem> gadgetAgents)
         {
             if (targetable == null)
             {
@@ -223,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             long firstAware = targetable.Time;
             AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent, targetable.Time);
-            if (targetAgent == ParserHelper._unknownAgent)
+            if (targetAgent == _unknownAgent)
             {
                 return 0;
             }
@@ -233,15 +229,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent, attackTargetEvent.Time);
-            if (deimosStructBody == ParserHelper._unknownAgent)
+            if (deimosStructBody == _unknownAgent)
             {
                 return 0;
             }
-            gadgetAgents.Add(deimosStructBody.Agent);
+            gadgetAgents.Add(deimosStructBody);
             CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
             if (armDeimosDamageEvent != null)
             {
-                gadgetAgents.Add(armDeimosDamageEvent.SrcAgent);
+                gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
             }
             return firstAware;
         }
@@ -350,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Deimos gadgets
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware);
-            var gadgetAgents = new HashSet<ulong>();
+            var gadgetAgents = new HashSet<AgentItem>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
             if (firstAware == 0)
@@ -362,16 +358,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (deimosGadgets.Count > 0)
                     {
                         firstAware = deimosGadgets.Max(x => x.FirstAware);
-                        gadgetAgents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                        gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
                     }
                 }
             }
             if (gadgetAgents.Count > 0)
             {
                 _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
-                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, extensions);
+                MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, agentData, extensions);
                 // Add custom spawn event
-                combatData.Add(new CombatItem(_deimos10PercentTime + 1, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
+                combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             }
             deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
             deimos.OverrideName("Deimos");
@@ -419,7 +415,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
 
             if (invulDei != null)
             {
@@ -427,7 +423,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
-                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > ParserHelper.PhaseTimeLimit)
+                if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > PhaseTimeLimit)
                 {
                     var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
                     phase10to0.AddTarget(mainTarget);
@@ -459,23 +455,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
-            List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, UnnaturalSignet, mainTarget, true, true);
-            long sigStart = 0;
+            var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             int burstID = 1;
-            for (int i = 0; i < signets.Count; i++)
+            foreach (Segment signet in signets)
             {
-                AbstractBuffEvent signet = signets[i];
-                if (signet is BuffApplyEvent)
-                {
-                    sigStart = Math.Max(signet.Time + 1, 0);
-                }
-                else
-                {
-                    long sigEnd = Math.Min(signet.Time - 1, log.FightData.FightEnd);
-                    var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
-                    burstPhase.AddTarget(mainTarget);
-                    phases.Add(burstPhase);
-                }
+                long sigStart = Math.Max(signet.Start, log.FightData.FightStart);
+                long sigEnd = Math.Min(signet.End, log.FightData.FightEnd);
+                var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
+                burstPhase.AddTarget(mainTarget);
+                phases.Add(burstPhase);
             }
             return phases;
         }
@@ -550,20 +538,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, UnnaturalSignet, target, true, true);
-                    int sigStart = 0;
-                    int sigEnd = 0;
-                    foreach (AbstractBuffEvent signet in signets)
+                    var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in signets)
                     {
-                        if (signet is BuffApplyEvent)
-                        {
-                            sigStart = (int)signet.Time;
-                        }
-                        else
-                        {
-                            sigEnd = (int)signet.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Gambler:
@@ -588,7 +566,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
                     if (Saul != null)
                     {
-                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware - 1);
+                        replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.DemonicBond:
@@ -630,7 +608,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 diffY = -1130;
                             }
                         }
-                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ParserHelper.ServerDelayConstant) + new Point3D(diffX, diffY);
+                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
                         replay.Decorations.Add(new LineDecoration(0, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
@@ -643,21 +621,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // teleport zone
-            List<AbstractBuffEvent> tpDeimos = GetFilteredList(log.CombatData, DeimosSelectedByGreen, p, true, true);
-            int tpStart = 0;
-            foreach (AbstractBuffEvent c in tpDeimos)
+            var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in tpDeimos)
             {
-                if (c is BuffApplyEvent)
-                {
-                    tpStart = (int)c.Time;
-                }
-                else
-                {
-                    int tpEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
             }
+            // Tear Instability
+            IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

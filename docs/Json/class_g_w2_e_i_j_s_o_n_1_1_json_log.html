@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Guild Wars 2 - Elite Insights
-   &#160;<span id="projectnumber">2.53.0.0+</span>
+   &#160;<span id="projectnumber">2.57.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -142,12 +142,19 @@ see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/En
 <tr class="memitem:a1644dfa11424c9f28b64347bf56dd00c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1644dfa11424c9f28b64347bf56dd00c">Language</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a1644dfa11424c9f28b64347bf56dd00c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Language with which the evtc was generated  <a href="#a1644dfa11424c9f28b64347bf56dd00c">More...</a><br /></td></tr>
 <tr class="separator:a1644dfa11424c9f28b64347bf56dd00c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac075875f8eb8fb8be5a415655a951459"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac075875f8eb8fb8be5a415655a951459">FractalScale</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac075875f8eb8fb8be5a415655a951459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale of the fractal, only applicable for fractal encounters. <br />
+Valued at 0 if missing.  <a href="#ac075875f8eb8fb8be5a415655a951459">More...</a><br /></td></tr>
+<tr class="separator:ac075875f8eb8fb8be5a415655a951459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae12642cdb8b209e31ca150b4b198ad86"><td class="memItemLeft" align="right" valign="top">byte&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae12642cdb8b209e31ca150b4b198ad86">LanguageID</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:ae12642cdb8b209e31ca150b4b198ad86"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the language  <a href="#ae12642cdb8b209e31ca150b4b198ad86">More...</a><br /></td></tr>
 <tr class="separator:ae12642cdb8b209e31ca150b4b198ad86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13f8ce5b6c867ed357a9d766a418d535"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a13f8ce5b6c867ed357a9d766a418d535">RecordedBy</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a13f8ce5b6c867ed357a9d766a418d535"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player who recorded the fight  <a href="#a13f8ce5b6c867ed357a9d766a418d535">More...</a><br /></td></tr>
 <tr class="separator:a13f8ce5b6c867ed357a9d766a418d535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c48b5ac81428b5faf1f3db33731eda"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a85c48b5ac81428b5faf1f3db33731eda">RecordedAccountBy</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a85c48b5ac81428b5faf1f3db33731eda"><td class="mdescLeft">&#160;</td><td class="mdescRight">The account name of the player who recorded the fight  <a href="#a85c48b5ac81428b5faf1f3db33731eda">More...</a><br /></td></tr>
+<tr class="separator:a85c48b5ac81428b5faf1f3db33731eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5d43ad7f496bdf53f36c773930c7abc"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#af5d43ad7f496bdf53f36c773930c7abc">TimeStart</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:af5d43ad7f496bdf53f36c773930c7abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: use TimeStartStd instead <br />
 The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br />
@@ -181,6 +188,13 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <tr class="memitem:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8">IsCM</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the fight is in challenge mode  <a href="#acaa0d773f609bb6ef25a59b0ff5ef8a8">More...</a><br /></td></tr>
 <tr class="separator:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a0aac09135663213e64ed1614c8d5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a43a0aac09135663213e64ed1614c8d5c">Anonymous</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a43a0aac09135663213e64ed1614c8d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the log was parsed in anonymous mode  <a href="#a43a0aac09135663213e64ed1614c8d5c">More...</a><br /></td></tr>
+<tr class="separator:a43a0aac09135663213e64ed1614c8d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f5f727058e2781c39b18d280196783"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a57f5f727058e2781c39b18d280196783">DetailedWvW</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a57f5f727058e2781c39b18d280196783"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the log was parsed in detailed mode. <br />
+Only for WvW logs  <a href="#a57f5f727058e2781c39b18d280196783">More...</a><br /></td></tr>
+<tr class="separator:a57f5f727058e2781c39b18d280196783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd7367b5c42d2fd3224ac800c4c19d61"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html">JsonNPC</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acd7367b5c42d2fd3224ac800c4c19d61">Targets</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:acd7367b5c42d2fd3224ac800c4c19d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">The list of targets  <a href="#acd7367b5c42d2fd3224ac800c4c19d61">More...</a><br /></td></tr>
 <tr class="separator:acd7367b5c42d2fd3224ac800c4c19d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,6 +241,30 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The root of the JSON </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a43a0aac09135663213e64ed1614c8d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43a0aac09135663213e64ed1614c8d5c">&#9670;&nbsp;</a></span>Anonymous</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.Anonymous</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the log was parsed in anonymous mode </p>
+
+</div>
+</div>
 <a id="a47681fcdcbd7b0cb7456da99fe141bad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47681fcdcbd7b0cb7456da99fe141bad">&#9670;&nbsp;</a></span>ArcVersion</h2>
 
@@ -323,6 +361,31 @@ The value will be LogData.DefaultTimeValue if the event does not exist  <a href=
 
 <p>Dictionary of damage modifiers' description, the key is in "'d' + id" format </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html" title="Describs the damage modifier item">DamageModDesc</a></dd></dl>
+
+</div>
+</div>
+<a id="a57f5f727058e2781c39b18d280196783"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57f5f727058e2781c39b18d280196783">&#9670;&nbsp;</a></span>DetailedWvW</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GW2EIJSON.JsonLog.DetailedWvW</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the log was parsed in detailed mode. <br />
+Only for WvW logs </p>
 
 </div>
 </div>
@@ -468,6 +531,31 @@ see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/En
 </div><div class="memdoc">
 
 <p>The name of the fight </p>
+
+</div>
+</div>
+<a id="ac075875f8eb8fb8be5a415655a951459"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac075875f8eb8fb8be5a415655a951459">&#9670;&nbsp;</a></span>FractalScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GW2EIJSON.JsonLog.FractalScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Scale of the fractal, only applicable for fractal encounters. <br />
+Valued at 0 if missing. </p>
 
 </div>
 </div>
@@ -762,6 +850,30 @@ see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/En
 
 <p>List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a23b06f8c19bd7dbd1c5c8d158f8a620a" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format">BuffMap</a></dd></dl>
+
+</div>
+</div>
+<a id="a85c48b5ac81428b5faf1f3db33731eda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85c48b5ac81428b5faf1f3db33731eda">&#9670;&nbsp;</a></span>RecordedAccountBy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GW2EIJSON.JsonLog.RecordedAccountBy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The account name of the player who recorded the fight </p>
 
 </div>
 </div>

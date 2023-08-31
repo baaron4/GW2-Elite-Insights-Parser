@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Righteous Indignation", RighteousIndignation, Source.Common, BuffClassification.Other, BuffImages.Brilliance),
             new Buff("Gliding Disabled Warning", GlidingDisabledWarning, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabledWarning),
             new Buff("Siege Disabled", SiegeDisabled, Source.Common, BuffClassification.Debuff, BuffImages.SiegeDisabled),
-            new Buff("Force Dome", ForceDomeTier5Effect, Source.Common, BuffClassification.Support, BuffImages.ForceDome),
+            new Buff("Force Dome", ForceDomeTier5Buff, Source.Common, BuffClassification.Support, BuffImages.ForceDome),
             new Buff("Structural Vulnerability", StructuralVulnerability, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.StructuralVulnerability),
             new Buff("Sabotage Depot", SabotageDepot, Source.Common, BuffClassification.Other, BuffImages.SabotagedWeaponParts),
             new Buff("Iron Hide (Ram)", IronHideRam, Source.Common, BuffClassification.Defensive, BuffImages.IronHide),
@@ -65,6 +65,7 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Commander's Presence", CommandersPresence, Source.Common, BuffClassification.Support, BuffImages.MightyBlow),
             new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
             new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
+            new Buff("Chilling Fog", ChillingFogBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust),
             // Edge of the Mists
             new Buff("Marked (Mists Arena)", MarkedMistsArena, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),
             new Buff("Marked (Red Sentry Turret)", MarkedSentryTurretRed, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),

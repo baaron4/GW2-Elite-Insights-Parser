@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -26,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(HatefulEphemera, "Hateful Ephemera", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0),
             new PlayerDstHitMechanic(ArcingAfflictionHit, "Arcing Affliction", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0),
             new PlayerDstBuffApplyMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb","Arcing Affliction (Bomb) application", "Bomb",0),
-            new PlayerDstBuffRemoveMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0, (br, log) =>
+            new PlayerDstBuffRemoveMechanic(ArcingAffliction, "Arcing Affliction", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0).UsingChecker((br, log) =>
             {
                 // Removal duration check
                 if (br.RemovedDuration < 50)
@@ -51,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
              }),
             //new Mechanic(ResidualAffliction, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesApplication, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
-            new PlayerDstHitMechanic(DhuumShacklesHit, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0,   (de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(DhuumShacklesHit, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0).UsingChecker((de,log) => de.HealthDamage > 0),
             new PlayerDstHitMechanic(ConeSlash, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
             new PlayerDstHitMechanic(Cull, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
             new PlayerDstHitMechanic(PutridBomb, "Putrid Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
@@ -62,7 +63,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
             //new SkillOnPlayerMechanic(EndersEchoDamage , "Echo's Damage", new MechanicPlotlySetting(Symbols.Square,Color.Red), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             new PlayerDstBuffApplyMechanic(EchosPickup, "Echo's Pick up", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
-            new PlayerDstBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
+            new PlayerDstBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0).UsingChecker( (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
             });
             Extension = "dhuum";
             Icon = EncounterIconDhuum;
@@ -83,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(DeathlyAura, DeathlyAura), // Deathly Aura
+                new DamageCastFinder(DeathlyAura, DeathlyAura),
             };
         }
 
@@ -162,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Sometimes the pre event is not in the evtc
             IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, log.FightData.FightStart, 20000);
-            if (dhuumCast.Any(x => !(x is InstantCastEvent) && x.SkillId != WeaponStow))
+            if (dhuumCast.Any(x => !(x is InstantCastEvent) && x.SkillId != WeaponDraw && x.SkillId != WeaponStow))
             {
                 // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);
@@ -177,8 +178,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end, "Pre Event"));
-                    phases.Add(new PhaseData(end + 1, fightDuration, "Main Fight") { CanBeSubPhase = false });
-                    ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
+                    phases.Add(new PhaseData(end, fightDuration, "Main Fight") { CanBeSubPhase = false });
+                    ComputeFightPhases(phases, castLogs, fightDuration, end);
                 }
             }
             bool hasRitual = phases.Last().Name == "Ritual";
@@ -328,20 +329,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
                 case (int)ArcDPSEnums.TrashID.UnderworldReaper:
-                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, Stealth, target, true, true);
-                    int stealthStart = 0;
-                    int stealthEnd = 0;
-                    foreach (AbstractBuffEvent c in stealths)
+                    var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in stealths)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            stealthStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            stealthEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                     }
                     if (!_isBugged)
                     {
@@ -428,20 +419,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
             // bomb
-            List<AbstractBuffEvent> bombDhuum = GetFilteredList(log.CombatData, ArcingAffliction, p, true, true);
-            int bombDhuumStart = 0;
-            foreach (AbstractBuffEvent c in bombDhuum)
+            var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in bombDhuum)
             {
-                if (c is BuffApplyEvent)
-                {
-                    bombDhuumStart = (int)c.Time;
-                }
-                else
-                {
-                    int bombDhuumEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, bombDhuumStart + 13000, 100, (bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 13000, 100, seg, "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
+                replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection
             var shackles = GetFilteredList(log.CombatData, DhuumShacklesApplication, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();

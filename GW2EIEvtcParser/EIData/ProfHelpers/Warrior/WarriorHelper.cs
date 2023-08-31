@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -15,10 +16,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance), // Reckless Impact
-            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceEffecct), // Berserker Stance
-            new BuffGainCastFinder(BalancedStanceSKill, BalancedStanceEffect), // Balanced Stance
-            new BuffGainCastFinder(EndurePainSkill, EnduringPainEffect), // Endure Pain
+            new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
+            new BuffGainCastFinder(BalancedStanceSill, BalancedStanceBuff),
+            new BuffGainCastFinder(EndurePainSkill, EnduringPainBuff),
+            new BuffGainCastFinder(SignetOfFurySkill, SignetOfFuryActive),
+            new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
+            new EXTHealingCastFinder(MendingMight, MendingMight).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
         private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
@@ -51,13 +57,17 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffDamageModifier(NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, BuffImages.Empowered, DamageModifierMode.All),
             // Warrior's Cunning (Barrier)
-            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) > 0.0 , ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
             // Warrior's Cunning (High HP, no Barrier)
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvEWvW).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) => x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvP).UsingApproximate(true).WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023Balance),
+            new DamageLogDamageModifier("Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, ByPresence, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
             // Warrior's Sprint
             new BuffDamageModifier(Swiftness, "Warrior's Sprint", "7% under swiftness", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2018Balance, GW2Builds.May2021Balance),
             new BuffDamageModifier(Swiftness, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2018Balance),
@@ -72,23 +82,24 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
             new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
+            new Buff("Flames of War", FlamesOfWar, Source.Warrior, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Signets
             new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
-            new Buff("Dolyak Signet", DolyakSignet, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
-            new Buff("Signet of Fury", SignetOfFury, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
-            new Buff("Signet of Might", SignetOfMight, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
-            new Buff("Signet of Stamina", SignetOfStamina, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
+            new Buff("Dolyak Signet", DolyakSignetBuff, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
+            new Buff("Signet of Fury", SignetOfFuryBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
+            new Buff("Signet of Might", SignetOfMightBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
+            new Buff("Signet of Stamina", SignetOfStaminaBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
             new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
             // Banners
-            new Buff("Banner of Strength", BannerOfStrengthEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Discipline", BannerOfDisciplineEffect, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Tactics", BannerOfTacticsEffect, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new Buff("Banner of Defense", BannerOfDefenseEffect, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Strength", BannerOfStrengthBuff, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfStrength).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Discipline", BannerOfDisciplineBuff, Source.Warrior, BuffClassification.Offensive, BuffImages.BannerOfDiscipline).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Tactics", BannerOfTacticsBuff, Source.Warrior, BuffClassification.Support, BuffImages.BannerOfTactics).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new Buff("Banner of Defense", BannerOfDefenseBuff, Source.Warrior, BuffClassification.Defensive, BuffImages.BannerOfDefense).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             // Stances
             new Buff("Shield Stance", ShieldStance, Source.Warrior, BuffClassification.Other, BuffImages.ShieldStance),
-            new Buff("Berserker's Stance", BerserkersStanceEffecct, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
-            new Buff("Enduring Pain", EnduringPainEffect, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.EndurePain),
-            new Buff("Balanced Stance", BalancedStanceEffect, Source.Warrior, BuffClassification.Other, BuffImages.BalancedStance),
+            new Buff("Berserker's Stance", BerserkersStanceBuff, Source.Warrior, BuffClassification.Other, BuffImages.BerserkerStance),
+            new Buff("Enduring Pain", EnduringPainBuff, Source.Warrior, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.EndurePain),
+            new Buff("Balanced Stance", BalancedStanceBuff, Source.Warrior, BuffClassification.Other, BuffImages.BalancedStance),
             new Buff("Defiant Stance", DefiantStance, Source.Warrior, BuffClassification.Other, BuffImages.DefiantStance),
             new Buff("Rampage", Rampage, Source.Warrior, BuffClassification.Other, BuffImages.Rampage),
             // Traits
@@ -134,10 +145,10 @@ namespace GW2EIEvtcParser.EIData
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
-            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthEffect, playerAgents),
-                defBanners = GetBannerAgents(combatData, BannerOfDefenseEffect, playerAgents),
-                disBanners = GetBannerAgents(combatData, BannerOfDisciplineEffect, playerAgents),
-                tacBanners = GetBannerAgents(combatData, BannerOfTacticsEffect, playerAgents);
+            HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthBuff, playerAgents),
+                defBanners = GetBannerAgents(combatData, BannerOfDefenseBuff, playerAgents),
+                disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
+                tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
             //battleBanner = FindBattleStandards(buffData, playerAgents);
             var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
             // if only one warrior, could only be that one

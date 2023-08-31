@@ -37,10 +37,15 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal int FindWeaponSlot(List<int> swaps)
+        public static bool IsWeaponSlot(string slot)
         {
-            int swapped = -1;
-            int firstSwap = swaps.Count > 0 ? swaps[0] : -1;
+            return slot == "Weapon_1" || slot == "Weapon_2" || slot == "Weapon_3" || slot == "Weapon_4" || slot == "Weapon_5";
+        }
+
+        internal int FindFirstWeaponSet(List<int> swaps)
+        {
+            int swapped = WeaponSetIDs.NoSet;
+            int firstSwap = swaps.Count > 0 ? swaps[0] : WeaponSetIDs.NoSet;
             if (IsLand)
             {
                 // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with

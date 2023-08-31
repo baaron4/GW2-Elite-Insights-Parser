@@ -69,6 +69,8 @@ namespace GW2EIBuilders.HtmlModels
         public long EncounterID { get; set; }
         public string Parser { get; set; }
         public string RecordedBy { get; set; }
+        public string RecordedAccountBy { get; set; }
+        public int FractalScale { get; set; }
         public List<string> UploadLinks { get; set; }
         public List<string> UsedExtensions { get; set; }
         public List<List<string>> PlayersRunningExtensions { get; set; }
@@ -85,6 +87,8 @@ namespace GW2EIBuilders.HtmlModels
             EncounterID = log.FightData.Logic.EncounterID;
             Parser = "Elite Insights " + parserVersion.ToString();
             RecordedBy = log.LogData.PoVName;
+            RecordedAccountBy = log.LogData.PoVAccount;
+            FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             UploadLinks = uploadLinks.ToList();
             if (log.LogData.UsedExtensions.Any())
             {

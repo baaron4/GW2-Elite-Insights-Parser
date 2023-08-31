@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Exceptions;
-using System;
-using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -22,7 +23,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-
+                new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TrashID.Mine)),
+                new PlayerDstSkillMechanic(GlennaBombHit, "Bomb Explosion", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
+                new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
+                new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, "Radiant Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
+                new PlayerDstBuffApplyMechanic(CrimsonAttunementPhantasm, "Crimson Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Crim.A", "Crimson Attunement Application", "Crimson Attunement Application", 150),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.LightBlue), "Inv.A", "Invulnerability Applied", "Invulnerability Applied", 150),
+                new EnemyCastStartMechanic(TeleportDisplacementField, "Teleport Displacement Field", new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
             }
             );
             ChestID = ArcDPSEnums.ChestID.SiegeChest;
@@ -68,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "McLeod Split " + (i) / 2;
                     AbstractSingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
                     AbstractSingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
-                    phase.AddTarget(whiteMcLeod); 
+                    phase.AddTarget(whiteMcLeod);
                     phase.AddTarget(redMcLeod);
                     phase.OverrideTimes(log);
                 }
@@ -99,14 +106,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (_hasPreEvent)
             {
                 var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware).ToList();
-                var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware - 1)
+                var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
                 {
                     Name = "Escort",
                 };
                 preEventPhase.AddTargets(preEventWargs);
                 preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
                 phases.Add(preEventPhase);
-            } 
+            }
             phases.AddRange(GetMcLeodPhases(mcLeod, log));
             var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware).ToList();
             if (mcLeodWargs.Any())
@@ -120,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.OverrideTimes(log);
                 phases.Add(phase);
             }
-            
+
             return phases;
         }
 
@@ -142,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // to keep the pre event as we need targets
             if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
             {
-                agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+                agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
                 needsRefresh = false;
             }
             if (needsRefresh)
@@ -181,10 +188,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                if (mcLeod.FirstAware - fightData.LogStart > ParserHelper.MinimumInCombatDuration)
+                if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
-                } 
+                }
                 else
                 {
                     startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
@@ -215,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>() { 
+            return new List<ArcDPSEnums.TrashID>() {
                 ArcDPSEnums.TrashID.MushroomCharger,
                 ArcDPSEnums.TrashID.MushroomKing,
                 ArcDPSEnums.TrashID.MushroomSpikeThrower,
@@ -263,5 +270,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Attunements Overhead
+            replay.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+        }
     }
 }
+

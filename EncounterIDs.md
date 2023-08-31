@@ -89,6 +89,9 @@ Ai, Elemental Only: 0x030302
 
 Ai, Dark Only: 0x030303
 
+### Silent Surf
+Kanaxai, Scythe of House Aurkus: 0x030401
+
 ## Strikes
 ### Festivals
 Freezie: 0x040101
@@ -116,6 +119,11 @@ Kaineng Overlook: 0x040303
 Harvest Temple: 0x040304
 
 Old Lion's Court: 0x040305
+
+### Secret of the Obscure
+Cosmic Observatory: 0x040501
+
+Temple of Febe: 0x040502
 
 ## Open World
 Soo-Won: 0x050401
@@ -145,7 +153,7 @@ Massive Golem 4M: 0x080102
 
 Massive Golem 1M: 0x080103
 
-Vital Golem: 0x040104
+Vital Golem: 0x080104
 
 Average Golem: 0x080105
 

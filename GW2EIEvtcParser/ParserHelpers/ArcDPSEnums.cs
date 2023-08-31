@@ -11,7 +11,11 @@ namespace GW2EIEvtcParser
         {
             internal const ulong StartOfLife = ulong.MinValue;
             //
+            internal const ulong HoTRelease = 54485;
+            internal const ulong November2016NightmareRelease = 69591;
             internal const ulong February2017Balance = 72781;
+            internal const ulong May2017Balance = 76706;
+            internal const ulong July2017ShatteredObservatoryRelease = 79873;
             internal const ulong December2017Balance = 84832;
             internal const ulong February2018Balance = 86181;
             internal const ulong May2018Balance = 88541;
@@ -30,6 +34,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2020Balance = 102321;
             internal const ulong February2020Balance2 = 102389;
             internal const ulong July2020Balance = 104844;
+            internal const ulong September2020SunquaPeakRelease = 106277;
             internal const ulong May2021Balance = 115190;
             internal const ulong May2021BalanceHotFix = 115728;
             internal const ulong June2021Balance = 116210;
@@ -39,6 +44,7 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta4 = 122479;
             internal const ulong March2022Balance = 126520;
             internal const ulong March2022Balance2 = 127285;
+            internal const ulong May2022Balance = 128773;
             internal const ulong June2022Balance = 130910;
             internal const ulong June2022BalanceHotFix = 131084;
             internal const ulong July2022FractalInstabilitiesRework = 131720;
@@ -47,6 +53,12 @@ namespace GW2EIEvtcParser
             internal const ulong October2022Balance = 135242;
             internal const ulong November2022Balance = 137943;
             internal const ulong February2023Balance = 141374;
+            internal const ulong May2023Balance = 145038;
+            internal const ulong May2023BalanceHotFix = 146069;
+            internal const ulong June2023Balance = 147734;
+            internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
+            internal const ulong July2023BalanceAndSilentSurfCM = 148697;
+            internal const ulong SOTOReleaseAndBalance = 150431;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -62,12 +74,14 @@ namespace GW2EIEvtcParser
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
+            internal const int FunctionalEffect2Events = 20230719;
             //
             internal const int EndOfLife = int.MaxValue;
         }
 
         public static class WeaponSetIDs
         {
+            public const int NoSet = -1;
             public const int FirstLandSet = 4;
             public const int SecondLandSet = 5;
             public const int FirstWaterSet = 0;
@@ -84,7 +98,7 @@ namespace GW2EIEvtcParser
             internal const int OldRaidReward1 = 55821; // On each kill
             internal const int OldRaidReward2 = 60685; // On each kill
             internal const int CurrentRaidReward = 22797; // Once per week
-            internal const int EoDStrikeReward = 29453;
+            internal const int PostEoDStrikeReward = 29453;
         }
 
         /// <summary>
@@ -242,11 +256,13 @@ namespace GW2EIEvtcParser
             InstanceStart = 42,
             TickRate = 43,
             Last90BeforeDown = 44,
-            Effect = 45,
+            Effect_45 = 45,
             EffectIDToGUID = 46,
             LogStartNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
+            FractalScale = 50,
+            Effect_51 = 51,
             Unknown
         };
 
@@ -276,7 +292,7 @@ namespace GW2EIEvtcParser
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
-            CappedDuration = 2,
+            StackingSomething = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
             Regeneration = 3,
             Stacking = 4,
             Force = 5,
@@ -396,6 +412,8 @@ namespace GW2EIEvtcParser
             return res;
         }
 
+        // Broken
+        /*
         public enum BuffCategory : byte
         {
             Boon = 0,
@@ -412,7 +430,7 @@ namespace GW2EIEvtcParser
         internal static BuffCategory GetBuffCategory(byte bt)
         {
             return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
-        }
+        }*/
         // WIP
         public enum SkillAction : byte
         {
@@ -492,6 +510,8 @@ namespace GW2EIEvtcParser
         private const int Environment = -36;
         private const int FerrousBomb = -37;
         private const int SanctuaryPrism = -38;
+        private const int Torch = -39;
+        private const int BoundIcebroodElemental = -40;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -684,7 +704,7 @@ namespace GW2EIEvtcParser
             PyreGuardianResolution = ArcDPSEnums.PyreGuardianResolution,
             PyreGuardianProtect = ArcDPSEnums.PyreGuardianProtect,
             PyreGuardianStab = ArcDPSEnums.PyreGuardianStab,
-            ReaperofFlesh = 21218,
+            ReaperOfFlesh = 21218,
             DestroyerTroll = 20944,
             IceElemental = 21049,
             AncientInvokedHydra = 21285,
@@ -692,8 +712,51 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
-            AngryZommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
+            AngryZommoros = 20961,
             ChillZommoros = 21118,
+            AssaultCube = 21092,
+            AwakenedSoldier = 21244,
+            Basilisk = 21140,
+            BlackMoa = 20980,
+            BrandedCharr = 21083,
+            BrandedDevourer = 21053,
+            ChakDrone = 21064,
+            CrazedKarkaHatchling = 21040,
+            FireImpLamp = 21173,
+            GhostlyPirateFighter = 21257,
+            GiantBrawler = 21288,
+            GiantHunter = 20972,
+            GoldOoze = 21264,
+            GrawlBascher = 21145,
+            GrawlTrapper = 21290,
+            GuildInitiateModusSceleris = 21161,
+            IcebroodAtrocity = 16504,
+            IcebroodKodan = 20975,
+            IcebroodQuaggan = 21196,
+            Jotun = 21054,
+            JungleWurm = 21147,
+            Karka = 21192,
+            MinotaurBull = 20969,
+            ModnirrBerserker = 20951,
+            MoltenDisaggregator = 21010,
+            MoltenProtector = 21037,
+            MoltenReverberant = 20956,
+            MordremVinetooth = 20940,
+            Murellow = 21032,
+            NightmareCourtier = 21261,
+            OgreHunter = 21116,
+            PirareSkrittSentry = 21189,
+            PolarBear = 20968,
+            Rabbit = 1085,
+            ReefSkelk = 21024,
+            RisenKraitDamoss = 21070,
+            RottingAncientOakheart = 21252,
+            RottingDestroyer = 21182,
+            ShadowSkelk = 20966,
+            SpiritOfExcess = 21095,
+            TamedWarg = 18184,
+            TarElemental = 21019,
+            WindRider = 21164,
             // Adina
             HandOfErosion = ArcDPSEnums.HandOfErosion,
             HandOfEruption = ArcDPSEnums.HandOfEruption,
@@ -710,12 +773,14 @@ namespace GW2EIEvtcParser
             EnergyOrb = 21946,
             // Fraenir
             IcebroodElemental = 22576,
+            BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
             // Boneskinner
             PrioryExplorer = 22561,
             PrioryScholar = 22448,
             VigilRecruit = 22389,
             VigilTactician = 22420,
             AberrantWisp = 22538,
+            Torch = ArcDPSEnums.Torch,
             // Whisper of Jormag
             WhisperEcho = 22628,
             DoppelgangerElementalist = 22627,
@@ -806,7 +871,20 @@ namespace GW2EIEvtcParser
             VoidStormseer = 24677,
             VoidMelter = 24223,
             VoidGoliath = 24761,
-            DragonEnergyOrb = ArcDPSEnums.DragonOrb,
+            DragonEnergyOrb = DragonOrb,
+            // Cosmic Observatory
+            TheTormented1 = 25829,
+            TheTormented2 = 26000,
+            TheTormented3 = 26016,
+            SoulFeast = 26069,
+            // Temple of Febe
+            EmbodimentOfGluttony = 25677,
+            EmbodimentOfRage = 25686,
+            EmbodimentOfDespair = 26034,
+            EmbodimentOfRegret = 26049,
+            EmbodimentOfEnvy = 25967,
+            EmbodimentOfMalice = 25700,
+            MaliciousShadow = 25747,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,
@@ -815,6 +893,11 @@ namespace GW2EIEvtcParser
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,
+            JadeMawTentacle = 16721,
+            InspectorEllenKiel = 21566,
+            ChampionRabbit = 11329,
+            AwakenedAbomination = 21634,
+            TheMossman = 11277,
             // MAMA
             Arkk = 16902,
             GreenKnight = 16906,
@@ -857,15 +940,25 @@ namespace GW2EIEvtcParser
             CHOP = 16552,
             ProjectionArkk = 17613,
             // Ai
-            EnrageWaterSprite = 23270,
-            SorrowDemon1 = 23265,
-            SorrowDemon2 = 23242,
-            SorrowDemon3 = 23279,
-            SorrowDemon4 = 23245,
-            SorrowDemon5 = 23256,
-            DoubtDemon = 23268,
+            EnragedWaterSprite = 23270,
+            TransitionSorrowDemon1 = 23265,
+            TransitionSorrowDemon2 = 23242,
+            TransitionSorrowDemon3 = 23279,
+            TransitionSorrowDemon4 = 23245,
+            CCSorrowDemon = 23256,
+            AiDoubtDemon = 23268,
+            PlayerDoubtDemon = 23246,
             FearDemon = 23264,
             GuiltDemon = 23252,
+            // Kanaxai
+            AspectOfTorment = 25556,
+            AspectOfLethargy = 25561,
+            AspectOfExposure = 25562,
+            AspectOfDeath = 25580,
+            AspectOfFear = 25563,
+            LuxonMonkSpirit = 25571,
+            CaptainThess1 = 25554,
+            CaptainThess2 = 25557,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
@@ -992,6 +1085,8 @@ namespace GW2EIEvtcParser
             PrototypeVermilionCM = 25414,
             PrototypeArseniteCM = 25416,
             PrototypeIndigoCM = 25423,
+            Dagda = 25705,
+            Cerus = 25989,
             //VoidAmalgamate = 
             // Fract
             MAMA = 17021,
@@ -1006,6 +1101,8 @@ namespace GW2EIEvtcParser
             TheVoice = 20497,
             AiKeeperOfThePeak = 23254,
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
+            KanaxaiScytheOfHouseAurkusNM = 25572,
+            KanaxaiScytheOfHouseAurkusCM = 25577,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,
@@ -1043,6 +1140,7 @@ namespace GW2EIEvtcParser
         {
             // Racial Summons
             HoundOfBalthazar = 6394,
+            SnowWurm = 6445,
             DruidSpirit = 6475,
             SylvanHound = 6476,
             IronLegionSoldier = 6509,
@@ -1051,6 +1149,8 @@ namespace GW2EIEvtcParser
             BloodLegionMarksman = 10107,
             AshLegionSoldier = 10108,
             AshLegionMarksman = 10109,
+            STAD007 = 10145,
+            STA7012 = 10146,
             // GW2 Digital Deluxe
             MistfireWolf = 9801,
             // Rune Summons
@@ -1058,7 +1158,13 @@ namespace GW2EIEvtcParser
             RuneRockDog = 8836,
             RuneMarkIGolem = 8837,
             RuneTropicalBird = 8838,
-            //
+            // Consumables with summons
+            Ember = 1454,
+            HawkeyeGriffon = 5614,
+            SousChef = 10076,
+            SunspearParagonSupport = 19643,
+            RavenSpiritShadow = 22309,
+            // Mesmer Phantasmas
             IllusionarySwordsman = 6487,
             IllusionaryBerserker = 6535,
             IllusionaryDisenchanter = 6621,
@@ -1068,36 +1174,53 @@ namespace GW2EIEvtcParser
             IllusionaryDuelist = 5758,
             IllusionaryWarlock = 6449,
             IllusionaryWarden = 7981,
+            IllusionaryMariner = 9052,
+            IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
-            //
-            CloneSpear = 6479,
-            CloneUnknown1 = 8106,
-            CloneUnknown2 = 8107,
-            CloneUnknown3 = 8108,
+            // Mesmer Clones
+            // - Single Weapon
+            CloneSword = 8108,
+            CloneScepter = 8109,
+            CloneAxe = 18894,
             CloneGreatsword = 8110,
             CloneStaff = 8111,
             CloneTrident = 9058,
+            CloneSpear = 6479,
             CloneDownstate = 10542,
-            CloneSwordPistol = 15003,
-            CloneSwordTorch = 15032,
+            CloneDagger = 25569,
+            CloneUnknown = 8107, // Possibly -> https://wiki.guildwars2.com/wiki/Clone_(Snowball_Mayhem)
+            // - Sword + Offhand
+            CloneSwordTorch = 15090,
+            CloneSwordFocus = 15114,
+            CloneSwordSword = 15233,
+            CloneSwordShield = 15199,
+            CloneSwordPistol = 15181,
+            // - Sword 3 + Offhand
+            CloneIllusionaryLeap = 8106,
+            CloneIllusionaryLeapFocus = 15084,
+            CloneIllusionaryLeapShield = 15131,
+            CloneIllusionaryLeapSword = 15117,
+            CloneIllusionaryLeapPistol = 15003,
+            CloneIllusionaryLeapTorch = 15032,
+            // - Scepter + Offhand
             CloneScepterTorch = 15044,
-            CloneSwordFocus = 15084,
-            CloneSwordTorchPhantasm = 15090,
-            CloneSwordFocusPhantasm = 15114,
-            CloneSwordSword = 15117,
-            CloneSwordShield = 15131,
             CloneScepterShield = 15156,
-            CloneSwordPistolPhantasm = 15181,
             CloneScepterPistol = 15196,
-            CloneSwordShieldPhantasm = 15199,
-            CloneSwordSwordPhantasm = 15233,
             CloneScepterFocus = 15240,
             CloneScepterSword = 15249,
+            // - Axe + Offhand
             CloneAxeTorch = 18922,
             CloneAxePistol = 18939,
             CloneAxeSword = 19134,
             CloneAxeFocus = 19257,
-            //
+            CloneAxeShield = 25576,
+            // - Dagger + Offhand
+            CloneDaggerShield = 25570,
+            CloneDaggerPistol = 25573,
+            CloneDaggerFocus = 25575,
+            CloneDaggerTorch = 25578,
+            CloneDaggerSword = 25582,
+            // Necromancer Minions
             BloodFiend = 1104,
             BoneFiend = 1458,
             FleshGolem = 1792,
@@ -1106,13 +1229,14 @@ namespace GW2EIEvtcParser
             BoneMinion = 1192,
             UnstableHorror = 18802,
             ShamblingHorror = 15314,
-            //
+            // Ranger Spirits
             StoneSpirit = 6370,
             SunSpirit = 6330,
             FrostSpirit = 6369,
             StormSpirit = 6371,
             WaterSpirit = 12778,
             SpiritOfNatureRenewal = 6649,
+            // Ranger Pets
             JuvenileJungleStalker = 3827,
             JuvenileKrytanDrakehound = 4425,
             JuvenileBrownBear = 4426,
@@ -1172,12 +1296,13 @@ namespace GW2EIEvtcParser
             JuvenileWhiteTiger = 24298,
             JuvenileSiegeTurtle = 24796,
             JuvenilePhoenix = 25131,
-            //
+            JuvenileAetherHunter = 25652,
+            // Guardian Weapon Summons
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,
             ShieldOfTheAvenger = 6382,
             SwordOfJustice = 6381,
-            //
+            // Thief
             Thief1 = 7580,
             Thief2 = 7581,
             Thief3 = 10090,
@@ -1230,7 +1355,7 @@ namespace GW2EIEvtcParser
             Specter8 = 25231,
             Specter9 = 25232,
             Specter10 = 25234,
-            //
+            // Elementalist Summons
             LesserAirElemental = 8711,
             LesserEarthElemental = 8712,
             LesserFireElemental = 8713,
@@ -1239,7 +1364,7 @@ namespace GW2EIEvtcParser
             EarthElemental = 6523,
             FireElemental = 6524,
             IceElemental = 6525,
-            //
+            // Scrapper Gyros
             SneakGyro = 15012,
             ShredderGyro = 15046,
             BulwarkGyro = 15134,
@@ -1247,14 +1372,14 @@ namespace GW2EIEvtcParser
             MedicGyro = 15208,
             BlastGyro = 15330,
             FunctionGyro = 15336,
-            //
+            // Revenant Summons
             ViskIcerazor = 18524,
             KusDarkrazor = 18594,
             JasRazorclaw = 18791,
             EraBreakrazor = 18806,
             OfelaSoulcleave = 19002,
             VentariTablet = ArcDPSEnums.VentariTablet,
-            //
+            // Mechanist
             JadeMech = 23549,
             //
             Unknown,

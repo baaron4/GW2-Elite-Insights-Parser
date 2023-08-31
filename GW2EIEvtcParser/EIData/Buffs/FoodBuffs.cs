@@ -448,11 +448,14 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bowl of Jade Sea Bounty", BowlOfJadeSeaBounty, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfJadeSeaBounty),
             new Buff("Bowl of Echovald Hotpot", BowlOfEchovaldHotpot, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfEchovaldHotpot),
             new Buff("Flight Of Sushi", FlightOfSushi, Source.Item, BuffClassification.Nourishment, BuffImages.FlightOfSushi),
+            new Buff("Bowl of Mists-Infused Fruit Salad with Mint Garnish", BowlOfMistsInfusedFruitSaladWithMintGarnish, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfFruitSaladWithMintGarnish),
+            new Buff("Mists-Infused Peppercorn-Crusted Sous-Vide Steak", MistsInfusedPeppercornCrustedSousVideSteak, Source.Item, BuffClassification.Nourishment, BuffImages.PeppercornCrustedSousVideSteak),
+            new Buff("Mists-Infused Spherified Peppercorn-Spiced Oyster Soup", MistsInfusedSpherifiedPeppercornSpicedOysterSoup, Source.Item, BuffClassification.Nourishment, BuffImages.SpherifiedPeppercornSpicedOysterSoup),
         };
 
         internal static readonly List<Buff> FoodProcs = new List<Buff>
         {
-            // Effect procs for On Kill Food
+            // Buff procs for On Kill Food
             new Buff("Nourishment (Bonus 40 Power)", NourishmentBonusPower40, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
             new Buff("Nourishment (Bonus 60 Power)", NourishmentBonusPower60, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
             new Buff("Nourishment (Bonus 100 Power)", NourishmentBonusPower100, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),

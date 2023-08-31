@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -12,11 +16,12 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Celestial Avatar
-            new BuffLossCastFinder(ExitCelestialAvatar,CelestialAvatar).UsingBeforeWeaponSwap(true), // Release Celestial Avatar
-            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingEnable((combatData) => !combatData.HasEffectData), // Disable this one when effect events are present
-            new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Druid),
-            new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Druid)
+            new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar).UsingBeforeWeaponSwap(true),
+            new EffectCastFinder(SeedOfLife, EffectGUIDs.DruidSeedOfLife).UsingSrcSpecChecker(Spec.Druid).WithBuilds(GW2Builds.October2022Balance),
+            new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
+            new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
         };
 
         private static readonly HashSet<long> _celestialAvatar = new HashSet<long>
@@ -31,21 +36,44 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
+            new BuffDamageModifier(NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Ranger, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-            new Buff("Ancestral Grace", AncestralGrace, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace),
+            new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-            new Buff("Glyph of Unity", GlyphOfUnityEffect, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
-            new Buff("Glyph of Unity (CA)", GlyphOfUnityEffectCA, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
+            new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
+            new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
             new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
             new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfEmpowermentCelestialAvatar).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.NaturalMender).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new Buff("Natural Mender", NaturalMender, Source.Druid, BuffClassification.Other, BuffImages.NaturalMender).WithBuilds(GW2Builds.October2022Balance),
-            new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, BuffImages.LingeringLight),
+            new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, BuffImages.LingeringLight).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
+            new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, BuffImages.NaturalBalance).WithBuilds(GW2Builds.June2023Balance),
         };
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Ranger;
+
+            // Sublime Conversion
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out IReadOnlyList<EffectEvent> sublimeConversions2))
+            {
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out IReadOnlyList<EffectEvent> sublimeConversions1))
+                {
+                    foreach (EffectEvent effect in sublimeConversions1)
+                    {
+                        if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                            var connector = new PositionConnector(effect.Position);
+                            replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 400, 60, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Druid, SublimeConversion, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Druid, SublimeConversion, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

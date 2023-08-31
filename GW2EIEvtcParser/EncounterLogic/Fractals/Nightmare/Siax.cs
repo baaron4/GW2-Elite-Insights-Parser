@@ -5,11 +5,13 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -21,12 +23,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             new PlayerDstHitMechanic(VileSpit, "Vile Spit", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit","Vile Spit (green goo)", "Poison Spit",0),
             new PlayerDstHitMechanic(TailLashSiax, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new SpawnMechanic((int)ArcDPSEnums.TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
+            new SpawnMechanic((int)TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
             new PlayerDstHitMechanic(new long[] { CascadeOfTorment1, CascadeOfTorment2 }, "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
             new EnemyCastStartMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase","Phase Start", "Phase", 0),
-            new EnemyCastEndMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0, (ce,log) => ce.ActualDuration >= 20649), //
+            new EnemyCastEndMechanic(new long[] { CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33 }, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail","Phase Fail (Failed to kill Echos in time)", "Phase Fail", 0).UsingChecker((ce,log) => ce.ActualDuration >= 20649), //
             new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC","Breakbar Start", "Breakbar", 0),
-            new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC Fail","Failed to CC in time", "CC Fail", 0, (ce,log) => ce.ActualDuration >= 15232),
+            new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC Fail","Failed to CC in time", "CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15232),
             new PlayerDstBuffApplyMechanic(FixatedNightmare, "Fixated", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Fixate", "Fixated by Volatile Hallucination", "Fixated",0),
             });
             Extension = "siax";
@@ -46,18 +48,20 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.VolatileHallucinationSiax,
-                ArcDPSEnums.TrashID.NightmareHallucinationSiax
+                TrashID.VolatileHallucinationSiax,
+                TrashID.NightmareHallucinationSiax
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Siax,
-                (int)ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                (int)TargetID.Siax,
+                (int)TrashID.EchoOfTheUnclean,
             };
         }
 
@@ -69,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Siax));
+            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax));
             if (siax == null)
             {
                 throw new MissingKeyActorsException("Siax not found");
@@ -87,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     var ids = new List<int>
                     {
-                       (int) ArcDPSEnums.TrashID.EchoOfTheUnclean,
+                       (int) TrashID.EchoOfTheUnclean,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     phase.Name = "Caustic Explosion " + (i / 2);
@@ -101,15 +105,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
         
-        static readonly List<(string, float, float)> EchoLocations = new List<(string, float, float)> {
-            ("N", 1870.630f, -2205.379f),
-            ("E", 2500.260f, -3288.280f),
-            ("S", 1572.040f, -3992.580f),
-            ("W", 907.199f, -2976.850f),
-            ("NW", 1036.980f, -2237.050f),
-            ("NE", 2556.450f, -2628.590f),
-            ("SE", 2293.149f, -3912.510f),
-            ("SW", 891.370f, -3722.450f),
+        static readonly List<(string, Point3D)> EchoLocations = new List<(string, Point3D)> {
+            ("N", new Point3D(1870.630f, -2205.379f)),
+            ("E", new Point3D(2500.260f, -3288.280f)),
+            ("S", new Point3D(1572.040f, -3992.580f)),
+            ("W", new Point3D(907.199f, -2976.850f)),
+            ("NW", new Point3D(1036.980f, -2237.050f)),
+            ("NE", new Point3D(2556.450f, -2628.590f)),
+            ("SE", new Point3D(2293.149f, -3912.510f)),
+            ("SW", new Point3D(891.370f, -3722.450f)),
         };
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -117,11 +121,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TargetID.Siax))
+                if (target.IsSpecies(TargetID.Siax))
                 {
                     target.OverrideName("Siax the Corrupted");
                 }
-                else if (target.IsSpecies(ArcDPSEnums.TrashID.EchoOfTheUnclean))
+                else if (target.IsSpecies(TrashID.EchoOfTheUnclean))
                 {
                     AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
                 }
@@ -134,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Siax:
+                case (int)TargetID.Siax:
                     // Siax's Breakbar
                     var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar).ToList();
                     foreach (AbstractCastEvent c in causticExplosionBreakbar)
@@ -189,10 +193,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
                     // Poison AoE
-                    EffectGUIDEvent poisonField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VileSpitSiax);
-                    if (poisonField != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VileSpitSiax, out IReadOnlyList<EffectEvent> poisonEffects))
                     {
-                        var poisonEffects = log.CombatData.GetEffectEventsByEffectID(poisonField.ContentID).ToList();
                         int duration = 16000;
                         foreach (EffectEvent effect in poisonEffects)
                         {
@@ -200,10 +202,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Nightmare Hallucinations Spawn Event
-                    EffectGUIDEvent spawnField = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.NightmareHallucinationsSpawn);
-                    if (spawnField != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareHallucinationsSpawn, out IReadOnlyList<EffectEvent> spawnEffects))
                     {
-                        var spawnEffects = log.CombatData.GetEffectEventsByEffectID(spawnField.ContentID).ToList();
                         int duration = 3000;
                         foreach (EffectEvent effect in spawnEffects)
                         {
@@ -212,10 +212,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Caustic Barrage
-                    EffectGUIDEvent causticBarrage = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CausticBarrageIndicator);
-                    if (causticBarrage != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CausticBarrageIndicator, out IReadOnlyList<EffectEvent> barrageEffects))
                     {
-                        var barrageEffects = log.CombatData.GetEffectEventsByEffectID(causticBarrage.ContentID).ToList();
                         int duration = 500;
                         foreach (EffectEvent effect in barrageEffects)
                         {
@@ -224,10 +222,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Volatile Hallucinations Explosions
-                    EffectGUIDEvent volatileExpulsion = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.VolatileExpulsionIndicator);
-                    if (volatileExpulsion != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VolatileExpulsionIndicator, out IReadOnlyList<EffectEvent> expulsionEffects))
                     {
-                        var expulsionEffects = log.CombatData.GetEffectEventsByEffectID(volatileExpulsion.ContentID).ToList();
                         int duration = 200;
                         foreach (EffectEvent effect in expulsionEffects)
                         {
@@ -237,14 +233,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     // Cascade Of Torment
                     int cotDuration = 1000;
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing0), cotDuration, 0, 150);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing1), cotDuration, 150, 250);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing2), cotDuration, 250, 350);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing3), cotDuration, 350, 450);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing4), cotDuration, 450, 550);
-                    AddCascadeOfTormentDecoration(log, replay, log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CascadeOfTormentRing5), cotDuration, 550, 650);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing1, cotDuration, 150, 250);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing2, cotDuration, 250, 350);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing3, cotDuration, 350, 450);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
+                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
-                case (int)ArcDPSEnums.TrashID.EchoOfTheUnclean:
+                case (int)TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
                     foreach (AbstractCastEvent c in causticExplosionEcho)
                     {
@@ -255,12 +251,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.VolatileHallucinationSiax:
+                case (int)TrashID.VolatileHallucinationSiax:
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucinationSiax:
+                case (int)TrashID.NightmareHallucinationSiax:
                     break;
                 default: break;
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Fixations
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

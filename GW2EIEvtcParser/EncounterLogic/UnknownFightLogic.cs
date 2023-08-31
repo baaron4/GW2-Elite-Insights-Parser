@@ -31,14 +31,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return logStartNPCUpdate.Time;
+                AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
+                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);
             }
             return GetGenericFightOffset(fightData);
         }
 
         internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            int id = GetTargetsIDs().First();
+            int id = GenericTriggerID;
             AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
             // Trigger ID is not NPC
             if (agentItem == null)

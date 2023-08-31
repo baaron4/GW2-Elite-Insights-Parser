@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
 
-        protected ArcDPSEnums.ChestID ChestID { get; set; } = ArcDPSEnums.ChestID.None;
+        protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
         protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
 
@@ -60,23 +60,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         public EncounterCategory EncounterCategoryInformation { get; protected set; }
         protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
 
-
-        internal static Mechanic DeathMechanic = new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false);
-        internal static Mechanic DownMechanic = new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a)).UsingShowOnTable(false);
-        internal static Mechanic AliveMechanic = new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a)).UsingShowOnTable(false);
-        internal static Mechanic RespawnMechanic = new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a)).UsingShowOnTable(false);
-        internal static Mechanic DespawnMechanic = new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a)).UsingShowOnTable(false);
-
         protected FightLogic(int triggerID)
         {
             GenericTriggerID = triggerID;
             MechanicList = new List<Mechanic>() {
-                DeathMechanic,
-                DownMechanic,
+                new PlayerStatusMechanic<DeadEvent>("Dead", new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingShowOnTable(false),
+                new PlayerStatusMechanic<DownEvent>("Downed", new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a)).UsingShowOnTable(false),
                 new PlayerCastStartMechanic(SkillIDs.Resurrect, "Resurrect", new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res",0).UsingShowOnTable(false),
-                AliveMechanic,
-                DespawnMechanic,
-                RespawnMechanic
+                new PlayerStatusMechanic<AliveEvent>("Got up", new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a)).UsingShowOnTable(false),
+                new PlayerStatusMechanic<DespawnEvent>("Disconnected", new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a)).UsingShowOnTable(false),
+                new PlayerStatusMechanic<SpawnEvent>("Respawn", new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a)).UsingShowOnTable(false)
             };
             _basicMechanicsCount = MechanicList.Count;
             EncounterCategoryInformation = new EncounterCategory();
@@ -115,7 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int emboldenedStacks = (int)log.PlayerList.Select(x => {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
                 {
-                    return graph.BuffChart.Max(y => y.Value);
+                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, log.FightData.FightEnd)).Max(y => y.Value);
                 }
                 else
                 {
@@ -193,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(ArcDPSEnums.GetTrashID(x.ID))).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).ToList();
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
             foreach (AgentItem a in aList)
             {
@@ -252,30 +245,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractSingleActor target in Targets)
             {
                 int i = 0;
-                IReadOnlyList<BreakbarStateEvent> breakbarStateEvents = log.CombatData.GetBreakbarStateEvents(target.AgentItem);
-                var breakbarActiveEvents = breakbarStateEvents.Where(x => x.State == ArcDPSEnums.BreakbarState.Active).ToList();
-                var breakbarNotActiveEvents = breakbarStateEvents.Where(x => x.State != ArcDPSEnums.BreakbarState.Active).ToList();
-                foreach (BreakbarStateEvent active in breakbarActiveEvents)
+                (_, IReadOnlyList<Segment> actives, _, _) = target.GetBreakbarStatus(log);
+                foreach (Segment active in actives)
                 {
-                    long start = Math.Max(active.Time - 2000, log.FightData.FightStart);
-                    BreakbarStateEvent notActive = breakbarNotActiveEvents.FirstOrDefault(x => x.Time >= active.Time);
-                    long end;
-                    if (notActive == null)
-                    {
-                        DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-                        if (deadEvent == null)
-                        {
-                            end = Math.Min(target.LastAware, log.FightData.FightEnd);
-                        }
-                        else
-                        {
-                            end = Math.Min(deadEvent.Time, log.FightData.FightEnd);
-                        }
-                    }
-                    else
-                    {
-                        end = Math.Min(notActive.Time, log.FightData.FightEnd);
-                    }
+                    long start = Math.Max(active.Start - 2000, log.FightData.FightStart);
+                    long end = Math.Min(active.End, log.FightData.FightEnd);
                     var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                     {
                         BreakbarPhase = true,
@@ -312,15 +286,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ErrorEvent>();
         }
 
-        protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
+        protected void AddTargetsToPhase(PhaseData phase, List<int> ids)
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware, 0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
                 {
                     phase.AddTarget(target);
                 }
             }
+        }
+
+        protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
+        {
+            AddTargetsToPhase(phase, ids);
             phase.OverrideTimes(log);
         }
 
@@ -409,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -14,6 +15,10 @@ namespace GW2EIEvtcParser
         internal static readonly AgentItem _unknownAgent = new AgentItem();
 
         public const int CombatReplayPollingRate = 150;
+        internal const int CombatReplaySkillDefaultSizeInPixel = 22;
+        internal const int CombatReplaySkillDefaultSizeInWorld = 90;
+        internal const int CombatReplayOverheadDefaultSizeInPixel = 20;
+        internal const float CombatReplayOverheadDefaultOpacity = 1.0f;
 
         public const int MinionLimit = 1500;
 
@@ -27,6 +32,10 @@ namespace GW2EIEvtcParser
         internal const long BuffSimulatorDelayConstant = 15;
         internal const long BuffSimulatorStackActiveDelayConstant = 50;
         internal const long WeaponSwapDelayConstant = 75;
+        internal const long TimeThresholdConstant = 150;
+
+        internal const long InchDistanceThreshold = 10;
+
         internal const long MinimumInCombatDuration = 2200;
 
         internal const int PhaseTimeLimit = 2000;
@@ -212,7 +221,7 @@ namespace GW2EIEvtcParser
 
         internal static bool IsSupportedStateChange(StateChange state)
         {
-            return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.TickRate && state != StateChange.Idle;
+            return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.Idle;
         }
 
         /*
@@ -252,6 +261,135 @@ namespace GW2EIEvtcParser
                 final = final.InnerException;
             }
             return final;
+        }
+
+
+
+        internal delegate bool ExtraRedirection(CombatItem evt, AgentItem from, AgentItem to);
+        /// <summary>
+        /// Method used to redirect a subset of events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="stateCopyFroms">AgentItems from where last known states (hp, position, etc) will be copied from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
+        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                if (to.InAwareTimes(evt.Time))
+                {
+                    var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                    var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                    if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
+                    {
+                        continue;
+                    }
+                    if (srcMatchesAgent)
+                    {
+                        evt.OverrideSrcAgent(to.Agent);
+                    }
+                    if (dstMatchesAgent)
+                    {
+                        evt.OverrideDstAgent(to.Agent);
+                    }
+                }
+            }
+            var toCopy = new List<CombatItem>();
+            Func<CombatItem, bool> canCopy = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
+            var stateChangeCopyConditions = new List<Func<CombatItem, bool>>()
+            {
+                (x) => x.IsStateChange == StateChange.BreakbarState,
+                (x) => x.IsStateChange == StateChange.Position,
+                (x) => x.IsStateChange == StateChange.Rotation,
+                (x) => x.IsStateChange == StateChange.Velocity,
+                (x) => x.IsStateChange == StateChange.MaxHealthUpdate,
+                (x) => x.IsStateChange == StateChange.HealthUpdate,
+                (x) => x.IsStateChange == StateChange.BreakbarPercent,
+                (x) => x.IsStateChange == StateChange.BarrierUpdate,
+                (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
+                (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
+            };
+            foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyConditions)
+            {
+                CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopy(x) && x.Time <= to.FirstAware);
+                if (stateToCopy != null)
+                {
+                    toCopy.Add(stateToCopy);
+                }
+            }
+            foreach (CombatItem c in toCopy)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideSrcAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Copy attack targets
+            var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
+            foreach (CombatItem c in attackTargets)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideDstAgent(to.Agent);
+                combatData.Add(cExtra);
+            }
+            // Redirect NPC masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+            // Redirect Gadget masters
+            foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            {
+                if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+                {
+                    ag.SetMaster(to);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method used to redirect all events from redirectFrom to to
+        /// </summary>
+        /// <param name="combatData"></param>
+        /// <param name="extensions"></param>
+        /// <param name="agentData"></param>
+        /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
+        /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
+        internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection extraRedirections = null)
+        {
+            // Redirect combat events
+            foreach (CombatItem evt in combatData)
+            {
+                var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                if (!dstMatchesAgent && !srcMatchesAgent)
+                {
+                    continue;
+                }
+                if (extraRedirections != null && !extraRedirections(evt, redirectFrom, to))
+                {
+                    continue;
+                }
+                if (srcMatchesAgent)
+                {
+                    evt.OverrideSrcAgent(to.Agent);
+                }
+                if (dstMatchesAgent)
+                {
+                    evt.OverrideDstAgent(to.Agent);
+                }
+            }
+            agentData.SwapMasters(redirectFrom, to);
         }
 
         /// <summary>
@@ -541,7 +679,7 @@ namespace GW2EIEvtcParser
             {
                 return false;
             }
-            long id = minion.ID;
+            int id = minion.ID;
             bool res = ProfHelper.IsKnownMinionID(id);
             switch (spec)
             {
@@ -635,57 +773,6 @@ namespace GW2EIEvtcParser
             return res;
         }
 
-
-        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
-        {
-            ".zevtc",
-            ".evtc.zip",
-        };
-
-        private static readonly HashSet<string> _tmpCompressedFiles = new HashSet<string>()
-        {
-            ".tmp.zip"
-        };
-
-        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
-        {
-            ""
-        };
-
-        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
-        {
-            ".evtc"
-        };
-
-        public static bool IsCompressedFormat(string fileName)
-        {
-            foreach (string format in _compressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static IReadOnlyList<string> GetSupportedFormats()
-        {
-            return new List<string>(_supportedFiles);
-        }
-
-        public static bool IsSupportedFormat(string fileName)
-        {
-            foreach (string format in _supportedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
         {
             int i = 0;
@@ -700,30 +787,5 @@ namespace GW2EIEvtcParser
             }
             return -1;
         }
-
-        public static bool IsTemporaryCompressedFormat(string fileName)
-        {
-            foreach (string format in _tmpCompressedFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool IsTemporaryFormat(string fileName)
-        {
-            foreach (string format in _tmpFiles)
-            {
-                if (fileName.EndsWith(format, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     }
 }

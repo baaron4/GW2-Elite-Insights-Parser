@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -16,8 +17,8 @@ namespace GW2EIEvtcParser.EIData
         /////////////////////
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightEffect), // Sight beyond Sight
-            new DamageCastFinder(LossAversion, LossAversion), // Loss Aversion
+            new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightBuff),
+            new DamageCastFinder(LossAversion, LossAversion).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
         };
 
@@ -32,34 +33,39 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(MagebaneTether).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                    return x.Time - effectApply.Time < 8000;
-                }
-                return false;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(MagebaneTether).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 8000) < ServerDelayConstant && bae.By == src && bae.To == dst).LastOrDefault(y => y.Time <= x.Time);
-                if (effectApply != null)
-                {
-                    return x.Time - effectApply.Time < 8000;
-                }
-                return false;
+                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
             }).WithBuilds(GW2Builds.August2022Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Sight beyond Sight", SightBeyondSightEffect, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
-            new Buff("Full Counter", FullCounter, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),
+            new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
+            new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),
             new Buff("Disenchantment", Disenchantment, Source.Spellbreaker, BuffClassification.Other, BuffImages.WindsOfDisenchantment),
             new Buff("Attacker's Insight", AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.AttackersInsight),
             new Buff("Magebane Tether", MagebaneTether, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MagebaneTether),
         };
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Warrior;
 
+            // Winds of Disenchantment
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpellbreakerWindsOfDisenchantment, out IReadOnlyList<EffectEvent> windsOfDisenchantments))
+            {
+                foreach (EffectEvent effect in windsOfDisenchantments)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+        }
     }
 }

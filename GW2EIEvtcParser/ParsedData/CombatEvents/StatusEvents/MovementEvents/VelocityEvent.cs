@@ -11,8 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void AddPoint3D(CombatReplay replay)
         {
-            (float x, float y, float z) = Unpack();
-            replay.Velocities.Add(new ParametricPoint3D(x, y, z, Time));
+            replay.Velocities.Add(GetParametricPoint3D());
         }
     }
 }

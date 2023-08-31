@@ -17,6 +17,11 @@ namespace GW2EIEvtcParser.EIData
         private List<Segment> _dcs;
         //
         private List<DeathRecap> _deathRecaps;
+        //
+        private List<Segment> _breakbarNones;
+        private List<Segment> _breakbarActives;
+        private List<Segment> _breakbarImmunes;
+        private List<Segment> _breakbarRecoverings;
         //weaponslist
         private WeaponSets _weaponSets;
 
@@ -36,6 +41,19 @@ namespace GW2EIEvtcParser.EIData
                 AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
             }
             return (_deads, _downs, _dcs);
+        }
+
+        public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
+        {
+            if (_breakbarNones == null)
+            {
+                _breakbarNones = new List<Segment>();
+                _breakbarActives = new List<Segment>();
+                _breakbarImmunes = new List<Segment>();
+                _breakbarRecoverings = new List<Segment>();
+                AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData, log.FightData);
+            }
+            return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);
         }
 
         public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
@@ -94,7 +112,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            int swapped = -1;
+            int swapped = WeaponSetIDs.NoSet;
             long swappedTime = 0;
             var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
             {
@@ -108,9 +126,9 @@ namespace GW2EIEvtcParser.EIData
                 }
                 SkillItem skill = cl.Skill;
                 // first iteration
-                if (swapped == -1)
+                if (swapped == WeaponSetIDs.NoSet)
                 {
-                    swapped = skill.FindWeaponSlot(swaps);
+                    swapped = skill.FindFirstWeaponSet(swaps);
                 }
                 if (!skill.EstimateWeapons(_weaponSets, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
                 {

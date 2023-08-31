@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using GW2EIEvtcParser.Extensions;
 using System.Collections;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -26,8 +27,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(UpswingHallucination, "Upswing", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
             new PlayerDstHitMechanic(new long[] { NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 }, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Goo)", "Miasma",0),
             new EnemyCastStartMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","After Phase CC", "Breakbar", 0),
-            new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","After Phase CC Failed", "CC Fail", 0, (ce,log) => ce.ActualDuration >= 15260),
-            new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","After Phase CC Success", "CCed", 0, (ce, log) => ce.ActualDuration < 15260),
+            new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","After Phase CC Failed", "CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
+            new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","After Phase CC Success", "CCed", 0).UsingChecker( (ce, log) => ce.ActualDuration < 15260),
             new PlayerDstHitMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB","Knockback hourglass during CC", "CC KB", 0),
             new EnemyCastStartMechanic(new long[] { NightmareDevastation1, NightmareDevastation2 }, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble","Nightmare Devastation (bubble attack)", "Bubble",0),
             new PlayerDstHitMechanic(TailLashEnsolyss, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
@@ -59,36 +60,27 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Ensolyss,
+                (int)TargetID.Ensolyss,
                 //(int)ArcDPSEnums.TrashID.NightmareAltar,
             };
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.NightmareHallucination1,
-                ArcDPSEnums.TrashID.NightmareHallucination2,
+                TrashID.NightmareHallucination1,
+                TrashID.NightmareHallucination2,
                 //ArcDPSEnums.TrashID.NightmareAltar,
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
-
-        //internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
-        //{
-        //    IReadOnlyList<AgentItem> altars = agentData.GetGadgetsByID(ArcDPSEnums.TrashID.NightmareAltar);
-        //    foreach (AgentItem altar in altars)
-        //    {
-        //        altar.OverrideType(AgentItem.AgentType.NPC);
-        //    }
-        //    agentData.Refresh();
-        //    base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-        //}
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+            AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
             phases[0].AddTarget(enso);
             if (!requirePhases)
             {
@@ -112,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private static void AddTormentingBlassDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
+        private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
         {
             int startQuarter = start + quarterAoE;
             int endQuarter = start + quarterHit;
@@ -156,17 +148,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Ensolyss:
+                case (int)TargetID.Ensolyss:
                     IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
                     Segment percent66treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 66);
                     Segment percent15treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 15);
                     bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                     // Arkk's Shield
-                    EffectGUIDEvent shield = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ArkkShieldIndicator);
-                    if (shield != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
                     {
-                        var shieldEffects = log.CombatData.GetEffectEventsByEffectID(shield.ContentID).ToList();
                         foreach (EffectEvent shieldEffect in shieldEffects)
                         {
                             if (shieldEffect != null)
@@ -203,10 +193,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // 100% to 66% Doughnut
-                    EffectGUIDEvent doughnut100_66 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut100_66);
-                    if (doughnut100_66 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut100_66, out IReadOnlyList<EffectEvent> miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut100_66.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             if (percent66treshhold != null)
@@ -224,10 +213,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // 66% to 15% Doughnut
-                    EffectGUIDEvent doughnut66_15 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut66_15);
-                    if (doughnut66_15 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut66_15, out miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut66_15.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             // Check if the Arkk's shield attack has been skipped with high dps
@@ -246,10 +234,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // 15% to 0% Doughnut
-                    EffectGUIDEvent doughnut15_0 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssMiasmaDoughnut15_0);
-                    if (doughnut15_0 != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut15_0, out miasmaEffects))
                     {
-                        EffectEvent miasmaEffect = log.CombatData.GetEffectEventsByEffectID(doughnut15_0.ContentID).FirstOrDefault();
+                        EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
                         {
                             // If Arkk's shield has been skipped at 15% this decoration should never be added
@@ -309,8 +296,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
                             var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
 
-                            AddTormentingBlassDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
-                            AddTormentingBlassDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
+                            AddTormentingBlastDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
+                            AddTormentingBlastDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
                         }
                     }
 
@@ -417,7 +404,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucination1:
+                case (int)TrashID.NightmareHallucination1:
                     // Lunge (Dash)
                     var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination).ToList();
                     foreach (AbstractCastEvent c in lungeHallu)
@@ -440,7 +427,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.NightmareHallucination2:
+                case (int)TrashID.NightmareHallucination2:
                     break;
                 default:
                     break;
@@ -466,10 +453,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             //}
 
             // Altar Shockwave
-            EffectGUIDEvent altarWave = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.EnsolyssNightmareAltarShockwave);
-            if (altarWave != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarShockwave, out IReadOnlyList<EffectEvent> waveEffects))
             {
-                var waveEffects = log.CombatData.GetEffectEventsByEffectID(altarWave.ContentID).ToList();
                 foreach (EffectEvent waveEffect in waveEffects)
                 {
                     int duration = 2000;

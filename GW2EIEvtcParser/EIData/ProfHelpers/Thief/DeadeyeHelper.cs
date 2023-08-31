@@ -21,8 +21,10 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             new BuffDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-            new BuffDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifier(NumberOfBoons, "Premeditation", "1.5% per boon",DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
+            new BuffDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
+            new BuffDamageModifier(NumberOfBoons, "Premeditation", "1.5% per boon",DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
+            new BuffDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
+            //
             new BuffDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
@@ -40,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
                 }
                 return false;
-            }).WithBuilds(GW2Builds.August2022Balance),
+            }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
             new BuffDamageModifier(DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
@@ -49,17 +51,27 @@ namespace GW2EIEvtcParser.EIData
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
                 }
                 return false;
-            }).WithBuilds(GW2Builds.August2022Balance),
+            }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
+
+            new BuffDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+                }
+                return false;
+            }).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         };
 
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, BuffImages.Kneel),
+            new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, BuffImages.Kneel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, BuffImages.DeadeyesMark),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.Deadeye1,
             (int)MinionID.Deadeye2,
@@ -72,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Deadeye9,
             (int)MinionID.DeadeyeAsura2,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

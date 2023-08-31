@@ -5,6 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -48,24 +49,27 @@ namespace GW2EIEvtcParser.EIData
             return _engineerKit.Contains(id);
         }
 
-
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceEffect).WithBuilds(GW2Builds.February2020Balance), // Explosive Entrance
-            new BuffGainCastFinder(ElixirSSkill, ElixirSEffect), // Elixir S
+            new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff).WithBuilds(GW2Builds.February2020Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new BuffGainCastFinder(ElixirSSkill, ElixirSBuff),
             new BuffGainCastFinder(SlickShoesSkill, SlickShoesBuff),
-            new DamageCastFinder(OverchargedShot,OverchargedShot), // Overcharged Shot
+            new BuffGainCastFinder(IncendiaryAmmoSkill, IncendiaryAmmoBuff),
+            new DamageCastFinder(OverchargedShot, OverchargedShot),
+            new DamageCastFinder(MagneticInversion, MagneticInversion).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(MagneticInversion, EffectGUIDs.EngineerMagneticInversion)
+                .UsingDstBaseSpecChecker(Spec.Engineer)
+                .UsingChecker((effect, combatData, agentData, skillData) => HasLostBuff(combatData, Absorb, effect.Dst, effect.Time)),
             // Kits
-            new EngineerKitFinder(BombKit), // Bomb Kit
-            new EngineerKitFinder(ElixirGun), // Elixir Gun
-            new EngineerKitFinder(Flamethrower), // Flamethrower
-            new EngineerKitFinder(GrenadeKit), // Grenade Kit
-            new EngineerKitFinder(MedKitSkill), // Med Kit
-            new EngineerKitFinder(ToolKit), // Tool Kit
-            new EngineerKitFinder(EliteMortarKit), // Elite Mortar Kit
-            new EffectCastFinderByDst(HealingMist, EffectGUIDs.EngineerHealingMist).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Engineer && evt.Dst.Spec != Spec.Mechanist),
+            new EngineerKitFinder(BombKit),
+            new EngineerKitFinder(ElixirGun),
+            new EngineerKitFinder(Flamethrower),
+            new EngineerKitFinder(GrenadeKit),
+            new EngineerKitFinder(MedKitSkill),
+            new EngineerKitFinder(ToolKit),
+            new EngineerKitFinder(EliteMortarKit),
+            new EffectCastFinderByDst(HealingMistOrSoothingDetonation, EffectGUIDs.EngineerHealingMist).UsingDstBaseSpecChecker(Spec.Engineer),
         };
-
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
@@ -118,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
             new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),
             new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, BuffImages.AED),
-            new Buff("Elixir S", ElixirSEffect, Source.Engineer, BuffClassification.Other, BuffImages.ElixirS),
+            new Buff("Elixir S", ElixirSBuff, Source.Engineer, BuffClassification.Other, BuffImages.ElixirS),
             new Buff("Utility Goggles", UtilityGoggles, Source.Engineer, BuffClassification.Other, BuffImages.UtilityGoggles),
             new Buff("Slick Shoes", SlickShoesBuff, Source.Engineer, BuffClassification.Other, BuffImages.SlickShoes),
             new Buff("Gear Shield", GearShield, Source.Engineer, BuffClassification.Other, BuffImages.GearShield),
@@ -127,17 +131,20 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Kinetic Charge", KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KineticBattery),
             new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, BuffImages.PinpointDistribution).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, BuffImages.SkilledMarksman),
-            new Buff("Explosive Entrance", ExplosiveEntranceEffect, Source.Engineer, BuffClassification.Other, BuffImages.ExplosiveEntrance).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Explosive Entrance", ExplosiveEntranceBuff, Source.Engineer, BuffClassification.Other, BuffImages.ExplosiveEntrance).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Explosive Temper", ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ExplosiveTemper).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, BuffImages.BigBoomer),
             new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.MedKit),
             new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  BuffImages.MedKit),
-            new Buff("Grenade Kit", GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
-            new Buff("Bomb Kit", BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
-            new Buff("Elixir Gun", ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ElixirGun),
-            new Buff("Flamethrower", FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.Flamethrower),
-            new Buff("Tool Kit", ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
-            new Buff("Elite Mortar", EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
+            new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, BuffImages.CompoundingChemicals),
+            /*
+            new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
+            new Buff("Bomb Kit", POV_BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
+            new Buff("Elixir Gun", POV_ElixirGunKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ElixirGun),
+            new Buff("Flamethrower", POV_FlamethrowerKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.Flamethrower),
+            new Buff("Tool Kit", POV_ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
+            new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
+            */
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
@@ -188,8 +195,8 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        private static HashSet<long> Minions = new HashSet<long>();
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> Minions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

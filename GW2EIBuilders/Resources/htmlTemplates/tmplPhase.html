@@ -6,14 +6,15 @@
                 <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
             </li>
         </ul>
-        <div v-if="hasBreakbarPhases" class="d-flex flew-row justify-content-center align-items-center">
+        <div v-if="hasBreakbarPhases" class="d-flex flex-row justify-content-center align-items-center">
             <span class="mr-1">Breakbar Phases: </span>
-            <div v-for="data in breakbarPhasesPerTarget"
-                class="d-flex flew-row justify-content-center align-items-center mr-1 ml-1">
-                <img class="icon-l mr-2" :src="getTargetData(data.targetId).icon"
+            <div style="max-width: 1200px;" class="d-flex flex-row align-items-center scrollable-x">
+                <div v-for="data in breakbarPhasesPerTarget"
+                class="d-flex flex-row flex-nowrap  align-items-center mr-1 ml-1">
+                <img class="icon-sl mr-2" :src="getTargetData(data.targetId).icon"
                     :alt="getTargetData(data.targetId).name" :data-original-title="getTargetData(data.targetId).name"
                     v-if="breakbarPhasesPerTarget.length > 1">
-                <ul class="nav nav-pills d-flex flex-row justify-content-center">
+                <ul class="nav nav-pills d-flex flex-row flex-nowrap">
                     <li class="nav-item" v-for="(phaseId, id) in data.phaseIds"
                         v-show="getPhaseData(phaseId).breakbarPhase"
                         :data-original-title="getPhaseData(phaseId).durationS + ' seconds'">
@@ -21,6 +22,7 @@
                             :class="{active: getReactivePhaseData(phaseId).active}">{{id + 1}}</a>
                     </li>
                 </ul>
+            </div>
             </div>
 
         </div>

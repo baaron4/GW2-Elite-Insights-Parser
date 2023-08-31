@@ -54,8 +54,8 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             if (settings.RawFormatTimelineArrays)
             {
                 jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
-                var buffDicts = actor.GetBuffsDictionary(log, log.FightData.FightStart, log.FightData.FightEnd);
-                if (buffDicts.TryGetValue(buffID, out var buffDict))
+                IReadOnlyDictionary<long, FinalBuffsDictionary> buffDicts = actor.GetBuffsDictionary(log, log.FightData.FightStart, log.FightData.FightEnd);
+                if (buffDicts.TryGetValue(buffID, out FinalBuffsDictionary buffDict))
                 {
                     var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<int>>>();
                     foreach (AbstractSingleActor source in buffDict.Generated.Keys)

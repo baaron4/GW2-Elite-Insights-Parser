@@ -55,8 +55,19 @@ namespace GW2EIEvtcParser.EIData
         {
             if (Health == -2)
             {
+                Health = -1;
                 IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
-                Health = maxHpUpdates.Count > 0 ? maxHpUpdates.Max(x => x.MaxHealth) : -1;
+                if (maxHpUpdates.Any())
+                {
+                    AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
+                    long timeCheck = (FirstAware + LastAware) / 2;
+                    if (lastDamage != null)
+                    {
+                        timeCheck = Math.Max(timeCheck, Math.Max(FirstAware, lastDamage.Time - 5000));
+                    }
+                    MaxHealthUpdateEvent hpEvent = maxHpUpdates.LastOrDefault(x => x.Time < timeCheck + ServerDelayConstant);
+                    Health = hpEvent != null ? hpEvent.MaxHealth : maxHpUpdates.Max(x => x.MaxHealth);
+                }
             }
             return Health;
         }
@@ -68,6 +79,11 @@ namespace GW2EIEvtcParser.EIData
         public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
         {
             return _statusHelper.GetStatus(log);
+        }
+
+        public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
+        {
+            return _statusHelper.GetBreakbarStatus(log);
         }
 
         public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
@@ -93,6 +109,27 @@ namespace GW2EIEvtcParser.EIData
         {
             (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
             return dcs.Any(x => x.ContainsPoint(time));
+        }
+
+        public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+        {
+            (IReadOnlyList<Segment> nones, IReadOnlyList<Segment> actives, IReadOnlyList<Segment> immunes, IReadOnlyList<Segment> recoverings) = _statusHelper.GetBreakbarStatus(log);
+            if (nones.Any(x => x.ContainsPoint(time))) {
+                return ArcDPSEnums.BreakbarState.None;
+            }
+            if (actives.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Active;
+            }
+            if (immunes.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Immune;
+            }
+            if (recoverings.Any(x => x.ContainsPoint(time)))
+            {
+                return ArcDPSEnums.BreakbarState.Recover;
+            }
+            return ArcDPSEnums.BreakbarState.None;
         }
 
         //
@@ -306,6 +343,26 @@ namespace GW2EIEvtcParser.EIData
         {
             return _buffHelper.GetBuffStatus(log, buffId, time);
         }
+
+        /// <summary>
+        /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIds"/> in input.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="buffIds">Buff IDs of which to find the <see cref="Segment"/> of.</param>
+        /// <param name="start">Start time to search.</param>
+        /// <param name="end">End time to search.</param>
+        /// <returns><see cref="IReadOnlyList{T}"/> with the <see cref="Segment"/>s found.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIds, long start, long end)
+        {
+            var result = new List<Segment>();
+            foreach(long id in buffIds)
+            {
+                result.AddRange(_buffHelper.GetBuffStatus(log, id, start, end));
+            }
+            return result;
+        }
+
         public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
         {
             return _buffHelper.GetBuffStatus(log, by, buffId, start, end);
@@ -472,7 +529,7 @@ namespace GW2EIEvtcParser.EIData
             CastEvents.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ParserHelper.ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
+                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
                 {
                     CastEvents[CastEvents.Count - 1] = wepSwap;
                 }

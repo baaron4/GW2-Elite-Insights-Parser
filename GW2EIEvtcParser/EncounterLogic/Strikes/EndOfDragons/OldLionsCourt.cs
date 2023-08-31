@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -27,18 +28,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { Tribocharge, TribochargeCM }, "Tribocharge", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousVaporBlade, NoxiousVaporBladeCM }, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousReturn, NoxiousReturnCM }, "Noxious Return", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150, (de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150, (de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150, (de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)),
+                new PlayerDstHitMechanic(new long [] { BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM }, "Boiling Aether", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150).UsingAchievementEligibility(true),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || de.CreditedFrom.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)),
                 new PlayerDstBuffApplyMechanic(Spaghettification, "Spaghettification", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Spgt.H", "Hit by Spaghettification", "Spaghettification Hit", 0),
                 new PlayerDstBuffApplyMechanic(Dysapoptosis, "Dysapoptosis", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), "Dysp.H", "Hit by Dysapoptosis", "Dysapoptosis Hit", 0),
                 new PlayerDstBuffApplyMechanic(ThunderingUltimatum, "Thundering Ultimatum", new MechanicPlotlySetting(Symbols.Asterisk, Colors.DarkRed), "ThunUlti.H", "Hit by Thundering Ultimatum", "Thunderin gUltimatum Hit", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { TidalTorment, TidalTormentCM }, "Tidal Torment", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "TidTorm.A", "Tidal Torment Applied", "Tidal Torment Applied", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { ErgoShear, ErgoShearCM }, "Ergo Shear", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "ErgShr.A", "Ergo Shear Applied", "Ergo Shear Applied", 0),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0, (buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0, (buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0, (buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)),
-                new PlayerDstBuffApplyMechanic(ExposedEODStrike, "Exposed (Player)", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Purple),  "Expo.A", "Exposed Applied", "Exposed Applied (Player)", 0),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((buff, log) => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)),
+                new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed (Player)", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Purple),  "Expo.A", "Exposed Applied", "Exposed Applied (Player)", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, "Empowered", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
                 new EnemyDstBuffApplyMechanic(PowerTransfer, "Power Transfer", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
                 new EnemyDstBuffApplyMechanic(LeyWovenShielding, "Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
@@ -202,11 +204,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
+        internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractBuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
+            var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in shields)
+            {
+                // Missing Buff Initial
+                if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
+                {
+                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), 1, true));
+                }
+            }
+            return toAdd;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor vermilion = Vermilion();
-            var canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
+            bool canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
             if (vermilion != null)
             {
                 phases[0].AddTarget(vermilion);
@@ -261,6 +278,38 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     }
                 }
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Fixation
+            IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffData(FixatedOldLionsCourt).Where(buff => buff.To == p.AgentItem);
+            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM));
+            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM));
+            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(buff => buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo) || buff.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM));
+
+            AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
+            AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
+            AddFixatedDecorations(p, log, replay, fixatedIndigo, ParserIcons.FixationBlueOverhead);
+        }
+
+        /// <summary>
+        /// Adds the Fixated decorations.
+        /// </summary>
+        /// <param name="player">Player for the decoration.</param>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="fixations">The <see cref="AbstractBuffEvent"/> where the buff appears.</param>
+        /// <param name="icon">The icon related to the respective buff.</param>
+        private static void AddFixatedDecorations(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractBuffEvent> fixations, string icon)
+        {
+            IEnumerable<AbstractBuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
+            IEnumerable<AbstractBuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
+            foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
+            {
+                long start = bae.Time;
+                long end = removals.FirstOrDefault(x => x.Time > start) != null ? removals.FirstOrDefault(x => x.Time > start).Time : log.FightData.LogEnd;
+                replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
             }
         }
     }

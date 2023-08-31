@@ -12,10 +12,12 @@ namespace GW2EIEvtcParser.ParsedData
         public List<LogStartNPCUpdateEvent> LogStartNPCUpdateEvents { get; } = new List<LogStartNPCUpdateEvent>();
         public List<MapIDEvent> MapIDEvents { get; } = new List<MapIDEvent>();
         public List<ShardEvent> ShardEvents { get; } = new List<ShardEvent>();
+        public List<TickRateEvent> TickRateEvents { get; } = new List<TickRateEvent>();
         public PointOfViewEvent PointOfViewEvent { get; set; }
+        public FractalScaleEvent FractalScaleEvent { get; set; }
         public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
         public Dictionary<long, BuffInfoEvent> BuffInfoEvents { get; } = new Dictionary<long, BuffInfoEvent>();
-        public Dictionary<ArcDPSEnums.BuffCategory, List<BuffInfoEvent>> BuffInfoEventsByCategory { get; } = new Dictionary<ArcDPSEnums.BuffCategory, List<BuffInfoEvent>>();
+        public Dictionary<byte, List<BuffInfoEvent>> BuffInfoEventsByCategory { get; } = new Dictionary<byte, List<BuffInfoEvent>>();
         public Dictionary<long, SkillInfoEvent> SkillInfoEvents { get; } = new Dictionary<long, SkillInfoEvent>();
         public List<ErrorEvent> ErrorEvents { get; } = new List<ErrorEvent>();
         public Dictionary<long, EffectGUIDEvent> EffectGUIDEventsByEffectID { get; } = new Dictionary<long, EffectGUIDEvent>();

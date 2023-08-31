@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -26,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
                 new PlayerDstHitMechanic(new long[] { WaveOfTormentNM, WaveOfTormentCM }, "Wave of Torment", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
                 new PlayerDstHitMechanic(TerrifyingApparition, "Terrifying Apparition", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
+                new PlayerDstHitMechanic(new long[] { WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition }, "Clarity", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150).UsingAchievementEligibility(true),
                 new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, "Lich Fixation", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2 }, "Thrash", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
                 new PlayerDstHitMechanic(new long[] { ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ }, "Ground Slam", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
@@ -37,12 +39,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated", new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Fxt.Hatred", "Fixated by Reanimated Hatred", "Fixated Hatred", 150),
                 new PlayerDstBuffApplyMechanic(Hallucinations, "Hallucinations", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Hallu", "Received Hallucinations Debuff", "Hallucinations Debuff", 150),
                 new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, "Death's Hand Spread", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
+                new PlayerDstBuffApplyMechanic(DevouringVoid, "Devouring Void", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
+                new PlayerDstBuffApplyMechanic(DevouringVoid, "Undevoured", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150).UsingAchievementEligibility(true).UsingEnable(x => x.FightData.IsCM),
             }
             );
             Icon = EncounterIconXunlaiJadeJunkyard;
             Extension = "xunjadejunk";
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
+        }
+
+        internal override string GetLogicName(CombatData combatData, AgentData agentData)
+        {
+            return "Xunlai Jade Junkyard";
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -67,36 +76,55 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, false, true);
+
+            // DPS Phases
+            List<PhaseData> dpsPhase = GetPhasesByInvul(log, Determined895, ankka, false, true);
+            for (int i = 0; i < dpsPhase.Count; i++)
+            {
+                dpsPhase[i].Name = $"DPS Phase {i + 1}";
+                dpsPhase[i].AddTarget(ankka);
+            }
+            phases.AddRange(dpsPhase);
+
+            // Necrotic Rituals
+            List<PhaseData> rituals = GetPhasesByInvul(log, NecroticRitual, ankka, true, true);
+            for (int i = 0; i < rituals.Count; i++)
+            {
+                if (i % 2 != 0)
+                {
+                    rituals[i].Name = $"Necrotic Ritual {(i + 1) / 2}";
+                    rituals[i].AddTarget(ankka);
+                }
+            }
+            phases.AddRange(rituals);
+
+            // Health and Transition Phases
+            List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, true, true);
             for (int i = 0; i < subPhases.Count; i++)
             {
-                subPhases[i].Name = "Location " + (i + 1);
+                switch (i)
+                {
+                    case 0:
+                        subPhases[i].Name = "Phase 100-75%";
+                        break;
+                    case 1:
+                        subPhases[i].Name = "Transition 1";
+                        break;
+                    case 2:
+                        subPhases[i].Name = "Phase 75-40%";
+                        break;
+                    case 3:
+                        subPhases[i].Name = "Transition 2";
+                        break;
+                    case 4:
+                        subPhases[i].Name = "Phase 40-0%";
+                        break;
+                    default:
+                        break;
+                }
                 subPhases[i].AddTarget(ankka);
             }
             phases.AddRange(subPhases);
-            List<PhaseData> subSubPhases = GetPhasesByInvul(log, Determined895, ankka, false, false);
-            subSubPhases.RemoveAll(x => subPhases.Any(y => Math.Abs(y.Start - x.Start) < ServerDelayConstant && Math.Abs(y.End - x.End) < ServerDelayConstant));
-            int curSubSubPhaseID = 0;
-            PhaseData previousSubPhase = null;
-            for (int i = 0; i < subSubPhases.Count; i++)
-            {
-                PhaseData subsubPhase = subSubPhases[i];
-                PhaseData subPhase = subPhases.FirstOrDefault(x => x.Start - ServerDelayConstant <= subsubPhase.Start && x.End + ServerDelayConstant >= subsubPhase.End);
-                if (previousSubPhase != subPhase)
-                {
-                    previousSubPhase = subPhase;
-                    curSubSubPhaseID = 0;
-                }
-                if (subPhase != null)
-                {
-                    int index = subPhases.IndexOf(subPhase);
-                    subsubPhase.OverrideStart(Math.Max(subsubPhase.Start, subPhase.Start));
-                    subsubPhase.OverrideEnd(Math.Min(subsubPhase.End, subPhase.End));
-                    subsubPhase.Name = "Location " + (index + 1) + " - " + (++curSubSubPhaseID);
-                    subsubPhase.AddTarget(ankka);
-                }
-            }
-            phases.AddRange(subSubPhases);
             //
             return phases;
         }
@@ -229,11 +257,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
                         if (ankkaPosition == null) { continue; }
 
-                        EffectGUIDEvent effectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsEmbrace);
-
-                        if (effectGUID != null)
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
                         {
-                            var radius = 500; // Zone 1
+                            int radius = 500; // Zone 1
                             // Zone 2
                             if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
                             {
@@ -244,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 radius = 380;
                             }
-                            var effects = log.CombatData.GetEffectEventsByEffectID(effectGUID.ContentID).Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime).ToList();
+                            var effects = deathsEmbraceEffects.Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime).ToList();
                             foreach (EffectEvent effectEvt in effects)
                             {
                                 AddDeathEmbraceDecoration(replay, (int)deathEmbrace.Time, deathsEmbraceCastDuration, radius, (int)(effectEvt.Time - deathEmbrace.Time), effectEvt.Position);
@@ -288,7 +314,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // One also happens during death's embrace so we filter that one out
                                 if (!deathsEmbraces.Any(x => x.Time <= deathsHandEffect.Time && x.Time + deathsEmbraceCastDuration >= deathsHandEffect.Time))
                                 {
-
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
@@ -298,6 +323,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+
+                    // Power of the Void
+                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+                    replay.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
                     break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
                     // Wall of Fear
@@ -388,8 +417,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (segment != null && segment.Start > 0 && segment.Value == 1)
                     {
                         // AoE on player
-                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, ((int)segment.Start, (int)segment.End), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                         // Logs without effects
                         if (deathsHandOnPlayerGUID == null)
                         {
@@ -422,6 +451,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            // Reanimated Hatred Fixation
+            IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)

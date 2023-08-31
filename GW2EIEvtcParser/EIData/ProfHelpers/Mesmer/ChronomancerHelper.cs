@@ -24,15 +24,11 @@ namespace GW2EIEvtcParser.EIData
                 }
                 // Clones also trigger this effect but it is sourced to the master, we need additional checks
                 // Seize the moment makes for a very clear and clean check 
-                EffectGUIDEvent shatterSeizeTheMomentGUIDEvent = combatData.GetEffectGUIDEvent(EffectGUIDs.ChronomancerSeizeTheMomentShatter);
-                if (shatterSeizeTheMomentGUIDEvent != null)
+                if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.ChronomancerSeizeTheMomentShatter, out IReadOnlyList<EffectEvent> shatterEvents) && shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1))
                 {
-                    IReadOnlyList<EffectEvent> shatterEvents = combatData.GetEffectEventsByEffectID(shatterSeizeTheMomentGUIDEvent.ContentID);
-                    if  (shatterEvents.Any(x => x.Src == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant && x.Position.Distance2DToPoint(evt.Position) < 0.1)) {
-                        return true;
-                    }
-                    return false;
-                } 
+                    return true;
+                }
+                return false;
                 // This is not reliable enough, leaving the code commented
                 //Otherwise, we check the position
                 /*IEnumerable<PositionEvent> positionEvents = combatData.GetMovementData(evt.Src).OfType<PositionEvent>();
@@ -62,10 +58,9 @@ namespace GW2EIEvtcParser.EIData
                 if  (currentPosition.Distance2DToPoint(evt.Position) < 15) {
                     return true;
                 }*/
-                return false;
             }).UsingNotAccurate(true),
-            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Chronomancer),
-            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Chronomancer),
+            new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingSrcSpecChecker(Spec.Chronomancer),
+            new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingSrcSpecChecker(Spec.Chronomancer),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -78,16 +73,13 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu),
+            new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ContinuumSplit),
             new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
         };
 
-        private static HashSet<long> NonCloneMinions = new HashSet<long>()
-        {
-            (int)MinionID.IllusionaryAvenger,
-        };
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> NonCloneMinions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id);
         }

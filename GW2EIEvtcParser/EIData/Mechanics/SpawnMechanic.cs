@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class SpawnMechanic : IDBasedMechanic
+    internal class SpawnMechanic : IDBasedMechanic<AbstractSingleActor>
     {
         public SpawnMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
                 {
                     AbstractSingleActor amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
-                    if (amp != null)
+                    if (amp != null && Keep(amp, log))
                     {
                         mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
                     }

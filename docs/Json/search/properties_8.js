@@ -16,9 +16,12 @@ var searchData=
   ['interval',['Interval',['../class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data_1_1_combat_replay_map.html#a16192fa3b6172419fc0e1b4e5af54048',1,'GW2EIJSON::JsonCombatReplayMetaData::CombatReplayMap']]],
   ['invulned',['Invulned',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#aa27e477687ca098a15a4bd53cff5134c',1,'GW2EIJSON.JsonDamageDist.Invulned()'],['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ab728b756c2a2109bbcb6bac4d9250f69',1,'GW2EIJSON.JsonStatistics.JsonGameplayStats.Invulned()']]],
   ['invulnedcount',['InvulnedCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a0e02759bf694fedc4d56b3d656f84a9d',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
+  ['isachievementeligibility',['IsAchievementEligibility',['../class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html#aef40ef184058ac5cb32ca7ce0c0a8884',1,'GW2EIJSON::JsonMechanics']]],
   ['iscm',['IsCM',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8',1,'GW2EIJSON::JsonLog']]],
   ['isfake',['IsFake',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7b2a754478c15d81ff69f2d55dc98ed1',1,'GW2EIJSON::JsonActor']]],
+  ['isgearproc',['IsGearProc',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2273f3ce574afd5f6241fa09cfc970de',1,'GW2EIJSON::JsonLog::SkillDesc']]],
   ['isinstantcast',['IsInstantCast',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570',1,'GW2EIJSON::JsonLog::SkillDesc']]],
   ['isnotaccurate',['IsNotAccurate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364',1,'GW2EIJSON::JsonLog::SkillDesc']]],
-  ['isswap',['IsSwap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a621c82c97ccd5b5892ddb95a00f95677',1,'GW2EIJSON::JsonLog::SkillDesc']]]
+  ['isswap',['IsSwap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a621c82c97ccd5b5892ddb95a00f95677',1,'GW2EIJSON::JsonLog::SkillDesc']]],
+  ['istraitproc',['IsTraitProc',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2fdf1a6737488ea50ca1cc783ee33cf9',1,'GW2EIJSON::JsonLog::SkillDesc']]]
 ];

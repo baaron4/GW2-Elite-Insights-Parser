@@ -5,25 +5,15 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal abstract class SkillMechanic : IDBasedMechanic
+    internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEvent>
     {
-        public delegate bool SkillChecker(AbstractHealthDamageEvent d, ParsedEvtcLog log);
 
-        private readonly SkillChecker _triggerCondition = null;
-
-        protected virtual bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
+        public SkillMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            return (_triggerCondition == null || _triggerCondition(c, log));
         }
 
-        public SkillMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+        public SkillMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-            _triggerCondition = condition;
-        }
-
-        public SkillMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
-        {
-            _triggerCondition = condition;
         }
 
         protected abstract AgentItem GetAgentItem(AbstractHealthDamageEvent ahde);

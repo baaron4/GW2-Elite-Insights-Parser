@@ -13,10 +13,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool ProbablyInvert { get; private set; }
 
-        public ArcDPSEnums.BuffCategory Category { get; private set; }
+        //public ArcDPSEnums.BuffCategory Category { get; private set; }
+
+        public byte CategoryByte { get; private set; }
 
         public byte StackingTypeByte { get; private set; } = 6;
-        public ArcDPSEnums.BuffStackType StackingType { get; private set; } = ArcDPSEnums.BuffStackType.Unknown;
+        public ArcDPSEnums.BuffStackType StackingType { get; private set; } = BuffStackType.Unknown;
 
         public bool ProbablyResistance { get; private set; }
 
@@ -38,10 +40,10 @@ namespace GW2EIEvtcParser.ParsedData
             }
             switch (evtcItem.IsStateChange)
             {
-                case ArcDPSEnums.StateChange.BuffFormula:
+                case StateChange.BuffFormula:
                     BuildFromBuffFormula(evtcItem, evtcVersion);
                     break;
-                case ArcDPSEnums.StateChange.BuffInfo:
+                case StateChange.BuffInfo:
                     BuildFromBuffInfo(evtcItem, evtcVersion);
                     break;
                 default:
@@ -53,14 +55,15 @@ namespace GW2EIEvtcParser.ParsedData
         {
             ProbablyInvul = evtcItem.IsFlanking > 0;
             ProbablyInvert = evtcItem.IsShields > 0;
-            Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
+            //Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
+            CategoryByte = evtcItem.IsOffcycle;
             MaxStacks = evtcItem.SrcMasterInstid;
             DurationCap = evtcItem.OverstackValue;
             // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
             if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 StackingTypeByte = evtcItem.Pad1;
-                StackingType = ArcDPSEnums.GetBuffStackType(StackingTypeByte);
+                StackingType = GetBuffStackType(StackingTypeByte);
             }
             ProbablyResistance = evtcItem.Pad2 > 0;
         }
@@ -80,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         private void BuildFromBuffFormula(CombatItem evtcItem, int evtcVersion)
         {
-            Formulas.Add(new BuffFormula(evtcItem, this, evtcVersion));
+            Formulas.Add(new BuffFormula(evtcItem, evtcVersion));
         }
 
     }

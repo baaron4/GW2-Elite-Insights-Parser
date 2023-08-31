@@ -62,6 +62,8 @@
         internal const string AchillesBane = "https://wiki.guildwars2.com/images/5/55/Achilles_Bane.png";
         internal const string ReviveSickness = "https://wiki.guildwars2.com/images/9/91/Revive_Sickness.png";
         internal const string PowerAttribute = "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png";
+        internal const string HealingPowerAttribute = "https://wiki.guildwars2.com/images/0/0c/Healing_Power_attribute.png";
+        internal const string CooldownNegative = "https://wiki.guildwars2.com/images/c/c3/Aquatic_Ruins_Chest_Disabled.png";
         // Auras
         internal const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
         internal const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
@@ -118,6 +120,7 @@
         internal const string InvokeLightning = "https://wiki.guildwars2.com/images/a/ab/Invoke_Lightning.png";
         internal const string KodasArmor = "https://wiki.guildwars2.com/images/8/88/Koda%27s_Armor.png";
         internal const string SpoiledSupply = "https://wiki.guildwars2.com/images/e/e2/Spoiled_Supply.png";
+        internal const string EmergencyWaypoint = "https://wiki.guildwars2.com/images/8/87/Emergency_Waypoint.png";
         #endregion Commons
 
         #region Gear
@@ -150,6 +153,29 @@
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
         internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
         internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
+        // Relics
+        internal const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
+        internal const string RelicOfTheAristocracy = "https://wiki.guildwars2.com/images/6/60/Relic_of_the_Aristocracy.png";
+        internal const string RelicOfTheMonk = "https://wiki.guildwars2.com/images/c/c9/Relic_of_the_Monk.png";
+        internal const string RelicOfFireworks = "https://wiki.guildwars2.com/images/6/6c/Relic_of_Fireworks.png";
+        internal const string RelicOfTheThief = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Thief.png";
+        internal const string RelicOfTheBrawler = "https://wiki.guildwars2.com/images/3/30/Relic_of_the_Brawler.png";
+        internal const string RelicOfTheDaredevil = "https://wiki.guildwars2.com/images/9/9f/Relic_of_the_Daredevil.png";
+        internal const string RelicOfTheDeadeye = "https://wiki.guildwars2.com/images/0/08/Relic_of_the_Deadeye.png";
+        internal const string RelicOfTheDefender = "https://wiki.guildwars2.com/images/2/20/Relic_of_the_Defender.png";
+        internal const string RelicOfTheFirebrand = "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Firebrand.png";
+        internal const string RelicOfTheHerald = "https://wiki.guildwars2.com/images/6/64/Relic_of_the_Herald.png";
+        internal const string RelicOfTheScourge = "https://wiki.guildwars2.com/images/2/28/Relic_of_the_Scourge.png";
+        internal const string RelicOfTheWeaver = "https://wiki.guildwars2.com/images/e/e5/Relic_of_the_Weaver.png";
+        internal const string RelicOfTheZephyrite = "https://wiki.guildwars2.com/images/e/e4/Relic_of_the_Zephyrite.png";
+        internal const string RelicOfCerus = "https://wiki.guildwars2.com/images/2/29/Relic_of_Cerus.png";
+        internal const string RelicOfDagda = "https://wiki.guildwars2.com/images/a/a7/Relic_of_Dagda.png";
+        internal const string RelicOfIsgarren = "https://wiki.guildwars2.com/images/9/91/Relic_of_Isgarren.png";
+        internal const string RelicOfLyhr = "https://wiki.guildwars2.com/images/f/f4/Relic_of_Lyhr.png";
+        internal const string RelicOfMabon = "https://wiki.guildwars2.com/images/c/c4/Relic_of_Mabon.png";
+        internal const string RelicOfPeitha = "https://wiki.guildwars2.com/images/4/4f/Relic_of_Peitha.png";
+        internal const string RelicOfTheAstralWard = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Astral_Ward.png";
+        internal const string RelicOfVass = "https://wiki.guildwars2.com/images/f/f2/Relic_of_Vass.png";
         #endregion Gear
 
         #region Fractal
@@ -287,6 +313,8 @@
         internal const string Claim = "https://wiki.guildwars2.com/images/e/ef/Claim.png";
         // Samarog
         internal const string SoulSwarm = "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png";
+        internal const string FixateRigom = "https://wiki.guildwars2.com/images/f/f9/Fixate_%28Rigom%29.png";
+        internal const string FixateGuldhem = "https://wiki.guildwars2.com/images/8/83/Fixate_%28Guldhem%29.png";
         internal const string Burrowed = "https://wiki.guildwars2.com/images/e/e3/Burrowed.png";
         // Deimos
         internal const string UnnaturalSignet = "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png";
@@ -354,12 +382,14 @@
         internal const string KineticAbundance = "https://wiki.guildwars2.com/images/6/64/Kinetic_Abundance.png";
         internal const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
         internal const string MagicBlastIntensity = "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png";
+        internal const string PartiallyProtected = "https://wiki.guildwars2.com/images/d/d0/Partially_Protected.png";
         // Fractal
         internal const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
         internal const string RedirectAnomaly = "https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png";
         internal const string DiaphanousShielding = "https://wiki.guildwars2.com/images/5/57/Diaphanous_Shielding.png";
         internal const string PrimedBottle = "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png";
         internal const string CrowdFavor = "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png";
+        internal const string VoidAffliction = "https://wiki.guildwars2.com/images/f/f8/Void_Affliction.png";
         // Strikes
         internal const string Hypothermia = "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png";
         internal const string Frostbite = "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png";
@@ -397,6 +427,12 @@
         internal const string FrozenBarrier = "https://wiki.guildwars2.com/images/c/c8/Frozen_Barrier.png";
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";
         internal const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
+        internal const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
+        // Cosmic Observatory
+        internal const string ResidualAnxiety = "https://wiki.guildwars2.com/images/6/61/Throw_Cursed_Artifact.png";
+        // Temple of Febe
+        internal const string EmpoweredTempleOfFebe = "https://wiki.guildwars2.com/images/2/21/Expel_Excess_Magic_Poison.png";
+        internal const string Insatiable = "https://wiki.guildwars2.com/images/b/b8/Void_Corruption.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
@@ -1209,6 +1245,10 @@
         internal const string CoolantBlast = "https://wiki.guildwars2.com/images/b/b1/Coolant_Blast.png";
         internal const string PhotonWall = "https://wiki.guildwars2.com/images/e/ea/Photon_Wall.png";
         internal const string SpectrumShield = "https://wiki.guildwars2.com/images/2/29/Spectrum_Shield.png";
+        internal const string Heat = "https://wiki.guildwars2.com/images/c/c4/Heat.png";
+        internal const string Heat1 = "https://i.imgur.com/BNiORVR.png";
+        internal const string Heat2 = "https://i.imgur.com/ilVa7nM.png";
+        internal const string Heat3 = "https://i.imgur.com/Q9A8rUw.png";
         internal const string EngagePhotonForge = "https://wiki.guildwars2.com/images/d/dd/Engage_Photon_Forge.png";
         internal const string SolarFocusingLens = "https://wiki.guildwars2.com/images/5/51/Solar_Focusing_Lens.png";
         internal const string HeatTherapy = "https://wiki.guildwars2.com/images/3/34/Heat_Therapy.png";
@@ -1294,6 +1334,7 @@
         internal const string IllusionaryRiposte = "https://wiki.guildwars2.com/images/9/91/Illusionary_Riposte.png";
         internal const string IllusionaryLeap = "https://wiki.guildwars2.com/images/1/18/Illusionary_Leap.png";
         internal const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+        internal const string IllusionaryMembrane = "https://wiki.guildwars2.com/images/b/bf/Illusionary_Membrane.png";
         internal const string PortalEnter = "https://wiki.guildwars2.com/images/8/81/Portal_Entre.png";
         internal const string IllusionOfLife = "https://wiki.guildwars2.com/images/9/92/Illusion_of_Life.png";
         internal const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
@@ -1312,6 +1353,7 @@
         internal const string UnholyFervor = "https://wiki.guildwars2.com/images/e/e2/Unholy_Fervor.png";
         internal const string CloseToDeath = "https://wiki.guildwars2.com/images/b/b2/Close_to_Death.png";
         internal const string SoulBarbs = "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png";
+        internal const string DeathPerception = "https://wiki.guildwars2.com/images/6/60/Death_Perception.png";
         internal const string LichForm = "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png";
         internal const string DeathShroud = "https://wiki.guildwars2.com/images/f/f5/Death_Shroud.png";
         internal const string SignetOfVampirism = "https://wiki.guildwars2.com/images/7/73/Signet_of_Vampirism.png";
@@ -1496,6 +1538,19 @@
         internal const string GlyphOfElementalPowerWater = "https://wiki.guildwars2.com/images/b/bf/Glyph_of_Elemental_Power_%28water%29.png";
         internal const string GlyphOfElementalPowerAir = "https://wiki.guildwars2.com/images/c/cb/Glyph_of_Elemental_Power_%28air%29.png";
         internal const string GlyphOfElementalPowerEarth = "https://wiki.guildwars2.com/images/0/0a/Glyph_of_Elemental_Power_%28earth%29.png";
+        internal const string FreezingGust = "https://wiki.guildwars2.com/images/4/48/Freezing_Gust.png";
+        internal const string HeatLvl1 = "https://i.imgur.com/nNQEVpb.png";
+        internal const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
+        internal const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
+        internal const string NecroticTraversal = "https://wiki.guildwars2.com/images/9/98/Necrotic_Traversal.png";
+        internal const string GrimSpecter = "https://wiki.guildwars2.com/images/3/30/Grim_Specter.png";
+        internal const string NaturalBalance = "https://wiki.guildwars2.com/images/3/3d/Natural_Balance.png";
+        internal const string TempestuousAria = "https://wiki.guildwars2.com/images/2/28/Tempestuous_Aria.png";
+        internal const string UnflinchingFortitude = "https://wiki.guildwars2.com/images/d/d6/Unflinching_Fortitude.png";
+        internal const string DefyPain = "https://wiki.guildwars2.com/images/f/f9/Defy_Pain.png";
+        internal const string PhantasmalWarlock = "https://wiki.guildwars2.com/images/0/01/Phantasmal_Warlock.png";
+        internal const string HeatTheSoul = "https://wiki.guildwars2.com/images/5/58/Heat_the_Soul.png";
+        internal const string CompoundingChemicals = "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
@@ -1503,6 +1558,10 @@
         internal const string HealthfulRejuvenation = "https://wiki.guildwars2.com/images/1/1c/Healthful_Rejuvenation.png";
         internal const string DamageBonus5 = "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png";
         internal const string SwiftMoaFeather = "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png";
+        internal const string OgrePetWhistle = "https://wiki.guildwars2.com/images/d/de/Ogre_Pet_Whistle.png";
+        internal const string FireElementalPowder = "https://wiki.guildwars2.com/images/9/9c/Pile_of_Cinnamon_and_Sugar.png";
+        internal const string SunspearParagonSupport = "https://wiki.guildwars2.com/images/1/17/Sunspear_Paragon_Support.png";
+        internal const string RavenSpiritShadow = "https://wiki.guildwars2.com/images/d/de/Raven_Spirit_Shadow.png";
         // Others
         internal const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
         internal const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
@@ -1512,6 +1571,8 @@
         internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
         internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
         internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
+        internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
+        internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
         #endregion Misc
     }
 }

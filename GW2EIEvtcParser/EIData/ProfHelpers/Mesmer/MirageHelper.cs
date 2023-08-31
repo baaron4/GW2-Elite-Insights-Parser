@@ -14,7 +14,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(Jaunt, Jaunt), // Jaunt
+            new DamageCastFinder(Jaunt, Jaunt),
+            // new EffectCastFinderByDst(Jaunt, EffectGUIDs.MirageJaunt).UsingDstSpecChecker(Spec.Mirage),
             new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
             //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
         };
@@ -29,8 +30,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, BuffImages.FalseOasis),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>();
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> Minions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }

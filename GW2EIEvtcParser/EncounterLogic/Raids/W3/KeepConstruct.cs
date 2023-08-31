@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -23,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(new long[] { StatueFixated1, StatueFixated2 }, "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
             new PlayerDstHitMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyDstBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
-            new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0, (de, log) => {
+            new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0).UsingChecker( (de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
                 if (phases.Count < 2)
                 {
@@ -32,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return de.Time >= phases[1].End;
             }),
-            new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0, (de, log) => {
+            new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0).UsingChecker((de, log) => {
                 var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
                 if (phases.Count < 1)
                 {
@@ -51,11 +52,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] {PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1  }, "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new PlayerDstHitMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerDstBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
-            new PlayerDstHitMechanic(WhiteOrb, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0, (de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-            new PlayerDstHitMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0, (de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-            new PlayerDstHitMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0, (de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-            new PlayerDstHitMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0, (de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-            new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000, (de, log) => de.To.IsSpecies(ArcDPSEnums.TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
+            new PlayerDstHitMechanic(WhiteOrb, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0).UsingChecker((de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
+            new PlayerDstHitMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0).UsingChecker((de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
+            new PlayerDstHitMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0).UsingChecker((de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
+            new PlayerDstHitMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0).UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
+            new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000).UsingChecker((de, log) => de.To.IsSpecies(ArcDPSEnums.TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
             });
             Extension = "kc";
             Icon = EncounterIconKeepConstruct;
@@ -76,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ConstructAura, ConstructAura), // Construct Aura
+                new DamageCastFinder(ConstructAura, ConstructAura),
             };
         }
 
@@ -110,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     start = c.Time;
                 }
             }
-            if (fightEnd - start > ParserHelper.PhaseTimeLimit && start >= phases.Last().End)
+            if (fightEnd - start > PhaseTimeLimit && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightEnd));
                 start = fightEnd;
@@ -193,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End, "Leftover " + leftOverCount++);
+                            var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                             leftOverPhase.AddTarget(mainTarget);
                             leftOverPhases.Add(leftOverPhase);
                         }
@@ -276,20 +277,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, XerasBoon, target, true, true);
-                    int kcOrbStart = 0, kcOrbEnd = 0;
-                    foreach (AbstractBuffEvent c in kcOrbCollect)
+                    var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in kcOrbCollect)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            kcOrbStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            kcOrbEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -323,7 +315,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -337,11 +329,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
                         replay.Decorations.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(facing.Y, facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades3)
@@ -354,14 +346,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X))), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (ParserHelper.RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(true, 0, 1600, (RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X)) + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", new AgentConnector(target))); // First blade lasts longer
                         }
                     }
                     break;
@@ -409,20 +401,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bombs
-            List<AbstractBuffEvent> xeraFury = GetFilteredList(log.CombatData, XerasFury, p, true, true);
-            int xeraFuryStart = 0;
-            foreach (AbstractBuffEvent c in xeraFury)
+            var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in xeraFury)
             {
-                if (c is BuffApplyEvent)
-                {
-                    xeraFuryStart = (int)c.Time;
-                }
-                else
-                {
-                    int xeraFuryEnd = (int)c.Time;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                    replay.Decorations.Add(new CircleDecoration(true, xeraFuryEnd, 550, (xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 550, seg, "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
 
             }
             //fixated Statue
@@ -445,6 +428,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            // Fixation Overhead
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            // Attunements Overhead
+            IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, new long[] { CrimsonAttunementPhantasm, CrimsonAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
+            IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, new long[] { RadiantAttunementPhantasm, RadiantAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
         }
 
         protected override void SetInstanceBuffs(ParsedEvtcLog log)

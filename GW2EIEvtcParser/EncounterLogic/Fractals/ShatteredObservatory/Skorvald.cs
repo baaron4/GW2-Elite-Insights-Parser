@@ -5,6 +5,8 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -28,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] { HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
             new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
             new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new PlayerDstBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstHitMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
             new PlayerDstHitMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
@@ -54,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -73,14 +75,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly1,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly2,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly3,
-                        (int)ArcDPSEnums.TrashID.FluxAnomaly4,
-                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM1,
-                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM2,
-                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM3,
-                        (int)ArcDPSEnums.TrashID.FluxAnomalyCM4,
+                        (int)TrashID.FluxAnomaly1,
+                        (int)TrashID.FluxAnomaly2,
+                        (int)TrashID.FluxAnomaly3,
+                        (int)TrashID.FluxAnomaly4,
+                        (int)TrashID.FluxAnomalyCM1,
+                        (int)TrashID.FluxAnomalyCM2,
+                        (int)TrashID.FluxAnomalyCM3,
+                        (int)TrashID.FluxAnomalyCM4,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                 }
@@ -95,32 +97,43 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            var manualFractalScaleSet = false;
+            if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
+            {
+                manualFractalScaleSet = true;
+            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
             skorvald.OverrideName("Skorvald");
+            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
+            {
+                // Remove manual scale from T1 to T3 for now
+                combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
+                // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
+            }
             
             int[] nameCount = new [] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)
             {
                 switch (target.ID) {
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly1:
-                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM1:
+                    case (int)TrashID.FluxAnomaly1:
+                    case (int)TrashID.FluxAnomalyCM1:
                         target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
                         break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly2:
-                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM2:
+                    case (int)TrashID.FluxAnomaly2:
+                    case (int)TrashID.FluxAnomalyCM2:
                         target.OverrideName(target.Character + " " + (2 + 4 * nameCount[1]++));
                         break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly3:
-                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM3:
+                    case (int)TrashID.FluxAnomaly3:
+                    case (int)TrashID.FluxAnomalyCM3:
                         target.OverrideName(target.Character + " " + (3 + 4 * nameCount[2]++));
                         break;
-                    case (int) ArcDPSEnums.TrashID.FluxAnomaly4:
-                    case (int) ArcDPSEnums.TrashID.FluxAnomalyCM4:
+                    case (int)TrashID.FluxAnomaly4:
+                    case (int)TrashID.FluxAnomalyCM4:
                         target.OverrideName(target.Character + " " + (4 + 4 * nameCount[3]++));
                         break;
                 }
@@ -129,17 +142,18 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem skorvald = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Skorvald).FirstOrDefault();
+                AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault();
                 if (skorvald == null)
                 {
                     throw new MissingKeyActorsException("Skorvald not found");
                 }
+                long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
-                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
+                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
                 return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
@@ -147,12 +161,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
             }
-            if (combatData.GetBuildEvent().Build >= 106277)
+            if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
                 /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())
@@ -164,12 +178,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
                 // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
                 // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
+                // WARNING: Skorvald seems to cast SupernovaCM on T4 regardless of the mode since an unknown amount of time, removing that id check
+                // and adding split thrash mob check
                 var cmSkills = new HashSet<long>
                 {
                     SolarBoltCM,
-                    SupernovaCM,
+                    //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any())
+                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
+                    agentData.GetNPCsByID(TrashID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
                 {
                     return FightData.EncounterMode.CM;
                 }
@@ -185,15 +205,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>()
             {
-                (int)ArcDPSEnums.TargetID.Skorvald,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly1,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly2,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly3,
-                (int)ArcDPSEnums.TrashID.FluxAnomaly4,
-                (int)ArcDPSEnums.TrashID.FluxAnomalyCM1,
-                (int)ArcDPSEnums.TrashID.FluxAnomalyCM2,
-                (int)ArcDPSEnums.TrashID.FluxAnomalyCM3,
-                (int)ArcDPSEnums.TrashID.FluxAnomalyCM4,
+                (int)TargetID.Skorvald,
+                (int)TrashID.FluxAnomaly1,
+                (int)TrashID.FluxAnomaly2,
+                (int)TrashID.FluxAnomaly3,
+                (int)TrashID.FluxAnomaly4,
+                (int)TrashID.FluxAnomalyCM1,
+                (int)TrashID.FluxAnomalyCM2,
+                (int)TrashID.FluxAnomalyCM3,
+                (int)TrashID.FluxAnomalyCM4,
             };
         }
 
@@ -205,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Skorvald));
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
             {
                 throw new MissingKeyActorsException("Skorvald not found");
@@ -223,10 +243,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.SolarBloom
+                TrashID.SolarBloom
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -235,7 +257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Skorvald:
+                case (int)TargetID.Skorvald:
                     // Horizon Strike
                     var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4).ToList();
                     foreach (AbstractCastEvent c in horizonStrike)
@@ -338,10 +360,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Solar Bolt
-                    EffectGUIDEvent solarBolt = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SolarBolt);
-                    if (solarBolt != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SolarBolt, out IReadOnlyList<EffectEvent> solarBoltEffects))
                     {
-                        var solarBoltEffects = log.CombatData.GetEffectEventsByEffectID(solarBolt.ContentID).ToList();
                         foreach (EffectEvent solarBoltEffect in solarBoltEffects)
                         {
                             int aoeRadius = 100;
@@ -386,15 +406,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Solar Cyclone
-                    EffectGUIDEvent kick = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.KickGroundEffect);
-                    if (kick != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out IReadOnlyList<EffectEvent> kickEffects))
                     {
-                        IReadOnlyList<EffectEvent> kickEffects = log.CombatData.GetEffectEventsByEffectID(kick.ContentID);
                         foreach (EffectEvent kickEffect in kickEffects)
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, RadianToDegreeF(kickEffect.Orientation.Z) - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, kickEffect.Rotation.Z - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
                         }
                     }
 
@@ -426,10 +444,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM1:
-                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM2:
-                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM3:
-                case (int)ArcDPSEnums.TrashID.FluxAnomalyCM4:
+                case (int)TrashID.FluxAnomalyCM1:
+                case (int)TrashID.FluxAnomalyCM2:
+                case (int)TrashID.FluxAnomalyCM3:
+                case (int)TrashID.FluxAnomalyCM4:
                     // Solar Stomp
                     var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
                     foreach (AbstractCastEvent c in solarStomp)
@@ -534,7 +552,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.SolarBloom:
+                case (int)TrashID.SolarBloom:
                     break;
                 default:
                     break;
@@ -546,10 +564,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Mist Bomb - Both for Skorvald and Flux Anomalies
-            EffectGUIDEvent mistBomb = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.MistBomb);
-            if (mistBomb != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out IReadOnlyList<EffectEvent> mistBombEffects))
             {
-                var mistBombEffects = log.CombatData.GetEffectEventsByEffectID(mistBomb.ContentID).ToList();
                 foreach (EffectEvent mistBombEffect in mistBombEffects)
                 {
                     int aoeRadius = 130;
@@ -559,6 +575,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
                 }
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Fixations
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)

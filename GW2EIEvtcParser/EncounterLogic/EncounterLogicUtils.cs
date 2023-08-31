@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -15,21 +16,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
-                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
                 var newTargetAgent = new AgentItem(firstItem);
                 newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                agentData.SwapMasters(new HashSet<AgentItem>(agents), newTargetAgent);
                 agentData.ReplaceAgentsFromID(newTargetAgent);
-                foreach (CombatItem c in combatItems)
+                foreach (AgentItem agentItem in agents)
                 {
-                    if (agentValues.Contains(c.SrcAgent) && c.SrcIsAgent(extensions))
-                    {
-                        c.OverrideSrcAgent(newTargetAgent.Agent);
-                    }
-                    if (agentValues.Contains(c.DstAgent) && c.DstIsAgent(extensions))
-                    {
-                        c.OverrideDstAgent(newTargetAgent.Agent);
-                    }
+                    RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
                 }
             }
         }
@@ -112,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
         }
@@ -167,8 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                (float x, float y, float z) = AbstractMovementEvent.UnpackMovementData(evt.DstAgent, evt.Value);
-                if (Math.Abs(x - chestPosition.X) < 5 && Math.Abs(y - chestPosition.Y) < 5)
+                Point3D position = AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value);
+                if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
                 {
                     return true;
                 }
@@ -183,15 +175,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return false;
         }
 
-        internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, float, float)> positionData, float maxDiff = 10)
+        internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Point3D)> positionData, float maxDiff = InchDistanceThreshold)
         {
-            CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-            if (position != null)
+            CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+            if (positionEvt != null)
             {
-                (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
-                foreach ((string suffix, float expectedX, float expectedY) in positionData)
+                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                foreach ((string suffix, Point3D expectedPosition) in positionData)
                 {
-                    if ((Math.Abs(x - expectedX) <= maxDiff && Math.Abs(y - expectedY) <= maxDiff))
+                    if (position.Distance2DToPoint(expectedPosition) < maxDiff)
                     {
                         target.OverrideName(target.Character + " " + suffix);
                         return suffix;

@@ -23,10 +23,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(RadiantBlindness, "Radiant Blindness", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
                 new PlayerDstBuffApplyMechanic(ErodingCurse, "Eroding Curse", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
                 new PlayerDstHitMechanic(BoulderBarrage, "Boulder Barrage", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-                new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(StalagmitesDetonation, "Stalagmites", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
                 new PlayerDstHitMechanic(DiamondPalisadeEye, "Diamond Palisade", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
-                new PlayerDstSkillMechanic(new long[] { DoubleRotatingEarthRays, TripleRotatingEarthRays }, "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0, (de, log) => de.HasKilled),
+                new PlayerDstSkillMechanic(new long[] { DoubleRotatingEarthRays, TripleRotatingEarthRays }, "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
             });
             Extension = "adina";
             Icon = EncounterIconAdina;
@@ -41,27 +41,41 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(SeismicSuffering, SeismicSuffering), // Seismic Suffering
             };
         }
-        
+
+        internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+        {
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            // Handle potentially wrongly associated logs
+            if (logStartNPCUpdate != null)
+            {
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Sabir).Any(sabir => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(sabir) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+                {
+                    return new Sabir((int)ArcDPSEnums.TargetID.Sabir);
+                }
+            }
+            return base.AdjustLogic(agentData, combatData);
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = 0;
             long final = fightData.FightEnd;
+            var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                var copyEventsFrom = new List<AgentItem>() { hand };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(hand) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                CombatItem posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
-                if (pos != null)
+                if (posEvt != null)
                 {
-                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(pos.DstAgent, 0);
-                    if ((Math.Abs(x - 15570.5) < 10 && Math.Abs(y + 693.117) < 10) ||
-                            (Math.Abs(x - 14277.2) < 10 && Math.Abs(y + 2202.52) < 10))
+                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt.DstAgent, 0);
+                    if (handOfEruptionPositions.Any(x => x.Distance2DToPoint(pos) < InchDistanceThreshold))
                     {
                         id = ArcDPSEnums.TrashID.HandOfEruption;
                     }
@@ -75,27 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData)
-                    {
-                        if (extra.InAwareTimes(c.Time))
-                        {
-                            if (c.SrcMatchesAgent(hand, extensions))
-                            {
-                                c.OverrideSrcAgent(extra.Agent);
-                            }
-                            if (c.DstMatchesAgent(hand, extensions))
-                            {
-                                c.OverrideDstAgent(extra.Agent);
-                            }
-                        }
-                    }
-                    foreach (CombatItem c in posFacingHP)
-                    {
-                        var cExtra = new CombatItem(c);
-                        cExtra.OverrideTime(extra.FirstAware);
-                        cExtra.OverrideSrcAgent(extra.Agent);
-                        combatData.Add(cExtra);
-                    }
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra);
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);
@@ -113,18 +107,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> radiantBlindnesses = GetFilteredList(log.CombatData, RadiantBlindness, p, true, true);
-            int radiantBlindnessStart = 0;
-            foreach (AbstractBuffEvent c in radiantBlindnesses)
+            var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in radiantBlindnesses)
             {
-                if (c is BuffApplyEvent)
-                {
-                    radiantBlindnessStart = (int)c.Time;
-                }
-                else
-                {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (radiantBlindnessStart, (int)c.Time), "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
-                }
+                replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -176,18 +162,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
                     }
                     //
-                    List<AbstractBuffEvent> diamondPalisades = GetFilteredList(log.CombatData, DiamondPalisade, target, true, true);
-                    int diamondPalisadeStart = 0;
-                    foreach (AbstractBuffEvent c in diamondPalisades)
+                    var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment seg in diamondPalisades)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            diamondPalisadeStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 90, (diamondPalisadeStart, (int)c.Time), "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
@@ -251,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Main phases
             var mainPhases = new List<PhaseData>();
             var pillarApplies = log.CombatData.GetBuffData(PillarPandemonium).OfType<BuffApplyEvent>().Where(x => x.To == mainTarget.AgentItem).ToList();
-            Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = ParserHelper.GroupByTime(pillarApplies);
+            Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
             var mainPhaseEnds = new List<long>();
             foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)
             {

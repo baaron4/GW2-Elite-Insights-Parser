@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         private static readonly HealingLogic _healingLogic = new HealingLogic();
         private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
         private static readonly OverrideLogic _overrideLogic = new OverrideLogic();
-        private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
+        //private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
 
         // Constructor
         protected BuffSimulator(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
@@ -30,9 +30,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 case BuffStackType.Queue:
                     _logic = _queueLogic;
                     break;
-                case BuffStackType.CappedDuration:
-                    _logic = _cappedDurationLogic;
-                    break;
                 case BuffStackType.Regeneration:
                     _logic = _healingLogic;
                     break;
@@ -40,6 +37,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     _logic = _forceOverrideLogic;
                     break;
                 case BuffStackType.Stacking:
+                case BuffStackType.StackingSomething:
                 case BuffStackType.StackingConditionalLoss:
                     _logic = _overrideLogic;
                     break;

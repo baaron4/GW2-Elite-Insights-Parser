@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
             new PlayerDstHitMechanic(CairnDisplacement, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
-            new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0, (de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
             new PlayerDstBuffApplyMechanic(SharedAgony, "Shared Agony", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
             new PlayerDstBuffApplyMechanic(SharedAgony25, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 };
                 normalPhase.AddTarget(cairn);
 
-                var enragePhase = new PhaseData(enrageApply.Time + 1, log.FightData.FightEnd)
+                var enragePhase = new PhaseData(enrageApply.Time, log.FightData.FightEnd)
                 {
                     Name = "Angry"
                 };
@@ -98,10 +98,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent displacementEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDisplacement);
-            if (displacementEffectGUID != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out IReadOnlyList<EffectEvent> displacementEffects))
             {
-                IReadOnlyList<EffectEvent> displacementEffects = log.CombatData.GetEffectEventsByEffectID(displacementEffectGUID.ContentID);
                 foreach (EffectEvent displacement in displacementEffects)
                 {
                     EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
@@ -147,11 +145,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
-                    EffectGUIDEvent dashGreenEffectGUID = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CairnDashGreen);
-                    if (dashGreenEffectGUID != null)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
                     {
                         var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
-                        IReadOnlyList<EffectEvent> dashGreenEffects = log.CombatData.GetEffectEventsByEffectID(dashGreenEffectGUID.ContentID);
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
                             int dashGreenStart = (int)dashGreen.Time;
@@ -183,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == 34113);
             if (spawnProtectionLoss != null)
             {
-                return spawnProtectionLoss.Time - 1;
+                return spawnProtectionLoss.Time;
             }
             else
             {
@@ -203,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Adds around 15 to 20 ms diff compared to buff loss
                     else
                     {
-                        return firstCastEnd.Time - firstCastEnd.Value + actionHappened - 1;
+                        return firstCastEnd.Time - firstCastEnd.Value + actionHappened;
                     }
                 }
             }

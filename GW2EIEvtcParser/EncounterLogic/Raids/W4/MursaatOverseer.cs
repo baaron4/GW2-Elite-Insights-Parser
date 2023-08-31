@@ -3,6 +3,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -22,10 +23,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(ClaimSAK, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Square,Colors.Yellow), "Claim",0), //Buff remove only
             //new Mechanic(DispelSAK, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(ProtectSAK, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
-            new PlayerDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0, (ba, log) => ba.AppliedDuration == 1000),
-            new PlayerDstBuffApplyMechanic(ProtectSAK, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
-            new PlayerDstBuffApplyMechanic(DispelSAK, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
-            new PlayerDstBuffApplyMechanic(ClaimSAK, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
+            new PlayerDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0).UsingChecker((ba, log) => ba.AppliedDuration == 1000),
+            new PlayerDstBuffApplyMechanic(ProtectBuff, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
+            new PlayerDstBuffApplyMechanic(DispelBuff, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
+            new PlayerDstBuffApplyMechanic(ClaimBuff, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
             new EnemyDstBuffApplyMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
             new EnemyDstBuffRemoveMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(EnemyTile, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
@@ -56,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(PunishementAura, PunishementAura ), // PunishementAura
+                new DamageCastFinder(PunishementAura, PunishementAura),
             };
         }
 
@@ -90,20 +91,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, MursaatOverseersShield, target, true, true);
-                    int shieldStart = 0;
+                    var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     int shieldRadius = 100;
-                    foreach (AbstractBuffEvent c in shield)
+                    foreach (Segment seg in shields)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
@@ -119,6 +111,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 default:
                     break;
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IEnumerable<Segment> claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

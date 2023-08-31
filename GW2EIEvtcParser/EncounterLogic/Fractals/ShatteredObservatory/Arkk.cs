@@ -4,12 +4,15 @@ using System;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,22 +30,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(new long[] { StarbustCascade1, StarbustCascade2 }, "Starburst Cascade", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
             new PlayerDstHitMechanic(HorizonStrikeNormal, "Horizon Strike Normal", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm","Horizon Strike (normal)", "Horizon Strike (normal)",0),
             new PlayerDstHitMechanic(OverheadSmash, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash","Overhead Smash","Overhead Smash",0),
-            new PlayerDstBuffApplyMechanic(CorporealReassignment, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
+            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
             new PlayerDstHitMechanic(ExplodeArkk, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode","Hit by Solar Bloom explosion", "Bloom Explosion",0),
             new PlayerDstBuffApplyMechanic(new long[] {FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4}, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstBuffApplyMechanic(CosmicMeteor, "Cosmic Meteor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Temporal Realignment (Green) application", "Green",0),
-            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0, (ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new EnemyCastStartMechanic(ArkkBreakbarCast, "Breakbar Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar","Start Breakbar", "CC",0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0, (bae,log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0, (bae,log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ParserHelper.ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Breakbar (Failed CC)", "CC Fail",0).UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(Exposed31589, "Breakbar End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Breakbar broken", "CCed",0).UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
             new PlayerDstHitMechanic(OverheadSmashArchdiviner, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightRed), "A.Smsh","Overhead Smash (Arcdiviner)", "Smash (Add)",0),
             new PlayerDstHitMechanic(RollingChaos, "Rolling Chaos", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightRed), "KD Marble","Rolling Chaos (Arrow marble)", "KD Marble",0),
             new PlayerDstHitMechanic(SolarStomp, "Solar Stomp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Stomp","Solar Stomp (Evading Stomp)", "Evading Jump",0),
             new EnemyCastStartMechanic(CosmicStreaks, "Cosmic Streaks", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Pink), "DDR Beam","Triple Death Ray Cast (last phase)", "Death Ray Cast",0),
             new PlayerDstHitMechanic(WhirlingDevastation, "Whirling Devastation", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkPink), "Whirl","Whirling Devastation (Gladiator Spin)", "Gladiator Spin",300),
             new EnemyCastStartMechanic(PullCharge, "Pull Charge", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkTeal), "Pull","Pull Charge (Gladiator Pull)", "Gladiator Pull",0), //
-            new EnemyCastEndMechanic(PullCharge, "Pull Charge", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pull CC Fail","Pull Charge CC failed", "CC fail (Gladiator)",0, (ce,log) => ce.ActualDuration > 3200), //
-            new EnemyCastEndMechanic(PullCharge, "Pull Charge", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkGreen), "Pull CCed","Pull Charge CCed", "CCed (Gladiator)",0, (ce, log) => ce.ActualDuration < 3200), //
+            new EnemyCastEndMechanic(PullCharge, "Pull Charge", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pull CC Fail","Pull Charge CC failed", "CC fail (Gladiator)",0).UsingChecker((ce,log) => ce.ActualDuration > 3200), //
+            new EnemyCastEndMechanic(PullCharge, "Pull Charge", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkGreen), "Pull CCed","Pull Charge CCed", "CCed (Gladiator)",0).UsingChecker((ce, log) => ce.ActualDuration < 3200), //
             new PlayerDstHitMechanic(SpinningCut, "Spinning Cut", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightPurple), "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
             Extension = "arkk";
@@ -62,17 +65,19 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                ArcDPSEnums.TrashID.TemporalAnomaly2,
-                ArcDPSEnums.TrashID.BLIGHT,
-                ArcDPSEnums.TrashID.Fanatic,
-                ArcDPSEnums.TrashID.SolarBloom,
-                ArcDPSEnums.TrashID.PLINK,
-                ArcDPSEnums.TrashID.DOC,
-                ArcDPSEnums.TrashID.CHOP,
-                ArcDPSEnums.TrashID.ProjectionArkk
+                TrashID.TemporalAnomaly2,
+                TrashID.BLIGHT,
+                TrashID.Fanatic,
+                TrashID.SolarBloom,
+                TrashID.PLINK,
+                TrashID.DOC,
+                TrashID.CHOP,
+                TrashID.ProjectionArkk
             };
+            trashIDs.AddRange(base.GetTrashMobsIDs());
+            return trashIDs;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -84,9 +89,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Arkk,
-                (int)ArcDPSEnums.TrashID.Archdiviner,
-                (int)ArcDPSEnums.TrashID.EliteBrazenGladiator
+                (int)TargetID.Arkk,
+                (int)TrashID.Archdiviner,
+                (int)TrashID.EliteBrazenGladiator
             };
         }
 
@@ -105,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Arkk));
+            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
             if (arkk == null)
             {
                 throw new MissingKeyActorsException("Arkk not found");
@@ -121,22 +126,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases[i].Name = "Phase " + i;
                 phases[i].AddTarget(arkk);
             }
-            GetMiniBossPhase((int)ArcDPSEnums.TrashID.Archdiviner, log, "Archdiviner", phases);
-            GetMiniBossPhase((int)ArcDPSEnums.TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+            GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
+            GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
             return phases;
         }
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem arkk = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Arkk).FirstOrDefault();
+                AgentItem arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault();
                 if (arkk == null)
                 {
                     throw new MissingKeyActorsException("Arkk not found");
                 }
-                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= logStartNPCUpdate.Time + ParserHelper.ServerDelayConstant);
+                long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
+                CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
                 return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
@@ -150,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Arkk));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Arkk not found");
@@ -189,6 +195,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityBeDynamic], 1));
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Corporeal Reassignment
+            IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+            // Fixations
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

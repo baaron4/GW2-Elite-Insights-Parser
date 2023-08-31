@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,20 +17,55 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathEffect), // Shield of Wrath
-            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameEffect).UsingICD(0), // Zealot's Flame
-            new BuffGainCastFinder(MercifulInterventionSkill, MercifulInterventionSelfBuff),
+            new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
+            new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameBuff).UsingICD(0),
             //new BuffLossCastFinder(9115,9114,InstantCastFinder.DefaultICD), // Virtue of Justice
             //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
             //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
-            new DamageCastFinder(JudgesIntervention,JudgesIntervention), // Judge's Intervention
-            new DamageCastFinder(WrathOfJustice,WrathOfJustice), // Wrath of Justice
-            new DamageCastFinder(SmitersBoon,SmitersBoon), // Smiter's Boon
-            new DamageCastFinder(SmiteCondition,SmiteCondition), // Smite Condition
+
+            // Meditations
+            new DamageCastFinder(JudgesIntervention, JudgesIntervention).UsingDisableWithEffectData(),
+            new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfBuff)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
+                .UsingNotAccurate(true),
+            new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfBuff)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1).UsingDstBaseSpecChecker(Spec.Guardian),
+            new DamageCastFinder(SmiteCondition, SmiteCondition),
+            new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            
+            // Shouts
+            new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingSecondaryEffectChecker(EffectGUIDs.GuardianShout),
+            // distinguish by boons, check duration/stacks to counteract pure of voice
+            new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
+                        .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
+                }) // identify advance by self-applied 20s to 40s aegis
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
+                .UsingDstBaseSpecChecker(Spec.Guardian)
+                .UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    return 5 <= FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
+                        .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
+                }) // identify stand your ground by self-applied 5+ stacks of stability
+                .UsingNotAccurate(true),
+            // hold the line boons may overlap with save yourselves/pure of voice
+
+            // Signets
+            new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2).UsingDstBaseSpecChecker(Spec.Guardian),
+            new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            
             //new DamageCastFinder(9097,9097), // Symbol of Blades
-            new DamageCastFinder(GlacialHeart, GlacialHeart), // Glacial Heart
-            new DamageCastFinder(ShatteredAegis, ShatteredAegis), // Shattered Aegis
-            new EXTHealingCastFinder(SelflessDaring, SelflessDaring), // Selfless Daring
+            new DamageCastFinder(GlacialHeart, GlacialHeart).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(ShatteredAegis, ShatteredAegis).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(SelflessDaring, SelflessDaring).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
 
@@ -51,15 +90,15 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Buffs = new List<Buff>
         {        
             // Skills
-            new Buff("Zealot's Flame", ZealotsFlameEffect, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),
+            new Buff("Zealot's Flame", ZealotsFlameBuff, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),
             new Buff("Purging Flames", PurgingFlames, Source.Guardian, BuffClassification.Other, BuffImages.PurgingFlames),
             new Buff("Litany of Wrath", LitanyOfWrath, Source.Guardian, BuffClassification.Other, BuffImages.LitanyOfWrath),
             new Buff("Renewed Focus", RenewedFocus, Source.Guardian, BuffClassification.Other, BuffImages.RenewedFocus),
-            new Buff("Shield of Wrath", ShieldOfWrathEffect, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ShieldOfWrath),
+            new Buff("Shield of Wrath", ShieldOfWrathBuff, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ShieldOfWrath),
             new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, BuffImages.BindingBlade),
             new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Banish),
-            new Buff("Merciful Intervention (Self)", MercifulInterventionSelfBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
+            new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
             new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
@@ -68,7 +107,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bane Signet", BaneSignet, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.BaneSignet).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
-            new Buff("Signet of Judgment", SignetOfJudgment, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
+            new Buff("Signet of Judgment", SignetOfJudgmentBuff, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
             new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),
@@ -96,17 +135,78 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, BuffImages.ForceOfWill),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.BowOfTruth,
             (int)MinionID.HammerOfWisdom,
             (int)MinionID.ShieldOfTheAvenger,
             (int)MinionID.SwordOfJustice,
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Guardian;
+
+            // Ring of Warding (Hammer 5)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding, out IReadOnlyList<EffectEvent> ringOfWardings))
+            {
+                foreach (EffectEvent effect in ringOfWardings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, RingOfWarding));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, RingOfWarding));
+                }
+            }
+            // Line of Warding (Staff 5)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding, out IReadOnlyList<EffectEvent> lineOfWardings))
+            {
+                foreach (EffectEvent effect in lineOfWardings)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, LineOfWarding));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, LineOfWarding));
+                }
+            }
+            // Wall of Reflection
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection, out IReadOnlyList<EffectEvent> wallOfReflections))
+            {
+                foreach (EffectEvent effect in wallOfReflections)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000); // 10s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, WallOfReflection, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, WallOfReflection, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+            // Sanctuary
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary, out IReadOnlyList<EffectEvent> sanctuaries))
+            {
+                foreach (EffectEvent effect in sanctuaries)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, SanctuaryGuardian));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, SanctuaryGuardian));
+                }
+            }
+            // Shield of the Avenger
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out IReadOnlyList<EffectEvent> shieldOfTheAvengers
+                ))
+            {
+                foreach (EffectEvent effect in shieldOfTheAvengers)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Guardian, ShieldOfTheAvenger));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Guardian, ShieldOfTheAvenger));
+                }
+            }
+        }
     }
 }

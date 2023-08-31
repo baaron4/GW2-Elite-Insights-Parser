@@ -1,67 +1,61 @@
 ﻿using System;
 using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class EffectEvent : AbstractStatusEvent
+    public abstract class EffectEvent : AbstractStatusEvent
     {
-
+        /// <summary>
+        /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
+        /// </summary>
         public AgentItem Dst { get; } = null;
-        public Point3D Orientation { get; }
+
+        /// <summary>
+        /// The effect's rotation around each axis in <b>radians</b>.
+        /// Use <see cref="Rotation"/> for degrees.
+        /// </summary>
+        public Point3D Orientation { get; protected set; }
+
+        /// <summary>
+        /// The effect's position in the game's coordinate system, if <see cref="IsAroundDst"/> is <c>false</c>.
+        /// </summary>
         public Point3D Position { get; } = new Point3D(0, 0, 0);
 
+        /// <summary>
+        /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
+        /// </summary>
         public bool IsAroundDst => Dst != null;
 
+        /// <summary>
+        /// Whether the event marks the end of a previous effect identified by <see cref="TrackingID"/> .
+        /// </summary>
+        public bool IsEnd => EffectID == 0;
+
+        /// <summary>
+        /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
+        /// </summary>
         public long EffectID { get; }
-        public long TrackingID { get; }
 
-        public ushort Duration { get; }
+        /// <summary>
+        /// Unique id for tracking a created effect with regard to <see cref="IsEnd"/> events.
+        /// </summary>
+        public long TrackingID { get; protected set; }
 
-        private static Point3D ReadOrientation(CombatItem evtcItem)
-        {
-            byte[] orientationBytes = new byte[2 * sizeof(float)];
-            int offset = 0;
-            orientationBytes[offset++] = evtcItem.IFFByte;
-            orientationBytes[offset++] = evtcItem.IsBuff;
-            orientationBytes[offset++] = evtcItem.Result;
-            orientationBytes[offset++] = evtcItem.IsActivationByte;
-            orientationBytes[offset++] = evtcItem.IsBuffRemoveByte;
-            orientationBytes[offset++] = evtcItem.IsNinety;
-            orientationBytes[offset++] = evtcItem.IsFifty;
-            orientationBytes[offset++] = evtcItem.IsMoving;
+        /// <summary>
+        /// Duration of the effect in milliseconds.
+        /// </summary>
+        public long Duration { get; protected set; }
 
-
-            float[] orientationFloats = new float[2];
-            Buffer.BlockCopy(orientationBytes, 0, orientationFloats, 0, orientationBytes.Length);
-
-            return new Point3D(orientationFloats[0], orientationFloats[1], -BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
-        }
-
-        private static ushort ReadDuration(CombatItem evtcItem)
-        {
-            byte[] durationBytes = new byte[sizeof(ushort)];
-            int offset = 0;
-            durationBytes[offset++] = evtcItem.IsShields;
-            durationBytes[offset++] = evtcItem.IsOffcycle;
-
-
-            ushort[] durationUShort = new ushort[1];
-            Buffer.BlockCopy(durationBytes, 0, durationUShort, 0, durationBytes.Length);
-            return durationUShort[0];
-        }
+        /// <summary>
+        /// The effect's rotation around each axis in <b>degrees</b>.
+        /// Like <see cref="Orientation"/> but using degrees.
+        /// </summary>
+        public Point3D Rotation => new Point3D(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
 
         internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             EffectID = evtcItem.SkillID;
-            Orientation = ReadOrientation(evtcItem);
-            if (evtcItem.IsFlanking > 0 || EffectID == 0)
-            {
-                TrackingID = ReadDuration(evtcItem);
-            }
-            else
-            {
-                Duration = ReadDuration(evtcItem);
-            }
             if (evtcItem.DstAgent != 0)
             {
                 Dst = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
@@ -75,6 +69,5 @@ namespace GW2EIEvtcParser.ParsedData
                );
             }
         }
-
     }
 }

@@ -237,7 +237,8 @@ function mainLoad() {
     });
     $("body").tooltip({
         selector: "[data-original-title]",
-        html: true
+        html: true,
+        boundary: "window"
     });
 };
 

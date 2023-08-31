@@ -10,9 +10,18 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class InstantCastFinder : IVersionable
     {
+
+        public enum InstantCastOrigin
+        {
+            Skill,
+            Trait,
+            Gear
+        }
+
+        public InstantCastOrigin CastOrigin { get; private set; } = InstantCastOrigin.Skill;
+
         public delegate bool InstantCastEnableChecker(CombatData combatData);
-        private InstantCastEnableChecker _enableCondition { get; set; }
-        private InstantCastEnableChecker _enableConditionInternal { get; set; }
+        private List<InstantCastEnableChecker> _enableConditions { get; }
 
 
         public const long DefaultICD = 50;
@@ -20,7 +29,10 @@ namespace GW2EIEvtcParser.EIData
 
         public bool NotAccurate { get; private set; } = false;
 
+        protected long TimeOffset { get; set; } = 0;
+
         protected bool BeforeWeaponSwap { get; set; } = false;
+        protected bool AfterWeaponSwap { get; set; } = false;
 
         protected long ICD { get; private set; } = DefaultICD;
 
@@ -30,6 +42,7 @@ namespace GW2EIEvtcParser.EIData
         protected InstantCastFinder(long skillID)
         {
             SkillID = skillID;
+            _enableConditions = new List<InstantCastEnableChecker>();
         }
 
         internal InstantCastFinder WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
@@ -51,45 +64,62 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal InstantCastFinder UsingOrigin(InstantCastOrigin origin)
+        {
+            CastOrigin = origin;
+            return this;
+        }
+
         internal InstantCastFinder UsingEnable(InstantCastEnableChecker checker)
         {
-            _enableCondition = checker;
+            _enableConditions.Add(checker);
+            return this;
+        }
+
+        internal InstantCastFinder UsingDisableWithEffectData()
+        {
+            return UsingEnable(combatData => !combatData.HasEffectData);
+        }
+
+        internal virtual InstantCastFinder UsingTimeOffset(long timeOffset)
+        {
+            TimeOffset = timeOffset;
             return this;
         }
 
         internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
         {
             BeforeWeaponSwap = beforeWeaponSwap;
+            AfterWeaponSwap = false;
             return this;
         }
 
-        protected InstantCastFinder UsingEnableInternal(InstantCastEnableChecker checker)
+        internal virtual InstantCastFinder UsingAfterWeaponSwap(bool afterWeaponSwap)
         {
-            _enableConditionInternal = checker;
+            AfterWeaponSwap = afterWeaponSwap;
+            BeforeWeaponSwap = false;
             return this;
         }
 
         protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
         {
-            if (BeforeWeaponSwap)
+            long time = evt.Time +  TimeOffset;
+            if (BeforeWeaponSwap || AfterWeaponSwap)
             {
-                var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant / 2).ToList();
+                var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();
                 if (wepSwaps.Any())
                 {
-                    return Math.Min(wepSwaps[0].Time - 1, evt.Time);
+                    return BeforeWeaponSwap ? Math.Min(wepSwaps[0].Time - 1, time) : Math.Max(wepSwaps[0].Time + 1, time);
                 }
             }
-            return evt.Time;
+            return time;
         }
 
 
         public bool Available(CombatData combatData)
         {
-            if (_enableConditionInternal != null && !_enableConditionInternal(combatData))
+            if (!_enableConditions.All(checker => checker(combatData)))
             {
-                return false;
-            }
-            if (_enableCondition != null && !_enableCondition(combatData)) {
                 return false;
             }
             ulong gw2Build = combatData.GetBuildEvent().Build;

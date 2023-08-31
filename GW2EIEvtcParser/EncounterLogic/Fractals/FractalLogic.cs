@@ -19,9 +19,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced5;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstBuffApplyMechanic(FluxBombEffect, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
-            new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new PlayerDstBuffApplyMechanic(FluxBombBuff, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
+            new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0), // No longer tracking damage
             new SpawnMechanic((int)ArcDPSEnums.TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
+            new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Debilitated", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", 0),
+            /* Not trackable due to health % damage for now
+            new PlayerDstHitMechanic(ToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.DarkGreen, 10), "ToxSick.H", "Hit by Toxic Sickness", "Toxic Sickness Hit", 0),
+            new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
+            new PlayerDstHitMechanic(ExplodeLastLaugh, "Explode", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange, 10), "Explode.H", "Hit by Last Laugh Explode", "Last Laugh Hit", 0),
+            new PlayerDstHitMechanic(WeBleedFireBig, "We Bleed Fire", new MechanicPlotlySetting(Symbols.Star, Colors.LightRed, 10), "BleedFireB.H", "Hit by We Bleed Fire (Big)", "Big Bleed Fire Hit", 0),
+            new PlayerDstHitMechanic(WeBleedFireSmall, "We Bleed Fire", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed, 10), "BleedFireS.H", "Hit by We Bleed Fire (Small)", "Small Bleed FIre Hit", 0),
+             */
             });
             EncounterCategoryInformation.Category = FightCategory.Fractal;
             EncounterID |= EncounterIDs.EncounterMasks.FractalMask;
@@ -55,6 +63,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>
             {
                 GenericTriggerID
+            };
+        }
+
+        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        {
+            return new List<ArcDPSEnums.TrashID>()
+            {
+                ArcDPSEnums.TrashID.FractalAvenger,
+                ArcDPSEnums.TrashID.FractalVindicator,
+                ArcDPSEnums.TrashID.TheMossman,
+                ArcDPSEnums.TrashID.InspectorEllenKiel,
+                ArcDPSEnums.TrashID.ChampionRabbit,
+                ArcDPSEnums.TrashID.JadeMawTentacle,
+                ArcDPSEnums.TrashID.AwakenedAbomination,
             };
         }
 
@@ -118,13 +140,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            EffectGUIDEvent sickness = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ToxicSicknessPuke1);
-
-            if (sickness != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ToxicSicknessPuke1, out IReadOnlyList<EffectEvent> sicknessEffects))
             {
-                var sicknessEffects = log.CombatData.GetEffectEventsByEffectID(sickness.ContentID).Where(x => x.Dst == p.AgentItem).ToList();
+                var sicknessEffectsOnPlayer = sicknessEffects.Where(x => x.Dst == p.AgentItem).ToList();
 
-                foreach (EffectEvent sicknessEffect in sicknessEffects)
+                foreach (EffectEvent sicknessEffect in sicknessEffectsOnPlayer)
                 {
                     if (replay.Rotations.Any())
                     {
@@ -140,12 +160,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected static void AddFractalScaleEvent(ulong gw2Build, List<CombatItem> combatData, IReadOnlyList<(ulong build, byte scale)> scales)
+        {
+            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.FractalScale))
+            {
+                return;
+            }
+            var orderedScales = scales.OrderByDescending(x => x.build).ToList();
+            foreach ((ulong build, byte scale) in orderedScales)
+            {
+                if (gw2Build >= build)
+                {
+                    combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)ArcDPSEnums.StateChange.FractalScale, 0, 0, 0, 0));
+                    break;
+                }
+            }
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent fluxBombSmall = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.SmallFluxBomb);
-            if (fluxBombSmall != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombEffects))
             {
-                var fluxBombEffects = log.CombatData.GetEffectEventsByEffectID(fluxBombSmall.ContentID).ToList();
                 foreach (EffectEvent fluxEffect in fluxBombEffects)
                 {
                     int duration = 5000;

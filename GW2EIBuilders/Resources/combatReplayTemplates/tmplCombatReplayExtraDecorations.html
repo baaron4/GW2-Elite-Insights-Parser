@@ -1,38 +1,59 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-center">     
-        <div class="d-flex flex-row justify-content-center">
-            <div class="form-check mb-2 mr-3">
-                <input type="checkbox" class="form-check-input" id="subgroupCheck" checked v-on:change="getAnimator().toggleHighlightSelectedGroup()">
+    <div class="d-flex flex-column justify-content-center align-items-center" style="max-width: 500px;">           
+        <h4>General Settings</h4>
+        <div class="d-flex flex-row justify-content-center flex-wrap">
+            <div class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="subgroupCheck" 
+                    :checked="getAnimator().displaySettings.highlightSelectedGroup" v-on:change="getAnimator().toggleHighlightSelectedGroup()">
                 <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
             </div>
-            <div class="form-check mb-2 mr-3">
-                <input type="checkbox" class="form-check-input" id="trashCheck" checked v-on:change="getAnimator().toggleTrashMobs()">
+            <div v-if="showSecondaryNPCs" class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="trashCheck" 
+                    :checked="getAnimator().displaySettings.displayTrashMobs" v-on:change="getAnimator().toggleTrashMobs()">
                 <label class="form-check-label" for="trashCheck">Secondary NPCs</label>
             </div> 
-            <div class="form-check mb-2">
-                <input type="checkbox" class="form-check-input" id="mechanicsCheck" checked v-on:change="getAnimator().toggleMechanics()">
+            <div v-if="showMechanics" class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="mechanicsCheck" 
+                    :checked="getAnimator().displaySettings.displayMechanics" v-on:change="getAnimator().toggleMechanics()">
                 <label class="form-check-label" for="mechanicsCheck">Mechanics</label>
             </div>
-        </div>
-        <div class="d-flex flex-row justify-content-center">
-            <div class="form-check mb-2 mr-3">
-                <input type="checkbox" class="form-check-input" id="actorHitboxCheck" v-on:change="getAnimator().toggleUseActorHitboxWidth()">
+            <div v-if="showSkills" class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="skillsCheck" 
+                    :checked="getAnimator().displaySettings.displaySkillMechanics" v-on:change="getAnimator().toggleSkills()">
+                <label class="form-check-label" for="skillsCheck">Skills</label>
+            </div>
+            <div class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="actorHitboxCheck" 
+                    :checked="getAnimator().displaySettings.useActorHitboxWidth" v-on:change="getAnimator().toggleUseActorHitboxWidth()">
                 <label class="form-check-label" for="actorHitboxCheck">Use Hitbox Size</label>
             </div> 
-            <div class="form-check mb-2 mr-3">
-                <input type="checkbox" class="form-check-input" id="allMinionsCheck" v-on:change="getAnimator().toggleDisplayAllMinions()">
+            <div class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="allMinionsCheck" 
+                    :checked="getAnimator().displaySettings.displayAllMinions" v-on:change="getAnimator().toggleDisplayAllMinions()">
                 <label class="form-check-label" for="allMinionsCheck">All Minions</label>
             </div>     
-            <div class="form-check mb-2 mr-3">
-                <input type="checkbox" class="form-check-input" id="selectedMinionsCheck" checked v-on:change="getAnimator().toggleDisplaySelectedMinions()">
+            <div class="form-check mb-2 mr-2">
+                <input type="checkbox" class="form-check-input" id="selectedMinionsCheck" 
+                    :checked="getAnimator().displaySettings.displaySelectedMinions" v-on:change="getAnimator().toggleDisplaySelectedMinions()">
                 <label class="form-check-label" for="selectedMinionsCheck">Selected's Minions</label>
+            </div>
+        </div>
+        <div v-if="showSkills" class="d-flex flex-column justify-content-center align-items-center" style="max-width: 500px;">
+            <h4>Global Skill Settings</h4>
+            <div class="d-flex flex-row justify-content-center flex-wrap">
+                <div class="form-check mb-2 mr-2" v-for="skillCategory in skillCategories">
+                    <input type="checkbox" class="form-check-input" :id="skillCategory.key" 
+                        :checked="(getAnimator().displaySettings.skillMechanicsMask & skillCategory.mask) > 0" v-on:change="getAnimator().toggleSkillCategoryMask(skillCategory.mask)">
+                    <label class="form-check-label" :for="skillCategory.key">{{skillCategory.key}}</label>
+                </div>
             </div>
         </div>
         <div class="d-flex flex-row justify-content-center">
             <div class="mr-3">
-                <h3>Range Selectors</h3>
+                <h4>Range Selectors</h4>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle1Check" v-on:change="getAnimator().toggleRange(0)">
+                    <input type="checkbox" class="form-check-input" id="circle1Check" 
+                        :checked=" getAnimator().rangeControl[0].enabled" v-on:change="getAnimator().toggleRange(0)">
                     <label class="form-check-label" for="circle1Check">Circle 1</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -41,7 +62,8 @@
                                                         :placeholderValue="getAnimator().rangeControl[0].radius"></custom-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle2Check" v-on:change="getAnimator().toggleRange(1)">
+                    <input type="checkbox" class="form-check-input" id="circle2Check" 
+                        :checked=" getAnimator().rangeControl[1].enabled" v-on:change="getAnimator().toggleRange(1)">
                     <label class="form-check-label" for="circle2Check">Circle 2</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -50,7 +72,8 @@
                                                         :placeholderValue="getAnimator().rangeControl[1].radius"></custom-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle3Check" v-on:change="getAnimator().toggleRange(2)">
+                    <input type="checkbox" class="form-check-input" id="circle3Check" 
+                        :checked=" getAnimator().rangeControl[2].enabled" v-on:change="getAnimator().toggleRange(2)">
                     <label class="form-check-label" for="circle3Check">Circle 3</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
@@ -60,9 +83,10 @@
                 </div>
             </div>
             <div class="ml-3">
-                <h3 data-original-title="Has an effect only when facing arrow are present">Cone Indicator</h3>
+                <h4 data-original-title="Has an effect only when facing arrow are present">Cone Indicator</h4>
                 <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="coneCheck" v-on:change="getAnimator().toggleConeDisplay()">
+                    <input type="checkbox" class="form-check-input" id="coneCheck" 
+                        :checked=" getAnimator().coneControl.enabled" v-on:change="getAnimator().toggleConeDisplay()">
                     <label class="form-check-label" for="coneCheck">Display Cone</label>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
@@ -85,9 +109,25 @@
     Vue.component("combat-replay-extra-decorations-component", {
         props: ["light"],
         template: `${template}`,
+        data: function() {
+            return {
+                showSkills: animator.skillMechanicActorData.length > 0,
+                showMechanics: animator.overheadActorData.length + animator.mechanicActorData.length > 0,
+                showSecondaryNPCs: animator.trashMobData.size > 0,
+            };
+        },
         methods: {
             getAnimator: function () {
                 return animator;
+            }
+        },
+        computed: {
+            skillCategories: function() {
+                var res = [];
+                for (var key in SkillDecorationCategory) {
+                    res.push({key: key, mask: SkillDecorationCategory[key]});
+                }
+                return res;
             }
         },
         mounted() {

@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 } 
                 else
                 {
-                    startToUse = logStartNPCUpdate.Time;
+                    startToUse = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, brokenKing);
                 }
             }
             return startToUse;
@@ -64,11 +64,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            var green = log.CombatData.GetBuffData(SkillIDs.FrozenWind).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var green = log.CombatData.GetBuffData(FrozenWind).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
-                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(SkillIDs.FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+                AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
                 int start = (int)c.Time;
                 int end = start + duration;
                 if (removedBuff != null)

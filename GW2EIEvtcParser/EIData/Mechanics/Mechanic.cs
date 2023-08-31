@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.InstantCastFinder;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -49,6 +52,13 @@ namespace GW2EIEvtcParser.EIData
         public bool IsEnemyMechanic { get; protected set; }
         public bool ShowOnTable { get; private set; }
 
+        public bool IsAchievementEligibility { get; private set; }
+
+        public delegate bool Keeper(ParsedEvtcLog log);
+        private List<Keeper> _enableConditions { get; }
+        private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
+        private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+
         /// <summary>
         /// Full constructor without special checks
         /// </summary>
@@ -67,6 +77,7 @@ namespace GW2EIEvtcParser.EIData
             Description = description;
             InternalCooldown = internalCoolDown;
             ShowOnTable = true;
+            _enableConditions = new List<Keeper>();
         }
 
         internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
@@ -75,6 +86,63 @@ namespace GW2EIEvtcParser.EIData
         {
             ShowOnTable = showOnTable;
             return this;
+        }
+
+        private static bool EligibilityKeeper(ParsedEvtcLog log)
+        {
+            return log.FightData.Success;
+        }
+
+        /// <summary>
+        /// Eligibility mechanics will only be computed in successful logs
+        /// </summary>
+        /// <param name="isAchievementEligibility"></param>
+        /// <returns></returns>
+        internal Mechanic UsingAchievementEligibility(bool isAchievementEligibility)
+        {
+            IsAchievementEligibility = isAchievementEligibility;
+            if (isAchievementEligibility)
+            {
+                _enableConditions.Add(EligibilityKeeper);
+            } 
+            else
+            {
+                _enableConditions.Remove(EligibilityKeeper);
+            }
+            return this;
+        }
+
+        internal Mechanic UsingEnable(Keeper keeper)
+        {
+            _enableConditions.Add(keeper);
+            return this;
+        }
+
+        internal Mechanic UsingDisableWithEffectData()
+        {
+            return UsingEnable(log => !log.CombatData.HasEffectData);
+        }
+
+        internal Mechanic WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
+        {
+            _maxBuild = maxBuild;
+            _minBuild = minBuild;
+            return this;
+        }
+
+        internal bool Available(ParsedEvtcLog log)
+        {
+            if (!_enableConditions.All(checker => checker(log)))
+            {
+                return false;
+            }
+            ulong gw2Build = log.CombatData.GetBuildEvent().Build;
+            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+        }
+
+        internal bool KeepIfEmpty(ParsedEvtcLog log)
+        {
+            return IsAchievementEligibility && log.FightData.Success;
         }
 
     }

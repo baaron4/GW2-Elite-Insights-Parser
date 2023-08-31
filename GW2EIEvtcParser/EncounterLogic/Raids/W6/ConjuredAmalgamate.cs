@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -19,14 +20,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0, (de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0,(de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(JunkAbsorption, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
             new PlayerDstHitMechanic(new long[] {JunkFall1, JunkFall2 }, "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-            new PlayerDstHitMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0, (de,log) => de.HealthDamage > 0),
-            new PlayerDstHitMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0, (de,log) => de.HealthDamage > 0),
-            new PlayerDstHitMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0, (de,log) => de.HealthDamage > 0),
-            new PlayerCastStartMechanic(ConjuredSlash, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
+            new PlayerDstHitMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerCastStartMechanic(ConjuredSlashSAK, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
             new PlayerCastStartMechanic(ConjuredProtectionSAK, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
             new PlayerDstBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
             new PlayerDstBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
@@ -58,14 +59,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem armSmashGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
                 if (armSmashGUID != null)
                 {
-                    CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Effect && x.SkillID == armSmashGUID.SkillID);
+                    CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
                     if (firstArmSmash != null)
                     {
                         CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
                         if (logStartNPCUpdate != null)
                         {
                             // we couldn't have hit CA before the initial smash
-                            return firstArmSmash.Time > logStartNPCUpdate.Time ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                            return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                         } 
                         else
                         {
@@ -167,20 +168,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shieldCA = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldCAStart = 0;
-                    foreach (AbstractBuffEvent c in shieldCA)
+                    var shieldCA = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    int CAShieldRadius = 500;
+                    foreach (Segment seg in shieldCA)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldCAStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 500;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldCAStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.CALeftArm:
@@ -189,20 +181,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, Shielded, target, true, true);
-                    int shieldStart = 0;
-                    foreach (AbstractBuffEvent c in shield)
+                    var shieldShield = target.GetBuffStatus(log, Shielded, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    int ShieldShieldRadius = 100;
+                    foreach (Segment seg in shieldShield)
                     {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 100;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
-                        }
+                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -228,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return;
                 }
                 SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken == null)
                 {
                     return;
@@ -342,6 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            // Conjured Protection - Shield AoE
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
             foreach (AbstractCastEvent c in shieldCast)
@@ -357,6 +341,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
                 }
             }
+            // Shields and Greatswords Overheads
+            replay.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

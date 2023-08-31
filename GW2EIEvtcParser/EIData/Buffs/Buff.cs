@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EIData
             Enhancement,
             Nourishment,
             OtherConsumable,
+            Hidden,
             Unknown
         };
 
@@ -52,10 +53,10 @@ namespace GW2EIEvtcParser.EIData
                 {
                     case BuffStackType.Queue:
                     case BuffStackType.Regeneration:
-                    case BuffStackType.CappedDuration:
                     case BuffStackType.Force:
                         return BuffType.Duration;
                     case BuffStackType.Stacking:
+                    case BuffStackType.StackingSomething:
                     case BuffStackType.StackingConditionalLoss:
                         return BuffType.Intensity;
                     default:

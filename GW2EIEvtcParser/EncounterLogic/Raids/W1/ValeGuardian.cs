@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -34,8 +35,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new PlayerDstHitMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new EnemyCastStartMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0, (c, log) => c.ActualDuration <= 8544),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(c, log) => c.ActualDuration > 8544),
+            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0).UsingChecker((c, log) => c.ActualDuration <= 8544),
+            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0).UsingChecker((c, log) => c.ActualDuration > 8544),
             });
             Extension = "vg";
             Icon = EncounterIconValeGuardian;
@@ -144,11 +145,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            EffectGUIDEvent distributedMagicGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianDistributedMagic);
-            if (distributedMagicGUIDEvent != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
             {
                 int distributedMagicDuration = 6700;
-                IReadOnlyList<EffectEvent> distributedMagicEvents = log.CombatData.GetEffectEventsByEffectID(distributedMagicGUIDEvent.ContentID);
                 //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
                 foreach (EffectEvent distributedMagic in distributedMagicEvents)
                 {
@@ -159,10 +158,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, expectedEnd, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(distributedMagic.Position)));
                 }
             }
-            EffectGUIDEvent magicSpikeGUIDEvent = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.ValeGuardianMagicSpike);
-            if (magicSpikeGUIDEvent != null)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out IReadOnlyList<EffectEvent> magicSpikeEvents))
             {
-                IReadOnlyList<EffectEvent> magicSpikeEvents = log.CombatData.GetEffectEventsByEffectID(magicSpikeGUIDEvent.ContentID);
                 //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
                 foreach (EffectEvent magicSpike in magicSpikeEvents)
                 {
@@ -241,6 +238,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 default:
                     break;
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Attunements Overhead
+            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
         }
     }
 }

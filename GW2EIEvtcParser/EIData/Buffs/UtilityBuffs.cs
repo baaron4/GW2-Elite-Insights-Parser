@@ -78,6 +78,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fractal Defensive", FractalDefensive, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalDefensive),
             new Buff("Fractal Offensive", FractalOffensive, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalOffensive),
             new Buff("Anguished Tear of Alba", AnguishedTearOfAlba, Source.Item, BuffClassification.OtherConsumable, BuffImages.AppliedFortitude),
+            new Buff("Anguished Tear of Alba (Mastery)", AnguishedTearOfAlbaMastery, Source.Item, BuffClassification.OtherConsumable, BuffImages.AppliedFortitude),
             // Misc
             new Buff("Potion Of Karka Toughness", PotionOfKarkaToughness, Source.Item, BuffClassification.OtherConsumable, BuffImages.PowerfulPotionOfInquestSlaying),
             new Buff("Skale Venom (Consumable)", SkaleVenomConsumable, Source.Item, BuffClassification.OtherConsumable, BuffImages.WeakPotionOfNightmareCourtSlaying),
@@ -245,7 +246,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> UtilityProcs = new List<Buff>
         {
-            // Effects on revival
+            // Buffs on revival
             new Buff("Ghoul's Grasp", GhoulsGrasp, Source.Item, BuffClassification.Support, BuffImages.GhoulsGrasp),
             new Buff("Feline Fury", FelineFury, Source.Item, BuffClassification.Support, BuffImages.FelineFury),
             new Buff("Pumpkin Prowess", PumpkinProwess, Source.Item, BuffClassification.Support, BuffImages.PumpkinProwess),

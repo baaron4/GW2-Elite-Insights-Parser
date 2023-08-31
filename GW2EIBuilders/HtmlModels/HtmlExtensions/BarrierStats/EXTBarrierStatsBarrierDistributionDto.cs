@@ -5,6 +5,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.Extensions;
+using GW2EIBuilders.HtmlModels.HTMLStats;
 
 namespace GW2EIBuilders.HtmlModels.EXTBarrier
 {
@@ -59,29 +60,13 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
             {
                 isIndirectBarrier = false;
             }
-            long timeCasting = 0;
-            int casts = 0, timeWasted = 0, timeSaved = 0;
+            long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
+            int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
+            long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
             if (!isIndirectBarrier && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
             {
-                foreach (AbstractCastEvent cl in clList)
-                {
-                    if (phase.InInterval(cl.Time))
-                    {
-                        casts++;
-                        switch (cl.Status)
-                        {
-                            case AbstractCastEvent.AnimationStatus.Interrupted:
-                                timeWasted += cl.SavedDuration;
-                                break;
-
-                            case AbstractCastEvent.AnimationStatus.Reduced:
-                                timeSaved += cl.SavedDuration;
-                                break;
-                        }
-                    }
-                    timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-
-                }
+                (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
+                castLogsBySkill.Remove(skill);
             }
             object[] skillItem = {
                     isIndirectBarrier,
@@ -89,11 +74,15 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
                     totalbarrier,
                     minbarrier == int.MaxValue ? 0 : minbarrier,
                     maxbarrier == int.MinValue ? 0 : maxbarrier,
-                    isIndirectBarrier ? 0 : casts,
+                    isIndirectBarrier ? 0 : numberOfCast,
                     isIndirectBarrier ? 0 : -timeWasted / 1000.0,
                     isIndirectBarrier ? 0 : timeSaved / 1000.0,
                     hits,
-                    isIndirectBarrier ? 0 : timeCasting
+                    isIndirectBarrier ? 0 : timeSpentCasting,
+                    isIndirectBarrier ? 0 : minTimeSpentCasting,
+                    isIndirectBarrier ? 0 : maxTimeSpentCasting,
+                    isIndirectBarrier ? 0 : timeSpentCastingNoInterrupt,
+                    isIndirectBarrier ? 0 : numberOfCastNoInterrupt,
                 };
             return skillItem;
         }

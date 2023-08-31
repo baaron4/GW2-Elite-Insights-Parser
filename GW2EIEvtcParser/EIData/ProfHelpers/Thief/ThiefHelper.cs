@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -13,16 +17,28 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Shadowstep,Infiltration), // Shadowstep
-            new BuffLossCastFinder(ShadowReturn,Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant), // Shadow Return
-            new DamageCastFinder(Mug, Mug), // Mug
+            new BuffGainCastFinder(Shadowstep, Infiltration),
+            new BuffLossCastFinder(ShadowReturn, Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
+            new DamageCastFinder(Mug, Mug),
             new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
-            new BuffGainCastFinder(AssassinsSignet,AssassinsSignetActive), // Assassin's Signet
-            new BuffGiveCastFinder(DevourerVenomSkill,DevourerVenomEffect), // Devourer Venom
-            new BuffGiveCastFinder(IceDrakeVenomSkill,IceDrakeVenomEffect), // Ice Drake Venom
-            new BuffGiveCastFinder(SkaleVenomSkill,SkaleVenomEffect), // Skale Venom
-            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomEffect), // Soul Stone Venom
-            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomEffect).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // Spider Venom - same id as leeching venom trait?
+            new BuffGainCastFinder(AssassinsSignet, AssassinsSignetActive),
+            new BuffGiveCastFinder(DevourerVenomSkill, DevourerVenomBuff),
+            new BuffGiveCastFinder(IceDrakeVenomSkill, IceDrakeVenomBuff),
+            new BuffGiveCastFinder(SkaleVenomSkill, SkaleVenomBuff),
+            new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomBuff),
+            new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
+            new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedBuff)
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
+                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
+                .UsingNotAccurate(true),
+            new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+            new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedBuff),
+            new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1)
+                .UsingDstBaseSpecChecker(Spec.Thief)
+                .UsingSecondaryEffectChecker(EffectGUIDs.ThiefInfiltratorsSignet2),
+            new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
+            new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
@@ -44,21 +60,22 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
             new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShadowPortal),
+            new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, BuffImages.Kneel).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Signets
             new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, BuffImages.SignetOfMalice),
             new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),
             new Buff("Assassin's Signet (Active)", AssassinsSignetActive, Source.Thief, BuffClassification.Other, BuffImages.AssassinsSignet),
-            new Buff("Infiltrator's Signet", InfiltratorsSignet, Source.Thief, BuffClassification.Other, BuffImages.InfiltratorsSignet),
-            new Buff("Signet of Agility", SignetOfAgility, Source.Thief, BuffClassification.Other, BuffImages.SignetOfAgility),
-            new Buff("Signet of Shadows", SignetOfShadows, Source.Thief, BuffClassification.Other, BuffImages.SignetOfShadows),
+            new Buff("Infiltrator's Signet", InfiltratorsSignetBuff, Source.Thief, BuffClassification.Other, BuffImages.InfiltratorsSignet),
+            new Buff("Signet of Agility", SignetOfAgilityBuff, Source.Thief, BuffClassification.Other, BuffImages.SignetOfAgility),
+            new Buff("Signet of Shadows", SignetOfShadowsBuff, Source.Thief, BuffClassification.Other, BuffImages.SignetOfShadows),
             // Venoms // src is always the user, makes generation data useless
             new Buff("Skelk Venom", SkelkVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Defensive, BuffImages.SkelkVenom),
-            new Buff("Ice Drake Venom", IceDrakeVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, BuffImages.IceDrakeVenom),
-            new Buff("Devourer Venom", DevourerVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, BuffImages.DevourerVenom),
-            new Buff("Skale Venom", SkaleVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, BuffImages.SkaleVenom),
-            new Buff("Spider Venom", SpiderVenomEffect, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, BuffImages.SpiderVenom),
-            new Buff("Soul Stone Venom", SoulStoneVenomEffect, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.SoulStoneVenom),
-            new Buff("Basilisk Venom", BasiliskVenom, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, BuffImages.BasiliskVenom),
+            new Buff("Ice Drake Venom", IceDrakeVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Support, BuffImages.IceDrakeVenom),
+            new Buff("Devourer Venom", DevourerVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, BuffImages.DevourerVenom),
+            new Buff("Skale Venom", SkaleVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Offensive, BuffImages.SkaleVenom),
+            new Buff("Spider Venom", SpiderVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, BuffImages.SpiderVenom),
+            new Buff("Soul Stone Venom", SoulStoneVenomBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.SoulStoneVenom),
+            new Buff("Basilisk Venom", BasiliskVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, BuffImages.BasiliskVenom),
             new Buff("Petrified 1", Petrified1, Source.Thief, BuffClassification.Other, BuffImages.Stun),
             new Buff("Petrified 2", Petrified2, Source.Thief, BuffClassification.Other, BuffImages.Stun),
             new Buff("Infiltration", Infiltration, Source.Thief, BuffClassification.Other, BuffImages.Shadowstep),
@@ -70,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
         };
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
             (int)MinionID.Thief1,
             (int)MinionID.Thief2,
@@ -95,10 +112,69 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.Thief21,
             (int)MinionID.ThiefSwordSylvari2,
         };
-        internal static bool IsKnownMinionID(long id)
+
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Thief;
+
+            // Shadow Portal locations
+            var entranceDecorations = new List<GenericAttachedDecoration>();
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out IReadOnlyList<EffectEvent> shadowPortalActiveEntrance))
+            {
+                foreach (EffectEvent enter in shadowPortalActiveEntrance)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, enter, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    var connector = new PositionConnector(enter.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, PrepareShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Thief, PrepareShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal);
+                    replay.Decorations.Add(icon);
+                    entranceDecorations.Add(icon);
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit, out IReadOnlyList<EffectEvent> shadowPortalActiveExit))
+            {
+                foreach (EffectEvent exit in shadowPortalActiveExit)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    var connector = new PositionConnector(exit.Position);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal);
+                    GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
+                    if (entranceDecoration != null)
+                    {
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
+                    }
+                    replay.Decorations.Add(icon);
+                }
+            }
+
+            // Seal Area
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
+            {
+                foreach (EffectEvent effect in sealAreaAoEs)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, SealArea, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Thief, SealArea, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+            // Shadow Refuge
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out IReadOnlyList<EffectEvent> shadowRefuges))
+            {
+                foreach (EffectEvent effect in shadowRefuges)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, ShadowRefuge, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Thief, ShadowRefuge, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
+                }
+            }
+        }
     }
 }

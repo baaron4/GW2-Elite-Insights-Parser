@@ -19,6 +19,7 @@
         internal const string EncounterIconArtsariiv = "https://i.imgur.com/aFlYs1I.png";
         internal const string EncounterIconArkk = "https://i.imgur.com/glLH8n8.png";
         internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
+        internal const string EncounterIconKanaxai = "https://i.imgur.com/9hY6JFz.jpg";
 
         // Instances
         internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
@@ -26,15 +27,17 @@
         internal const string InstanceIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
         internal const string InstanceIconDeepstone = "https://i.imgur.com/3fACTgN.jpg";
         internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
+        internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
 
         // Combat Replay Maps
-        internal const string CombatReplayMAMA = "https://i.imgur.com/Iz41x7M.png";
-        internal const string CombatReplaySiax = "https://i.imgur.com/inUshuM.png";
+        internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
+        internal const string CombatReplaySiax = "https://i.imgur.com/hauz1jK.png";
         internal const string CombatReplayEnsolyss = "https://i.imgur.com/kjelZ4t.png";
         internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
         internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
         internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";
         internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
+        internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
 
         #endregion FRACTALS
 
@@ -128,6 +131,8 @@
         internal const string EncounterIconKainengOverlook = "https://i.imgur.com/7OutZup.png";
         internal const string EncounterIconHarvestTemple = "https://i.imgur.com/gZRqzlr.png";
         internal const string EncounterIconOldLionsCourt = "https://i.imgur.com/Q2g9aLD.png";
+        internal const string EncounterIconCosmicObservatory = "https://i.imgur.com/v6vjRsH.png";
+        internal const string EncounterIconTempleOfFebe = "https://i.imgur.com/1cGN1UT.png";
 
         // Combat Replay Maps
         internal const string CombatReplayFreezie = "";
@@ -135,13 +140,15 @@
         internal const string CombatReplayKodanBrothers = "https://i.imgur.com/kLjZ7eU.png";
         internal const string CombatReplayFraenirOfJormag = "https://i.imgur.com/kLjZ7eU.png";
         internal const string CombatReplayBoneskinner = "https://i.imgur.com/kLjZ7eU.png";
-        internal const string CombatReplayWhisperOfJormag = "https://i.imgur.com/sXvx6AL.png";
+        internal const string CombatReplayWhisperOfJormag = "https://i.imgur.com/iNEWXJF.png";
         internal const string CombatReplayColdWar = "https://i.imgur.com/sXvx6AL.png";
         internal const string CombatReplayAetherbladeHideout = "https://i.imgur.com/Qhnhrvp.png";
         internal const string CombatReplayXunlaiJadeJunkyard = "https://i.imgur.com/bwTO5Xg.png";
         internal const string CombatReplayKainengOverlook = "https://i.imgur.com/53ECM20.png";
         internal const string CombatReplayHarvestTemple = "https://i.imgur.com/WCygAeH.png";
         internal const string CombatReplayOldLionsCourt = "https://i.imgur.com/s1R1CRq.png";
+        internal const string CombatReplayCosmicObservatory = "";
+        internal const string CombatReplayTempleOfFebe = "";
 
         #endregion STRIKES
 

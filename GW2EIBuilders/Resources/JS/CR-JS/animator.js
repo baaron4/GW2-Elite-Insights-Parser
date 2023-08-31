@@ -34,6 +34,10 @@ function ToRadians(degrees) {
 
 const resolutionMultiplier = 2.0;
 
+const maxOverheadAnimationFrame = 50;
+let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
+let overheadAnimationIncrement = 1;
+
 var animator = null;
 // reactive structures
 var reactiveAnimationData = {
@@ -68,6 +72,8 @@ class Animator {
             displayAllMinions: false,
             displaySelectedMinions: true,
             displayMechanics: true,
+            displaySkillMechanics: true,
+            skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
             useActorHitboxWidth: false,
         };     
@@ -81,8 +87,10 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
-        this.attachedActorData = new Map();
+        this.skillMechanicActorData = [];
+        this.actorOrientationData = new Map();
         this.backgroundActorData = [];
         this.backgroundImages = [];
         this.selectedActor = null;
@@ -159,59 +167,84 @@ class Animator {
         this.targetData.clear();
         this.trashMobData.clear();
         this.friendlyMobData.clear();
-        this.attachedActorData.clear();
+        this.actorOrientationData.clear();
+        this.overheadActorData = [];
         this.mechanicActorData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            switch (actor.type) {
-                case "Player":
-                    this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc, this.inchToPixel * actor.hitboxWidth));
-                    if (this.times.length === 0) {
-                        for (let j = 0; j < actor.positions.length / 2; j++) {
-                            this.times.push(j * this.pollingRate);
+            if (!actor.isMechanicOrSkill) {
+                switch (actor.type) {
+                    case "Player":
+                        this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, this.inchToPixel * actor.hitboxWidth));
+                        if (this.times.length === 0) {
+                            for (let j = 0; j < actor.positions.length / 2; j++) {
+                                this.times.push(j * this.pollingRate);
+                            }
                         }
+                        break;
+                    case "Target":
+                    case "TargetPlayer":
+                        this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, -1, this.inchToPixel * actor.hitboxWidth));
+                        break;
+                    case "Mob":
+                        this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
+                        break;
+                    case "Friendly":
+                        this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
+                        break;
+                    case "ActorOrientation":
+                        this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
+                        break;
+                    case "MovingPlatform":
+                        this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
+                        break;
+                    case "IconOverheadDecoration":
+                        this.overheadActorData.push(new IconOverheadDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                        break;
+                    default:
+                        throw "Unknown decoration type";
+                }
+            } else {
+                let decoration = null;
+                switch (actor.type) {
+                    case "Circle":
+                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
+                        break;
+                    case "Rectangle":
+                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
+                        break;
+                    case "RotatedRectangle":
+                        decoration = new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
+                        break;
+                    case "Doughnut":
+                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
+                        break;
+                    case "Pie":
+                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
+                        break;
+                    case "Line":
+                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
+                        break;
+                    case "FacingRectangle":
+                        decoration = new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
+                        break;
+                    case "FacingPie":
+                        decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        break;
+                    case "IconDecoration":
+                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
+                        break;
+                    default:
+                        throw "Unknown decoration type";
+                }
+                if (decoration) {
+                    if (actor.owner) {
+                        decoration.usingSkillMode(actor.owner, actor.category);
+                        this.skillMechanicActorData.push(decoration);
+                    } else {
+                        this.mechanicActorData.push(decoration);
                     }
-                    break;
-                case "Target":
-                case "TargetPlayer":
-                    this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, -1, this.inchToPixel * actor.hitboxWidth));
-                    break;
-                case "Mob":
-                    this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                    break;
-                case "Friendly":
-                    this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                    break;
-                case "Circle":
-                    this.mechanicActorData.push(new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius));
-                    break;
-                case "Rectangle":
-                    this.mechanicActorData.push(new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo));
-                    break;
-                case "RotatedRectangle":
-                    this.mechanicActorData.push(new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo));
-                    break;
-                case "Doughnut":
-                    this.mechanicActorData.push(new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo));
-                    break;
-                case "Pie":
-                    this.mechanicActorData.push(new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo));
-                    break;
-                case "Line":
-                    this.mechanicActorData.push(new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo));
-                    break;
-                case "Facing":
-                    this.attachedActorData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
-                    break;
-                case "FacingRectangle":
-                    this.mechanicActorData.push(new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color));
-                    break;
-                case "FacingPie":
-                    this.mechanicActorData.push(new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color));
-                    break;
-                case "MovingPlatform":
-                    this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
-                    break;
+                }
             }
         }
     }
@@ -330,6 +363,20 @@ class Animator {
 
     toggleMechanics() {
         this.displaySettings.displayMechanics = !this.displaySettings.displayMechanics;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleSkills() {
+        this.displaySettings.displaySkillMechanics = !this.displaySettings.displaySkillMechanics;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleSkillCategoryMask(mask) {
+        if ( (this.displaySettings.skillMechanicsMask & mask) > 0) {           
+            this.displaySettings.skillMechanicsMask &= ~mask;
+        } else {
+            this.displaySettings.skillMechanicsMask |= mask;
+        }
         animateCanvas(noUpdateTime);
     }
 
@@ -589,6 +636,12 @@ class Animator {
         }
     }
 
+    _drawActorOrientation(key) {
+        if (this.actorOrientationData.has(key)) {
+            this.actorOrientationData.get(key).draw();
+        }
+    }
+
     _drawMainCanvas() {
         var _this = this;
         var ctx = this.mainContext;
@@ -611,13 +664,17 @@ class Animator {
                 this.mechanicActorData[i].draw();
             }
         }
+
+        if (this.displaySettings.displaySkillMechanics) {
+            for (let i = 0; i < this.skillMechanicActorData.length; i++) {
+                this.skillMechanicActorData[i].draw();
+            }
+        }
         
         this.friendlyMobData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
-                }
+                _this._drawActorOrientation(key);
             }
         });
         
@@ -625,9 +682,7 @@ class Animator {
             this.playerData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
@@ -636,9 +691,7 @@ class Animator {
             this.trashMobData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
@@ -646,25 +699,24 @@ class Animator {
         this.targetData.forEach(function (value, key, map) {
             if (!value.isSelected()) {
                 value.draw();
-                if (_this.attachedActorData.has(key)) {
-                    _this.attachedActorData.get(key).draw();
-                }
+                _this._drawActorOrientation(key);
             }
         });
         if (this.displaySettings.useActorHitboxWidth) {           
             this.playerData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
-                    if (_this.attachedActorData.has(key)) {
-                        _this.attachedActorData.get(key).draw();
-                    }
+                    _this._drawActorOrientation(key);
                 }
             });
         }
         if (this.selectedActor !== null) {
-            this.selectedActor.draw();
-            if (this.attachedActorData.has(this.reactiveDataStatus.selectedActorID)) {
-                this.attachedActorData.get(this.reactiveDataStatus.selectedActorID).draw();
+            this.selectedActor.draw();     
+            this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
+        }
+        if (this.displaySettings.displayMechanics) {
+            for (let i = 0; i < this.overheadActorData.length; i++) {
+                this.overheadActorData[i].draw();
             }
         }
     }
@@ -676,6 +728,10 @@ class Animator {
         //
         this._drawBGCanvas();
         this._drawMainCanvas();
+        if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
+            overheadAnimationIncrement *= -1;
+        }
+        overheadAnimationFrame += overheadAnimationIncrement;
     }
 }
 

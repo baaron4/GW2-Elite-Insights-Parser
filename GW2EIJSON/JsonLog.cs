@@ -51,6 +51,16 @@ namespace GW2EIJSON
             /// </summary>
             public bool IsInstantCast { get; set; }
             /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsTraitProc { get; set; }
+            /// <summary>
+            /// True when the skill represents a trait proc.\
+            /// <see cref="IsInstantCast"/> is necessarily true.
+            /// </summary>
+            public bool IsGearProc { get; set; }
+            /// <summary>
             /// True when the skill is an instant cast and the detection may have missed some
             /// </summary>
             public bool IsNotAccurate { get; set; }
@@ -223,7 +233,13 @@ namespace GW2EIJSON
         /// Language with which the evtc was generated
         /// </summary>
         public string Language { get; set; }
-        
+
+        /// <summary>
+        /// Scale of the fractal, only applicable for fractal encounters. \n
+        /// Valued at 0 if missing.
+        /// </summary>
+        public int FractalScale { get; set; }
+
         /// <summary>
         /// ID of the language
         /// </summary>
@@ -233,7 +249,12 @@ namespace GW2EIJSON
         /// The player who recorded the fight
         /// </summary>
         public string RecordedBy { get; set; }
-        
+
+        /// <summary>
+        /// The account name of the player who recorded the fight
+        /// </summary>
+        public string RecordedAccountBy { get; set; }
+
         /// <summary>
         /// DEPRECATED: use TimeStartStd instead \n
         /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
@@ -285,7 +306,19 @@ namespace GW2EIJSON
         /// If the fight is in challenge mode
         /// </summary>
         public bool IsCM { get; set; }
-        
+
+        /// <summary>
+        /// If the log was parsed in anonymous mode
+        /// </summary>
+        public bool Anonymous { get; set; }
+
+
+        /// <summary>
+        /// If the log was parsed in detailed mode. \n
+        /// Only for WvW logs
+        /// </summary>
+        public bool DetailedWvW { get; set; }
+
         /// <summary>
         /// The list of targets
         /// </summary>

@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class EffectCastFinder : InstantCastFinder
+    internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
-        public delegate bool EffectCastChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private EffectCastChecker _triggerCondition { get; set; }
-
         private readonly string _effectGUID;
 
         protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
@@ -24,13 +23,44 @@ namespace GW2EIEvtcParser.EIData
         public EffectCastFinder(long skillID, string effectGUID) : base(skillID)
         {
             UsingNotAccurate(true); // TODO: confirm if culling is server side logic
-            UsingEnableInternal((combatData) => combatData.HasEffectData);
+            UsingEnable((combatData) => combatData.HasEffectData);
             _effectGUID = effectGUID;
         }
 
-        internal EffectCastFinder UsingChecker(EffectCastChecker checker)
+        internal EffectCastFinder UsingSrcBaseSpecChecker(Spec spec)
         {
-            _triggerCondition = checker;
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+            return this;
+        }
+        
+        internal EffectCastFinder UsingSrcSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingSecondaryEffectChecker(string effectGUID, long timeOffset = 0, long epsilon = ServerDelayConstant)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) =>
+            {
+                if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+                {
+                    return effectEvents.Any(other => GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                }
+                return false;
+            });
             return this;
         }
 
@@ -51,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                             lastTime = effectEvent.Time;
                             continue;
                         }
-                        if (_triggerCondition == null || _triggerCondition(effectEvent, combatData, agentData, skillData))
+                        if (CheckCondition(effectEvent, combatData, agentData, skillData))
                         {
                             lastTime = effectEvent.Time;
                             AgentItem caster = GetAgent(effectEvent);

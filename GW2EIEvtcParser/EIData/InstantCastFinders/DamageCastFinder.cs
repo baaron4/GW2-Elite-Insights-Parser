@@ -4,22 +4,13 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DamageCastFinder : InstantCastFinder
+    internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
     {
-        public delegate bool DamageCastChecker(AbstractHealthDamageEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private DamageCastChecker _triggerCondition { get; set; }
-
         private readonly long _damageSkillID;
         public DamageCastFinder(long skillID, long damageSkillID ) : base(skillID)
         {
             UsingNotAccurate(true);
             _damageSkillID = damageSkillID;
-        }
-
-        internal DamageCastFinder UsingChecker(DamageCastChecker checker)
-        {
-            _triggerCondition = checker;
-            return this;
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -36,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = de.Time;
                         continue;
                     }
-                    if (_triggerCondition == null || _triggerCondition(de, combatData, agentData, skillData))
+                    if (CheckCondition(de, combatData, agentData, skillData))
                     {
                         lastTime = de.Time;
                         res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));

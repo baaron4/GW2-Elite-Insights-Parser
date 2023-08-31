@@ -31,11 +31,13 @@
             Nightmare,
             ShatteredObservatory,
             SunquaPeak,
+            SilentSurf,
             // 
             Grothmar,
             Bjora,
             Drizzlewood,
             Cantha,
+            SotO,
             //
             GreenAlpineBorderlands,
             BlueAlpineBorderlands,
@@ -114,6 +116,8 @@
                     return "Shattered Observatory";
                 case SubFightCategory.SunquaPeak:
                     return "Sunqua Peak";
+                case SubFightCategory.SilentSurf:
+                    return "Silent Surf";
                 // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
@@ -139,6 +143,8 @@
                     return "Bjora Marches";
                 case SubFightCategory.Drizzlewood:
                     return "Drizzlewood Coast";
+                case SubFightCategory.SotO:
+                    return "Secret of the Obscure";
                 default:
                     return SubCategory.ToString();
             }

@@ -26,14 +26,17 @@
 
 .scrollable-y {
     overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .scrollable-x {
     overflow-x: auto;
+    scrollbar-width: thin;
 }
 
 .theme-yeti ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: #DDDDDD;
 }
 
@@ -49,6 +52,7 @@
 
 .theme-slate ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
     background-color: #888888;
 }
 
@@ -70,7 +74,7 @@
 
 .ei-container-small {
     max-width: 1450px;
-    min-width: 1300px;
+    min-width: 1450px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -118,6 +122,8 @@
     color: #DDDDDD;
     width: 130px;
     height: 35px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .actor-rotation {
@@ -127,8 +133,10 @@
 
 .target-status {
     color: #DDDDDD;
-    width: 250px;
+    width: 180px;
     height: 35px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .cr-hp-display {
@@ -136,6 +144,7 @@
     position: relative;
     top: -12px;
     width: 45px;
+    pointer-events: none;
 }
 
 .cr-barrier-display {
@@ -143,24 +152,30 @@
     top: -43px;
     position: relative;
     width: 45px;
-}
-
-.cr-breakbar-bar {
-    color: #DDDDDD;
+    pointer-events: none;
 }
 
 .cr-barrier { 
     position: relative;
     width: 100%;
     height: 100%;
-    top: -96px;
+    top: -97px;
+    pointer-events: none;
 }
 
 .cr-breakbar-display {
     font-size: 0.65rem;
-    max-height: 35px;
-    height: 12px;
-    width: 200px;
+    min-height: 16px;
+}
+
+.cr-breakbar-bar {
+    color: #DDDDDD;
+    width: 130px;
+}
+
+.cr-breakbar-phase-display {
+    font-size: 0.65rem;
+    width: 180px;
 }
 
 .cr-hp-display-player {
@@ -176,7 +191,7 @@
 }
 
 .cr-barrier-display-target {
-    left: 77%;
+    left: 70%;
 }
 
 h6.actor-shorten {
@@ -368,9 +383,19 @@ img.icon-l {
     height: 24px;
 }
 
+
 .empty-icon-l {
     width: 24px;
     height: 24px;
+}
+img.icon-sl {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-icon-sl {
+    width: 32px;
+    height: 32px;
 }
 
 .empty-icon-ll {

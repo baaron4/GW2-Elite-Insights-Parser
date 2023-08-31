@@ -5,13 +5,13 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -26,10 +26,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long[] {TormentingWave, TormentingWaveCM }, "Tormenting Wave", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Shck.Wv", "Hit by Shockwave attack", "Shockwave", 150),
                 new PlayerDstHitMechanic(new long[] {LeyBreach, LeyBreachCM }, "Ley Breach", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Puddle", "Stood in Puddle", "Puddle", 150),
                 new PlayerDstHitMechanic(KaleidoscopicChaos, "Kaleidoscopic Chaos", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Orange), "Circle.H", "Hit by Yellow Circle", "Yellow Circle Hit", 150),
-                new PlayerDstBuffApplyMechanic(ExposedEODStrike, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
+                new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Exposed", "Received Exposed stack", "Exposed", 150),
                 new PlayerDstBuffApplyMechanic(new long[] {SharedDestructionMaiTrin, SharedDestructionMaiTrinCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
                 new PlayerDstBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Green.D", "Received Green debuff", "Green Debuff", 150),
-                new PlayerDstSkillMechanic(FocusedDestruction, "Focused Destruction", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Green.Dwn", "Downed by Green", "Green Downed", 150, (evt, log) => evt.HasDowned),
+                new PlayerDstSkillMechanic(FocusedDestruction, "Focused Destruction", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Green.Dwn", "Downed by Green", "Green Downed", 150).UsingChecker((evt, log) => evt.HasDowned),
                 new PlayerDstBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
             }
             );
@@ -113,6 +113,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Bomb Selection
+            var bombs = player.GetBuffStatus(log, new long[] { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            replay.AddOverheadIcons(bombs, player, ParserIcons.BombOverhead);
+        }
+
         private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)
         {
             return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM : (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM));
@@ -131,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         throw new MissingKeyActorsException("Mai Trin not found");
                     }
-                    BuffApplyEvent buffApply = combatData.GetBuffData(SkillIDs.Determined895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
+                    BuffApplyEvent buffApply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
                     if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                     {
                         fightData.SetSuccess(true, buffApply.Time);
@@ -168,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
                 long maiTrinEnd = lastHPUpdate.Time;
                 long maiTrinStart = 0;
-                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(SkillIDs.Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
+                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
                 if (buffRemove != null)
                 {
                     maiTrinStart = buffRemove.Time;
@@ -176,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
                 mainPhase.AddTarget(maiTrin);
                 phases.Add(mainPhase);
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, 38793, maiTrin, true, true, maiTrinStart, maiTrinEnd);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
@@ -199,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
                 phase.AddTarget(echoOfScarlet);
                 phases.Add(phase);
-                List<PhaseData> echoPhases = GetPhasesByInvul(log, 38793, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
+                List<PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
                 for (int i = 0; i < echoPhases.Count; i++)
                 {
                     PhaseData subPhase = echoPhases[i];
@@ -241,8 +248,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(ArcDPSEnums.TargetID.EchoOfScarletBriarCM).Count == 0)
             {
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
-                agentData.AddCustomNPCAgent(long.MaxValue, long.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
+                agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarNM, false);
+                agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, ArcDPSEnums.TargetID.EchoOfScarletBriarCM, false);
             }
             ComputeFightTargets(agentData, combatData, extensions);
             var echoesOfScarlet = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarNM) || x.IsSpecies(ArcDPSEnums.TargetID.EchoOfScarletBriarCM)).ToList();
@@ -251,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
                 {
-                    hpUpdates.LastOrDefault().OverrideSrcAgent(ParserHelper._unknownAgent.Agent);
+                    hpUpdates.LastOrDefault().OverrideSrcAgent(_unknownAgent.Agent);
                 }
             }
             foreach (NPC target in Targets)

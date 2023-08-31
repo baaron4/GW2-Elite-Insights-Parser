@@ -80,11 +80,19 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         }
 
         // Main method
-        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID)
+        public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, uint buffInstance)
         {
             if (!_boonIds.Contains(buffID))
             {
-                return dst;
+                if (buffInstance > 0)
+                {
+                    BuffApplyEvent seedApply = log.CombatData.GetBuffData(buffID).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
+                    if (seedApply != null)
+                    {
+                        return seedApply.By;
+                    }
+                }
+                return ParserHelper._unknownAgent;
             }
             List<AgentItem> imperialImpactCheck = CouldBeImperialImpact(extension, time, log);
             if (imperialImpactCheck.Count > 1)

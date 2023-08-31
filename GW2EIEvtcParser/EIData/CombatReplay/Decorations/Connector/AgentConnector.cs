@@ -1,17 +1,24 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using GW2EIEvtcParser.ParsedData;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal class AgentConnector : Connector
     {
-        private readonly AbstractSingleActor _agent;
+        public AgentItem Agent { get; }
 
         public AgentConnector(AbstractSingleActor agent)
         {
-            _agent = agent;
+            Agent = agent.AgentItem;
+        }
+
+        public AgentConnector(AgentItem agent)
+        {
+            Agent = agent;
         }
 
         public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return _agent.UniqueID;
+            return Agent.UniqueID;
         }
     }
 }

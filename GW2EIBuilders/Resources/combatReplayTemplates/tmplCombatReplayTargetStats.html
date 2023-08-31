@@ -1,8 +1,18 @@
 ﻿<template>
     <div>
-        <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"></combat-replay-actor-buffs-stats-component>
-        <div class="d-flex mb-1 mt-1 align-items-center">
-            <combat-replay-target-status-component :time="time" :targetindex="targetindex"></combat-replay-target-status-component>
+        <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"/>
+        <div class="d-flex mb-1 mt-1">
+            <combat-replay-target-status-component :time="time" :targetindex="targetindex"/>
+            <combat-replay-actor-rotation-component :time="time" :actorindex="targetindex" :enemy="true"/>
+        </div> 
+        <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">         
+            <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
+                <li class="nav-item" v-for="(phase, id) in breakbarPhases"
+                    @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
+                    :data-original-title="phase.durationS + ' seconds'">
+                    <a class="nav-link">{{id + 1}} </a>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -10,6 +20,28 @@
 <script>
     Vue.component("combat-replay-target-stats-component", {
         props: ["targetindex", "time", "buffstoshow"],
-        template: `${template}`
+        template: `${template}`,
+        methods: {       
+            updatePhaseTime: function (min, max, name) {
+                animator.updateTime(min);
+                sliderDelimiter.min = min;
+                sliderDelimiter.max = max;
+                sliderDelimiter.name = name;
+            },
+        },
+        computed: {           
+            breakbarPhases: function () {
+                if (!this.hasBreakbarPercent) {
+                    return [];
+                }
+                return logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(this.targetindex) > -1);
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbarPercent;
+            },
+            breakbarPercent: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
+        }
     });
 </script>

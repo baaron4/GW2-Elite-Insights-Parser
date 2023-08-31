@@ -8,6 +8,8 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using System;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -15,20 +17,25 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceEffect), // Legendary Assassin Stance
-            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceEffect), // Legendary Demon Stance
-            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceEffect), // Legendary Dwarf Stance
-            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceEffect), // Legendary Centaur Stance
-            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsEffect).UsingICD(500), // Impossible Odds
-            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsEffect).UsingICD(500), // Relinquish Power
-            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersEffect), // Vengeful Hammers
-            new BuffLossCastFinder(ReleaseHammers, VengefulHammersEffect), // Release Hammers
-            new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness), // Release Hammers
-            new DamageCastFinder(InvokingTorment, InvokingTorment).WithBuilds(GW2Builds.February2020Balance), // Invoking Torment
-            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin), // Call of the Assassin
-            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf), // Call of the Dwarf
-            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon), // Call of the Demon
-            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur), // Call of the Centaur
+            new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff),
+            new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff),
+            new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff), 
+            new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceBuff), 
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff).UsingICD(500), 
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff).UsingICD(500),
+            new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff),
+            new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff), 
+            new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness),
+            new DamageCastFinder(InvokingTorment, InvokingTorment)
+                .WithBuilds(GW2Builds.February2020Balance)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin),
+            new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf),
+            new DamageCastFinder(CallOfTheDemon, CallOfTheDemon),
+            new DamageCastFinder(LesserBanishEnchantment, LesserBanishEnchantment)
+                .WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur),
             new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
@@ -91,19 +98,21 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
-            new Buff("Vengeful Hammers", VengefulHammersEffect, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
+            new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
             new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
             new Buff("Rite of the Great Dwarf (Traited)", RiteOfTheGreatDwarfTraited, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
             new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, BuffImages.EmbraceTheDarkness),
             new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.EnchantedDaggers),
             new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PhaseTraversal),
-            new Buff("Tranquil", Tranquil, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ProjectTranquility),
-            new Buff("Impossible Odds", ImpossibleOddsEffect, Source.Revenant, BuffClassification.Other, BuffImages.ImpossibleOdds),
+            new Buff("Tranquil", Tranquil, Source.Revenant, BuffClassification.Other, BuffImages.ProjectTranquility),
+            new Buff("Impossible Odds", ImpossibleOddsBuff, Source.Revenant, BuffClassification.Other, BuffImages.ImpossibleOdds),
             new Buff("Jade", Jade, Source.Revenant, BuffClassification.Other, BuffImages.Stun),
-            new Buff("Legendary Centaur Stance", LegendaryCentaurStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryCentaurStance),
-            new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
-            new Buff("Legendary Demon Stance", LegendaryDemonStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
-            new Buff("Legendary Assassin Stance", LegendaryAssassinStanceEffect, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
+            new Buff("Legendary Centaur Stance", LegendaryCentaurStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryCentaurStance),
+            new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDwarfStance),
+            new Buff("Legendary Demon Stance", LegendaryDemonStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryDemonStance),
+            new Buff("Legendary Assassin Stance", LegendaryAssassinStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAssassinStance),
+            new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             // Traits
             new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
             new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, BuffImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
@@ -132,21 +141,20 @@ namespace GW2EIEvtcParser.EIData
             return _legendSwaps.Contains(id);
         }
 
-        private static HashSet<long> Minions = new HashSet<long>()
+        private static HashSet<int> Minions = new HashSet<int>()
         {
-            (long)MinionID.VentariTablet
+            (int)MinionID.VentariTablet
         };
-        internal static bool IsKnownMinionID(long id)
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
         }
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
         {
-            EffectGUIDEvent tabletAutoHealEffect = combatData.GetEffectGUIDEvent(EffectGUIDs.RevenantTabletAutoHeal);
-            if (tabletAutoHealEffect != null)
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out IReadOnlyList<EffectEvent> tabletHealEffectEvents))
             {
-                var allTablets = new HashSet<AgentItem>(combatData.GetEffectEventsByEffectID(tabletAutoHealEffect.ContentID).Select(x => x.Src));
+                var allTablets = new HashSet<AgentItem>(tabletHealEffectEvents.Select(x => x.Src));
                 foreach (AgentItem tablet in allTablets)
                 {
                     tablet.OverrideType(AgentItem.AgentType.NPC);
@@ -159,5 +167,30 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Revenant;
+
+            // Inspiring Reinforcement
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out IReadOnlyList<EffectEvent> inspiringReinforcementParts))
+            {
+                foreach (EffectEvent effect in inspiringReinforcementParts)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 240, 360, effect.Rotation.Z, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out IReadOnlyList<EffectEvent> inspiringReinforcements))
+            {
+                foreach (EffectEvent effect in inspiringReinforcements)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f); // 900 units in front, 60 behind
+                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 240, 960, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                }
+            }
+        }
     }
 }

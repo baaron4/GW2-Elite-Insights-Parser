@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
         private bool Minions { get; set; } = false;
 
-        public PlayerSrcAllHitsMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, SkillChecker condition = null) : base(0, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, condition)
+        public PlayerSrcAllHitsMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -16,11 +17,11 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortion).UsingChecker((evt, combatData, agentData, skillData) => {
+            new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
                 if(evt.Src.Spec != Spec.Virtuoso) {
                     return false;
                 }
-                if (!combatData.GetBuffData(DistortionEffect).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffData(DistortionBuff).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
                 {
                     return false;
                 }
@@ -29,6 +30,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return true;
             }).WithBuilds(GW2Builds.October2022Balance),
+            new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem).UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023Balance),
+            new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts).UsingSrcSpecChecker(Spec.Virtuoso),
         };
 
 
@@ -91,10 +94,39 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        private static HashSet<long> Minions = new HashSet<long>();
-        internal static bool IsKnownMinionID(long id)
+        private static HashSet<int> Minions = new HashSet<int>();
+        internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
+        }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Mesmer;
+
+            // Rain of Swords
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoRainOfSwords, out IReadOnlyList<EffectEvent> rainOfSwords))
+            {
+                foreach (EffectEvent effect in rainOfSwords)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
+                }
+            }
+            // Thousand Cuts
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts, out IReadOnlyList<EffectEvent> thousandCuts))
+            {
+                foreach (EffectEvent effect in thousandCuts)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, -600.0f);
+                    // 30 units width is a guess
+                    replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 30, 1200, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                }
+            }
         }
     }
 }

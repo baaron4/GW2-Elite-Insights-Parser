@@ -4,80 +4,132 @@
 /*global animator, ToRadians, facingIcon, animateCanvas, noUpdateTime*/
 "use strict";
 //// BASE MECHANIC
+
+function interpolatedPositionFetcher(connection, master) {
+    var index = -1;
+    var totalPoints = connection.positions.length / 3;
+    for (var i = 0; i < totalPoints; i++) {
+        var posTime = connection.positions[3 * i + 2];
+        if (time < posTime) {
+            break;
+        }
+        index = i;
+    }
+    if (index === -1) {
+        return {
+            x: connection.positions[0],
+            y: connection.positions[1]
+        };
+    } else if (index === totalPoints - 1) {
+        return {
+            x: connection.positions[3 * index],
+            y: connection.positions[3 * index + 1]
+        };
+    } else {
+        var cur = {
+            x: connection.positions[3 * index],
+            y: connection.positions[3 * index + 1]
+        };
+        var curTime = connection.positions[3 * index + 2];
+        var next = {
+            x: connection.positions[3 * (index + 1)],
+            y: connection.positions[3 * (index + 1) + 1]
+        };
+        var nextTime = connection.positions[3 * (index + 1) + 2];
+        var pt = {
+            x: 0,
+            y: 0
+        };
+        pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
+        pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
+        return pt;
+    }
+}
+
+function staticPositionFetcher(connection, master) {
+    return {
+        x: connection[0],
+        y: connection[1]
+    };
+}
+
+function masterPositionFetcher(connection, master) {
+    if (!master) {
+        return null;
+    }
+    return master.getPosition();
+}
+
 class MechanicDrawable {
     constructor(start, end, connectedTo) {
         this.start = start;
         this.end = end;
+        this.positionFetcher = null;
         this.connectedTo = connectedTo;
+        if (connectedTo.interpolationMethod >= 0) {
+            this.positionFetcher = interpolatedPositionFetcher;
+        } else if (connectedTo instanceof Array) {
+            this.positionFetcher = staticPositionFetcher;
+        } else {
+            this.positionFetcher = masterPositionFetcher;
+        }
         this.master = null;
+        // Skill mode
+        this.ownerID = null;
+        this.owner = null;
+        this.category = 0;
+    }
+
+    usingSkillMode(ownerID, category) {
+        this.ownerID = ownerID;
+        this.category = category;
+        return this;
     }
 
     draw() {
+        console.error("Draw should be overriden");
         // to override
     }
 
     getPosition() {
-        if (this.connectedTo === null) {
-            return null;
-        }
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.connectedTo.interpolationMethod >= 0) {
-            // only linear support for now
-            var index = -1;
-            for (var i = 0; i < this.connectedTo.positions.length / 3; i++) {
-                var posTime = this.connectedTo.positions[3 * i + 2];
-                if (time < posTime) {
-                    break;
-                }
-                index = i;
-            }
-            if (index === -1) {
-                return {
-                    x: this.connectedTo.positions[0],
-                    y: this.connectedTo.positions[1]
-                }; 
-            } else if (index === this.connectedTo.positions.length / 3 - 1) {
-                return {
-                    x: this.connectedTo.positions[3 * index],
-                    y: this.connectedTo.positions[3 * index + 1]
-                }; 
-            } else {
-                var cur = {
-                    x: this.connectedTo.positions[3 * index ],
-                    y: this.connectedTo.positions[3 * index + 1]
-                };
-                var curTime = this.connectedTo.positions[3 * index + 2];
-                var next = {
-                    x: this.connectedTo.positions[3 * (index + 1) ],
-                    y: this.connectedTo.positions[3 * (index + 1) + 1]
-                };
-                var nextTime = this.connectedTo.positions[3 * (index + 1) + 2];
-                var pt = {
-                    x: 0,
-                    y: 0
-                };                    
-                pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
-                pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
-                return pt;
-            }
-        }else if (this.connectedTo instanceof Array) {
-            return {
-                x: this.connectedTo[0],
-                y: this.connectedTo[1]
-            };
-        } else {
+        return this.positionFetcher(this.connectedTo, this.master);
+    }
+
+    canDraw() {
+        if (this.connectedTo === null) {
+            return false;
+        }
+        if (this.positionFetcher === masterPositionFetcher) {
             if (this.master === null) {
                 let masterId = this.connectedTo;
                 this.master = animator.getActorData(masterId);
             }
-            if (!this.master) {
-                return null;
+            if (!this.master || !this.master.canDraw()) {
+                return false;
             }
-            return this.master.getPosition();
         }
+        if (this.ownerID !== null) {
+            if (this.owner === null) {
+                this.owner = animator.getActorData(this.ownerID);
+            }
+            if (!this.owner) {
+                return false;
+            }
+            let renderMask = animator.displaySettings.skillMechanicsMask;
+            let drawOnSelect = (renderMask & SkillDecorationCategory["Show On Select"]) > 0;
+            renderMask &= ~SkillDecorationCategory["Show On Select"];
+            if ((this.category & renderMask) > 0) {
+                return true;
+            } else if (drawOnSelect && (this.owner.isSelected() || (this.owner.master && this.owner.master.isSelected()))) {
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
 }
@@ -110,10 +162,14 @@ class FacingMechanicDrawable extends MechanicDrawable {
         return angle;
     }
 
-    getRotation() {
+    canDraw() {
         if (this.facingData.length === 0) {
-            return null;
+            return false;
         }
+        return super.canDraw();
+    }
+
+    getRotation() {
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
@@ -128,6 +184,9 @@ class FacingMechanicDrawable extends MechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -168,6 +227,9 @@ class FacingRectangleMechanicDrawable extends FacingMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -196,6 +258,9 @@ class FacingPieMechanicDrawable extends FacingMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const rot = this.getRotation();
         if (pos === null || rot === null) {
@@ -245,6 +310,9 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -271,6 +339,9 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -306,6 +377,9 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -342,6 +416,9 @@ class RotatedRectangleMechanicDrawable extends RectangleMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -382,6 +459,9 @@ class PieMechanicDrawable extends FormMechanicDrawable {
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         if (pos === null) {
             return;
@@ -408,35 +488,45 @@ class LineMechanicDrawable extends FormMechanicDrawable {
     constructor(start, end, fill, growing, color, connectedFrom, connectedTo) {
         super(start, end, fill, growing, color, connectedTo);
         this.connectedFrom = connectedFrom;
-        this.endmaster = null;
+        this.targetPositionFetcher = null;
+        if (connectedFrom.interpolationMethod >= 0) {
+            this.targetPositionFetcher = interpolatedPositionFetcher;
+        } else if (connectedFrom instanceof Array) {
+            this.targetPositionFetcher = staticPositionFetcher;
+        } else {
+            this.targetPositionFetcher = masterPositionFetcher;
+        }
+        this.endMaster = null;
     }
 
     getTargetPosition() {
-        if (this.connectedFrom === null) {
-            return null;
-        }
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.connectedFrom instanceof Array) {
-            return {
-                x: this.connectedFrom[0],
-                y: this.connectedFrom[1]
-            };
-        } else {
-            if (this.endmaster === null) {
-                let masterId = this.connectedFrom;
-                this.endmaster = animator.getActorData(masterId);
-            }       
-            if (!this.endmaster) {
-                return null;
-            }
-            return this.endmaster.getPosition();
+        return this.targetPositionFetcher(this.connectedFrom, this.endMaster);
+    }
+    
+    canDraw() {
+        if (this.connectedFrom === null) {
+            return false;
         }
+        if (this.targetPositionFetcher === masterPositionFetcher) {
+            if (this.endMaster === null) {
+                let masterId = this.connectedFrom;
+                this.endMaster = animator.getActorData(masterId);
+            }
+            if (!this.endMaster || !this.endMaster.canDraw()) {
+                return false;
+            }
+        }
+        return super.canDraw();
     }
 
     draw() {
+        if (!this.canDraw()) {
+            return;
+        }
         const pos = this.getPosition();
         const target = this.getTargetPosition();
         if (pos === null || target === null) {
@@ -588,5 +678,71 @@ class MovingPlatformDrawable extends BackgroundDrawable {
             angle: (this.positions[i - 1][3] * (1 - progress) + this.positions[i][3] * progress),
             opacity: (this.positions[i - 1][4] * (1 - progress) + this.positions[i][4] * progress),
         };
+    }
+}
+
+class IconDecorationDrawable extends MechanicDrawable {
+    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo);
+        this.image = new Image();
+        this.image.src = image;
+        this.image.onload = () => animateCanvas(noUpdateTime);
+        this.pixelSize = pixelSize;
+        this.worldSize = worldSize;
+        this.opacity = opacity;
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
+            return this.worldSize;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
+    draw() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        if (pos === null) {
+            return;
+        }
+        
+        const ctx = animator.mainContext;
+        const size = this.getSize();
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.drawImage(this.image, pos.x - size / 2, pos.y - size / 2, size, size);
+        ctx.restore();
+    }
+}
+
+class IconOverheadDecorationDrawable extends IconDecorationDrawable {
+    constructor(start, end, connectedTo, image, pixelSize, worldSize, opacity) {
+        super(start, end, connectedTo, image, pixelSize, worldSize, opacity);
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
+            return this.worldSize;
+        } else {
+            return this.pixelSize / animator.scale;
+        }
+    }
+
+    getPosition() {
+        const pos = super.getPosition();
+        if (!pos) {
+            return null;
+        }
+        if (!this.master) {
+            console.error('Invalid IconOverhead decoration');
+            return null; 
+        }
+        const masterSize = this.master.getSize();
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1/animator.inchToPixel : animator.scale;
+        pos.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        return pos;
     }
 }

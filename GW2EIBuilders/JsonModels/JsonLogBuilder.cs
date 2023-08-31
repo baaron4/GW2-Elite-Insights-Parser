@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIBuilders.JsonModels.JsonActors;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
@@ -17,34 +18,36 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem item, ParsedEvtcLog log)
+        internal static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
-                Name = item.Name,
-                AutoAttack = item.AA,
-                Icon = item.Icon,
-                CanCrit = SkillItem.CanCrit(item.ID, log.LogData.GW2Build),
-                IsSwap = item.IsSwap,
-                IsInstantCast = log.CombatData.GetInstantCastData(item.ID).Any(),
-                IsNotAccurate = log.SkillData.IsNotAccurate(item.ID),
-                ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
-                HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
+                Name = skill.Name,
+                AutoAttack = skill.AA,
+                Icon = skill.Icon,
+                CanCrit = SkillItem.CanCrit(skill.ID, log.LogData.GW2Build),
+                IsSwap = skill.IsSwap,
+                IsInstantCast = log.CombatData.GetInstantCastData(skill.ID).Any(),
+                IsNotAccurate = log.SkillData.IsNotAccurate(skill.ID),
+                IsGearProc = log.SkillData.IsGearProc(skill.ID),
+                IsTraitProc = log.SkillData.IsTraitProc(skill.ID),
+                ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
+                HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
             };
             return skillDesc;
         }
 
-        internal static BuffDesc BuildBuffDesc(Buff item, ParsedEvtcLog log)
+        internal static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
         {
             var buffDesc = new BuffDesc
             {
-                Name = item.Name,
-                Icon = item.Link,
-                Stacking = item.Type == Buff.BuffType.Intensity,
-                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
-                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(item, log) == GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
+                Name = buff.Name,
+                Icon = buff.Link,
+                Stacking = buff.Type == Buff.BuffType.Intensity,
+                ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
+                HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
-            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(item.ID);
+            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>(){
@@ -60,7 +63,7 @@ namespace GW2EIBuilders.JsonModels
                     {
                         continue;
                     }
-                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds);
+                    string desc = formula.GetDescription(false, log.Buffs.BuffsByIds, buff);
                     if (desc.Length > 0)
                     {
                         descriptions.Add(desc);
@@ -71,16 +74,16 @@ namespace GW2EIBuilders.JsonModels
             return buffDesc;
         }
 
-        internal static DamageModDesc BuildDamageModDesc(DamageModifier item)
+        internal static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
         {
             var damageModDesc = new DamageModDesc
             {
-                Name = item.Name,
-                Icon = item.Icon,
-                Description = item.Tooltip,
-                NonMultiplier = !item.Multiplier,
-                SkillBased = item.SkillBased,
-                Approximate = item.Approximate
+                Name = damageModifier.Name,
+                Icon = damageModifier.Icon,
+                Description = damageModifier.Tooltip,
+                NonMultiplier = !damageModifier.Multiplier,
+                SkillBased = damageModifier.SkillBased,
+                Approximate = damageModifier.Approximate
             };
             return damageModDesc;
         }
@@ -97,6 +100,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.EliteInsightsVersion = parserVersion.ToString();
             jsonLog.ArcVersion = log.LogData.ArcVersion;
             jsonLog.RecordedBy = log.LogData.PoVName;
+            jsonLog.RecordedAccountBy = log.LogData.PoVAccount;
             jsonLog.TimeStart = log.LogData.LogStart;
             jsonLog.TimeEnd = log.LogData.LogEnd;
             jsonLog.TimeStartStd = log.LogData.LogStartStd;
@@ -109,7 +113,10 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.UploadLinks = uploadLinks;
             jsonLog.Language = log.LogData.Language;
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
+            jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
             jsonLog.IsCM = log.FightData.IsCM;
+            jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
+            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();
             var buffMap = new Dictionary<string, BuffDesc>();
@@ -137,14 +144,10 @@ namespace GW2EIBuilders.JsonModels
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
-            var mechanicLogs = new List<MechanicEvent>();
-            foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanicEvents(log))
+            IReadOnlyCollection<Mechanic> presentMechanics = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
+            if (presentMechanics.Any())
             {
-                mechanicLogs.AddRange(mLog);
-            }
-            if (mechanicLogs.Any())
-            {
-                jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(mechanicLogs);
+                jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(log, mechanicData, presentMechanics);
             }
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Phases");

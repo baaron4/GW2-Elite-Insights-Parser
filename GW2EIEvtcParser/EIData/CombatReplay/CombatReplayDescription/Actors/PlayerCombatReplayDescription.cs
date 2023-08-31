@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Group = player.Group;
             SetStatus(log, player);
+            SetBreakbarStatus(log, player);
         }
 
     }

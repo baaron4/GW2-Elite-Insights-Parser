@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.ParsedData
             _value = evtcItem.Value;
         }
 
-        internal static (float x, float y, float z) UnpackMovementData(ulong packedXY, int intZ)
+        private static (float x, float y, float z) UnpackMovementData(ulong packedXY, int intZ)
         {
             byte[] xyBytes = BitConverter.GetBytes(packedXY);
             byte[] zBytes = BitConverter.GetBytes(intZ);
@@ -25,9 +25,28 @@ namespace GW2EIEvtcParser.ParsedData
             return (x, y, z);
         }
 
-        protected (float x, float y, float z) Unpack()
+        public ParametricPoint3D GetParametricPoint3D()
         {
-            return UnpackMovementData(_dstAgent, _value);
+            (var x, var y, var z) = UnpackMovementData(_dstAgent, _value);
+            return new ParametricPoint3D(x, y, z, Time);
+        }
+
+        public Point3D GetPoint3D()
+        {
+            return GetPoint3D(_dstAgent, _value);
+        }
+
+        /// <summary>
+        /// Uses <see cref="UnpackMovementData(ulong, int)"/> to get X, Y, Z coordinates.<br></br>
+        /// Converts the coordinate points to a <see cref="Point3D"/> to access the class methods.
+        /// </summary>
+        /// <param name="packedXY"></param>
+        /// <param name="intZ"></param>
+        /// <returns><see cref="Point3D"/> containing coordinates obtained from <paramref name="packedXY"/> and <paramref name="intZ"/>.</returns>
+        internal static Point3D GetPoint3D(ulong packedXY, int intZ)
+        {
+            (var x, var y, var z) = UnpackMovementData(packedXY, intZ);
+            return new Point3D(x, y, z);
         }
 
         internal abstract void AddPoint3D(CombatReplay replay);

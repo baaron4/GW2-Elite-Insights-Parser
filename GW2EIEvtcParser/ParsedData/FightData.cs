@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA:
                 case ArcDPSEnums.TargetID.CALeftArm_CHINA:
                 case ArcDPSEnums.TargetID.CARightArm_CHINA:
-                    Logic = new ConjuredAmalgamate((int)ArcDPSEnums.TargetID.ConjuredAmalgamate);
+                    Logic = new ConjuredAmalgamate(id);
                     break;
                 case ArcDPSEnums.TargetID.Kenut:
                 case ArcDPSEnums.TargetID.Nikare:
@@ -210,6 +210,12 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.PrototypeIndigoCM:
                     Logic = new OldLionsCourt(id);
                     break;
+                case ArcDPSEnums.TargetID.Dagda:
+                    Logic = new CosmicObservatory(id);
+                    break;
+                case ArcDPSEnums.TargetID.Cerus:
+                    Logic = new TempleOfFebe(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.MAMA:
                     Logic = new MAMA(id);
@@ -231,6 +237,9 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
                     Logic = new AiKeeperOfThePeak(id);
+                    break;
+                case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                    Logic = new Kanaxai(id);
                     break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:

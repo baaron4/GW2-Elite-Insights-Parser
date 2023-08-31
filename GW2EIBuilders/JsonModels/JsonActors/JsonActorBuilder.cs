@@ -30,6 +30,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             jsonActor.HitboxWidth = actor.HitboxWidth;
             jsonActor.InstanceID = actor.AgentItem.InstID;
             jsonActor.IsFake = actor.IsFakeActor;
+            jsonActor.TeamID = log.CombatData.GetTeamChangeEvents(actor.AgentItem).Any()? log.CombatData.GetTeamChangeEvents(actor.AgentItem).LastOrDefault().TeamID : 0;
             //
             jsonActor.DpsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(actor.GetDPSStats(log, phase.Start, phase.End))).ToArray();
             jsonActor.StatsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStatsAll(actor.GetGameplayStats(log, phase.Start, phase.End), actor.GetOffensiveStats(null, log, phase.Start, phase.End))).ToArray();

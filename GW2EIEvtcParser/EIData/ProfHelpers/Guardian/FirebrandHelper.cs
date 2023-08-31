@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -12,35 +14,51 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(FlameRushOld,FlameRushOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Flame Rush
-            new DamageCastFinder(FlameSurgeOld,FlameSurgeOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Flame Surge
+            new DamageCastFinder(FlameRushOld, FlameRushOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingDisableWithEffectData(),
+            new DamageCastFinder(FlameRush, FlameRush).WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(FlameSurgeOld, FlameSurgeOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingDisableWithEffectData(),
+            new DamageCastFinder(FlameSurge, FlameSurge).WithBuilds(GW2Builds.February2023Balance),
             //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Echo of Truth
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Voice of Truth
-            new DamageCastFinder(MantraOfFlameCast,MantraOfFlameDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Mantra of Flame
-            new DamageCastFinder(MantraOfTruthCast,MantraOfTruthDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Mantra of Truth
+            new DamageCastFinder(MantraOfFlameCast, MantraOfFlameDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingDisableWithEffectData(),
+            new DamageCastFinder(MantraOfTruthCast, MantraOfTruthDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingDisableWithEffectData(),
             //
-            new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace).WithBuilds(GW2Builds.May2021Balance).UsingEnable((combatData) => !combatData.HasEffectData), // Mantra of Solace
-            new EffectCastFinderByDst(MantraOfFlameCast, EffectGUIDs.FirebrandMantraOfFlameSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfSolace, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfTruthCast, EffectGUIDs.FirebrandMantraOfTruthSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-            //     
-            new DamageCastFinder(FlameRush,FlameRush).WithBuilds(GW2Builds.February2023Balance),
-            new DamageCastFinder(FlameSurge,FlameSurge).WithBuilds(GW2Builds.February2023Balance),
+            new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace).WithBuilds(GW2Builds.May2021Balance).UsingDisableWithEffectData(),
+            new EffectCastFinderByDst(MantraOfFlameCast, EffectGUIDs.FirebrandMantraOfFlameSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfSolace, EffectGUIDs.FirebrandMantraOfSolaceSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfTruthCast, EffectGUIDs.FirebrandMantraOfTruthSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfLiberation, EffectGUIDs.FirebrandMantraOfLiberationSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfLore, EffectGUIDs.FirebrandMantraOfLoreSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(MantraOfPotence, EffectGUIDs.FirebrandMantraOfPotenceSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(RestoringReprieveOrRejunevatingRespite, EffectGUIDs.FirebrandMantraOfSolaceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
-            //   
-            new DamageCastFinder(EchoOfTrue,EchoOfTrue).WithBuilds(GW2Builds.February2023Balance),
-            new DamageCastFinder(VoiceOfTruth,VoiceOfTruth).WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(EchoOfTrue, EchoOfTrue).WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(VoiceOfTruth, VoiceOfTruth).WithBuilds(GW2Builds.February2023Balance),
             //
-            new EffectCastFinderByDst(PortentOfFreedomOrUnhinderedDelivery, EffectGUIDs.FirebrandMantraOfLiberationSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds( GW2Builds.February2023Balance),
-            //
-            new EffectCastFinderByDst(OpeningPassageOrClarifiedConclusion, EffectGUIDs.FirebrandMantraOfLoreSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
-            //
-            new EffectCastFinderByDst(PotentHasteOrOverwhelmingCelerity, EffectGUIDs.FirebrandMantraOfPotenceSymbol).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Firebrand).WithBuilds(GW2Builds.February2023Balance),
-            //
+            new EffectCastFinderByDst(PortentOfFreedomOrUnhinderedDelivery, EffectGUIDs.FirebrandMantraOfLiberationSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds( GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(OpeningPassageOrClarifiedConclusion, EffectGUIDs.FirebrandMantraOfLoreSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinderByDst(PotentHasteOrOverwhelmingCelerity, EffectGUIDs.FirebrandMantraOfPotenceSymbol)
+                .UsingDstSpecChecker(Spec.Firebrand)
+                .WithBuilds(GW2Builds.February2023Balance),
+            // tomes
             new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
@@ -72,14 +90,30 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.EpilogueAshesOfTheJust),
             new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, BuffImages.EpilogueEternalOasis),
             new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, BuffImages.EpilogueUnbrokenLines),
-            new Buff("Tome of Justice", TomeOfJusticeEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfJustice),
-            new Buff("Tome of Courage", TomeOfCourageEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfCourage),
-            new Buff("Tome of Resolve", TomeOfResolveEffect, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfResolve),
+            new Buff("Tome of Justice", TomeOfJusticeBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfJustice),
+            new Buff("Tome of Courage", TomeOfCourageBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfCourage),
+            new Buff("Tome of Resolve", TomeOfResolveBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfResolve),
             new Buff("Quickfire", Quickfire, Source.Firebrand, BuffClassification.Other, BuffImages.Quickfire),
             new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, BuffImages.DormantJustice),
             new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, BuffImages.DormantCourage),
             new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, BuffImages.DormantResolve),
         };
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Guardian;
+
+            // Valiant Bulwark
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark, out IReadOnlyList<EffectEvent> valiantBulwarks))
+            {
+                foreach (EffectEvent effect in valiantBulwarks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Firebrand, Chapter3ValiantBulwark, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Firebrand, Chapter3ValiantBulwark, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                }
+            }
+        }
     }
 }

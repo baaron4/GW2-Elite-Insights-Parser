@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffGainCastFinder : BuffCastFinder
+    internal class BuffGainCastFinder : BuffCastFinder<BuffApplyEvent>
     {
-
-        public delegate bool BuffGainCastChecker(BuffApplyEvent evt, CombatData combatData, AgentData agentData, SkillData skillData);
-        private BuffGainCastChecker _triggerCondition { get; set; }
-
         protected virtual AgentItem GetCasterAgent(AgentItem agent)
         {
             return agent;
@@ -19,9 +17,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffGainCastFinder UsingChecker(BuffGainCastChecker checker)
-        {
-            _triggerCondition = checker;
+        internal BuffGainCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
+        {  
+            UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - duration) < epsilon);
             return this;
         }
 
@@ -43,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
                         lastTime = bae.Time;
                         continue;
                     }
-                    if (_triggerCondition == null || _triggerCondition(bae, combatData, agentData, skillData))
+                    if (CheckCondition(bae, combatData, agentData, skillData))
                     {
                         lastTime = bae.Time;
                         AgentItem caster = GetCasterAgent(bae.To);

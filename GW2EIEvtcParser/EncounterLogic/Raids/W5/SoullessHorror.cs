@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -21,6 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             new PlayerDstHitMechanic(InnerVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
             new PlayerDstHitMechanic(OuterVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
+            new PlayerDstHitMechanic(new long[] { InnerVortexSlash, OuterVortexSlash }, "Necro Dancer", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "NecDancer.Achiv", "Achievement Eligibility: Necro Dancer", "Necro Dancer", 0).UsingAchievementEligibility(true),
             new PlayerDstHitMechanic(SoulRift, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
             new PlayerDstHitMechanic(QuadSlashFirstSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
             new PlayerDstHitMechanic(QuadSlashSecondSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
@@ -31,8 +33,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(CorruptTheLiving, "Corrupt the Living", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin","Corrupt the Living (Torment+Poison Spin)", "Torment+Poison Spin",0),
             new PlayerDstHitMechanic(WurmSpit, "Wurm Spit", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit","Wurm Spit", "Wurm Spit",0),
             new EnemyCastStartMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0, (ce, log) => ce.ActualDuration <= 6800),
-            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0, (ce,log) => ce.ActualDuration > 6800),
+            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0).UsingChecker((ce, log) => ce.ActualDuration <= 6800),
+            new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0).UsingChecker((ce,log) => ce.ActualDuration > 6800),
+            new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(ArcDPSEnums.TrashID.TormentedDead)),
 
             });
             Extension = "sh";
@@ -46,7 +49,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(ChillingAura, ChillingAura), // Chilling Aura
+                new DamageCastFinder(ChillingAura, ChillingAura),
             };
         }
 
@@ -87,7 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Soulless Horror not found");
                 }
-                AbstractBuffEvent buffOnDeath = combatData.GetBuffData(SkillIDs.Determined895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
+                AbstractBuffEvent buffOnDeath = combatData.GetBuffData(Determined895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
                     fightData.SetSuccess(true, buffOnDeath.Time);
@@ -288,9 +291,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IEnumerable<Segment> fixations = player.GetBuffStatus(log, FixatedSH, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            var necrosis = combatData.GetBuffData(SkillIDs.Necrosis).Where(x => x is BuffApplyEvent).ToList();
+            var necrosis = combatData.GetBuffData(Necrosis).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;

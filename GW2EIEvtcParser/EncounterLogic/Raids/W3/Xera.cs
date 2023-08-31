@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -30,8 +31,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(TemporalShredAoE, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
             new PlayerDstBuffApplyMechanic(BloodstoneProtection, "Bloodstone Protection", new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
             new EnemyCastStartMechanic(SummonFragments, "Summon Fragment Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0, (ce,log) => ce.ActualDuration > 11940),
-            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0, (ce, log) => ce.ActualDuration <= 11940),
+            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0).UsingChecker( (ce,log) => ce.ActualDuration > 11940),
+            new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0).UsingChecker( (ce, log) => ce.ActualDuration <= 11940),
             new PlayerDstBuffApplyMechanic(Derangement, "Derangement", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
             new PlayerDstBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new PlayerDstBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
@@ -83,6 +84,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return;
             }
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            if (fightData.Success && fightData.FightEnd < _xeraSecondPhaseStartTime)
+            {
+                fightData.SetSuccess(false, fightData.LogEnd);
+            }
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -137,10 +142,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffData(SkillIDs.Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent determined = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             if (determined == null)
             {
-                determined = log.CombatData.GetBuffData(SkillIDs.SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+                determined = log.CombatData.GetBuffData(SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
             }
             return determined;
         }
@@ -251,19 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _xeraSecondPhaseStartTime = secondXera.FirstAware;
                 }
                 firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
-                agentData.SwapMasters(secondXera, firstXera);
-                // update combat data
-                foreach (CombatItem c in combatData)
-                {
-                    if (c.SrcMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideSrcAgent(firstXera.Agent);
-                    }
-                    if (c.DstMatchesAgent(secondXera, extensions))
-                    {
-                        c.OverrideDstAgent(firstXera.Agent);
-                    }
-                }
+                RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
 
@@ -335,6 +328,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
+            IEnumerable<Segment> derangements = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment segment in derangements)
+            {
+                if (segment.Value >= 90)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
+                }
+                else if (segment.Value >= 60)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementGoldOverhead);
+                }
+                else if (segment.Value >= 30)
+                {
+                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
+                }
             }
         }
     }

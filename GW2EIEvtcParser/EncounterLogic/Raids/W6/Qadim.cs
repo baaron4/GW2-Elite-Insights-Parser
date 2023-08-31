@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             new EnemyCastStartMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC","Qadim CC", "Qadim CC",0),
-            new EnemyCastEndMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
+            new EnemyCastEndMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed","Qadim Breakbar broken", "Qadim CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkRed), "Q.CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
             new PlayerDstHitMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
             new PlayerDstHitMechanic(new long[] { FieryDance1, FieryDance2, FieryDance3, FieryDance4, }, "Fiery Dance", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
@@ -37,8 +37,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "H.Meteor","Fiery Meteor (Hydra)", "Hydra Meteor",0),
             new EnemyCastStartMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "H.CC","Fiery Meteor (Hydra Breakbar)", "Hydra CC",0),
             //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
-            new EnemyCastEndMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "H.CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0,(ce, log) => ce.ActualDuration < 12364),
-            new EnemyCastEndMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0, (ce,log) => ce.ActualDuration >= 12364),
+            new EnemyCastEndMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "H.CCed","Fiery Meteor (Hydra Breakbar broken)", "Hydra CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 12364),
+            new EnemyCastEndMechanic(FieryMeteor, "Fiery Meteor", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC Fail","Fiery Meteor (Hydra Breakbar not broken)", "Hydra CC Failed",0).UsingChecker((ce,log) => ce.ActualDuration >= 12364),
             new PlayerDstHitMechanic(TeleportHydra, "Teleport", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "H.KB","Teleport Knockback (Hydra)", "Hydra TP KB",0),
             new PlayerDstHitMechanic(BigHit, "Big Hit", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Mace","Big Hit (Mace Impact)", "Mace Impact",0),
             new PlayerDstHitMechanic(Inferno, "Inferno", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "Inf.","Inferno (Lava Pool drop  on long platform spokes)", "Inferno Pool",0),
@@ -47,19 +47,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(FireBreath, "Fire Breath", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Orange), "W.Breath","Fire Breath (Wyvern)", "Fire Breath",0),
             new PlayerDstHitMechanic(WingBuffet, "Wing Buffet", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkTeal), "W.Wing","Wing Buffet (Wyvern Launching Wing Storm)", "Wing Buffet",0),
             new EnemyCastStartMechanic(PatriarchCC, "Patriarch CC", new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkTeal), "W.BB","Platform Destruction (Patriarch CC)", "Patriarch CC",0),
-            new EnemyCastEndMechanic(PatriarchCC, "Patriarch CC", new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkGreen), "W.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0, (ce, log) => ce.ActualDuration < 6500),
+            new EnemyCastEndMechanic(PatriarchCC, "Patriarch CC", new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkGreen), "W.CCed","Platform Destruction (Patriarch Breakbar broken)", "Patriarch CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(PatriarchCCJumpInAir, "Patriarch CC (Jump into air)", new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkRed), "Wyv CC Fail","Platform Destruction (Patriarch Breakbar failed)", "Patriarch CC Fail",0),
             new PlayerDstHitMechanic(SeismicStomp, "Seismic Stomp", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Yellow), "D.Stomp","Seismic Stomp (Destroyer Stomp)", "Seismic Stomp (Destroyer)",0),
             new PlayerDstHitMechanic(ShatteredEarth, "Shattered Earth", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "D.Slam","Shattered Earth (Destroyer Jump Slam)", "Jump Slam (Destroyer)",0),
             new PlayerDstHitMechanic(WaveOfForce, "Wave of Force", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Orange), "D.Pizza","Wave of Force (Destroyer Pizza)", "Destroyer Auto",0),
             new EnemyCastStartMechanic(SummonDestroyer, "Summon", new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkTeal), "D.CC","Summon (Destroyer Breakbar)", "Destroyer CC",0),
-            new EnemyCastEndMechanic(SummonDestroyer, "Summon", new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkGreen), "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0, (ce, log) => ce.ActualDuration < 8332),
-            new EnemyCastEndMechanic(SummonDestroyer, "Summon", new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkRed), "D.CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0, (ce,log) => ce.ActualDuration >= 8332),
+            new EnemyCastEndMechanic(SummonDestroyer, "Summon", new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkGreen), "D.CCed","Summon (Destroyer Breakbar broken)", "Destroyer CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 8332),
+            new EnemyCastEndMechanic(SummonDestroyer, "Summon", new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkRed), "D.CC Fail","Summon (Destroyer Breakbar failed)", "Destroyer CC Fail",0).UsingChecker((ce,log) => ce.ActualDuration >= 8332),
             new SpawnMechanic(SummonSpawn, "Summon (Spawn)", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkRed), "D.Spwn","Summon (Destroyer Trolls summoned)", "Destroyer Summoned",0),
             new PlayerDstHitMechanic(BodyOfFlame, "Body of Flame", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Pink,10), "P.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
             new PlayerDstHitMechanic(SeaOfFlame, "Sea of Flame", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Q.Hitbox","Sea of Flame (Stood in Qadim Hitbox)", "Qadim Hitbox AoE",0),
             new PlayerDstHitMechanic(Claw, "Claw", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
-            new PlayerDstHitMechanic(Swap, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
+            new PlayerDstHitMechanic(SwapQadim, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerDstBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
             new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
@@ -88,12 +88,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Qadim,
-                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
-                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
-                (int)ArcDPSEnums.TrashID.WyvernPatriarch,
-                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
-                (int)ArcDPSEnums.TrashID.QadimLamp,
+                (int)TargetID.Qadim,
+                (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.WyvernMatriarch,
+                (int)TrashID.WyvernPatriarch,
+                (int)TrashID.ApocalypseBringer,
+                (int)TrashID.QadimLamp,
             };
         }
 
@@ -101,45 +101,48 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.Qadim,
-                (int)ArcDPSEnums.TrashID.AncientInvokedHydra,
-                (int)ArcDPSEnums.TrashID.ApocalypseBringer,
-                (int)ArcDPSEnums.TrashID.WyvernMatriarch,
-                (int)ArcDPSEnums.TrashID.WyvernPatriarch
+                (int)TargetID.Qadim,
+                (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.ApocalypseBringer,
+                (int)TrashID.WyvernMatriarch,
+                (int)TrashID.WyvernPatriarch
             };
         }
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(ArcDPSEnums.TrashID.PyreGuardian);
+            IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID(ArcDPSEnums.TrashID.QadimLamp);
+                lamp.OverrideID(TrashID.QadimLamp);
             }
             bool refresh = lampAgents.Count > 0;
             // Pyres
+            var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
+            var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
+            var resolutionRetaliationPyrePositions = new List<Point3D> { new Point3D(-8951, 9429), new Point3D(-5716, 9325), new Point3D(-7846, 10612) };
             foreach (AgentItem pyre in pyres)
             {
-                CombatItem position = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                if (position != null)
+                CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
+                if (positionEvt != null)
                 {
-                    (float x, float y, _) = AbstractMovementEvent.UnpackMovementData(position.DstAgent, 0);
-                    if ((Math.Abs(x + 8947) < 10 && Math.Abs(y - 14728) < 10) || (Math.Abs(x + 10834) < 10 && Math.Abs(y - 12477) < 10))
+                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                    if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianProtect);
+                        pyre.OverrideID(TrashID.PyreGuardianProtect);
                         refresh = true;
                     }
-                    else if ((Math.Abs(x + 4356) < 10 && Math.Abs(y - 12076) < 10) || (Math.Abs(x + 5889) < 10 && Math.Abs(y - 14723) < 10) || (Math.Abs(x + 7851) < 10 && Math.Abs(y - 13550) < 10))
+                    else if (stabilityPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(ArcDPSEnums.TrashID.PyreGuardianStab);
+                        pyre.OverrideID(TrashID.PyreGuardianStab);
                         refresh = true;
                     }
-                    else if ((Math.Abs(x + 8951) < 10 && Math.Abs(y - 9429) < 10) || (Math.Abs(x + 5716) < 10 && Math.Abs(y - 9325) < 10) || (Math.Abs(x + 7846) < 10 && Math.Abs(y - 10612) < 10))
+                    else if (resolutionRetaliationPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
-                        pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? ArcDPSEnums.TrashID.PyreGuardianResolution : ArcDPSEnums.TrashID.PyreGuardianRetal);
+                        pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal);
                         refresh = true;
                     }
                 }
@@ -151,19 +154,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianProtect))
+                if (target.IsSpecies(TrashID.PyreGuardianProtect))
                 {
                     target.OverrideName("Protect " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianRetal))
+                if (target.IsSpecies(TrashID.PyreGuardianRetal))
                 {
                     target.OverrideName("Retal " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianResolution))
+                if (target.IsSpecies(TrashID.PyreGuardianResolution))
                 {
                     target.OverrideName("Resolution " + target.Character);
                 }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.PyreGuardianStab))
+                if (target.IsSpecies(TrashID.PyreGuardianStab))
                 {
                     target.OverrideName("Stab " + target.Character);
                 }
@@ -181,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Qadim).FirstOrDefault();
+            AgentItem target = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -206,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
             if (qadim == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -216,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            phases.AddRange(GetPhasesByInvul(log, 52329, qadim, true, false));
+            phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -226,11 +229,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var pyresFirstAware = new List<long>();
                     var pyres = new List<ArcDPSEnums.TrashID>
                         {
-                            ArcDPSEnums.TrashID.PyreGuardian,
-                            ArcDPSEnums.TrashID.PyreGuardianProtect,
-                            ArcDPSEnums.TrashID.PyreGuardianStab,
-                            ArcDPSEnums.TrashID.PyreGuardianRetal,
-                            ArcDPSEnums.TrashID.PyreGuardianResolution,
+                            TrashID.PyreGuardian,
+                            TrashID.PyreGuardianProtect,
+                            TrashID.PyreGuardianStab,
+                            TrashID.PyreGuardianRetal,
+                            TrashID.PyreGuardianResolution,
                         };
                     foreach (int pyreId in pyres)
                     {
@@ -246,25 +249,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     var ids = new List<int>
                         {
-                           (int) ArcDPSEnums.TrashID.WyvernMatriarch,
-                           (int) ArcDPSEnums.TrashID.WyvernPatriarch,
-                           (int) ArcDPSEnums.TrashID.AncientInvokedHydra,
-                           (int) ArcDPSEnums.TrashID.ApocalypseBringer,
-                           (int) ArcDPSEnums.TrashID.QadimLamp
+                           (int) TrashID.WyvernMatriarch,
+                           (int) TrashID.WyvernPatriarch,
+                           (int) TrashID.AncientInvokedHydra,
+                           (int) TrashID.ApocalypseBringer,
+                           (int) TrashID.QadimLamp
                         };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         var phaseTarIDs = new HashSet<int>(phase.Targets.Select(x => x.ID));
-                        if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.AncientInvokedHydra))
+                        if (phaseTarIDs.Contains((int)TrashID.AncientInvokedHydra))
                         {
                             phase.Name = "Hydra";
                         }
-                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.ApocalypseBringer))
+                        else if (phaseTarIDs.Contains((int)TrashID.ApocalypseBringer))
                         {
                             phase.Name = "Apocalypse";
                         }
-                        else if (phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)ArcDPSEnums.TrashID.WyvernMatriarch))
+                        else if (phaseTarIDs.Contains((int)TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)TrashID.WyvernMatriarch))
                         {
                             phase.Name = "Wyvern";
                         }
@@ -283,22 +286,65 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.LavaElemental1,
-                ArcDPSEnums.TrashID.LavaElemental2,
-                ArcDPSEnums.TrashID.IcebornHydra,
-                ArcDPSEnums.TrashID.GreaterMagmaElemental1,
-                ArcDPSEnums.TrashID.GreaterMagmaElemental2,
-                ArcDPSEnums.TrashID.FireElemental,
-                ArcDPSEnums.TrashID.FireImp,
-                ArcDPSEnums.TrashID.PyreGuardian,
-                ArcDPSEnums.TrashID.PyreGuardianProtect,
-                ArcDPSEnums.TrashID.PyreGuardianRetal,
-                ArcDPSEnums.TrashID.PyreGuardianResolution,
-                ArcDPSEnums.TrashID.PyreGuardianStab,
-                ArcDPSEnums.TrashID.ReaperofFlesh,
-                ArcDPSEnums.TrashID.DestroyerTroll,
-                ArcDPSEnums.TrashID.IceElemental,
-                ArcDPSEnums.TrashID.AngryZommoros
+                TrashID.LavaElemental1,
+                TrashID.LavaElemental2,
+                TrashID.IcebornHydra,
+                TrashID.GreaterMagmaElemental1,
+                TrashID.GreaterMagmaElemental2,
+                TrashID.FireElemental,
+                TrashID.FireImp,
+                TrashID.PyreGuardian,
+                TrashID.PyreGuardianProtect,
+                TrashID.PyreGuardianRetal,
+                TrashID.PyreGuardianResolution,
+                TrashID.PyreGuardianStab,
+                TrashID.ReaperOfFlesh,
+                TrashID.DestroyerTroll,
+                TrashID.IceElemental,
+                TrashID.AngryZommoros,
+                TrashID.AssaultCube,
+                TrashID.AwakenedSoldier,
+                TrashID.Basilisk,
+                TrashID.BlackMoa,
+                TrashID.BrandedCharr,
+                TrashID.BrandedDevourer,
+                TrashID.ChakDrone,
+                TrashID.CrazedKarkaHatchling,
+                TrashID.FireImpLamp,
+                TrashID.GhostlyPirateFighter,
+                TrashID.GiantBrawler,
+                TrashID.GiantHunter,
+                TrashID.GoldOoze,
+                TrashID.GrawlBascher,
+                TrashID.GrawlTrapper,
+                TrashID.GuildInitiateModusSceleris,
+                TrashID.IcebroodAtrocity,
+                TrashID.IcebroodKodan,
+                TrashID.IcebroodQuaggan,
+                TrashID.Jotun,
+                TrashID.JungleWurm,
+                TrashID.Karka,
+                TrashID.MinotaurBull,
+                TrashID.ModnirrBerserker,
+                TrashID.MoltenDisaggregator,
+                TrashID.MoltenProtector,
+                TrashID.MoltenReverberant,
+                TrashID.MordremVinetooth,
+                TrashID.Murellow,
+                TrashID.NightmareCourtier,
+                TrashID.OgreHunter,
+                TrashID.PirareSkrittSentry,
+                TrashID.PolarBear,
+                TrashID.Rabbit,
+                TrashID.ReefSkelk,
+                TrashID.RisenKraitDamoss,
+                TrashID.RottingAncientOakheart,
+                TrashID.RottingDestroyer,
+                TrashID.ShadowSkelk,
+                TrashID.SpiritOfExcess,
+                TrashID.TamedWarg,
+                TrashID.TarElemental,
+                TrashID.WindRider,
             };
         }
 
@@ -313,7 +359,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int ccRadius = 200;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Qadim:
+                case (int)TargetID.Qadim:
                     //CC
                     var breakbar = cls.Where(x => x.SkillId == QadimCC).ToList();
                     foreach (AbstractCastEvent c in breakbar)
@@ -349,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.AncientInvokedHydra:
+                case (int)TrashID.AncientInvokedHydra:
                     //CC
                     var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
@@ -372,7 +418,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.WyvernMatriarch:
+                case (int)TrashID.WyvernMatriarch:
                     //Wing Buffet
                     var wingBuffet = cls.Where(x => x.SkillId == WingBuffet).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
@@ -432,7 +478,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.WyvernPatriarch:
+                case (int)TrashID.WyvernPatriarch:
                     //CC
                     var patCC = cls.Where(x => x.SkillId == PatriarchCC).ToList();
                     foreach (AbstractCastEvent c in patCC)
@@ -481,7 +527,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.ApocalypseBringer:
+                case (int)TrashID.ApocalypseBringer:
                     var jumpShockwave = cls.Where(x => x.SkillId == ShatteredEarth).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
@@ -547,7 +593,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Qadim not found");
@@ -558,7 +604,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(qadim.IsSpecies(ArcDPSEnums.TargetID.Qadim));
+            Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library
