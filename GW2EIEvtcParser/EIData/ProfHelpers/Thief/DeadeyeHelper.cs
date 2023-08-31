@@ -73,15 +73,15 @@ namespace GW2EIEvtcParser.EIData
 
         private static HashSet<int> Minions = new HashSet<int>()
         {
-            (int)MinionID.Deadeye1,
+            (int)MinionID.DeadeyeSylvari1,
             (int)MinionID.DeadeyeHuman1,
             (int)MinionID.DeadeyeCharr1,
-            (int)MinionID.DeadeyeSylvari1,
+            (int)MinionID.DeadeyeSylvari2,
             (int)MinionID.DeadeyeAsura1,
             (int)MinionID.DeadeyeNorn1,
             (int)MinionID.DeadeyeNorn2,
             (int)MinionID.DeadeyeHuman2,
-            (int)MinionID.Deadeye9,
+            (int)MinionID.DeadeyeCharr2,
             (int)MinionID.DeadeyeAsura2,
         };
         internal static bool IsKnownMinionID(int id)

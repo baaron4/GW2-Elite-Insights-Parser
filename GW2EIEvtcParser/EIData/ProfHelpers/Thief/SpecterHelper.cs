@@ -51,9 +51,9 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.SpecterSylvari1,
             (int)MinionID.SpecterHuman2,
             (int)MinionID.SpecterNorn1,
-            (int)MinionID.Specter7,
-            (int)MinionID.Specter8,
             (int)MinionID.SpecterCharr1,
+            (int)MinionID.SpecterSylvari2,
+            (int)MinionID.SpecterCharr2,
             (int)MinionID.SpecterNorn2,
         };
 
