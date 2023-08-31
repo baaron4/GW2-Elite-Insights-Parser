@@ -47,13 +47,13 @@ namespace GW2EIEvtcParser.EIData
         {
             (int)MinionID.Daredevil1,
             (int)MinionID.DaredevilAsura1,
-            (int)MinionID.Daredevil3,
+            (int)MinionID.DaredevilHuman1,
             (int)MinionID.DaredevilAsura2,
-            (int)MinionID.Daredevil5,
-            (int)MinionID.Daredevil6,
+            (int)MinionID.DaredevilNorn1,
+            (int)MinionID.DaredevilNorn2,
             (int)MinionID.DaredevilCharr1,
             (int)MinionID.DaredevilSylvari1,
-            (int)MinionID.Daredevil9,
+            (int)MinionID.DaredevilHuman2,
             (int)MinionID.Daredevil10,
         };
         internal static bool IsKnownMinionID(int id)
