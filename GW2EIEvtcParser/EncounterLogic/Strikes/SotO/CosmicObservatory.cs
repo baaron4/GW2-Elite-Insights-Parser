@@ -42,6 +42,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (0,0,0,0));
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+            IEnumerable<Segment> lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            replay.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
