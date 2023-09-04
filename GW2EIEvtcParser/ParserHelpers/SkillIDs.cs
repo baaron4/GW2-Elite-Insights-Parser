@@ -3527,6 +3527,7 @@
         public const long RelicOfCerusBuff = 69867;
         public const long RelicOfPeithaTargetBuff = 69882;
         public const long RelicOfVass = 69961;
+        public const long SpinningNebula = 69989;
         public const long RelicOfMabon = 69992;
         public const long RelicOfAkeem = 70044;
         public const long SkyscaleFireballDamage = 70087;
@@ -3535,6 +3536,7 @@
         public const long Insatiable = 70253;
         public const long RelicOfTheDeadeye = 70282;
         public const long ResidualAnxiety = 70283;
+        public const long CosmicObservatoryLostControlBuff = 70297;
         public const long RelicOfTheDefender = 70319;
         public const long RelicOfTheDragonhunterTargetBuff = 70350;
         public const long RelicOfLyhr = 70353;
@@ -3547,6 +3549,7 @@
         public const long BeamOfLightDuration = 70525;
         public const long RelicOfTheKrait = 70530;
         public const long EmpoweredRegret = 70544;
+        public const long SoulFeast = 70567;
         public const long RelicOfTheSunless = 70617;
         public const long EmpoweredMalice = 70621;
         public const long RelicOfTheMirage = 70622;
@@ -3560,6 +3563,7 @@
         public const long RelicOfTheScourge = 70975;
         public const long RelicOfTheIce = 71051;
         public const long EmpoweredMaliceCerus = 71073;
+        public const long DemonicBlast = 71082;
         public const long RelicOfTheMonk = 71132;
         public const long RelicOfTheAstralWard = 71134;
         public const long RelicOfDagdaBuff = 71139;
