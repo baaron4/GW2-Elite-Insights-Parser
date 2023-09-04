@@ -261,16 +261,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     hpUpdates.LastOrDefault().OverrideSrcAgent(_unknownAgent.Agent);
                 }
             }
+            int curPhantom = 1;
+            int curCC = 1;
             foreach (NPC target in Targets)
             {
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar:
-                        target.OverrideName("Elite " + target.Character + " CC");
+                        target.OverrideName("Elite " + target.Character + " CC " + (curCC++));
                         break;
                     case (int)ArcDPSEnums.TrashID.ScarletPhantomHP:
                     case (int)ArcDPSEnums.TrashID.ScarletPhantomHPCM:
-                        target.OverrideName("Elite " + target.Character + " HP");
+                        target.OverrideName("Elite " + target.Character + " HP " + (curPhantom++));
                         break;
                     default:
                         break;
