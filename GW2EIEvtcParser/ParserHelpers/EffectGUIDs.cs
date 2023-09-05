@@ -308,5 +308,13 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleTsunami2 = "C2CF236673BC0141B6EE5A918869728A"; // There are multiple effects when the Tsunami goes off
         public const string HarvestTempleTsunami3 = "E4700E828E058649B9B94F170DEF8659"; // There are multiple effects when the Tsunami goes off
         public const string HarvestTempleTailSlamIndicator = "49BD7FF8309E4047B4D17C83E660A461";
+        // Old Lion's Court
+        // Cosmic Observatory
+        // Temple of Febe
+        public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
+        public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player
+        public const string TempleOfFebeRegretGreen = "015E5CF598A13D4F8D6CCFD66643525F"; // Owner Embodiment of Regret Target Player
+        public const string TempleOfFebeGreenSuccess = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenFailure = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
     }
 }
