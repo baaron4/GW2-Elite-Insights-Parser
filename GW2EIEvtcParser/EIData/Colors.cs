@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser.EIData
         public static Color Brown = new Color(120, 100, 0);
         public static Color Green = new Color(0, 255, 0);
         public static Color DarkGreen = new Color(0, 128, 0);
+        public static Color DarkBlue = new Color(0, 70, 128);
         public static Color Teal = new Color(0, 255, 255);
         public static Color DarkTeal = new Color(0, 160, 150);
         public static Color LightBlue = new Color(0, 140, 255);

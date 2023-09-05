@@ -567,6 +567,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string ConjuredShieldEmptyOverhead = "https://wiki.guildwars2.com/images/4/41/Conjured_Shield_%28overhead_icon%29.png";
         internal const string GreatswordPowerEmptyOverhead = "https://wiki.guildwars2.com/images/c/c1/Greatsword_Power_%28overhead_icon%29.png";
         internal const string EyeOverhead = "https://i.imgur.com/OBfLywE.png";
+        internal const string CallTarget = "https://wiki.guildwars2.com/images/e/e9/Call_Target.png";
         // - Bomb Timer
         internal const string BombTimerEmptyOverhead = "https://wiki.guildwars2.com/images/a/a0/Timer_empty_%28overhead_icon%29.png";
         internal const string BombTimerFullOverhead = "https://wiki.guildwars2.com/images/d/d9/Timer_full_%28overhead_icon%29.png";

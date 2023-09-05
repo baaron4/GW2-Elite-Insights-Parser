@@ -561,6 +561,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Residual Anxiety", ResidualAnxiety, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ThrowCursedArtifact),
             new Buff("Beam of Light Duration", BeamOfLightDuration, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Dagda Castin Something", DagdaCastingSomething, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
+            new Buff("Lost Control (Cosmic Observatory)", CosmicObservatoryLostControlBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Unknown),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
