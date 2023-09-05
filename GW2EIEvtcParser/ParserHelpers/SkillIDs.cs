@@ -3570,6 +3570,7 @@
         public const long RelicOfTheKrait = 70530;
         public const long EmpoweredRegretEmbodiment = 70544;
         public const long SoulFeast = 70567;
+        public const long PetrifySkill = 70575;
         public const long RelicOfTheSunless = 70617;
         public const long EmpoweredMaliceEmbodiment = 70621;
         public const long RelicOfTheMirage = 70622;
