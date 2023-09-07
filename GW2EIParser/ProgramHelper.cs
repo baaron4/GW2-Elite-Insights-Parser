@@ -20,6 +20,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIParser.Exceptions;
 using static GW2EIEvtcParser.ParserHelper;
+using System.Xml.Linq;
 
 namespace GW2EIParser
 {
@@ -196,7 +197,8 @@ namespace GW2EIParser
                                 sw.Close();
                                 htmlFile = ms.ToArray();
                             }
-                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, traces, ParserVersion);
+                            string result = log.FightData.Success ? "kill" : "fail";
+                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{log.FightData.Logic.Extension}_{result}", traces, ParserVersion);
                         }
                         catch (Exception e)
                         {

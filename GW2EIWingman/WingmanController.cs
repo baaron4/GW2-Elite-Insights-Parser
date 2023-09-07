@@ -202,22 +202,22 @@ namespace GW2EIWingman
             };
             return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, contentCreator) == "True";
         }
-        public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, List<string> traces, Version parserVersion)
+        public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, string suffix, List<string> traces, Version parserVersion)
         {
             //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
             byte[] fileBytes = File.ReadAllBytes(fi.FullName);
             string name = fi.Name;
-            string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + ".json";
-            string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + ".html";
+            string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".json";
+            string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".html";
             Func<HttpContent> contentCreator = () =>
             {
                 var multiPartContent = new MultipartFormDataContent();
                 var fileContent = new ByteArrayContent(fileBytes);
                 fileContent.Headers.Add("Content-Type", "application/octet-stream");
                 multiPartContent.Add(fileContent, "file", name);
-                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile));
+                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile), Encoding.UTF8, "text/plain");
                 multiPartContent.Add(jsonContent, "jsonfile", jsonName);
-                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile));
+                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile), Encoding.UTF8, "text/plain");
                 multiPartContent.Add(htmlContent, "htmlfile", htmlName);
                 var data = new Dictionary<string, string> { { "account", account } };
                 var dataContent = new FormUrlEncodedContent(data);
