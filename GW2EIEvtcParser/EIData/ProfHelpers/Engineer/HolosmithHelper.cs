@@ -12,13 +12,19 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(EnterPhotonForge, PhotonForge).UsingBeforeWeaponSwap(true), // Photon Forge
-            new BuffLossCastFinder(ExitPhotonForge, PhotonForge).UsingBeforeWeaponSwap(true), // Deactivate Photon Forge - red or blue irrevelant
-            new BuffGainCastFinder(OverheatSkill, OverheatBuff).UsingBeforeWeaponSwap(true), // Overheat
-            new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff), // Spectrum Shield
-            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Thermal Release Valve
-            new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark).UsingDstSpecChecker(Spec.Holosmith),
-            new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1).UsingDstSpecChecker(Spec.Holosmith)
+            new BuffGainCastFinder(EnterPhotonForge, PhotonForge)
+                .UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(ExitPhotonForge, PhotonForge)
+                .UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(OverheatSkill, OverheatBuff)
+                .UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff),
+            new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EffectCastFinderByDst(FlashSpark, EffectGUIDs.HolosmithFlashSpark)
+                .UsingDstSpecChecker(Spec.Holosmith),
+            new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1)
+                .UsingDstSpecChecker(Spec.Holosmith)
                 .UsingSecondaryEffectChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2),
         };
 
@@ -43,7 +49,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, BuffImages.PhotonWall),
             new Buff("Spectrum Shield", SpectrumShieldBuff, Source.Holosmith, BuffClassification.Other, BuffImages.SpectrumShield),
             new Buff("Photon Forge", PhotonForge, Source.Holosmith, BuffClassification.Other, BuffImages.EngagePhotonForge),
-            new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, BuffImages.LasersEdge).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+            new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, BuffImages.LasersEdge)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new Buff("Afterburner", Afterburner, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.SolarFocusingLens),
             new Buff("Heat Therapy", HeatTherapy, Source.Holosmith, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.HeatTherapy),
             new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, BuffImages.Overheat),
