@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .WithBuilds(GW2Builds.June2022Balance),
-            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace)
+            new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
         };
 
@@ -221,6 +221,18 @@ namespace GW2EIEvtcParser.EIData
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
+            {
+                foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff);
+                    var connector = new AgentConnector(effect.Dst);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
+                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                 }
             }
         }

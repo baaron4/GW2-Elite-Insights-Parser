@@ -1077,6 +1077,7 @@
         public const long AssassinsPresence = 26854;
         public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
+        public const long POV_ProtectiveSolaceBuff = 26957;
         public const long Resistance = 26980;
         public const long FacetOfElementsSkill = 27014;
         public const long CeleritasSpores = 27048;
@@ -1084,6 +1085,7 @@
         public const long LegendaryDwarfStanceBuff = 27205;
         public const long Kick = 27266;
         public const long VengefulHammersBuff = 27273;
+        public const long ProtectiveSolaceTabletBuff = 27334;
         public const long FacetOfLight = 27336;
         public const long FacetOfStrengthBuff = 27376;
         public const long ImpossibleOddsBuff = 27581;
@@ -1123,7 +1125,7 @@
         public const long PurifyingEssence = 29197;
         public const long FacetOfNatureBuff = 29275;
         public const long CrystalHibernation = 29303;
-        public const long ProtectiveSolace = 29310;
+        public const long ProtectiveSolaceSkill = 29310;
         public const long FacetOfNatureSkill = 29371;
         public const long NaturalisticResonance = 29379;
         public const long ViciousLacerations = 29395;

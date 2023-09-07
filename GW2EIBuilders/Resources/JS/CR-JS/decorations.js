@@ -205,7 +205,7 @@ class MechanicDrawable {
                 let masterId = this.connectedTo.masterId;
                 this.master = animator.getActorData(masterId);
             }
-            if (!this.master || !this.master.canDraw()) {
+            if (!this.master || (!this.master.canDraw() && !this.ownerID )) {
                 return false;
             }
         }
@@ -214,7 +214,7 @@ class MechanicDrawable {
                 let masterId = this.rotationConnectedTo.masterId;
                 this.rotationMaster = animator.getActorData(masterId);
             }
-            if (!this.rotationMaster || !this.rotationMaster.canDraw()) {
+            if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
                 return false;
             }
         }

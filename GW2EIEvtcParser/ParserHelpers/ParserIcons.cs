@@ -514,6 +514,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfDarkness = "https://i.imgur.com/hfaRt5e.png";
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
+        internal const string EffectProtectiveSolace = "https://i.imgur.com/uBO48eB.png";
 
         // Overhead icons
         // - Fixations
