@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -270,17 +271,24 @@ namespace GW2EIEvtcParser.ParsedData
             }
             var status = new List<BreakbarStateEvent>();
             status.AddRange(combatData.GetBreakbarStateEvents(this));
-            nones.Add(new Segment(long.MinValue, FirstAware, 1));
             if (!status.Any())
             {
-                nones.Add(new Segment(FirstAware, long.MaxValue, 1));
+                nones.Add(new Segment(FirstAware, LastAware, 1));
                 return;
             }
             status = status.OrderBy(x => x.Time).ToList();
             for (int i = 0; i < status.Count - 1; i++)
             {
                 BreakbarStateEvent cur = status[i];
+                if (i == 0 && cur.Time > FirstAware)
+                {
+                    nones.Add(new Segment(FirstAware, cur.Time, 1));
+                }
                 BreakbarStateEvent next = status[i + 1];
+                if (next.Time - cur.Time < ParserHelper.ServerDelayConstant)
+                {
+                    continue;
+                }
                 switch (cur.State)
                 {
                     case ArcDPSEnums.BreakbarState.Active:
@@ -301,25 +309,25 @@ namespace GW2EIEvtcParser.ParsedData
             if (status.Count > 0)
             {
                 BreakbarStateEvent cur = status.Last();
-                switch(cur.State)
+                if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
                 {
-                    case ArcDPSEnums.BreakbarState.Active:
-                        actives.Add(new Segment(cur.Time, LastAware, 1));
-                        actives.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.Immune:
-                        immunes.Add(new Segment(cur.Time, LastAware, 1));
-                        immunes.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.None:
-                        nones.Add(new Segment(cur.Time, LastAware, 1));
-                        nones.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.Recover:
-                        recovering.Add(new Segment(cur.Time, LastAware, 1));
-                        recovering.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
+                    switch (cur.State)
+                    {
+                        case ArcDPSEnums.BreakbarState.Active:
+                            actives.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.Immune:
+                            immunes.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.None:
+                            nones.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.Recover:
+                            recovering.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                    }
                 }
+                
             }
         }
 
