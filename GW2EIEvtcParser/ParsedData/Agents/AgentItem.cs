@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.ParsedData
 {
