@@ -417,9 +417,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Determined + additional data on inst change
             AbstractBuffEvent invulDei = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
 
-            if (invulDei != null)
+            if (invulDei != null || _deimos10PercentTime > 0)
             {
-                var phase100to10 = new PhaseData(_deimos100PercentTime, invulDei.Time, "100% - 10%");
+                long npcDeimosEnd = _deimos10PercentTime;
+                if (invulDei != null)
+                {
+                    npcDeimosEnd = invulDei.Time;
+                } 
+                else if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).Any())
+                {
+                    HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
+                    if (prevHPUpdate != null)
+                    {
+                        npcDeimosEnd = prevHPUpdate.Time;
+                    }
+                }
+                var phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, "100% - 10%");
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
