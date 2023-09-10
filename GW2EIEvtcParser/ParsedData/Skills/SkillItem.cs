@@ -150,6 +150,8 @@ namespace GW2EIEvtcParser.ParsedData
             { PhantomsOnslaughtDamage, "Phantom's Onslaught (Hit)" },
             { KallaSummonsDespawnSkill, "Despawn" },
             { KallaSummonsSaluteAnimationSkill, "Salute" },
+            { GenerousAbundanceCentaur, "Generous Abundance (Centaur)" },
+            { GenerousAbundanceOther, "Generous Abundance (Other)" },
             // Thief
 	        { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
             { SoulStoneVenomSkill, "Soul Stone Venom" },
