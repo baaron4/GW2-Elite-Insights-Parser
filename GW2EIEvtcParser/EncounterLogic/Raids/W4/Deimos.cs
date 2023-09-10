@@ -420,6 +420,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (invulDei != null || _deimos10PercentTime > 0)
             {
                 long npcDeimosEnd = _deimos10PercentTime;
+                var mainDeimosPhaseName = "100% - 10%";
                 if (invulDei != null)
                 {
                     npcDeimosEnd = invulDei.Time;
@@ -429,10 +430,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
                     if (prevHPUpdate != null)
                     {
+                        mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HPPercent)}";
                         npcDeimosEnd = prevHPUpdate.Time;
                     }
                 }
-                var phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, "100% - 10%");
+                var phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, mainDeimosPhaseName);
                 phase100to10.AddTarget(mainTarget);
                 phases.Add(phase100to10);
 
