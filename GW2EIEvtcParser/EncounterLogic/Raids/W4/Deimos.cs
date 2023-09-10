@@ -430,7 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
                     if (prevHPUpdate != null)
                     {
-                        mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HPPercent)}";
+                        mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HPPercent)}%";
                         npcDeimosEnd = prevHPUpdate.Time;
                     }
                 }
