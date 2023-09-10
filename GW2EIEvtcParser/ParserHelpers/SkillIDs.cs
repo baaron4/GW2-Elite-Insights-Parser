@@ -953,6 +953,7 @@
         public const long PurgingFlames = 21672;
         public const long SignetOfTheEther = 21751;
         public const long SignetOfVampirism = 21761;
+        public const long SignetOfVampirismHeal = 21765;
         public const long VampiricMark = 21766;
         public const long WaterSpiritAura = 21768;
         public const long WaterSpiritSummoned = 21772;
@@ -1014,6 +1015,7 @@
         public const long HealingRipple = 24061;
         public const long POV_DhuumfireCooldown = 24286;
         public const long SigilOfWater = 24241;
+        public const long WaveOfHealing2 = 24244;
         public const long Critical = 24278;
         public const long StoneHeart = 24304;
         public const long LightningRod = 24305;
@@ -1068,6 +1070,7 @@
         public const long CatsShadow = 25641;
         public const long GhastlyAppearance = 25642;
         public const long VengefulHammersSkill = 26557;
+        public const long EnergyExpulsionHeal = 26558;
         public const long RiteOfTheGreatDwarf = 26596;
         public const long FacetOfStrengthSkill = 26644;
         public const long BattleScars = 26646;
@@ -1078,9 +1081,11 @@
         public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
         public const long POV_ProtectiveSolaceBuff = 26957;
+        public const long NaturalHarmonyHeal = 26977;
         public const long Resistance = 26980;
         public const long FacetOfElementsSkill = 27014;
         public const long CeleritasSpores = 27048;
+        public const long ProjectTranquilityHeal = 27101;
         public const long ImpossibleOddsSkill = 27107;
         public const long LegendaryDwarfStanceBuff = 27205;
         public const long Kick = 27266;
@@ -1122,11 +1127,15 @@
         public const long EnergyExpulsion = 29114;
         public const long MendersRebuke = 29145;
         public const long ProjectTranquility = 29148;
+        public const long HealersGift = 29168;
         public const long PurifyingEssence = 29197;
+        public const long WordsOfCensure = 29210;
+        public const long GenerousAbundanceCentaur = 29236;
         public const long FacetOfNatureBuff = 29275;
         public const long CrystalHibernation = 29303;
         public const long ProtectiveSolaceSkill = 29310;
         public const long FacetOfNatureSkill = 29371;
+        public const long HealingOrbRevenant = 29373;
         public const long NaturalisticResonance = 29379;
         public const long ViciousLacerations = 29395;
         public const long YouAreAllWeaklings = 29414;
@@ -2383,6 +2392,7 @@
         public const long PatriarchCC = 53132;
         public const long FieryDance3 = 53153;
         public const long Petrified2 = 53180;
+        public const long IllusionaryInspiration = 53183;
         public const long SoulPastry = 53222;
         public const long SuperiorRuneOfTheMonk = 53285;
         public const long EnhancedLucentOil = 53304;
@@ -2436,6 +2446,7 @@
         public const long GlyphOfTheStarsCA = 55026;
         public const long FeelNoPainSavageInstinct = 55030;
         public const long UnyieldingDevotion = 55044;
+        public const long GenerousAbundanceOther = 55047;
         public const long GlyphOfTheStars = 55048;
         public const long SkyscaleBlastSkill = 55536;
         public const long SkyscaleSkill = 55715;
@@ -2775,6 +2786,7 @@
         public const long ExplosiveEntranceBuff = 59579;
         public const long InvokingTorment = 59591;
         public const long InspiringVirtue = 59592;
+        public const long GarlingResolve = 59595;
         public const long BigBoomer = 59601;
         public const long ChatoyantElixir = 59643;
         public const long HarbingerShroud = 59964;
@@ -3366,6 +3378,7 @@
         public const long StormOfSwords8 = 68042;
         public const long StormOfSwords9 = 68045;
         public const long StormOfSwords10 = 68055;
+        public const long PurifyingEssenceHeal = 68063;
         public const long Tranquil = 68065;
         public const long AchievementEligibilityVoidwalker = 68066;
         public const long VoidDischarge = 68071;
@@ -3439,6 +3452,7 @@
         public const long MechanicalGenius = 68612;
         public const long DormantResolve = 68640;
         public const long Banished = 68668;
+        public const long HealingRain = 68679;
         public const long AchievementEligibilityUnsundered = 69103;
         public const long BowlOfMistsInfusedFruitSaladWithMintGarnish = 69105;
         public const long MistsInfusedSpherifiedPeppercornSpicedOysterSoup = 69124;
