@@ -2786,7 +2786,7 @@
         public const long ExplosiveEntranceBuff = 59579;
         public const long InvokingTorment = 59591;
         public const long InspiringVirtue = 59592;
-        public const long GarlingResolve = 59595;
+        public const long GlaringResolve = 59595;
         public const long BigBoomer = 59601;
         public const long ChatoyantElixir = 59643;
         public const long HarbingerShroud = 59964;
