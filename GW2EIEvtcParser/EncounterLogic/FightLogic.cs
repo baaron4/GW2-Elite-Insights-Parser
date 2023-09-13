@@ -248,6 +248,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (_, IReadOnlyList<Segment> actives, _, _) = target.GetBreakbarStatus(log);
                 foreach (Segment active in actives)
                 {
+                    if (Math.Abs(active.End - active.Start) < ParserHelper.ServerDelayConstant)
+                    {
+                        continue;
+                    }
                     long start = Math.Max(active.Start - 2000, log.FightData.FightStart);
                     long end = Math.Min(active.End, log.FightData.FightEnd);
                     var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)

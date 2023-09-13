@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, int index)
+        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
         {
             long cTime = cur.Time;
             if (cur is DownEvent)
@@ -210,11 +210,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (cur is SpawnEvent)
                 {
-                    dc.Add(new Segment(long.MinValue, cTime, 1));
+                    dc.Add(new Segment(minTime, cTime, 1));
                 }
                 else if (cur is AliveEvent)
                 {
-                    dead.Add(new Segment(long.MinValue, cTime, 1));
+                    dead.Add(new Segment(minTime, cTime, 1));
                 }
             }
         }
@@ -243,13 +243,13 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next.Time, i);
+                AddValueToStatusList(dead, down, dc, cur, next.Time, FirstAware, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, LastAware, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, LastAware, FirstAware, status.Count - 1);
                 if (cur is DeadEvent)
                 {
                     dead.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -284,10 +284,6 @@ namespace GW2EIEvtcParser.ParsedData
                     nones.Add(new Segment(FirstAware, cur.Time, 1));
                 }
                 BreakbarStateEvent next = status[i + 1];
-                if (next.Time - cur.Time < ParserHelper.ServerDelayConstant)
-                {
-                    continue;
-                }
                 switch (cur.State)
                 {
                     case ArcDPSEnums.BreakbarState.Active:
