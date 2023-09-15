@@ -147,8 +147,8 @@
         internal const string CombatReplayKainengOverlook = "https://i.imgur.com/53ECM20.png";
         internal const string CombatReplayHarvestTemple = "https://i.imgur.com/WCygAeH.png";
         internal const string CombatReplayOldLionsCourt = "https://i.imgur.com/s1R1CRq.png";
-        internal const string CombatReplayCosmicObservatory = "";
-        internal const string CombatReplayTempleOfFebe = "";
+        internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/47tKhXG.png";
+        internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
 
         #endregion STRIKES
 
