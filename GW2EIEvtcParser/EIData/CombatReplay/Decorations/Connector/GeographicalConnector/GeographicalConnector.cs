@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         public GeographicalConnector WithOffset(float orientation, float amount, bool afterRotation)
         {
-            Point3D offset = amount * new Point3D(-(float)Math.Sin(orientation), (float)Math.Cos(orientation));
+            Point3D offset = amount * new Point3D(-(float)Math.Sin(-orientation), (float)Math.Cos(-orientation));
             Offset = offset;
             OffsetAfterRotation = afterRotation;
             return this;
