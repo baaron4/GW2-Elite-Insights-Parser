@@ -57,9 +57,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayTempleOfFebe,
-                            // TODO
-                            (1008, 1008),
-                            (0,0,0,0));
+                            (1149, 1149),
+                            (-2088, -6124, 2086, -1950));
         }
 
         protected override List<int> GetTargetsIDs()
