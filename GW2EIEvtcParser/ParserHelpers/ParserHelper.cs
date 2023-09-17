@@ -275,8 +275,9 @@ namespace GW2EIEvtcParser
         /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
         /// <param name="stateCopyFroms">AgentItems from where last known states (hp, position, etc) will be copied from</param>
         /// <param name="to">AgentItem the events need to be redirected to</param>
+        /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
         /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, ExtraRedirection extraRedirections = null)
+        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection extraRedirections = null)
         {
             // Redirect combat events
             foreach (CombatItem evt in combatData)
@@ -299,14 +300,27 @@ namespace GW2EIEvtcParser
                     }
                 }
             }
+            // Copy attack targets
+            var attackTargetAgents = new List<AgentItem>();
+            var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
+            foreach (CombatItem c in attackTargets)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware);
+                cExtra.OverrideDstAgent(to.Agent);
+                combatData.Add(cExtra);
+                AgentItem at = agentData.GetAgent(c.SrcAgent, c.Time);
+                if (combatData.Any(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1 && x.SrcMatchesAgent(at)))
+                {
+                    attackTargetAgents.Add(at);
+                }
+            }
+            // Copy states
             var toCopy = new List<CombatItem>();
-            Func<CombatItem, bool> canCopy = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
-            var stateChangeCopyConditions = new List<Func<CombatItem, bool>>()
+            Func<CombatItem, bool> canCopyFromAgent = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
+            var stateChangeCopyFromAgentConditions = new List<Func<CombatItem, bool>>()
             {
                 (x) => x.IsStateChange == StateChange.BreakbarState,
-                (x) => x.IsStateChange == StateChange.Position,
-                (x) => x.IsStateChange == StateChange.Rotation,
-                (x) => x.IsStateChange == StateChange.Velocity,
                 (x) => x.IsStateChange == StateChange.MaxHealthUpdate,
                 (x) => x.IsStateChange == StateChange.HealthUpdate,
                 (x) => x.IsStateChange == StateChange.BreakbarPercent,
@@ -314,12 +328,37 @@ namespace GW2EIEvtcParser
                 (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
                 (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
             };
-            foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyConditions)
+            if (!copyPositionalDataFromAttackTarget || !attackTargetAgents.Any())
             {
-                CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopy(x) && x.Time <= to.FirstAware);
+                stateChangeCopyFromAgentConditions.Add((x) => x.IsStateChange == StateChange.Position);
+                stateChangeCopyFromAgentConditions.Add((x) => x.IsStateChange == StateChange.Rotation);
+                stateChangeCopyFromAgentConditions.Add((x) => x.IsStateChange == StateChange.Velocity);
+            }
+            foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyFromAgentConditions)
+            {
+                CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAgent(x) && x.Time <= to.FirstAware);
                 if (stateToCopy != null)
                 {
                     toCopy.Add(stateToCopy);
+                }
+            }
+            // Copy positional data from attack targets
+            if (copyPositionalDataFromAttackTarget && attackTargetAgents.Any())
+            {
+                Func<CombatItem, bool> canCopyFromAttackTarget = (evt) => attackTargetAgents.Any(x => evt.SrcMatchesAgent(x));
+                var stateChangeCopyFromAttackTargetConditions = new List<Func<CombatItem, bool>>()
+                {
+                    (x) => x.IsStateChange == StateChange.Position,
+                    (x) => x.IsStateChange == StateChange.Rotation,
+                    (x) => x.IsStateChange == StateChange.Velocity,
+                };
+                foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyFromAttackTargetConditions)
+                {
+                    CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAttackTarget(x) && x.Time <= to.FirstAware);
+                    if (stateToCopy != null)
+                    {
+                        toCopy.Add(stateToCopy);
+                    }
                 }
             }
             foreach (CombatItem c in toCopy)
@@ -327,15 +366,6 @@ namespace GW2EIEvtcParser
                 var cExtra = new CombatItem(c);
                 cExtra.OverrideTime(to.FirstAware);
                 cExtra.OverrideSrcAgent(to.Agent);
-                combatData.Add(cExtra);
-            }
-            // Copy attack targets
-            var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
-            foreach (CombatItem c in attackTargets)
-            {
-                var cExtra = new CombatItem(c);
-                cExtra.OverrideTime(to.FirstAware);
-                cExtra.OverrideDstAgent(to.Agent);
                 combatData.Add(cExtra);
             }
             // Redirect NPC masters

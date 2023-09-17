@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
-            return "The Dragonvoid";
+            return "Harvest Temple";
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -358,9 +358,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
-                // Events to be copied
-                var posFacingHPEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                posFacingHPEventsToCopy.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
@@ -380,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     ulong lastHPUpdate = ulong.MaxValue;
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
-                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra,
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                         (evt, from, to) =>
                         {
                             if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
