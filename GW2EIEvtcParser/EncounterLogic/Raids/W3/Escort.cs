@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
+                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
                 }
             }
             return startToUse;
