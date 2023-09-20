@@ -34,7 +34,8 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         public GeographicalConnector WithOffset(float orientation, float amount, bool afterRotation)
         {
-            Point3D offset = amount * new Point3D(-(float)Math.Sin(-orientation), (float)Math.Cos(-orientation));
+            orientation *= -1; // game is indirect
+            Point3D offset = amount * new Point3D((float)Math.Cos(orientation), (float)Math.Sin(orientation));
             Offset = offset;
             OffsetAfterRotation = afterRotation;
             return this;

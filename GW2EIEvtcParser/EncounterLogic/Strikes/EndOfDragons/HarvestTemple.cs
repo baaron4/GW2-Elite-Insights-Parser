@@ -665,7 +665,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 50;
                             int lifespan = 15000;
-                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
+                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(-beeLaunchEffect.Orientation.Z), (float)Math.Sin(-beeLaunchEffect.Orientation.Z)), end + lifespan);
                             //replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
                         }
                     }

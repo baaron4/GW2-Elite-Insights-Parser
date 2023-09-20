@@ -63,8 +63,8 @@ function noOffsetFetcher(connection) {
 
 function staticOffsetFetcher(connection) {
     return {
-        x: -animator.inchToPixel * connection.offset[0],
-        y: -animator.inchToPixel * connection.offset[1]
+        x: animator.inchToPixel * connection.offset[0],
+        y: animator.inchToPixel * connection.offset[1]
     };
 }
 
