@@ -513,6 +513,7 @@ namespace GW2EIEvtcParser
         private const int SanctuaryPrism = -38;
         private const int Torch = -39;
         private const int BoundIcebroodElemental = -40;
+        private const int CAChest = -41;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1129,6 +1130,7 @@ namespace GW2EIEvtcParser
         {
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
+            CAChest = ArcDPSEnums.CAChest,
             //
             None = int.MaxValue,
         };
