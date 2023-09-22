@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser
         public const string Generic360Or600UnitRadius = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // somehow both? e.g. chaos vortex, medical dispersion field, reconstruction enclosure, barrier engine
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495"; // e.g. ranger spirits, protect me
         public const string Generic900UnitRadius = "EB9EBC2CB610B448BB00B7FBCB191F28"; // e.g. call of the wild
+        public const string GenericTrapInactive = "D9F9B146BC2B914B874EA980B2FF0C00";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -185,6 +186,15 @@ namespace GW2EIEvtcParser
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string RangerHunkerDown = "FAE87ED17A43E54AA3ABB3EAA2FDB754";
+        public const string RangerBarrage1 = "A982C451890E704BA918B6959175D2A4"; // has owner, repeating, has duration
+        public const string RangerBarrage2 = "90A4BD30E723C749A4E161C177F723A0"; // has owner, repeating
+        public const string RangerBonfire = "E68388DE0702F44BB3F7E457EE9410AF"; // has owner
+        public const string RangerFlameTrap = "371DA8262E27304BB1142A39FAED0731"; // has owner
+        public const string RangerFrostTrap = "B2A5125C3FDDFB448F130488D32568C2"; // has owner, has duration
+        public const string RangerFrostTrapTrigger = "A86A024FE2DDD147829551764894D716"; // has owner, no duration
+        public const string RangerVipersNest = "1964816830EF7B47827298789EF7227B"; // has owner
+        public const string RangerSpikeTrap = "E0223550EAC46A4C8CEC277CFC2B7927"; // has owner
+        public const string RangerPoisonousCloud = "FDD0241186BAFE4AA451767D082D0BA9"; // has owner
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner

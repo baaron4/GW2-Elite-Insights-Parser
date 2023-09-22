@@ -334,6 +334,72 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHunkerDown, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, HunkerDownPetTurtle, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                 }
             }
+            // Barrage
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out IReadOnlyList<EffectEvent> barrages))
+            {
+                foreach (EffectEvent effect in barrages)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600); // ~600ms interval
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, Barrage, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBarrage, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, Barrage, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
+            // Bonfire
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out IReadOnlyList<EffectEvent> bonfires))
+            {
+                foreach (EffectEvent effect in bonfires)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, Bonfire, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBonfire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, Bonfire, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
+            // Frost Trap
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out IReadOnlyList<EffectEvent> frostTraps))
+            {
+                foreach (EffectEvent effect in frostTraps)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, FrostTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFrostTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, FrostTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
+            // Flame Trap
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out IReadOnlyList<EffectEvent> flameTraps))
+            {
+                foreach (EffectEvent effect in flameTraps)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, FlameTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFlameTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, FlameTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
+            // Viper's Nest
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out IReadOnlyList<EffectEvent> vipersNests))
+            {
+                foreach (EffectEvent effect in vipersNests)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, VipersNest, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVipersNest, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, VipersNest, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
+            // Spike Trap
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out IReadOnlyList<EffectEvent> spikeTraps))
+            {
+                foreach (EffectEvent effect in spikeTraps)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000); // roughly time displayed ingame
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Ranger, SpikeTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpikeTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, SpikeTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
         }
     }
 }

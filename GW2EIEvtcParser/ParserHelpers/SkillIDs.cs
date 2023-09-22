@@ -714,13 +714,19 @@
         public const long SeedTurret = 12456;
         public const long TakeRootSkill = 12457;
         public const long TakeRootBufft = 12459;
+        public const long Barrage = 12469;
+        public const long SpikeTrap = 12476;
+        public const long FrostTrap = 12492;
         public const long StormSpirit = 12493;
         public const long LightningReflexes = 12494;
         public const long StoneSpiritSkill = 12495;
+        public const long VipersNest = 12496;
         public const long FrostSpiritSkill = 12497;
         public const long SunSpiritSkill = 12498;
+        public const long FlameTrap = 12499;
         public const long SignetOfStone = 12500;
         public const long SignetOfRenewalSkill = 12502;
+        public const long Bonfire = 12504;
         public const long SignetOfTheWild = 12518;
         public const long SharpeningStonesBuff = 12536;
         public const long SharpeningStonesSkill = 12537;
@@ -762,6 +768,7 @@
         public const long SicEmSkill = 12633;
         public const long SignetOfTheWildPet = 12636;
         public const long Peck = 12659;
+        public const long PoisonousCloud = 12675;
         public const long FrenziedAttack = 12707;
         public const long PoisonLeapCombo = 12810;
         public const long PoisonBlastCombo = 12812;

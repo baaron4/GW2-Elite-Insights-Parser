@@ -492,6 +492,12 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";
         internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
         internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
+        internal const string EffectBarrage = "https://i.imgur.com/8XZHYwx.png";
+        internal const string EffectBonfire = "https://i.imgur.com/khgHSD5.png";
+        internal const string EffectFlameTrap = "https://i.imgur.com/Z0hDXFW.png";
+        internal const string EffectFrostTrap = "https://i.imgur.com/gW8yg4G.png";
+        internal const string EffectSpikeTrap = "https://i.imgur.com/sHgsGxe.png";
+        internal const string EffectVipersNest = "https://i.imgur.com/M7imyZL.png";
         internal const string EffectHunkerDown = "https://i.imgur.com/KkFFoJa.png";
         internal const string EffectInspiringReinforcement = "https://i.imgur.com/OItlXSb.png";
         internal const string EffectLineOfWarding = "https://i.imgur.com/XSix0GV.png";
