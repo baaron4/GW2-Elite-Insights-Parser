@@ -221,6 +221,7 @@ namespace GW2EIEvtcParser
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
         public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
         public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
+        public const string MAMAGrenadeBarrageIndicator = "8DDED161CE26964FA5952D821AD852F7";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
         public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
         public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
