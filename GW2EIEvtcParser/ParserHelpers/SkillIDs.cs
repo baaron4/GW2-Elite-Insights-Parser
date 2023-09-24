@@ -2246,6 +2246,7 @@
         public const long MindWrackAmmo = 49068;
         public const long SoulStoneVenomStrike = 49077;
         public const long SoulStoneVenomBuff = 49083;
+        public const long ImpactSavantBarrier = 49084;
         public const long CompoundingChemicals = 49090;
         public const long IllusionaryDefense = 49099;
         public const long SignetOfTheEtherHeal = 49103;
@@ -3387,6 +3388,7 @@
         public const long Emboldened = 68087;
         public const long JumpShotEOD = 68091;
         public const long OverchargedCartridgesBuff = 68095;
+        public const long ElementalRefreshmentBarrier = 68100;
         public const long POV_ShareTheVoidCounter = 68110;
         public const long AchievementEligibilityJumpingTheNopeRopes = 68123;
         public const long InfluenceOfTheVoid = 68124;

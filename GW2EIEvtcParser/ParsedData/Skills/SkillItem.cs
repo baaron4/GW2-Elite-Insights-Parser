@@ -334,6 +334,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ConeOfColdHealing, "https://wiki.guildwars2.com/images/9/92/Cone_of_Cold.png" },
             { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             { HealingRain, "https://wiki.guildwars2.com/images/0/03/Healing_Rain.png" },
+            { ElementalRefreshmentBarrier, "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
@@ -351,6 +352,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
             { BladeBurstOrParticleAccelerator, "https://i.imgur.com/09MY813.png" },
             { MedicalDispersionFieldHeal, "https://wiki.guildwars2.com/images/a/a6/Medical_Dispersion_Field.png" },
+            { ImpactSavantBarrier, "https://wiki.guildwars2.com/images/8/82/Impact_Savant.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
