@@ -345,16 +345,37 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
-            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
             if (nikare == null)
             {
                 throw new MissingKeyActorsException("Nikare not found");
             }
+            bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillId == AquaticDomain);
+            if (nikareHasCastAquaticDomain) // aquatic domain only present in CM
+            {
+                return FightData.EncounterMode.CM;
+            }
+            FightData.EncounterMode mode = (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare;
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
             if (kenut != null)
             {
-                return kenut.GetHealth(combatData) > 16e6 || nikare.GetHealth(combatData) > 18e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; // Kenut or nikare hp
+                if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillId == AquaticDomain)) // aquatic domain only present in CM
+                {
+                    return FightData.EncounterMode.CM;
+                }
+                if (mode != FightData.EncounterMode.CM && kenut.GetHealth(combatData) > 16e6) // Health of Kenut
+                {
+                    mode = FightData.EncounterMode.CM;
+                }
+                if (mode == FightData.EncounterMode.CM && combatData.GetDamageTakenData(kenut.AgentItem).Any(x => x.CreditedFrom.IsPlayer && x.HealthDamage > 0) && !nikareHasCastAquaticDomain) // Kenut engaged but nikare never cast Aquatic Domain -> normal mode
+                {
+                    mode = FightData.EncounterMode.Normal;
+                }
             }
-            return (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare
+            if (mode == FightData.EncounterMode.CM && combatData.GetHealthUpdateEvents(nikare.AgentItem).Any(x => x.HPPercent < 70) && !nikareHasCastAquaticDomain) // Nikare went below 70% but never cast Aquatic Domain
+            {
+                mode = FightData.EncounterMode.Normal;
+            }
+            return mode;
         }
     }
 }
