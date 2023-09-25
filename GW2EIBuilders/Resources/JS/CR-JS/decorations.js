@@ -449,7 +449,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         this.targetPositionFetcher = null;
         if (connectedFrom.interpolationMethod >= 0) {
             this.targetPositionFetcher = interpolatedPositionFetcher;
-        } else if (connectedFrom instanceof Array) {
+        } else if (connectedFrom.position instanceof Array) {
             this.targetPositionFetcher = staticPositionFetcher;
         } else {
             this.targetPositionFetcher = masterPositionFetcher;
