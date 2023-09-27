@@ -51,6 +51,7 @@ namespace GW2EIEvtcParser
             internal const ulong August2022BalanceHotFix = 132359;
             internal const ulong August2022Balance = 133322;
             internal const ulong October2022Balance = 135242;
+            internal const ulong October2022BalanceHotFix = 135930;
             internal const ulong November2022Balance = 137943;
             internal const ulong February2023Balance = 141374;
             internal const ulong May2023Balance = 145038;
@@ -512,6 +513,7 @@ namespace GW2EIEvtcParser
         private const int SanctuaryPrism = -38;
         private const int Torch = -39;
         private const int BoundIcebroodElemental = -40;
+        private const int CAChest = -41;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1128,6 +1130,7 @@ namespace GW2EIEvtcParser
         {
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
+            CAChest = ArcDPSEnums.CAChest,
             //
             None = int.MaxValue,
         };

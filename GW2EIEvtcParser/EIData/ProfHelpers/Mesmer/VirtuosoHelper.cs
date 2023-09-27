@@ -121,11 +121,15 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in thousandCuts)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, -600.0f, false);
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 600.0f), true);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     // 30 units width is a guess
-                    replay.Decorations.Add(new RectangleDecoration(true, 0, 30, 1200, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                    replay.Decorations.Add(new RectangleDecoration(true, 0, 30, 1200, lifespan, color.WithAlpha(0.5f).ToString(), connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
                 }
             }
         }

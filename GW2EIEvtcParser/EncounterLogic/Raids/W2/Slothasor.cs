@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             lastDeadTime = deadEvent.Time;
                         }
                         AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                        RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom);
+                        RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
                         copyEventsFrom.Add(aliveMushroom);
                     }
                 }

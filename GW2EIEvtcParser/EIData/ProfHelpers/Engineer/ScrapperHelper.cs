@@ -14,15 +14,20 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating).UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating)
+                .UsingSrcSpecChecker(Spec.Scrapper),
         };
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance)
+            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.July2019Balance)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

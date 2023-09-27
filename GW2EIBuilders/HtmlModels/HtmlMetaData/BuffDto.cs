@@ -23,6 +23,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>() {
+                    "ID: " + buff.ID,
                     "Max Stack(s) " + buffInfoEvent.MaxStacks
                 };
                 if (buffInfoEvent.DurationCap > 0)

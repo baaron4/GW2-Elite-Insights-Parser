@@ -16,12 +16,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1).UsingSrcSpecChecker(Spec.Mechanist),
-            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon).UsingDisableWithEffectData().UsingNotAccurate(true),
-            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet).UsingDstSpecChecker(Spec.Mechanist),
+            new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1)
+                .UsingSrcSpecChecker(Spec.Mechanist),
+            new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon)
+                .UsingDisableWithEffectData()
+                .UsingNotAccurate(true),
+            new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet)
+                .UsingDstSpecChecker(Spec.Mechanist),
 
             // Mech
-            new DamageCastFinder(CrashDown, CrashDown).UsingDisableWithEffectData(),
+            new DamageCastFinder(CrashDown, CrashDown)
+                .UsingDisableWithEffectData(),
             new MinionSpawnCastFinder(CrashDown, (int)MinionID.JadeMech)
                 .UsingChecker((spawn, combatData, agentData, skillData) =>
                 {
@@ -50,14 +55,18 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
             // Need to check mech specy id for those
-            new BuffDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4).UsingChecker((x,log) =>
-            {
-                return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
-            }),
-            new BuffDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4).UsingChecker((x,log) =>
-            {
-                return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
-            }),
+            new BuffDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.EODBeta4)
+                .UsingChecker((x,log) =>
+                {
+                    return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
+                }),
+            new BuffDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.EODBeta4)
+                .UsingChecker((x,log) =>
+                {
+                    return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
+                }),
         };
 
 

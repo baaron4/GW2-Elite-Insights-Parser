@@ -59,8 +59,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Stealth", Stealth, Source.Common, BuffStackType.Queue, 5, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Hide in Shadows", HideInShadows, Source.Common, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.Stealth),
             new Buff("Revealed", Revealed, Source.Common, BuffClassification.Support, BuffImages.Revealed),
-            new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
-            new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed).WithBuilds(GW2Builds.June2021Balance, GW2Builds.EndOfLife),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
+            new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed)
+                .WithBuilds(GW2Builds.June2021Balance, GW2Builds.EndOfLife),
             new Buff("Determined (762)", Determined762, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (785)", Determined785, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (788)", Determined788, Source.Common, BuffClassification.Other, BuffImages.Determined),
@@ -78,7 +80,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
-            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable)
+                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
             new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
@@ -91,7 +94,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Light Aura", LightAura, Source.Common, BuffClassification.Support, BuffImages.LightAura),
             new Buff("Magnetic Aura", MagneticAura, Source.Common, BuffClassification.Support, BuffImages.MagneticAura),
             new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
-            new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura).WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+            new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura)
+                .WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
             // Race
             new Buff("Take Root", TakeRootBufft, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
             new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
@@ -129,7 +133,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> Gear = new List<Buff>
         {
             // Sigils
-            new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
+            new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
             new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfCorruption),
             new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfCorruption),
             new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCorruption),
@@ -153,10 +158,14 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Major Sigil of Leeching",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
             new Buff("Leech (Sigil / Runes)", LeechBuff, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
             // Runes
-            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-            new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk)
+                .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             // Exotic Halloween Upgrades
             new Buff("Spectral Countenance", SpectralCountenance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
             new Buff("Ghastly Appearance", GhastlyAppearance, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),

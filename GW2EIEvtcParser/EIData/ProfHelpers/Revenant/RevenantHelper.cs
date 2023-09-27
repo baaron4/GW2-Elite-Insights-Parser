@@ -21,8 +21,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff),
             new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff), 
             new BuffGainCastFinder(LegendaryCentaurStanceSkill, LegendaryCentaurStanceBuff), 
-            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff).UsingICD(500), 
-            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff).UsingICD(500),
+            new BuffGainCastFinder(ImpossibleOddsSkill, ImpossibleOddsBuff)
+                .UsingICD(500), 
+            new BuffLossCastFinder(RelinquishPower, ImpossibleOddsBuff)
+                .UsingICD(500),
             new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff),
             new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff), 
             new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness),
@@ -36,12 +38,30 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.December2018Balance, GW2Builds.February2020Balance)
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur),
-            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinder(ProtectiveSolace, EffectGUIDs.RevenantProtectiveSolace).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet))
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new EffectCastFinderFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
+                .WithBuilds( GW2Builds.June2022Balance),
+            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
+                .UsingSrcBaseSpecChecker(Spec.Revenant)
+                .WithBuilds(GW2Builds.June2022Balance),
+            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+            new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
+                .UsingSrcBaseSpecChecker(Spec.Revenant)
+                .WithBuilds(GW2Builds.June2022Balance),
+            new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
         };
 
 
@@ -152,18 +172,28 @@ namespace GW2EIEvtcParser.EIData
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
         {
+            var allTablets = new HashSet<AgentItem>();
             if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out IReadOnlyList<EffectEvent> tabletHealEffectEvents))
             {
-                var allTablets = new HashSet<AgentItem>(tabletHealEffectEvents.Select(x => x.Src));
-                foreach (AgentItem tablet in allTablets)
-                {
-                    tablet.OverrideType(AgentItem.AgentType.NPC);
-                    tablet.OverrideID(MinionID.VentariTablet);
-                }
-                if (allTablets.Any())
-                {
-                    agentData.Refresh();
-                }
+                allTablets.UnionWith(tabletHealEffectEvents.Select(x => x.Src));        
+            }
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletVentarisWill, out IReadOnlyList<EffectEvent> ventarisWillEffectEvents))
+            {
+                allTablets.UnionWith(ventarisWillEffectEvents.Where(x => x.IsAroundDst).Select(x => x.Dst));
+            }
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
+            {
+                allTablets.UnionWith(protectiveSolaceEffectEvents.Where(x => x.IsAroundDst).Select(x => x.Dst));
+            }
+            foreach (AgentItem tablet in allTablets)
+            {
+                tablet.OverrideType(AgentItem.AgentType.NPC);
+                tablet.OverrideID(MinionID.VentariTablet);
+                tablet.OverrideName("Ventari's Tablet");
+            }
+            if (allTablets.Any())
+            {
+                agentData.Refresh();
             }
         }
 
@@ -187,10 +217,26 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in inspiringReinforcements)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f, false); // 900 units in front, 60 behind
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -420.0f), true); // 900 units in front, 60 behind
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
+            {
+                foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff);
+                    var connector = new AgentConnector(effect.Dst);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
+                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
                 }
             }
         }

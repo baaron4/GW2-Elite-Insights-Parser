@@ -16,18 +16,30 @@ namespace GW2EIEvtcParser.EIData
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
             new BreakbarDamageCastFinder(Technobabble, Technobabble),
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy).UsingICD(500).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(SigilOfEarth, SigilOfEarth)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
-            new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
+                .UsingBeforeWeaponSwap(true),
             // Relics
-            new BuffGainCastFinder(RelicOfVass, RelicOfVass).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(RelicOfVass, RelicOfVass)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
             //{
             //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
@@ -36,11 +48,17 @@ namespace GW2EIEvtcParser.EIData
             //{
             //    return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce).UsingICD(1000).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce)
+                .UsingICD(1000)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             //{
             //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
@@ -57,17 +75,19 @@ namespace GW2EIEvtcParser.EIData
             //    return effects != null && effects.Any(x => x.Time > evt.Time);
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+                .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
             new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
-            new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith)
+                .UsingBeforeWeaponSwap(true),
             new BuffGainCastFinder(Stealth2Skill, StealthMountBuff),
             // Skyscale
             new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),
             new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
-            new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1).UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
+            new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1)
+                .UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
         };
 
         internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
