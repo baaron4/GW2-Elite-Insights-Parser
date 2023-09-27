@@ -131,6 +131,22 @@ namespace GW2EIParser.Properties {
             }
         }
 
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToWingman
+        {
+            get
+            {
+                return ((bool)(this["UploadToWingman"]));
+            }
+            set
+            {
+                this["UploadToWingman"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]

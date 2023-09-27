@@ -15,16 +15,19 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>3.2.0</Version>
-    <Product>GW2 Elite Insights</Product>
-    <Company>GW2 Elite Insights</Company>
+    <Version>0.1.0</Version>
     <Authors>EliphasNUIT</Authors>
+    <Company>GW2 Elite Insights</Company>
+    <Product>GW2 Elite Insights</Product>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="3.11.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GW2EIJSON\GW2EIJSON.csproj" />
   </ItemGroup>
 
 </Project>

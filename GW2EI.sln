@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29319.158
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIParser", "GW2EIParser\GW2EIParser.csproj", "{6135677E-6C0E-42DE-925E-1995E52E5AC5}"
 EndProject
@@ -22,7 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GW2EIJSON", "GW2EIJSON\GW2EIJSON.csproj", "{C30E7976-08D5-48C4-A0CD-2A8CF541162A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIJSON", "GW2EIJSON\GW2EIJSON.csproj", "{C30E7976-08D5-48C4-A0CD-2A8CF541162A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIWingman", "GW2EIWingman\GW2EIWingman.csproj", "{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,12 @@ Global
 		{C30E7976-08D5-48C4-A0CD-2A8CF541162A}.NoRewards|Any CPU.Build.0 = Debug|Any CPU
 		{C30E7976-08D5-48C4-A0CD-2A8CF541162A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C30E7976-08D5-48C4-A0CD-2A8CF541162A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.NoRewards|Any CPU.ActiveCfg = NoRewards|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.NoRewards|Any CPU.Build.0 = NoRewards|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04A96BA2-27A7-4D6B-B8F8-368EE771A3D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
