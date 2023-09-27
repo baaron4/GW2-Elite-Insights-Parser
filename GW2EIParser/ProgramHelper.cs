@@ -40,7 +40,7 @@ namespace GW2EIParser
 
         internal static int GetMaxParallelRunning()
         {
-            if (Properties.Settings.Default.SendEmbedToWebhook || Properties.Settings.Default.UploadToDPSReports || (false && Properties.Settings.Default.UploadToWingman))
+            if (Properties.Settings.Default.SendEmbedToWebhook || Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToWingman)
             {
                 return Math.Max(Environment.ProcessorCount / 2, 1);
             }
@@ -145,7 +145,7 @@ namespace GW2EIParser
                 }
                 */
             }
-            if (false && Properties.Settings.Default.UploadToWingman)
+            if (Properties.Settings.Default.UploadToWingman)
             {
 #if !DEBUG
                 if (!isWingmanCompatible)

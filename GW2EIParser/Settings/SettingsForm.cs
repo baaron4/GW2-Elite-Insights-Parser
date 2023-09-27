@@ -32,7 +32,7 @@ namespace GW2EIParser.Setting
             ChkMultiThreaded.Enabled = !busy;
             ChkMultiLogs.Enabled = !busy;
             ChkUploadDPSReports.Enabled = !busy;
-            ChkUploadWingman.Enabled = true || !busy;
+            ChkUploadWingman.Enabled = !busy;
             TxtDPSReportUserToken.Enabled = !busy;
             BtnResetSkillList.Enabled = !busy;
             BtnResetSpecList.Enabled = !busy;
