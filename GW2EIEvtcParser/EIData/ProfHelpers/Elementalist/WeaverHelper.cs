@@ -210,13 +210,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
         {
-            new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All),
+            new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
+            new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
+            new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
             new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2022Balance),
             new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.November2022Balance),
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
+            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.September2023Balance),
             new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
                 .WithBuilds(GW2Builds.November2022Balance),
             new BuffDamageModifier(WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
