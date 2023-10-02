@@ -708,7 +708,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
 #if DEBUG
-            Name = ID + '-' + Name;
+            Name = ID + "-" + Name;
 #endif
         }
 
