@@ -3025,6 +3025,7 @@
         public const long ShroudedAlly = 63207;
         public const long VenomousOutburst = 63209;
         public const long DawnsRepose = 63220;
+        public const long UnleashedOverbearingSmashLeap = 63224;
         public const long BarrierSignetJDrive = 63228;
         public const long SkyCircus = 63236;
         public const long DischargeArrayBuff = 63238;
