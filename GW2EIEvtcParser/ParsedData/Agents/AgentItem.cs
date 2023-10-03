@@ -193,7 +193,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
         {
-            long cTime = cur.Time;
+            long cTime = cur.Time; 
+            
             if (cur is DownEvent)
             {
                 down.Add(new Segment(cTime, nextTime, 1));
@@ -208,14 +209,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             else if (index == 0)
             {
-                if (cur is SpawnEvent)
-                {
-                    dc.Add(new Segment(minTime, cTime, 1));
-                }
-                else if (cur is AliveEvent)
-                {
-                    dead.Add(new Segment(minTime, cTime, 1));
-                }
+                dc.Add(new Segment(minTime, cTime, 1));
             }
         }
 
