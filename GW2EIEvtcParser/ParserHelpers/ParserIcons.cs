@@ -490,6 +490,8 @@ namespace GW2EIEvtcParser.ParserHelpers
 
         // Skill effect decoration icons
         internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";
+        internal const string EffectThunderclap = "https://i.imgur.com/uaTRWqN.png";
+        internal const string EffectFunctionGyro = "https://i.imgur.com/HFg6kXZ.png";
         internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
         internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
         internal const string EffectBarrage = "https://i.imgur.com/8XZHYwx.png";

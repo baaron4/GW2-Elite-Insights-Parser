@@ -56,6 +56,17 @@ namespace GW2EIEvtcParser.EIData
         {
             Color color = Colors.Engineer;
 
+            // Function Gyro
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperFunctionGyro, out IReadOnlyList<EffectEvent> functionGyros))
+            {
+                foreach (EffectEvent effect in functionGyros)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Scrapper, FunctionGyro, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFunctionGyro, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Scrapper, FunctionGyro, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
+                }
+            }
             // Defense Field
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperDefenseField, out IReadOnlyList<EffectEvent> defenseFields))
             {

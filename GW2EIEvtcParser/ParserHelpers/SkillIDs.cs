@@ -1216,6 +1216,7 @@
         public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
+        public const long Thunderclap = 30713;
         public const long SignetOfHumility = 30739;
         public const long ContinuumShift = 30747;
         public const long PulmonaryImpactSkill = 30770;
@@ -2569,6 +2570,7 @@
         public const long Pitfall = 56911;
         public const long ThousandNeedlesArmedBuff = 56912;
         public const long SealAreaArmedBuff = 56917;
+        public const long FunctionGyro = 56920;
         public const long SicEmPvPBuff = 56923;
         public const long PitfallPreparedBuff = 56924;
         public const long Rewinder = 56928;

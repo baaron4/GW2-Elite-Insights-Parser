@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
@@ -360,9 +360,16 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
+
             switch (player.Spec)
             {
+                case Spec.Engineer:
+                case Spec.Holosmith:
+                case Spec.Mechanist:
+                    EngineerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Scrapper:
+                    EngineerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     ScrapperHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Guardian:
