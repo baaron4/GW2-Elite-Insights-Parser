@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -328,16 +329,18 @@ namespace GW2EIEvtcParser.EIData
             // White Mantle Portal Device portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive, out IReadOnlyList<EffectEvent> whiteMantlePortalInactive))
             {
+                var skill = new SkillModeDescriptor(player, PortalEntranceWhiteMantleWatchwork);
                 foreach (EffectEvent effect in whiteMantlePortalInactive)
                 {
                     (int, int) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(player, PortalEntranceWhiteMantleWatchwork));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, PortalEntranceWhiteMantleWatchwork));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> whiteMantlePortalActive))
             {
+                var skill = new SkillModeDescriptor(player, PortalExitWhiteMantleWatchwork, SkillModeCategory.Portal);
                 foreach (IReadOnlyList<EffectEvent> group in whiteMantlePortalActive)
                 {
                     GenericAttachedDecoration first = null;
@@ -345,15 +348,15 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (int, int) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal));
-                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal);
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(skill));
+                        GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
                             first = decoration;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(player, PortalExitWhiteMantleWatchwork, GenericAttachedDecoration.SkillModeCategory.Portal));
+                            replay.Decorations.Add(first.LineTo(decoration, 0, color.WithAlpha(0.3f).ToString()).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(decoration);
                     }

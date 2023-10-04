@@ -107,17 +107,19 @@ namespace GW2EIEvtcParser.EIData
             // Rain of Swords
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoRainOfSwords, out IReadOnlyList<EffectEvent> rainOfSwords))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Virtuoso, RainOfSwords);
                 foreach (EffectEvent effect in rainOfSwords)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Thousand Cuts
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts, out IReadOnlyList<EffectEvent> thousandCuts))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Virtuoso, ThousandCuts);
                 foreach (EffectEvent effect in thousandCuts)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
@@ -126,10 +128,10 @@ namespace GW2EIEvtcParser.EIData
                     // 30 units width is a guess
                     replay.Decorations.Add(new RectangleDecoration(true, 0, 30, 1200, lifespan, color.WithAlpha(0.5f).ToString(), connector)
                         .UsingRotationConnector(rotationConnector)
-                        .UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                        .UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                         .UsingRotationConnector(rotationConnector)
-                        .UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                        .UsingSkillMode(skill));
                 }
             }
         }
