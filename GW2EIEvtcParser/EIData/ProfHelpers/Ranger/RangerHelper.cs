@@ -400,6 +400,24 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpikeTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Ranger, SpikeTrap, GenericAttachedDecoration.SkillModeCategory.ShowOnSelect));
                 }
             }
+            // Sublime Conversion
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out IReadOnlyList<EffectEvent> sublimeConversions2))
+            {
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out IReadOnlyList<EffectEvent> sublimeConversions1))
+                {
+                    foreach (EffectEvent effect in sublimeConversions1)
+                    {
+                        if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                            var connector = new PositionConnector(effect.Position);
+                            var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                            replay.Decorations.Add(new RectangleDecoration(false, 0, 400, 60, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Druid, SublimeConversion, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Druid, SublimeConversion, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                        }
+                    }
+                }
+            }
         }
     }
 }

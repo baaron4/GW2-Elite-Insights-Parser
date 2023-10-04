@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
@@ -384,13 +384,10 @@ namespace GW2EIEvtcParser.EIData
                     ScourgeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Ranger:
+                case Spec.Druid:
                 case Spec.Soulbeast:
                 case Spec.Untamed:
                     RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
-                    break;
-                case Spec.Druid:
-                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
-                    DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
                 case Spec.Chronomancer:
