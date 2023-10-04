@@ -335,6 +335,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ConeOfColdHealing, "https://wiki.guildwars2.com/images/9/92/Cone_of_Cold.png" },
             { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             { HealingRain, "https://wiki.guildwars2.com/images/0/03/Healing_Rain.png" },
+            { ElementalRefreshmentBarrier, "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
@@ -352,6 +353,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RapidRegeneration, "https://wiki.guildwars2.com/images/7/7a/Rapid_Regeneration.png" },
             { BladeBurstOrParticleAccelerator, "https://i.imgur.com/09MY813.png" },
             { MedicalDispersionFieldHeal, "https://wiki.guildwars2.com/images/a/a6/Medical_Dispersion_Field.png" },
+            { ImpactSavantBarrier, "https://wiki.guildwars2.com/images/8/82/Impact_Savant.png" },
             // Guardian
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
@@ -611,6 +613,8 @@ namespace GW2EIEvtcParser.ParsedData
             { FluxDisruptorActivateCast, "https://wiki.guildwars2.com/images/d/d5/Flux_Disruptor-_Activate.png" },
             { FluxDisruptorDeactivateCast, "https://wiki.guildwars2.com/images/3/34/Flux_Disruptor-_Deactivate.png" },
             { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
+            // - Dadga (Cosmic Observatory)
+            { PurifyingLight, "https://wiki.guildwars2.com/images/1/1e/Purifying_Light_%28Dagda%29.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
@@ -705,6 +709,9 @@ namespace GW2EIEvtcParser.ParsedData
                     AA = AA && !ApiSkill.Description.Contains("Ambush.");
                 }
             }
+#if DEBUG
+            Name = ID + "-" + Name;
+#endif
         }
 
         public static bool CanCrit(long id, ulong gw2Build)

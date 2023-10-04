@@ -135,7 +135,9 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__DPSReportUserToken__: dps.report user token.
 
--__UploadToRaidar__: if true, the log will be uploaded to raidar (not used).
+-__UploadToRaidar__: if true, the log will be uploaded to raidar (deprecated, service not available).
+
+-__UploadToWingman__: if true, the log will be uploaded to Wingman uploadProcessed API.
 
 -__WebhookURL__: Webhook URL to send an embed or simple message to.
 

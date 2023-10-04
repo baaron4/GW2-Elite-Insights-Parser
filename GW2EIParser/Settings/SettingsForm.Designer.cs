@@ -46,8 +46,8 @@
             this.ChkMultiThreaded = new System.Windows.Forms.CheckBox();
             this.ChkCombatReplay = new System.Windows.Forms.CheckBox();
             this.ChkUploadDPSReports = new System.Windows.Forms.CheckBox();
+            this.ChkUploadWingman = new System.Windows.Forms.CheckBox();
             this.TxtDPSReportUserToken = new System.Windows.Forms.TextBox();
-            this.ChkUploadRaidar = new System.Windows.Forms.CheckBox();
             this.ChkUploadWebhook = new System.Windows.Forms.CheckBox();
             this.ChkUploadSimpleMessageWebhook = new System.Windows.Forms.CheckBox();
             this.TxtUploadWebhookUrl = new System.Windows.Forms.TextBox();
@@ -320,14 +320,14 @@
             // 
             // ChkUploadRaidar
             // 
-            this.ChkUploadRaidar.AutoSize = true;
-            this.ChkUploadRaidar.Location = new System.Drawing.Point(12, 64);
-            this.ChkUploadRaidar.Name = "ChkUploadRaidar";
-            this.ChkUploadRaidar.Size = new System.Drawing.Size(175, 17);
-            this.ChkUploadRaidar.TabIndex = 45;
-            this.ChkUploadRaidar.Text = "Upload to Raidar (Not Working)";
-            this.ChkUploadRaidar.UseVisualStyleBackColor = true;
-            this.ChkUploadRaidar.CheckedChanged += new System.EventHandler(this.ChkUploadRaidarCheckedChanged);
+            this.ChkUploadWingman.AutoSize = true;
+            this.ChkUploadWingman.Location = new System.Drawing.Point(12, 64);
+            this.ChkUploadWingman.Name = "ChkUploadWingman";
+            this.ChkUploadWingman.Size = new System.Drawing.Size(175, 17);
+            this.ChkUploadWingman.TabIndex = 45;
+            this.ChkUploadWingman.Text = "Upload to Wingman via uploadProcessed";
+            this.ChkUploadWingman.UseVisualStyleBackColor = true;
+            this.ChkUploadWingman.CheckedChanged += new System.EventHandler(this.ChkUploadWingmanCheckedChanged);
             // 
             // ChkUploadWebhook
             // 
@@ -846,7 +846,7 @@
             this.TabUpload.Controls.Add(this.DPSReportUserTokenLabel);
             this.TabUpload.Controls.Add(this.ChkUploadDPSReports);
             this.TabUpload.Controls.Add(this.TxtDPSReportUserToken);
-            this.TabUpload.Controls.Add(this.ChkUploadRaidar);
+            this.TabUpload.Controls.Add(this.ChkUploadWingman);
             this.TabUpload.Controls.Add(this.GroupWebhookSettings);
             this.TabUpload.Location = new System.Drawing.Point(4, 22);
             this.TabUpload.Name = "TabUpload";
@@ -1012,7 +1012,7 @@
         private System.Windows.Forms.CheckBox ChkCombatReplay;
         private System.Windows.Forms.CheckBox ChkUploadDPSReports;
         private System.Windows.Forms.TextBox TxtDPSReportUserToken;
-        private System.Windows.Forms.CheckBox ChkUploadRaidar;
+        private System.Windows.Forms.CheckBox ChkUploadWingman;
         private System.Windows.Forms.GroupBox GroupWebhookSettings;
         private System.Windows.Forms.CheckBox ChkUploadWebhook;
         private System.Windows.Forms.CheckBox ChkUploadSimpleMessageWebhook;

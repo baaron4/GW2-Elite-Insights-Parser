@@ -32,6 +32,7 @@ namespace GW2EIParser.Setting
             ChkMultiThreaded.Enabled = !busy;
             ChkMultiLogs.Enabled = !busy;
             ChkUploadDPSReports.Enabled = !busy;
+            ChkUploadWingman.Enabled = false && !busy;
             TxtDPSReportUserToken.Enabled = !busy;
             BtnResetSkillList.Enabled = !busy;
             BtnResetSpecList.Enabled = !busy;
@@ -47,7 +48,6 @@ namespace GW2EIParser.Setting
 
         private void SetUIEnable()
         {
-            ChkUploadRaidar.Enabled = false;
             PanelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             PanelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
             PanelXML.Enabled = Properties.Settings.Default.SaveOutXML;
@@ -78,8 +78,8 @@ namespace GW2EIParser.Setting
             ChkOutputXml.Checked = Properties.Settings.Default.SaveOutXML;
             ChkIndentXML.Checked = Properties.Settings.Default.IndentXML;
             ChkUploadDPSReports.Checked = Properties.Settings.Default.UploadToDPSReports;
+            ChkUploadWingman.Checked = Properties.Settings.Default.UploadToWingman;
             TxtDPSReportUserToken.Text = Properties.Settings.Default.DPSReportUserToken;
-            ChkUploadRaidar.Checked = Properties.Settings.Default.UploadToRaidar;
             ChkUploadWebhook.Checked = Properties.Settings.Default.SendEmbedToWebhook;
             ChkUploadSimpleMessageWebhook.Checked = Properties.Settings.Default.SendSimpleMessageToWebhook;
             TxtUploadWebhookUrl.Text = Properties.Settings.Default.WebhookURL;
@@ -207,9 +207,10 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.DPSReportUserToken = TxtDPSReportUserToken.Text;
         }
 
-        private void ChkUploadRaidarCheckedChanged(object sender, EventArgs e)
+        private void ChkUploadWingmanCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.UploadToRaidar = ChkUploadRaidar.Checked;
+            Properties.Settings.Default.UploadToWingman = ChkUploadWingman.Checked;
+            SetUIEnable();
         }
 
         private void ChkUploadWebhookCheckedChanged(object sender, EventArgs e)

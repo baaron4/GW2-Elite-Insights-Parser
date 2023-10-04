@@ -60,6 +60,7 @@ namespace GW2EIEvtcParser
             internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             internal const ulong SOTOReleaseAndBalance = 150431;
+            internal const ulong September2023Balance = 151966;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -513,6 +514,7 @@ namespace GW2EIEvtcParser
         private const int SanctuaryPrism = -38;
         private const int Torch = -39;
         private const int BoundIcebroodElemental = -40;
+        private const int CAChest = -41;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1129,6 +1131,7 @@ namespace GW2EIEvtcParser
         {
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
+            CAChest = ArcDPSEnums.CAChest,
             //
             None = int.MaxValue,
         };

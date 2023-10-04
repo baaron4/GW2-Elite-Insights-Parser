@@ -217,10 +217,14 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in inspiringReinforcements)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, 420.0f, false); // 900 units in front, 60 behind
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -420.0f), true); // 900 units in front, 60 behind
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
                 }
             }
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))

@@ -119,35 +119,35 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, BuffImages.MercifulIntervention),
             // Signets
-            new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SignetOfResolve),
+            new Buff("Signet of Resolve", SignetOfResolve, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfResolve),
             new Buff("Signet of Resolve (Shared)", SignetOfResolveShared, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfResolve)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Resolve (PI)", SignetOfResolvePI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfResolve)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             new Buff("Bane Signet", BaneSignet, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.BaneSignet)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Bane Signet (PI)", BaneSignetPI, Source.Guardian, BuffClassification.Other, BuffImages.BaneSignet)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             new Buff("Signet of Judgment", SignetOfJudgmentBuff, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfJudgment)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),
             new Buff("Signet of Mercy (PI)", SignetOfMercyPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfMercy)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Mercy (PI)", SignetOfMercyPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             new Buff("Signet of Wrath", SignetOfWrath, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfWrath),
             new Buff("Signet of Wrath (PI)", SignetOfWrathPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.SignetOfWrath)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Wrath (PI)", SignetOfWrathPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfWrath)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             new Buff("Signet of Courage", SignetOfCourage, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfCourage),
             new Buff("Signet of Courage (Shared)", SignetOfCourageShared , Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfCourage).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Courage (PI)", SignetOfCouragePI , Source.Guardian, BuffClassification.Other, BuffImages.SignetOfCourage)
-                .WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2022Balance),
             // Virtues
             new Buff("Virtue of Justice", VirtueOfJustice, Source.Guardian, BuffClassification.Other, BuffImages.VirtueOfJustice),
             new Buff("Virtue of Courage", VirtueOfCourage, Source.Guardian, BuffClassification.Other, BuffImages.VirtueOfCourage),
@@ -160,10 +160,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Virtue of Resolve (Battle Presence)", VirtueOfResolveBattlePresence, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, BuffImages.BattlePresence),
             new Buff("Virtue of Resolve (Battle Presence - Absolute Resolve)", VirtueOfResolveBattlePresenceAbsoluteResolve, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, BuffImages.VirtueOfResolve),
             new Buff("Symbolic Avenger", SymbolicAvenger, Source.Guardian, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SymbolicAvenger)
-                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2019Balance),
             new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffStackType.Queue, 99, BuffClassification.Other, BuffImages.VirtuousSolace)
                 .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-            new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, BuffImages.VirtuousSolace).WithBuilds(GW2Builds.February2020Balance2, GW2Builds.EndOfLife),
+            new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, BuffImages.VirtuousSolace).WithBuilds(GW2Builds.February2020Balance2),
             new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, BuffImages.ForceOfWill),
         };
 

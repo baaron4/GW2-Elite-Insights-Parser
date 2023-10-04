@@ -83,19 +83,40 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return new List<AgentItem>();
         }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(int id, ulong agent)
+        {
+            if (agent == 0)
+            {
+                return GetNPCsByID(id);
+            }
+            return GetNPCsByID(id).Where(x => x.Agent == agent).ToList();
+        }
+
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TrashID id)
         {
             return GetNPCsByID((int)id);
+        }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TrashID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
         }
 
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TargetID id)
         {
             return GetNPCsByID((int)id);
         }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TargetID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
+        }
 
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.MinionID id)
         {
             return GetNPCsByID((int)id);
+        }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.MinionID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
         }
 
 

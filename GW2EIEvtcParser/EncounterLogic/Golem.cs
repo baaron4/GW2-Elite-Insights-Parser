@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -183,7 +184,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID);
+                AgentItem golem = agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, golem);
             }
             return GetGenericFightOffset(fightData);
         }

@@ -115,7 +115,6 @@ namespace GW2EIDPSReport
                 return null;
             }
             return response;
-
         }
 
         public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)

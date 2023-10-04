@@ -57,9 +57,11 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta2, GW2Builds.November2022Balance),
             new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
-                .WithBuilds(GW2Builds.November2022Balance),
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
             new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.November2022Balance),
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
+            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.September2023Balance),
         };
 
 
