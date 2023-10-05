@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +16,8 @@ namespace GW2EIDPSReport
     /// </summary>
     public static class DPSReportController
     {
+
+        public delegate void TraceHandler(string trace);
 
         private static bool IsUserTokenValid(string userToken)
         {
@@ -95,7 +96,7 @@ namespace GW2EIDPSReport
             return GetURL(url, userToken);
         }
         ///////////////// APIs
-        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, List<string> traces, string userToken, bool anonymous = false, bool detailedWvW = false)
+        public static DPSReportUploadObject UploadUsingEI(FileInfo fi, TraceHandler traceHandler, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -108,68 +109,68 @@ namespace GW2EIDPSReport
                 return multiPartContent;
             };
 
-            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + " & generator=ei", traces, contentCreator);
+            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + " & generator=ei", traceHandler, contentCreator);
             if (response != null && response.Error != null)
             {
-                traces.Add("DPSReport: UploadUsingEI failed - " + response.Error);
+                traceHandler("DPSReport: UploadUsingEI failed - " + response.Error);
                 return null;
             }
             return response;
         }
 
-        public static DPSReportGetUploadsObject GetUploads(List<string> traces, string userToken, GetUploadsParameters parameters)
+        public static DPSReportGetUploadsObject GetUploads(TraceHandler traceHandler, string userToken, GetUploadsParameters parameters)
         {
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traces);
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traceHandler);
         }
-        public static string GenerateUserToken(List<string> traces)
+        public static string GenerateUserToken(TraceHandler traceHandler)
         {
-            DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traces);
+            DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traceHandler);
             if (responseItem != null)
             {
                 return responseItem.UserToken;
             }
             return "";
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, List<string> traces)
+        public static DPSReportUploadObject GetUploadMetaDataWithID(string id, TraceHandler traceHandler)
         {
             if (id == null || id.Length == 0)
             {
                 throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traces);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traceHandler);
         }
-        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, List<string> traces)
+        public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, TraceHandler traceHandler)
         {
             if (permalink == null || permalink.Length == 0)
             {
                 throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traces);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traceHandler);
         }
 
-        public static T GetJsonWithID<T>(string id, List<string> traces)
+        public static T GetJsonWithID<T>(string id, TraceHandler traceHandler)
         {
             if (id == null || id.Length == 0)
             {
                 throw new InvalidDataException("Missing ID for GetJson end point");
             }
-            return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traces);
+            return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traceHandler);
         }
-        public static T GetJsonWithPermalink<T>(string permalink, List<string> traces)
+        public static T GetJsonWithPermalink<T>(string permalink, TraceHandler traceHandler)
         {
             if (permalink == null || permalink.Length == 0)
             {
                 throw new InvalidDataException("Missing Permalink for GetJson end point");
             }
-            return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traces);
+            return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traceHandler);
         }
         ///////////////// Response Utilities
-        private static T GetDPSReportResponse<T>(string requestName, string URI, List<string> traces, Func<HttpContent> content = null)
+        private static T GetDPSReportResponse<T>(string requestName, string URI, TraceHandler traceHandler, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traces.Add("DPSReport: " + requestName + " tentative");
+                traceHandler("DPSReport: " + requestName + " tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -200,13 +201,13 @@ namespace GW2EIDPSReport
                             ContractResolver = DefaultJsonContractResolver,
                             StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
-                        traces.Add("DPSReport: " + requestName + " tentative successful");
+                        traceHandler("DPSReport: " + requestName + " tentative successful");
                         return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    traces.Add("DPSReport: " + requestName + " tentative failed - " + e.Message);
+                    traceHandler("DPSReport: " + requestName + " tentative failed - " + e.Message);
                 }
                 finally
                 {
