@@ -290,6 +290,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Hastened Demise", HastenedDemise, Source.FightSpecific, BuffClassification.Other, BuffImages.HastenedDemise),
             new Buff("Echo's Pick up", EchosPickup, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
             new Buff("Energy Threshold", EnergyThreshold, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm), // Dhuum & Eater of Souls
+            new Buff("Source: Pure Oblivion", SourcePureOblivionBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CounterMagicSkill),
             //////////////////////////////////////////////
             // CA
             new Buff("Greatsword Power", GreatswordPower, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.GreatswordPower),

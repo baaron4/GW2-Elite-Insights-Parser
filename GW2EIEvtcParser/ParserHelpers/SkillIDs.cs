@@ -2038,6 +2038,7 @@
         public const long ChargeGazelle = 44051;
         public const long MantraOfTruthCast = 44080;
         public const long OneWolfPackBuff = 44139;
+        public const long GrimSpecterTargetBuff = 44143;
         public const long PlagueSignetShroud = 44164;
         public const long FullCounterSkill = 44165;
         public const long ClarifiedConclusion = 44248;
@@ -2192,6 +2193,7 @@
         public const long FrozenWind = 47776;
         public const long ChillingAura = 47837;
         public const long Hamstrung = 47856;
+        public const long SourcePureOblivionBuff = 47903;
         public const long QuadSlashSecondSet = 47915;
         public const long OneTrackMind = 47929;
         public const long SoulSiphon2 = 47939;
@@ -2780,6 +2782,7 @@
         public const long SpreadingIceOthers = 59468;
         public const long AchievementEligibilityReflectionsInTheIce = 59482;
         public const long IceShatterWhisper2 = 59489;
+        public const long GreaterCallOfTheMistsWvW = 59521;
         public const long ExplosiveTemper = 59528;
         public const long MinionCommandBuff = 59536; // applied to minion, from player for necro/ele, from pet for ranger, not used for mechanist
         public const long EternalBondSkill = 59554;
@@ -3549,6 +3552,7 @@
         public const long ShootingStarsTargetToDagdaBuff = 69735; // Buff applied from player to Dagda when the player is hit
         public const long IntoTheFray = 69764;
         public const long RelicOfTheAristocracy = 69795;
+        public const long BannerDropWarning = 61797;
         public const long PoolOfDespair1 = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGaze = 69814;
