@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Engineer;
 
             // Thunderclap
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out IReadOnlyList<EffectEvent> thunderclaps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out IReadOnlyList<EffectEvent> thunderclaps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Thunderclap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in thunderclaps)

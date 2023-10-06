@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Barrage
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out IReadOnlyList<EffectEvent> barrages))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out IReadOnlyList<EffectEvent> barrages))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in barrages)
@@ -349,7 +349,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Bonfire
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out IReadOnlyList<EffectEvent> bonfires))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out IReadOnlyList<EffectEvent> bonfires))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in bonfires)
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Frost Trap
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out IReadOnlyList<EffectEvent> frostTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out IReadOnlyList<EffectEvent> frostTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in frostTraps)
@@ -373,7 +373,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Flame Trap
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out IReadOnlyList<EffectEvent> flameTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out IReadOnlyList<EffectEvent> flameTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in flameTraps)
@@ -385,7 +385,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Viper's Nest
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out IReadOnlyList<EffectEvent> vipersNests))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out IReadOnlyList<EffectEvent> vipersNests))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in vipersNests)
@@ -397,7 +397,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Spike Trap
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out IReadOnlyList<EffectEvent> spikeTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out IReadOnlyList<EffectEvent> spikeTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in spikeTraps)
