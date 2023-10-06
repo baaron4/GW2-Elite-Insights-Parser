@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
             Portal = 1 << 6,
         }
 
-        public AgentItem Owner;
+        public SkillConnector Owner;
         public Spec Spec;
         public long SkillID = 0;
         public SkillModeCategory Category = SkillModeCategory.NotApplicable;
@@ -51,19 +51,13 @@ namespace GW2EIEvtcParser.EIData
         {
             if (owner == null)
             {
-                Owner = null;
-                Category = SkillModeCategory.NotApplicable;
-                Spec = Spec.Unknown;
-                SkillID = 0;
+                throw new InvalidOperationException("SkillModeDescriptor must have an owner");
             } 
-            else
-            {
-                Owner = owner.AgentItem.GetFinalMaster();
-                Category = category;
-                Category |= SkillModeCategory.ShowOnSelect;
-                Spec = spec;
-                SkillID = skillID;
-            }
+            Owner = new SkillConnector(owner.AgentItem.GetFinalMaster());
+            Category = category;
+            Category |= SkillModeCategory.ShowOnSelect;
+            Spec = spec;
+            SkillID = skillID;
         }
 
         

@@ -8,8 +8,7 @@ namespace GW2EIEvtcParser.EIData
 
         public Connector ConnectedTo { get; }
         public RotationConnector RotationConnectedTo { get; protected set; }
-        public SkillConnector Owner;
-        public SkillModeDescriptor Skill;
+        public SkillModeDescriptor SkillMode;
 
         protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
         {
@@ -38,8 +37,7 @@ namespace GW2EIEvtcParser.EIData
         /// <returns></returns>
         public virtual GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
         {
-            Skill = skill;
-            Owner = new SkillConnector(skill.Owner);
+            SkillMode = skill;
             return this;
         }
     }
