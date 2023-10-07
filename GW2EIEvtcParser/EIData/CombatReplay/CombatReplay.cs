@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="npcs">NPCs targetting the player.</param>
         /// <param name="player">Player target of the tether.</param>
         /// <param name="color">Color of the tether.</param>
-        internal void AddPlayerToNPCTethering(List<AbstractBuffEvent> fixations, IReadOnlyList<NPC> npcs, AbstractPlayer player, string color)
+        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<NPC> npcs, AbstractPlayer player, string color)
         {
             int tetherStart = 0;
             AbstractSingleActor actor = null;
@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EIData
                     tetherStart = (int)fixation.Time;
                     actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
                 }
-                else
+                else if (fixation is BuffRemoveAllEvent)
                 {
                     int tetherEnd = (int)fixation.Time;
                     if (actor != null)
@@ -303,7 +303,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="npcs">NPCs targetting the player.</param>
         /// <param name="player">Player target of the tether.</param>
         /// <param name="color">Color of the tether.</param>
-        internal void AddPlayerToNPCTethering(List<AbstractBuffEvent> fixations, IReadOnlyList<AbstractSingleActor> npcs, AbstractPlayer player, string color)
+        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<AbstractSingleActor> npcs, AbstractPlayer player, string color)
         {
             int tetherStart = 0;
             AbstractSingleActor actor = null;
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EIData
                     tetherStart = (int)fixation.Time;
                     actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
                 }
-                else
+                else if (fixation is BuffRemoveAllEvent)
                 {
                     int tetherEnd = (int)fixation.Time;
                     if (actor != null)
