@@ -15,10 +15,13 @@ namespace GW2EIEvtcParser.EIData
             ConnectedTo = decoration.ConnectedTo.GetConnectedTo(map, log);
             RotationConnectedTo = decoration.RotationConnectedTo?.GetConnectedTo(map, log);
             IsMechanicOrSkill = true;
-            if (decoration.Owner != null)
+            if (decoration.SkillMode != null)
             {
-                Owner = decoration.Owner.GetConnectedTo(map, log);
-                Category = (uint)decoration.SkillCategory;
+                Category = (uint)decoration.SkillMode.Category;
+                if (decoration.SkillMode.Owner != null)
+                {
+                    Owner = decoration.SkillMode.Owner.GetConnectedTo(map, log);
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser
         public const string Generic360Or600UnitRadius = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // somehow both? e.g. chaos vortex, medical dispersion field, reconstruction enclosure, barrier engine
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495"; // e.g. ranger spirits, protect me
         public const string Generic900UnitRadius = "EB9EBC2CB610B448BB00B7FBCB191F28"; // e.g. call of the wild
+        public const string GenericTrapInactive = "D9F9B146BC2B914B874EA980B2FF0C00";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -165,6 +166,13 @@ namespace GW2EIEvtcParser
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
+        public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
+        public const string EngineerMineExplode1 = "885B7AAA68F09E48A926BFFE488DB5AD";
+        public const string EngineerMineExplode2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD";
+        public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
+        public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
+        public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration
+        public const string ScrapperFunctionGyroSpawn = "AC9C3749A245D741BC012CCAB224E37C"; // has owner, 1s duration
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
@@ -185,6 +193,15 @@ namespace GW2EIEvtcParser
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string RangerHunkerDown = "FAE87ED17A43E54AA3ABB3EAA2FDB754";
+        public const string RangerBarrage1 = "A982C451890E704BA918B6959175D2A4"; // has owner, repeating, has duration
+        public const string RangerBarrage2 = "90A4BD30E723C749A4E161C177F723A0"; // has owner, repeating
+        public const string RangerBonfire = "E68388DE0702F44BB3F7E457EE9410AF"; // has owner
+        public const string RangerFlameTrap = "371DA8262E27304BB1142A39FAED0731"; // has owner
+        public const string RangerFrostTrap = "B2A5125C3FDDFB448F130488D32568C2"; // has owner, has duration
+        public const string RangerFrostTrapTrigger = "A86A024FE2DDD147829551764894D716"; // has owner, no duration
+        public const string RangerVipersNest = "1964816830EF7B47827298789EF7227B"; // has owner
+        public const string RangerSpikeTrap = "E0223550EAC46A4C8CEC277CFC2B7927"; // has owner
+        public const string RangerPoisonousCloud = "FDD0241186BAFE4AA451767D082D0BA9"; // has owner
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
@@ -221,6 +238,7 @@ namespace GW2EIEvtcParser
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
         public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
         public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
+        public const string MAMAGrenadeBarrageIndicator = "8DDED161CE26964FA5952D821AD852F7";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
         public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
         public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";

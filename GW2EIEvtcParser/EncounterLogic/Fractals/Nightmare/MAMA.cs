@@ -230,6 +230,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                         }
                     }
+
+                    // Grenade Barrage
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MAMAGrenadeBarrageIndicator, out IReadOnlyList<EffectEvent> effects)) {
+                        foreach (EffectEvent effect in effects) {
+                            int duration = (int)effect.Duration;
+                            int start = (int)effect.Time;
+                            int end = start + duration;
+                            int radius = 140;
+                            var connector = new PositionConnector(effect.Position);
+                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, end), "rgba(250, 120, 0, 0.2)", connector));
+                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 120, 0, 0.2)", connector));
+                        }
+                    }
+
                     // Cascade Of Torment
                     int cotDuration = 1000;
                     AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);

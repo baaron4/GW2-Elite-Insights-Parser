@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using System;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -202,14 +203,16 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Revenant;
 
             // Inspiring Reinforcement
+            var inspiringReinforcementSkill = new SkillModeDescriptor(player, Spec.Revenant, InspiringReinforcement, SkillModeCategory.ImportantBuffs);
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out IReadOnlyList<EffectEvent> inspiringReinforcementParts))
             {
+                
                 foreach (EffectEvent effect in inspiringReinforcementParts)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 360, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 360, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(inspiringReinforcementSkill));
                 }
             }
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out IReadOnlyList<EffectEvent> inspiringReinforcements))
@@ -221,22 +224,23 @@ namespace GW2EIEvtcParser.EIData
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector)
                         .UsingRotationConnector(rotationConnector)
-                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                        .UsingSkillMode(inspiringReinforcementSkill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                         .UsingRotationConnector(rotationConnector)
-                        .UsingSkillMode(player, Spec.Revenant, InspiringReinforcement, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                        .UsingSkillMode(inspiringReinforcementSkill));
                 }
             }
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Revenant, ProtectiveSolaceSkill, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff);
                     var connector = new AgentConnector(effect.Dst);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
-                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                        .UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
-                        .UsingSkillMode(player, Spec.Revenant, ProtectiveSolaceSkill, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                        .UsingSkillMode(skill));
                 }
             }
         }

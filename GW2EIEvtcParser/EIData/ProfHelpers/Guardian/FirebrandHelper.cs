@@ -5,6 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -132,12 +133,13 @@ namespace GW2EIEvtcParser.EIData
             // Valiant Bulwark
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark, out IReadOnlyList<EffectEvent> valiantBulwarks))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter3ValiantBulwark, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in valiantBulwarks)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Firebrand, Chapter3ValiantBulwark, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Firebrand, Chapter3ValiantBulwark, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectValiantBulwark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }
