@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EIData
             // Sublime Conversion
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out IReadOnlyList<EffectEvent> sublimeConversions2))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Druid, SublimeConversion, SkillModeCategory.ProjectileManagement);
+                var skill = new SkillModeDescriptor(player, Spec.Ranger, SublimeConversion, SkillModeCategory.ProjectileManagement);
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out IReadOnlyList<EffectEvent> sublimeConversions1))
                 {
                     foreach (EffectEvent effect in sublimeConversions1)
