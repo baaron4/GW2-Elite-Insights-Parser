@@ -233,11 +233,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<AbstractBuffEvent> fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
             replay.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
             //fixated Guldhem
-            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, FixatedGuldhem, p, true, true);
-            replay.AddTether(fixatedGuldhem, "rgba(255, 100, 0, 0.3)");
+            var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in fixatedGuldhem)
+            {
+                long mid = (seg.Start + seg.End) / 2;
+                AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
+                if (guldhem != null)
+                {
+                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                }
+            }
             //fixated Rigom
-            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, FixatedRigom, p, true, true);
-            replay.AddTether(fixatedRigom, "rgba(255, 0, 0, 0.3)");
+            var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment seg in fixatedGuldhem)
+            {
+                long mid = (seg.Start + seg.End) / 2;
+                AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
+                if (rigom != null)
+                {
+                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                }
+            }
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
