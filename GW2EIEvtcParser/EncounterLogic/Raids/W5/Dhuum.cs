@@ -435,7 +435,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
             List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
-            replay.AddTether(shacklesDmg, "rgba(0, 255, 200, 0.5)");
+            replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
