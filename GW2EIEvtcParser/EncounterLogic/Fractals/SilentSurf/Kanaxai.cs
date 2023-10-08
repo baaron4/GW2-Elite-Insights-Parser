@@ -290,15 +290,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
-            IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
-            IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
-            foreach (BuffApplyEvent apply in phantasmagoria.OfType<BuffApplyEvent>())
-            {
-                int start = (int)apply.Time;
-                BuffRemoveAllEvent remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                long end = remove?.Time ?? maxEnd;
-                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
-            }
+            List<AbstractBuffEvent> phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
+            replay.AddTether(phantasmagorias, "rgba(0, 100, 255, 0.5)");
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);

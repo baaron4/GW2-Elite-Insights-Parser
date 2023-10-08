@@ -223,35 +223,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int smallEnd = smallStart + 6000;
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
-            // fixated
+            // fixated Samarog
             var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSam)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
-            //fixated Ghuldem
-            var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in fixatedGuldhem)
-            {
-                long mid = (seg.Start + seg.End) / 2;
-                AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
-                if (guldhem != null)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
-                }
-            }
+            List<AbstractBuffEvent> fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
+            replay.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
+            //fixated Guldhem
+            List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, FixatedGuldhem, p, true, true);
+            replay.AddTether(fixatedGuldhem, "rgba(255, 100, 0, 0.3)");
             //fixated Rigom
-            var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in fixatedGuldhem)
-            {
-                long mid = (seg.Start + seg.End) / 2;
-                AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
-                if (rigom != null)
-                {
-                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
-                }
-            }
+            List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, FixatedRigom, p, true, true);
+            replay.AddTether(fixatedRigom, "rgba(255, 0, 0, 0.3)");
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

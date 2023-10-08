@@ -395,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Tethering Players to Fears
             List<AbstractBuffEvent> fearFixations = GetFilteredList(log.CombatData, new long[] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, p, true, true);
-            replay.AddPlayerToNPCTethering(fearFixations, TrashMobs, p, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fearFixations, "rgba(255, 0, 255, 0.5)");
         }
     }
 }

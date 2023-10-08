@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-            replay.AddPlayerToNPCTethering(fixationEvents, TrashMobs, p, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
         }
     }
 }

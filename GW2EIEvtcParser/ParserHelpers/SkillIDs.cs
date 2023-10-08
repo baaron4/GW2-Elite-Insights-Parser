@@ -2176,7 +2176,7 @@
         public const long DhuumVulnerableLast10Percent = 47304;
         public const long MistlockInstabilityHamstrung = 47323;
         public const long InnerVortexSlash = 47327;
-        public const long DhuumShacklesApplication = 47335;
+        public const long DhuumShacklesBuff = 47335;
         public const long SpinningSlash = 47363;
         public const long MajorSoulSplit = 47396;
         public const long Necrosis = 47414;
@@ -2208,7 +2208,7 @@
         public const long ReclaimedEnergySkill = 47942;
         public const long BrokenKingFirstCast = 47981;
         public const long Imbibe = 48007;
-        public const long DhuumDamagingShackles = 48042;
+        public const long DhuumDamagingShacklesBuff = 48042;
         public const long KingsWrath = 48066;
         public const long DeepAbyss = 48150;
         public const long MortalCoilRiver = 48154;
@@ -2239,7 +2239,7 @@
         public const long Fixated1 = 48533;
         public const long SoulDigestion = 48541;
         public const long MortalCoilStatueOfDeath = 48583;
-        public const long DhuumShackles2 = 48591;
+        public const long DhuumShacklesBuff2 = 48591;
         public const long HowlingDeath = 48662;
         public const long Cull = 48752;
         public const long PutridBomb = 48760;

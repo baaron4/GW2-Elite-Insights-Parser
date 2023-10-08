@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
              }),
             //new Mechanic(ResidualAffliction, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesApplication, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
+            new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
             new PlayerDstHitMechanic(DhuumShacklesHit, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0).UsingChecker((de,log) => de.HealthDamage > 0),
             new PlayerDstHitMechanic(ConeSlash, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
             new PlayerDstHitMechanic(Cull, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
@@ -428,47 +428,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection
-            var shackles = GetFilteredList(log.CombatData, DhuumShacklesApplication, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();
-            int shacklesStart = 0;
-            Player shacklesTarget = null;
-            foreach (AbstractBuffEvent c in shackles)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    shacklesStart = (int)c.Time;
-                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int shacklesEnd = (int)c.Time;
-                    if (shacklesTarget != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
-                    }
-                }
-            }
+            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, new long[] { DhuumShacklesBuff, DhuumShacklesBuff2 }, p, true, true);
+            replay.AddTether(shackles, "rgba(0, 255, 255, 0.5)");
+
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShackles, p, true, true);
-            int shacklesDmgStart = 0;
-            Player shacklesDmgTarget = null;
-            foreach (AbstractBuffEvent c in shacklesDmg)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    shacklesDmgStart = (int)c.Time;
-                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int shacklesDmgEnd = (int)c.Time;
-                    if (shacklesDmgTarget != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(255, 200, 0, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
-                    }
-                }
-            }
+            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
+            replay.AddTether(shacklesDmg, "rgba(0, 255, 200, 0.5)");
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

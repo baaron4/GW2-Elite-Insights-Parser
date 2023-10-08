@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Fixation
             replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
-            replay.AddPlayerToNPCTethering(fixationEvents, Targets, p, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
         }
     }
 }

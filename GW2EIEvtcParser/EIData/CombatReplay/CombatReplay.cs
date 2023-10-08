@@ -266,60 +266,31 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Add tether decorations from the <paramref name="player"/> to <paramref name="npcs"/>. <br></br>
-        /// Uses <see cref="List{T}"/> of <see cref="AbstractBuffEvent"/> to find the buff owner and attach the two agents.
+        /// Add tether decorations which src and dst are defined by tethers parameter
         /// </summary>
-        /// <param name="fixations">Buff events of the fixations.</param>
-        /// <param name="npcs">NPCs targetting the player.</param>
-        /// <param name="player">Player target of the tether.</param>
-        /// <param name="color">Color of the tether.</param>
-        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<NPC> npcs, AbstractPlayer player, string color)
+        /// <param name="tethers">Buff events of the tethers.</param>
+        /// <param name="color">color of the tether</param>
+        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, string color)
         {
             int tetherStart = 0;
-            AbstractSingleActor actor = null;
-            foreach (AbstractBuffEvent fixation in fixations)
+            AgentItem src = ParserHelper._unknownAgent;
+            AgentItem dst = ParserHelper._unknownAgent;
+            foreach (AbstractBuffEvent tether in tethers)
             {
-                if (fixation is BuffApplyEvent)
+                if (tether is BuffApplyEvent)
                 {
-                    tetherStart = (int)fixation.Time;
-                    actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
+                    tetherStart = (int)tether.Time;
+                    src = tether.By;
+                    dst = tether.To;
                 }
-                else if (fixation is BuffRemoveAllEvent)
+                else if (tether is BuffRemoveAllEvent)
                 {
-                    int tetherEnd = (int)fixation.Time;
-                    if (actor != null)
+                    int tetherEnd = (int)tether.Time;
+                    if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
                     {
-                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(player), new AgentConnector(actor)));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add tether decorations from the <paramref name="player"/> to <paramref name="npcs"/>. <br></br>
-        /// Uses <see cref="List{T}"/> of <see cref="AbstractBuffEvent"/> to find the buff owner and attach the two agents.
-        /// </summary>
-        /// <param name="fixations">Buff events of the fixations.</param>
-        /// <param name="npcs">NPCs targetting the player.</param>
-        /// <param name="player">Player target of the tether.</param>
-        /// <param name="color">Color of the tether.</param>
-        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<AbstractSingleActor> npcs, AbstractPlayer player, string color)
-        {
-            int tetherStart = 0;
-            AbstractSingleActor actor = null;
-            foreach (AbstractBuffEvent fixation in fixations)
-            {
-                if (fixation is BuffApplyEvent)
-                {
-                    tetherStart = (int)fixation.Time;
-                    actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
-                }
-                else if (fixation is BuffRemoveAllEvent)
-                {
-                    int tetherEnd = (int)fixation.Time;
-                    if (actor != null)
-                    {
-                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(player), new AgentConnector(actor)));
+                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)));
+                        src = ParserHelper._unknownAgent;
+                        dst = ParserHelper._unknownAgent;
                     }
                 }
             }
