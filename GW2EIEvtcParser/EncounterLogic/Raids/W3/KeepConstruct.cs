@@ -425,26 +425,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 550, seg, "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
 
             }
-            //fixated Statue
+            // Fixated Statue tether to Player
             var fixatedStatue = GetFilteredList(log.CombatData, StatueFixated1, p, true, true).Concat(GetFilteredList(log.CombatData, StatueFixated2, p, true, true)).ToList();
-            int fixationStatueStart = 0;
-            AbstractSingleActor statue = null;
-            foreach (AbstractBuffEvent c in fixatedStatue)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    fixationStatueStart = (int)c.Time;
-                    statue = Targets.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int fixationStatueEnd = (int)c.Time;
-                    if (statue != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (fixationStatueStart, fixationStatueEnd), "rgba(255, 0, 255, 0.5)", new AgentConnector(p), new AgentConnector(statue)));
-                    }
-                }
-            }
+            replay.AddPlayerToNPCTethering(fixatedStatue, Targets, p, "rgba(255, 0, 255, 0.5)");
             // Fixation Overhead
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);

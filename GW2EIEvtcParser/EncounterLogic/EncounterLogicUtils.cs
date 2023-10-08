@@ -114,6 +114,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
         }
 
+        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long[] buffIDs, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        {
+            var filteredList = new List<AbstractBuffEvent>();
+            foreach (long buffID in buffIDs)
+            {
+                filteredList.AddRange(GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd));
+            }
+            return filteredList;
+        }
+
         internal static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
         {
             int playerDeadOrDCCount = 0;

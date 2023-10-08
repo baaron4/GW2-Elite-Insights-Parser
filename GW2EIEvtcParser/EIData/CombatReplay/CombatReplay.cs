@@ -158,6 +158,9 @@ namespace GW2EIEvtcParser.EIData
             RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
         }
 
+
+        #region DEBUG EFFECTS
+
         internal static void DebugEffects(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList();
@@ -212,6 +215,27 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
+        internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+        {
+            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
+            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
+            foreach (EffectEvent effectEvt in allEffectEvents)
+            {
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                }
+            }
+        }
+
+        #endregion DEBUG EFFECTS
+
         /// <summary>
         /// Add an overhead icon decoration
         /// </summary>
@@ -241,24 +265,64 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+        /// <summary>
+        /// Add tether decorations from the <paramref name="player"/> to <paramref name="npcs"/>. <br></br>
+        /// Uses <see cref="List{T}"/> of <see cref="AbstractBuffEvent"/> to find the buff owner and attach the two agents.
+        /// </summary>
+        /// <param name="fixations">Buff events of the fixations.</param>
+        /// <param name="npcs">NPCs targetting the player.</param>
+        /// <param name="player">Player target of the tether.</param>
+        /// <param name="color">Color of the tether.</param>
+        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<NPC> npcs, AbstractPlayer player, string color)
         {
-            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
-            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
-            var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
-            foreach (EffectEvent effectEvt in allEffectEvents)
+            int tetherStart = 0;
+            AbstractSingleActor actor = null;
+            foreach (AbstractBuffEvent fixation in fixations)
             {
-                if (effectEvt.IsAroundDst)
+                if (fixation is BuffApplyEvent)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    tetherStart = (int)fixation.Time;
+                    actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
                 }
-                else
+                else if (fixation is BuffRemoveAllEvent)
                 {
-
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    int tetherEnd = (int)fixation.Time;
+                    if (actor != null)
+                    {
+                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(player), new AgentConnector(actor)));
+                    }
                 }
             }
+        }
 
+        /// <summary>
+        /// Add tether decorations from the <paramref name="player"/> to <paramref name="npcs"/>. <br></br>
+        /// Uses <see cref="List{T}"/> of <see cref="AbstractBuffEvent"/> to find the buff owner and attach the two agents.
+        /// </summary>
+        /// <param name="fixations">Buff events of the fixations.</param>
+        /// <param name="npcs">NPCs targetting the player.</param>
+        /// <param name="player">Player target of the tether.</param>
+        /// <param name="color">Color of the tether.</param>
+        internal void AddPlayerToNPCTethering(IReadOnlyList<AbstractBuffEvent> fixations, IReadOnlyList<AbstractSingleActor> npcs, AbstractPlayer player, string color)
+        {
+            int tetherStart = 0;
+            AbstractSingleActor actor = null;
+            foreach (AbstractBuffEvent fixation in fixations)
+            {
+                if (fixation is BuffApplyEvent)
+                {
+                    tetherStart = (int)fixation.Time;
+                    actor = npcs.FirstOrDefault(x => x.AgentItem == fixation.CreditedBy);
+                }
+                else if (fixation is BuffRemoveAllEvent)
+                {
+                    int tetherEnd = (int)fixation.Time;
+                    if (actor != null)
+                    {
+                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(player), new AgentConnector(actor)));
+                    }
+                }
+            }
         }
     }
 }

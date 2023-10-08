@@ -61,6 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(NegativeBurst, "Negative Burst", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.","Negative Burst", "Negative Burst",500),
             new PlayerDstHitMechanic(Terrorstorm, "Terrorstorm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm","Terrorstorm", "Terrorstorm",0),
             new PlayerDstBuffApplyMechanic(CrushingGuilt, "Crushing Guilt", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
+            new PlayerDstBuffApplyMechanic(new long [] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, "Fixated (Fear)", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Fear.Fix.A", "Fixated by Fear", "Fixated Application", 0),
             new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffData(Downed).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae && bae.To == evt.To)),
             new EnemyCastStartMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
             new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
@@ -388,6 +389,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            // Tethering Players to Fears
+            List<AbstractBuffEvent> fearFixations = GetFilteredList(log.CombatData, new long[] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, p, true, true);
+            replay.AddPlayerToNPCTethering(fearFixations, TrashMobs, p, "rgba(255, 0, 255, 0.5)");
         }
     }
 }
