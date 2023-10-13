@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static (EffectGUIDEvent guid, int radius, int duration) GetDeathsHandOnPlayerData(ParsedEvtcLog log)
         {
-            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaCM), 380, 36000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaNM), 300, 16000);
+            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaCM), 380, 33000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaNM), 300, 13000);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -441,12 +441,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)
         {
+            int deathHandGrowStart = start;
+            int deathHandGrowEnd = deathHandGrowStart + delay;
             // Growing AoE
-            replay.Decorations.Add(new CircleDecoration(true, start + delay, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, deathHandGrowEnd, radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
             // Damaging AoE
-            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, (start + delay, start + duration), "rgba(255, 0, 0, 0.4)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay, start + duration), "rgba(0, 100, 0, 0.2)", new PositionConnector(position)));
+            int AoEStart = deathHandGrowEnd;
+            int AoEEnd = AoEStart + duration;
+            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, (AoEStart, AoEEnd), "rgba(255, 0, 0, 0.4)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.2)", new PositionConnector(position)));
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)
