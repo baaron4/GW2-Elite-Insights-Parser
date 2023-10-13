@@ -38,8 +38,8 @@
         <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tableEid">
             <thead>
                 <tr>
-                    <th class="text-left" :class="getEnemyHeaderClass('Name')" @click="sortEnemyBy('Name')">Enemy</th>
-                    <th v-for="(mech, index) in enemyMechHeader" 
+                    <th class="text-left" style="width: 250px;":class="getEnemyHeaderClass('Name')" @click="sortEnemyBy('Name')">Enemy</th>
+                    <th class="stat-cell" v-for="(mech, index) in enemyMechHeader" 
                         v-show="isInEnemyColPage(index)"
                         :class="getEnemyHeaderClass('Data', index)" @click="sortEnemyBy('Data', index)" :data-original-title="mech.name + ': ' + mech.description">
                         {{ mech.shortName}}
