@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static (EffectGUIDEvent guid, int radius, int duration) GetDeathsHandOnPlayerData(ParsedEvtcLog log)
         {
-            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaCM), 380, 33000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaNM), 300, 13000);
+            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaOnPlayerAndInBetweenCM), 380, 33000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaOnPlayerNM), 300, 13000);
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -309,6 +309,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var deathsHandEffects = log.CombatData.GetEffectEventsByEffectID(deathsHandGUID.ContentID).Where(x => x.Src == target.AgentItem).ToList();
                         foreach (EffectEvent deathsHandEffect in deathsHandEffects)
                         {
+                            if (log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                            {
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, deathsHandOnPlayerRadius, deathsHandOnPlayerDuration);
+                            } 
+                        }
+                    }
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsHandByAnkkaOnPlayerAndInBetweenCM, out IReadOnlyList<EffectEvent> inBetweenDeathHandEffects))
+                    {
+                        foreach (EffectEvent deathsHandEffect in inBetweenDeathHandEffects)
+                        {
                             if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
                             {
                                 // One also happens during death's embrace so we filter that one out
@@ -316,10 +326,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
-                            } 
-                            else
-                            {
-                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, deathsHandOnPlayerRadius, deathsHandOnPlayerDuration);
                             }
                         }
                     }
