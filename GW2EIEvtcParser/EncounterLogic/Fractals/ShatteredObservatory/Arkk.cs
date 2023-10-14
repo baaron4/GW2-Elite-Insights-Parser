@@ -128,10 +128,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases[i].Name = "Phase " + i;
                 phases[i].AddTarget(arkk);
             }
+
             GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
             GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+
+            int bloomCount = 1;
+            foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TrashID.SolarBloom)).OrderBy(x => x.FirstAware))
+            {
+                long start = bloom.FirstAware;
+                long end = Math.Min(bloom.LastAware, log.FightData.FightEnd); // TODO: arkk invuln loss instead?
+                PhaseData phase = phases.FirstOrDefault(x => Math.Abs(x.Start - start) < ServerDelayConstant);
+                if (phase != null)
+                {
+                    phase.OverrideStart(Math.Min(phase.Start, start));
+                    phase.OverrideEnd(Math.Max(phase.End, end));
+                }
+                else
+                {
+                    phases.Add(new PhaseData(start, end, $"Blooms {bloomCount++}"));
+                    phases.Last().AddTarget(arkk);
+                }
+            }
+
             return phases;
         }
+
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
