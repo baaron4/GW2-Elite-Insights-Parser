@@ -143,69 +143,51 @@ namespace GW2EIEvtcParser.EncounterLogic
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfDespair:
-                        CombatItem despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curDespair++ + ")");
                         if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curDespair++ + ")");
-                        }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curDespair++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy:
-                        CombatItem envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curEnvy++ + ")");
                         if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character + " (P" + curEnvy++ + ")");
                         }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curEnvy++ + ")");
-                        }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony:
-                        CombatItem gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curGluttony++ + ")");
                         if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character + " (P" + curGluttony++ + ")");
                         }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curGluttony++ + ")");
-                        }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfMalice:
-                        CombatItem malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curMalice++ + ")");
                         if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character + " (P" + curMalice++ + ")");
                         }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curMalice++ + ")");
-                        }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfRage:
-                        CombatItem rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curRage++ + ")");
                         if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character + " (P" + curRage++ + ")");
                         }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curRage++ + ")");
-                        }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfRegret:
-                        CombatItem regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstAgent == target.AgentItem.Agent);
+                        CombatItem regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                        target.OverrideName(target.Character + " (P" + curRegret++ + ")");
                         if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character + " (P" + curRegret++ + ")");
-                        }
-                        else
-                        {
-                            target.OverrideName(target.Character + " (P" + curRegret++ + ")");
                         }
                         break;
                     default:
