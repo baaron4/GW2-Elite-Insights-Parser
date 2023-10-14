@@ -50,9 +50,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             invuls.RemoveAll(x => x.Time < 0);
             invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
             bool nextToAddIsSkipPhase = !beginWithStart;
-            for (int i = 0; i < invuls.Count; i++)
+            foreach (AbstractBuffEvent c in invuls)
             {
-                AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
                     long curEnd = Math.Min(c.Time, end);
