@@ -1752,6 +1752,7 @@
         public const long SpatialManipulation5 = 38074;
         public const long SpectralAgony = 38077;
         public const long Countdown = 38098;
+        public const long CairnImpact = 38102;
         public const long CairnDisplacement = 38113;
         public const long BrutalizeCast = 38136;
         public const long UnseenBurden = 38153;
@@ -2359,6 +2360,7 @@
         public const long SeaOfFlame = 52461;
         public const long Parry = 52464;
         public const long AquaticDetainment = 52477;
+        public const long QadimInitialCast = 52496;
         public const long ElementalBreath = 52520;
         public const long BurningCrucible = 52522;
         public const long FlameSlash3 = 52528;
@@ -3634,6 +3636,7 @@
         public const long RelicOfTheBrawler = 70913;
         public const long EmpoweredEnvyCerus = 70974;
         public const long RelicOfTheScourge = 70975;
+        public const long InvulnerabilityEmbodiment = 70986;
         public const long DimensionBreach = 71002;
         public const long DemonicFever = 71047;
         public const long RelicOfTheIce = 71051;
