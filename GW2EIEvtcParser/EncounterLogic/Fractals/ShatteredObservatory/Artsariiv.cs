@@ -220,28 +220,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             case Obliterate:
                             {
-                                int start = (int)cast.Time;
-                                int end = (int)cast.EndTime; 
-                                int radius = 1300;
-                                replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                                replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                                break;
-                            }
-                            case PostObliterateNew:
-                            {
-                                // positions taken from effects
+                                int castStart = (int)cast.Time;
+                                int castEnd = castStart + 3160;
+                                replay.Decorations.Add(new CircleDecoration(true, 0, 1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                                replay.Decorations.Add(new CircleDecoration(true, castEnd, 1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+
                                 (float, float)[][] positions = {
+                                    // positions taken from effects
                                    new [] { (9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f) },
                                    new [] { (10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f) },
                                    new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
                                    new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
                                 };
                                 int[] radius = { 400, 290, 180, 70 };
-                                string color = "rgba(250, 120, 0, 0.2)";
                                 long nextInvul = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == target.AgentItem && x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
-                                for (int i = 0; i < 4 ; i++)
+                                for (int i = 0; i < 4; i++)
                                 {
-                                    int start = (int)cast.Time + 560 * i;
+                                    int start = castEnd + 560 * i;
                                     int end = start + 2450;
                                     if (start >= nextInvul)
                                     {
@@ -250,8 +245,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     foreach ((float x, float y) in positions[i])
                                     {
                                         var position = new PositionConnector(new Point3D(x, y));
-                                        replay.Decorations.Add(new CircleDecoration(true, 0, radius[i], (start, end), color, position));
-                                        replay.Decorations.Add(new CircleDecoration(true, end, radius[i], (start, end), color, position));
+                                        replay.Decorations.Add(new CircleDecoration(true, 0, radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position));
+                                        replay.Decorations.Add(new CircleDecoration(true, end, radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position));
                                     }
                                 }
                                 break;
