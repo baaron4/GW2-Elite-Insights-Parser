@@ -1810,7 +1810,7 @@
         public const long FixatedBloom1 = 39131;
         public const long WaveOfMutilation = 39133;
         public const long CranialCascadeSkorvald = 39220;
-        public const long SupernovaCM = 39225;
+        public const long SupernovaSkorvaldCM = 39225;
         public const long SolarCyclone = 39228;
         public const long CosmicEnergy = 39237;
         public const long FocusedAnger = 39257;
@@ -1858,7 +1858,10 @@
         public const long DiffractiveEdge2 = 39755;
         public const long SolarBolt2 = 39760;
         public const long HorizonStrikeSkorvald4 = 39770;
+        public const long SupernovaArkk = 39782;
         public const long DiffractiveEdge1 = 39787;
+        public const long SolarBlastArkk1 = 39823;
+        public const long SolarBlastArkk2 = 39857;
         public const long RadiantFurySkorvald = 39845;
         public const long CrimsonDawn = 39846;
         public const long PulsarBlast = 39847;

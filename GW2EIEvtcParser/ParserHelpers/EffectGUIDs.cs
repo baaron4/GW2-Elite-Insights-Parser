@@ -261,6 +261,11 @@ namespace GW2EIEvtcParser
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
+        public const string CorporealReassignmentDome = "1607FB8A58554A4E96E5AD04AF8E247A"; // owned by unknown agent
+        public const string CorporealReassignmentExplosionDome = "5B8F0DCE941DF544AD0966F6158A5127";
+        public const string CorporealReassignmentExplosion1 = "C93D2CA54BC7F84BBFA31B40DE056D21"; // owned by exploding player
+        public const string CorporealReassignmentExplosion2 = "DAD653E8823274409610A732BE8FA188"; // owned by exploding player
+        public const string HorizonStrikeArkk = "C5E4632E8131D342AA4F18222C68D8EB"; // owned by arkk
         // Silent Surf Fractal
         public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";

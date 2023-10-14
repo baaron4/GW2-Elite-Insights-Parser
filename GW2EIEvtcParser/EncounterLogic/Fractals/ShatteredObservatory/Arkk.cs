@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System;
 using GW2EIEvtcParser.EIData;
@@ -222,12 +222,165 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            // Corporeal Reassignment
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+
+            // Corporeal Reassignment (skull)
             IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
-            // Fixations
+
+            // Bloom Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+
+            // Cosmic Meteor (green)
+            IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment cosmicMeteor in cosmicMeteors)
+            {
+                int start = (int)cosmicMeteor.Start;
+                int end = (int)cosmicMeteor.End;
+                string color = "rgba(0, 120, 0, 0.4)";
+                replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), color, new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), color, new AgentConnector(p)));
+            }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+
+            IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
+            switch (target.ID) {
+                case (int)TargetID.Arkk:
+                    foreach (AbstractCastEvent cast in casts)
+                    {
+                        switch (cast.SkillId)
+                        {
+                            case SolarBlastArkk1:
+                                replay.AddOverheadIcon(new Segment((int)cast.Time, cast.EndTime, 1), target, ParserIcons.EyeOverhead, 30);
+                                break;
+                            case SupernovaArkk:
+                                // TODO: add growing square
+                                break;
+                            case HorizonStrikeArkk1:
+                            {
+                                if (log.CombatData.HasEffectData)
+                                {
+                                    continue;
+                                }
+                                int offset = 520; // ~520ms at the start and between
+                                int duration = 2600;
+                                string color = "rgba(250, 120, 0, 0.2)";
+                                var connector = new AgentConnector(target);
+                                ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
+                                if (rotation != null)
+                                {
+                                    float facing = Point3D.GetRotationFromFacing(rotation);
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        int start = (int)cast.Time + offset * (i + 1);
+                                        float angle = facing + 180 / 5 * i;
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    }
+                                }
+                                break;
+                            }
+                            case HorizonStrikeArkk2:
+                            {
+                                if (log.CombatData.HasEffectData)
+                                {
+                                    continue;
+                                }
+                                int offset = 520; // ~520ms at the start and between
+                                int duration = 2600;
+                                string color = "rgba(250, 120, 0, 0.2)";
+                                var connector = new AgentConnector(target);
+                                ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
+                                if (rotation != null)
+                                {
+                                    float facing = Point3D.GetRotationFromFacing(rotation);
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        int start = (int)cast.Time + offset * (i + 1);
+                                        int end = start + duration;
+                                        float angle = facing + 90 - 180 / 5 * i;
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case (int)TrashID.TemporalAnomaly2:
+                    if (!log.CombatData.HasEffectData)
+                    {
+                        foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
+                        {
+                            int start = (int)exitCombat.Time;
+                            BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
+                            int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
+                            ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
+                            if (anomalyPos != null)
+                            {
+                                replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(anomalyPos)));
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+        
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Corporeal Assignment domes & explosions
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out IReadOnlyList<EffectEvent> domes))
+            {
+                foreach (EffectEvent effect in domes)
+                {
+                    if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
+                    {
+                        int start = (int)effect.Time;
+                        EnvironmentDecorations.Add(new CircleDecoration(false, 0, 220, (start, (int)end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
+                    }
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
+            {
+                foreach (EffectEvent effect in domeExplosions)
+                {
+                    int start = (int)effect.Time - 500;
+                    int end = (int) effect.Time;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
+            {
+                foreach (EffectEvent effect in explosions)
+                {
+                    int start = (int)effect.Time;
+                    int end = (int) effect.Time + 500;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Horizon Strike
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out IReadOnlyList<EffectEvent> strikes))
+            {
+                foreach (EffectEvent effect in strikes)
+                {
+                    int start = (int)effect.Time;
+                    int end = start + 2600; // effect has 3833ms duration for some reason
+                    var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                    EnvironmentDecorations.Add(new PieDecoration(true, 0, 1400, 30, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(true, 0, 1400, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                }
+            }
         }
     }
 }
