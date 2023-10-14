@@ -583,6 +583,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Empowered Regret (Embodiment)", EmpoweredRegretEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),
             new Buff("Kryptis-Possessed", KryptisPossessed, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Invulnerability (Cerus)", InvulnerabilityCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),
