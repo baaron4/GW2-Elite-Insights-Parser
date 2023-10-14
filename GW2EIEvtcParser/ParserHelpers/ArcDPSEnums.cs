@@ -935,7 +935,9 @@ namespace GW2EIEvtcParser
             // Arkk
             TemporalAnomaly2 = 17720,
             Archdiviner = 17893,
-            Fanatic = 11282,
+            FanaticDagger1 = 11281,
+            FanaticDagger2 = 11282,
+            FanaticBow = 11288,
             EliteBrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System;
 using GW2EIEvtcParser.EIData;
@@ -68,9 +68,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
                 TrashID.TemporalAnomaly2,
-                TrashID.BLIGHT,
-                TrashID.Fanatic,
+                TrashID.FanaticDagger2,
+                TrashID.FanaticDagger1,
+                TrashID.FanaticBow,
                 TrashID.SolarBloom,
+                TrashID.BLIGHT,
                 TrashID.PLINK,
                 TrashID.DOC,
                 TrashID.CHOP,
