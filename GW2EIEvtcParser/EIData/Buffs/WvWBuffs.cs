@@ -66,6 +66,8 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
             new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
             new Buff("Chilling Fog", ChillingFogBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust),
+            new Buff("Banner Drop Warning", BannerDropWarning, Source.Common, BuffClassification.Other, BuffImages.Tracked),
+            new Buff("Greater Call of the Mists (WvW)", GreaterCallOfTheMistsWvW, Source.Common, BuffClassification.Other, BuffImages.GloriousFervor),
             // Edge of the Mists
             new Buff("Marked (Mists Arena)", MarkedMistsArena, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),
             new Buff("Marked (Red Sentry Turret)", MarkedSentryTurretRed, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),

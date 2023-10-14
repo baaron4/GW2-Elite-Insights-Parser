@@ -230,7 +230,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             // Bloom Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
 
             // Cosmic Meteor (green)
             IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);

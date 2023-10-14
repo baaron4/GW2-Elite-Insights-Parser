@@ -1546,6 +1546,7 @@
         internal const string PhantasmalWarlock = "https://wiki.guildwars2.com/images/0/01/Phantasmal_Warlock.png";
         internal const string HeatTheSoul = "https://wiki.guildwars2.com/images/5/58/Heat_the_Soul.png";
         internal const string CompoundingChemicals = "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png";
+        internal const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
@@ -1568,6 +1569,7 @@
         internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
         internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
         internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
+        internal const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
         #endregion Misc
     }
 }

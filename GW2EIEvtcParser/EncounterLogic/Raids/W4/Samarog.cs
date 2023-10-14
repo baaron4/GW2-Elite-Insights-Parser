@@ -223,14 +223,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int smallEnd = smallStart + 6000;
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
-            // fixated
+            // fixated Samarog
             var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSam)
             {
                 replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
-            //fixated Ghuldem
+            List<AbstractBuffEvent> fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
+            replay.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
+            //fixated Guldhem
             var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedGuldhem)
             {

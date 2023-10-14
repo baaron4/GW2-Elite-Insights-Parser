@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
             foreach (BuffApplyEvent bae in tethersApplies)
             {
-                AbstractSingleActor src = log.FindActor(bae.CreditedBy);
+                AbstractSingleActor src = log.FindActor(bae.By);
                 if (src != null)
                 {
                     int tetherStart = (int)bae.Time;

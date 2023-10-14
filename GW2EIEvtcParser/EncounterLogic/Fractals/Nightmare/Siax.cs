@@ -266,7 +266,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EncounterLogic;
-using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParser
 {
@@ -63,7 +63,10 @@ namespace GW2EIParser
         /// <summary>
         /// Time elapsed parsing
         /// </summary>
-        public string Elapsed { get; set; } = "";
+        public string Elapsed { get; private set; } = "";
+
+
+        private readonly Stopwatch _stopWatch = new Stopwatch();
 
         public OperationController(string location, string status)
         {
@@ -82,6 +85,15 @@ namespace GW2EIParser
             Elapsed = "";
             GeneratedFiles.Clear();
             OpenableFiles.Clear();
+        }
+
+        public void Start() { 
+            _stopWatch.Start(); 
+        }
+
+        public void Stop() { 
+            _stopWatch.Stop();
+            Elapsed = ("Elapsed " + _stopWatch.ElapsedMilliseconds + " ms");
         }
 
         public void FinalizeStatus(string prefix)

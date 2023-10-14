@@ -158,6 +158,9 @@ namespace GW2EIEvtcParser.EIData
             RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
         }
 
+
+        #region DEBUG EFFECTS
+
         internal static void DebugEffects(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList();
@@ -212,6 +215,27 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
+        internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+        {
+            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
+            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
+            var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
+            foreach (EffectEvent effectEvt in allEffectEvents)
+            {
+                if (effectEvt.IsAroundDst)
+                {
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                }
+                else
+                {
+
+                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                }
+            }
+        }
+
+        #endregion DEBUG EFFECTS
+
         /// <summary>
         /// Add an overhead icon decoration
         /// </summary>
@@ -241,24 +265,35 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter
+        /// </summary>
+        /// <param name="tethers">Buff events of the tethers.</param>
+        /// <param name="color">color of the tether</param>
+        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, string color)
         {
-            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
-            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
-            var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
-            foreach (EffectEvent effectEvt in allEffectEvents)
+            int tetherStart = 0;
+            AgentItem src = ParserHelper._unknownAgent;
+            AgentItem dst = ParserHelper._unknownAgent;
+            foreach (AbstractBuffEvent tether in tethers)
             {
-                if (effectEvt.IsAroundDst)
+                if (tether is BuffApplyEvent)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    tetherStart = (int)tether.Time;
+                    src = tether.By;
+                    dst = tether.To;
                 }
-                else
+                else if (tether is BuffRemoveAllEvent)
                 {
-
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    int tetherEnd = (int)tether.Time;
+                    if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
+                    {
+                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)));
+                        src = ParserHelper._unknownAgent;
+                        dst = ParserHelper._unknownAgent;
+                    }
                 }
             }
-
         }
     }
 }
