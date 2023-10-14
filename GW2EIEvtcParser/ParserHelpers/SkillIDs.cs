@@ -1831,6 +1831,7 @@
         public const long BlindingRadiance = 39442;
         public const long HorizonStrikeSkorvald = 39458;
         public const long TeleportLunge = 39469;
+        public const long Obliterate = 39470;
         public const long BloomExplode = 39491;
         public const long OystersWithSpicySauce = 39500;
         public const long HorizonStrikeSkorvald1 = 39507;
@@ -3651,6 +3652,7 @@
         public const long VengefulStrike = 71218; // Dagda Autochain 2
         public const long RelicOfCerusHit = 71252;
         public const long EmpoweredDespairEmbodiment = 71276;
+        public const long PostObliterateNew = 71308;
     }
 
 }

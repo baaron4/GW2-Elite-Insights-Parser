@@ -338,36 +338,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
-            // Corporeal Assignment domes & explosions
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out IReadOnlyList<EffectEvent> domes))
-            {
-                foreach (EffectEvent effect in domes)
-                {
-                    if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
-                    {
-                        int start = (int)effect.Time;
-                        EnvironmentDecorations.Add(new CircleDecoration(false, 0, 220, (start, (int)end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
-                    }
-                }
-            }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
-            {
-                foreach (EffectEvent effect in domeExplosions)
-                {
-                    int start = (int)effect.Time - 500;
-                    int end = (int) effect.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
-                }
-            }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
-            {
-                foreach (EffectEvent effect in explosions)
-                {
-                    int start = (int)effect.Time;
-                    int end = (int) effect.Time + 500;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)));
-                }
-            }
+            AddCorporealReassignmentDecorations(log);
 
             // Horizon Strike
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out IReadOnlyList<EffectEvent> strikes))
