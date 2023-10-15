@@ -1152,6 +1152,7 @@
         public const long ForceOfWill = 29485;
         public const long Berserk = 29502;
         public const long ShieldOfCourage = 29523;
+        public const long WellOfPrecognition = 29526;
         public const long SpitefulSpirit = 29560;
         public const long TimeEcho = 29582;
         public const long POV_EliteMortarKitOpen = 29592;
@@ -1168,7 +1169,7 @@
         public const long SymbolOfEnergy = 29789;
         public const long LesserSignetOfVampirism = 29799;
         public const long ContinuumSplit = 29830;
-        public const long WellOfRecall = 29856;
+        public const long WellOfRecall_Senility = 29856;
         public const long LiveVicariously = 29863;
         public const long LifeFromDeath = 29901;
         public const long ShieldOfCourageActive = 29906;
@@ -1191,6 +1192,7 @@
         public const long LesserSignetOfWrath = 30255;
         public const long VampiricAura = 30285;
         public const long LeechingBolt1 = 30301;
+        public const long WellOfEternity = 30305;
         public const long WingsOfResolveBuff = 30308;
         public const long EscapistsFortitude = 30313;
         public const long LeechingBolt2 = 30319;

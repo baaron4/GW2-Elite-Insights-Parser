@@ -530,6 +530,12 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSilence = "https://i.imgur.com/ZQxshJM.png";
         internal const string EffectWellOfSorrow = "https://i.imgur.com/B2gQzkY.png";
         internal const string EffectShadowfall = "https://i.imgur.com/SfRb7bC.png";
+        internal const string EffectWellOfEternity = "https://i.imgur.com/TPisxaE.png";
+        internal const string EffectWellOfAction = "https://i.imgur.com/YnwzegV.png";
+        internal const string EffectWellOfCalamity = "https://i.imgur.com/ZrYTFnd.png";
+        internal const string EffectWellOfPrecognition = "https://i.imgur.com/ECcw4jT.png";
+        internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
+        internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
 
         // Overhead icons
         // - Fixations

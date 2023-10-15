@@ -400,7 +400,12 @@ namespace GW2EIEvtcParser.EIData
                     RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Chronomancer:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    ChronomancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Mirage:
                     MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
