@@ -132,6 +132,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         int effectTimeStart = (int)effect.Time + pulseTimeDelay;
                         int effectTimeEnd = effectTimeStart + 300;
+                        if (effectTimeStart > lifespan.Item2) { break; }
                         if (i < 3)
                         {
                             // Pulse inwards
@@ -214,6 +215,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         int effectTimeStart = (int)effect.Time + pulseTimeDelay;
                         int effectTimeEnd = effectTimeStart + 300;
+                        if (effectTimeStart > lifespan.Item2) { break; }
                         if (i < 3)
                         {
                             // Pulse inwards
