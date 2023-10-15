@@ -105,6 +105,16 @@ namespace GW2EIEvtcParser
         public const string NecromancerPlaguelandsPulse1 = "7E12B3B1896BC748AE50333267CDBFB9";
         public const string NecromancerPlaguelandsPulse2 = "A442AE5DFE73D04BBC19B050540E000A";
         public const string NecromancerPlaguelandsPulse3 = "253ADDAEC2009A499FA29C44E1D73F05";
+        public const string NecromancerMarkOfBloodOrChillblains = "A859FDB2593E2C4ABEFB51907393BBAA";
+        public const string NecromancerPutridMark = "651695CA0DB15E4F88E30BF58630B891";
+        public const string NecromancerReapersMark = "074AFD46220642429D67BF645CA81D65";
+        public const string NecromancerMarkOfBloodActivated1 = "31D543A5DCEF9643A59EF9498A55ACDE";
+        public const string NecromancerMarkOfBloodActivated2 = "5FA6527231BB8041AC783396142C6200";
+        public const string NecromancerChillblainsActivated = "831159227814DF4FA354CAD7E0755FEE";
+        public const string NecromancerPutridMarkActivated1 = "E52F2D6DBABA934882BBBB8F0832C777";
+        public const string NecromancerPutridMarkActivated2 = "EFB9CDA30AEBC744B9D377A99BEBC0B2";
+        public const string NecromancerPutridMarkActivated3 = "CAF4E62C2C5CC04499657C2A6A78087B"; // No src or dst
+        public const string NecromancerReapersMarkActivated = "255FBE1C15D0C6488BD018748184624F";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";

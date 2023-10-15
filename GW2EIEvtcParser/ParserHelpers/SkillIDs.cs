@@ -48,6 +48,7 @@
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
         public const long RelicOfFireworksBuffLoss = -32;
+        public const long MarkOfBloodOrChillblains = -33;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -685,6 +686,7 @@
         public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
+        public const long Chillblains = 10605;
         public const long Epidemic = 10606;
         public const long WellOfDarkness = 10607;
         public const long SignetOfUndeath = 10610;
@@ -937,6 +939,9 @@
         public const long Enraged1_Unknown = 18711;
         public const long FieryBlock = 18981;
         public const long IncreasedArmorOilMasteryIII = 19083;
+        public const long ReapersMark = 19115;
+        public const long PutridMark = 19116;
+        public const long MarkOfBlood = 19117;
         public const long SmashBottle = 19152;
         public const long ThrowBottle = 19153;
         public const long Torment = 19426;

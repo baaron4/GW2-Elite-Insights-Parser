@@ -537,6 +537,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
         internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
         internal const string EffectVitalDraw = "https://i.imgur.com/v0FW8mn.png";
+        internal const string EffectMarkOfBlood = "https://i.imgur.com/RXSaEJE.png";
+        internal const string EffectChillblains = "https://i.imgur.com/ViOzLNe.png";
+        internal const string EffectMarkOfBloodOrChillblains = "https://i.imgur.com/dAPDUFm.png";
+        internal const string EffectPutridMark = "https://i.imgur.com/wJ3V2Fm.png";
+        internal const string EffectReapersMark = "https://i.imgur.com/85VAsHR.png";
 
         // Overhead icons
         // - Fixations

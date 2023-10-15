@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             // Vital Draw
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.HarbingerVitalDrawAoE, out IReadOnlyList<EffectEvent> vitalDraws))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, VitalDraw);
+                var skill = new SkillModeDescriptor(player, Spec.Harbinger, VitalDraw);
                 foreach (EffectEvent effect in vitalDraws)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
