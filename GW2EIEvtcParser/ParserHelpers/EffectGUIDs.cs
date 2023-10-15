@@ -116,6 +116,8 @@ namespace GW2EIEvtcParser
         public const string HarbingerCascadingCorruption = "EEDCAB61CD35E840909B03D398878B1C";
         public const string HarbingerDeathlyHaste = "9C06D9D9B0E22247A1752C426808CD80";
         public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
+        public const string HarbingerVitalDrawSelfDst = "667EAEE89766E14E883E6ECA5D3D267B"; // Target self
+        public const string HarbingerVitalDrawAoE = "859611F71893924989B056F6A011C160"; // Ground effect
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear

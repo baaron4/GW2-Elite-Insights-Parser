@@ -536,6 +536,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfPrecognition = "https://i.imgur.com/ECcw4jT.png";
         internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
         internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
+        internal const string EffectVitalDraw = "https://i.imgur.com/v0FW8mn.png";
 
         // Overhead icons
         // - Fixations

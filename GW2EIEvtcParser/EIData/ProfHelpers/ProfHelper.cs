@@ -386,8 +386,11 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case Spec.Necromancer:
                 case Spec.Reaper:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Harbinger:
                     NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    HarbingerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Scourge:
                     NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);

@@ -2917,6 +2917,7 @@
         public const long RainOfSwords = 62553;
         public const long CutterBurst = 62554;
         public const long DoomApproaches = 62558;
+        public const long VitalDraw = 62563;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
         public const long Bladeturn = 62592;
