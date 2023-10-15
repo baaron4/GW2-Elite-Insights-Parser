@@ -524,12 +524,12 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
         internal const string EffectProtectiveSolace = "https://i.imgur.com/uBO48eB.png";
-        internal const string EffectWellOfGloom = "https://wiki.guildwars2.com/images/7/73/Well_of_Gloom.png";
-        internal const string EffectWellOfBounty = "https://wiki.guildwars2.com/images/3/32/Well_of_Bounty.png";
-        internal const string EffectWellOfTears = "https://wiki.guildwars2.com/images/2/24/Well_of_Tears.png";
-        internal const string EffectWellOfSilence = "https://wiki.guildwars2.com/images/e/ee/Well_of_Silence.png";
-        internal const string EffectWellOfSorrow = "https://wiki.guildwars2.com/images/9/99/Well_of_Sorrow.png";
-        internal const string EffectShadowfall = "https://wiki.guildwars2.com/images/5/51/Shadowfall.png";
+        internal const string EffectWellOfGloom = "https://i.imgur.com/k4RSbxD.png";
+        internal const string EffectWellOfBounty = "https://i.imgur.com/ZgKMlgA.png";
+        internal const string EffectWellOfTears = "https://i.imgur.com/pbCS8tn.png";
+        internal const string EffectWellOfSilence = "https://i.imgur.com/ZQxshJM.png";
+        internal const string EffectWellOfSorrow = "https://i.imgur.com/B2gQzkY.png";
+        internal const string EffectShadowfall = "https://i.imgur.com/SfRb7bC.png";
 
         // Overhead icons
         // - Fixations

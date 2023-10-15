@@ -417,6 +417,8 @@ namespace GW2EIEvtcParser.EIData
                 case Spec.Thief:
                 case Spec.Daredevil:
                 case Spec.Deadeye:
+                    ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Specter:
                     ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     SpecterHelper.ComputeProfessionCombatReplayActors(player, log, replay);
