@@ -236,11 +236,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return false;
         }
 
-        private static (EffectGUIDEvent guid, int radius, int duration) GetDeathsHandOnPlayerData(ParsedEvtcLog log)
-        {
-            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaCM), 380, 36000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaNM), 300, 16000);
-        }
-
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -303,11 +298,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    (EffectGUIDEvent deathsHandGUID, int deathsHandOnPlayerRadius, int deathsHandOnPlayerDuration) = GetDeathsHandOnPlayerData(log);
-                    if (deathsHandGUID != null)
+                    //
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsHandByAnkkaRadius300, out IReadOnlyList<EffectEvent> deathsHandOnPlayerNM))
                     {
-                        var deathsHandEffects = log.CombatData.GetEffectEventsByEffectID(deathsHandGUID.ContentID).Where(x => x.Src == target.AgentItem).ToList();
-                        foreach (EffectEvent deathsHandEffect in deathsHandEffects)
+                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
+                        {
+                            if (log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                            {
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 300, 13000);
+                            }
+                        }
+                    }
+                    //
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsHandByAnkkaRadius380, out IReadOnlyList<EffectEvent> deathsHandOnPlayerCMOrInBetween))
+                    {
+                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
                         {
                             if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
                             {
@@ -317,9 +322,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
-                            else
+                            else if (log.FightData.IsCM)
                             {
-                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, deathsHandOnPlayerRadius, deathsHandOnPlayerDuration);
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 33000);
                             }
                         }
                     }
@@ -409,18 +414,19 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            (EffectGUIDEvent deathsHandOnPlayerGUID, int deathsHandRadius, int deathsHandDuration) = GetDeathsHandOnPlayerData(log);
             if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
             {
                 foreach (Segment segment in value.BuffChart)
                 {
                     if (segment != null && segment.Start > 0 && segment.Value == 1)
                     {
+                        int deathsHandRadius = log.FightData.IsCM ? 380 : 300;
+                        int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;
                         // AoE on player
                         replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        // Logs without effects
-                        if (deathsHandOnPlayerGUID == null)
+                        // Logs without effects, we add the dropped AoE manually
+                        if (!log.CombatData.HasEffectData)
                         {
                             ParametricPoint3D playerPosition = p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).LastOrDefault();
                             if (playerPosition != null)
@@ -441,12 +447,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)
         {
+            int deathHandGrowStart = start;
+            int deathHandGrowEnd = deathHandGrowStart + delay;
             // Growing AoE
-            replay.Decorations.Add(new CircleDecoration(true, start + delay, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, deathHandGrowEnd, radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
             // Damaging AoE
-            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, (start + delay, start + duration), "rgba(255, 0, 0, 0.4)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay, start + duration), "rgba(0, 100, 0, 0.2)", new PositionConnector(position)));
+            int AoEStart = deathHandGrowEnd;
+            int AoEEnd = AoEStart + duration;
+            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, (AoEStart, AoEEnd), "rgba(255, 0, 0, 0.4)", new PositionConnector(position)));
+            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.2)", new PositionConnector(position)));
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)

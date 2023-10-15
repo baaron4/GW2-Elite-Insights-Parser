@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
-                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time).ToList();
+                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time - 150).ToList();
                         IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
                         foreach (AnimatedCastEvent liffOff in liftOffs)
                         {

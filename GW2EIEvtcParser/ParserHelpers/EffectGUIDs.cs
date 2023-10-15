@@ -287,8 +287,8 @@ namespace GW2EIEvtcParser
         // Ankka
         public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         public const string DeathsHandOnPlayerCM = "9A64DC8F21EEC046BA1D4412863F2940";
-        public const string DeathsHandByAnkkaCM = "651CA3631083EF4A81159989AB58F787";
-        public const string DeathsHandByAnkkaNM = "805E3CE2A313584797C614082C44197D";
+        public const string DeathsHandByAnkkaRadius380 = "651CA3631083EF4A81159989AB58F787";
+        public const string DeathsHandByAnkkaRadius300 = "805E3CE2A313584797C614082C44197D";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
