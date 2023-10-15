@@ -233,6 +233,24 @@ namespace GW2EIEvtcParser
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
         public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
+        public const string SpecterWellOfGloom1 = "F4260FA8B35EFC40B6990F5015E486A3"; // These 3 effects happen before the AoE, the placement can be moved with skill retargetting
+        public const string SpecterWellOfGloom2 = "F5BD1268C23E0C4C85E7DFC927360EFE";
+        public const string SpecterWellOfGloom3 = "1B9672DFA1F1D74DB11ADF3F0956FCF0";
+        public const string SpecterWellOfGloom4 = "0FA258E85B5B2B4CBCF504F478558D3C"; // ~715ms delay - Using these two effects for the AoE placement (they happen after retargetting)
+        public const string SpecterWellOfGloom5 = "63B5CB22E35C094E948DA101CA247B25"; // ~715ms delay
+        public const string SpecterWellOfGloom6 = "D4CD6FCC1BABB042AA7E1779FF166F4B"; // ~960ms delay
+        public const string SpecterWellOfBounty1 = "E452C4E8FD6B9A4F9C3659782ECEDEA3";
+        public const string SpecterWellOfBounty2 = "704FF2761D3CA74AB7C12060F1D3D872"; // ~880ms delay
+        public const string SpecterWellOfTears1 = "AEB43693461D1846BB70C2AEAB47EE2B";
+        public const string SpecterWellOfTears2 = "21BF83968804A54DBF795C7A0AD385A5"; // ~1240ms delay
+        public const string SpecterWellOfTears3 = "5CBC62CDE1F5204E8E63EA785CF81D59"; // ~1240ms delay
+        public const string SpecterWellOfSilence1 = "51FCBBE627637D4C9EB9AC8A4CD216AC";
+        public const string SpecterWellOfSilence2 = "15A73155534B204D8C9F97F5C8ED6DA1"; // ~440ms delay
+        public const string SpecterWellOfSorrow1 = "036B9D5F24402C4A9ED923A0391E61C3";
+        public const string SpecterWellOfSorrow2 = "5A74A8FADB71B249BD245E2FBE1D8952"; // ~1240ms delay
+        public const string SpecterWellOfSorrow3 = "1B56F702912BE7428182CA57036AEE99"; // ~1240ms delay
+        public const string SpecterShadowfall1 = "FB21A6E213C240459BD8E9524088FA66";
+        public const string SpecterShadowfall2 = "D8E380E80E843A4092C8DD53C5A51F0F"; // ~880ms delay
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
