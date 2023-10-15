@@ -177,7 +177,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss -- most reliable
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == 34113);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == SpawnProtection);
             if (spawnProtectionLoss != null)
             {
                 return spawnProtectionLoss.Time;
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // get first end casting
                 CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
-                if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
+                if (firstCastEnd != null && firstCastEnd.SkillID == CairnImpact)
                 {
                     // Action 4 from skill dump for 38102
                     long actionHappened = 1025;
