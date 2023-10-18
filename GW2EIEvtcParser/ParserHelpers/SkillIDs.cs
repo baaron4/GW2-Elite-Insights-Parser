@@ -48,6 +48,7 @@
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
         public const long RelicOfFireworksBuffLoss = -32;
+        public const long MarkOfBloodOrChillblains = -33;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -685,6 +686,7 @@
         public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
+        public const long Chillblains = 10605;
         public const long Epidemic = 10606;
         public const long WellOfDarkness = 10607;
         public const long SignetOfUndeath = 10610;
@@ -937,6 +939,9 @@
         public const long Enraged1_Unknown = 18711;
         public const long FieryBlock = 18981;
         public const long IncreasedArmorOilMasteryIII = 19083;
+        public const long ReapersMark = 19115;
+        public const long PutridMark = 19116;
+        public const long MarkOfBlood = 19117;
         public const long SmashBottle = 19152;
         public const long ThrowBottle = 19153;
         public const long Torment = 19426;
@@ -1152,6 +1157,7 @@
         public const long ForceOfWill = 29485;
         public const long Berserk = 29502;
         public const long ShieldOfCourage = 29523;
+        public const long WellOfPrecognition = 29526;
         public const long SpitefulSpirit = 29560;
         public const long TimeEcho = 29582;
         public const long POV_EliteMortarKitOpen = 29592;
@@ -1168,7 +1174,7 @@
         public const long SymbolOfEnergy = 29789;
         public const long LesserSignetOfVampirism = 29799;
         public const long ContinuumSplit = 29830;
-        public const long WellOfRecall = 29856;
+        public const long WellOfRecall_Senility = 29856;
         public const long LiveVicariously = 29863;
         public const long LifeFromDeath = 29901;
         public const long ShieldOfCourageActive = 29906;
@@ -1191,6 +1197,7 @@
         public const long LesserSignetOfWrath = 30255;
         public const long VampiricAura = 30285;
         public const long LeechingBolt1 = 30301;
+        public const long WellOfEternity = 30305;
         public const long WingsOfResolveBuff = 30308;
         public const long EscapistsFortitude = 30313;
         public const long LeechingBolt2 = 30319;
@@ -2915,6 +2922,7 @@
         public const long RainOfSwords = 62553;
         public const long CutterBurst = 62554;
         public const long DoomApproaches = 62558;
+        public const long VitalDraw = 62563;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
         public const long Bladeturn = 62592;
@@ -3035,6 +3043,7 @@
         public const long DawnsRepose = 63220;
         public const long UnleashedOverbearingSmashLeap = 63224;
         public const long BarrierSignetJDrive = 63228;
+        public const long WellOfSilence = 63230;
         public const long SkyCircus = 63236;
         public const long DischargeArrayBuff = 63238;
         public const long ShadowShroud = 63239;
@@ -3045,15 +3054,20 @@
         public const long MutateConditions = 63256;
         public const long RendingVines = 63258;
         public const long HeavySmashJadeMech = 63263;
+        public const long Shadowfall = 63275;
+        public const long WellOfSorrow = 63276;
         public const long PerilousGift = 63284;
         public const long TwinStrikeJadeMech = 63288;
+        public const long WellOfGloom = 63292;
         public const long CrisisZone = 63293;
+        public const long WellOfTears = 63294;
         public const long RendingVinesPet = 63296;
         public const long HardStrikeJadeMech = 63298;
         public const long RecallMech_MechSkill = 63300;
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
+        public const long WellOfBounty = 63323;
         public const long RoilingSmash = 63334;
         public const long JadeBusterCannon = 63334;
         public const long UnleashPet = 63344;

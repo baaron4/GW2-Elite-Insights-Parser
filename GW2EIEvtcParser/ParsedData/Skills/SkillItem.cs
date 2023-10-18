@@ -121,6 +121,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SandCascadeBarrier, "Sand Cascade (Barrier)" },
             { SandFlare, "Sand Cascade" },
             { SadisticSearingActivation, "Sadistic Searing (Activation)" },
+            { MarkOfBloodOrChillblains, "Mark of Blood / Chillblains" },
             // Ranger
             { WindborneNotes, "Windborne Notes" },
             { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
@@ -431,6 +432,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulEater, "https://wiki.guildwars2.com/images/6/6c/Soul_Eater.png" },
             { LesserSignetOfVampirism, BuffImages.SignetOfVampirism },
             { SignetOfVampirismHeal, BuffImages.SignetOfVampirism },
+            { MarkOfBloodOrChillblains, "https://i.imgur.com/oMv0Emd.png" },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },

@@ -220,6 +220,93 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
+
+            // Mark of Blood or Chillblains (Staff 2/3)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out IReadOnlyList<EffectEvent> markOfBloodOrChillblains))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
+                foreach (EffectEvent effect in markOfBloodOrChillblains)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBloodOrChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Mark of Blood Activated (Staff 2)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodActivated1, out IReadOnlyList<EffectEvent> marksOfBloodActivated))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBlood);
+                foreach (EffectEvent effect in marksOfBloodActivated)
+                {
+                    (int, int) lifespan = ((int)effect.Time, (int)effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Chillblains Activated (Staff 3)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerChillblainsActivated, out IReadOnlyList<EffectEvent> chillblainsActivated))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, Chillblains);
+                foreach (EffectEvent effect in chillblainsActivated)
+                {
+                    (int, int) lifespan = ((int)effect.Time, (int)effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Putrid Mark (Staff 4)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMark, out IReadOnlyList<EffectEvent> putridMarks))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
+                foreach (EffectEvent effect in putridMarks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Putrid Mark (Staff 4) Activated
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMarkActivated1, out IReadOnlyList<EffectEvent> putridMarksActivated))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
+                foreach (EffectEvent effect in putridMarksActivated)
+                {
+                    (int, int) lifespan = ((int)effect.Time, (int)effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Reaper's Mark (Staff 5)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMark, out IReadOnlyList<EffectEvent> reapersMarks))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
+                foreach (EffectEvent effect in reapersMarks)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Reaper's Mark (Staff 5) Activated
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMarkActivated, out IReadOnlyList<EffectEvent> reapersMarksActivated))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
+                foreach (EffectEvent effect in reapersMarksActivated)
+                {
+                    (int, int) lifespan = ((int)effect.Time, (int)effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
         }
     }
 }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -84,5 +86,175 @@ namespace GW2EIEvtcParser.EIData
             return NonCloneMinions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Mesmer;
+
+            // Well of Eternity
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfEternity, out IReadOnlyList<EffectEvent> wellsOfEternity))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfEternity, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in wellsOfEternity)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfEternity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Well of Eternity - Pulses
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfEternityPulse, EffectGUIDs.ChronomancerWellOfEternityExplosion }, out IReadOnlyList<EffectEvent> wellsOfEternityPulses))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfEternity, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in wellsOfEternityPulses)
+                {
+                    int effectTimeStart = (int)effect.Time;
+                    int effectTimeEnd = effectTimeStart + 1000;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Well of Action
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfAction, out IReadOnlyList<EffectEvent> wellsOfAction))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfAction);
+                foreach (EffectEvent effect in wellsOfAction)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    
+                    // Well pulses - Hard coded because the effects don't have a Src
+                    int pulseTimeDelay = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int effectTimeStart = (int)effect.Time + pulseTimeDelay;
+                        int effectTimeEnd = effectTimeStart + 300;
+                        if (effectTimeStart > lifespan.Item2) { break; }
+                        if (i < 3)
+                        {
+                            // Pulse inwards
+                            replay.Decorations.Add(new CircleDecoration(false, -effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        }
+                        else
+                        {
+                            // Final pulse outwards
+                            replay.Decorations.Add(new CircleDecoration(false, effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        }
+                        pulseTimeDelay += 1000;
+                    }
+                }
+            }
+
+            // Well of Calamity
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfCalamity, out IReadOnlyList<EffectEvent> wellsOfCalamity))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
+                foreach (EffectEvent effect in wellsOfCalamity)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCalamity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Well of Calamity - Pulses
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfCalamityPulse, EffectGUIDs.ChronomancerWellOfCalamityExplosion }, out IReadOnlyList<EffectEvent> wellsOfCalamityPulses))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
+                foreach (EffectEvent effect in wellsOfCalamityPulses)
+                {
+                    int effectTimeStart = (int)effect.Time;
+                    int effectTimeEnd = effectTimeStart + 1000;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, -effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Well of Precognition
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfPrecognition, out IReadOnlyList<EffectEvent> wellsOfPrecognition))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
+                foreach (EffectEvent effect in wellsOfPrecognition)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfPrecognition, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Well of Precognition - Pulses
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfPrecognitionPulse, EffectGUIDs.ChronomancerWellOfPrecognitionExplosion }, out IReadOnlyList<EffectEvent> wellsOfPrecognitionPulses))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
+                foreach (EffectEvent effect in wellsOfPrecognitionPulses)
+                {
+                    int effectTimeStart = (int)effect.Time;
+                    int effectTimeEnd = effectTimeStart + 1000;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Well of Senility
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfSenility, out IReadOnlyList<EffectEvent> wellsOfSenility))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfRecall_Senility);
+                foreach (EffectEvent effect in wellsOfSenility)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+
+                    // Well pulses - Hard coded because the effects don't have a Src
+                    int pulseTimeDelay = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int effectTimeStart = (int)effect.Time + pulseTimeDelay;
+                        int effectTimeEnd = effectTimeStart + 300;
+                        if (effectTimeStart > lifespan.Item2) { break; }
+                        if (i < 3)
+                        {
+                            // Pulse inwards
+                            replay.Decorations.Add(new CircleDecoration(false, -effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        }
+                        else
+                        {
+                            // Final pulse outwards
+                            replay.Decorations.Add(new CircleDecoration(false, effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        }
+                        pulseTimeDelay += 1000;
+                    }
+                }
+            }
+
+            // Gravity Well
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerGravityWell, out IReadOnlyList<EffectEvent> gravityWells))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                foreach (EffectEvent effect in gravityWells)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGravityWell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Gravity Well - Pulses
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out IReadOnlyList<EffectEvent> gravityWellPulses))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                foreach (EffectEvent effect in gravityWellPulses)
+                {
+                    int effectTimeStart = (int)effect.Time;
+                    int effectTimeEnd = effectTimeStart + 1000;
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, -effectTimeEnd, 240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                }
+            }
+        }
     }
 }

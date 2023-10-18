@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
@@ -523,6 +524,24 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
         internal const string EffectProtectiveSolace = "https://i.imgur.com/uBO48eB.png";
+        internal const string EffectWellOfGloom = "https://i.imgur.com/k4RSbxD.png";
+        internal const string EffectWellOfBounty = "https://i.imgur.com/ZgKMlgA.png";
+        internal const string EffectWellOfTears = "https://i.imgur.com/pbCS8tn.png";
+        internal const string EffectWellOfSilence = "https://i.imgur.com/ZQxshJM.png";
+        internal const string EffectWellOfSorrow = "https://i.imgur.com/B2gQzkY.png";
+        internal const string EffectShadowfall = "https://i.imgur.com/SfRb7bC.png";
+        internal const string EffectWellOfEternity = "https://i.imgur.com/TPisxaE.png";
+        internal const string EffectWellOfAction = "https://i.imgur.com/YnwzegV.png";
+        internal const string EffectWellOfCalamity = "https://i.imgur.com/ZrYTFnd.png";
+        internal const string EffectWellOfPrecognition = "https://i.imgur.com/ECcw4jT.png";
+        internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
+        internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
+        internal const string EffectVitalDraw = "https://i.imgur.com/v0FW8mn.png";
+        internal const string EffectMarkOfBlood = "https://i.imgur.com/RXSaEJE.png";
+        internal const string EffectChillblains = "https://i.imgur.com/ViOzLNe.png";
+        internal const string EffectMarkOfBloodOrChillblains = "https://i.imgur.com/dAPDUFm.png";
+        internal const string EffectPutridMark = "https://i.imgur.com/wJ3V2Fm.png";
+        internal const string EffectReapersMark = "https://i.imgur.com/85VAsHR.png";
 
         // Overhead icons
         // - Fixations

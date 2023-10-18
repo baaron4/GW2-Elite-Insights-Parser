@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.Extensions
             BattleScars,
             MendersRebuke,
             SymbolOfEnergy,
-            WellOfRecall, 
+            WellOfRecall_Senility, 
             GravityWell, 
             VampiricAura,
             YourSoulIsMine, 

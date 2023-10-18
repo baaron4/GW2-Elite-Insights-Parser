@@ -386,8 +386,11 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case Spec.Necromancer:
                 case Spec.Reaper:
+                    NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Harbinger:
                     NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    HarbingerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Scourge:
                     NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
@@ -400,7 +403,12 @@ namespace GW2EIEvtcParser.EIData
                     RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Mesmer:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Chronomancer:
+                    MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    ChronomancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Mirage:
                     MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
@@ -417,8 +425,11 @@ namespace GW2EIEvtcParser.EIData
                 case Spec.Thief:
                 case Spec.Daredevil:
                 case Spec.Deadeye:
+                    ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Specter:
                     ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    SpecterHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Spellbreaker:
                     SpellbreakerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
