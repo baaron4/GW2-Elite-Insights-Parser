@@ -89,6 +89,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EarthAirAttunement, "Earth Air Attunement" },
             { ShatteringIceDamage, "Shattering Ice (Hit)" },
             { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
+            { FirestormGlyphOfStormsOrFieryGreatsword, "Firestorm (Glyph of Storms / Fiery Greatsword)" },
             // Engineer
             { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
@@ -337,6 +338,7 @@ namespace GW2EIEvtcParser.ParsedData
             { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             { HealingRain, "https://wiki.guildwars2.com/images/0/03/Healing_Rain.png" },
             { ElementalRefreshmentBarrier, "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png" },
+            { FirestormGlyphOfStormsOrFieryGreatsword, "https://i.imgur.com/6BTB3XT.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },

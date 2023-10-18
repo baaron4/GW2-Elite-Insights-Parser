@@ -49,6 +49,7 @@
         public const long BladeBurstOrParticleAccelerator = -31;
         public const long RelicOfFireworksBuffLoss = -32;
         public const long MarkOfBloodOrChillblains = -33;
+        public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -117,6 +118,7 @@
         public const long UnloadThiefMinion = 3666;
         public const long BlackPowderThiefMinion = 3669;
         public const long Determined3892 = 3892;
+        public const long MeteorShower = 5501;
         public const long WaterTrident = 5510;
         public const long CleansingFire = 5535;
         public const long LightningFlash = 5536;
@@ -152,9 +154,13 @@
         public const long ArcaneShieldBuff = 5640;
         public const long ArcaneShieldSkill = 5641;
         public const long ObsidianFlesh = 5667;
+        public const long StaticFieldStaff = 5671;
         public const long FireAura = 5677;
+        public const long GeyserStaffElementalist = 5681;
         public const long MagneticAura = 5684;
+        public const long Updraft = 5687;
         public const long ArcaneShieldDamage = 5703;
+        public const long StaticFieldLightingHammer = 5732;
         public const long GlyphOfElementalPowerFireBuff = 5739;
         public const long GlyphOfElementalPowerAirBuff = 5740;
         public const long GlyphOfElementalPowerWaterBuff = 5741;
@@ -1168,6 +1174,8 @@
         public const long Echo = 29664;
         public const long BypassCoating = 29665;
         public const long QuickDraw = 29703;
+        public const long OverloadFire = 29706;
+        public const long OverloadAir = 29719;
         public const long LastRites = 29726;
         public const long PurgeGyro = 29739;
         public const long TestOfFaith = 29786;
