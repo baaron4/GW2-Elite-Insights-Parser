@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
                 foreach (EffectEvent effect in markOfBloodOrChillblains)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // marks remain for 30 seconds max
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBloodOrChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
                 foreach (EffectEvent effect in putridMarks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // marks remain for 30 seconds max
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -289,7 +289,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
                 foreach (EffectEvent effect in reapersMarks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect);// marks remain for 30 seconds max
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));

@@ -533,15 +533,21 @@ namespace GW2EIEvtcParser.EIData
                     return remove.Time;
                 }
             }
-            if (effect.Duration > 0 && effect.Duration < maxDuration)
+            // In order for effect.Duration to be usable, the duration of the effect must be statically known in advance
+            if (maxDuration > 0)
             {
-                return effect.Time + effect.Duration;
+                if (effect.Duration > 0 && effect.Duration < maxDuration)
+                {
+                    return effect.Time + effect.Duration;
+                }
+                return effect.Time + maxDuration;
             }
-            return effect.Time + maxDuration;
+            return effect.Time;
         }
 
         /// <summary>
         /// Computes the lifespan of an effect.
+        /// Will use default duration if all other methods fail
         /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
         /// </summary>
         internal static (int, int) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
@@ -549,6 +555,19 @@ namespace GW2EIEvtcParser.EIData
             long start = effect.Time;
             long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
             return ((int) start, (int) end);
+        }
+
+        /// <summary>
+        /// Computes the lifespan of an effect.
+        /// Will default to 0 duration if all other methods fail.
+        /// This method is to be used when the duration of the effect is not static (ex: a trap AoE getting triggered or when a trait can modify the duration).
+        /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
+        /// </summary>
+        internal static (int, int) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, AgentItem agent = null, long? associatedBuff = null)
+        {
+            long start = effect.Time;
+            long end = ComputeEffectEndTime(log, effect, 0, agent, associatedBuff);
+            return ((int)start, (int)end);
         }
     }
 }
