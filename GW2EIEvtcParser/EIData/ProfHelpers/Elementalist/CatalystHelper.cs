@@ -100,10 +100,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, string effectGUID, long skillId, string icon)
         {
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> jadeSpheresEarth))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> jadeSphere))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
-                foreach (EffectEvent effect in jadeSpheresEarth)
+                foreach (EffectEvent effect in jadeSphere)
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);

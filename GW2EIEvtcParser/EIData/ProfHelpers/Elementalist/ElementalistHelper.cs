@@ -253,10 +253,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach(EffectEvent effect in updrafts)
                 {
-                    if (effect.Duration > 0)
-                    {
-                        res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, effect.Time + effect.Duration));
-                    }
+                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
                 }
             }
             return res;
