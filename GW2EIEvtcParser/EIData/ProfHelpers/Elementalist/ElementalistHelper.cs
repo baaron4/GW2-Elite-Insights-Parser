@@ -44,8 +44,6 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
             new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
                 .UsingDstBaseSpecChecker(Spec.Elementalist),
-            new EffectCastFinder(Updraft, EffectGUIDs.ElementalistUpdraft)
-                .UsingSecondaryEffectChecker(EffectGUIDs.ElementalistUpdraft2),
             //new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
             //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
 
@@ -247,6 +245,21 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
+        public static IReadOnlyList<AnimatedCastEvent> ComputeUpdraftCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(Updraft);
+            combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts);
+            foreach(EffectEvent effect in updrafts)
+            {
+                if (effect.Duration > 0)
+                {
+                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, effect.Time + effect.Duration));
+                }
+            }
+            return res;
+        }
+
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Elementalist;
@@ -311,6 +324,7 @@ namespace GW2EIEvtcParser.EIData
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(false, -lifespan.Item2, 240, lifespan, "rgba(255, 255, 255, 0.5)", connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

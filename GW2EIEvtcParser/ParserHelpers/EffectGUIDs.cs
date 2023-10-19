@@ -140,6 +140,7 @@ namespace GW2EIEvtcParser
         public const string ElementalistStaticFieldLightningHammer = "E32640807FA71947BE21177E2C75043C";
         public const string ElementalistUpdraft = "DFFD3374FA23D644A6D0BE37216938C5";
         public const string ElementalistUpdraft2 = "0FA8EF1CE419504A9D03004D6CF5F073";
+        public const string ElementalistUpdraftWind = "DE8C1CE6E3AC3445911B214CA8021BDD";
         public const string ElementalistFirestorm = "172F43AB94CB214D95A6EA7F7DFCE520"; // Same for Glyph of Storms and Conjured Fiery Greatsword
         public const string ElementalistGeyser = "C0FAFED39AEDD948B025AA1272B80A8B";
         public const string TempestOverloadFire = "675AE0297C86764ABC4A5988CE76A20E";
