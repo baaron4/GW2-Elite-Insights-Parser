@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayHarvestTemple,
-                            (788, 788),
+                            (1024, 1024),
                             (-812, -21820, 2037, -18971)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
