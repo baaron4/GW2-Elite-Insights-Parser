@@ -213,6 +213,7 @@ namespace GW2EIEvtcParser.ParsedData
                         break;
                     case Spec.Elementalist:
                         toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ElementalistHelper.ComputeRideTheLightningCastEvents(p, this, skillData, agentData));
                         break;
                     default:
                         break;

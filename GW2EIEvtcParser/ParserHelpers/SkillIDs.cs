@@ -120,6 +120,7 @@
         public const long Determined3892 = 3892;
         public const long MeteorShower = 5501;
         public const long WaterTrident = 5510;
+        public const long RideTheLightningSkill = 5529;
         public const long CleansingFire = 5535;
         public const long LightningFlash = 5536;
         public const long ArcaneBlast = 5539;
@@ -142,7 +143,7 @@
         public const long FireAttunementBuff = 5585;
         public const long WaterAttunementBuff = 5586;
         public const long SoothingMist = 5587;
-        public const long RideTheLightning = 5588;
+        public const long RideTheLightningBuff = 5588;
         public const long SignetOfAirBuff = 5590;
         public const long SignetOfWater = 5591;
         public const long SignetOfEarth = 5592;

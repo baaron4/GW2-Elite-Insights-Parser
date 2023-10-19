@@ -144,7 +144,7 @@ namespace GW2EIEvtcParser.EIData
             // Forms
             new Buff("Mist Form", MistForm, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
             new Buff("Mist Form 2", MistForm2, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
-            new Buff("Ride the Lightning",RideTheLightning, Source.Elementalist, BuffClassification.Other, BuffImages.RideTheLightning),
+            new Buff("Ride the Lightning",RideTheLightningBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RideTheLightning),
             new Buff("Vapor Form", VaporForm, Source.Elementalist, BuffClassification.Other, BuffImages.VaporForm),
             new Buff("Tornado", Tornado, Source.Elementalist, BuffClassification.Other, BuffImages.Tornado),
             new Buff("Whirlpool", Whirlpool, Source.Elementalist, BuffClassification.Other, BuffImages.Whirlpool),
@@ -249,13 +249,28 @@ namespace GW2EIEvtcParser.EIData
         {
             var res = new List<AnimatedCastEvent>();
             SkillItem skill = skillData.Get(Updraft);
-            combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts);
-            foreach(EffectEvent effect in updrafts)
+            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
-                if (effect.Duration > 0)
+                foreach(EffectEvent effect in updrafts)
                 {
-                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, effect.Time + effect.Duration));
+                    if (effect.Duration > 0)
+                    {
+                        res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, effect.Time + effect.Duration));
+                    }
                 }
+            }
+            return res;
+        }
+
+        public static IReadOnlyList<AnimatedCastEvent> ComputeRideTheLightningCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(RideTheLightningSkill);
+            var applies = combatData.GetBuffData(RideTheLightningBuff).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
+            var removals = combatData.GetBuffData(RideTheLightningBuff).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
+            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            {
+                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
             }
             return res;
         }
