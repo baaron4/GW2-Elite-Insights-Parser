@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, WallOfReflection, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in wallOfReflections)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // 10s with trait
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 10000); // 10s with trait
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(false, 0, 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SanctuaryGuardian);
                 foreach (EffectEvent effect in sanctuaries)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // 7s with trait
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));

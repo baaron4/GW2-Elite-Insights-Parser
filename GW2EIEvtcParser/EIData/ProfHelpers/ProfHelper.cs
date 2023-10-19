@@ -533,16 +533,11 @@ namespace GW2EIEvtcParser.EIData
                     return remove.Time;
                 }
             }
-            // In order for effect.Duration to be usable, the duration of the effect must be statically known in advance
-            if (maxDuration > 0)
+            if (effect.Duration > 0 && effect.Duration < maxDuration)
             {
-                if (effect.Duration > 0 && effect.Duration < maxDuration)
-                {
-                    return effect.Time + effect.Duration;
-                }
-                return effect.Time + maxDuration;
+                return effect.Time + effect.Duration;
             }
-            return effect.Time;
+            return effect.Time + maxDuration;
         }
 
         /// <summary>
@@ -563,10 +558,14 @@ namespace GW2EIEvtcParser.EIData
         /// This method is to be used when the duration of the effect is not static (ex: a trap AoE getting triggered or when a trait can modify the duration).
         /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
         /// </summary>
-        internal static (int, int) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, AgentItem agent = null, long? associatedBuff = null)
+        internal static (int, int) ComputeDynamicEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
         {
+            if (!(effect is EffectEventCBTS51))
+            {
+                return ((int)effect.Time, (int)effect.Time);
+            }
             long start = effect.Time;
-            long end = ComputeEffectEndTime(log, effect, 0, agent, associatedBuff);
+            long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
             return ((int)start, (int)end);
         }
     }

@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, ProtectiveSolaceSkill, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, effect.Dst, ProtectiveSolaceTabletBuff); // manually disabled or when no more ressources
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff); // manually disabled or when no more ressources
                     var connector = new AgentConnector(effect.Dst);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
                         .UsingSkillMode(skill));

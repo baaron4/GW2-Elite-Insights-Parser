@@ -224,13 +224,31 @@ namespace GW2EIEvtcParser.EIData
             // Mark of Blood or Chillblains (Staff 2/3)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out IReadOnlyList<EffectEvent> markOfBloodOrChillblains))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
+                var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == MarkOfBlood || x.SkillId == Chillblains || x.Skill.IsDodge(log.SkillData)).ToList();
                 foreach (EffectEvent effect in markOfBloodOrChillblains)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // marks remain for 30 seconds max
+                    SkillModeDescriptor skill;
+                    string icon;
+                    bool fromDodge = false;
+                    if (markCasts.Count(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant) == 1)
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Necromancer, markCasts.FirstOrDefault(x => effect.Time - x.Time > 0 && effect.Time - x.Time < 1000).SkillId);
+                        if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
+                        {
+                            fromDodge = true;
+                            skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBlood);
+                        }
+                        icon = skill.SkillID == Chillblains ? ParserIcons.EffectChillblains : ParserIcons.EffectMarkOfBlood;
+                    } 
+                    else
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
+                        icon = ParserIcons.EffectMarkOfBloodOrChillblains;
+                    }
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, fromDodge ? 6000 : 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBloodOrChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Mark of Blood Activated (Staff 2)
@@ -264,10 +282,10 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
                 foreach (EffectEvent effect in putridMarks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect); // marks remain for 30 seconds max
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Putrid Mark (Staff 4) Activated
@@ -289,10 +307,10 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
                 foreach (EffectEvent effect in reapersMarks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect);// marks remain for 30 seconds max
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(255, 255, 255, 0.2)", connector).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Reaper's Mark (Staff 5) Activated
