@@ -148,6 +148,8 @@ namespace GW2EIEvtcParser
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
+        public const string TempestLightningOrb1 = "DE4C727C58DA0A4EB87D5433B2B64EAB";
+        public const string TempestLightningOrb2 = "AF5462A3F3500A4B8C91D6BEAFA62B62";
         public const string CatalystDeployFireJadeSphere = "AFC5D5C7DA63D64BAAD55F787205B64F";
         public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
         public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";

@@ -1061,6 +1061,7 @@
         public const long AirElementalSummoned = 25496;
         public const long EarthElementalStomp = 25498;
         public const long FireElementalFlameBarrage = 25499;
+        public const long POV_BurningRetreatEvadeBuff = 25502;
         public const long LightAura = 25518;
         public const long SuperiorSigilOfCruelty = 25526;
         public const long SiegeGolemMasteryRank4Omega = 25589;
@@ -1241,6 +1242,7 @@
         public const long WingsOfResolveSkill = 30783;
         public const long InvigoratingBond = 30784;
         public const long EnterReaperShroud = 30792;
+        public const long LightningOrb = 30795;
         public const long EliteMortarKit = 30800;
         public const long WellOfAction = 30814;
         public const long CorruptersDefense = 30845;

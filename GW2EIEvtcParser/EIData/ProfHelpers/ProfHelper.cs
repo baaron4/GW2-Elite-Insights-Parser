@@ -375,8 +375,11 @@ namespace GW2EIEvtcParser.EIData
                     TempestHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 case Spec.Weaver:
+                    ElementalistHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Catalyst:
                     ElementalistHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    CatalystHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 // Engineer
                 case Spec.Engineer:

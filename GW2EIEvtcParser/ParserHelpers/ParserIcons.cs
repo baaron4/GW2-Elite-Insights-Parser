@@ -549,6 +549,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectUpdraft = "https://i.imgur.com/LQSmmJ1.png";
         internal const string EffectFirestormGlyphOrFieryGreatsword = "https://i.imgur.com/BpsVQir.png";
         internal const string EffectGeyser = "https://i.imgur.com/4h9HaFh.png";
+        internal const string EffectDeployJadeSphereFire = "https://i.imgur.com/qdkoYap.png";
+        internal const string EffectDeployJadeSphereWater = "https://i.imgur.com/xy0SAxK.png";
+        internal const string EffectDeployJadeSphereAir = "https://i.imgur.com/SvUQmyj.png";
+        internal const string EffectDeployJadeSphereEarth = "https://i.imgur.com/KG8ysd9.png";
 
         // Overhead icons
         // - Fixations
