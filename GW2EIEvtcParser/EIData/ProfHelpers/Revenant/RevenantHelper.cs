@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EIData
                 
                 foreach (EffectEvent effect in inspiringReinforcementParts)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 360, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(inspiringReinforcementSkill));
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (EffectEvent effect in inspiringReinforcements)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -420.0f), true); // 900 units in front, 60 behind
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(false, 0, 240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector)
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, ProtectiveSolaceSkill, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
                 {
-                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff); // manually disabled or when no more ressources
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0, effect.Dst, ProtectiveSolaceTabletBuff); // manually disabled or when no more ressources
                     var connector = new AgentConnector(effect.Dst);
                     replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
                         .UsingSkillMode(skill));
