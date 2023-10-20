@@ -567,7 +567,7 @@ namespace GW2EIEvtcParser.EIData
                     return remove.Time;
                 }
             }
-            if (effect.Duration > 0 && effect.Duration < maxDuration)
+            if (effect.Duration > 0 && effect.Duration <= maxDuration)
             {
                 return effect.Time + effect.Duration;
             }
@@ -594,12 +594,13 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         internal static (int, int) ComputeDynamicEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
         {
+            long durationToUse = defaultDuration;
             if (!(effect is EffectEventCBTS51))
             {
-                return ((int)effect.Time, (int)effect.Time);
+                durationToUse = 0;
             }
             long start = effect.Time;
-            long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
+            long end = ComputeEffectEndTime(log, effect, durationToUse, agent, associatedBuff);
             return ((int)start, (int)end);
         }
     }
