@@ -211,6 +211,10 @@ namespace GW2EIEvtcParser.ParsedData
                     case ParserHelper.Spec.Ranger:
                         toAdd.AddRange(RangerHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
                         break;
+                    case Spec.Elementalist:
+                        toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ElementalistHelper.ComputeRideTheLightningCastEvents(p, this, skillData, agentData));
+                        break;
                     default:
                         break;
                 }

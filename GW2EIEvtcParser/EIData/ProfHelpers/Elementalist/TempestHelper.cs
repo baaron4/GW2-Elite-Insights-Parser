@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -49,5 +53,36 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.June2023Balance),
         };
 
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Elementalist;
+
+            // Overload Fire
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire, out IReadOnlyList<EffectEvent> overloadsFire))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadFire);
+                foreach (EffectEvent effect in overloadsFire)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadFire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Overload Air
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir, out IReadOnlyList<EffectEvent> overloadsAir))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadAir);
+                foreach (EffectEvent effect in overloadsAir)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadAir, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+        }
     }
 }

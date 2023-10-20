@@ -49,6 +49,7 @@
         public const long BladeBurstOrParticleAccelerator = -31;
         public const long RelicOfFireworksBuffLoss = -32;
         public const long MarkOfBloodOrChillblains = -33;
+        public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -117,7 +118,9 @@
         public const long UnloadThiefMinion = 3666;
         public const long BlackPowderThiefMinion = 3669;
         public const long Determined3892 = 3892;
+        public const long MeteorShower = 5501;
         public const long WaterTrident = 5510;
+        public const long RideTheLightningSkill = 5529;
         public const long CleansingFire = 5535;
         public const long LightningFlash = 5536;
         public const long ArcaneBlast = 5539;
@@ -140,7 +143,7 @@
         public const long FireAttunementBuff = 5585;
         public const long WaterAttunementBuff = 5586;
         public const long SoothingMist = 5587;
-        public const long RideTheLightning = 5588;
+        public const long RideTheLightningBuff = 5588;
         public const long SignetOfAirBuff = 5590;
         public const long SignetOfWater = 5591;
         public const long SignetOfEarth = 5592;
@@ -152,9 +155,13 @@
         public const long ArcaneShieldBuff = 5640;
         public const long ArcaneShieldSkill = 5641;
         public const long ObsidianFlesh = 5667;
+        public const long StaticFieldStaff = 5671;
         public const long FireAura = 5677;
+        public const long GeyserStaffElementalist = 5681;
         public const long MagneticAura = 5684;
+        public const long Updraft = 5687;
         public const long ArcaneShieldDamage = 5703;
+        public const long StaticFieldLightingHammer = 5732;
         public const long GlyphOfElementalPowerFireBuff = 5739;
         public const long GlyphOfElementalPowerAirBuff = 5740;
         public const long GlyphOfElementalPowerWaterBuff = 5741;
@@ -1054,6 +1061,7 @@
         public const long AirElementalSummoned = 25496;
         public const long EarthElementalStomp = 25498;
         public const long FireElementalFlameBarrage = 25499;
+        public const long POV_BurningRetreatEvadeBuff = 25502;
         public const long LightAura = 25518;
         public const long SuperiorSigilOfCruelty = 25526;
         public const long SiegeGolemMasteryRank4Omega = 25589;
@@ -1168,6 +1176,8 @@
         public const long Echo = 29664;
         public const long BypassCoating = 29665;
         public const long QuickDraw = 29703;
+        public const long OverloadFire = 29706;
+        public const long OverloadAir = 29719;
         public const long LastRites = 29726;
         public const long PurgeGyro = 29739;
         public const long TestOfFaith = 29786;
@@ -1232,6 +1242,7 @@
         public const long WingsOfResolveSkill = 30783;
         public const long InvigoratingBond = 30784;
         public const long EnterReaperShroud = 30792;
+        public const long LightningOrb = 30795;
         public const long EliteMortarKit = 30800;
         public const long WellOfAction = 30814;
         public const long CorruptersDefense = 30845;
