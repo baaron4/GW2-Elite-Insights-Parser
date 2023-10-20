@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in radiantBlindnesses)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -126,30 +126,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var doubleQuantumQuakes = cls.Where(x => x.SkillId == DoubleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in doubleQuantumQuakes)
                     {
-                        int start = (int)c.Time;
+                        long start = c.Time;
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
                         int width = 1100; int height = 60;
                         foreach (int angle in new List<int> { 90, 270 })
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
                     }
                     //
                     var tripleQuantumQuakes = cls.Where(x => x.SkillId == TripleRotatingEarthRays).ToList();
                     foreach (AbstractCastEvent c in tripleQuantumQuakes)
                     {
-                        int start = (int)c.Time;
+                        long start = c.Time;
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
                         int width = 1100; int height = 60;
                         foreach (int angle in new List<int> { 30, 150, 270})
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
 
                     }
@@ -157,26 +157,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var terraforms = cls.Where(x => x.SkillId == Terraform).ToList();
                     foreach (AbstractCastEvent c in terraforms)
                     {
-                        int start = (int)c.Time;
+                        long start = c.Time;
                         int delay = 2000; // casttime 0 from skill def
                         int duration = 5000;
                         int radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + duration));
                     }
                     //
                     var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in diamondPalisades)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
                     foreach (AbstractCastEvent c in boulderBarrages)
                     {
-                        int start = (int)c.Time;
+                        long start = c.Time;
                         int duration = 4600; // cycle 3 from skill def
                         int radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(true, start + duration, radius, (start, start + duration), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)).UsingGrowingEnd(start + duration));
                     }
                     break;
                 default:
