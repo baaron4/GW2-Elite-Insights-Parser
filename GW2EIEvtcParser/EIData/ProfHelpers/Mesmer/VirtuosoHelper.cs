@@ -75,20 +75,20 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (blade is BuffApplyEvent bae)
                 {
-                    res.Add(new BuffApplyEvent(a, a, bae.Time, bae.AppliedDuration, skill, bae.BuffInstance, true));
+                    res.Add(new BuffApplyEvent(bae.By, a, bae.Time, bae.AppliedDuration, skill, bae.IFF, bae.BuffInstance, true));
                     lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
                 }
                 else if (blade is BuffRemoveAllEvent brae)
                 {
-                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint remmovedInstance))
+                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint removedInstance))
                     {
-                        remmovedInstance = 0;
+                        removedInstance = 0;
                     }
-                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, remmovedInstance));
+                    res.Add(new BuffRemoveSingleEvent(brae.By, a, brae.Time, brae.RemovedDuration, skill, brae.IFF, removedInstance));
                 }
                 else if (blade is BuffRemoveSingleEvent brse)
                 {
-                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, brse.BuffInstance));
+                    res.Add(new BuffRemoveSingleEvent(brse.By, a, brse.Time, brse.RemovedDuration, skill, brse.IFF, brse.BuffInstance));
                 }
             }
             return res;

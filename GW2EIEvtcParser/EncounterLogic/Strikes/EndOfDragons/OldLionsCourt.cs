@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Missing Buff Initial
                 if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
                 {
-                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), 1, true));
+                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), ArcDPSEnums.IFF.Friend, 1, true));
                 }
             }
             return toAdd;
