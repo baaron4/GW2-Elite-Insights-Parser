@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public override FormDecoration Copy()
         {
-            return (FormDecoration)new RectangleDecoration(Width, Height, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowing(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new RectangleDecoration(Width, Height, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
     }
 }

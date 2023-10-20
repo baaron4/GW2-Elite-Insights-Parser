@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class FormDecoration : GenericAttachedDecoration
     {
 
-        public bool Filled { get; private set; }
+        public bool Filled { get; private set; } = true;
         public string Color { get; }
         public int GrowingEnd { get; private set; }
         public bool GrowingReverse { get; private set; }
@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public virtual FormDecoration UsingGrowing(long growingEnd, bool reverse)
+        public virtual FormDecoration UsingGrowingEnd(long growingEnd, bool reverse = false)
         {
             if (GrowingReverse)
             {
