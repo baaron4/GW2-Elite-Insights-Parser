@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff) : base(by, to, time, removedDuration, buffSkill, iff)
+        internal BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(by, to, time, removedDuration, buffSkill, IFF.Unknown)
         {
         }
 
