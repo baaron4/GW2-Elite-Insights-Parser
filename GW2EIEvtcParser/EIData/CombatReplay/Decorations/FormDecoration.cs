@@ -8,6 +8,7 @@ namespace GW2EIEvtcParser.EIData
         public bool Filled { get; private set; }
         public string Color { get; }
         public int GrowingEnd { get; private set; }
+        public bool GrowingReverse { get; private set; }
 
         protected FormDecoration((long , long) lifespan, string color, Connector connector) : base(lifespan, connector)
         {
@@ -22,15 +23,12 @@ namespace GW2EIEvtcParser.EIData
 
         public virtual FormDecoration UsingGrowing(long growingEnd, bool reverse)
         {
-            if (growingEnd < 0)
+            if (GrowingReverse)
             {
                 throw new InvalidDataException("GrowingEnd must be positive");
             }
             GrowingEnd = (int)growingEnd;
-            if (reverse)
-            {
-                GrowingEnd *= -1;
-            }
+            GrowingReverse = reverse;
             return this;
         }
 

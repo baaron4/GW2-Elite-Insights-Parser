@@ -10,7 +10,7 @@
         {
             Fill = decoration.Filled;
             Color = decoration.Color;
-            GrowingEnd = decoration.GrowingEnd;
+            GrowingEnd = decoration.GrowingReverse ? -decoration.GrowingEnd : decoration.GrowingEnd;
         }
 
     }
