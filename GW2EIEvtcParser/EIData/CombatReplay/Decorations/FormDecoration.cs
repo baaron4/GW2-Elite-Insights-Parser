@@ -5,13 +5,13 @@
 
         public bool Filled { get; }
         public string Color { get; }
-        public int Growing { get; }
+        public int GrowingEnd { get; }
 
         protected FormDecoration(bool fill, int growing, (int start, int end) lifespan, string color, Connector connector) : base(lifespan, connector)
         {
             Color = color;
             Filled = fill;
-            Growing = growing;
+            GrowingEnd = growing;
         }
 
     }
