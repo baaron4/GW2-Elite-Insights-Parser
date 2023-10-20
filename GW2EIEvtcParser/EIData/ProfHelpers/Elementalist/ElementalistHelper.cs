@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
@@ -282,7 +283,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, MeteorShower);
                 foreach (EffectEvent effect in meteorShowerCircles)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 9000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMeteorShower, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -292,11 +293,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     foreach (EffectEvent effect in meteorShowersMeteors)
                     {
-                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1330);
                         var connector = new PositionConnector(effect.Position);
                         // -750 to make the decoration faster than in game
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (lifespan.Item2 -750, lifespan.Item2), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new CircleDecoration(false, -lifespan.Item2, 180, (lifespan.Item2 - 750, lifespan.Item2), "rgba(255, 255, 255, 0.5)", connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (lifespan.Item2 - 750, lifespan.Item2), color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(false, -lifespan.Item2, 180, (lifespan.Item2 - 750, lifespan.Item2), color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
                     }
                 }
             }
@@ -307,7 +308,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldStaff);
                 foreach (EffectEvent effect in staticFieldsStaff)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -320,7 +321,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldLightingHammer);
                 foreach (EffectEvent effect in staticFieldsHammer)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -333,7 +334,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Updraft);
                 foreach (EffectEvent effect in updrafts)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 750);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new CircleDecoration(false, -lifespan.Item2, 240, lifespan, "rgba(255, 255, 255, 0.5)", connector).UsingSkillMode(skill));
@@ -347,7 +348,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
                 foreach (EffectEvent effect in firestorms)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 10000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFirestormGlyphOrFieryGreatsword, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -357,14 +358,22 @@ namespace GW2EIEvtcParser.EIData
             // Geyser
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyser, out IReadOnlyList<EffectEvent> geysers))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist);
-                foreach (EffectEvent effect in geysers)
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyserSplash, out IReadOnlyList<EffectEvent> geyserSplash))
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGeyser, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist);
+                    foreach (EffectEvent effect in geysers)
+                    {
+                        if (!geyserSplash.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            continue;
+                        }
+                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGeyser, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    }
                 }
+                
             }
         }
     }

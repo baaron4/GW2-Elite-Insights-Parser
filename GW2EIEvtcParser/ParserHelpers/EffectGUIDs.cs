@@ -142,9 +142,12 @@ namespace GW2EIEvtcParser
         public const string ElementalistUpdraft2 = "0FA8EF1CE419504A9D03004D6CF5F073";
         public const string ElementalistUpdraftWind = "DE8C1CE6E3AC3445911B214CA8021BDD";
         public const string ElementalistFirestorm = "172F43AB94CB214D95A6EA7F7DFCE520"; // Same for Glyph of Storms and Conjured Fiery Greatsword
-        public const string ElementalistGeyser = "C0FAFED39AEDD948B025AA1272B80A8B";
-        public const string TempestOverloadFire = "675AE0297C86764ABC4A5988CE76A20E";
-        public const string TempestOverloadAir = "3CE58ECAB1EE9C4E96F70E3A64967F55";
+        public const string ElementalistGeyserSplash = "C0FAFED39AEDD948B025AA1272B80A8B";
+        public const string ElementalistGeyser = "3A15A72D28971D4D8CE5C24DB66C5595";
+        public const string TempestOverloadFire1 = "675AE0297C86764ABC4A5988CE76A20E";
+        public const string TempestOverloadFire2 = "977D44CE34F6B9438BCDCFA074BBDCA8";
+        public const string TempestOverloadAir1 = "3CE58ECAB1EE9C4E96F70E3A64967F55";
+        public const string TempestOverloadAir2 = "E8EB2CDF97F34C42A8AAC0D3BA6551D0";
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
