@@ -220,7 +220,7 @@ class Animator {
                         decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Line":
-                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, actor.connectedFrom, actor.connectedTo);
+                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.growingEnd, actor.color, actor.connectedFrom, actor.connectedTo);
                         break;
                     case "IconDecoration":
                         decoration = new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);

@@ -443,8 +443,8 @@ class PieMechanicDrawable extends FormMechanicDrawable {
 }
 
 class LineMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, connectedFrom, connectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, null);
+    constructor(start, end, growingEnd, color, connectedFrom, connectedTo) {
+        super(start, end, false, growingEnd, color, connectedTo, null);
         this.connectedFrom = connectedFrom;
         this.targetPositionFetcher = null;
         if (connectedFrom.interpolationMethod >= 0) {
@@ -504,10 +504,18 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         const percent = this.getPercent();
         var ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, 0);
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(percent * (target.x - pos.x), percent * (target.y - pos.y));
+        if (this.growingEnd < 0) {
+            this.moveContext(ctx, target, 0);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(( 1 - percent) * (pos.x - target.x), percent * (pos.y - target.y));
+        } else {
+            this.moveContext(ctx, pos, 0);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(percent * (target.x - pos.x), percent * (target.y - pos.y));
+        }
+        
         ctx.lineWidth = (2 / animator.scale).toString();
         ctx.strokeStyle = this.color;
         ctx.stroke();
