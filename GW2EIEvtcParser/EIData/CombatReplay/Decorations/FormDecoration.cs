@@ -1,18 +1,40 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System.IO;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal abstract class FormDecoration : GenericAttachedDecoration
     {
 
-        public bool Filled { get; }
+        public bool Filled { get; private set; }
         public string Color { get; }
-        public int GrowingEnd { get; }
+        public int GrowingEnd { get; private set; }
 
-        protected FormDecoration(bool fill, int growing, (int start, int end) lifespan, string color, Connector connector) : base(lifespan, connector)
+        protected FormDecoration((long , long) lifespan, string color, Connector connector) : base(lifespan, connector)
         {
             Color = color;
-            Filled = fill;
-            GrowingEnd = growing;
         }
+
+        public virtual FormDecoration UsingFilled(bool filled)
+        {
+            Filled = filled;
+            return this;
+        }
+
+        public virtual FormDecoration UsingGrowing(long growingEnd, bool reverse)
+        {
+            if (growingEnd < 0)
+            {
+                throw new InvalidDataException("GrowingEnd must be positive");
+            }
+            GrowingEnd = (int)growingEnd;
+            if (reverse)
+            {
+                GrowingEnd *= -1;
+            }
+            return this;
+        }
+
+        public abstract FormDecoration Copy();
 
     }
 }

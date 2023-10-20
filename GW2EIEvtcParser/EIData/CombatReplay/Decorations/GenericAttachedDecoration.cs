@@ -10,17 +10,17 @@ namespace GW2EIEvtcParser.EIData
         public RotationConnector RotationConnectedTo { get; protected set; }
         public SkillModeDescriptor SkillMode;
 
-        protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
+        protected GenericAttachedDecoration((long , long ) lifespan, Connector connector) : base(lifespan)
         {
             ConnectedTo = connector;
         }
 
         /// <summary>Creates a new line towards the other decoration</summary>
-        public LineDecoration LineTo(GenericAttachedDecoration other, int growing, string color)
+        public LineDecoration LineTo(GenericAttachedDecoration other, string color)
         {
             int start = Math.Max(Lifespan.start, other.Lifespan.start);
             int end = Math.Min(Lifespan.end, other.Lifespan.end);
-            return new LineDecoration(growing, (start, end), color, ConnectedTo, other.ConnectedTo);
+            return new LineDecoration((start, end), color, ConnectedTo, other.ConnectedTo);
         }
 
         public virtual GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)

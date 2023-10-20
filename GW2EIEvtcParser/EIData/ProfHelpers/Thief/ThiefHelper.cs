@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                     GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                     if (entranceDecoration != null)
                     {
-                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
                     }
                     replay.Decorations.Add(icon);
                 }
