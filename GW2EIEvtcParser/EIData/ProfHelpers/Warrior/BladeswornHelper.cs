@@ -4,7 +4,6 @@ using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -22,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(FlowStabilizer, PositiveFlow)
                 .UsingChecker((bae, combatData, agentData, skillData) =>
                 {
-                    return 2 == FindRelatedEvents(combatData.GetBuffData(PositiveFlow).OfType<BuffApplyEvent>(), bae.Time).Count(apply => apply.By == bae.To && apply.To == bae.To);
+                    return 2 == CombatData.FindRelatedEvents(combatData.GetBuffData(PositiveFlow).OfType<BuffApplyEvent>(), bae.Time).Count(apply => apply.By == bae.To && apply.To == bae.To);
                 }),
             new EffectCastFinder(DragonspikeMineSkill, EffectGUIDs.BladeswornDragonspikeMine).UsingSrcSpecChecker(Spec.Bladesworn),
         };

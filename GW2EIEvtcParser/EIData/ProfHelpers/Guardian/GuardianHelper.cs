@@ -6,7 +6,6 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using GW2EIEvtcParser.ParserHelpers;
@@ -29,10 +28,10 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(JudgesIntervention, JudgesIntervention)
                 .UsingDisableWithEffectData(),
             new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfBuff)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffectDst(EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
                 .UsingNotAccurate(true),
             new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfBuff)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffectDst(combatData, EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffectDst(EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1)
                 .UsingDstBaseSpecChecker(Spec.Guardian),
@@ -49,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstBaseSpecChecker(Spec.Guardian)
                 .UsingChecker((evt, combatData, agentData, skillData) =>
                 {
-                    return FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
+                    return CombatData.FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
                         .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
                 }) // identify advance by self-applied 20s to 40s aegis
                 .UsingNotAccurate(true),
@@ -57,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstBaseSpecChecker(Spec.Guardian)
                 .UsingChecker((evt, combatData, agentData, skillData) =>
                 {
-                    return 5 <= FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
+                    return 5 <= CombatData.FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
                         .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
                 }) // identify stand your ground by self-applied 5+ stacks of stability
                 .UsingNotAccurate(true),

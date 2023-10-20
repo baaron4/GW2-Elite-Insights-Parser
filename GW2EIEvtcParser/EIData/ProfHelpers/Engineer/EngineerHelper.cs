@@ -6,7 +6,6 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -63,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDisableWithEffectData(),
             new EffectCastFinderByDst(MagneticInversion, EffectGUIDs.EngineerMagneticInversion)
                 .UsingDstBaseSpecChecker(Spec.Engineer)
-                .UsingChecker((effect, combatData, agentData, skillData) => HasLostBuff(combatData, Absorb, effect.Dst, effect.Time)),
+                .UsingChecker((effect, combatData, agentData, skillData) => combatData.HasLostBuff(Absorb, effect.Dst, effect.Time)),
             // Kits
             new EngineerKitFinder(BombKit),
             new EngineerKitFinder(ElixirGun),
