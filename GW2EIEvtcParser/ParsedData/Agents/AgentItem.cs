@@ -480,5 +480,15 @@ namespace GW2EIEvtcParser.ParsedData
         {
             return ids.Any(x => IsSpecies(x));
         }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.MinionID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.ChestID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
     }
 }
