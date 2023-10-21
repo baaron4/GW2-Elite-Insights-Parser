@@ -524,8 +524,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = start + 5000;
                         var circle = new CircleDecoration(180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target));
-                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
-                        replay.Decorations.Add(circle.Copy().UsingFilled(false));
+                        replay.AddDualDecoration(circle.UsingFilled(false), true, end);
                         if (!log.FightData.IsCM)
                         {
                             replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
@@ -645,8 +644,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in tpDeimos)
             {
                 var circle = new CircleDecoration(180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p));
-                replay.Decorations.Add(circle);
-                replay.Decorations.Add(circle.Copy().UsingGrowingEnd(seg.End));
+                replay.AddDualDecoration(circle, seg.End);
             }
             // Tear Instability
             IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

@@ -137,12 +137,12 @@ namespace GW2EIEvtcParser.EIData
                         if (i < 3)
                         {
                             // Pulse inwards
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(effectTimeEnd, true));
+                            replay.Decorations.Add(circle.UsingGrowingEnd(effectTimeEnd, true));
                         }
                         else
                         {
                             // Final pulse outwards
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(effectTimeEnd));
+                            replay.Decorations.Add(circle.UsingGrowingEnd(effectTimeEnd));
                         }
                         pulseTimeDelay += 1000;
                     }
@@ -221,12 +221,12 @@ namespace GW2EIEvtcParser.EIData
                         if (i < 3)
                         {
                             // Pulse inwards
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(effectTimeEnd, true));
+                            replay.Decorations.Add(circle.UsingGrowingEnd(effectTimeEnd, true));
                         }
                         else
                         {
                             // Final pulse outwards
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(effectTimeEnd));
+                            replay.Decorations.Add(circle.UsingGrowingEnd(effectTimeEnd));
                         }
                         pulseTimeDelay += 1000;
                     }

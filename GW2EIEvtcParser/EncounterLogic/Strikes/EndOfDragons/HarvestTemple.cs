@@ -625,8 +625,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)lightningEffect.Time - duration;
                             int end = (int)lightningEffect.Time;
                             var circle = new CircleDecoration(180, (start, end), "rgba(255, 180, 0, 0.2)", new PositionConnector(lightningEffect.Position));
-                            replay.Decorations.Add(circle);
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
+                            replay.AddDualDecoration(circle, end);
                         }
                     }
                     //
@@ -637,8 +636,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int startLoad = (int)fireBallEffect.Time - 2000;
                             int endLoad = (int)fireBallEffect.Time;
                             var circle = new CircleDecoration(180, (startLoad, endLoad), "rgba(250, 0, 0, 0.2)", new PositionConnector(fireBallEffect.Position));
-                            replay.Decorations.Add(circle);
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(endLoad));
+                            replay.AddDualDecoration(circle, endLoad);
                             replay.Decorations.Add(new CircleDecoration(180, (endLoad, endLoad + 2000), "rgba(250, 0, 0, 0.4)", new PositionConnector(fireBallEffect.Position)));
                         }
                     }
@@ -652,8 +650,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var connector = new PositionConnector(voidZoneEffect.Position);
                             var rotationConnector = new AngleConnector(voidZoneEffect.Rotation.Z);
                             var rectangle = (RectangleDecoration)new RectangleDecoration(90, 230, (start, end), "rgba(150, 0, 150, 0.2)", connector).UsingRotationConnector(rotationConnector);
-                            replay.Decorations.Add(rectangle);
-                            replay.Decorations.Add(rectangle.Copy().UsingGrowingEnd(end));
+                            replay.AddDualDecoration(rectangle, end);
                         }
                     }
                     //
@@ -665,8 +662,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 3000;
                             replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), "rgba(250, 50, 0, 0.4)", new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
                             var circle = new CircleDecoration(280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position));
-                            replay.Decorations.Add(circle);
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
+                            replay.AddDualDecoration(circle, end);
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 210;
                             int lifespan = 15000;
@@ -697,8 +693,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
                             int radius = 2700;
                             var circle = new CircleDecoration(radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position));
-                            replay.Decorations.Add(circle);
-                            replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
+                            replay.AddDualDecoration(circle, end);
                         }
                     }
                     //

@@ -125,8 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
                             var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
-                            replay.Decorations.Add(pie.Copy().UsingGrowingEnd(endHitTime));
-                            replay.Decorations.Add(pie);
+                            replay.AddDualDecoration(pie, endHitTime);
                             // Lingering AoE to match in game display
                             replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
                         }
@@ -142,8 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Position of the jump back
                         var jumpPosition = new Point3D((float)613.054, (float)-85.3458, (float)-7075.265);
                         var circle = new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.1)", new PositionConnector(jumpPosition));
-                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(endTime));
-                        replay.Decorations.Add(circle);
+                        replay.AddDualDecoration(circle, endTime);
                     }
                     // Douse in Darkness
                     var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness).ToList();
@@ -156,8 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                         // Jump up
                         var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
-                        replay.Decorations.Add(jumpUpCircle.Copy().UsingGrowingEnd(endJump));
-                        replay.Decorations.Add(jumpUpCircle);
+                        replay.AddDualDecoration(jumpUpCircle, endJump);
                         // Pull
                         for (int i = 0; i < 4; i++)
                         {
@@ -169,8 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long pullTime = c.Time + jumpTime + 1700;
                         long finalTime = pullTime + 1500;
                         var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
-                        replay.Decorations.Add(landingCircle.Copy().UsingGrowingEnd(finalTime));
-                        replay.Decorations.Add(landingCircle);
+                        replay.AddDualDecoration(landingCircle, finalTime);
                     }
                     // Cascade
                     AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);

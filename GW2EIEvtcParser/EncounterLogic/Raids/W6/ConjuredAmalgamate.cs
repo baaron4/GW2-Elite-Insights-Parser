@@ -341,8 +341,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (shieldNextPos != null || shieldPrevPos != null)
                 {
                     var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start));
-                    replay.Decorations.Add(circle);
-                    replay.Decorations.Add(circle.Copy().UsingFilled(false));
+                    replay.AddDualDecoration(circle, false);
                 }
             }
             // Shields and Greatswords Overheads
