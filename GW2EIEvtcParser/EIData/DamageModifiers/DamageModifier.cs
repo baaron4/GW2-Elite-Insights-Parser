@@ -164,6 +164,8 @@ namespace GW2EIEvtcParser.EIData
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:
                     return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+                case DamageType.LifeLeech:
+                    return _dmgSrc == DamageSource.All ? damageData.LifeLeechDamage : damageData.ActorLifeLeechDamage;
                 case DamageType.Strike:
                     return _dmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
                 case DamageType.StrikeAndCondition:
