@@ -266,6 +266,45 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration"></param>
+        /// <param name="filled"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddDualDecoration(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.Copy().UsingFilled(filled).UsingGrowingEnd(growingEnd, reverseGrowing));
+        }
+
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration"></param>
+        /// <param name="filled"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddDualDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.Copy().UsingGrowingEnd(growingEnd, reverseGrowing));
+        }
+
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration"></param>
+        /// <param name="filled"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddDualDecoration(FormDecoration decoration, bool filled)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.Copy().UsingFilled(filled));
+        }
+
+        /// <summary>
         /// Add tether decorations which src and dst are defined by tethers parameter
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>

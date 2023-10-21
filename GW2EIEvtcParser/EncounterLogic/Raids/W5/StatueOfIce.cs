@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
             }
         }
 
@@ -99,8 +99,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(true, 0, range, angle, (start, end), "rgba(0,100,255,0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(true, 0, range, angle, (start + 1900, end), "rgba(0,100,255,0.3)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), "rgba(0,100,255,0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), "rgba(0,100,255,0.3)", connector).UsingRotationConnector(rotationConnector));
                     }
                     break;
                 default:

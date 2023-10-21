@@ -26,16 +26,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in expulsionEffects)
                 {
-                    int endTime = (int)effect.Time + cotDuration;
+                    long endTime = effect.Time + cotDuration;
                     if (innerRadius == 0)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(outerRadius, (effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                     }
                     else
                     {
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, ((int)effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, innerRadius, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                     }
                 }
             }

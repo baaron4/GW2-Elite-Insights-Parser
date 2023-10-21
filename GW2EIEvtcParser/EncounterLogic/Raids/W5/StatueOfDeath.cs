@@ -94,8 +94,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
+                        replay.Decorations.Add(circle);
+                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(start + c.ExpectedDuration));
                     }
                     var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();
                     foreach (AbstractCastEvent c in vomit)
@@ -109,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new PieDecoration(true, start + cascading, radius, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new PieDecoration( radius, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls).ToList();
@@ -119,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         //int duration = 900;
                         end = (int)c.EndTime; //duration;
                         //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenSpirit1:
@@ -129,8 +130,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                        replay.Decorations.Add(circle);
+                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(gend));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritHorde1:
@@ -157,8 +159,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
+                var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
+                replay.Decorations.Add(circle);
+                replay.Decorations.Add(circle.Copy().UsingGrowingEnd(start + duration));
             }
         }
 
