@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Add tether decorations which src and dst are defined by tethers parameter
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>
         /// <param name="color">color of the tether</param>
@@ -296,17 +296,28 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal void AddTetherByEffectGUID(EffectEvent effect, string color, int duration = 0, bool overrideDuration = false)
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="effect">Tether effect.</param>
+        /// <param name="color">Color of the tether decoration.</param>
+        /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
+        /// <param name="overrideDuration">Wether to override the duration or not.</param>
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, string color, int duration = 0, bool overrideDuration = false)
         {
+            if (!effect.IsAroundDst) { return; }
+
             (int, int) lifespan;
-            if (effect.Duration > 0 && overrideDuration == false)
+            if (overrideDuration == false)
             {
-                lifespan = ((int)effect.Time, (int)effect.Time + (int)effect.Duration);
+                lifespan = ProfHelper.ComputeEffectLifespan(log, effect, effect.Duration);
             }
             else
             {
                 lifespan = ((int)effect.Time, (int)effect.Time + duration);
             }
+
             if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
             {
                 Decorations.Add(new LineDecoration(0, lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));

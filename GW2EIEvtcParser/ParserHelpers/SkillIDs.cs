@@ -3153,7 +3153,7 @@
         public const long PoisonRoar = 64576;
         public const long MagicHail = 64582;
         public const long VoidExplosion3 = 64585;
-        public const long DragonSlashRush2 = 64619;
+        public const long DragonSlashRushNM2 = 64619;
         public const long DragonsEndContributor8 = 64623;
         public const long WaveOfTormentNM = 64669;
         public const long ToxicOrb = 64718;
@@ -3170,14 +3170,14 @@
         public const long FissureOfTorment = 64895;
         public const long OrangefishSushi = 64896;
         public const long ToxicBullet1 = 64914;
-        public const long ExplosiveUppercut1 = 64920;
+        public const long ExplosiveUppercutNM = 64920;
         public const long DragonsEndContributor4 = 64924;
         public const long RedfishSushi = 64931;
         public const long SlamZhaitan = 64932;
         public const long ExposedPlayer = 64936;
         public const long DragonSlashBurst2 = 64940;
         public const long DeadlyAim = 64947;
-        public const long DragonSlashWave = 64952;
+        public const long DragonSlashWaveNM = 64952;
         public const long TheMechRiderPushNM = 64953;
         public const long FlankingStrike = 64965;
         public const long DebilitatingVoid = 64967;
@@ -3239,7 +3239,7 @@
         public const long VoidCorruption = 65590;
         public const long VoidExplosion2 = 65595;
         public const long PowerOfTheVoid = 65601;
-        public const long EnforcerRushingJustice = 65608;
+        public const long EnforcerRushingJusticeNM = 65608;
         public const long YellowfishSushi = 65613;
         public const long HallucinatingShot = 65649;
         public const long DeathsHandSpreadBuff = 65661;
@@ -3272,7 +3272,7 @@
         public const long NightmareEpoch1 = 66059;
         public const long AnkkaLichHallucinationFixation = 66075;
         public const long NightmareFusilladeSide = 66089;
-        public const long DragonSlashRush1 = 66090;
+        public const long DragonSlashRushNM1 = 66090;
         public const long FixatedAnkkaKainengOverlook = 66140;
         public const long TerrifyingApparition = 66156;
         public const long DragonsEndContributor2 = 66185;
@@ -3289,7 +3289,7 @@
         public const long ChaosAndDestruction = 66409;
         public const long CallLightning = 66424;
         public const long GlacialSlam = 66446;
-        public const long DragonSlashBurst = 66465;
+        public const long DragonSlashBurstNM = 66465;
         public const long Drown2 = 66486;
         public const long TsunamiSlam2 = 66489;
         public const long FishyRiceBowl = 66503;
@@ -3374,7 +3374,7 @@
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long WaveOfTormentCM = 67839;
-        public const long ExplosiveUppercut2 = 67849;
+        public const long ExplosiveUppercutCM = 67849;
         public const long MagneticBomb = 67856;
         public const long ImminentDeathSkill = 67859;
         public const long TormentingWaveCM = 67866;

@@ -20,22 +20,28 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(new long[] { DragonSlashWave, DragonSlashWaveCM }, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
-                new PlayerDstHitMechanic(new long []{DragonSlashBurst, DragonSlashBurstCM }, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
-                new PlayerDstHitMechanic(new long[] { DragonSlashRush1, DragonSlashRush2, DragonSlashRush1CM, DragonSlashRush2CM }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
-                new PlayerDstSkillMechanic(new long[] {TargetedExpulsion, TargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((evt, log) => evt.HasDowned),
-                //new PlayerDstBuffApplyMechanic(new long[] {PoV_SharedDestructionLi, PoV_SharedDestructionLiCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
-                new PlayerDstHitMechanic(new long[] { EnforcerRushingJustice, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashWaveNM, DragonSlashWaveCM }, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashBurstNM, DragonSlashBurstCM }, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
+                new PlayerDstHitMechanic(new long[] { EnforcerRushingJusticeNM, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new PlayerDstHitMechanic(new long[] { StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM }, "A Test of Your Reflexes", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150).UsingAchievementEligibility(true).UsingEnable((log) => log.FightData.IsCM),
+                new PlayerDstHitMechanic(new long[] { ExplosiveUppercutNM, ExplosiveUppercutCM }, "Explosive Uppercut", new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
                 new PlayerDstHitMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150).UsingChecker((evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindblade) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindbladeCM)),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150).UsingChecker((evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcer) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcerCM)),
-                new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
-                new PlayerDstHitMechanic(new long[]{StormOfSwords1, StormOfSwords2, StormOfSwords3 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new PlayerDstHitMechanic(JadeBusterCannonMechRider, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
-                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
-                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, "Enhanced Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
-                new PlayerDstHitMechanic(new long[] { DragonSlashWave, DragonSlashWaveCM, DragonSlashRush1, DragonSlashRush2, DragonSlashRush1CM, DragonSlashRush2CM }, "A Test of Your Reflexes", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150).UsingAchievementEligibility(true).UsingEnable((log) => log.FightData.IsCM),
+                new PlayerDstSkillMechanic(new long[] { TargetedExpulsion, TargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstNoSkillMechanic(new long[] { EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 }, "The Path of Most Resistance", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150).UsingAchievementEligibility(true).UsingEnable(x => x.FightData.IsCM),
+                new PlayerDstBuffApplyMechanic(new long [] { TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 }, "Target Order", new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TrashID> { ArcDPSEnums.TrashID.TheMindblade, ArcDPSEnums.TrashID.TheMindbladeCM })),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TrashID> { ArcDPSEnums.TrashID.TheEnforcer, ArcDPSEnums.TrashID.TheEnforcerCM })),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreen, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, "Shared Destruction",  new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.Succ", "Successful Green", "Successful Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenFailure, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.DarkGreen), "Green.Fail", "Failed Green", "Failed Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, "Ricochet", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Sniper.T", "Targetted by Sniper Ricochet", "Ricochet Target", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, "Rain of Blades", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targetted by Rain of Blades", "Rain of Blades Target", 150),
+                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, "Enhanced Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
             }
             );
             Icon = EncounterIconKainengOverlook;
@@ -215,10 +221,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new string[] { EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, EffectGUIDs.KainengOverlookSharedDestructionGreenFailure },
                 out IReadOnlyList<EffectEvent> greenEndEffectEvents))
             {
-                foreach (EffectEvent e in greenEndEffectEvents)
+                foreach (EffectEvent effect in greenEndEffectEvents)
                 {
-                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(e.EffectID).ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
-                    AddSharedDestructionDecoration(p, replay, ((int)e.Time - greenDuration, (int)e.Time), isSuccess);
+                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
+                    AddSharedDestructionDecoration(p, replay, ((int)effect.Time - greenDuration, (int)effect.Time), isSuccess);
                 }
             }
             else
@@ -227,17 +233,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSharedDestructionGreen, out IReadOnlyList<EffectEvent> greenApplyEffectEvents))
             {
-                foreach (EffectEvent e in greenApplyEffectEvents)
+                foreach (EffectEvent effect in greenApplyEffectEvents)
                 {
-                    if (!greenEndEffectEvents.Any(x => Math.Abs(x.Time - e.Time) < 200 || Math.Abs(x.Time - greenDuration - e.Time) < 200))
+                    // Check if any green effect event happens within 200 ms from another successful or failed green.
+                    // If the green mechanic targets the same player twice at the same time (meaning only one green appears in game), the second effect gets queued up 6.5 seconds later.
+                    // This prevents the late green effect from appearing in the combat replay, since it doesn't exist in game.
+                    if (!greenEndEffectEvents.Any(x => Math.Abs(x.Time - effect.Time) < 200 || Math.Abs(x.Time - greenDuration - effect.Time) < 200))
                     {
-                        AddSharedDestructionDecoration(p, replay, ProfHelper.ComputeEffectLifespan(log, e, greenDuration), true);
+                        AddSharedDestructionDecoration(p, replay, ProfHelper.ComputeEffectLifespan(log, effect, greenDuration), true);
                     }
                 }
             }
 
-            // Sniper Tether & AoE - CM
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSniperBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
+            // Sniper Ricochet Tether & AoE - CM
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
             {
                 foreach (EffectEvent effect in sniperBeamsCM.Where(x => x.Dst == p.AgentItem))
                 {
@@ -249,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (int, int) lifespan = ((int)effect.Time, (int)effect.Time + correctedDuration);
 
                     // Tether Sniper to Player
-                    replay.AddTetherByEffectGUID(effect, "rgba(255, 200, 0, 0.3)", correctedDuration, true);
+                    replay.AddTetherByEffectGUID(log, effect, "rgba(255, 200, 0, 0.3)", correctedDuration, true);
 
                     // Circle around the player
                     replay.Decorations.Add(new CircleDecoration(false, 0, 500, lifespan, "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
@@ -268,8 +277,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // Mindblade AoE on players - Orange circle (first)
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
+            // Rain Of Blades - Mindblade AoE on players - Orange circle (first)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers.Where(x => x.Dst == p.AgentItem))
                 {
@@ -280,8 +289,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // Mindblade AoE on players - Orange circle (consecutives)
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
+            // Rain Of Blades - Mindblade AoE on players - Orange circle (consecutives)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers4.Where(x => x.Dst == p.AgentItem))
                 {
@@ -386,9 +395,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritOfPain:
                     // Volatile Expulsion - Orange AoE around the spirit
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out IReadOnlyList<EffectEvent> volatileExpulsion))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out IReadOnlyList<EffectEvent> volatileExpulsion))
                     {
-                        foreach (EffectEvent effect in volatileExpulsion.Where(x => x.Src == target.AgentItem))
+                        foreach (EffectEvent effect in volatileExpulsion)
                         {
                             (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
                             var connector = new AgentConnector(target);
@@ -399,9 +408,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritOfDestruction:
                     // Volatile Burst - Orange AoE around the spirit with safe zone in the center
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem,EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
                     {
-                        foreach (EffectEvent effect in volatileBurst.Where(x => x.Src == target.AgentItem))
+                        foreach (EffectEvent effect in volatileBurst)
                         {
                             (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
                             var connector = new AgentConnector(target);
@@ -491,8 +500,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 240, lifespan, "rgba(250, 50, 0, 0.2)", connector));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 240, lifespan, "rgba(250, 50, 0, 0.2)", connector));
+                    int damageDelay = 2000;
+                    int warningEnd = lifespan.Item1 + damageDelay;
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, warningEnd, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 240, (warningEnd, lifespan.Item2), "rgba(250, 50, 0, 0.4)", connector));
                 }
             }
 
@@ -515,25 +528,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
                     var connector = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 50, lifespan, "rgba(200, 120, 0, 0.2)", connector));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespan.Item2, 50, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespan.Item2, 90, lifespan, "rgba(200, 120, 0, 0.2)", connector));
                 }
             }
         }
 
         internal static void AddFallOfTheAxeDecoration(NPC target, CombatReplay replay, AngleConnector rotationConnector, (int, int) lifespan, int angle)
         {
-            replay.Decorations.Add(new PieDecoration(false, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-            replay.Decorations.Add(new PieDecoration(true, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-            replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(rotationConnector));
+            var connector = new AgentConnector(target);
+            replay.Decorations.Add(new PieDecoration(false, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
         }
 
         private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (int, int) lifespan, bool isSuccessful)
         {
             string green = "rgba(0, 120, 0, 0.4)";
             string color = isSuccessful ? green : "rgba(120, 0, 0, 0.4)";
-            replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 180, lifespan, green, new AgentConnector(p)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, 180, lifespan, color, new AgentConnector(p)));
+            var connector = new AgentConnector(p);
+            replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 180, lifespan, green, connector));
+            replay.Decorations.Add(new CircleDecoration(true, 0, 180, lifespan, color, connector));
         }
     }
 }

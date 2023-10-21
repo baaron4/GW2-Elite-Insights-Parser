@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser
         public const string KainengOverlookDragonSlashBurstRedAoE2 = "E9DDC9F070B9514F8B4C6F5D428356E4"; // 0 duration - probably the explosion effect on player hit
         public const string KainengOverlookJadeMine1 = "DE7F3CF2B6C1794F97F5DC6F6B1C5F7C"; // 4294967295 duration
         public const string KainengOverlookJadeMine2 = "FAAC4919C404C945ACEF2ABE3C8CCF08"; // 2000 duration
-        public const string KainengOverlookSniperBeamCM = "A5C623040E6810468F2C9E518DB09D83"; // 10000 duration
+        public const string KainengOverlookSniperRicochetBeamCM = "A5C623040E6810468F2C9E518DB09D83"; // 10000 duration
         public const string KainengOverlookSmallOrangeAoE = "34724E94CD4E974C95A8D9D1D1162658";
         public const string KainengOverlookTargetedExpulsion = "67C0C333F91A5443BA894BEE5E88E202"; // 5000 duration
         public const string KainengOverlookJadeLobPulsingGreen = "D5CD93218B9CBE4B93B6B5D54ED71273";
@@ -355,8 +355,8 @@ namespace GW2EIEvtcParser
         public const string KainengOverlookEnforcerMiddleAoE = "BA8654BD3D252C4B9A170EE404FBEA15"; // 1500 duration
         public const string KainengOverlookEnforcerMiddleRedAoE = "C0F88EBEA179344092D4BB193A741F1D"; // 0 duration
         public const string KainengOverlookEnforcerOrbsAoE = "766B7DACFC18974B8F6AA46BCD779563"; // 2708 duration
-        public const string KainengOverlookMindbladeFirstOrangeAoEOnPlayer = "D7FB6DB480A6D14DB4561E03172B705D";
-        public const string KainengOverlookMindbladeConsecutiveOrangeAoEOnPlayer = "D4089DD8E0040146B3899EB2955AAE87";
+        public const string KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer = "D7FB6DB480A6D14DB4561E03172B705D"; // 8000 duration
+        public const string KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer = "D4089DD8E0040146B3899EB2955AAE87"; // 2000 duration
         public const string KainengOverlookMindbladeRainOfBladesRedAoECM = "6814DF4DB1EB4541996056FF4E805AC4";
         public const string KainengOverlookVolatileExpulsionAoE = "A673F658E9B67C41AD469BAD8E7ACEA7";
         public const string KainengOverlookVolatileBurstAoE = "6C2F5A0A632627419B77D52D8CC9E4DB";
