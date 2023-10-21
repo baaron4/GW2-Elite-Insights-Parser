@@ -3230,7 +3230,7 @@
         public const long FrozenFury = 65498;
         public const long BreathOfJormag1 = 65517;
         public const long SpottersShot = 65528;
-        public const long ElectricRain2 = 65535;
+        public const long ElectricRainNM = 65535;
         public const long VoidShell = 65563;
         public const long StormOfSwords3 = 65569;
         public const long ExplosiveLeap2 = 65576;
@@ -3397,7 +3397,7 @@
         public const long TargetedExpulsionCM = 67982;
         public const long VolatileExpulsion4 = 67999;
         public const long POV_SharedDestructionLiCM = 68004;
-        public const long ElectricRain = 68006;
+        public const long ElectricRainCM = 68006;
         public const long FallOfTheAxeSmallConeCM = 68015;
         public const long StormOfSwords6 = 68016;
         public const long SharedDestruction3 = 68018;
