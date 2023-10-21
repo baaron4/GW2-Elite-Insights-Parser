@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 AbstractSingleActor masterActor = log.FindActor(master);
                 // Basic linkage
-                CombatReplay.Decorations.Add(new LineDecoration(0, ((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
+                CombatReplay.Decorations.Add(new LineDecoration((CombatReplay.TimeOffsets.start, CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
                 // Prof specific treatment
                 ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, CombatReplay);
             }
