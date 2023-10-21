@@ -282,20 +282,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            var loadingCircle = new CircleDecoration(radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position));
+                            replay.Decorations.Add(loadingCircle.Copy().UsingGrowingEnd(zoneActive));
+                            replay.Decorations.Add(loadingCircle);
+                            replay.Decorations.Add(new CircleDecoration(radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
 
                         }
                     }
                     var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
-                        start = (int)c.Time;
-                        end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(300, (c.Time, c.EndTime), "rgba(255, 150, 0, 0.5)", new AgentConnector(target));
+                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
+                        replay.Decorations.Add(circle);
                     }
                     var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
                     foreach (AbstractCastEvent c in slash)
@@ -307,25 +307,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        replay.Decorations.Add(new PieDecoration(false, 0, 850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                        replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                     }
 
                     if (majorSplit != null)
                     {
                         start = (int)majorSplit.Time;
                         end = (int)log.FightData.FightEnd;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.DhuumDesmina:
                     break;
                 case (int)ArcDPSEnums.TrashID.Echo:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Enforcer:
                     break;
                 case (int)ArcDPSEnums.TrashID.Messenger:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in stealths)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                     }
                     if (!_isBugged)
                     {
@@ -381,8 +381,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                            var greenCircle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                            replay.Decorations.Add(greenCircle);
+                            replay.Decorations.Add(greenCircle.Copy().UsingGrowingEnd(gend));
                         }
                     }
                     break;
@@ -416,15 +417,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
+                var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
+                replay.Decorations.Add(circle);
+                replay.Decorations.Add(circle.Copy().UsingGrowingEnd(end));
             }
             // bomb
             var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in bombDhuum)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 13000, 100, seg, "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
+                var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
+                replay.Decorations.Add(circle);
+                replay.Decorations.Add(circle.Copy().UsingGrowingEnd(seg.Start + 13000));
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection

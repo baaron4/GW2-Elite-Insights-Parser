@@ -170,12 +170,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 255, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
             IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEvents(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList(); ;
@@ -185,12 +185,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 0, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -204,12 +204,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
 
@@ -224,12 +224,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(true, 0, 180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EIData
                     int tetherEnd = (int)tether.Time;
                     if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
                     {
-                        Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)));
+                        Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)));
                         src = ParserHelper._unknownAgent;
                         dst = ParserHelper._unknownAgent;
                     }
