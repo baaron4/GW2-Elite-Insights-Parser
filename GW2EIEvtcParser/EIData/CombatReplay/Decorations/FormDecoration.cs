@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidDataException("GrowingEnd must be positive");
             }
-            GrowingEnd = (int)growingEnd;
+            GrowingEnd = growingEnd < Lifespan.start ? 0 : (int)growingEnd;
             GrowingReverse = reverse;
             return this;
         }
