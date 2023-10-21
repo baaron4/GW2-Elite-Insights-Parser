@@ -975,7 +975,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AbstractMovementEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEvents(AgentItem src)
+        public IReadOnlyList<EffectEvent> GetEffectEventsBySrc(AgentItem src)
         {
             if (_statusEvents.EffectEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
             {

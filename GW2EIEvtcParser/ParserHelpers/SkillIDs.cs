@@ -3091,7 +3091,7 @@
         public const long DeployJadeSphereEarth2 = 63472;
         public const long TurronSlice = 63482;
         public const long LongevityNoodles = 63487;
-        public const long FallOfTheAxe4 = 63503;
+        public const long FallOfTheAxeBigConeNM = 63503;
         public const long SwarmOfMordremoth_PoolOfUndeath = 63544;
         public const long StormOfSwords2 = 63550;
         public const long SniperShot = 63551;
@@ -3178,6 +3178,7 @@
         public const long DragonSlashBurst2 = 64940;
         public const long DeadlyAim = 64947;
         public const long DragonSlashWave = 64952;
+        public const long TheMechRiderPushNM = 64953;
         public const long FlankingStrike = 64965;
         public const long DebilitatingVoid = 64967;
         public const long ShareTheVoid3 = 64973;
@@ -3275,7 +3276,7 @@
         public const long FixatedAnkkaKainengOverlook = 66140;
         public const long TerrifyingApparition = 66156;
         public const long DragonsEndContributor2 = 66185;
-        public const long FallOfTheAxe1 = 66187;
+        public const long FallOfTheAxeSmallConeNM = 66187;
         public const long InevitabilityOfDeath = 66198;
         public const long BreathOfJormag2 = 66216;
         public const long SanctuaryAnkka1 = 66241;
@@ -3397,10 +3398,11 @@
         public const long VolatileExpulsion4 = 67999;
         public const long POV_SharedDestructionLiCM = 68004;
         public const long ElectricRain = 68006;
-        public const long FallOfTheAxe2 = 68015;
+        public const long FallOfTheAxeSmallConeCM = 68015;
         public const long StormOfSwords6 = 68016;
         public const long SharedDestruction3 = 68018;
-        public const long FallOfTheAxe3 = 68023;
+        public const long TheMechRiderPushCM = 68022;
+        public const long FallOfTheAxeBigConeCM = 68023;
         public const long EnforcerRushingJusticeCM = 68028;
         public const long JadeMine2 = 68036;
         public const long VolatileBurst2 = 68039;

@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        Point3D facingDirection = GetFacingPoint3D(replay, c, duration);
+                        var facingDirection = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (facingDirection == null)
                         {
                             continue;
@@ -317,7 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        Point3D facingDirection = GetFacingPoint3D(replay, c, duration);
+                        var facingDirection = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (facingDirection == null)
                         {
                             continue;
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
+                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -431,7 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
+                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -477,7 +477,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascadeCount = 4;
                         int attackEnd = start + duration;
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
+                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -499,7 +499,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int translation = 150;
                         int attackEnd = start + duration;
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
+                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -539,7 +539,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascadeCount = 4;
                         int attackEnd = start + duration;
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
+                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -614,23 +614,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             Segment det = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
             return det != null ? (int)Math.Min(det.Start, attackEnd) : attackEnd;
-        }
-
-        private static Point3D GetFacingPoint3D(CombatReplay replay, AbstractCastEvent c, int duration)
-        {
-            IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-            ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + duration); // 200 for turning delay event
-            if (facingDirection != null)
-            {
-                return new Point3D(facingDirection.X, facingDirection.Y);
-            }
-            // Last facing direction polled
-            ParametricPoint3D lastDirection = list.LastOrDefault(x => x.Time < c.Time);
-            if (lastDirection != null)
-            {
-                return new Point3D(lastDirection.X, lastDirection.Y);
-            }
-            return null;
         }
 
         private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float rotation, int translation, int cascadeCount)
