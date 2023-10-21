@@ -35,6 +35,16 @@
                         <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
                              class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 21)" @click="sortBy('Data', 21, 20)"
+                        data-original-title="Percent time power hits while self above 90% hp">
+                        <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                             class="icon"> > 90%
+                    </th>    
+                    <th class="stat-cell" :class="getHeaderClass('Data', 23)" @click="sortBy('Data', 23, 22)"
+                        data-original-title="Percent time condition ticks while self above 90% hp">
+                        <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                             class="icon"> > 90%
+                    </th>    
                     <th class="stat-cell" :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5, 11)"
                         data-original-title="Percent time hits while glancing">
                         <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
@@ -121,6 +131,14 @@
                         :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[4]/ row.data[11])}}%
                     </td>
+                    <td :class="getBodyClass('Data', 21)"
+                        :data-original-title="row.data[21] + ' out of ' + row.data[20] + ' connected power hit(s)'">
+                        {{round2(100*row.data[21]/ row.data[20])}}%
+                    </td>
+                    <td :class="getBodyClass('Data', 23)"
+                        :data-original-title="row.data[23] + ' out of ' + row.data[22] + ' connected condition tick(s)'">
+                        {{round2(100*row.data[23]/ row.data[22])}}%
+                    </td>
                     <td :class="getBodyClass('Data', 5)"
                         :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[5]/ row.data[11])}}%
@@ -175,6 +193,12 @@
                     </td>
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[4]/ row.data[11])}}%
+                    </td>
+                    <td :data-original-title="row.data[21] + ' out of ' + row.data[20] + ' connected power hit(s)'">
+                        {{round2(100*row.data[21]/ row.data[20])}}%
+                    </td>
+                    <td :data-original-title="row.data[23] + ' out of ' + row.data[22] + ' connected condition tick(s)'">
+                        {{round2(100*row.data[23]/ row.data[22])}}%
                     </td>
                     <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[5]/ row.data[11])}}%
