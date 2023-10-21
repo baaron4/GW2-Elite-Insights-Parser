@@ -28,7 +28,12 @@ namespace GW2EIEvtcParser.EIData
         public int Killed { get; }
         public int Downed { get; }
 
-        public int DownContribution { get; }
+        public int ConnectedPowerCount { get; }
+        public int ConnectedPowerAbove90HPCount { get; }
+        public int ConnectedConditionCount { get; }
+        public int ConnectedConditionAbove90HPCount { get; }
+
+    public int DownContribution { get; }
 
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
@@ -104,6 +109,22 @@ namespace GW2EIEvtcParser.EIData
                         if (dl.AgainstMoving)
                         {
                             AgainstMovingCount++;
+                        }
+                        if (dl.ConditionDamageBased(log))
+                        {
+                            ConnectedConditionCount++;
+                            if (dl.IsOverNinety)
+                            {
+                                ConnectedConditionAbove90HPCount++;
+                            }
+                        } 
+                        else
+                        {
+                            ConnectedPowerCount++;
+                            if (dl.IsOverNinety)
+                            {
+                                ConnectedPowerAbove90HPCount++;
+                            }
                         }
                     }
                 }
