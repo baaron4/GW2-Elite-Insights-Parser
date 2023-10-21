@@ -42,6 +42,7 @@ namespace GW2EIDPSReport
             public uint Since { get; set; } = 0;
             public uint SinceEncounter { get; set; } = 0;
             public uint UntilEncounter { get; set; } = 0;
+            public uint Unique { get; set; } = 0;
             public GetUploadsParameters()
             {
 
@@ -92,6 +93,10 @@ namespace GW2EIDPSReport
             if (parameters.UntilEncounter > 0)
             {
                 url += "&untilEncounter=" + parameters.UntilEncounter;
+            }
+            if (parameters.Unique > 0)
+            {
+                url += "&unique=1";
             }
             return GetURL(url, userToken);
         }
