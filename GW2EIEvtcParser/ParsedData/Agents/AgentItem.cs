@@ -473,26 +473,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TrashID> ids)
         {
-            foreach (ArcDPSEnums.TrashID id in ids)
-            {
-                if(IsSpecies((int)id))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return ids.Any(x => IsSpecies(x));
         }
 
         public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TargetID> ids)
         {
-            foreach (ArcDPSEnums.TargetID id in ids)
-            {
-                if (IsSpecies((int)id))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return ids.Any(x => IsSpecies(x));
         }
     }
 }
