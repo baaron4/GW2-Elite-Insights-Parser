@@ -790,7 +790,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return null;
             }
-            return positions.FirstOrDefault(x => x.Time > time);
+            return positions.FirstOrDefault(x => x.Time >= time);
         }
 
         public Point3D GetCurrentRotation(ParsedEvtcLog log, long time)
@@ -800,7 +800,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return null;
             }
-            return rotations.FirstOrDefault(x => x.Time > time);
+            return rotations.FirstOrDefault(x => x.Time >= time);
         }
 
     }
