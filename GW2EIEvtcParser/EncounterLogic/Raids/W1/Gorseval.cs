@@ -128,8 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(true, c.ExpectedDuration + start, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                        replay.AddDualDecoration(new CircleDecoration(600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
                     }
                     IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
@@ -210,42 +209,45 @@ namespace GW2EIEvtcParser.EncounterLogic
                             start += 2200;
                             for (int i = 0; i < ticks; i++)
                             {
-                                int tickStart = start + 4000 * i;
-                                int explosion = tickStart + 3000;
-                                int tickEnd = tickStart + 3500;
                                 byte pattern = patterns[i];
+                                var connector = new PositionConnector(pos);
+                                var color = "rgba(25,25,112, 0.25)";
+                                //
+                                var nonFullDecorations = new List<FormDecoration>();
+                                int tickStartNonFull = start + 4000 * i;
+                                int explosionNonFull = tickStartNonFull + 3000;
+                                int tickEndNonFull = tickStartNonFull + 3500;
+                                (int, int) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
                                 if ((pattern & first) > 0)
                                 {
-                                    replay.Decorations.Add(new CircleDecoration(true, explosion, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 360, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, color, connector));
                                 }
                                 if ((pattern & second) > 0)
                                 {
-                                    replay.Decorations.Add(new DoughnutDecoration(true, explosion, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 360, 720, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, color, connector));
                                 }
                                 if ((pattern & third) > 0)
                                 {
-                                    replay.Decorations.Add(new DoughnutDecoration(true, explosion, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 720, 1080, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, color, connector));
                                 }
                                 if ((pattern & fourth) > 0)
                                 {
-                                    replay.Decorations.Add(new DoughnutDecoration(true, explosion, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 1080, 1440, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, color, connector));
                                 }
                                 if ((pattern & fifth) > 0)
                                 {
-                                    replay.Decorations.Add(new DoughnutDecoration(true, explosion, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 1440, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, color, connector));
                                 }
+                                foreach (FormDecoration decoration in nonFullDecorations)
+                                {
+                                    replay.AddDualDecoration(decoration, explosionNonFull);
+                                }
+                                // Full a different timings
                                 if ((pattern & full) > 0)
                                 {
-                                    tickStart -= 1000;
-                                    explosion -= 1000;
-                                    tickEnd -= 1000;
-                                    replay.Decorations.Add(new CircleDecoration(true, explosion, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.2)", new PositionConnector(pos)));
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 1800, (tickStart, tickEnd), "rgba(25,25,112, 0.4)", new PositionConnector(pos)));
+                                    (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
+                                    int fullExplosion = explosionNonFull - 1000;
+                                    replay.AddDualDecoration(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
                                 }
                             }
                         }
@@ -258,8 +260,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int impactTime = start + impactPoint;
                         int end = Math.Min((int)c.EndTime, impactTime);
                         int radius = 320;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                     }
                     var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in protection)
