@@ -440,6 +440,12 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetCurrentPosition(log, time);
         }
 
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentRotation(log, time);
+        }
+
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);

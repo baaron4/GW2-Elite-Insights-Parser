@@ -790,7 +790,17 @@ namespace GW2EIEvtcParser.EIData
             {
                 return null;
             }
-            return positions.FirstOrDefault(x => x.Time >= time);
+            return positions.LastOrDefault(x => x.Time <= time + CombatReplayPollingRate / 2);
+        }
+
+        public Point3D GetRotationPosition(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
+            if (!rotations.Any())
+            {
+                return null;
+            }
+            return rotations.LastOrDefault(x => x.Time <= time + CombatReplayPollingRate / 2);
         }
 
     }
