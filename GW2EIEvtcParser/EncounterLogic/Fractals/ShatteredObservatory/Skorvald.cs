@@ -334,8 +334,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(degree);
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                     }
 
                     // Punishing Kick
@@ -370,7 +370,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int aoeTimeout = 12000;
                             int start = (int)solarBoltEffect.Time;
                             int attackEnd = start + aoeTimeout;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(solarBoltEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(aoeRadius, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(solarBoltEffect.Position)));
                         }
                     }
 
@@ -414,7 +414,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
+                            replay.Decorations.Add(new RectangleDecoration(300, (int)target.HitboxWidth, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
                         }
                     }
 
@@ -525,7 +525,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         // Nightmare Discharge Shockwave
-                        replay.Decorations.Add(new CircleDecoration(false, waveEnd, 1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(waveEnd));
                     }
 
                     // Wave of Mutilation
@@ -574,7 +574,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int aoeTimeout = 300;
                     int start = (int)mistBombEffect.Time;
                     int attackEnd = start + aoeTimeout;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
                 }
             }
         }
@@ -601,7 +601,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
         {
-            replay.Decorations.Add(new CircleDecoration(false, attackEnd, radius, (start, attackEnd), "rgba(120, 0, 0, 0.6)", new AgentConnector(target)));
+            replay.Decorations.Add(new CircleDecoration(radius, (start, attackEnd), "rgba(120, 0, 0, 0.6)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(attackEnd));
         }
 
         private static int GetAttackEndByStunTime(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration, int attackEnd)
@@ -642,7 +642,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             for (int i = 0; i < cascadeCount; i++)
             {
-                replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
+                replay.Decorations.Add(new RectangleDecoration(300, (int)target.HitboxWidth, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
                 attackEnd += 300;
                 translation += 300;
             }

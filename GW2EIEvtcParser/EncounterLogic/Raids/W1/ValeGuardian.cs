@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var rotationConnector = new AngleConnector(151);
                             replay.Decorations.Add(new PieDecoration(true, start + distributedMagicDuration, arenaRadius, 120, (start, end), "rgba(0,255,0,0.1)", positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new PieDecoration(true, 0, arenaRadius, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
                         }
                         var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue).ToList();
                         foreach (AbstractCastEvent c in distributedMagicBlue)
@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var rotationConnector = new AngleConnector(31);
                             replay.Decorations.Add(new PieDecoration(true, start + distributedMagicDuration, arenaRadius, 120, (start, end), "rgba(0,255,0,0.1)", positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new PieDecoration(true, 0, arenaRadius, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
                         }
                         var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed).ToList();
                         foreach (AbstractCastEvent c in distributedMagicRed)
@@ -223,23 +223,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var rotationConnector = new AngleConnector(271);
                             replay.Decorations.Add(new PieDecoration(true, start + distributedMagicDuration, arenaRadius, 120, (start, end), "rgba(0,255,0,0.1)", positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new PieDecoration(true, 0, arenaRadius, 120, (end, end + impactDuration), "rgba(0,255,0,0.3)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0,255,0,0.2)", new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
                         }
                     } 
                     //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     break;
                 case (int)ArcDPSEnums.TrashID.BlueGuardian:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenGuardian:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 case (int)ArcDPSEnums.TrashID.RedGuardian:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 case (int)ArcDPSEnums.TrashID.Seekers:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 default:
                     break;

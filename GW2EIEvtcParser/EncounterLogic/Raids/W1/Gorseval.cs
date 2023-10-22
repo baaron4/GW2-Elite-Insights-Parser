@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in eggs)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
             }
 
             // Spectral Darkness - Orbs Debuff Overhead
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)c.Time;
                             int end = (int)c.EndTime;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
                             int phaseIndex;
@@ -264,12 +264,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in protection)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, seg, "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(300, seg, "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedSoul:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 default:
                     break;

@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < 3; i++)
                             {
                                 int shockWaveStart = hitTime + i * 120;
-                                replay.Decorations.Add(new CircleDecoration(false, shockWaveStart + duration, shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)));
+                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
                             }
                         }
                     }
@@ -209,11 +209,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int safeTime = endFirstAndSecondAoe + 1000;
                             int dangerTime = 77000;
 
-                            replay.Decorations.Add(new CircleDecoration(true, growingFirstAoe, 540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, growingSecondAoe, 540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, safeTime, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(safeTime));
+                            replay.Decorations.Add(new CircleDecoration( 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
                         }
                     }
 
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 6200;
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
                             replay.Decorations.Add(new DoughnutDecoration(true, -effectEnd, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                             replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                         }

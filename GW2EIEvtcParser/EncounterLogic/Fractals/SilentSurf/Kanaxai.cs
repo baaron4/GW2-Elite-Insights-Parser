@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
-                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                replay.Decorations.Add(new LineDecoration((start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
@@ -305,7 +305,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -369,7 +369,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();

@@ -314,13 +314,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
                         float initialAngle = Point3D.GetRotationFromFacing(facing);
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle = initialAngle + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -333,17 +333,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
                         float initialAngle1 = Point3D.GetRotationFromFacing(facing);
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                         float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
                             float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades3)
@@ -356,21 +356,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
                         float initialAngle1 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                         float initialAngle2 = initialAngle1 + 120;
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
                         float initialAngle3 = initialAngle1 - 120;
-                        replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
                             float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
                             float angle3 = initialAngle3 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(true, 0, bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
                         }
                     }
                     break;

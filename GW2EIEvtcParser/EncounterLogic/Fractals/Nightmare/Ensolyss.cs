@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new PieDecoration(true, 0, 700, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Standard
                 if (endQuarter == growingQuarter) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 700, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Lingering
+                    replay.Decorations.Add(new PieDecoration(700, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Standard
                 if (end == growing) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Lingering
+                    replay.Decorations.Add(new PieDecoration(1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
                 // Retro
                 var flippedRotationConnector = new AngleConnector(flipPoint);
@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Standard
                 if (end == growing) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Lingering
+                    replay.Decorations.Add(new PieDecoration(1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Lingering
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (!shield15_0Added && percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
                                 {
                                     int effectEnd = (int)target.LastAware;
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
                                     shield15_0Added = true;
                                 }
                                 else if (!shield15_0Added)
@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     {
                                         attackEnd = (int)percent15treshhold.Start;
                                     }
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                                     replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
                                 }
@@ -207,13 +207,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent66treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 66%
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -228,13 +228,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent15treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration( 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 15%
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -249,7 +249,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -270,7 +270,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (start, attackEnd), "rgba(250, 120, 0, 0.2)",new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start, attackEnd), "rgba(250, 120, 0, 0.2)",new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 
@@ -340,7 +340,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                         // Shockwave
-                        replay.Decorations.Add(new CircleDecoration(false, endTimeWave, 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration( 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(endTimeWave));
                     }
 
                     // 66% & 33% Breakbars
@@ -363,7 +363,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         if (attackEnd == expectedHitEnd)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         }
                         // Initial facing point
                         IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
@@ -404,7 +404,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, 1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 
@@ -418,7 +418,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, 1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 

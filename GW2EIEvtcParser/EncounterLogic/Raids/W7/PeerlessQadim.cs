@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (start, end), "rgba(255, 50, 50, 0.15)", new PositionConnector(pylonPosition)));
                         replay.Decorations.Add(new CircleDecoration(true, end, magmaRadius, (start, end), "rgba(255, 50, 50, 0.25)", new PositionConnector(pylonPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        replay.Decorations.Add(new CircleDecoration( magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     foreach (AbstractCastEvent c in forceOfHavoc)
                     {
@@ -200,11 +200,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
-                                replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                                replay.Decorations.Add(new RectangleDecoration(roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             }
                         }
                     }
@@ -221,8 +221,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(true, start + preCastTime, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
                         for (int i = 0; i < cascades; i++)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration( radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
                         }
                     }
                     foreach (AbstractCastEvent c in etherStrikes)
@@ -261,10 +261,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             }
                         }
                     }
@@ -295,14 +295,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
                     break;
                 default:
                     break;
