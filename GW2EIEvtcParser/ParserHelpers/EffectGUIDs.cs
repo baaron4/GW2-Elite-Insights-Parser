@@ -364,6 +364,8 @@ namespace GW2EIEvtcParser
         public const string KainengOverlookEnforcerHeavensPalmAoE = "BDF708225224C64183BA3CE2A609D37F"; // 5000 duration
         public const string KainengOverlookEnforcerHeavensPalmAnimation = "92F0566A1A0A9E4B919C796DB434052C"; // Should be the actual palm
         public const string KainengOverlookRitualistSpiritualLightningAoE = "3AEC5A729A1D624B80CABCFDA11D82C6";
+        public const string KainengOverlookDragonSlashWaveIndicator = "CB877C57D1423240BACDF8D6B52A440F";
+        public const string KainengOverlookStormOfSwordsIndicator = "F019EA6ADC183B4599FDF7E67071E181";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";

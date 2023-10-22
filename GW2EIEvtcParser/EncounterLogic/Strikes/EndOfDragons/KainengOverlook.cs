@@ -324,8 +324,29 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.MinisterLi:
-                    break;
                 case (int)ArcDPSEnums.TargetID.MinisterLiCM:
+                    // Dragon Slash-Wave
+                    // The effect is only usable in normal mode
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashWaveIndicator, out IReadOnlyList<EffectEvent> waveEffect))
+                    {
+                        foreach (EffectEvent effect in waveEffect)
+                        {
+                            int durationCone = 1000;
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, durationCone);
+                            AddDragonSlashWaveDecoration(target, replay, lifespan, durationCone);
+                        }
+                    }
+                    else
+                    {
+                        // Check for the normal mode skill for older logs
+                        var waveCM = casts.Where(x => x.SkillId == DragonSlashWaveNM || x.SkillId == DragonSlashWaveCM).ToList();
+                        foreach (AbstractCastEvent c in waveCM)
+                        {
+                            int durationCone = c.SkillId == DragonSlashWaveNM ? 1000 : 500;
+                            (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCone);
+                            AddDragonSlashWaveDecoration(target, replay, lifespan, durationCone);
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.TheMechRider:
                 case (int)ArcDPSEnums.TrashID.TheMechRiderCM:
@@ -335,12 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int durationCastTime = 965;
                         (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCastTime);
-                        var facingDirection = Point3D.GetFacingPoint3D(replay, c, durationCastTime);
-                        if (facingDirection == null)
-                        {
-                            continue;
-                        }
-                        AddFallOfTheAxeDecoration(target, replay, new AngleConnector(facingDirection), lifespan, 35);
+                        AddFallOfTheAxeDecoration(target, replay, lifespan, durationCastTime, 35);
                     }
 
                     // Big Cone
@@ -349,12 +365,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int durationCastTime = 1030;
                         (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCastTime);
-                        var facingDirection = Point3D.GetFacingPoint3D(replay, c, durationCastTime);
-                        if (facingDirection == null)
-                        {
-                            continue;
-                        }
-                        AddFallOfTheAxeDecoration(target, replay, new AngleConnector(facingDirection), lifespan, 75);
+                        AddFallOfTheAxeDecoration(target, replay, lifespan, durationCastTime, 75);
                     }
 
                     // Jade Buster Cannon
@@ -535,14 +546,46 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(true, lifespan.Item2, 90, lifespan, "rgba(200, 120, 0, 0.2)", connector));
                 }
             }
+
+            // Storm of Swords - Indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookStormOfSwordsIndicator, out IReadOnlyList<EffectEvent> stormOfSwords))
+            {
+                foreach (EffectEvent effect in stormOfSwords)
+                {
+                    (int, int) lifespanIndicator = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespanIndicator.Item2, 200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector));
+                    var initialPosition = new ParametricPoint3D(effect.Position, lifespanIndicator.Item2);
+                    int velocity = 85; // Approximation
+                    int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
+                    (int, int) lifespanAnimation = (lifespanIndicator.Item2, lifespanIndicator.Item2 + stormDuration);
+                    var finalPosition = new ParametricPoint3D(initialPosition + (velocity * stormDuration / 1000.0f) * new Point3D((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2)), lifespanIndicator.Item2 + stormDuration);
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 200, lifespanAnimation, "rgba(250, 50, 0, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
+                }
+            }
         }
 
-        internal static void AddFallOfTheAxeDecoration(NPC target, CombatReplay replay, AngleConnector rotationConnector, (int, int) lifespan, int angle)
+        internal static void AddFallOfTheAxeDecoration(NPC target, CombatReplay replay, (int, int) lifespan, int duration, int angle)
         {
+            var facingDirection = Point3D.GetFacingPoint3D(replay, lifespan.Item1, duration);
+            if (facingDirection == null) { return; }
             var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
             replay.Decorations.Add(new PieDecoration(false, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
             replay.Decorations.Add(new PieDecoration(true, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
             replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+        }
+
+        private static void AddDragonSlashWaveDecoration(NPC target, CombatReplay replay, (int, int) lifespan, int duration)
+        {
+            var facingDirection = Point3D.GetFacingPoint3D(replay, lifespan.Item1, duration);
+            if (facingDirection == null) { return; }
+            var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
+            replay.Decorations.Add(new PieDecoration(true, 0, 1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
         }
 
         private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (int, int) lifespan, bool isSuccessful)
