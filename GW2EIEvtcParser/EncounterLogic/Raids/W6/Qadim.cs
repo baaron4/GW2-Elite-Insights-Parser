@@ -475,8 +475,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector).UsingRotationConnector(rotationConnector));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDualDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector), false);
 
                             }
                         }
@@ -488,7 +487,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.4)", new AgentConnector(target)));
                     }
                     //Breath
                     var patBreath = cls.Where(x => x.SkillId == FireBreath).ToList();
@@ -528,8 +527,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector).UsingRotationConnector(rotationConnector));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDualDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), false);
                             }
                         }
                     }
@@ -589,8 +587,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.Decorations.Add(new PieDecoration(false, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 255, 0, 0.6)", connector));
-                                replay.Decorations.Add(new PieDecoration(true, 0, maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDualDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), false);
                             }
                         }
                     }

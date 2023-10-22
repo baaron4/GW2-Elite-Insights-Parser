@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override FormDecoration Copy()
         {
-            return (FormDecoration)new CircleDecoration(Radius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new CircleDecoration(Radius, MinRadius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
     }
 }

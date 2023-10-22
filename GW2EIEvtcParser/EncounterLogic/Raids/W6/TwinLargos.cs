@@ -295,8 +295,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(false, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.8)", positionConnector).UsingRotationConnector(rotationConnextor));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.AddDualDecoration((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor), false);
                         }
                     }
                     break;
@@ -317,14 +316,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
+                replay.AddDualDecoration(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
                 ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
                 ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
                 if (poisonNextPos != null || poisonPrevPos != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(100, 100, 100, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
-                    replay.Decorations.Add(new CircleDecoration(false, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(230, 230, 230, 0.4)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
+                    replay.AddDualDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
