@@ -489,11 +489,6 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
         {
-            if (!log.CanCombatReplay)
-            {
-                // no combat replay support on fight
-                return new List<GenericDecoration>();
-            }
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
