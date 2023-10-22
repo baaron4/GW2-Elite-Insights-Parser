@@ -280,8 +280,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in kcOrbCollect)
                     {
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 300, seg, "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.AddDualDecoration(new CircleDecoration(300, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(target)).UsingFilled(false), true, seg.End);
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -293,8 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         ParametricPoint3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
                         if (prev != null || next != null)
                         {
-                            replay.Decorations.Add(new CircleDecoration(false, 0, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
-                            replay.Decorations.Add(new CircleDecoration(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
+                            replay.AddDualDecoration(new CircleDecoration(400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)).UsingFilled(false), true, skillCast);
                         }
                     }
                     var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1).ToList();
@@ -384,19 +382,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Henley:
                 case (int)ArcDPSEnums.TrashID.Galletta:
                 case (int)ArcDPSEnums.TrashID.Ianim:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration( 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
                     Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstPhantasmPosition != null)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(firstPhantasmPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, start, 300, (start - 5000, start), "rgba(220, 50, 0, 0.5)", new PositionConnector(firstPhantasmPosition)));
+                        replay.AddDualDecoration(new CircleDecoration(300, (start - 5000, start), "rgba(220, 50, 0, 0.3)", new PositionConnector(firstPhantasmPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenPhantasm:
                     int lifetime = 8000;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(target)));
+                    replay.AddDualDecoration(new CircleDecoration(210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)), start + lifetime);
                     break;
                 case (int)ArcDPSEnums.TrashID.RetrieverProjection:
                 case (int)ArcDPSEnums.TrashID.InsidiousProjection:
@@ -421,8 +417,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in xeraFury)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, 550, seg, "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+                replay.AddDualDecoration(new CircleDecoration(550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), seg.End);
 
             }
             // Fixated Statue tether to Player
