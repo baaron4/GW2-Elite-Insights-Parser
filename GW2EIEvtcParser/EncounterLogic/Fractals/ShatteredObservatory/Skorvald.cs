@@ -402,9 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int expectedHitTime = start + duration;
                         int attackEnd = start + duration;
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDualDecoration(new CircleDecoration(1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)), expectedHitTime);
                     }
 
                     // Solar Cyclone
@@ -461,8 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endWave = attackEnd + castTime;
 
                         // Stomp
-                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDualDecoration(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
                         // Shockwave
                         AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
                     }
@@ -521,9 +518,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 160;
                         int attackEnd = start + duration;
                         int waveEnd = attackEnd + 2250;
-
-                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDualDecoration(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
                         // Nightmare Discharge Shockwave
                         replay.Decorations.Add(new CircleDecoration(1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(waveEnd));
                     }
@@ -592,11 +587,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             var frontRotationConnector = new AngleConnector(degree);
             var flipRotationConnector = new AngleConnector(degree + 180);
             // Indicator
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
+            var pieIndicator = new PieDecoration(radius, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", connector);
+            replay.Decorations.Add(pieIndicator.UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(pieIndicator.Copy().UsingRotationConnector(flipRotationConnector));
             // Attack hit
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(frontRotationConnector));
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(flipRotationConnector));
+            var pieHit = (PieDecoration)new PieDecoration(radius, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", connector).UsingGrowingEnd(attackEnd + 300);
+            replay.Decorations.Add(pieHit.UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
         }
 
         private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
@@ -637,8 +634,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var rotationConnector = new AngleConnector(rotation);
             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
-            replay.Decorations.Add(new RectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
-            replay.Decorations.Add(new RectangleDecoration(true, 0, 300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector));
+            replay.AddDualDecoration((RectangleDecoration)new RectangleDecoration(300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector), attackEnd);
 
             for (int i = 0; i < cascadeCount; i++)
             {
