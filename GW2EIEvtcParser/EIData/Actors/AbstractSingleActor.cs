@@ -793,7 +793,7 @@ namespace GW2EIEvtcParser.EIData
             return positions.LastOrDefault(x => x.Time <= time + CombatReplayPollingRate / 2);
         }
 
-        public Point3D GetRotationPosition(ParsedEvtcLog log, long time)
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time)
         {
             IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
             if (!rotations.Any())
