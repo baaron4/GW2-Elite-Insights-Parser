@@ -783,22 +783,30 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             if (!positions.Any())
             {
                 return null;
             }
+            if (forwardWindow != 0)
+            {
+                return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
+            }
             return positions.FirstOrDefault(x => x.Time >= time);
         }
 
-        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time)
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
             if (!rotations.Any())
             {
                 return null;
+            }
+            if (forwardWindow != 0)
+            {
+                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time); 
             }
             return rotations.FirstOrDefault(x => x.Time >= time);
         }
