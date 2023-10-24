@@ -778,6 +778,13 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Position will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
@@ -789,9 +796,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
             }
-            return positions.FirstOrDefault(x => x.Time >= time);
+            return positions.LastOrDefault(x => x.Time <= time);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Rotation will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
         public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
@@ -803,7 +817,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time); 
             }
-            return rotations.FirstOrDefault(x => x.Time >= time);
+            return rotations.LastOrDefault(x => x.Time <= time);
         }
 
     }

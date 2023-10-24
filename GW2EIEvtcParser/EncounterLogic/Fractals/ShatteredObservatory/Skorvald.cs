@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        var facingDirection = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (facingDirection == null)
                         {
                             continue;
@@ -317,7 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        var facingDirection = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (facingDirection == null)
                         {
                             continue;
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
                         attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
 
-                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascadeCount = 4;
                         int attackEnd = start + duration;
 
-                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -496,7 +496,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int translation = 150;
                         int attackEnd = start + duration;
 
-                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (frontalPoint == null)
                         {
                             continue;
@@ -534,7 +534,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascadeCount = 4;
                         int attackEnd = start + duration;
 
-                        var frontalPoint = Point3D.GetFacingPoint3D(replay, c.Time, duration);
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, duration);
                         if (frontalPoint == null)
                         {
                             continue;

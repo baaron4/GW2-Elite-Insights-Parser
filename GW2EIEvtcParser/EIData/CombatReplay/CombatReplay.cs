@@ -383,19 +383,19 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!effect.IsAroundDst) { return; }
 
-            (int, int) lifespan;
+            (long, long) lifespan;
             if (overrideDuration == false)
             {
                 lifespan = ProfHelper.ComputeEffectLifespan(log, effect, effect.Duration);
             }
             else
             {
-                lifespan = ((int)effect.Time, (int)effect.Time + duration);
+                lifespan = (effect.Time, effect.Time + duration);
             }
 
             if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
             {
-                Decorations.Add(new LineDecoration(0, lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
+                Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
         }
     }
