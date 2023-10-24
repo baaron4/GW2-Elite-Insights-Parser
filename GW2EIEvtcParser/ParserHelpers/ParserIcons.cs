@@ -348,6 +348,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheMossman = "https://i.imgur.com/jwFEGFA.png";
         private const string TrashJadeMawTentacle = "https://i.imgur.com/SfB9gJG.png";
         private const string TrashInspectorEllenKiel = "https://i.imgur.com/TyYmSnn.png";
+        private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -961,8 +962,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.ReanimatedSpite, TrashReanimatedSpite },
             { ArcDPSEnums.TrashID.SanctuaryPrism, TrashSanctuaryPrism },
             { ArcDPSEnums.TrashID.VoidBrandstalker, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfPain, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashSpiritOfDestructionOrPain },
+            { ArcDPSEnums.TrashID.SpiritOfPain, TrashSpiritOfDestructionOrPain },
             { ArcDPSEnums.TrashID.DragonEnergyOrb, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.HandOfErosion, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.HandOfEruption, TrashHandOfErosionEruption },
