@@ -341,6 +341,30 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        internal void AddBorderDecoration(FormDecoration decoration, string color = null)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.GetBorderDecoration(color));
+        }
+
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddBorderDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false, string color = null)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));
+        }
+
+        /// <summary>
         /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>
