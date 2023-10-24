@@ -70,6 +70,15 @@
                         <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs"
                             class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 16)" @click="sortBy('Data', 16)"
+                        data-original-title="Damage taken while downed">
+                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                            class="icon">
+                            &#8658
+                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                            alt="Downed" 
+                            class="icon">
+                    </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 14)" @click="sortBy('Data', 14)"
                         data-original-title="Times died">
                         <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead"
@@ -125,6 +134,9 @@
                     <td :class="getBodyClass('Data', 12)" :data-original-title="row.def[13]">
                         {{row.def[12]}}
                     </td>
+                    <td :class="getBodyClass('Data', 16)">
+                        {{row.def[16]}}
+                    </td>
                     <td :class="getBodyClass('Data', 14)" :data-original-title="row.def[15]">
                         {{row.def[14]}}
                     </td>
@@ -149,6 +161,7 @@
                     <td>{{sum.def[8]}}</td>
                     <td>{{sum.def[10]}}</td>
                     <td>{{sum.def[12]}}</td>
+                    <td>{{sum.def[16]}}</td>
                     <td>{{sum.def[14]}}</td>
                 </tr>
             </tfoot>
@@ -221,7 +234,7 @@
                 }
                 var rows = [];
                 var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var total = [];
                 var groups = [];
                 var i;
                 for (i = 0; i < this.phase.defStats.length; i++) {
@@ -235,11 +248,14 @@
                         def: def
                     });
                     if (!groups[player.group]) {
-                        groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        groups[player.group] = [];
                     }
-                    for (var j = 0; j < total.length; j++) {
-                        total[j] += def[j];
-                        groups[player.group][j] += def[j];
+                    for (var j = 0; j < def.length; j++) {
+                        if (typeof def[j] === 'string') {
+                            continue;
+                        }
+                        total[j] = (total[j] || 0) + def[j];
+                        groups[player.group][j] = (groups[player.group][j] || 0) + def[j];
                     }
                 }
                 for (i = 0; i < groups.length; i++) {

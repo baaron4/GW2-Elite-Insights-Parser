@@ -28,6 +28,9 @@ namespace GW2EIEvtcParser.EIData
         public int Killed { get; }
         public int Downed { get; }
 
+        public int AgainstDownedCount { get; }
+        public int AgainstDownedDamage { get; }
+
         public int ConnectedPowerCount { get; }
         public int ConnectedPowerAbove90HPCount { get; }
         public int ConnectedConditionCount { get; }
@@ -125,6 +128,11 @@ namespace GW2EIEvtcParser.EIData
                             {
                                 ConnectedPowerAbove90HPCount++;
                             }
+                        }
+                        if (dl.AgainstDowned)
+                        {
+                            AgainstDownedCount++;
+                            AgainstDownedDamage += dl.HealthDamage;
                         }
                     }
                 }
