@@ -336,11 +336,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int start = (int)c.Time;
                 int duration = 10000;
                 int radius = 300;
-                ParametricPoint3D shieldNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
-                ParametricPoint3D shieldPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
-                if (shieldNextPos != null || shieldPrevPos != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, start);
+                if (position != null)
                 {
-                    var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start));
+                    var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
                     replay.AddDualDecoration(circle, false);
                 }
             }
