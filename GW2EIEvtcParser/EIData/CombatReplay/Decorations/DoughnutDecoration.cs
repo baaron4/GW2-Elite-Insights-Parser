@@ -23,5 +23,19 @@ namespace GW2EIEvtcParser.EIData
             return (FormDecoration)new DoughnutDecoration(InnerRadius, OuterRadius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
+        public override FormDecoration GetBorderDecoration(string borderColor = null)
+        {
+            if (!Filled)
+            {
+                throw new InvalidOperationException("Non filled doughtnuts can't have borders");
+            }
+            var copy = (DoughnutDecoration)Copy().UsingFilled(false);
+            if (borderColor != null)
+            {
+                copy.Color = borderColor;
+            }
+            return copy;
+        }
+
     }
 }

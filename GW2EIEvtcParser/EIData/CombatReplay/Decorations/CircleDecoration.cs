@@ -37,5 +37,18 @@ namespace GW2EIEvtcParser.EIData
         {
             return (FormDecoration)new CircleDecoration(Radius, MinRadius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
+        public override FormDecoration GetBorderDecoration(string borderColor = null)
+        {
+            if (!Filled)
+            {
+                throw new InvalidOperationException("Non filled circles can't have borders");
+            }
+            var copy = (CircleDecoration)Copy().UsingFilled(false);
+            if (borderColor != null)
+            {
+                copy.Color = borderColor;
+            }
+            return copy;
+        }
     }
 }

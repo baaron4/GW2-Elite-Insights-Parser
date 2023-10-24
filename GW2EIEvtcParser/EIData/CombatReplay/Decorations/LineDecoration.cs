@@ -31,5 +31,10 @@ namespace GW2EIEvtcParser.EIData
         {
             return (FormDecoration)new LineDecoration(Lifespan, Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
+
+        public override FormDecoration GetBorderDecoration(string borderColor = null)
+        {
+            throw new InvalidOperationException("Lines can't have borders");
+        }
     }
 }

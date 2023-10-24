@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public bool Filled { get; private set; } = true;
-        public string Color { get; }
+        public string Color { get; protected set; }
         public int GrowingEnd { get; private set; }
         public bool GrowingReverse { get; private set; }
 
@@ -33,6 +33,8 @@ namespace GW2EIEvtcParser.EIData
         }
 
         public abstract FormDecoration Copy();
+
+        public abstract FormDecoration GetBorderDecoration(string borderColor = null);
 
     }
 }
