@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1000;
                         int duration = 2000;
                         int range = 600;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -221,11 +221,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int toDropEnd = (int)seg.End;
                 var circle = new CircleDecoration( 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
                 replay.AddDualDecoration(circle.UsingFilled(false), true, toDropStart + 8000);
-                ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
-                ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
-                if (poisonNextPos != null || poisonPrevPos != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd)).UsingGrowingEnd(toDropStart + 90000));
+                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }

@@ -169,11 +169,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDualDecoration(landingCircle, finalTime);
                     }
                     // Cascade
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
+                    AddCascadeDecoration(log, target,replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
                     break;
                 case (int)ArcDPSEnums.TrashID.AberrantWisp:
                     break;
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddCascadeDecoration(ParsedEvtcLog log, CombatReplay replay, string guid, int width, int height)
+        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, int width, int height)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
             {
@@ -221,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    ParametricPoint3D rotation = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
+                    Point3D rotation = actor.GetCurrentRotation(log, start, duration);
                     if (rotation != null)
                     {
                         var connector = new PositionConnector(indicator.Position);

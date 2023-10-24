@@ -277,8 +277,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                         }
                         int spellCenterDistance = 200; //hitbox radius
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 3000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 3000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;

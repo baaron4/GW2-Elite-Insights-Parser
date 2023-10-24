@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
                         int width = 1400; int height = 80;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);

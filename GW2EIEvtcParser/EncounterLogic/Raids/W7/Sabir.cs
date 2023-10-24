@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 3000; // casttime 0 from skill def
                         int duration = 5000;
                         int radius = 1200;
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (targetPosition != null)
                         {
                             replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));

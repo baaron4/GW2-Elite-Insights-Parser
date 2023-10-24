@@ -384,8 +384,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 2000;
                         int impactRadius = 40;
                         int spellCenterDistance = 300;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 2600;
                         int duration = 1000;
                         int openingAngle = 70;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
@@ -426,7 +426,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCast = Math.Min(3500, c.ActualDuration);
                         int duration = Math.Min(6500, c.ActualDuration);
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         int range = 2800;
                         int span = 2400;
                         if (facing != null)
@@ -447,8 +447,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 3000;
                         int openingAngle = 70;
                         int fieldDuration = 10000;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D pos = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && pos != null)
                         {
                             var rotationConnector = new AngleConnector(facing);
@@ -467,7 +467,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 59;
                         int angleIncrement = 60;
                         int coneAmount = 4;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             float initialAngle = Point3D.GetRotationFromFacing(facing);
@@ -499,8 +499,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 3000;
                         int openingAngle = 60;
                         int fieldDuration = 10000;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D pos = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D pos = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && pos != null)
                         {
                             var rotationConnector = new AngleConnector(facing);
@@ -519,7 +519,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 59;
                         int angleIncrement = 60;
                         int coneAmount = 4;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             float initialAngle = Point3D.GetRotationFromFacing(facing);
@@ -551,8 +551,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int maxRadius = 2000;
                         int impactRadius = 500;
                         int spellCenterDistance = 270; //hitbox radius
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
@@ -579,7 +579,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 44;
                         int angleIncrement = 45;
                         int coneAmount = 3;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             float initialAngle = Point3D.GetRotationFromFacing(facing);

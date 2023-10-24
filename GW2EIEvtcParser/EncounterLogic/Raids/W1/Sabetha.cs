@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 2800;
                         int duration = 10000;
                         int width = 1300; int height = 60;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int secondConeEnd = secondConeStart + 400;
                         int thirdConeEnd = thirdConeStart + 400;
                         int radius = 1500;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = start + 4000;
                         int radius = 600;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));

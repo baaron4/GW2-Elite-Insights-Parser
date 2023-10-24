@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int attackStart = (int)c.Time;
                         int hitTime = (int)c.ExpectedEndTime;
                         // Find position at the end of the leap time
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= hitTime + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, hitTime + 1000);
                         if (targetPosition == null)
                         {
                             continue;

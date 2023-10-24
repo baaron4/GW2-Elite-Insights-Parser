@@ -105,8 +105,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 15000 + cascading;
                         end = start + duration;
                         int radius = 900;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
-                        Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D position = target.GetCurrentPosition(log, start);
                         if (facing != null && position != null)
                         {
                             replay.Decorations.Add(new PieDecoration( radius, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));

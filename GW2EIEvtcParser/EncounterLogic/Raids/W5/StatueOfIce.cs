@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int end = (int)c.EndTime;
                         int range = 450;
                         int angle = 100;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;

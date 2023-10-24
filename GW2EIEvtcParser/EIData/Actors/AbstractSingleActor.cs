@@ -799,6 +799,36 @@ namespace GW2EIEvtcParser.EIData
             return positions.LastOrDefault(x => x.Time <= time);
         }
 
+        public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
+            if (!positions.Any())
+            {
+                return null;
+            }
+            ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
+            ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
+            Point3D res;
+            if (prev != null && next != null)
+            {
+                long denom = next.Time - prev.Time;
+                if (denom == 0)
+                {
+                    res = prev;
+                }
+                else
+                {
+                    float ratio = (float)(time - prev.Time) / denom;
+                    res = new Point3D(prev, next, ratio);
+                }
+            }
+            else
+            {
+                res = prev ?? next;
+            }
+            return res;
+        }
+
         /// <summary>
         /// 
         /// </summary>

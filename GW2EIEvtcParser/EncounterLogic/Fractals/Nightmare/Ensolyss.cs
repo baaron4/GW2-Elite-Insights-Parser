@@ -289,8 +289,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
 
                         // Facing point
-                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time, duration);
                         if (facingDirection != null)
                         {
                             // Calculated points
@@ -359,8 +358,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
                         }
                         // Initial facing point
-                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time, duration);
                         if (facingDirection != null)
                         {
                             // Calculated other quarters from initial point

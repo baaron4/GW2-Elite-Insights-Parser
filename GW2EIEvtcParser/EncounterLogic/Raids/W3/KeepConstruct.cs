@@ -288,11 +288,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         int skillCast = end - 1000;
-                        ParametricPoint3D next = replay.PolledPositions.FirstOrDefault(x => x.Time >= end);
-                        ParametricPoint3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
-                        if (prev != null || next != null)
+                        Point3D position = target.GetCurrentInterpolatedPosition(log, end);
+                        if (position != null)
                         {
-                            replay.AddDualDecoration(new CircleDecoration(400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)).UsingFilled(false), true, skillCast);
+                            replay.AddDualDecoration(new CircleDecoration(400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new PositionConnector(position)).UsingFilled(false), true, skillCast);
                         }
                     }
                     var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1).ToList();
@@ -306,7 +305,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;
@@ -325,7 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;
@@ -348,7 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;

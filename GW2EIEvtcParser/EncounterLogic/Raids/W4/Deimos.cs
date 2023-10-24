@@ -537,7 +537,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 1000;
                         end = start + 2400;
                         int duration = 120;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;

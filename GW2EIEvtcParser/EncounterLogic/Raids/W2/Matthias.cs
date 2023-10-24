@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1000;
                         int duration = 750;
                         int width = 4000; int height = 130;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -322,11 +322,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int corruptedMatthiasEnd = (int)seg.End;
                 replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
-                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
-                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
-                if (wellNextPosition != null || wellPrevPosition != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
+                if (position != null)
                 {
-                    replay.AddDualDecoration(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)), corruptedMatthiasEnd + 100000);
+                    replay.AddDualDecoration(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new PositionConnector(position)), corruptedMatthiasEnd + 100000);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
             }
@@ -336,11 +335,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int wellMatthiasEnd = (int)seg.End;
                 replay.AddDualDecoration(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
-                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
-                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
-                if (wellNextPosition != null || wellPrevPosition != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, wellMatthiasEnd);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
+                    replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new PositionConnector(position)));
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }

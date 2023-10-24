@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long secondConeEnd = secondConeStart + 400;
                         long thirdConeEnd = thirdConeStart + 400;
                         int radius = 1500;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);

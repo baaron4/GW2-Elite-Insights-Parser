@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -290,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 500;
                         int width = 500;
                         int height = 250;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -317,11 +318,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
                 replay.AddDualDecoration(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
-                ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
-                ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
-                if (poisonNextPos != null || poisonPrevPos != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
+                if (position != null)
                 {
-                    replay.AddDualDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd)).UsingFilled(false), toDropStart + duration);
+                    replay.AddDualDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }

@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int magmaRadius = 850;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
+                        Point3D pylonPosition = target.GetCurrentPosition(log, end);
                         replay.AddDualDecoration(new CircleDecoration( magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
                         replay.Decorations.Add(new CircleDecoration( magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
@@ -195,8 +195,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         int preCastTime = 1500;
                         int duration = 22500;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && position != null)
                         {
                             replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int timeBetweenCascades = 200;
                         int cascades = 5;
                         start = (int)c.Time + 1400;
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
                             replay.AddDualDecoration(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int coneAngle = 60;
                         start = (int)c.Time;
                         end = start + 250;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
+                        Point3D facing = target.GetCurrentRotation(log, start + 300);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 650;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
                             replay.AddDualDecoration(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
@@ -341,14 +341,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int magmaDropEnd = (int)seg.End;
                 replay.AddDualDecoration(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
-                ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
-                ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
-                if (magmaNextPos != null || magmaPrevPos != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
+                if (position != null)
                 {
                     string colorToUse = magmaColors[magmaColor];
                     magmaColor = (magmaColor + 1) % 2;
-                    replay.AddDualDecoration(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.2)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)), magmaDropEnd + magmaOffset);
-                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaDropEnd + magmaOffset, log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                    replay.AddDualDecoration(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaDropEnd + magmaOffset, log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new PositionConnector(position)));
                 }
             }
             //sapping surge, bad red tether
