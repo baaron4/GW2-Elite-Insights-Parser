@@ -320,6 +320,11 @@ namespace GW2EIBuilders.HtmlModels
                     stats.DownContribution, // 17
                     stats.ConnectedDmg, // 18
                     stats.ConnectedDirectDmg, // 19
+
+                    stats.ConnectedPowerCount, // 20
+                    stats.ConnectedPowerAbove90HPCount, // 21
+                    stats.ConnectedConditionCount, // 22
+                    stats.ConnectedConditionAbove90HPCount, // 23
                 };
             return data;
         }

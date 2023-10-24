@@ -71,8 +71,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             var res = new List<AbstractBuffEvent>();
             if (_xeraSecondPhaseStartTime != 0)
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762)));
+                res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown, 1, int.MaxValue));
+                res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown));
             }
             return res;
         }

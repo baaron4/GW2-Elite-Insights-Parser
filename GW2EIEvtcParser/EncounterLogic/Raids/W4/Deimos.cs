@@ -147,8 +147,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                     if (removal == null)
                     {
-                        res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), 1, 0));
-                        res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet)));
+                        res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, 1, 0));
+                        res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown));
                     }
                 }
                 else if (bfe is BuffRemoveAllEvent)
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                     if (apply == null)
                     {
-                        res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), uint.MaxValue, true));
+                        res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, uint.MaxValue, true));
                     }
                 }
             }

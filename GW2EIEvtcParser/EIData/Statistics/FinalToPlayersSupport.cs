@@ -25,39 +25,24 @@ namespace GW2EIEvtcParser.EIData
             foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
             {
                 // add everything from total
-                if (totals.Removals.TryGetValue(boon.ID, out (int count, long time) item))
+                if (totals.FoeRemovals.TryGetValue(boon.ID, out (int count, long time) itemFoe))
                 {
-                    BoonStrips += item.count;
-                    BoonStripsTime += item.time;
+                    BoonStrips += itemFoe.count;
+                    BoonStripsTime += itemFoe.time;
                 }
-                // remove everything from self
-                if (self.Removals.TryGetValue(boon.ID, out item))
+                if (totals.UnknownRemovals.TryGetValue(boon.ID, out (int count, long time) itemUnknown))
                 {
-                    BoonStrips -= item.count;
-                    BoonStripsTime -= item.time;
-                }
-                // Remove everything from other, security check, no in game mechanics do such thing today
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p == actor)
-                    {
-                        continue;
-                    }
-                    FinalSupport other = actor.GetSupportStats(p, log, start, end);
-                    if (other.Removals.TryGetValue(boon.ID, out item))
-                    {
-                        BoonStrips -= item.count;
-                        BoonStripsTime -= item.time;
-                    }
+                    BoonStrips += itemUnknown.count;
+                    BoonStripsTime += itemUnknown.time;
                 }
             }
             foreach (Buff condition in log.Buffs.BuffsByClassification[BuffClassification.Condition])
             {
                 // add everything from self
-                if (self.Removals.TryGetValue(condition.ID, out (int count, long time) item))
+                if (self.FriendlyRemovals.TryGetValue(condition.ID, out (int count, long time) itemFriend))
                 {
-                    CondiCleanseSelf += item.count;
-                    CondiCleanseTimeSelf += item.time;
+                    CondiCleanseSelf += itemFriend.count;
+                    CondiCleanseTimeSelf += itemFriend.time;
                 }
                 foreach (Player p in log.PlayerList)
                 {
@@ -67,10 +52,10 @@ namespace GW2EIEvtcParser.EIData
                     }
                     FinalSupport other = actor.GetSupportStats(p, log, start, end);
                     // Add everything from other
-                    if (other.Removals.TryGetValue(condition.ID, out item))
+                    if (other.FriendlyRemovals.TryGetValue(condition.ID, out itemFriend))
                     {
-                        CondiCleanse += item.count;
-                        CondiCleanseTime += item.time;
+                        CondiCleanse += itemFriend.count;
+                        CondiCleanseTime += itemFriend.time;
                     }
                 }
             }

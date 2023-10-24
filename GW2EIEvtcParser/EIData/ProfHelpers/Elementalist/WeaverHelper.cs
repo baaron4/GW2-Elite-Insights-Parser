@@ -408,11 +408,11 @@ namespace GW2EIEvtcParser.EIData
                     continue;
                 }
                 uint curInstanceID = applies.First().BuffInstance;
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), IFF.Friend, curInstanceID, true));
                 if (prevID != 0)
                 {
-                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), 1, int.MaxValue));
+                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), IFF.Friend));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), IFF.Friend, 1, int.MaxValue));
                 }
                 prevID = curID;
             }

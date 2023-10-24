@@ -178,7 +178,7 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Insert(0, new CircleDecoration(180, ((int)effectEvt.Time, (int)effectEvt.Time + 100), "rgba(0, 0, 255, 0.5)", new PositionConnector(effectEvt.Position)));
                 }
             }
-            IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEvents(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList(); ;
+            IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList(); ;
             var effectGUIDsByAgent = effectEventsByAgent.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).ContentGUID).ToList();
             var effectGUIDsByAgentDistinct = effectGUIDsByAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in effectEventsByAgent)
@@ -341,7 +341,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Add tether decorations which src and dst are defined by tethers parameter
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>
         /// <param name="color">color of the tether</param>
@@ -368,6 +368,34 @@ namespace GW2EIEvtcParser.EIData
                         dst = ParserHelper._unknownAgent;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="effect">Tether effect.</param>
+        /// <param name="color">Color of the tether decoration.</param>
+        /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
+        /// <param name="overrideDuration">Wether to override the duration or not.</param>
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, string color, int duration = 0, bool overrideDuration = false)
+        {
+            if (!effect.IsAroundDst) { return; }
+
+            (int, int) lifespan;
+            if (overrideDuration == false)
+            {
+                lifespan = ProfHelper.ComputeEffectLifespan(log, effect, effect.Duration);
+            }
+            else
+            {
+                lifespan = ((int)effect.Time, (int)effect.Time + duration);
+            }
+
+            if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
+            {
+                Decorations.Add(new LineDecoration(0, lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
         }
     }

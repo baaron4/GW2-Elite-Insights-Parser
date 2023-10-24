@@ -60,6 +60,7 @@ namespace GW2EIEvtcParser.ParsedData
             Orientation = ReadOrientation(evtcItem);
             Duration = ReadDuration(evtcItem);
             TrackingID = ReadTrackingID(evtcItem);
+            OnNonStaticPlatform = evtcItem.IsFlanking > 0;
         }
 
     }

@@ -83,6 +83,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             jsonGameplayStats.Killed = offStats.Killed;
             jsonGameplayStats.Downed = offStats.Downed;
             jsonGameplayStats.DownContribution = offStats.DownContribution;
+            jsonGameplayStats.ConnectedConditionCount = offStats.ConnectedConditionCount;
+            jsonGameplayStats.ConnectedConditionAbove90HPCount = offStats.ConnectedConditionAbove90HPCount;
+            jsonGameplayStats.ConnectedPowerAbove90HPCount = offStats.ConnectedPowerAbove90HPCount;
+            jsonGameplayStats.ConnectedPowerCount = offStats.ConnectedPowerCount;
         }
 
         public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats offStats)

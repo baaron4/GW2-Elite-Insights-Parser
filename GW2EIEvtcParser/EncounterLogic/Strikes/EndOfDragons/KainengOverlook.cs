@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -18,22 +20,31 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(new long[] { DragonSlashWave, DragonSlashWaveCM }, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
-                new PlayerDstHitMechanic(new long []{DragonSlashBurst, DragonSlashBurstCM }, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
-                new PlayerDstHitMechanic(new long[] { DragonSlashRush1, DragonSlashRush2, DragonSlashRush1CM, DragonSlashRush2CM }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
-                new PlayerDstSkillMechanic(new long[] {TargetedExpulsion, TargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((evt, log) => evt.HasDowned),
-                //new PlayerDstBuffApplyMechanic(new long[] {PoV_SharedDestructionLi, PoV_SharedDestructionLiCM }, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green", "Selected for Green", "Green", 150),
-                new PlayerDstHitMechanic(new long[] { EnforcerRushingJustice, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashWaveNM, DragonSlashWaveCM }, "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashBurstNM, DragonSlashBurstCM }, "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM }, "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
+                new PlayerDstHitMechanic(new long[] { EnforcerRushingJusticeNM, EnforcerRushingJusticeCM }, "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                new PlayerDstHitMechanic(new long[] { StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                new PlayerDstHitMechanic(new long[] { DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM }, "A Test of Your Reflexes", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150).UsingAchievementEligibility(true).UsingEnable((log) => log.FightData.IsCM),
+                new PlayerDstHitMechanic(new long[] { ExplosiveUppercutNM, ExplosiveUppercutCM }, "Explosive Uppercut", new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
+                new PlayerDstHitMechanic(new long[] { FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM }, "Fall of the Axe", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", 150),
+                new PlayerDstHitMechanic(new long[] { FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM }, "Fall of the Axe", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", 150),
+                new PlayerDstHitMechanic(new long[] { ElectricRainNM, ElectricRainCM }, "Electric Rain", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", 150),
                 new PlayerDstHitMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150).UsingChecker((evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindblade) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheMindbladeCM)),
-                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150).UsingChecker((evt, log) => evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcer) || evt.CreditedBy.IsSpecies(ArcDPSEnums.TrashID.TheEnforcerCM)),
-                new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
-                new PlayerDstHitMechanic(new long[]{StormOfSwords1, StormOfSwords2, StormOfSwords3 }, "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                 new PlayerDstHitMechanic(JadeBusterCannonMechRider, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
-                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
-                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, "Enhanced Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
-                new PlayerDstHitMechanic(new long[] { DragonSlashWave, DragonSlashWaveCM, DragonSlashRush1, DragonSlashRush2, DragonSlashRush1CM, DragonSlashRush2CM }, "A Test of Your Reflexes", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150).UsingAchievementEligibility(true).UsingEnable((log) => log.FightData.IsCM),
+                new PlayerDstSkillMechanic(new long[] { TargetedExpulsion, TargetedExpulsionCM }, "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstNoSkillMechanic(new long[] { EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 }, "The Path of Most Resistance", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150).UsingAchievementEligibility(true).UsingEnable(x => x.FightData.IsCM),
+                new PlayerDstBuffApplyMechanic(new long [] { TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 }, "Target Order", new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TrashID> { ArcDPSEnums.TrashID.TheMindblade, ArcDPSEnums.TrashID.TheMindbladeCM })),
+                new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TrashID> { ArcDPSEnums.TrashID.TheEnforcer, ArcDPSEnums.TrashID.TheEnforcerCM })),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreen, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Selected for Green", "Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, "Shared Destruction",  new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.Succ", "Successful Green", "Successful Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenFailure, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.DarkGreen), "Green.Fail", "Failed Green", "Failed Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, "Ricochet", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Sniper.T", "Targetted by Sniper Ricochet", "Ricochet Target", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, "Rain of Blades", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targetted by Rain of Blades", "Rain of Blades Target", 150),
+                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, "Enhanced Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
             }
             );
             Icon = EncounterIconKainengOverlook;
@@ -46,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap(CombatReplayKainengOverlook,
                             (1803, 1918),
-                            (-24798, -18014, -18164,-10932)/*,
+                            (-24798, -18014, -18164, -10932)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
         }
@@ -161,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 subPhases[i].AddTarget(ministerLi);
             }
             // when wiped during a split phase, Li's LastAware is well before fight end
-            subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ParserHelper.ServerDelayConstant);
+            subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ServerDelayConstant);
             phases.AddRange(subPhases);
             //
             AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
@@ -206,6 +217,384 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
             replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
+
+            // Shared Destruction (Green)
+            int greenDuration = 6250;
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(p.AgentItem,
+                new string[] { EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, EffectGUIDs.KainengOverlookSharedDestructionGreenFailure },
+                out IReadOnlyList<EffectEvent> greenEndEffectEvents))
+            {
+                foreach (EffectEvent effect in greenEndEffectEvents)
+                {
+                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
+                    AddSharedDestructionDecoration(p, replay, ((int)effect.Time - greenDuration, (int)effect.Time), isSuccess);
+                }
+            }
+            else
+            {
+                greenEndEffectEvents = new List<EffectEvent>();
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSharedDestructionGreen, out IReadOnlyList<EffectEvent> greenApplyEffectEvents))
+            {
+                foreach (EffectEvent effect in greenApplyEffectEvents)
+                {
+                    // Check if any green effect event happens within 200 ms from another successful or failed green.
+                    // If the green mechanic targets the same player twice at the same time (meaning only one green appears in game), the second effect gets queued up 6.5 seconds later.
+                    // This prevents the late green effect from appearing in the combat replay, since it doesn't exist in game.
+                    if (!greenEndEffectEvents.Any(x => Math.Abs(x.Time - effect.Time) < 200 || Math.Abs(x.Time - greenDuration - effect.Time) < 200))
+                    {
+                        AddSharedDestructionDecoration(p, replay, ProfHelper.ComputeEffectLifespan(log, effect, greenDuration), true);
+                    }
+                }
+            }
+
+            // Sniper Ricochet Tether & AoE - CM
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
+            {
+                foreach (EffectEvent effect in sniperBeamsCM.Where(x => x.Dst == p.AgentItem))
+                {
+                    // Check if any effect event exists before the current one within a 20 seconds time span
+                    // This is to fix the beam duration incorrectly logged
+                    // The first shot happens after 10 seconds, the following ones after 5 seconds
+                    int correctedDuration = sniperBeamsCM.Where(x => x.Time > effect.Time - 20000 && x.Time != effect.Time && x.Time < effect.Time).Any() ? 5000 : 10000;
+                    // Correct the life span for the circle decoration
+                    (int, int) lifespan = ((int)effect.Time, (int)effect.Time + correctedDuration);
+
+                    // Tether Sniper to Player
+                    replay.AddTetherByEffectGUID(log, effect, "rgba(255, 200, 0, 0.3)", correctedDuration, true);
+
+                    // Circle around the player
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 500, lifespan, "rgba(250, 50, 0, 0.2)", new AgentConnector(p)));
+                }
+            }
+
+            // Targeted Expulsion - Orange spread AoEs CM
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookTargetedExpulsion, out IReadOnlyList<EffectEvent> spreads))
+            {
+                foreach (EffectEvent effect in spreads.Where(x => x.Dst == p.AgentItem))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 230, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 230, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+
+            // Rain Of Blades - Mindblade AoE on players - Orange circle (first)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
+            {
+                foreach (EffectEvent effect in mindbladeAoEOnPlayers.Where(x => x.Dst == p.AgentItem))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 240, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+
+            // Rain Of Blades - Mindblade AoE on players - Orange circle (consecutives)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
+            {
+                foreach (EffectEvent effect in mindbladeAoEOnPlayers4.Where(x => x.Dst == p.AgentItem))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 240, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+
+            // Heaven's Palm - AoE on players
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerHeavensPalmAoE, out IReadOnlyList<EffectEvent> heavensPalm))
+            {
+                foreach (EffectEvent effect in heavensPalm.Where(x => x.Dst == p.AgentItem))
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 280, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+            switch (target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.MinisterLi:
+                case (int)ArcDPSEnums.TargetID.MinisterLiCM:
+                    // Dragon Slash-Wave
+                    // The effect is only usable in normal mode
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashWaveIndicator, out IReadOnlyList<EffectEvent> waveEffect))
+                    {
+                        foreach (EffectEvent effect in waveEffect)
+                        {
+                            int durationCone = 1000;
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, durationCone);
+                            AddDragonSlashWaveDecoration(target, replay, lifespan, durationCone);
+                        }
+                    }
+                    else
+                    {
+                        // Check for the normal mode skill for older logs
+                        var waveCM = casts.Where(x => x.SkillId == DragonSlashWaveNM || x.SkillId == DragonSlashWaveCM).ToList();
+                        foreach (AbstractCastEvent c in waveCM)
+                        {
+                            int durationCone = c.SkillId == DragonSlashWaveNM ? 1000 : 500;
+                            (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCone);
+                            AddDragonSlashWaveDecoration(target, replay, lifespan, durationCone);
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.TheMechRider:
+                case (int)ArcDPSEnums.TrashID.TheMechRiderCM:
+                    // Small Cone
+                    var fallOfTheAxeSmall = casts.Where(x => x.SkillId == FallOfTheAxeSmallConeNM || x.SkillId == FallOfTheAxeSmallConeCM).ToList();
+                    foreach (AbstractCastEvent c in fallOfTheAxeSmall)
+                    {
+                        int durationCastTime = 965;
+                        (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCastTime);
+                        AddFallOfTheAxeDecoration(target, replay, lifespan, durationCastTime, 35);
+                    }
+
+                    // Big Cone
+                    var fallOfTheAxeBig = casts.Where(x => x.SkillId == FallOfTheAxeBigConeNM || x.SkillId == FallOfTheAxeBigConeCM).ToList();
+                    foreach (AbstractCastEvent c in fallOfTheAxeBig)
+                    {
+                        int durationCastTime = 1030;
+                        (int, int) lifespan = ((int)c.Time, (int)c.Time + durationCastTime);
+                        AddFallOfTheAxeDecoration(target, replay, lifespan, durationCastTime, 75);
+                    }
+
+                    // Jade Buster Cannon
+                    var cannon = casts.Where(x => x.SkillId == JadeBusterCannonMechRider).ToList();
+                    int warningDuration = 2800;
+                    // Warning decoration
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeBusterCannonWarning, out IReadOnlyList<EffectEvent> warningRectangle))
+                    {
+                        foreach (EffectEvent effect in warningRectangle)
+                        {
+                            (int, int) lifespanWarning = ProfHelper.ComputeEffectLifespan(log, effect, warningDuration);
+                            var connector = new AgentConnector(target);
+                            replay.Decorations.Add(new RectangleDecoration(false, 0, 375, 3000, lifespanWarning, "rgba(250, 50, 0, 0.2)", connector.WithOffset(new Point3D(0, -1350), true)));
+                            replay.Decorations.Add(new RectangleDecoration(true, 0, 375, 3000, lifespanWarning, "rgba(200, 120, 0, 0.2)", connector.WithOffset(new Point3D(0, -1350), true)));
+                        }
+                    }
+                    // Damage decoration
+                    foreach (AbstractCastEvent c in cannon)
+                    {
+                        int durationCastTime = 10367;
+                        (int, int) lifespan = ((int)c.Time + warningDuration, (int)c.Time + durationCastTime - warningDuration);
+                        var connector = new AgentConnector(target);
+                        replay.Decorations.Add(new RectangleDecoration(false, 0, 375, 3000, lifespan, "rgba(250, 50, 0, 0.2)", connector.WithOffset(new Point3D(0, -1350), true)));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(new Point3D(0, -1350), true)));
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.TheEnforcer:
+                case (int)ArcDPSEnums.TrashID.TheEnforcerCM:
+                    // Blue tether from Enforcer to Mindblade when they're close to each other
+                    List<AbstractBuffEvent> enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
+                    replay.AddTether(enforcerInspiration, "rgba(0, 0, 255, 0.1)");
+                    break;
+                case (int)ArcDPSEnums.TrashID.TheMindblade:
+                case (int)ArcDPSEnums.TrashID.TheMindbladeCM:
+                    // Blue tether from Mindblade to Enforcer when they're close to each other
+                    List<AbstractBuffEvent> mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
+                    replay.AddTether(mindbladeInspiration, "rgba(0, 0, 255, 0.1)");
+                    break;
+                case (int)ArcDPSEnums.TrashID.TheRitualist:
+                case (int)ArcDPSEnums.TrashID.TheRitualistCM:
+                    break;
+                case (int)ArcDPSEnums.TrashID.SpiritOfPain:
+                    // Volatile Expulsion - Orange AoE around the spirit
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out IReadOnlyList<EffectEvent> volatileExpulsion))
+                    {
+                        foreach (EffectEvent effect in volatileExpulsion)
+                        {
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            var connector = new AgentConnector(target);
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 380, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                            replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 380, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                        }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.SpiritOfDestruction:
+                    // Volatile Burst - Orange AoE around the spirit with safe zone in the center
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem,EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
+                    {
+                        foreach (EffectEvent effect in volatileBurst)
+                        {
+                            (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            var connector = new AgentConnector(target);
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 100, 500, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                            replay.Decorations.Add(new DoughnutDecoration(true, lifespan.Item2, 100, 500, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Dragon Slash Burst - Red AoE Puddles - CM
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashBurstRedAoE1, out IReadOnlyList<EffectEvent> smolReds))
+            {
+                foreach (EffectEvent effect in smolReds)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 20800);
+                    var connector = new PositionConnector(effect.Position);
+                    int damageDelay = 1610;
+                    int warningEnd = lifespan.Item1 + damageDelay;
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 80, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, warningEnd, 80, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 80, (warningEnd, lifespan.Item2), "rgba(250, 50, 0, 0.4)", connector));
+                }
+            }
+
+            // Jade Mines
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeMine1, out IReadOnlyList<EffectEvent> mines))
+            {
+                foreach (EffectEvent effect in mines)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 80, lifespan, "rgba(250, 50, 0, 0.4)", connector));
+                }
+            }
+
+            // Electric Rain - 5 AoEs in sequence up to 5
+            // Jade Lob - Small deathly AoE
+            // Small Orange AoEs
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSmallOrangeAoE, out IReadOnlyList<EffectEvent> electricRain))
+            {
+                foreach (EffectEvent effect in electricRain)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2400);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespan.Item2, 100, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+
+            // Jade Lob - Small deathly AoE
+            // Pulsing Green Effect
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeLobPulsingGreen, out IReadOnlyList<EffectEvent> jadeLob))
+            {
+                foreach (EffectEvent effect in jadeLob)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1500);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 100, lifespan, "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, lifespan, "rgba(0, 200, 0, 0.2)", connector));
+                }
+            }
+
+            // Enforcer Orbs AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerOrbsAoE, out IReadOnlyList<EffectEvent> enforcerOrbsAoEs))
+            {
+                foreach (EffectEvent effect in enforcerOrbsAoEs)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2708);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 100, lifespan, "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, lifespan, "rgba(0, 0, 200, 0.2)", connector));
+                }
+            }
+
+            // Rain Of Blades - Mindblade Red AoEs dropped by players
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesRedAoECM, out IReadOnlyList<EffectEvent> mindbladeReds))
+            {
+                foreach (EffectEvent effect in mindbladeReds)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    int damageDelay = 2000;
+                    int warningEnd = lifespan.Item1 + damageDelay;
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, warningEnd, 240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 240, (warningEnd, lifespan.Item2), "rgba(250, 50, 0, 0.4)", connector));
+                }
+            }
+
+            // Rushing Justice - Enforcer Flames
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerRushingJusticeFlames, out IReadOnlyList<EffectEvent> rushingJustice))
+            {
+                foreach (EffectEvent effect in rushingJustice)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0);
+                    var connector = new PositionConnector(effect.Position);
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    EnvironmentDecorations.Add(new RectangleDecoration(true, 0, 50, 145, lifespan, "rgba(250, 50, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                }
+            }
+
+            // Spiritual Lightning AoEs - Ritualist
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookRitualistSpiritualLightningAoE, out IReadOnlyList<EffectEvent> spiritualLightning))
+            {
+                foreach (EffectEvent effect in spiritualLightning)
+                {
+                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespan.Item2, 90, lifespan, "rgba(200, 120, 0, 0.2)", connector));
+                }
+            }
+
+            // Storm of Swords - Indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookStormOfSwordsIndicator, out IReadOnlyList<EffectEvent> stormOfSwords))
+            {
+                foreach (EffectEvent effect in stormOfSwords)
+                {
+                    (int, int) lifespanIndicator = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    var connector = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, lifespanIndicator.Item2, 200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector));
+                    var initialPosition = new ParametricPoint3D(effect.Position, lifespanIndicator.Item2);
+                    int velocity = 85; // Approximation
+                    int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
+                    (int, int) lifespanAnimation = (lifespanIndicator.Item2, lifespanIndicator.Item2 + stormDuration);
+                    var finalPosition = new ParametricPoint3D(initialPosition + (velocity * stormDuration / 1000.0f) * new Point3D((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2)), lifespanIndicator.Item2 + stormDuration);
+                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 200, lifespanAnimation, "rgba(250, 50, 0, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
+                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
+                }
+            }
+        }
+
+        internal static void AddFallOfTheAxeDecoration(NPC target, CombatReplay replay, (int, int) lifespan, int duration, int angle)
+        {
+            var facingDirection = Point3D.GetFacingPoint3D(replay, lifespan.Item1, duration);
+            if (facingDirection == null) { return; }
+            var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
+            replay.Decorations.Add(new PieDecoration(false, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, 0, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+        }
+
+        private static void AddDragonSlashWaveDecoration(NPC target, CombatReplay replay, (int, int) lifespan, int duration)
+        {
+            var facingDirection = Point3D.GetFacingPoint3D(replay, lifespan.Item1, duration);
+            if (facingDirection == null) { return; }
+            var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
+            replay.Decorations.Add(new PieDecoration(true, 0, 1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(true, lifespan.Item2, 1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+        }
+
+        private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (int, int) lifespan, bool isSuccessful)
+        {
+            string green = "rgba(0, 120, 0, 0.4)";
+            string color = isSuccessful ? green : "rgba(120, 0, 0, 0.4)";
+            var connector = new AgentConnector(p);
+            replay.Decorations.Add(new CircleDecoration(true, lifespan.Item2, 180, lifespan, green, connector));
+            replay.Decorations.Add(new CircleDecoration(true, 0, 180, lifespan, color, connector));
         }
     }
 }

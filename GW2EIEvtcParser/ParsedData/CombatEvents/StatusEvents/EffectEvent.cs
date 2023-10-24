@@ -48,6 +48,11 @@ namespace GW2EIEvtcParser.ParsedData
         public long Duration { get; protected set; }
 
         /// <summary>
+        /// If true, effect is on a moving platform
+        /// </summary>
+        public bool OnNonStaticPlatform { get; protected set; }
+
+        /// <summary>
         /// The effect's rotation around each axis in <b>degrees</b>.
         /// Like <see cref="Orientation"/> but using degrees.
         /// </summary>

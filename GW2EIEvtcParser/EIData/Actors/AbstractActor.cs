@@ -93,6 +93,9 @@ namespace GW2EIEvtcParser.EIData
                     case ParserHelper.DamageType.Strike:
                         dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
                         break;
+                    case ParserHelper.DamageType.LifeLeech:
+                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !ndhd.IsLifeLeech);
+                        break;
                     case ParserHelper.DamageType.Condition:
                         dls.RemoveAll(x => !x.ConditionDamageBased(log));
                         break;

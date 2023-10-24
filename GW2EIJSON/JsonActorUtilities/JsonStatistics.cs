@@ -305,6 +305,23 @@ namespace GW2EIJSON
             /// </summary>
             public int DownContribution { get; set; }
 
+            /// <summary>
+            /// Number of times a Power based damage skill hits
+            /// </summary>
+            public int ConnectedPowerCount { get; set; }
+            /// <summary>
+            /// Number of times a Power based damage skill hits while source is above 90% hp
+            /// </summary>
+            public int ConnectedPowerAbove90HPCount { get; set; }
+            /// <summary>
+            /// Number of times a Condition based damage skill hits
+            /// </summary>
+            public int ConnectedConditionCount { get; set; }
+            /// <summary>
+            /// Number of times a Condition based damage skill hits while source is above 90% hp
+            /// </summary>
+            public int ConnectedConditionAbove90HPCount { get; set; }
+
 
             public JsonGameplayStats()
             {
