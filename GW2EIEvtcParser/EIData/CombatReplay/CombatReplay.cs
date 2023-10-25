@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
+        /// Add a copy of given decoration using given extra parameters
         /// </summary>
         /// <param name="decoration"></param>
         /// <param name="filled"></param>
@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="filled"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddDualDecoration(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
+        internal void AddDoubleDecoration(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
         {
             Decorations.Add(decoration);
             AddCopyDecoration(decoration, filled, growingEnd, reverseGrowing);
@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="filled"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddDualDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
+        internal void AddDoubleDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
         {
             Decorations.Add(decoration);
             AddCopyDecoration(decoration, growingEnd, reverseGrowing);
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="filled"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddDualDecoration(FormDecoration decoration, bool filled)
+        internal void AddDoubleDecoration(FormDecoration decoration, bool filled)
         {
             Decorations.Add(decoration);
             AddCopyDecoration(decoration, filled);
@@ -345,7 +345,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="decoration">Must be filled</param>
         /// <param name="color"></param>
-        internal void AddBorderDecoration(FormDecoration decoration, string color = null)
+        internal void AddDecorationWithBorder(FormDecoration decoration, string color = null)
         {
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color));
@@ -358,7 +358,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="color"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddBorderDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false, string color = null)
+        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, bool reverseGrowing = false, string color = null)
         {
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));

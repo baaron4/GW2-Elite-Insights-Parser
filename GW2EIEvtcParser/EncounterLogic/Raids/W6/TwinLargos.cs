@@ -296,7 +296,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.AddDualDecoration((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor), false);
+                            replay.AddDoubleDecoration((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor), false);
                         }
                     }
                     break;
@@ -317,11 +317,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.AddDualDecoration(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+                replay.AddDoubleDecoration(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.AddDualDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
+                    replay.AddDoubleDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }

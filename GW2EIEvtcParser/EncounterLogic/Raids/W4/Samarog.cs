@@ -213,7 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int bigStart = (int)c.Time;
                 int bigEnd = bigStart + 6000;
                 var circle = new CircleDecoration(300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p));
-                replay.AddDualDecoration(circle, bigEnd);
+                replay.AddDoubleDecoration(circle, bigEnd);
             }
             // small bomb
             var smallbomb = log.CombatData.GetBuffData(InevitableBetrayalSmall).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();

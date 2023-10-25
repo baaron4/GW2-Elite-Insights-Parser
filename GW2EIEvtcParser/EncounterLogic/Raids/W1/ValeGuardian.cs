@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        replay.AddDualDecoration(new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)), start + c.ExpectedDuration);
+                        replay.AddDoubleDecoration(new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)), start + c.ExpectedDuration);
                     }
                     if (!log.CombatData.HasEffectData)
                     {

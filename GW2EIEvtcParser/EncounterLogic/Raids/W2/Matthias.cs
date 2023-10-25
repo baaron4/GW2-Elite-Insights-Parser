@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        replay.AddDualDecoration(new CircleDecoration(300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, end);
+                        replay.AddDoubleDecoration(new CircleDecoration(300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, end);
                     }
                     var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman).ToList();
                     foreach (AbstractCastEvent c in hadouken)
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
                 if (position != null)
                 {
-                    replay.AddDualDecoration(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new PositionConnector(position)), corruptedMatthiasEnd + 100000);
+                    replay.AddDoubleDecoration(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new PositionConnector(position)), corruptedMatthiasEnd + 100000);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
             }
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in wellMatthias)
             {
                 int wellMatthiasEnd = (int)seg.End;
-                replay.AddDualDecoration(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
+                replay.AddDoubleDecoration(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, wellMatthiasEnd);
                 if (position != null)
                 {
@@ -349,7 +349,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in sacrificeMatthias)
             {
-                replay.AddDualDecoration(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
+                replay.AddDoubleDecoration(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
             }
             // Bombs
             var zealousBenediction = log.CombatData.GetBuffData(ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
@@ -357,7 +357,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
-                replay.AddDualDecoration(new CircleDecoration(180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), zealousEnd);
+                replay.AddDoubleDecoration(new CircleDecoration(180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), zealousEnd);
             }
             // Unbalanced
             IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

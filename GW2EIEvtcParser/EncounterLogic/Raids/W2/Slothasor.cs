@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         var circle = new CircleDecoration(300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target));
-                        replay.AddDualDecoration(circle.UsingFilled(false), true, end);
+                        replay.AddDoubleDecoration(circle.UsingFilled(false), true, end);
                     }
                     var shakes = cls.Where(x => x.SkillId == SporeRelease).ToList();
                     foreach (AbstractCastEvent c in shakes)
@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         var circle = new CircleDecoration( 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target));
-                        replay.AddDualDecoration(circle.UsingFilled(false), true, end);
+                        replay.AddDoubleDecoration(circle.UsingFilled(false), true, end);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.PoisonMushroom:
@@ -220,7 +220,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
                 var circle = new CircleDecoration( 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
-                replay.AddDualDecoration(circle.UsingFilled(false), true, toDropStart + 8000);
+                replay.AddDoubleDecoration(circle.UsingFilled(false), true, toDropStart + 8000);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {

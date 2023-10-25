@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (hpUpdate != null)
                         {
                             var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), destroyedRingColor, new PositionConnector(center));
-                            replay.AddDualDecoration(doughnut, hpUpdate.Start + 3000);
+                            replay.AddDoubleDecoration(doughnut, hpUpdate.Start + 3000);
                         }
                         else
                         {
@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
-                        replay.AddDualDecoration(circle, start + c.ExpectedDuration);
+                        replay.AddDoubleDecoration(circle, start + c.ExpectedDuration);
                     }
                     var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
                     foreach (AbstractCastEvent c in vortex)
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (position != null)
                         {
                             var circle = new CircleDecoration(380, (start, end), "rgba(255, 150, 0, 0.5)", new PositionConnector(position));
-                            replay.AddDualDecoration(circle.UsingFilled(false), true, end);
+                            replay.AddDoubleDecoration(circle.UsingFilled(false), true, end);
                             replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new PositionConnector(position)));
                         }
                     }

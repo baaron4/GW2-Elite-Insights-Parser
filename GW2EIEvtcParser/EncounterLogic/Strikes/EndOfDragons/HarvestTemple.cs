@@ -625,7 +625,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)lightningEffect.Time - duration;
                             int end = (int)lightningEffect.Time;
                             var circle = new CircleDecoration(180, (start, end), "rgba(255, 180, 0, 0.2)", new PositionConnector(lightningEffect.Position));
-                            replay.AddDualDecoration(circle, end);
+                            replay.AddDoubleDecoration(circle, end);
                         }
                     }
                     //
@@ -636,7 +636,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int startLoad = (int)fireBallEffect.Time - 2000;
                             int endLoad = (int)fireBallEffect.Time;
                             var circle = new CircleDecoration(180, (startLoad, endLoad), "rgba(250, 0, 0, 0.2)", new PositionConnector(fireBallEffect.Position));
-                            replay.AddDualDecoration(circle, endLoad);
+                            replay.AddDoubleDecoration(circle, endLoad);
                             replay.Decorations.Add(new CircleDecoration(180, (endLoad, endLoad + 2000), "rgba(250, 0, 0, 0.4)", new PositionConnector(fireBallEffect.Position)));
                         }
                     }
@@ -650,7 +650,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var connector = new PositionConnector(voidZoneEffect.Position);
                             var rotationConnector = new AngleConnector(voidZoneEffect.Rotation.Z);
                             var rectangle = (RectangleDecoration)new RectangleDecoration(90, 230, (start, end), "rgba(150, 0, 150, 0.2)", connector).UsingRotationConnector(rotationConnector);
-                            replay.AddDualDecoration(rectangle, end);
+                            replay.AddDoubleDecoration(rectangle, end);
                         }
                     }
                     //
@@ -662,7 +662,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 3000;
                             replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), "rgba(250, 50, 0, 0.4)", new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
                             var circle = new CircleDecoration(280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position));
-                            replay.AddDualDecoration(circle, end);
+                            replay.AddDoubleDecoration(circle, end);
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 210;
                             int lifespan = 15000;
@@ -693,7 +693,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
                             int radius = 2700;
                             var circle = new CircleDecoration(radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position));
-                            replay.AddDualDecoration(circle, end);
+                            replay.AddDoubleDecoration(circle, end);
                         }
                     }
                     //
@@ -714,7 +714,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 2500;
                             int start = (int)iceShardEffect.Time;
                             int end = start + duration;
-                            replay.AddDualDecoration(new CircleDecoration(160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration(160, (start, end), "rgba(0, 50, 180, 0.2)", new PositionConnector(iceShardEffect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField, out IReadOnlyList<EffectEvent> meteorEffects))
@@ -727,9 +727,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)effect.Time;
                             int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
                             // meteor impact
-                            replay.AddDualDecoration(new CircleDecoration(600, (start - indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)), start);
+                            replay.AddDoubleDecoration(new CircleDecoration(600, (start - indicatorDuration, start), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)), start);
                             // ice field
-                            replay.AddDualDecoration(new CircleDecoration(1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)), start + spreadDuration);
+                            replay.AddDoubleDecoration(new CircleDecoration(1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)), start + spreadDuration);
                         }
                     }
                     break;
@@ -747,7 +747,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.AddDualDecoration(new CircleDecoration(560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration(560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
@@ -756,7 +756,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)bigJawEffect.Time;
                             int end = start + 7500;
-                            replay.AddDualDecoration(new CircleDecoration( 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration( 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)), end);
                             replay.Decorations.Add(new CircleDecoration(1700, (end, end + 4000), "rgba(200, 0, 0, 0.4)", new AgentConnector(target)));
                         }
                     }
@@ -771,7 +771,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int indicatorStart = (int)effect.Time;
                             int aoeStart = indicatorStart + indicatorDuration;
                             int aoeEnd = Math.Min(aoeStart + aoeDuration, (int)target.LastAware);
-                            replay.AddDualDecoration(new RectangleDecoration(700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)), aoeStart);
+                            replay.AddDoubleDecoration(new RectangleDecoration(700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)), aoeStart);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe, out IReadOnlyList<EffectEvent> kralkBeamAoeEffects))
@@ -863,7 +863,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int end = (int)effect.Time;
                             int start = end - 2000;
-                            replay.AddDualDecoration(new CircleDecoration( 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration( 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)), end);
                         }
                     }
                     break;
@@ -874,7 +874,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int end = (int)effect.Time;
                             int start = end - 2000;
-                            replay.AddDualDecoration(new CircleDecoration( 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration( 200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE, out IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects))
@@ -897,7 +897,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)effect.Time;
                             int end = start + 2300;
                             var connector = new PositionConnector(effect.Position);
-                            replay.AddDualDecoration((PieDecoration)new PieDecoration( 1060, 145, (start, end), "rgba(200, 0, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), end);
+                            replay.AddDoubleDecoration((PieDecoration)new PieDecoration( 1060, 145, (start, end), "rgba(200, 0, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> bouncingOrbClawEffects))
@@ -906,7 +906,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = start + 550;
-                            replay.AddDualDecoration(new CircleDecoration(200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration(200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidTailIndicator, out IReadOnlyList<EffectEvent> bouncingOrbTailEffects))
@@ -915,7 +915,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = start + 1600;
-                            replay.AddDualDecoration(new CircleDecoration(200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDoubleDecoration(new CircleDecoration(200, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(effect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out IReadOnlyList<EffectEvent> tailSlamEffects))
@@ -924,7 +924,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = start + 1600;
-                            replay.AddDualDecoration(new RectangleDecoration(3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDoubleDecoration(new RectangleDecoration(3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTsunami1, out IReadOnlyList<EffectEvent> tsunamiEffects))
@@ -934,7 +934,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // AoE indicator
                             int indicatorEnd = (int)effect.Time;
                             int indicatorStart = indicatorEnd - 1600;
-                            replay.AddDualDecoration(new CircleDecoration(235, (indicatorStart, indicatorEnd), "rgba(250, 0, 0, 0.2)", new PositionConnector(effect.Position)), indicatorEnd);
+                            replay.AddDoubleDecoration(new CircleDecoration(235, (indicatorStart, indicatorEnd), "rgba(250, 0, 0, 0.2)", new PositionConnector(effect.Position)), indicatorEnd);
                             // Expanding wave - radius and duration are estimates, can't seem to line up the decoration with actual hits
                             int waveStart = (int)effect.Time;
                             int waveEnd = waveStart + 4500;
@@ -953,7 +953,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 1900;
                         int endTime = (int)c.Time + castTime;
-                        replay.AddDualDecoration(new DoughnutDecoration(300, 500, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDoubleDecoration(new DoughnutDecoration(300, 500, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     // Ground Slam - AoE that knocks out
                     var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT).ToList();
@@ -965,7 +965,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 66534 -> Fast AoE -- 64526 -> Slow AoE
                         if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamHT) { castTime = 2500; }
                         endTime = (int)c.Time + castTime;
-                        replay.AddDualDecoration(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDoubleDecoration(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     break;
                 default:
@@ -1037,7 +1037,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     continue;
                 }
                 int end = Math.Min((int)dragonVoid.LastAware, start + duration);
-                replay.AddDualDecoration(new CircleDecoration(radius, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)), end);
+                replay.AddDoubleDecoration(new CircleDecoration(radius, (start, end), "rgba(250, 50, 0, 0.2)", new AgentConnector(p)), end);
             }
         }
 
@@ -1064,7 +1064,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     effectEnd = Math.Min((int)despawnEvent.Time, end);
                 }
-                replay.AddDualDecoration(new CircleDecoration(radius, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)), end);
+                replay.AddDoubleDecoration(new CircleDecoration(radius, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(p)), end);
             }
         }
 
