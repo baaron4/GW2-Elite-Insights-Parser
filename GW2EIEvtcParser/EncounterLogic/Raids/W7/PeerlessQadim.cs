@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D pylonPosition = target.GetCurrentPosition(log, end);
-                        replay.AddDoubleDecoration(new CircleDecoration( magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
                         replay.Decorations.Add(new CircleDecoration( magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     foreach (AbstractCastEvent c in forceOfHavoc)
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
-                            replay.AddDoubleDecoration(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
                             for (int i = 0; i < cascades; i++)
                             {
                                 replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
@@ -276,11 +276,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
-                            replay.AddDoubleDecoration(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
 
                             foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
                             {
-                                replay.AddDoubleDecoration(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
+                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
                             }
                         }
                     }
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstEntropicPosition != null)
                     {
-                        replay.AddDoubleDecoration(new CircleDecoration(300, (start - 5000, start), "rgba(255, 0, 0, 0.3)", new PositionConnector(firstEntropicPosition)), start);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), "rgba(255, 0, 0, 0.3)", new PositionConnector(firstEntropicPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
@@ -340,13 +340,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in magmaDrop)
             {
                 int magmaDropEnd = (int)seg.End;
-                replay.AddDoubleDecoration(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
+                replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
                 if (position != null)
                 {
                     string colorToUse = magmaColors[magmaColor];
                     magmaColor = (magmaColor + 1) % 2;
-                    replay.AddDoubleDecoration(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
                     replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaDropEnd + magmaOffset, log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new PositionConnector(position)));
                 }
             }

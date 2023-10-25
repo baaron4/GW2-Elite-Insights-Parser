@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 750);
                     var connector = new PositionConnector(effect.Position);
                     var circle = (CircleDecoration)new CircleDecoration(240, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill);
-                    replay.AddDoubleDecoration(circle, lifespan.Item2, true);
+                    replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

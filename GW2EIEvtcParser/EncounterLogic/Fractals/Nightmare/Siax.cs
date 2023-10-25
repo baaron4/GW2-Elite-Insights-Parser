@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             attackEnd = Math.Min((int)detSegment.Start, attackEnd); // Start of determinated
                         }
                         var doughnut = new DoughnutDecoration(0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
-                        replay.AddDoubleDecoration(doughnut, expectedHitTime, true);
+                        replay.AddDecorationWithGrowing(doughnut, expectedHitTime, true);
                     }
                     // Tail Swipe
                     var tailLash = casts.Where(x => x.SkillId == TailLashSiax).ToList();
@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
                         }
                         var circle = new CircleDecoration(1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
-                        replay.AddDoubleDecoration(circle, expectedHitTime);
+                        replay.AddDecorationWithGrowing(circle, expectedHitTime);
                     }
                     // Poison AoE
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VileSpitSiax, out IReadOnlyList<EffectEvent> poisonEffects))
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in spawnEffects)
                         {
                             var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
-                            replay.AddDoubleDecoration(circle, effect.Time + duration);
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Caustic Barrage
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in barrageEffects)
                         {
                             var circle = new CircleDecoration(100, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
-                            replay.AddDoubleDecoration(circle, effect.Time + duration);
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Volatile Hallucinations Explosions
@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in expulsionEffects)
                         {
                             var circle = new CircleDecoration(240, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
-                            replay.AddDoubleDecoration(circle, effect.Time + duration);
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Cascade Of Torment

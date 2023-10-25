@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 var connector = new AgentConnector(target);
                 var rotationConnector = new AngleConnector(point);
-                replay.AddDoubleDecoration((PieDecoration)new PieDecoration(700, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), growingQuarter);
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(700, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), growingQuarter);
                 if (endQuarter == growingQuarter) // If the attack went off
                 {
                     replay.Decorations.Add(new PieDecoration(700, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)",connector).UsingRotationConnector(rotationConnector)); // Lingering
@@ -129,14 +129,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var connector = new AgentConnector(target);
                 var rotationConnector = new AngleConnector(point);
                 // Frontal
-                replay.AddDoubleDecoration((PieDecoration)new PieDecoration(1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), growing);
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), growing);
                 if (end == growing) // If the attack went off
                 {
                     replay.Decorations.Add(new PieDecoration(1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
                 // Retro
                 var flippedRotationConnector = new AngleConnector(flipPoint);
-                replay.AddDoubleDecoration((PieDecoration)new PieDecoration(1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flippedRotationConnector), growing);
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(flippedRotationConnector), growing);
                 if (end == growing) // If the attack went off
                 {
                     replay.Decorations.Add(new PieDecoration(1200, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", connector).UsingRotationConnector(flippedRotationConnector)); // Lingering
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         attackEnd = (int)percent15treshhold.Start;
                                     }
                                     replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                                    replay.AddDoubleDecoration(new DoughnutDecoration(300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
+                                    replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
                                 }
                             }
                         }
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
                         }
-                        replay.AddDoubleDecoration(new CircleDecoration(1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), expectedHitEnd);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), expectedHitEnd);
                     }
 
                     // Upswing
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
                         }
-                        replay.AddDoubleDecoration(new CircleDecoration(600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), expectedHitEnd);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), expectedHitEnd);
                         // Shockwave
                         replay.Decorations.Add(new CircleDecoration( 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(endTimeWave));
                     }
@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
                         }
                         // Circle going in
-                        replay.AddDoubleDecoration(new DoughnutDecoration(0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)), expectedHitEnd, true);
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)), expectedHitEnd, true);
                         if (attackEnd == expectedHitEnd)
                         {
                             replay.Decorations.Add(new CircleDecoration(2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
@@ -419,7 +419,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int endTime = (int)c.Time + 1333;
-                        replay.AddDoubleDecoration(new CircleDecoration( 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)TrashID.NightmareHallucination2:

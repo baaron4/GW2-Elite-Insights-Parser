@@ -402,7 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int expectedHitTime = start + duration;
                         int attackEnd = start + duration;
                         attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        replay.AddDoubleDecoration(new CircleDecoration(1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)), expectedHitTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)), expectedHitTime);
                     }
 
                     // Solar Cyclone
@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endWave = attackEnd + castTime;
 
                         // Stomp
-                        replay.AddDoubleDecoration(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
                         // Shockwave
                         AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
                     }
@@ -518,7 +518,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 160;
                         int attackEnd = start + duration;
                         int waveEnd = attackEnd + 2250;
-                        replay.AddDoubleDecoration(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), attackEnd);
                         // Nightmare Discharge Shockwave
                         replay.Decorations.Add(new CircleDecoration(1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(waveEnd));
                     }
@@ -617,7 +617,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var rotationConnector = new AngleConnector(rotation);
             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
-            replay.AddDoubleDecoration((RectangleDecoration)new RectangleDecoration(300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector), attackEnd);
+            replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, (int)target.HitboxWidth, (start, attackEnd), "rgba(250, 120, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnector), attackEnd);
 
             for (int i = 0; i < cascadeCount; i++)
             {

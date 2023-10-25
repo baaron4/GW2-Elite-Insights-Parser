@@ -266,75 +266,39 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
-        /// Add a copy of given decoration using given extra parameters
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
         /// </summary>
         /// <param name="decoration"></param>
         /// <param name="filled"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddCopyDecoration(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
+        internal void AddDecorationWithFilledWithGrowing(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
         {
+            Decorations.Add(decoration);
             Decorations.Add(decoration.Copy().UsingFilled(filled).UsingGrowingEnd(growingEnd, reverseGrowing));
         }
 
         /// <summary>
-        /// Add a copy of given decoration using given extra parameters
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
         /// </summary>
         /// <param name="decoration"></param>
-        /// <param name="filled"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddCopyDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
+        internal void AddDecorationWithGrowing(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
         {
+            Decorations.Add(decoration);
             Decorations.Add(decoration.Copy().UsingGrowingEnd(growingEnd, reverseGrowing));
         }
 
         /// <summary>
-        /// Add a copy of given decoration using given extra parameters
+        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
         /// </summary>
         /// <param name="decoration"></param>
         /// <param name="filled"></param>
-        /// <param name="growingEnd"></param>
-        /// <param name="reverseGrowing"></param>
-        internal void AddCopyDecoration(FormDecoration decoration, bool filled)
+        internal void AddDecorationWithFilled(FormDecoration decoration, bool filled)
         {
+            Decorations.Add(decoration);
             Decorations.Add(decoration.Copy().UsingFilled(filled));
-        }
-
-        /// <summary>
-        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
-        /// </summary>
-        /// <param name="decoration"></param>
-        /// <param name="filled"></param>
-        /// <param name="growingEnd"></param>
-        /// <param name="reverseGrowing"></param>
-        internal void AddDoubleDecoration(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
-        {
-            Decorations.Add(decoration);
-            AddCopyDecoration(decoration, filled, growingEnd, reverseGrowing);
-        }
-
-        /// <summary>
-        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
-        /// </summary>
-        /// <param name="decoration"></param>
-        /// <param name="growingEnd"></param>
-        /// <param name="reverseGrowing"></param>
-        internal void AddDoubleDecoration(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
-        {
-            Decorations.Add(decoration);
-            AddCopyDecoration(decoration, growingEnd, reverseGrowing);
-        }
-
-        /// <summary>
-        /// Add the decoration twice, the 2nd one being a copy using given extra parameters
-        /// </summary>
-        /// <param name="decoration"></param>
-        /// <param name="filled"></param>
-        internal void AddDoubleDecoration(FormDecoration decoration, bool filled)
-        {
-            Decorations.Add(decoration);
-            AddCopyDecoration(decoration, filled);
         }
 
         /// <summary>

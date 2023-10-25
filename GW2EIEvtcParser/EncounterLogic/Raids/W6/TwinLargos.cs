@@ -317,11 +317,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.AddDoubleDecoration(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.AddDoubleDecoration(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }

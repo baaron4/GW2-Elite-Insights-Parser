@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in boltBreaks)
             {
                 var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
-                replay.AddDoubleDecoration(circle, seg.End);
+                replay.AddDecorationWithGrowing(circle, seg.End);
             }
         }
 

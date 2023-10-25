@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
-                        replay.AddDoubleDecoration(circle, start + c.ExpectedDuration);
+                        replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
                     var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();
                     foreach (AbstractCastEvent c in vomit)
@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
                         var circle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
-                        replay.AddDoubleDecoration(circle, gend);
+                        replay.AddDecorationWithGrowing(circle, gend);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritHorde1:
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = (int)removedBuff.Time;
                 }
                 var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-                replay.AddDoubleDecoration(circle, start + duration);
+                replay.AddDecorationWithGrowing(circle, start + duration);
             }
         }
 

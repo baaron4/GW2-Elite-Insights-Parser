@@ -226,13 +226,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)c.Time;
                 int end = start + 3000;
-                replay.AddDoubleDecoration(new CircleDecoration(0, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)).UsingFilled(false), true, end);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(0, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)).UsingFilled(false), true, end);
             }
             // Sapper bombs
             var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in sapperBombs)
             {
-                replay.AddDoubleDecoration(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
             }
         }

@@ -297,7 +297,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.AddDoubleDecoration(new CircleDecoration(180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)), segment.End);
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)), segment.End);
             }
 
             // Frightening Speed - Numbers spread AoEs
@@ -520,7 +520,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="growing">Duration of the channel.</param>
         private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
         {
-            replay.AddDoubleDecoration(new CircleDecoration(1100, (start, end), "rgba(255, 55, 0, 0.2)", new AgentConnector(target)), growing);
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), "rgba(255, 55, 0, 0.2)", new AgentConnector(target)), growing);
         }
     }
 }

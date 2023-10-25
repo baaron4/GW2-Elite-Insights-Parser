@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        replay.AddDoubleDecoration(new CircleDecoration(600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
                     }
                     IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
@@ -240,14 +240,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 foreach (FormDecoration decoration in nonFullDecorations)
                                 {
-                                    replay.AddDoubleDecoration(decoration, explosionNonFull);
+                                    replay.AddDecorationWithGrowing(decoration, explosionNonFull);
                                 }
                                 // Full a different timings
                                 if ((pattern & full) > 0)
                                 {
                                     (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
                                     int fullExplosion = explosionNonFull - 1000;
-                                    replay.AddDoubleDecoration(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
                                 }
                             }
                         }

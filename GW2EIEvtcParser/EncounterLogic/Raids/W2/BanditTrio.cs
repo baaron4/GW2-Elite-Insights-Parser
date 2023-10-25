@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in sapperBombs)
             {
                 var circle = new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player));
-                replay.AddDoubleDecoration(circle.UsingFilled(false), true, seg.Start + 5000);
+                replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
                 replay.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
             }
         }

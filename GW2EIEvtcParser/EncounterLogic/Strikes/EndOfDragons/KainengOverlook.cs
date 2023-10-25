@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new AgentConnector(p);
-                    replay.AddDoubleDecoration(new CircleDecoration(230, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
             }
 
@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
                     var connector = new AgentConnector(p);
-                    replay.AddDoubleDecoration(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
             }
 
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
                     var connector = new AgentConnector(p);
-                    replay.AddDoubleDecoration(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
             }
 
@@ -309,7 +309,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new AgentConnector(p);
-                    replay.AddDoubleDecoration(new CircleDecoration(280, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
             }
         }
@@ -413,7 +413,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
                             var connector = new AgentConnector(target);
                             var circle = new CircleDecoration(380, lifespan, "rgba(200, 120, 0, 0.2)", connector);
-                            replay.AddDoubleDecoration(circle, lifespan.Item2);
+                            replay.AddDecorationWithGrowing(circle, lifespan.Item2);
                         }
                     }
                     break;
@@ -426,7 +426,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
                             var connector = new AgentConnector(target);
                             var doughnut = new DoughnutDecoration(100, 500, lifespan, "rgba(200, 120, 0, 0.2)", connector);
-                            replay.AddDoubleDecoration(doughnut, lifespan.Item2);
+                            replay.AddDecorationWithGrowing(doughnut, lifespan.Item2);
                         }
                     }
                     break;
@@ -579,7 +579,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
-            replay.AddDoubleDecoration(pie, lifespan.Item2);
+            replay.AddDecorationWithGrowing(pie, lifespan.Item2);
             replay.Decorations.Add(pie.GetBorderDecoration());
         }
 
@@ -590,7 +590,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
-            replay.AddDoubleDecoration(pie, lifespan.Item2);
+            replay.AddDecorationWithGrowing(pie, lifespan.Item2);
         }
 
         private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)
