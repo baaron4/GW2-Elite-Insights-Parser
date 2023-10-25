@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.AddDoubleDecoration((PieDecoration)new PieDecoration( coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), false);
+                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     foreach (AbstractCastEvent c in causticChaos)

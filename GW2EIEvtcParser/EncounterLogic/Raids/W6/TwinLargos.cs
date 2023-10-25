@@ -296,7 +296,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.AddDoubleDecoration((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor), false);
+                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;

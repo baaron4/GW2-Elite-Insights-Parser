@@ -340,7 +340,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (position != null)
                 {
                     var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
-                    replay.AddDoubleDecoration(circle, false);
+                    replay.AddDecorationWithBorder(circle);
                 }
             }
             // Shields and Greatswords Overheads

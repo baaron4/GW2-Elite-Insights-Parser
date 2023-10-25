@@ -475,7 +475,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDoubleDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector), false);
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
 
                             }
                         }
@@ -527,7 +527,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDoubleDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), false);
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -587,7 +587,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDoubleDecoration((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector), false);
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
