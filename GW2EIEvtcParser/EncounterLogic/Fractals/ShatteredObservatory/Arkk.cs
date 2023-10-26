@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                TrashID.TemporalAnomaly2,
+                TrashID.TemporalAnomalyArkk,
                 TrashID.FanaticDagger2,
                 TrashID.FanaticDagger1,
                 TrashID.FanaticBow,
@@ -317,22 +317,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
-                case (int)TrashID.TemporalAnomaly2:
-                    if (!log.CombatData.HasEffectData)
-                    {
-                        foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
-                        {
-                            int start = (int)exitCombat.Time;
-                            BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
-                            int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
-                            ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
-                            if (anomalyPos != null)
-                            {
-                                replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(anomalyPos)));
-                            }
-                        }
-                    }
-                    break;
+                // case (int)TrashID.TemporalAnomalyArkk:
+                //     if (!log.CombatData.HasEffectData)
+                //     {
+                //         foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
+                //         {
+                //             int start = (int)exitCombat.Time;
+                //             BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
+                //             int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
+                //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
+                //             if (anomalyPos != null)
+                //             {
+                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(anomalyPos)));
+                //             }
+                //         }
+                //     }
+                //     break;
             }
         }
         

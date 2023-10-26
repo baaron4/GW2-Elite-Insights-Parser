@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var trashIDs = new List<ArcDPSEnums.TrashID>
             {
-                TrashID.TemporalAnomaly,
+                TrashID.TemporalAnomalyArtsariiv,
                 TrashID.Spark,
                 TrashID.SmallArtsariiv,
                 TrashID.MediumArtsariiv,
