@@ -926,16 +926,18 @@ namespace GW2EIEvtcParser
             FluxAnomalyCM4 = 17673,
             SolarBloom = 17732,
             // Artsariiv
-            TemporalAnomaly = 17870,
+            TemporalAnomalyArtsariiv = 17870,
             Spark = 17630,
             SmallArtsariiv = 17811, // tiny adds
             MediumArtsariiv = 17694, // small adds
             BigArtsariiv = 17937, // big adds
             CloneArtsariiv = SubArtsariiv, // clone adds
             // Arkk
-            TemporalAnomaly2 = 17720,
+            TemporalAnomalyArkk = 17720,
             Archdiviner = 17893,
-            Fanatic = 11282,
+            FanaticDagger1 = 11281,
+            FanaticDagger2 = 11282,
+            FanaticBow = 11288,
             EliteBrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,

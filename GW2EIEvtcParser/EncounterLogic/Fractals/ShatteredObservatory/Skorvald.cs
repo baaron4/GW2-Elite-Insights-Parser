@@ -394,7 +394,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Supernova - Phase Oneshot
-                    var supernova = casts.Where(x => x.SkillId == SupernovaCM).ToList();
+                    var supernova = casts.Where(x => x.SkillId == SupernovaSkorvaldCM).ToList();
                     foreach (AbstractCastEvent c in supernova)
                     {
                         int start = (int)c.Time;

@@ -1829,7 +1829,7 @@
         public const long FixatedBloom1 = 39131;
         public const long WaveOfMutilation = 39133;
         public const long CranialCascadeSkorvald = 39220;
-        public const long SupernovaCM = 39225;
+        public const long SupernovaSkorvaldCM = 39225;
         public const long SolarCyclone = 39228;
         public const long CosmicEnergy = 39237;
         public const long FocusedAnger = 39257;
@@ -1850,6 +1850,7 @@
         public const long BlindingRadiance = 39442;
         public const long HorizonStrikeSkorvald = 39458;
         public const long TeleportLunge = 39469;
+        public const long Obliterate = 39470;
         public const long BloomExplode = 39491;
         public const long OystersWithSpicySauce = 39500;
         public const long HorizonStrikeSkorvald1 = 39507;
@@ -1877,7 +1878,10 @@
         public const long DiffractiveEdge2 = 39755;
         public const long SolarBolt2 = 39760;
         public const long HorizonStrikeSkorvald4 = 39770;
+        public const long SupernovaArkk = 39782;
         public const long DiffractiveEdge1 = 39787;
+        public const long SolarBlastArkk1 = 39823;
+        public const long SolarBlastArkk2 = 39857;
         public const long RadiantFurySkorvald = 39845;
         public const long CrimsonDawn = 39846;
         public const long PulsarBlast = 39847;
@@ -3682,6 +3686,7 @@
         public const long VengefulStrike = 71218; // Dagda Autochain 2
         public const long RelicOfCerusHit = 71252;
         public const long EmpoweredDespairEmbodiment = 71276;
+        public const long PostObliterateNew = 71308;
     }
 
 }
