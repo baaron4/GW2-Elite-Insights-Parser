@@ -132,12 +132,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
             GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
 
-            int bloomCount = 1;
+            var bloomPhases = new List<PhaseData>();
             foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TrashID.SolarBloom)).OrderBy(x => x.FirstAware))
             {
                 long start = bloom.FirstAware;
-                long end = Math.Min(bloom.LastAware, log.FightData.FightEnd); // TODO: arkk invuln loss instead?
-                PhaseData phase = phases.FirstOrDefault(x => Math.Abs(x.Start - start) < ServerDelayConstant);
+                long end = bloom.LastAware;
+                PhaseData phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < ServerDelayConstant);
                 if (phase != null)
                 {
                     phase.OverrideStart(Math.Min(phase.Start, start));
@@ -145,10 +145,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    phases.Add(new PhaseData(start, end, $"Blooms {bloomCount++}"));
-                    phases.Last().AddTarget(arkk);
+                    bloomPhases.Add(new PhaseData(start, end));
                 }
             }
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
+            for (int i = 0; i < bloomPhases.Count; i++)
+            {
+                PhaseData phase = bloomPhases[i];
+                phase.Name = $"Blooms {i + 1}";
+                phase.AddTarget(arkk);
+                AbstractBuffEvent invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
+                phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
+            }
+            phases.AddRange(bloomPhases);
 
             return phases;
         }
