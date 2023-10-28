@@ -14,6 +14,11 @@ namespace GW2EIEvtcParser.EIData
             OpeningAngle = openingAngle;
         }
 
+        public override FormDecoration Copy()
+        {
+            return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+        }
+
         //
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
