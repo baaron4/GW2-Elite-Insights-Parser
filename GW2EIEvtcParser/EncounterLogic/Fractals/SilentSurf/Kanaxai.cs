@@ -479,7 +479,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int end = (int)harrowshot.Time + duration;
                     var circle = new CircleDecoration(280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                 }
             }
         }
