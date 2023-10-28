@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsHandByAnkkaRadius300, out IReadOnlyList<EffectEvent> deathsHandOnPlayerNM))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out IReadOnlyList<EffectEvent> deathsHandOnPlayerNM))
                     {
                         foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
                         {
@@ -310,7 +310,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsHandByAnkkaRadius380, out IReadOnlyList<EffectEvent> deathsHandOnPlayerCMOrInBetween))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out IReadOnlyList<EffectEvent> deathsHandOnPlayerCMOrInBetween))
                     {
                         foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
                         {
