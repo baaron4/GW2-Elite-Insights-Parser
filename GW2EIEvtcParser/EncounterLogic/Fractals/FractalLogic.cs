@@ -192,8 +192,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 5000;
                     int start = (int)fluxEffect.Time;
                     int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(120, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(fluxEffect.Position)).UsingFilled(false));
+                    var circle = new CircleDecoration(120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
 
                     int pulseDuration = 1000;
                     int pulse = start + pulseDuration;

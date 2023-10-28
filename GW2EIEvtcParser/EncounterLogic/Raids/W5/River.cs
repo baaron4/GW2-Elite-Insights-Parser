@@ -185,8 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endCast = (int)bomb.EndTime;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
                         var circle = new CircleDecoration(480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target));
-                        replay.Decorations.Add(circle);
-                        replay.Decorations.Add(circle.UsingGrowingEnd(expectedEnd));
+                        replay.AddDecorationWithGrowing(circle, expectedEnd);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.RiverOfSouls:

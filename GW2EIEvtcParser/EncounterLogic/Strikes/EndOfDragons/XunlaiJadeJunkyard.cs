@@ -445,7 +445,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Damaging AoE
             int AoEStart = deathHandGrowEnd;
             int AoEEnd = AoEStart + duration;
-            replay.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)));
+            replay.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), "rgba(255, 0, 0, 0.4)");
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)

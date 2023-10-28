@@ -205,8 +205,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 30000;
                     int start = (int)claw.Time;
                     int end = (int)claw.Time + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position)));
-                    EnvironmentDecorations.Add(new DoughnutDecoration(95, 100, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(claw.Position)));
+                    var circle = new CircleDecoration(100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
                 }
             }
         }
@@ -226,8 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         var connector = new PositionConnector(indicator.Position);
                         var rotationConnector = new AngleConnector(rotation);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, end), "rgba(255, 0, 0, 0.2)", connector).UsingFilled(false).UsingRotationConnector(rotationConnector));
+                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), "rgba(255, 0, 0, 0.2)");
                     }
                 }
             }

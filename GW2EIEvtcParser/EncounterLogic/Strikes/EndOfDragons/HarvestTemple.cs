@@ -804,8 +804,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             EffectEvent nextEffect = poolEffects[i + 1];
                             int start = (int)curEffect.Time;
                             int end = (int)nextEffect.Time;
-                            replay.Decorations.Add(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration((int)radius, (start, end), "rgba(255, 0, 0, 0.5)", new PositionConnector(curEffect.Position)).UsingFilled(false));
+                            replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), "rgba(255, 0, 0, 0.5)");
                             radius += radiusIncrement;
                         }
                         // last pool effect ends slightly differently depending on phase
@@ -852,8 +851,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 break;
                         }
-                        replay.Decorations.Add(new CircleDecoration((int)radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)));
-                        replay.Decorations.Add(new CircleDecoration((int)radius, (lastStart, lastEnd), "rgba(255, 0, 0, 0.5)", new PositionConnector(lastEffect.Position)).UsingFilled(false));
+                        replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), "rgba(255, 0, 0, 0.5)");
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
@@ -883,8 +881,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = (int)Math.Min(target.LastAware, start + 10000);
-                            replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(200, 0, 0, 0.5)", new PositionConnector(effect.Position)).UsingFilled(false));
-                            replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.AddDecorationWithBorder(new CircleDecoration(200, (start, end), "rgba(49, 71, 0, 0.2)", new PositionConnector(effect.Position)), "rgba(200, 0, 0, 0.5)");
                         }
                     }
                     break;
