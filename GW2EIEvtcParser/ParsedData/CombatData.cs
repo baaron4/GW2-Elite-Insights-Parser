@@ -1050,6 +1050,17 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
+        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                effectEvents = effects.Where(effect => effect.Dst == agent).ToList();
+                return true;
+            }
+            return false;
+        }
         /// <summary>Returns effect events for the given agent and effect GUIDs.</summary>
         public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
@@ -1237,18 +1248,18 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool HasRelatedEffect(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
             {
-                return FindRelatedEvents(effectEvents, time, epsilon).Any(effect => effect.Src == agent);
+                return FindRelatedEvents(effectEvents, time, epsilon).Any();
             }
             return false;
         }
 
         public bool HasRelatedEffectDst(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            if (TryGetEffectEventsByDstWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
             {
-                return FindRelatedEvents(effectEvents, time, epsilon).Any(effect => effect.Dst == agent);
+                return FindRelatedEvents(effectEvents, time, epsilon).Any();
             }
             return false;
         }

@@ -250,9 +250,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Sniper Ricochet Tether & AoE - CM
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
             {
-                foreach (EffectEvent effect in sniperBeamsCM.Where(x => x.Dst == p.AgentItem))
+                foreach (EffectEvent effect in sniperBeamsCM)
                 {
                     // Check if any effect event exists before the current one within a 20 seconds time span
                     // This is to fix the beam duration incorrectly logged
@@ -270,9 +270,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Targeted Expulsion - Orange spread AoEs CM
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookTargetedExpulsion, out IReadOnlyList<EffectEvent> spreads))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookTargetedExpulsion, out IReadOnlyList<EffectEvent> spreads))
             {
-                foreach (EffectEvent effect in spreads.Where(x => x.Dst == p.AgentItem))
+                foreach (EffectEvent effect in spreads)
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new AgentConnector(p);
@@ -281,9 +281,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rain Of Blades - Mindblade AoE on players - Orange circle (first)
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
             {
-                foreach (EffectEvent effect in mindbladeAoEOnPlayers.Where(x => x.Dst == p.AgentItem))
+                foreach (EffectEvent effect in mindbladeAoEOnPlayers)
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
                     var connector = new AgentConnector(p);
@@ -292,9 +292,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rain Of Blades - Mindblade AoE on players - Orange circle (consecutives)
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
             {
-                foreach (EffectEvent effect in mindbladeAoEOnPlayers4.Where(x => x.Dst == p.AgentItem))
+                foreach (EffectEvent effect in mindbladeAoEOnPlayers4)
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
                     var connector = new AgentConnector(p);
@@ -303,9 +303,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Heaven's Palm - AoE on players
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerHeavensPalmAoE, out IReadOnlyList<EffectEvent> heavensPalm))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookEnforcerHeavensPalmAoE, out IReadOnlyList<EffectEvent> heavensPalm))
             {
-                foreach (EffectEvent effect in heavensPalm.Where(x => x.Dst == p.AgentItem))
+                foreach (EffectEvent effect in heavensPalm)
                 {
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new AgentConnector(p);
