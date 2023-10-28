@@ -160,9 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int hitTime = (int)c.ExpectedEndTime;
                         int endTime = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-
-                        replay.Decorations.Add(new CircleDecoration(true, hitTime, 550, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 550, ((int)c.Time, endTime), "rgba(255, 0, 0, 2)", new AgentConnector(target)));
+                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), "rgba(255, 120, 0, 2)", new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, false, "rgba(255, 0, 0, 2)");
                     }
 
                     // Leap with shockwaves
@@ -172,15 +170,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int attackStart = (int)c.Time;
                         int hitTime = (int)c.ExpectedEndTime;
                         // Find position at the end of the leap time
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= hitTime + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, hitTime + 1000);
                         if (targetPosition == null)
                         {
                             continue;
                         }
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
                         int impactRadius = (int)target.HitboxWidth / 2 + 100;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, hitTime, impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)), hitTime);
                         // 3 rounds of decorations for the 3 waves
                         if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
                         {
@@ -189,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < 3; i++)
                             {
                                 int shockWaveStart = hitTime + i * 120;
-                                replay.Decorations.Add(new CircleDecoration(false, shockWaveStart + duration, shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)));
+                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
                             }
                         }
                     }
@@ -209,11 +206,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int safeTime = endFirstAndSecondAoe + 1000;
                             int dangerTime = 77000;
 
-                            replay.Decorations.Add(new CircleDecoration(true, growingFirstAoe, 540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, growingSecondAoe, 540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, safeTime, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
+                            replay.AddDecorationWithGrowing(new CircleDecoration(540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)), safeTime);
+                            replay.Decorations.Add(new CircleDecoration(540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
                         }
                     }
 
@@ -225,9 +221,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 6200;
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, -effectEnd, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)), effectEnd, true);
                         }
                     }
 
@@ -239,8 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + duration;
                             int radius = 140;
                             var connector = new PositionConnector(effect.Position);
-                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, end), "rgba(250, 120, 0, 0.2)", connector));
-                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(250, 120, 0, 0.2)", connector));
+                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingFilled(false), true, end);
                         }
                     }
 
@@ -267,11 +261,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int windUpStart = (int)c.Time - windUpDuration;
 
                         // Wind Up - Knight in air
-                        replay.Decorations.Add(new CircleDecoration(true, -(int)c.Time, 600, (windUpStart, (int)c.Time), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, (windUpStart, (int)c.Time), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), c.Time, true);
                         // Hit - Knight falling
-                        replay.Decorations.Add(new CircleDecoration(true, hitTime, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
                     }
 
                     // Pull AoE
@@ -281,8 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int hitTime = (int)c.ExpectedEndTime;
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.Decorations.Add(new DoughnutDecoration(true, hitTime, 300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
                     }
                     break;
                 default:

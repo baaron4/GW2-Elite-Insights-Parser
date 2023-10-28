@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
                     {
                         int start = (int)effect.Time;
-                        EnvironmentDecorations.Add(new CircleDecoration(false, 0, 220, (start, (int)end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
+                        EnvironmentDecorations.Add(new CircleDecoration(220, (start, (int)end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
                     }
                 }
             }
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time - 500;
                     int end = (int)effect.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time;
                     int end = start + 500;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)));
+                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
         }

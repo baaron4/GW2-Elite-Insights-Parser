@@ -2,7 +2,7 @@
 {
     internal abstract class BackgroundDecoration : GenericDecoration
     {
-        public BackgroundDecoration((int start, int end) lifespan) : base(lifespan)
+        public BackgroundDecoration((long start, long end) lifespan) : base(lifespan)
         {
         }
 

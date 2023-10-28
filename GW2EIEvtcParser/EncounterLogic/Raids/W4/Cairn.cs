@@ -102,8 +102,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent displacement in displacementEffects)
                 {
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, (int)displacement.Time + 3000, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
                 }
             }
         }
@@ -122,14 +123,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
                         int width = 1400; int height = 80;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
                     var wave = cls.Where(x => x.SkillId == GravityWave).ToList();
@@ -142,24 +143,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int secondRadius = 700;
                         int thirdRadius = 1000;
                         int fourthRadius = 1300;
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
                     {
                         var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
-                            int dashGreenStart = (int)dashGreen.Time;
-                            int dashGreenEnd = (int)target.LastAware;
+                            long dashGreenStart = dashGreen.Time;
+                            long dashGreenEnd = target.LastAware;
                             AbstractCastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                             if (endEvent != null)
                             {
-                                dashGreenEnd = (int)endEvent.Time + 3300; // from skill def
+                                dashGreenEnd = endEvent.Time + 3300; // from skill def
                             }
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
                         }
                     }
                     //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
@@ -213,9 +214,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             var agony = log.CombatData.GetBuffData(SharedAgony).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
-                int agonyStart = (int)c.Time;
-                int agonyEnd = agonyStart + 62000;
-                replay.Decorations.Add(new CircleDecoration(false, 0, 220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
+                long agonyStart = c.Time;
+                long agonyEnd = agonyStart + 62000;
+                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)).UsingFilled(false));
             }
         }
 

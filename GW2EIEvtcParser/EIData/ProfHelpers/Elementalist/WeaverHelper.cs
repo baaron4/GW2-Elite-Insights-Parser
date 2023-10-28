@@ -64,12 +64,12 @@ namespace GW2EIEvtcParser.EIData
             // Hammer 
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualFireAttunement)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndWater, FlameWheelBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireWaterAttunement || last == WaterFireAttunement;
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndAir, FlameWheelBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireAirAttunement || last == AirFireAttunement;
@@ -87,7 +87,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndEarth, FlameWheelBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireEarthAttunement || last == EarthFireAttunement;
@@ -97,13 +97,13 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualWaterAttunement)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndWater, IcyCoilBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireWaterAttunement || last == WaterFireAttunement;
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndAir, IcyCoilBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == WaterAirAttunement || last == AirWaterAttunement;
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitWaterAndEarth, IcyCoilBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == WaterEarthAttunement || last == EarthWaterAttunement;
@@ -132,13 +132,13 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualAirAttunement)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndAir, CrescentWindBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireAirAttunement || last == AirFireAttunement;
@@ -148,8 +148,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndAir, CrescentWindBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == WaterAirAttunement || last == AirWaterAttunement;
@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitAirAndEarth, CrescentWindBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == AirEarthAttunement || last == EarthAirAttunement;
@@ -169,13 +169,13 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
                 .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualEarthAttunement)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndEarth, RockyLoopBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff( FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == FireEarthAttunement || last == EarthWaterAttunement;
@@ -185,8 +185,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndEarth, RockyLoopBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff( IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == WaterEarthAttunement || last == EarthWaterAttunement;
@@ -196,8 +196,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitAirAndEarth, RockyLoopBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, CrescentWindBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(CrescentWindBuff, ba.To, ba.Time - extraOrbHammerDelay))
                 .UsingChecker((ba, combatData, agentData, skillData) => {
                         var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
                         return last == AirEarthAttunement || last == EarthAirAttunement;

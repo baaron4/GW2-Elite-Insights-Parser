@@ -133,8 +133,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             int boltBreakRadius = 180;
             foreach (Segment seg in boltBreaks)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
+                replay.AddDecorationWithGrowing(circle, seg.End);
             }
         }
 
@@ -149,18 +149,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in repulsionFields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                     }
                     var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in ionShields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                     }
                     //
                     var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
@@ -170,20 +170,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 3000; // casttime 0 from skill def
                         int duration = 5000;
                         int radius = 1200;
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (targetPosition != null)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(start + duration));
                         }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
                 case (int)ArcDPSEnums.TrashID.ParalyzingWisp:

@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
         public List<(float x, float y, float z, float angle, float opacity, int time)> Positions { get; } =
             new List<(float x, float y, float z, float angle, float opacity, int time)>();
 
-        public MovingPlatformDecoration(string image, int width, int height, (int start, int end) lifespan) : base(lifespan)
+        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(lifespan)
         {
             Image = image;
             Width = width;

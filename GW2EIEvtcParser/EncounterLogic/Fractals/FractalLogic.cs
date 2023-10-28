@@ -159,8 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int effectEnd = effectStart + duration;
                         var rotationConnector = new AgentFacingConnector(p);
                         var connector = new AgentConnector(p);
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (effectStart, effectEnd), "rgba(0, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (effectEnd, effectEnd + 200), "rgba(0, 100, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectStart, effectEnd), "rgba(0, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectEnd, effectEnd + 200), "rgba(0, 100, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
                     }
                 }
             }
@@ -192,15 +192,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 5000;
                     int start = (int)fluxEffect.Time;
                     int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
-                    EnvironmentDecorations.Add(new DoughnutDecoration(false, 0, 119, 121, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(fluxEffect.Position)));
+                    var circle = new CircleDecoration(120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
 
                     int pulseDuration = 1000;
                     int pulse = start + pulseDuration;
                     int previousPulse = start;
                     for (int pulses = 0; pulses < 5; pulses++)
                     {
-                        EnvironmentDecorations.Add(new CircleDecoration(true, pulse, 120, (previousPulse, pulse), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)));
+                        EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)).UsingGrowingEnd(pulse));
                         previousPulse = pulse;
                         pulse += pulseDuration;
                     }

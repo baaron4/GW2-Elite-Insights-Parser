@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment asylum in asylums)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
@@ -184,8 +184,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int startCast = (int)bomb.Time;
                         int endCast = (int)bomb.EndTime;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(circle, expectedEnd);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.RiverOfSouls:
@@ -198,7 +198,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)replay.TimeOffsets.start;
                         int end = (int)replay.TimeOffsets.end;
-                        replay.Decorations.Add(new RectangleDecoration(true, 0, 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration( 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Enervator:

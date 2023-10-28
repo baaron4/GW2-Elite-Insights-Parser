@@ -190,14 +190,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in brutalize)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Rigom:
                 case (int)ArcDPSEnums.TrashID.Guldhem:
                     break;
                 case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)target.FirstAware, (int)target.LastAware), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(240, ((int)target.FirstAware, (int)target.LastAware), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -212,8 +212,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int bigStart = (int)c.Time;
                 int bigEnd = bigStart + 6000;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, bigEnd, 300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p)));
+                var circle = new CircleDecoration(300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p));
+                replay.AddDecorationWithGrowing(circle, bigEnd);
             }
             // small bomb
             var smallbomb = log.CombatData.GetBuffData(InevitableBetrayalSmall).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
@@ -221,13 +221,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int smallStart = (int)c.Time;
                 int smallEnd = smallStart + 6000;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
             }
             // fixated Samarog
             var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixatedSam)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
             List<AbstractBuffEvent> fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
@@ -240,7 +240,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (guldhem != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                    replay.Decorations.Add(new LineDecoration(seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
                 }
             }
             //fixated Rigom
@@ -251,7 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (rigom != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(0, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                    replay.Decorations.Add(new LineDecoration(seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
                 }
             }
         }
