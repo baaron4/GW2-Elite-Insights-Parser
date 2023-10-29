@@ -285,13 +285,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
                                 {
+                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
+                                    BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
+                                    BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
+                                    long cap = Math.Min(nextInvul?.Time ?? long.MaxValue, nextStun?.Time ?? long.MaxValue);
                                     float facing = Point3D.GetRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
                                         int start = (int)cast.Time + offset * (i + 1);
+                                        int end = start + duration;
                                         float angle = facing + 180 / 5 * i;
+                                        if (start >= cap)
+                                        {
+                                            break;
+                                        }
                                         replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
                                         replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
                                     }
                                 }
                                 break;
@@ -309,12 +320,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
                                 {
+                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
+                                    BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
+                                    BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
+                                    long cap = Math.Min(nextInvul?.Time ?? long.MaxValue, nextStun?.Time ?? long.MaxValue);
                                     float facing = Point3D.GetRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
                                         int start = (int)cast.Time + offset * (i + 1);
                                         int end = start + duration;
                                         float angle = facing + 90 - 180 / 5 * i;
+                                        if (start >= cap)
+                                        {
+                                            break;
+                                        }
                                         replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle)));
                                         replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
                                         replay.Decorations.Add(new PieDecoration(true, 0, 1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
