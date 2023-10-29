@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -164,6 +165,12 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
             return ParserHelper._unknownAgent;
+        }
+
+        public bool HasSpawnedMinion(MinionID minion, AgentItem master, long time, long epsilon = ParserHelper.ServerDelayConstant)
+        {
+            return GetNPCsByID(minion)
+                .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
         }
 
         internal void ReplaceAgentsFromID(AgentItem agentItem)

@@ -159,9 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)detSegment.Start, attackEnd); // Start of determinated
                         }
-
-                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        var doughnut = new DoughnutDecoration(0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(doughnut, expectedHitTime, true);
                     }
                     // Tail Swipe
                     var tailLash = casts.Where(x => x.SkillId == TailLashSiax).ToList();
@@ -174,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int end = start + duration;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, openingAngle, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
                     // 66% and 33% phases
@@ -191,9 +190,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
                         }
-
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(circle, expectedHitTime);
                     }
                     // Poison AoE
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VileSpitSiax, out IReadOnlyList<EffectEvent> poisonEffects))
@@ -201,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 16000;
                         foreach (EffectEvent effect in poisonEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
                         }
                     }
                     // Nightmare Hallucinations Spawn Event
@@ -210,8 +208,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 3000;
                         foreach (EffectEvent effect in spawnEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Caustic Barrage
@@ -220,8 +218,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 500;
                         foreach (EffectEvent effect in barrageEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            var circle = new CircleDecoration(100, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Volatile Hallucinations Explosions
@@ -230,8 +228,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 200;
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                            var circle = new CircleDecoration(240, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
                     // Cascade Of Torment
@@ -251,7 +249,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 20000;
                         int start = (int)c.Time + 18000;
                         int attackEnd = (int)c.Time + duration;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 case (int)TrashID.VolatileHallucinationSiax:

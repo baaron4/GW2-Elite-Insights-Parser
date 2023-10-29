@@ -233,22 +233,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var bulletHail = cls.Where(x => x.SkillId == HailOfBulletsZane).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
-                        int start = (int)c.Time;
-                        int firstConeStart = start;
-                        int secondConeStart = start + 800;
-                        int thirdConeStart = start + 1600;
-                        int firstConeEnd = firstConeStart + 400;
-                        int secondConeEnd = secondConeStart + 400;
-                        int thirdConeEnd = thirdConeStart + 400;
+                        long start = c.Time;
+                        long firstConeStart = start;
+                        long secondConeStart = start + 800;
+                        long thirdConeStart = start + 1600;
+                        long firstConeEnd = firstConeStart + 400;
+                        long secondConeEnd = secondConeStart + 400;
+                        long thirdConeEnd = thirdConeStart + 400;
                         int radius = 1500;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     break;
@@ -266,8 +266,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             var sapperBombs = player.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in sapperBombs)
             {
-                replay.Decorations.Add(new CircleDecoration(false, 0, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 5000, 180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player)));
+                var circle = new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player));
+                replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
                 replay.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
             }
         }

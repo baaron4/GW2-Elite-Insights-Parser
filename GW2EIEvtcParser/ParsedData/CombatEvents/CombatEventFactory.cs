@@ -223,6 +223,7 @@ namespace GW2EIEvtcParser.ParsedData
                             break;
                         case StateChange.Effect_51:
                             effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData);
+                            
                             if (effectEvt.TrackingID != 0)
                             {
                                 Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
@@ -232,14 +233,14 @@ namespace GW2EIEvtcParser.ParsedData
                             throw new InvalidDataException("Invalid effect state change");
                     }
                     statusEvents.EffectEvents.Add(effectEvt);
-                    Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
+                    if (!effectEvt.IsEnd)
+                    {
+                        Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
+                        Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
+                    }
                     if (effectEvt.IsAroundDst)
                     {
                         Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);
-                    }
-                    if (effectEvt.EffectID != 0)
-                    {
-                        Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     }
                     break;
                 case StateChange.EffectIDToGUID:

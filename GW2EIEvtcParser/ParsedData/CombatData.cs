@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -210,6 +211,10 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     case ParserHelper.Spec.Ranger:
                         toAdd.AddRange(RangerHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
+                        break;
+                    case Spec.Elementalist:
+                        toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ElementalistHelper.ComputeRideTheLightningCastEvents(p, this, skillData, agentData));
                         break;
                     default:
                         break;
@@ -975,7 +980,7 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AbstractMovementEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEvents(AgentItem src)
+        public IReadOnlyList<EffectEvent> GetEffectEventsBySrc(AgentItem src)
         {
             if (_statusEvents.EffectEventsBySrc.TryGetValue(src, out List<EffectEvent> list))
             {
@@ -1041,6 +1046,17 @@ namespace GW2EIEvtcParser.ParsedData
             effectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
                 effectEvents = effects.Where(effect => effect.Src == agent).ToList();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                effectEvents = effects.Where(effect => effect.Dst == agent).ToList();
                 return true;
             }
             return false;
@@ -1169,6 +1185,107 @@ namespace GW2EIEvtcParser.ParsedData
                 return evt;
             }
             return null;
+        }
+
+        public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : AbstractTimeCombatEvent
+        {
+            return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
+        }
+
+        public bool HasRelatedHit(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetDamageData(skillID), time, epsilon)
+                .Any(hit => hit.CreditedFrom == agent);
+        }
+
+        public bool HasPreviousCast(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetAnimatedCastData(skillID), time, epsilon)
+                .Any(cast => cast.Caster == agent && cast.Time <= time);
+        }
+
+        public bool IsCasting(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return GetAnimatedCastData(skillID)
+                .Any(cast => cast.Caster == agent && cast.Time - epsilon <= time && cast.EndTime + epsilon >= time);
+        }
+
+        public bool HasGainedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent);
+        }
+
+        public bool HasGainedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source);
+        }
+
+        public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
+        }
+
+        public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
+        }
+
+        public bool HasLostBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffRemoveAllEvent>(), time, epsilon)
+                .Any(remove => remove.To == agent);
+        }
+
+        public bool HasLostBuffStack(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
+                .Any(remove => remove.To == agent);
+        }
+
+        public bool HasRelatedEffect(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            {
+                return FindRelatedEvents(effectEvents, time, epsilon).Any();
+            }
+            return false;
+        }
+
+        public bool HasRelatedEffectDst(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            if (TryGetEffectEventsByDstWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            {
+                return FindRelatedEvents(effectEvents, time, epsilon).Any();
+            }
+            return false;
+        }
+
+        public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent);
+        }
+
+        public bool HasExtendedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source);
+        }
+
+        public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
+        }
+
+        public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, AgentItem source, long epsilon = ServerDelayConstant)
+        {
+            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
         }
 
     }

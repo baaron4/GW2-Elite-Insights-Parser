@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
@@ -347,6 +348,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheMossman = "https://i.imgur.com/jwFEGFA.png";
         private const string TrashJadeMawTentacle = "https://i.imgur.com/SfB9gJG.png";
         private const string TrashInspectorEllenKiel = "https://i.imgur.com/TyYmSnn.png";
+        private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -523,6 +525,35 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
         internal const string EffectProtectiveSolace = "https://i.imgur.com/uBO48eB.png";
+        internal const string EffectWellOfGloom = "https://i.imgur.com/k4RSbxD.png";
+        internal const string EffectWellOfBounty = "https://i.imgur.com/ZgKMlgA.png";
+        internal const string EffectWellOfTears = "https://i.imgur.com/pbCS8tn.png";
+        internal const string EffectWellOfSilence = "https://i.imgur.com/ZQxshJM.png";
+        internal const string EffectWellOfSorrow = "https://i.imgur.com/B2gQzkY.png";
+        internal const string EffectShadowfall = "https://i.imgur.com/SfRb7bC.png";
+        internal const string EffectWellOfEternity = "https://i.imgur.com/TPisxaE.png";
+        internal const string EffectWellOfAction = "https://i.imgur.com/YnwzegV.png";
+        internal const string EffectWellOfCalamity = "https://i.imgur.com/ZrYTFnd.png";
+        internal const string EffectWellOfPrecognition = "https://i.imgur.com/ECcw4jT.png";
+        internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
+        internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
+        internal const string EffectVitalDraw = "https://i.imgur.com/v0FW8mn.png";
+        internal const string EffectMarkOfBlood = "https://i.imgur.com/RXSaEJE.png";
+        internal const string EffectChillblains = "https://i.imgur.com/ViOzLNe.png";
+        internal const string EffectMarkOfBloodOrChillblains = "https://i.imgur.com/dAPDUFm.png";
+        internal const string EffectPutridMark = "https://i.imgur.com/wJ3V2Fm.png";
+        internal const string EffectReapersMark = "https://i.imgur.com/85VAsHR.png";
+        internal const string EffectMeteorShower = "https://i.imgur.com/ENXoZja.png";
+        internal const string EffectStaticField = "https://i.imgur.com/XixW4Ae.png";
+        internal const string EffectOverloadFire = "https://i.imgur.com/K34TWxW.png";
+        internal const string EffectOverloadAir = "https://i.imgur.com/VwMTUTD.png";
+        internal const string EffectUpdraft = "https://i.imgur.com/LQSmmJ1.png";
+        internal const string EffectFirestormGlyphOrFieryGreatsword = "https://i.imgur.com/BpsVQir.png";
+        internal const string EffectGeyser = "https://i.imgur.com/4h9HaFh.png";
+        internal const string EffectDeployJadeSphereFire = "https://i.imgur.com/qdkoYap.png";
+        internal const string EffectDeployJadeSphereWater = "https://i.imgur.com/xy0SAxK.png";
+        internal const string EffectDeployJadeSphereAir = "https://i.imgur.com/SvUQmyj.png";
+        internal const string EffectDeployJadeSphereEarth = "https://i.imgur.com/KG8ysd9.png";
 
         // Overhead icons
         // - Fixations
@@ -931,8 +962,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.ReanimatedSpite, TrashReanimatedSpite },
             { ArcDPSEnums.TrashID.SanctuaryPrism, TrashSanctuaryPrism },
             { ArcDPSEnums.TrashID.VoidBrandstalker, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfPain, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashSpiritOfDestructionOrPain },
+            { ArcDPSEnums.TrashID.SpiritOfPain, TrashSpiritOfDestructionOrPain },
             { ArcDPSEnums.TrashID.DragonEnergyOrb, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.HandOfErosion, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.HandOfEruption, TrashHandOfErosionEruption },

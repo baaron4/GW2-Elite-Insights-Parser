@@ -1,17 +1,22 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System;
+
+namespace GW2EIEvtcParser.EIData
 {
     internal class LineDecoration : FormDecoration
     {
         public Connector ConnectedFrom { get; }
-        public int Width { get; }
 
-        public LineDecoration(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
+        public LineDecoration((long start, long end) lifespan, string color, Connector connector, Connector targetConnector) : base( lifespan, color, connector)
         {
             ConnectedFrom = targetConnector;
         }
 
-        public LineDecoration(int growing, Segment lifespan, string color, Connector connector, Connector targetConnector) : this(growing, ((int)lifespan.Start, (int)lifespan.End), color, connector, targetConnector)
+        public LineDecoration(Segment lifespan, string color, Connector connector, Connector targetConnector) : this((lifespan.Start, lifespan.End), color, connector, targetConnector)
         {
+        }
+        public override FormDecoration UsingFilled(bool filled)
+        {
+            return this;
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
@@ -21,6 +26,15 @@
         public override GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
         {
             return this;
+        }
+        public override FormDecoration Copy()
+        {
+            return (FormDecoration)new LineDecoration(Lifespan, Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+        }
+
+        public override FormDecoration GetBorderDecoration(string borderColor = null)
+        {
+            throw new InvalidOperationException("Lines can't have borders");
         }
     }
 }

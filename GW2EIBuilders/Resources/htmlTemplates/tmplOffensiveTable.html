@@ -35,6 +35,16 @@
                         <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
                              class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 21)" @click="sortBy('Data', 21, 20)"
+                        data-original-title="Percent time power hits while self above 90% hp">
+                        <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                             class="icon"> > 90%
+                    </th>    
+                    <th class="stat-cell" :class="getHeaderClass('Data', 23)" @click="sortBy('Data', 23, 22)"
+                        data-original-title="Percent time condition ticks while self above 90% hp">
+                        <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                             class="icon"> > 90%
+                    </th>    
                     <th class="stat-cell" :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5, 11)"
                         data-original-title="Percent time hits while glancing">
                         <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
@@ -84,7 +94,16 @@
                         <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
                             alt="Downed" 
                             class="icon icon-hover">
-                    </th>             
+                    </th>   
+                    <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 25)" @click="sortBy('Data', 25)"
+                        data-original-title="Damage against downed target">
+                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                            class="icon">
+                            &#8658
+                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                            alt="Downed" 
+                            class="icon">
+                    </th>           
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12)"
                         data-original-title="Number of times killed target">
                         <img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png"
@@ -121,6 +140,14 @@
                         :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[4]/ row.data[11])}}%
                     </td>
+                    <td :class="getBodyClass('Data', 21)"
+                        :data-original-title="row.data[21] + ' out of ' + row.data[20] + ' connected power hit(s)'">
+                        {{round2(100*row.data[21]/ row.data[20])}}%
+                    </td>
+                    <td :class="getBodyClass('Data', 23)"
+                        :data-original-title="row.data[23] + ' out of ' + row.data[22] + ' connected condition tick(s)'">
+                        {{round2(100*row.data[23]/ row.data[22])}}%
+                    </td>
                     <td :class="getBodyClass('Data', 5)"
                         :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[5]/ row.data[11])}}%
@@ -149,11 +176,15 @@
                         {{row.data[10]}}
                     </td>
                     <td v-if="wvw" :class="getBodyClass('Data', 17)"
-                        :data-original-title="round2(100*row.data[17]/ row.data[18]) +'% of total damage'">
+                        :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
                     <td v-if="wvw" :class="getBodyClass('Data', 13)">
                         {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw" :class="getBodyClass('Data', 25)"
+                    :data-original-title="row.data[24] + ' hits<br>' + round2(100*row.data[25]/ row.data[26]) +'% of total damage'">
+                        {{row.data[25]}}
                     </td>
                     <td v-if="wvw" :class="getBodyClass('Data', 12)">
                         {{row.data[12]}}
@@ -176,6 +207,12 @@
                     <td :data-original-title="row.data[4] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[4]/ row.data[11])}}%
                     </td>
+                    <td :data-original-title="row.data[21] + ' out of ' + row.data[20] + ' connected power hit(s)'">
+                        {{round2(100*row.data[21]/ row.data[20])}}%
+                    </td>
+                    <td :data-original-title="row.data[23] + ' out of ' + row.data[22] + ' connected condition tick(s)'">
+                        {{round2(100*row.data[23]/ row.data[22])}}%
+                    </td>
                     <td :data-original-title="row.data[5] + ' out of ' + row.data[11] + ' connected direct hit(s)'">
                         {{round2(100*row.data[5]/ row.data[11])}}%
                     </td>
@@ -197,11 +234,14 @@
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
-                    <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[18]) +'% of total damage'">
+                    <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
                     <td v-if="wvw">
                         {{row.data[13]}}
+                    </td>
+                    <td v-if="wvw" :data-original-title="row.data[24] + ' hits<br>' + round2(100*row.data[25]/ row.data[26]) +'% of total damage'">
+                        {{row.data[25]}}
                     </td>
                     <td v-if="wvw">
                         {{row.data[12]}}

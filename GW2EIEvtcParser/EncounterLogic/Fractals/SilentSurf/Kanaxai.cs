@@ -285,7 +285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
-                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                replay.Decorations.Add(new LineDecoration((start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
@@ -297,15 +297,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)), segment.End);
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -369,7 +368,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
@@ -430,8 +429,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1500;
                     int start = (int)aoe.Time;
                     int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+                    var circle = new CircleDecoration( 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
                 }
             }
 
@@ -477,8 +477,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 3000;
                     int start = (int)harrowshot.Time;
                     int end = (int)harrowshot.Time + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
+                    var circle = new CircleDecoration(280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                 }
             }
         }
@@ -504,8 +505,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             int start = (int)aoe.Time;
             int effectEnd = start + duration;
-            EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
-            EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+            var circle = new CircleDecoration(180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+            EnvironmentDecorations.Add(circle);
+            EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
         }
 
         /// <summary>
@@ -518,8 +520,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="growing">Duration of the channel.</param>
         private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
         {
-            replay.Decorations.Add(new CircleDecoration(true, 0, 1100, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new CircleDecoration(true, growing, 1100, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), "rgba(255, 55, 0, 0.2)", new AgentConnector(target)), growing);
         }
     }
 }

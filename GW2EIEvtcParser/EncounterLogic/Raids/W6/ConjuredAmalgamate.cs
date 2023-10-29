@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int CAShieldRadius = 500;
                     foreach (Segment seg in shieldCA)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.CALeftArm:
@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int ShieldShieldRadius = 100;
                     foreach (Segment seg in shieldShield)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -336,12 +336,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int start = (int)c.Time;
                 int duration = 10000;
                 int radius = 300;
-                ParametricPoint3D shieldNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= start);
-                ParametricPoint3D shieldPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
-                if (shieldNextPos != null || shieldPrevPos != null)
+                Point3D position = p.GetCurrentInterpolatedPosition(log, start);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.1)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
-                    replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, start + duration), "rgba(255, 0, 255, 0.3)", new InterpolatedPositionConnector(shieldPrevPos, shieldNextPos, start)));
+                    var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
+                    replay.AddDecorationWithBorder(circle);
                 }
             }
             // Shields and Greatswords Overheads

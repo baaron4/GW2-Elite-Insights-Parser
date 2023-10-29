@@ -434,10 +434,16 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetCurrentBarrierPercent(log, time);
         }
 
-        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             AbstractSingleActor actor = log.FindActor(this);
-            return actor.GetCurrentPosition(log, time);
+            return actor.GetCurrentPosition(log, time, forwardWindow);
+        }
+
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentRotation(log, time, forwardWindow);
         }
 
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
@@ -469,6 +475,26 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsSpecies(ArcDPSEnums.ChestID id)
         {
             return IsSpecies((int)id);
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TrashID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TargetID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.MinionID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.ChestID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
         }
     }
 }

@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -49,5 +54,50 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.June2023Balance),
         };
 
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Elementalist;
+
+            // Overload Fire
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire2, out IReadOnlyList<EffectEvent> overloadsFire))
+            {
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire1, out IReadOnlyList<EffectEvent> overloadsFireAux))
+                {
+                    var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadFire);
+                    foreach (EffectEvent effect in overloadsFire)
+                    {
+                        if (!overloadsFireAux.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            continue;
+                        }
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadFire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    }
+                }
+            }
+
+            // Overload Air
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir2, out IReadOnlyList<EffectEvent> overloadsAir))
+            {
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir1, out IReadOnlyList<EffectEvent> overloadsAirAux))
+                {
+                    var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadAir);
+                    foreach (EffectEvent effect in overloadsAir)
+                    {
+                        if (!overloadsAirAux.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            continue;
+                        }
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadAir, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    }
+                }
+            }
+        }
     }
 }

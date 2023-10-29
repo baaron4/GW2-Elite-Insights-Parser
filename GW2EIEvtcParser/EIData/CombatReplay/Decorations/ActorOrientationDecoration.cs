@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
 
-        public ActorOrientationDecoration((int start, int end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
         {
             RotationConnectedTo = new AgentFacingConnector(agent);
         }

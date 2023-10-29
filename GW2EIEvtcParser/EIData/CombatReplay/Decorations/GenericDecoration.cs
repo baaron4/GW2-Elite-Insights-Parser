@@ -4,9 +4,9 @@
     {
         public (int start, int end) Lifespan { get; }
 
-        protected GenericDecoration((int start, int end) lifespan)
+        protected GenericDecoration((long start, long end) lifespan)
         {
-            Lifespan = lifespan;
+            Lifespan = ((int)lifespan.start, (int)lifespan.end);
         }
         //
 

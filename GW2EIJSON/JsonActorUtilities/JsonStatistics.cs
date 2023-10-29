@@ -17,7 +17,11 @@ namespace GW2EIJSON
             /// Total damage taken
             /// </summary>
             public long DamageTaken { get; set; }
-            
+            /// <summary>
+            /// Total damage taken while downed
+            /// </summary>
+            public long DownedDamageTaken { get; set; }
+
             /// <summary>
             /// Total breakbar damage taken
             /// </summary>
@@ -304,6 +308,31 @@ namespace GW2EIJSON
             /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death
             /// </summary>
             public int DownContribution { get; set; }
+
+            /// <summary>
+            /// Number of times a Power based damage skill hits
+            /// </summary>
+            public int ConnectedPowerCount { get; set; }
+            /// <summary>
+            /// Number of times a Power based damage skill hits while source is above 90% hp
+            /// </summary>
+            public int ConnectedPowerAbove90HPCount { get; set; }
+            /// <summary>
+            /// Number of times a Condition based damage skill hits
+            /// </summary>
+            public int ConnectedConditionCount { get; set; }
+            /// <summary>
+            /// Number of times a Condition based damage skill hits while source is above 90% hp
+            /// </summary>
+            public int ConnectedConditionAbove90HPCount { get; set; }
+            /// <summary>
+            /// Number of times a skill hits while target is downed is downed
+            /// </summary>
+            public int AgainstDownedCount { get; set; }
+            /// <summary>
+            /// Damage done against downed target
+            /// </summary>
+            public int AgainstDownedDamage { get; set; }
 
 
             public JsonGameplayStats()

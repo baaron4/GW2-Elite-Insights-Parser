@@ -75,20 +75,20 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (blade is BuffApplyEvent bae)
                 {
-                    res.Add(new BuffApplyEvent(a, a, bae.Time, bae.AppliedDuration, skill, bae.BuffInstance, true));
+                    res.Add(new BuffApplyEvent(bae.By, a, bae.Time, bae.AppliedDuration, skill, bae.IFF, bae.BuffInstance, true));
                     lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
                 }
                 else if (blade is BuffRemoveAllEvent brae)
                 {
-                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint remmovedInstance))
+                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint removedInstance))
                     {
-                        remmovedInstance = 0;
+                        removedInstance = 0;
                     }
-                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, remmovedInstance));
+                    res.Add(new BuffRemoveSingleEvent(brae.By, a, brae.Time, brae.RemovedDuration, skill, brae.IFF, removedInstance));
                 }
                 else if (blade is BuffRemoveSingleEvent brse)
                 {
-                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, brse.BuffInstance));
+                    res.Add(new BuffRemoveSingleEvent(brse.By, a, brse.Time, brse.RemovedDuration, skill, brse.IFF, brse.BuffInstance));
                 }
             }
             return res;
@@ -110,9 +110,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Virtuoso, RainOfSwords);
                 foreach (EffectEvent effect in rainOfSwords)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -122,11 +122,11 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Virtuoso, ThousandCuts);
                 foreach (EffectEvent effect in thousandCuts)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 600.0f), true);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     // 30 units width is a guess
-                    replay.Decorations.Add(new RectangleDecoration(true, 0, 30, 1200, lifespan, color.WithAlpha(0.5f).ToString(), connector)
+                    replay.Decorations.Add(new RectangleDecoration(30, 1200, lifespan, color.WithAlpha(0.5f).ToString(), connector)
                         .UsingRotationConnector(rotationConnector)
                         .UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)

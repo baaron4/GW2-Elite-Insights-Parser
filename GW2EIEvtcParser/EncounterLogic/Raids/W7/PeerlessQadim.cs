@@ -181,10 +181,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int magmaRadius = 850;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D pylonPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= end);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (start, end), "rgba(255, 50, 50, 0.15)", new PositionConnector(pylonPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, end, magmaRadius, (start, end), "rgba(255, 50, 50, 0.25)", new PositionConnector(pylonPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        Point3D pylonPosition = target.GetCurrentPosition(log, end);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
+                        replay.Decorations.Add(new CircleDecoration( magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     foreach (AbstractCastEvent c in forceOfHavoc)
                     {
@@ -196,15 +195,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         int preCastTime = 1500;
                         int duration = 22500;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
-                                replay.Decorations.Add(new RectangleDecoration(true, 0, roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                                replay.Decorations.Add(new RectangleDecoration(roadLength/subdivisions, roadWidth , (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             }
                         }
                     }
@@ -216,14 +215,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int timeBetweenCascades = 200;
                         int cascades = 5;
                         start = (int)c.Time + 1400;
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.15)", new PositionConnector(position)));
-                        replay.Decorations.Add(new CircleDecoration(true, start + preCastTime, radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
-                        for (int i = 0; i < cascades; i++)
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
+                        if (position != null)
                         {
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
-                        }
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
+                            for (int i = 0; i < cascades; i++)
+                            {
+                                replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                                replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
+                            }
+                        }                    
                     }
                     foreach (AbstractCastEvent c in etherStrikes)
                     {
@@ -231,13 +232,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int coneAngle = 60;
                         start = (int)c.Time;
                         end = start + 250;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 300);
+                        Point3D facing = target.GetCurrentRotation(log, start + 300);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(false, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.30)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(true, 0, coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
+                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     foreach (AbstractCastEvent c in causticChaos)
@@ -261,10 +261,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new RectangleDecoration(true, 0, chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
                             }
                         }
                     }
@@ -273,14 +273,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 650;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D position = replay.Positions.LastOrDefault(x => x.Time <= start + 1000);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new PositionConnector(position)));
-                        replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new PositionConnector(position)));
-
-                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
+                        Point3D position = target.GetCurrentPosition(log, start + 1000);
+                        if (position != null)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 220, 0, 0.15)", new AgentConnector(pylon)));
-                            replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 220, 50, 0.25)", new AgentConnector(pylon)));
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
+
+                            foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
+                            {
+                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
+                            }
                         }
                     }
                     break;
@@ -290,19 +291,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstEntropicPosition != null)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start - 5000, start), "rgba(255, 0, 0, 0.4)", new PositionConnector(firstEntropicPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, start, 300, (start - 5000, start), "rgba(255, 0, 0, 0.4)", new PositionConnector(firstEntropicPosition)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), "rgba(255, 0, 0, 0.3)", new PositionConnector(firstEntropicPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -316,20 +316,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in fixated)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
                 replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
             // Chaos Corrosion
             var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in chaosCorrosion)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
             }
             // Critical Mass, debuff while carrying an orb
             var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in criticalMass)
             {
-                replay.Decorations.Add(new CircleDecoration(false, 0, 200, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(200, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p)).UsingFilled(false));
             }
             // Magma drop
             var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -340,17 +340,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in magmaDrop)
             {
                 int magmaDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, seg, "rgba(255, 50, 0, 0.15)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd, magmaRadius, seg, "rgba(255, 50, 0, 0.25)", new AgentConnector(p)));
-                ParametricPoint3D magmaNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= magmaDropEnd);
-                ParametricPoint3D magmaPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= magmaDropEnd);
-                if (magmaNextPos != null || magmaPrevPos != null)
+                replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
+                Point3D position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
+                if (position != null)
                 {
                     string colorToUse = magmaColors[magmaColor];
                     magmaColor = (magmaColor + 1) % 2;
-                    replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                    replay.Decorations.Add(new CircleDecoration(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                    replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(" + colorToUse + ", 0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaDropEnd + magmaOffset, log.FightData.FightEnd), "rgba(" + colorToUse + ", 0.5)", new PositionConnector(position)));
                 }
             }
             //sapping surge, bad red tether
@@ -381,7 +378,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         tetherEnd = (int)log.FightData.FightEnd;
                     }
-                    replay.Decorations.Add(new LineDecoration(0, (tetherStart, tetherEnd), color, new AgentConnector(actor), new AgentConnector(src)));
+                    replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(actor), new AgentConnector(src)));
                 }
             }
         } 

@@ -212,51 +212,49 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeNPCCombatReplayActors(target, log, replay);
 
             IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
-            switch (target.ID) {
+            switch (target.ID)
+            {
                 case (int)TargetID.Artsariiv:
                     foreach (AnimatedCastEvent cast in casts)
                     {
                         switch (cast.SkillId)
                         {
                             case Obliterate:
-                            {
-                                int castStart = (int)cast.Time;
-                                int castEnd = castStart + 3160;
-                                replay.Decorations.Add(new CircleDecoration(true, 0, 1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                                replay.Decorations.Add(new CircleDecoration(true, castEnd, 1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-
-                                (float, float)[][] positions = {
+                                {
+                                    int castStart = (int)cast.Time;
+                                    int castEnd = castStart + 3160;
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), castEnd);
+                                    (float, float)[][] positions = {
                                     // positions taken from effects
                                    new [] { (9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f) },
                                    new [] { (10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f) },
                                    new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
                                    new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
                                 };
-                                int[] radius = { 400, 290, 180, 70 };
-                                long nextInvul = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == target.AgentItem && x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
-                                for (int i = 0; i < 4; i++)
-                                {
-                                    int start = castEnd + 560 * i;
-                                    int end = start + 2450;
-                                    if (start >= nextInvul)
+                                    int[] radius = { 400, 290, 180, 70 };
+                                    long nextInvul = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == target.AgentItem && x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
+                                    for (int i = 0; i < 4; i++)
                                     {
-                                        break;
+                                        int start = castEnd + 560 * i;
+                                        int end = start + 2450;
+                                        if (start >= nextInvul)
+                                        {
+                                            break;
+                                        }
+                                        foreach ((float x, float y) in positions[i])
+                                        {
+                                            var position = new PositionConnector(new Point3D(x, y));
+                                            replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position), end);
+                                        }
                                     }
-                                    foreach ((float x, float y) in positions[i])
-                                    {
-                                        var position = new PositionConnector(new Point3D(x, y));
-                                        replay.Decorations.Add(new CircleDecoration(true, 0, radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position));
-                                        replay.Decorations.Add(new CircleDecoration(true, end, radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position));
-                                    }
+                                    break;
                                 }
-                                break;
-                            }
                         }
                     }
                     break;
             }
         }
-        
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
@@ -290,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             const int hitbox = 360;
             var rotation = new AngleConnector(effect.Rotation.Z);
             GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f), true);
-            EnvironmentDecorations.Add(new RectangleDecoration(true, 0, 360, length + hitbox, lifespan, color, position).UsingRotationConnector(rotation));
+            EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, position).UsingRotationConnector(rotation));
         }
     }
 }

@@ -89,6 +89,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EarthAirAttunement, "Earth Air Attunement" },
             { ShatteringIceDamage, "Shattering Ice (Hit)" },
             { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
+            { FirestormGlyphOfStormsOrFieryGreatsword, "Firestorm (Glyph of Storms / Fiery Greatsword)" },
             // Engineer
             { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
@@ -121,6 +122,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SandCascadeBarrier, "Sand Cascade (Barrier)" },
             { SandFlare, "Sand Cascade" },
             { SadisticSearingActivation, "Sadistic Searing (Activation)" },
+            { MarkOfBloodOrChillblains, "Mark of Blood / Chillblains" },
             // Ranger
             { WindborneNotes, "Windborne Notes" },
             { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
@@ -336,6 +338,7 @@ namespace GW2EIEvtcParser.ParsedData
             { HealingRipple, "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png" },
             { HealingRain, "https://wiki.guildwars2.com/images/0/03/Healing_Rain.png" },
             { ElementalRefreshmentBarrier, "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png" },
+            { FirestormGlyphOfStormsOrFieryGreatsword, "https://i.imgur.com/6BTB3XT.png" },
             // Engineer
             { ShredderGyroDamage, "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png" },
             { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
@@ -431,6 +434,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoulEater, "https://wiki.guildwars2.com/images/6/6c/Soul_Eater.png" },
             { LesserSignetOfVampirism, BuffImages.SignetOfVampirism },
             { SignetOfVampirismHeal, BuffImages.SignetOfVampirism },
+            { MarkOfBloodOrChillblains, "https://i.imgur.com/oMv0Emd.png" },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },

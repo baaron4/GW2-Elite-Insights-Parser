@@ -48,6 +48,8 @@
         public const long SadisticSearingActivation = -30;
         public const long BladeBurstOrParticleAccelerator = -31;
         public const long RelicOfFireworksBuffLoss = -32;
+        public const long MarkOfBloodOrChillblains = -33;
+        public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -116,7 +118,9 @@
         public const long UnloadThiefMinion = 3666;
         public const long BlackPowderThiefMinion = 3669;
         public const long Determined3892 = 3892;
+        public const long MeteorShower = 5501;
         public const long WaterTrident = 5510;
+        public const long RideTheLightningSkill = 5529;
         public const long CleansingFire = 5535;
         public const long LightningFlash = 5536;
         public const long ArcaneBlast = 5539;
@@ -139,7 +143,7 @@
         public const long FireAttunementBuff = 5585;
         public const long WaterAttunementBuff = 5586;
         public const long SoothingMist = 5587;
-        public const long RideTheLightning = 5588;
+        public const long RideTheLightningBuff = 5588;
         public const long SignetOfAirBuff = 5590;
         public const long SignetOfWater = 5591;
         public const long SignetOfEarth = 5592;
@@ -151,9 +155,13 @@
         public const long ArcaneShieldBuff = 5640;
         public const long ArcaneShieldSkill = 5641;
         public const long ObsidianFlesh = 5667;
+        public const long StaticFieldStaff = 5671;
         public const long FireAura = 5677;
+        public const long GeyserStaffElementalist = 5681;
         public const long MagneticAura = 5684;
+        public const long Updraft = 5687;
         public const long ArcaneShieldDamage = 5703;
+        public const long StaticFieldLightingHammer = 5732;
         public const long GlyphOfElementalPowerFireBuff = 5739;
         public const long GlyphOfElementalPowerAirBuff = 5740;
         public const long GlyphOfElementalPowerWaterBuff = 5741;
@@ -685,6 +693,7 @@
         public const long HauntSkill = 10590;
         public const long LifeTransfer = 10594;
         public const long NecroticTraversal = 10600;
+        public const long Chillblains = 10605;
         public const long Epidemic = 10606;
         public const long WellOfDarkness = 10607;
         public const long SignetOfUndeath = 10610;
@@ -937,6 +946,9 @@
         public const long Enraged1_Unknown = 18711;
         public const long FieryBlock = 18981;
         public const long IncreasedArmorOilMasteryIII = 19083;
+        public const long ReapersMark = 19115;
+        public const long PutridMark = 19116;
+        public const long MarkOfBlood = 19117;
         public const long SmashBottle = 19152;
         public const long ThrowBottle = 19153;
         public const long Torment = 19426;
@@ -1049,6 +1061,7 @@
         public const long AirElementalSummoned = 25496;
         public const long EarthElementalStomp = 25498;
         public const long FireElementalFlameBarrage = 25499;
+        public const long POV_BurningRetreatEvadeBuff = 25502;
         public const long LightAura = 25518;
         public const long SuperiorSigilOfCruelty = 25526;
         public const long SiegeGolemMasteryRank4Omega = 25589;
@@ -1152,6 +1165,7 @@
         public const long ForceOfWill = 29485;
         public const long Berserk = 29502;
         public const long ShieldOfCourage = 29523;
+        public const long WellOfPrecognition = 29526;
         public const long SpitefulSpirit = 29560;
         public const long TimeEcho = 29582;
         public const long POV_EliteMortarKitOpen = 29592;
@@ -1162,13 +1176,15 @@
         public const long Echo = 29664;
         public const long BypassCoating = 29665;
         public const long QuickDraw = 29703;
+        public const long OverloadFire = 29706;
+        public const long OverloadAir = 29719;
         public const long LastRites = 29726;
         public const long PurgeGyro = 29739;
         public const long TestOfFaith = 29786;
         public const long SymbolOfEnergy = 29789;
         public const long LesserSignetOfVampirism = 29799;
         public const long ContinuumSplit = 29830;
-        public const long WellOfRecall = 29856;
+        public const long WellOfRecall_Senility = 29856;
         public const long LiveVicariously = 29863;
         public const long LifeFromDeath = 29901;
         public const long ShieldOfCourageActive = 29906;
@@ -1191,6 +1207,7 @@
         public const long LesserSignetOfWrath = 30255;
         public const long VampiricAura = 30285;
         public const long LeechingBolt1 = 30301;
+        public const long WellOfEternity = 30305;
         public const long WingsOfResolveBuff = 30308;
         public const long EscapistsFortitude = 30313;
         public const long LeechingBolt2 = 30319;
@@ -1225,6 +1242,7 @@
         public const long WingsOfResolveSkill = 30783;
         public const long InvigoratingBond = 30784;
         public const long EnterReaperShroud = 30792;
+        public const long LightningOrb = 30795;
         public const long EliteMortarKit = 30800;
         public const long WellOfAction = 30814;
         public const long CorruptersDefense = 30845;
@@ -1752,6 +1770,7 @@
         public const long SpatialManipulation5 = 38074;
         public const long SpectralAgony = 38077;
         public const long Countdown = 38098;
+        public const long CairnImpact = 38102;
         public const long CairnDisplacement = 38113;
         public const long BrutalizeCast = 38136;
         public const long UnseenBurden = 38153;
@@ -2363,6 +2382,7 @@
         public const long SeaOfFlame = 52461;
         public const long Parry = 52464;
         public const long AquaticDetainment = 52477;
+        public const long QadimInitialCast = 52496;
         public const long ElementalBreath = 52520;
         public const long BurningCrucible = 52522;
         public const long FlameSlash3 = 52528;
@@ -2917,6 +2937,7 @@
         public const long RainOfSwords = 62553;
         public const long CutterBurst = 62554;
         public const long DoomApproaches = 62558;
+        public const long VitalDraw = 62563;
         public const long EnterHarbingerShroud = 62567;
         public const long VirtuosoBlade2 = 62583;
         public const long Bladeturn = 62592;
@@ -3037,6 +3058,7 @@
         public const long DawnsRepose = 63220;
         public const long UnleashedOverbearingSmashLeap = 63224;
         public const long BarrierSignetJDrive = 63228;
+        public const long WellOfSilence = 63230;
         public const long SkyCircus = 63236;
         public const long DischargeArrayBuff = 63238;
         public const long ShadowShroud = 63239;
@@ -3047,15 +3069,20 @@
         public const long MutateConditions = 63256;
         public const long RendingVines = 63258;
         public const long HeavySmashJadeMech = 63263;
+        public const long Shadowfall = 63275;
+        public const long WellOfSorrow = 63276;
         public const long PerilousGift = 63284;
         public const long TwinStrikeJadeMech = 63288;
+        public const long WellOfGloom = 63292;
         public const long CrisisZone = 63293;
+        public const long WellOfTears = 63294;
         public const long RendingVinesPet = 63296;
         public const long HardStrikeJadeMech = 63298;
         public const long RecallMech_MechSkill = 63300;
         public const long RectifierSignet = 63305;
         public const long Unleashed = 63317;
         public const long SuperconductingSignet = 63322;
+        public const long WellOfBounty = 63323;
         public const long RoilingSmash = 63334;
         public const long JadeBusterCannon = 63334;
         public const long UnleashPet = 63344;
@@ -3079,7 +3106,7 @@
         public const long DeployJadeSphereEarth2 = 63472;
         public const long TurronSlice = 63482;
         public const long LongevityNoodles = 63487;
-        public const long FallOfTheAxe4 = 63503;
+        public const long FallOfTheAxeBigConeNM = 63503;
         public const long SwarmOfMordremoth_PoolOfUndeath = 63544;
         public const long StormOfSwords2 = 63550;
         public const long SniperShot = 63551;
@@ -3141,7 +3168,7 @@
         public const long PoisonRoar = 64576;
         public const long MagicHail = 64582;
         public const long VoidExplosion3 = 64585;
-        public const long DragonSlashRush2 = 64619;
+        public const long DragonSlashRushNM2 = 64619;
         public const long DragonsEndContributor8 = 64623;
         public const long WaveOfTormentNM = 64669;
         public const long ToxicOrb = 64718;
@@ -3158,14 +3185,15 @@
         public const long FissureOfTorment = 64895;
         public const long OrangefishSushi = 64896;
         public const long ToxicBullet1 = 64914;
-        public const long ExplosiveUppercut1 = 64920;
+        public const long ExplosiveUppercutNM = 64920;
         public const long DragonsEndContributor4 = 64924;
         public const long RedfishSushi = 64931;
         public const long SlamZhaitan = 64932;
         public const long ExposedPlayer = 64936;
         public const long DragonSlashBurst2 = 64940;
         public const long DeadlyAim = 64947;
-        public const long DragonSlashWave = 64952;
+        public const long DragonSlashWaveNM = 64952;
+        public const long TheMechRiderPushNM = 64953;
         public const long FlankingStrike = 64965;
         public const long DebilitatingVoid = 64967;
         public const long ShareTheVoid3 = 64973;
@@ -3217,7 +3245,7 @@
         public const long FrozenFury = 65498;
         public const long BreathOfJormag1 = 65517;
         public const long SpottersShot = 65528;
-        public const long ElectricRain2 = 65535;
+        public const long ElectricRainNM = 65535;
         public const long VoidShell = 65563;
         public const long StormOfSwords3 = 65569;
         public const long ExplosiveLeap2 = 65576;
@@ -3226,7 +3254,7 @@
         public const long VoidCorruption = 65590;
         public const long VoidExplosion2 = 65595;
         public const long PowerOfTheVoid = 65601;
-        public const long EnforcerRushingJustice = 65608;
+        public const long EnforcerRushingJusticeNM = 65608;
         public const long YellowfishSushi = 65613;
         public const long HallucinatingShot = 65649;
         public const long DeathsHandSpreadBuff = 65661;
@@ -3259,11 +3287,11 @@
         public const long NightmareEpoch1 = 66059;
         public const long AnkkaLichHallucinationFixation = 66075;
         public const long NightmareFusilladeSide = 66089;
-        public const long DragonSlashRush1 = 66090;
+        public const long DragonSlashRushNM1 = 66090;
         public const long FixatedAnkkaKainengOverlook = 66140;
         public const long TerrifyingApparition = 66156;
         public const long DragonsEndContributor2 = 66185;
-        public const long FallOfTheAxe1 = 66187;
+        public const long FallOfTheAxeSmallConeNM = 66187;
         public const long InevitabilityOfDeath = 66198;
         public const long BreathOfJormag2 = 66216;
         public const long SanctuaryAnkka1 = 66241;
@@ -3276,7 +3304,7 @@
         public const long ChaosAndDestruction = 66409;
         public const long CallLightning = 66424;
         public const long GlacialSlam = 66446;
-        public const long DragonSlashBurst = 66465;
+        public const long DragonSlashBurstNM = 66465;
         public const long Drown2 = 66486;
         public const long TsunamiSlam2 = 66489;
         public const long FishyRiceBowl = 66503;
@@ -3361,7 +3389,7 @@
         public const long SharedDestructionMaiTrinCM = 67831;
         public const long LeyBreachCM = 67832;
         public const long WaveOfTormentCM = 67839;
-        public const long ExplosiveUppercut2 = 67849;
+        public const long ExplosiveUppercutCM = 67849;
         public const long MagneticBomb = 67856;
         public const long ImminentDeathSkill = 67859;
         public const long TormentingWaveCM = 67866;
@@ -3384,11 +3412,12 @@
         public const long TargetedExpulsionCM = 67982;
         public const long VolatileExpulsion4 = 67999;
         public const long POV_SharedDestructionLiCM = 68004;
-        public const long ElectricRain = 68006;
-        public const long FallOfTheAxe2 = 68015;
+        public const long ElectricRainCM = 68006;
+        public const long FallOfTheAxeSmallConeCM = 68015;
         public const long StormOfSwords6 = 68016;
         public const long SharedDestruction3 = 68018;
-        public const long FallOfTheAxe3 = 68023;
+        public const long TheMechRiderPushCM = 68022;
+        public const long FallOfTheAxeBigConeCM = 68023;
         public const long EnforcerRushingJusticeCM = 68028;
         public const long JadeMine2 = 68036;
         public const long VolatileBurst2 = 68039;
@@ -3638,6 +3667,7 @@
         public const long RelicOfTheBrawler = 70913;
         public const long EmpoweredEnvyCerus = 70974;
         public const long RelicOfTheScourge = 70975;
+        public const long InvulnerabilityEmbodiment = 70986;
         public const long DimensionBreach = 71002;
         public const long DemonicFever = 71047;
         public const long RelicOfTheIce = 71051;

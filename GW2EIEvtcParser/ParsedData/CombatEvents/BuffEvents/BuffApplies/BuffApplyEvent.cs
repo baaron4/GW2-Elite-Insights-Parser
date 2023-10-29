@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.BuffSimulators;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             OverridenDuration = evtcItem.OverstackValue;
         }
 
-        internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool addedActive) : base(by, to, time, buffSkill, id)
+        internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, IFF iff, uint id, bool addedActive) : base(by, to, time, buffSkill, iff, id)
         {
             AppliedDuration = duration;
             _addedActive = addedActive;

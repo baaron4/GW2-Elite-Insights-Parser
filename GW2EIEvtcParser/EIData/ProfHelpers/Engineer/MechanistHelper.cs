@@ -5,7 +5,6 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -34,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
                     Point3D pos = combatData.GetMovementData(spawn.Src).OfType<PositionEvent>().FirstOrDefault(evt => evt.Time + ServerDelayConstant >= spawn.Time)?.GetPoint3D();
                     if (pos != null && combatData.TryGetEffectEventsByGUID(EffectGUIDs.MechanistCrashDownImpact, out IReadOnlyList<EffectEvent> effects))
                     {
-                        return FindRelatedEvents(effects, spawn.Time + 800).Any(effect => pos.Distance2DToPoint(effect.Position) < 10.0f);
+                        return CombatData.FindRelatedEvents(effects, spawn.Time + 800).Any(effect => pos.Distance2DToPoint(effect.Position) < 10.0f);
                     }
                     return false;
                 }) // intersect first position after spawn with delayed effect

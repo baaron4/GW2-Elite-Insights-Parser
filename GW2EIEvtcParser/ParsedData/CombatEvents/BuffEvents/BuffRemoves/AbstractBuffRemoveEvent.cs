@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
+
+namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractBuffRemoveEvent : AbstractBuffEvent
     {
@@ -11,7 +13,7 @@
             To = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         }
 
-        internal AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(buffSkill, time)
+        internal AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff) : base(buffSkill, time, iff)
         {
             RemovedDuration = removedDuration;
             By = by;
