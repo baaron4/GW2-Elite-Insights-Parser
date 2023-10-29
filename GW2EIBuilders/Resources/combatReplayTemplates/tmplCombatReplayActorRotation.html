@@ -76,16 +76,6 @@
             actorRotation: function () {
                 return this.actor.details.rotation[0];
             },
-            actorRotationNoInstants: function () {
-                var res = [];
-                for (var i = 0; i < this.actorRotation.length; i++) {
-                    var item = this.actorRotation[i];
-                    if (item[3] !== 4) {
-                        res.push({ item: item, index: i });
-                    }
-                }
-                return res;
-            },
             rotation: function () {
                 var res = {
                     current: null,
@@ -95,8 +85,7 @@
                     return res;
                 }
                 var time = this.timeToUse / 1000.0;
-                var id = this.findRotationIndex(this.actorRotationNoInstants, time, 0, this.actorRotationNoInstants.length - 1);
-                id = this.actorRotationNoInstants[id].index;
+                var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
                 var item = this.actorRotation[id];
                 var x = item[0];
                 var duration = this.getSkillDuration(item);
