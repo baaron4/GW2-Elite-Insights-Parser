@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                                    long cap = Math.Min(nextInvul?.Time ?? long.MaxValue, nextStun?.Time ?? long.MaxValue);
+                                    long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
                                     float facing = Point3D.GetRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                                    long cap = Math.Min(nextInvul?.Time ?? long.MaxValue, nextStun?.Time ?? long.MaxValue);
+                                    long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
                                     float facing = Point3D.GetRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
