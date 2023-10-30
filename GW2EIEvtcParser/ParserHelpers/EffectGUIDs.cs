@@ -351,6 +351,26 @@ namespace GW2EIEvtcParser
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Qadim the Peerless
+        public const string QadimPeerlessRainOfChaos = "D8259BFD4E6B8348AF15D862F7DBC8FA";
+        public const string QadimPeerlessResidualImpactFireAoE = "EFAC2FC0F661404D84F0291CAB76FF0E";
+        public const string QadimPeerlessChaosCalledElectricShark = "7A5A2002C855A440BCC22E2C76B0C405";
+        public const string QadimPeerlessForceOfHavoc1 = "5F3B01764915FD41A02B2FBAD788651B"; // 2000 duration
+        public const string QadimPeerlessForceOfHavoc2 = "B2396CC1F4A73B4EAEA86F66978DC895"; // 1000 duration
+        public const string QadimPeerlessForceOfHavoc3 = "A2E91B50829AB64097D217E468189F52"; // 22400 duration
+        public const string QadimPeerlessEtherStrikesOrbs = "625838F1175E25459A5293CA6C911290"; // 1500 duration
+        public const string QadimPeerlessEtherStrikesAoEs = "A89E436B20CFC142B159F3D2195F75AE"; // 0 duration
+        public const string QadimPeerlessShowerOfChaosAoE = "845D252D05631740B3B2309457FB4338"; // 5000 duration
+        public const string QadimPeerlessShowerOfChaosExplosion = "3AAEF82C63C4424FAA0F55CD02256E00";
+        public const string QadimPeerlessShowerOfChaosOnPlayer1 = "27B83B9DF241F94DB16414852EA68354";
+        public const string QadimPeerlessShowerOfChaosOnPlayer2 = "0BA57434DC93604096B870FB98B3C4F1"; // Src Qadim
+        public const string QadimPeerlessMeteorIllusion1 = "00C4F7C59E4D8449B565CC00FC30D9DD"; // 5000 duration
+        public const string QadimPeerlessMeteorIllusion2 = "ED04DA4F2B31D74CBEF501CAFFDAFAAD"; // 4294967295 duration - Usable with ComputeDynamicEffectLifespan
+        public const string QadimPeerlessBrandstormLightning1 = "C5B4846F6A548D47B0856AA8A2CE283C"; // 0 duration
+        public const string QadimPeerlessBrandstormLightning2 = "995E6709BB16B44DBABCC707F10E5345"; // 3000 duration
+        public const string QadimPeerlessMagmaWarningAoE = "E269977C2FC9474EAAD1051CDAFAD653"; // 4000 duration - Src player
+        public const string QadimPeerlessMagmaLandingExplosion = "6617FA23565EE646ADAA7A646C895927"; // 1000 duration - No Src
+        public const string QadimPeerlessMagmaDamagingAoE = "BABE69EC5AC7AF48A2F14A9FB8920C7F"; // 600000 duration - Src Qadim
         // Boneskinner
         public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
         public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator

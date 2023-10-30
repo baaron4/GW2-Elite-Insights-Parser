@@ -100,6 +100,11 @@ namespace GW2EIEvtcParser.EIData
             (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
             return downs.Any(x => x.ContainsPoint(time));
         }
+        public bool IsDowned(ParsedEvtcLog log, long start, long end)
+        {
+            (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
+            return downs.Any(x => x.Start >= start && x.Start <= end);
+        }
         public bool IsDead(ParsedEvtcLog log, long time)
         {
             (IReadOnlyList<Segment> deads,_ , _) = _statusHelper.GetStatus(log);

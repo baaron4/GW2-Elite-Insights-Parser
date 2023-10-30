@@ -368,6 +368,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Jade Buster Cannon
                     var cannon = casts.Where(x => x.SkillId == JadeBusterCannonMechRider).ToList();
                     int warningDuration = 2800;
+                    var offset = new Point3D(0, -1400);
                     // Warning decoration
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeBusterCannonWarning, out IReadOnlyList<EffectEvent> warningRectangle))
                     {
@@ -375,7 +376,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             (long, long) lifespanWarning = ProfHelper.ComputeEffectLifespan(log, effect, warningDuration);
                             var connector = new AgentConnector(target);
-                            var rectangle = new RectangleDecoration(375, 3000, lifespanWarning, "rgba(200, 120, 0, 0.2)", connector.WithOffset(new Point3D(0, -1350), true));
+                            var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                            var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, "rgba(200, 120, 0, 0.2)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
                             replay.AddDecorationWithBorder(rectangle, "rgba(250, 50, 0, 0.2)");
                         }
                     }
@@ -385,8 +387,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int durationCastTime = 10367;
                         (long, long) lifespan = (c.Time + warningDuration, c.Time + durationCastTime - warningDuration);
                         var connector = new AgentConnector(target);
-                        var rectangle = new RectangleDecoration(375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(new Point3D(0, -1350), true));
-                        replay.AddDecorationWithBorder(rectangle, "rgba(250, 50, 0, 0.2)");
+                        var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                        var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
+                        replay.AddDecorationWithBorder(rectangle, "rgba(255, 0, 0, 0.2)");
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.TheEnforcer:
