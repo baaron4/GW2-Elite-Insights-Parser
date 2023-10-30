@@ -1,15 +1,9 @@
 var namespace_g_w2_e_i_j_s_o_n =
 [
     [ "EXTJsonBarrierDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_dist.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_dist" ],
-    [ "EXTJsonBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics.html", [
-      [ "EXTJsonIncomingBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_incoming_barrier_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_incoming_barrier_statistics" ],
-      [ "EXTJsonOutgoingBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics" ]
-    ] ],
+    [ "EXTJsonBarrierStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics" ],
     [ "EXTJsonHealingDist", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist" ],
-    [ "EXTJsonHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics.html", [
-      [ "EXTJsonIncomingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics" ],
-      [ "EXTJsonOutgoingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics" ]
-    ] ],
+    [ "EXTJsonHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics" ],
     [ "EXTJsonMinionsBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_barrier_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_barrier_stats" ],
     [ "EXTJsonMinionsHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats" ],
     [ "EXTJsonPlayerBarrierStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats" ],
@@ -30,11 +24,5 @@ var namespace_g_w2_e_i_j_s_o_n =
     [ "JsonPlayer", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html", "class_g_w2_e_i_j_s_o_n_1_1_json_player" ],
     [ "JsonPlayerBuffsGeneration", "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation.html", "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation" ],
     [ "JsonRotation", "class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html", "class_g_w2_e_i_j_s_o_n_1_1_json_rotation" ],
-    [ "JsonStatistics", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics.html", [
-      [ "JsonDefensesAll", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all" ],
-      [ "JsonDPS", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s" ],
-      [ "JsonGameplayStats", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats" ],
-      [ "JsonGameplayStatsAll", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all" ],
-      [ "JsonPlayerSupport", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support" ]
-    ] ]
+    [ "JsonStatistics", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics" ]
 ];

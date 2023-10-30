@@ -15,6 +15,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all =
     [ "DodgeCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ad0390ccbe3249654b1a90a03576ee7e6", null ],
     [ "DownCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aea0a5cf0b59e5e11b776137bf319a067", null ],
     [ "DownDuration", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a0d93c29183ad7455697026ef116acd7a", null ],
+    [ "DownedDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aeb460a2cc53901a02ba5e5dc4b9c70ee", null ],
     [ "EvadedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae51ae3f652744b19f1309dfbd689768a", null ],
     [ "InterruptedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a79ac91fea0909a86eb5f3c36b2a8748e", null ],
     [ "InvulnedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a0e02759bf694fedc4d56b3d656f84a9d", null ],
