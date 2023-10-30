@@ -364,6 +364,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Unbridled Chaos", UnbridledChaos, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ExposedEyes),
             new Buff("Rebellious Power", RebelliousPower, Source.FightSpecific, BuffStackType.Stacking, 40, BuffClassification.Other, BuffImages.InfusedShield),
             new Buff("Charged Soul", ChargedSoul, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.PartiallyProtected),
+            new Buff("Breakbar Target", QadimThePeerlessBreakbarTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Power Surge", AchievementEligibilityPowerSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             //////////////////////////////////////////////
             // Fractals 

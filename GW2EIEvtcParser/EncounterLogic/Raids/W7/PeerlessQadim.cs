@@ -339,6 +339,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
+                    // Red tether from Qadim to the Pylon during breakbar
+                    List<AbstractBuffEvent> breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
+                    replay.AddTether(breakbarBuffs, "rgba(255, 0, 0, 0.4)");
                     break;
                 case (int)ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
                     break;
