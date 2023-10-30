@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff, uint stackID) : base(by, to, time, removedDuration, buffSkill, iff)
         {
             BuffInstance = stackID;
+            _byShouldntBeUnknown = true;
         }
 
         internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
