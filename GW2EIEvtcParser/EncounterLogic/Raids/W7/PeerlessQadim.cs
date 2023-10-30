@@ -390,7 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in magmaDrop)
             {
                 // If a player has gone into downstate while in air, the magma field will not spawn
-                var hasPlayerDownedInAir = p.IsDowned(log, seg.Start, seg.End + 350);
+                var hasPlayerDownedInAir = log.CombatData.GetDownEvents(p.AgentItem).Any(x => x.Time >= seg.Start && x.Time <= seg.End);
                 long magmaDropEnd = seg.End;
                 replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
                 if (!log.CombatData.HasEffectData)
