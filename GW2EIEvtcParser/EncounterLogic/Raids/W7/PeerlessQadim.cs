@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>()
             {
                 (int)ArcDPSEnums.TargetID.PeerlessQadim,
-                (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon,
+                (int)ArcDPSEnums.TrashID.PeerlessQadimPylon,
                 (int)ArcDPSEnums.TrashID.EntropicDistortion,
             };
         }
@@ -65,12 +65,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.HostilePeerlessQadimPylon,
+                //ArcDPSEnums.TrashID.PeerlessQadimAuraPylon,
                 ArcDPSEnums.TrashID.BigKillerTornado,
                 ArcDPSEnums.TrashID.EnergyOrb,
-                ArcDPSEnums.TrashID.Brandstorm,
+                //ArcDPSEnums.TrashID.Brandstorm,
                 ArcDPSEnums.TrashID.GiantQadimThePeerless,
-                ArcDPSEnums.TrashID.DummyPeerlessQadim,
+                //ArcDPSEnums.TrashID.DummyPeerlessQadim,
             };
         }
 
@@ -94,8 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
 
             // Update pylon names with their cardinal locations.
-            IReadOnlyList<ArcDPSEnums.TrashID> pylons = new List<ArcDPSEnums.TrashID>() { ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon, ArcDPSEnums.TrashID.HostilePeerlessQadimPylon };
-            foreach (NPC target in Targets.Where(x => x.IsAnySpecies(pylons)).Cast<NPC>())
+            foreach (NPC target in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PeerlessQadimPylon)).Cast<NPC>())
             {
                 AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
             }
@@ -309,7 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
 
-                            foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.HostilePeerlessQadimPylon)))
+                            foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PeerlessQadimAuraPylon)))
                             {
                                 replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
                             }
@@ -338,12 +337,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
                     replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     break;
-                case (int)ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon:
+                case (int)ArcDPSEnums.TrashID.PeerlessQadimPylon:
                     // Red tether from Qadim to the Pylon during breakbar
                     List<AbstractBuffEvent> breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
                     replay.AddTether(breakbarBuffs, "rgba(255, 0, 0, 0.4)");
                     break;
-                case (int)ArcDPSEnums.TrashID.HostilePeerlessQadimPylon:
+                case (int)ArcDPSEnums.TrashID.PeerlessQadimAuraPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
                     replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));

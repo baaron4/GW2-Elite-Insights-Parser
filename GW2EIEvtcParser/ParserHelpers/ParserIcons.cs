@@ -244,8 +244,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashHandOfErosionEruption = "https://i.imgur.com/reGQHhr.png";
         private const string TrashVoltaicWisp = "https://i.imgur.com/C1mvNGZ.png";
         private const string TrashParalyzingWisp = "https://i.imgur.com/YBl8Pqo.png";
-        private const string TrashFriendlyPeerlessQadimPylon = "https://i.imgur.com/CXbs6up.png";
-        private const string TrashHostilePeerlessQadimPylon = "https://i.imgur.com/ojjQQlR.png";
+        private const string TrashPeerlessQadimPylon = "https://i.imgur.com/Db5Pi3b.png";
+        private const string TrashPeerlessQadimAuraPylon = "https://i.imgur.com/ojjQQlR.png";
         private const string TrashEntropicDistortion = "https://i.imgur.com/MIpP5pK.png";
         private const string TrashGiantQadimThePeerless = "https://i.imgur.com/qRhJSgR.png";
         private const string TrashSmallJumpyTornado = "https://i.imgur.com/WBJNgp7.png";
@@ -971,12 +971,12 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.HandOfEruption, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.VoltaicWisp, TrashVoltaicWisp },
             { ArcDPSEnums.TrashID.ParalyzingWisp, TrashParalyzingWisp },
-            { ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon, TrashFriendlyPeerlessQadimPylon },
-            { ArcDPSEnums.TrashID.HostilePeerlessQadimPylon, TrashHostilePeerlessQadimPylon },
+            { ArcDPSEnums.TrashID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
+            //{ ArcDPSEnums.TrashID.PeerlessQadimAuraPylon, TrashPeerlessQadimAuraPylon },
             { ArcDPSEnums.TrashID.EntropicDistortion, TrashEntropicDistortion },
-            { ArcDPSEnums.TrashID.Brandstorm, GenericEnemyIcon },
+            //{ ArcDPSEnums.TrashID.Brandstorm, GenericEnemyIcon },
             { ArcDPSEnums.TrashID.GiantQadimThePeerless, TrashGiantQadimThePeerless },
-            { ArcDPSEnums.TrashID.DummyPeerlessQadim, GenericEnemyIcon },
+            //{ ArcDPSEnums.TrashID.DummyPeerlessQadim, GenericEnemyIcon },
             { ArcDPSEnums.TrashID.SmallJumpyTornado, TrashSmallJumpyTornado },
             { ArcDPSEnums.TrashID.OrbSpider, TrashOrbSpider },
             { ArcDPSEnums.TrashID.Seekers, TrashSeekers },
