@@ -431,7 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     timeDeath = deadEvents.Where(x => x.Time > cast.Time).FirstOrDefault().Time;
                 }
                 var segment = new Segment(cast.Time, Math.Min(timeUnleash, timeDeath), 1);
-                replay.AddOverheadIcon(segment, p, "https://i.imgur.com/0EnjyQX.png");
+                replay.AddOverheadIcon(segment, p, ParserIcons.GenericBlueArrowUp);
             }
         }
 

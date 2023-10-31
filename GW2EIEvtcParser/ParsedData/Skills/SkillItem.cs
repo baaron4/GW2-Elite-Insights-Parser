@@ -617,7 +617,7 @@ namespace GW2EIEvtcParser.ParsedData
             // - Qadim the Peerless
             { FluxDisruptorActivateCast, "https://wiki.guildwars2.com/images/d/d5/Flux_Disruptor-_Activate.png" },
             { FluxDisruptorDeactivateCast, "https://wiki.guildwars2.com/images/3/34/Flux_Disruptor-_Deactivate.png" },
-            { PlayerLiftUpQadimThePeerless, "https://i.imgur.com/0EnjyQX.png" },
+            { PlayerLiftUpQadimThePeerless, ParserIcons.GenericBlueArrowUp },
             { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
             // - Dadga (Cosmic Observatory)
             { PurifyingLight, "https://wiki.guildwars2.com/images/1/1e/Purifying_Light_%28Dagda%29.png" },

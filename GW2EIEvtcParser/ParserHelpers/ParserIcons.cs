@@ -21,6 +21,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// </summary>
         public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
+        /// <summary>
+        /// Generic blue arrow up.
+        /// </summary>
+        public const string GenericBlueArrowUp = "https://i.imgur.com/0EnjyQX.png";
+
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
         private const string HighResSoulbeast = "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";
