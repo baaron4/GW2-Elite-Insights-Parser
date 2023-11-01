@@ -420,17 +420,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem).ToList();
             foreach (AbstractCastEvent cast in castsLiftUp)
             {
-                long timeUnleash = log.FightData.LogEnd;
-                long timeDeath = log.FightData.LogEnd;
-                if (castsUnleash.Count > 0)
+                long liftUpEnd = log.FightData.LogEnd;
+                AbstractCastEvent unleashCast = castsUnleash.Where(x => x.Time > cast.Time).FirstOrDefault();
+                if (unleashCast != null)
                 {
-                    timeUnleash = castsUnleash.Where(x => x.Time > cast.Time).FirstOrDefault().Time;
+                    liftUpEnd = Math.Min(liftUpEnd, unleashCast.Time);
                 }
-                if (deadEvents.Count > 0)
+                DeadEvent deadEvent = deadEvents.Where(x => x.Time > cast.Time).FirstOrDefault();
+                if (deadEvent != null)
                 {
-                    timeDeath = deadEvents.Where(x => x.Time > cast.Time).FirstOrDefault().Time;
+                    liftUpEnd = Math.Min(liftUpEnd, deadEvent.Time);
                 }
-                var segment = new Segment(cast.Time, Math.Min(timeUnleash, timeDeath), 1);
+                var segment = new Segment(cast.Time, liftUpEnd, 1);
                 replay.AddOverheadIcon(segment, p, ParserIcons.GenericBlueArrowUp);
             }
         }
@@ -448,7 +449,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int radius = 210;
                     // Check if and count how many effects are present before the current one.
                     // Each effect spawns every 3200ms - using 7000ms as a treshold to find a maximum of two.
-                    int previousAoeCounter = rainOfChaos.Count(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 7000 && x.Time != effect.Time);
+                    int previousAoeCounter = rainOfChaos.Count(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 7000);
                     if (previousAoeCounter == 1) { radius *= 2; } // 420
                     if (previousAoeCounter == 2) { radius = 680; } // In game it's not 840 as it's meant to be
 
@@ -506,7 +507,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     if (landedOrbExplosions != null)
                     {
-                        failedOrb = landedOrbExplosions.Any(x => Math.Abs(lifespan.Item2 - x.Time) < ServerDelayConstant && effect.Position.X == x.Position.X && effect.Position.Y == x.Position.Y);
+                        failedOrb = landedOrbExplosions.Any(x => effect.Position.Distance2DToPoint(x.Position) < 1e-6);
                     }
                     if (failedOrb)
                     {
