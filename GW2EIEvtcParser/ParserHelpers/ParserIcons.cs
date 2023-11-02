@@ -21,6 +21,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// </summary>
         public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
+        /// <summary>
+        /// Generic blue arrow up.
+        /// </summary>
+        public const string GenericBlueArrowUp = "https://i.imgur.com/0EnjyQX.png";
+
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
         private const string HighResSoulbeast = "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";
@@ -244,8 +249,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashHandOfErosionEruption = "https://i.imgur.com/reGQHhr.png";
         private const string TrashVoltaicWisp = "https://i.imgur.com/C1mvNGZ.png";
         private const string TrashParalyzingWisp = "https://i.imgur.com/YBl8Pqo.png";
-        private const string TrashHostilePeerlessQadimPylon = "https://i.imgur.com/b33vAEQ.png";
+        private const string TrashPeerlessQadimPylon = "https://i.imgur.com/Db5Pi3b.png";
+        private const string TrashPeerlessQadimAuraPylon = "https://i.imgur.com/ojjQQlR.png";
         private const string TrashEntropicDistortion = "https://i.imgur.com/MIpP5pK.png";
+        private const string TrashGiantQadimThePeerless = "https://i.imgur.com/qRhJSgR.png";
         private const string TrashSmallJumpyTornado = "https://i.imgur.com/WBJNgp7.png";
         private const string TrashOrbSpider = "https://i.imgur.com/FB5VM9X.png";
         private const string TrashSeekers = "https://i.imgur.com/FrPoluz.png";
@@ -969,8 +976,12 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.HandOfEruption, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.VoltaicWisp, TrashVoltaicWisp },
             { ArcDPSEnums.TrashID.ParalyzingWisp, TrashParalyzingWisp },
-            { ArcDPSEnums.TrashID.HostilePeerlessQadimPylon, TrashHostilePeerlessQadimPylon },
+            { ArcDPSEnums.TrashID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
+            //{ ArcDPSEnums.TrashID.PeerlessQadimAuraPylon, TrashPeerlessQadimAuraPylon },
             { ArcDPSEnums.TrashID.EntropicDistortion, TrashEntropicDistortion },
+            //{ ArcDPSEnums.TrashID.Brandstorm, GenericEnemyIcon },
+            { ArcDPSEnums.TrashID.GiantQadimThePeerless, TrashGiantQadimThePeerless },
+            //{ ArcDPSEnums.TrashID.DummyPeerlessQadim, GenericEnemyIcon },
             { ArcDPSEnums.TrashID.SmallJumpyTornado, TrashSmallJumpyTornado },
             { ArcDPSEnums.TrashID.OrbSpider, TrashOrbSpider },
             { ArcDPSEnums.TrashID.Seekers, TrashSeekers },
@@ -989,7 +1000,6 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.VigilTactician, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Prisoner1, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Prisoner2, TrashGenericFriendlyTarget },
-            { ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Mine, TrashMine },
             { ArcDPSEnums.TrashID.FleshWurm, TrashFleshWurm },
             { ArcDPSEnums.TrashID.Hands, TrashHands },

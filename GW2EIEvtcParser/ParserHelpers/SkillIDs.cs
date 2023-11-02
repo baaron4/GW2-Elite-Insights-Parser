@@ -2524,6 +2524,7 @@
         public const long ExponentialRepercussion = 56223;
         public const long Invulnerability56227 = 56227;
         public const long CleansedConductor = 56237;
+        public const long QadimThePeerlessBreakbarTargetBuff = 56245;
         public const long Incorporeal = 56250;
         public const long FlashDischargeSAK = 56251;
         public const long ExponentialRepercussionQadimShield = 56254;

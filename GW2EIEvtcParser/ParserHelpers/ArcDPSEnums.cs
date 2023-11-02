@@ -770,10 +770,13 @@ namespace GW2EIEvtcParser
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
             // Peerless Qadim
-            FriendlyPeerlessQadimPylon = 21996,
-            HostilePeerlessQadimPylon = 21962,
+            PeerlessQadimPylon = 21996,
+            PeerlessQadimAuraPylon = 21962,
             EntropicDistortion = 21973,
             EnergyOrb = 21946,
+            Brandstorm = 21978,
+            GiantQadimThePeerless = 21953,
+            DummyPeerlessQadim = 22005,
             // Fraenir
             IcebroodElemental = 22576,
             BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,

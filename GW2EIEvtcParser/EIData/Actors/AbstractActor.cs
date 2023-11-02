@@ -69,6 +69,26 @@ namespace GW2EIEvtcParser.EIData
             return AgentItem.IsSpecies(id);
         }
 
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TrashID> ids)
+        {
+            return AgentItem.IsAnySpecies(ids);
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TargetID> ids)
+        {
+            return AgentItem.IsAnySpecies(ids);
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.MinionID> ids)
+        {
+            return AgentItem.IsAnySpecies(ids);
+        }
+
+        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.ChestID> ids)
+        {
+            return AgentItem.IsAnySpecies(ids);
+        }
+
         // Getters
         // Damage logs
         public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
