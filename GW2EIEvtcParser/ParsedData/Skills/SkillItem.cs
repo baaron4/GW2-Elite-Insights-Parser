@@ -183,18 +183,27 @@ namespace GW2EIEvtcParser.ParsedData
             { TantrumSkill, "Tantrum Start" },
             { NarcolepsySkill, "Sleeping" },
             { FearMeSlothasor, "Fear Me!" },
+            { PurgeSlothasor, "Purge" },
             // Matthias
             { ShieldHuman, "Shield (Human)" },
             { AbominationTransformation, "Abomination Transformation" },
             { ShieldAbomination, "Shield (Abomination)" },
             // Escort
             { GlennaCap, "Capture" },
-            // Generic
-            //{-5, "Phase out" },
-            // Deimos
-            //{-6, "Roleplay" },
+            { OverHere, "Over Here!" },
+            // Xera
+            { InterventionSAK, "Intervetion" },
+            // Cairn
+            { CelestialDashSAK, "Celestial Dash" },
+            // Mursaar Overseer
+            { ClaimSAK, "Claim" },
+            { DispelSAK, "Dispel" },
+            { ProtectSAK, "Protect" },
+            // Soulless Horror
+            { IssueChallengeSAK, "Issue Challenge" },
             // Dhuum
             { MajorSoulSplit, "Major Soul Split" },
+            { ExpelEnergySAK, "Expel Energy" },
             // Keep Construct
             { MagicBlastCharge, "Magic Blast Charge" },
             // Conjured Amalgamate
@@ -219,6 +228,12 @@ namespace GW2EIEvtcParser.ParsedData
             { BigMagmaDrop, "Big Magma Drop" },
             // Voice and Claw
             { KodanTeleport, "Kodan Teleport" },
+            // Mai Trin (Aetherblade Hideout)
+            { ReverseThePolaritySAK, "Reverse the Polarity!" },
+            // Artsariiv
+            { NovaLaunchSAK, "Nova Launch" },
+            // Arkk
+            { HypernovaLaunchSAK, "Hypernova Launch" },
             // Kanaxai
             { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
@@ -605,8 +620,24 @@ namespace GW2EIEvtcParser.ParsedData
             { ShatteredPsycheTier4, "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png" },
             // - Sabetha
             { SapperBombSkill, "https://wiki.guildwars2.com/images/b/ba/Sapper_Bomb.png" },
+            // - Slothasor
+            { PurgeSlothasor, "https://wiki.guildwars2.com/images/a/aa/Purge.png" },
+            // - Matthias
+            { UnstableBloodMagic, "https://wiki.guildwars2.com/images/a/aa/Purge.png" },
+            // - Escort Glenna
+            { OverHere, "https://wiki.guildwars2.com/images/b/b7/Over_Here%21.png" },
+            // - Xera
+            { InterventionSAK, "https://wiki.guildwars2.com/images/3/3f/Intervention.png" },
             // - Cairn
-            { CelestialDash, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            { CelestialDashSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            // - Mursaar Overseer
+            { ClaimSAK, BuffImages.Claim },
+            { DispelSAK, BuffImages.Dispel },
+            { ProtectSAK, BuffImages.Protect },
+            // - Soulless Horror
+            { IssueChallengeSAK, "https://wiki.guildwars2.com/images/1/13/Rally_the_Crowd.png" },
+            // - Dhuum
+            { ExpelEnergySAK, "https://wiki.guildwars2.com/images/c/c1/Core_Capture.png" },
             // - Conjured Amalgamate
             { ConjuredSlashPlayer, "https://wiki.guildwars2.com/images/5/59/Conjured_Slash.png" },
             { ConjuredProtection, "https://wiki.guildwars2.com/images/0/02/Conjured_Protection.png" },
@@ -619,8 +650,14 @@ namespace GW2EIEvtcParser.ParsedData
             { FluxDisruptorDeactivateCast, "https://wiki.guildwars2.com/images/3/34/Flux_Disruptor-_Deactivate.png" },
             { PlayerLiftUpQadimThePeerless, ParserIcons.GenericBlueArrowUp },
             { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
+            // - Mai Trin (Aetherble Hideout)
+            { ReverseThePolaritySAK, "https://wiki.guildwars2.com/images/f/f8/Prod.png" },
             // - Dadga (Cosmic Observatory)
             { PurifyingLight, "https://wiki.guildwars2.com/images/1/1e/Purifying_Light_%28Dagda%29.png" },
+            // - Artsariiv
+            { NovaLaunchSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            // - Arkk
+            { HypernovaLaunchSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>

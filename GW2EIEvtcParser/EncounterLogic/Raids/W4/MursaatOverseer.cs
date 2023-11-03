@@ -58,6 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(PunishementAura, PunishementAura),
+                new EffectCastFinder(ProtectSAK, EffectGUIDs.MursaarOverseerProtectBubble),
             };
         }
 
@@ -127,6 +128,48 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mursaat Overseer not found");
             }
             return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+
+            var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
+            var claimRemove = combatData.GetBuffData(ClaimBuff).OfType<BuffRemoveAllEvent>().ToList();
+
+            var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+            var dispelRemove = combatData.GetBuffData(DispelBuff).OfType<BuffRemoveAllEvent>().ToList();
+
+            SkillItem claimSkill = skillData.Get(ClaimSAK);
+            SkillItem dispelSkill = skillData.Get(DispelSAK);
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
+            {
+                foreach (EffectEvent effect in claims)
+                {
+                    // Find the player agent that has the claim buff when the effect event happens
+                    if (claimApply.Where(x => x.Time < effect.Time).Any() && claimRemove.Where(x => x.Time > effect.Time).Any())
+                    {
+                        AgentItem player = claimApply.Where(x => x.Time < effect.Time).FirstOrDefault().To;
+                        res.Add(new AnimatedCastEvent(player, claimSkill, effect.Time, effect.Time));
+                    }
+                }
+            }
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
+            {
+                foreach (EffectEvent effect in dispels)
+                {
+                    // Find the player agent that has the dispel buff when the effect event happens
+                    if (dispelApply.Where(x => x.Time < effect.Time).Any() && dispelRemove.Where(x => x.Time > effect.Time).Any())
+                    {
+                        AgentItem player = dispelApply.Where(x => x.Time < effect.Time).FirstOrDefault().To;
+                        res.Add(new AnimatedCastEvent(player, dispelSkill, effect.Time, effect.Time));
+                    }
+                }
+            }
+
+            return res;
         }
     }
 }

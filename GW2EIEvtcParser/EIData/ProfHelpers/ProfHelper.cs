@@ -603,5 +603,18 @@ namespace GW2EIEvtcParser.EIData
             long end = ComputeEffectEndTime(log, effect, durationToUse, agent, associatedBuff);
             return (start, end);
         }
+
+        internal static IReadOnlyList<AnimatedCastEvent> ComputeDashCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData, long skillId, long buffId)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(skillId);
+            var applies = combatData.GetBuffData(buffId).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
+            var removals = combatData.GetBuffData(buffId).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
+            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            {
+                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+            }
+            return res;
+        }
     }
 }

@@ -100,6 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(SpontaneousCombustion, SpontaneousCombustion),
                 new DamageCastFinder(SnowstormSkill, SnowstormSkill),
                 new DamageCastFinder(DownpourSkill, DownpourSkill),
+                new BuffLossCastFinder(UnstableBloodMagic, UnstableBloodMagic),
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

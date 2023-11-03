@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -201,7 +202,7 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (Player p in players) {
                 switch(p.Spec)
                 {
-                    case ParserHelper.Spec.Willbender:
+                    case Spec.Willbender:
                         toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
                         break;
                     default:
@@ -209,16 +210,22 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 switch(p.BaseSpec)
                 {
-                    case ParserHelper.Spec.Ranger:
-                        toAdd.AddRange(RangerHelper.ComputeAncestralGraceCastEvents(p, this, skillData, agentData));
+                    case Spec.Ranger:
+                        toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, AncestralGraceSkill, AncestralGraceBuff));
                         break;
                     case Spec.Elementalist:
                         toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
-                        toAdd.AddRange(ElementalistHelper.ComputeRideTheLightningCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, RideTheLightningSkill, RideTheLightningBuff));
                         break;
                     default:
                         break;
                 }
+                // Cairn
+                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, CelestialDashSAK, CelestialDashBuff));
+                // Artsariiv
+                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, NovaLaunchSAK, NovaLaunchBuff));
+                // Arkk
+                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, HypernovaLaunchSAK, HypernovaLaunchBuff));
             }
             //
             var castIDsToSort = new HashSet<long>();

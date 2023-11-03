@@ -1522,6 +1522,7 @@
         public const long ToxicCloud1 = 34565;
         public const long DownpourMatthias = 34568;
         public const long BloodstoneBisque = 34570;
+        public const long PurgeSlothasor = 34599;
         public const long CanOfMushroomAndAsparagusRisotto = 34604;
         public const long CannedTarragonBread = 34608;
         public const long CannedMixedBerryPie = 34612;
@@ -1575,6 +1576,7 @@
         public const long SummonFragments = 34887;
         public const long AchievementEligibilityEvasiveManeuver = 34890;
         public const long SpatialDenial = 34899;
+        public const long OverHere = 34903;
         public const long StatueFixated1 = 34912;
         public const long TemporalShredAoE = 34913;
         public const long WhiteOrb = 34914;
@@ -1588,7 +1590,7 @@
         public const long ConstructAura = 34946;
         public const long Outnumbered = 34947;
         public const long SoothingWaters = 34955;
-        public const long InterventionSAK = 34956;
+        public const long InterventionSkillOwnerBuff = 34956;
         public const long AchievementEligibilityDownDownDowned = 34958;
         public const long ChaoticHaze = 34963;
         public const long AchievementEligibilityLoveIsBunny = 34944;
@@ -1600,7 +1602,7 @@
         public const long Unbreakable = 34979;
         public const long RadiantAttunementPhantasm = 34992;
         public const long HerosDeparture = 34997;
-        public const long Intervention = 35000;
+        public const long InterventionInvulnerabilityBuff = 35000;
         public const long Madness = 35006;
         public const long ConfoundingFrenzy = 35009;
         public const long CrimsonAttunementPhantasm = 35014;
@@ -1610,6 +1612,7 @@
         public const long MagicBlastCharge = 35048;
         public const long GlennaCap = 35057;
         public const long EscortToxicSpores = 35059;
+        public const long InterventionSAK = 35061;
         public const long PhantasmalBlades1 = 35064;
         public const long EscortHealingCleanse = 35073;
         public const long GainingPower = 35075;
@@ -1741,6 +1744,7 @@
         public const long ClaimBuff = 37779;
         public const long Impact = 37784;
         public const long JadeSoldierExplosion = 37788;
+        public const long POV_CelestialDashBuff = 37791;
         public const long TramplingRush = 37797;
         public const long ProtectBuff = 37813;
         public const long EnragedCairn2 = 37824;
@@ -1754,7 +1758,7 @@
         public const long EffigyPulse = 37901;
         public const long DispelSAK = 37904;
         public const long GravityWave = 37910;
-        public const long CelestialDash = 37924;
+        public const long CelestialDashSAK = 37924;
         public const long Annihilate1 = 37929;
         public const long PunishementAura = 37952;
         public const long InevitableBetrayalBig = 37966;
@@ -1785,6 +1789,7 @@
         public const long Annihilate2 = 38208;
         public const long SharedAgony75 = 38209;
         public const long SharedAgony3 = 38210;
+        public const long CelestialDashBuff = 38217;
         public const long FixatedGuldhem = 38223;
         public const long UnnaturalSignet = 38224;
         public const long FanaticalResilience = 38226;
@@ -1813,6 +1818,7 @@
         public const long CorporealReassignmentBuff = 38880;
         public const long PunishingKickSkorvald = 38896;
         public const long RadiantFury = 38926;
+        public const long NovaLaunchBuff = 38929;
         public const long VaultArtsariiv = 38977;
         public const long FixatedBloom4 = 38985;
         public const long StarbustCascade1 = 38982;
@@ -1828,6 +1834,7 @@
         public const long DiaphanousShielding = 39111;
         public const long FixatedBloom1 = 39131;
         public const long WaveOfMutilation = 39133;
+        public const long HypernovaLaunchSAK = 39157;
         public const long CranialCascadeSkorvald = 39220;
         public const long SupernovaSkorvaldCM = 39225;
         public const long SolarCyclone = 39228;
@@ -1877,10 +1884,12 @@
         public const long SolarFury = 39728;
         public const long DiffractiveEdge2 = 39755;
         public const long SolarBolt2 = 39760;
+        public const long HypernovaLaunchBuff = 39762;
         public const long HorizonStrikeSkorvald4 = 39770;
         public const long SupernovaArkk = 39782;
         public const long DiffractiveEdge1 = 39787;
         public const long SolarBlastArkk1 = 39823;
+        public const long NovaLaunchSAK = 39843;
         public const long SolarBlastArkk2 = 39857;
         public const long RadiantFurySkorvald = 39845;
         public const long CrimsonDawn = 39846;
@@ -2175,6 +2184,7 @@
         public const long MistlockInstabilityVengeance = 46865;
         public const long WatchfulEyePvP = 46910;
         public const long CorsairSharpeningStone = 46925;
+        public const long IssueChallengeSAK = 46947;
         public const long FracturedSpirit = 46950;
         public const long SuperiorSigilOfTheStars = 46953;
         public const long MushroomKingsBlessing = 46970;
@@ -2224,6 +2234,7 @@
         public const long FrozenWind = 47776;
         public const long ChillingAura = 47837;
         public const long Hamstrung = 47856;
+        public const long ExpelEnergySAK = 47880;
         public const long SourcePureOblivionBuff = 47903;
         public const long QuadSlashSecondSet = 47915;
         public const long OneTrackMind = 47929;
@@ -2250,12 +2261,12 @@
         public const long CorruptTheLiving = 48327;
         public const long SpiritForm = 48331;
         public const long CorsairTuningCrystal = 48348;
-        public const long ExilesEmbrace = 48349;
         public const long QuadSlashFirstSet = 48363;
         public const long ThrowLight = 48380;
         public const long CataclysmicCycle = 48398;
         public const long FractalChampion = 48414;
         public const long OuterVortexSlash = 48432;
+        public const long ExilesEmbrace = 48439;
         public const long EmpoweredLightThief = 48477;
         public const long DeathBloom = 48500;
         public const long RendingSwipe = 48531;
@@ -3397,6 +3408,7 @@
         public const long MaiTrinCMBeamsTargetRed = 67868;
         public const long MaiTrinCMBeamsTargetGreen = 67871;
         public const long PhotonSaturation = 67872;
+        public const long ReverseThePolaritySAK = 67880;
         public const long AchievementEligibilityLeapsAbound = 67882;
         public const long ImminentDeathBuff = 67931;
         public const long FailSafeActivated = 67936;

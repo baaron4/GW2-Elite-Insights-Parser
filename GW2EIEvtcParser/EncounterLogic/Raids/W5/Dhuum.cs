@@ -86,6 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(DeathlyAura, DeathlyAura),
+                new BuffLossCastFinder(ExpelEnergySAK, ArcingAffliction)
             };
         }
 
