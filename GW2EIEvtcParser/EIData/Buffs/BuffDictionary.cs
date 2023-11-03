@@ -20,18 +20,33 @@ namespace GW2EIEvtcParser.EIData
 
         private static void AddToList(List<AbstractBuffEvent> list, AbstractBuffEvent buffEvent)
         {
-            AbstractBuffEvent last = list.Last();
             // Essence of speed issue for Soulbeast
-            if (last is BuffExtensionEvent beeLast && buffEvent is BuffExtensionEvent beeCurrent 
-                && beeCurrent.BuffInstance == beeLast.BuffInstance && buffEvent.Time == last.Time
-                && Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+            if (buffEvent is BuffExtensionEvent beeCurrent)
             {
-                list.Remove(last);
+                var beeLast = (BuffExtensionEvent)list.LastOrDefault(x => x is BuffExtensionEvent bee && bee.BuffInstance == beeCurrent.BuffInstance);
+                if (beeLast != null && Math.Abs(buffEvent.Time - beeLast.Time) <= 1)
+                {
+                    if (Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+                    {
+                        list.Remove(beeLast);
+                    }
+                    else if (Math.Abs(beeCurrent.NewDuration - beeLast.NewDuration) <= 1)
+                    {
+                        return;
+                    }
+                }
+            } 
+            else if (buffEvent is BuffApplyEvent bae && bae.BuffInstance != 0)
+            {
+                if (list.Any(x => x is BuffApplyEvent baeBefore && baeBefore.BuffInstance == bae.BuffInstance) && Math.Abs(bae.Time - bae.Time) <= 1)
+                {
+                    return;
+                } 
             }
             list.Add(buffEvent);
         }
 
-            public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
             {
@@ -106,7 +121,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
             {
-                foreach(KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
