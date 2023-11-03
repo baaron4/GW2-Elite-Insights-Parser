@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         public long OldDuration => NewDuration - ExtendedDuration;
         public long ExtendedDuration { get; }
-        public long NewDuration { get; }
+        public long NewDuration { get; protected set; }
         private bool _sourceFinderRan = false;
 
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
@@ -23,6 +23,20 @@ namespace GW2EIEvtcParser.ParsedData
                 _sourceFinderRan = true;
                 By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance);
             }
+        }
+
+        internal void OffsetNewDurationFromBuffApply(BuffApplyEvent bae)
+        {
+            if (bae == null)
+            {
+                return;
+            }
+            long applicationTime = bae.Time;
+            if (bae.Initial)
+            {
+                applicationTime -= bae.OriginalAppliedDuration - bae.AppliedDuration;
+            } 
+            NewDuration -= Time - applicationTime;
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)

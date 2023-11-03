@@ -457,7 +457,7 @@ namespace GW2EIEvtcParser.ParsedData
                     insertToSkillIDs = true;
                     if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
                     {
-                        CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
+                        CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
                     }
                     else if (combatItem.IsBuff == 0)
                     {

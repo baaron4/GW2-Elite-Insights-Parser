@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
     public class BuffApplyEvent : AbstractBuffApplyEvent
     {
         public bool Initial { get; }
+        public int OriginalAppliedDuration { get; }
         public int AppliedDuration { get; }
 
         public uint OverridenDuration { get; }
@@ -18,6 +19,14 @@ namespace GW2EIEvtcParser.ParsedData
         {
             Initial = evtcItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
+            if (Initial)
+            {
+                OriginalAppliedDuration = evtcItem.BuffDmg;
+            } 
+            else
+            {
+                OriginalAppliedDuration = AppliedDuration;
+            }
             _addedActive = evtcItem.IsShields > 0;
             OverridenDuration = evtcItem.OverstackValue;
         }
