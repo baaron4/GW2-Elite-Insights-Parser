@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.ParsedData
                     buffEvents.Add(new BuffStackResetEvent(stateChangeEvent, agentData, skillData));
                     break;
                 case StateChange.BuffInitial:
-                    buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
+                    buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData, evtcVersion));
                     break;
                 case StateChange.TickRate:
                     metaDataEvents.TickRateEvents.Add(new TickRateEvent(stateChangeEvent));
@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             else
             {
-                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData));
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
             }
         }
 

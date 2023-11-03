@@ -15,11 +15,11 @@ namespace GW2EIEvtcParser.ParsedData
         internal uint OverridenInstance { get; set; }
         private readonly bool _addedActive;
 
-        internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+        internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, int evtcVersion) : base(evtcItem, agentData, skillData)
         {
             Initial = evtcItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            if (Initial)
+            if (Initial && evtcVersion > ArcDPSBuilds.BuffExtensionOverstackValueChanged)
             {
                 OriginalAppliedDuration = evtcItem.BuffDmg;
             } 
@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, IFF iff, uint id, bool addedActive) : base(by, to, time, buffSkill, iff, id)
         {
             AppliedDuration = duration;
+            OriginalAppliedDuration = duration;
             _addedActive = addedActive;
         }
 
