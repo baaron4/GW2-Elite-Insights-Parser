@@ -402,8 +402,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                HealthUpdateEvent hpUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time);
-                if (hpUpdate != null && hpUpdate.HPPercent < 10.50)
+                Segment liftOff = p.GetBuffStatus(log, SourcePureOblivionBuff, c.Time + ParserHelper.ServerDelayConstant);
+                if (liftOff.Value > 0)
                 {
                     duration = 30000;
                 }
@@ -415,7 +415,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     end = (int)removedBuff.Time;
                 }
                 var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-                replay.AddDecorationWithGrowing(circle, end);
+                replay.AddDecorationWithGrowing(circle, duration);
             }
             // bomb
             var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
