@@ -422,7 +422,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in bombDhuum)
             {
                 var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
-                replay.AddDecorationWithGrowing(circle, seg.Start + 1300);
+                replay.AddDecorationWithGrowing(circle, seg.Start + 13000);
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection
