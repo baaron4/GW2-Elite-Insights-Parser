@@ -271,19 +271,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Poison Master", PoisonMasterBuff, Source.Ranger, BuffClassification.Other, BuffImages.PoisonMaster),
         };
 
-        public static IReadOnlyList<AnimatedCastEvent> ComputeAncestralGraceCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(AncestralGraceSkill);
-            var applies = combatData.GetBuffData(AncestralGraceBuff).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
-            var removals = combatData.GetBuffData(AncestralGraceBuff).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
-            for (int i = 0; i < applies.Count && i < removals.Count; i++)
-            {
-                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
-            }
-            return res;
-        }
-
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));

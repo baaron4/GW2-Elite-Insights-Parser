@@ -1547,6 +1547,7 @@
         internal const string HeatTheSoul = "https://wiki.guildwars2.com/images/5/58/Heat_the_Soul.png";
         internal const string CompoundingChemicals = "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png";
         internal const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
+        internal const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
         // Consumables
         internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
         internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

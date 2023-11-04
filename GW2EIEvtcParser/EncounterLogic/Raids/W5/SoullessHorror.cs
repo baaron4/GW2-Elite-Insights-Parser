@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(ChillingAura, ChillingAura),
+                new BuffGainCastFinder(IssueChallengeSAK, FixatedSH),
             };
         }
 

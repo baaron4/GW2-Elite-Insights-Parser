@@ -85,6 +85,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(VolatileAura, VolatileAura),
+                new BuffLossCastFinder(PurgeSlothasor, VolatilePoisonBuff),
             };
         }
 

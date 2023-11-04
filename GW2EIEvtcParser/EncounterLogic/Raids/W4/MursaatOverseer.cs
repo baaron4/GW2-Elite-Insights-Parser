@@ -58,6 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(PunishementAura, PunishementAura),
+                new EffectCastFinder(ProtectSAK, EffectGUIDs.MursaarOverseerProtectBubble),
             };
         }
 
@@ -127,6 +128,43 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mursaat Overseer not found");
             }
             return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+
+            var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
+            var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+
+            SkillItem claimSkill = skillData.Get(ClaimSAK);
+            SkillItem dispelSkill = skillData.Get(DispelSAK);
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
+            {
+                foreach (EffectEvent effect in claims)
+                {
+                    BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null) 
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
+                    };
+                }
+            }
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
+            {
+                foreach (EffectEvent effect in dispels)
+                {
+                    BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null)
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));
+                    };
+                }
+            }
+
+            return res;
         }
     }
 }

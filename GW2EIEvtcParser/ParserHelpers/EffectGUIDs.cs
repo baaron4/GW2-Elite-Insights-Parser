@@ -346,11 +346,24 @@ namespace GW2EIEvtcParser
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
+        // Escort Glenna
+        public const string EscortOverHere = "64CD79C1A121EC42B1278DEF9280ED35";
+        // Xera
+        public const string XeraIntervention1 = "63C34770B4EFF64B8EAA21BB835BB560"; // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
+        public const string XeraIntervention2 = "79EA3F01274B4F418B2C571BAE1B9E17"; // 0 duration - Src Player
+        public const string XeraIntervention3 = "5FA6527231BB8041AC783396142C6200"; // 0 duration - No Src No Dst
         // Cairn
         public const string CairnDisplacement = "7798B97ED6B6EB489F7E33DF9FE6BD99";
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
+        // Mursaat Overseen
+        public const string MursaarOverseerDispelProjectile = "DE71A86A0867764BB5789265E8C0CF6A"; // No Src - Dst Jade Scout
+        public const string MursaarOverseerProtectBubble = "17BC358A51ED2D43BF2ABE8AB642B86B"; // Src player
+        public const string MursaarOverseerClaimMarker = "94F3501D777FAC439E78E143CE756B0A"; // No Src - No Dst
+        public const string MursaarOverseerShockwave = "0F62A1315A00FC438B2F1273E6BC4054";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Sabir
+        public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Qadim the Peerless
         public const string QadimPeerlessRainOfChaos = "D8259BFD4E6B8348AF15D862F7DBC8FA";
         public const string QadimPeerlessResidualImpactFireAoE = "EFAC2FC0F661404D84F0291CAB76FF0E";

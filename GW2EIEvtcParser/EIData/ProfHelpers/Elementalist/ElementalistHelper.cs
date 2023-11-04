@@ -260,19 +260,6 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        public static IReadOnlyList<AnimatedCastEvent> ComputeRideTheLightningCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(RideTheLightningSkill);
-            var applies = combatData.GetBuffData(RideTheLightningBuff).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
-            var removals = combatData.GetBuffData(RideTheLightningBuff).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
-            for (int i = 0; i < applies.Count && i < removals.Count; i++)
-            {
-                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
-            }
-            return res;
-        }
-
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Elementalist;

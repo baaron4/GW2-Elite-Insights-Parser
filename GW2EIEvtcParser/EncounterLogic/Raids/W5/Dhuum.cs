@@ -86,6 +86,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(DeathlyAura, DeathlyAura),
+                new BuffLossCastFinder(ExpelEnergySAK, ArcingAffliction).UsingChecker((brae, combatData, agentData, skillData) =>
+                {
+                    bool state = true;
+                    // Buff loss caused by the Greather Death Mark
+                    if (combatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                    {
+                        state = false;
+                    }
+                    // Buff loss at the time of the 10% starting
+                    if (combatData.GetBuffData(SourcePureOblivionBuff).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                    {
+                        state = false;
+                    }
+                    return state;
+                }),
             };
         }
 

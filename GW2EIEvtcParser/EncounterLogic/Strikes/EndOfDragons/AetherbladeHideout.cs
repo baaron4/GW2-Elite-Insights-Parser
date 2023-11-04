@@ -112,6 +112,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetGreen),
+                new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetBlue),
+                new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetRed),
+            };
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             // Bomb Selection

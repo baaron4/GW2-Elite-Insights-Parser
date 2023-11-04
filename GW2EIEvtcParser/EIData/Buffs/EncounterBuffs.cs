@@ -211,7 +211,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bending Chaos", BendingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.Target2),
             new Buff("Shifting Chaos", ShiftingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.ShiftingChaos),
             new Buff("Twisting Chaos", TwistingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.TwistingChaos),
-            new Buff("Intervention", Intervention, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
+            new Buff("Intervention (SAK)", InterventionSkillOwnerBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
+            new Buff("Intervention (Invuln)", InterventionInvulnerabilityBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
             new Buff("Bloodstone Protection", BloodstoneProtection, Source.FightSpecific, BuffClassification.Other, BuffImages.BloodstoneProtection),
             new Buff("Bloodstone Blessed", BloodstoneBlessed, Source.FightSpecific, BuffClassification.Other, BuffImages.BloodstoneBlessed),
             new Buff("Void Zone", VoidZone, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidZone),
@@ -226,6 +227,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Unseen Burden", UnseenBurden, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.UnseenBurden),
             new Buff("Countdown", Countdown, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Countdown),
             new Buff("Gaze Avoidance", GazeAvoidance, Source.FightSpecific, BuffClassification.Other, BuffImages.GazeAvoidance),
+            new Buff("Celestial Dash", CelestialDashBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Mursaat Overseer
             new Buff("Empowered", Empowered, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.Empowered),
             new Buff("Mursaat Overseer's Shield", MursaatOverseersShield, Source.FightSpecific, BuffClassification.Other, BuffImages.Dispel),
@@ -394,6 +396,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Corporeal Reassignment", CorporealReassignmentBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Blinding Radiance", BlindingRadiance, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Determination (Viirastra)", DeterminationViirastra, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
+            new Buff("Nova Launch", NovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Arkk 
             new Buff("Fixated (Bloom 3)", FixatedBloom3, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Bloom 2)", FixatedBloom2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
@@ -402,6 +405,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Cosmic Meteor", CosmicMeteor, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Diaphanous Shielding", DiaphanousShielding, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Electrocuted", Electrocuted, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AirAttunement),
+            new Buff("Hypernova Launch", HypernovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Ai, Keeper of the Peak
             new Buff("Tidal Barrier", TidalBarrier, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),
             new Buff("Whirlwind Shield", WhirlwindShield, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),

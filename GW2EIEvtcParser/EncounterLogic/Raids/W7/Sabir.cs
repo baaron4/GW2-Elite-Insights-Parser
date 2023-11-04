@@ -68,7 +68,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BoltBreakSabir, BoltBreakSabir), // Bolt Break
+                new DamageCastFinder(BoltBreakSabir, BoltBreakSabir),
+                new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge),
             };
         }
 
