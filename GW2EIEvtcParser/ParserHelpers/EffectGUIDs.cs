@@ -348,6 +348,10 @@ namespace GW2EIEvtcParser
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
         // Escort Glenna
         public const string EscortOverHere = "64CD79C1A121EC42B1278DEF9280ED35";
+        // Xera
+        public const string XeraIntervention1 = "63C34770B4EFF64B8EAA21BB835BB560"; // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
+        public const string XeraIntervention2 = "79EA3F01274B4F418B2C571BAE1B9E17"; // 0 duration - Src Player
+        public const string XeraIntervention3 = "5FA6527231BB8041AC783396142C6200"; // 0 duration - No Src No Dst
         // Cairn
         public const string CairnDisplacement = "7798B97ED6B6EB489F7E33DF9FE6BD99";
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";

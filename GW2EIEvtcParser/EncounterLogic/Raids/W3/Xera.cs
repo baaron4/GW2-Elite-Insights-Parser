@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new BuffLossCastFinder(InterventionSAK, InterventionSkillOwnerBuff),
+                new EffectCastFinder(InterventionSAK, EffectGUIDs.XeraIntervention1),
             };
         }
 
@@ -356,6 +356,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else if (segment.Value >= 30)
                 {
                     replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
+                }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Intervention Bubble
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out IReadOnlyList<EffectEvent> intervention))
+            {
+                foreach (EffectEvent effect in intervention)
+                {
+                    // Effect has duration of 4294967295 but the skill lasts only 6000
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 6000);
+                    var circle = new CircleDecoration(240, lifespan, "rgba(255, 200, 0, 0.3)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(0, 50, 200, 0.4)"));
                 }
             }
         }
