@@ -51,15 +51,15 @@ namespace GW2EIEvtcParser.ParsedData
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
             {
-                if (p.Spec == ParserHelper.Spec.Weaver)
+                if (p.Spec == Spec.Weaver)
                 {
                     toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), _buffData, p.AgentItem, skillData));
                 }
-                if (p.Spec == ParserHelper.Spec.Virtuoso)
+                if (p.Spec == Spec.Virtuoso)
                 {
                     toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffData(p.AgentItem), p.AgentItem, skillData));
                 }
-                if (p.BaseSpec == ParserHelper.Spec.Elementalist && p.Spec != ParserHelper.Spec.Weaver)
+                if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
                 {
                     ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
                 }
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
             {
-                if (pair.Key.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))
+                if (pair.Key.IsSpecies(TargetID.WorldVersusWorld))
                 {
                     continue;
                 }
@@ -382,9 +382,9 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (KeyValuePair<AgentItem, List<BreakbarStateEvent>> pair in _statusEvents.BreakbarStateEvents)
             {
                 BreakbarStateEvent first = pair.Value.FirstOrDefault();
-                if (first != null && first.State != ArcDPSEnums.BreakbarState.Active && first.Time > pair.Key.FirstAware + 500)
+                if (first != null && first.State != BreakbarState.Active && first.Time > pair.Key.FirstAware + 500)
                 {
-                    pair.Value.Insert(0, new BreakbarStateEvent(pair.Key, pair.Key.FirstAware, ArcDPSEnums.BreakbarState.Active));
+                    pair.Value.Insert(0, new BreakbarStateEvent(pair.Key, pair.Key.FirstAware, BreakbarState.Active));
                 }
             }
             // master attachements
@@ -422,7 +422,7 @@ namespace GW2EIEvtcParser.ParsedData
             foreach (CombatItem combatItem in combatEvents)
             {
                 bool insertToSkillIDs = false;
-                if (combatItem.IsStateChange != ArcDPSEnums.StateChange.None)
+                if (combatItem.IsStateChange != StateChange.None)
                 {
                     if (combatItem.IsExtension)
                     {
@@ -434,12 +434,12 @@ namespace GW2EIEvtcParser.ParsedData
                     } 
                     else
                     {
-                        insertToSkillIDs = combatItem.IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
+                        insertToSkillIDs = combatItem.IsStateChange == StateChange.BuffInitial;
                         CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion);
                     }
                     
                 }
-                else if (combatItem.IsActivation != ArcDPSEnums.Activation.None)
+                else if (combatItem.IsActivation != Activation.None)
                 {
                     insertToSkillIDs = true;
                     if (castCombatEvents.TryGetValue(combatItem.SrcAgent, out List<CombatItem> list))
@@ -451,7 +451,7 @@ namespace GW2EIEvtcParser.ParsedData
                         castCombatEvents[combatItem.SrcAgent] = new List<CombatItem>() { combatItem };
                     }
                 }
-                else if (combatItem.IsBuffRemove != ArcDPSEnums.BuffRemove.None)
+                else if (combatItem.IsBuffRemove != BuffRemove.None)
                 {
                     insertToSkillIDs = true;
                     CombatEventFactory.AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData);
@@ -477,7 +477,7 @@ namespace GW2EIEvtcParser.ParsedData
                     _skillIds.Add(combatItem.SkillID);
                 }
             }
-            HasStackIDs = evtcVersion > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
+            HasStackIDs = evtcVersion > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             UseBuffInstanceSimulator = HasStackIDs && false;// (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Any();

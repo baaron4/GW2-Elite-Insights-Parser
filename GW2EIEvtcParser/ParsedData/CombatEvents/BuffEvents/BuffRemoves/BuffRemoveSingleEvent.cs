@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(CreditedBy, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
+            simulator.Remove(CreditedBy, RemovedDuration, 1, Time, BuffRemove.Single, BuffInstance);
         }
         /*internal override int CompareTo(AbstractBuffEvent abe)
         {
