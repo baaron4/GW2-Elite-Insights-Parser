@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (src != null) 
                     {
                         res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
-                    };
+                    }
                 }
             }
 
@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (src != null)
                     {
                         res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));
-                    };
+                    }
                 }
             }
 

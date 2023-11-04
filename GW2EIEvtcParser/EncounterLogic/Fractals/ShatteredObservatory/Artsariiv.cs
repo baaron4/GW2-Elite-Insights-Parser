@@ -290,5 +290,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f), true);
             EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, position).UsingRotationConnector(rotation));
         }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+            res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, NovaLaunchSAK, NovaLaunchBuff));
+            return res;
+        }
     }
 }

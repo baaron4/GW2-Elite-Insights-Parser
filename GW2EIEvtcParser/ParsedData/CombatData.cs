@@ -211,22 +211,20 @@ namespace GW2EIEvtcParser.ParsedData
                 switch(p.BaseSpec)
                 {
                     case Spec.Ranger:
-                        toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, AncestralGraceSkill, AncestralGraceBuff));
+                        toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, AncestralGraceSkill, AncestralGraceBuff));
                         break;
                     case Spec.Elementalist:
                         toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
-                        toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, RideTheLightningSkill, RideTheLightningBuff));
+                        toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, RideTheLightningSkill, RideTheLightningBuff));
                         break;
                     default:
                         break;
                 }
-                // Cairn
-                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, CelestialDashSAK, CelestialDashBuff));
-                // Artsariiv
-                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, NovaLaunchSAK, NovaLaunchBuff));
-                // Arkk
-                toAdd.AddRange(ProfHelper.ComputeDashCastEvents(p, this, skillData, agentData, HypernovaLaunchSAK, HypernovaLaunchBuff));
             }
+            // Generic instant cast finders
+            var instantCastsFinder = new HashSet<InstantCastFinder>(ProfHelper.GetProfessionInstantCastFinders(players));
+            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastsFinder.Add(x));
+            toAdd.AddRange(ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder.ToList()));
             //
             var castIDsToSort = new HashSet<long>();
             var castAgentsToSort = new HashSet<AgentItem>();
@@ -277,39 +275,36 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     wepSwapAgentsToSort.Add(wse.Caster);
                 }
+                if (cast is InstantCastEvent ice)
+                {
+
+                    if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
+                    {
+                        instantCastList.Add(ice);
+                    }
+                    else
+                    {
+                        _instantCastData[ice.Caster] = new List<InstantCastEvent>()
+                        {
+                            ice
+                        };
+                    }
+                    instantAgentsToSort.Add(ice.Caster);
+                    if (_instantCastDataById.TryGetValue(ice.SkillId, out List<InstantCastEvent> instantCastListByID))
+                    {
+                        instantCastListByID.Add(ice);
+                    }
+                    else
+                    {
+                        _instantCastDataById[ice.SkillId] = new List<InstantCastEvent>()
+                        {
+                            ice
+                        };
+                    }
+                    instantIDsToSort.Add(ice.SkillId);
+                }
             }
-            var instantCastsFinder = new HashSet<InstantCastFinder>(ProfHelper.GetProfessionInstantCastFinders(players));
-            fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastsFinder.Add(x));
-            var instantCasts = new List<InstantCastEvent>(ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder.ToList()));
-            instantCasts.AddRange(toAdd.OfType<InstantCastEvent>());
             //
-            foreach (InstantCastEvent ice in instantCasts)
-            {
-                if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
-                {
-                    instantCastList.Add(ice);
-                }
-                else
-                {
-                    _instantCastData[ice.Caster] = new List<InstantCastEvent>()
-                        {
-                            ice
-                        };
-                }
-                instantAgentsToSort.Add(ice.Caster);
-                if (_instantCastDataById.TryGetValue(ice.SkillId, out List<InstantCastEvent> instantCastListByID))
-                {
-                    instantCastListByID.Add(ice);
-                }
-                else
-                {
-                    _instantCastDataById[ice.SkillId] = new List<InstantCastEvent>()
-                        {
-                            ice
-                        };
-                }
-                instantIDsToSort.Add(ice.SkillId);
-            }
             foreach (long castID in castIDsToSort)
             {
                 _animatedCastDataById[castID] = _animatedCastDataById[castID].OrderBy(x => x.Time).ToList();

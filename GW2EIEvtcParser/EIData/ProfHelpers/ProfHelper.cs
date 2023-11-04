@@ -604,15 +604,33 @@ namespace GW2EIEvtcParser.EIData
             return (start, end);
         }
 
-        internal static IReadOnlyList<AnimatedCastEvent> ComputeDashCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData, long skillId, long buffId)
+
+        private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
         {
             var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(skillId);
-            var applies = combatData.GetBuffData(buffId).OfType<BuffApplyEvent>().Where(x => x.To == player.AgentItem).ToList();
-            var removals = combatData.GetBuffData(buffId).OfType<BuffRemoveAllEvent>().Where(x => x.To == player.AgentItem).ToList();
+            var applies = buffs.OfType<BuffApplyEvent>().ToList();
+            var removals = buffs.OfType<BuffRemoveAllEvent>().ToList();
             for (int i = 0; i < applies.Count && i < removals.Count; i++)
             {
-                res.Add(new AnimatedCastEvent(player.AgentItem, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+                res.Add(new AnimatedCastEvent(applies[i].To, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+            }
+            return res;
+        }
+
+        internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
+        {
+            SkillItem skill = skillData.Get(skillId);
+            return ComputeUnderBuffCastEvents(combatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem).ToList(), skill);
+        }
+
+        internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)
+        {
+            SkillItem skill = skillData.Get(skillId);
+            var dict = combatData.GetBuffData(buffId).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            var res = new List<AnimatedCastEvent>();
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in dict)
+            {
+                res.AddRange(ComputeUnderBuffCastEvents(pair.Value, skill));
             }
             return res;
         }

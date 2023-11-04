@@ -382,5 +382,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+            res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, HypernovaLaunchSAK, HypernovaLaunchBuff));
+            return res;
+        }
     }
 }
