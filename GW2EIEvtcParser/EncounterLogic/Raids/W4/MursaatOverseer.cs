@@ -144,7 +144,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in claims)
                 {
-                    // Find the player agent that has the claim buff when the effect event happens
                     BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
                     if (src != null) 
                     {
