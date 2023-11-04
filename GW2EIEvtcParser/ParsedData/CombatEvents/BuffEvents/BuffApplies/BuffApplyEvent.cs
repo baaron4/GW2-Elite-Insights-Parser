@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             Initial = evtcItem.IsStateChange == StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            if (Initial && evtcVersion > ArcDPSBuilds.BuffExtensionOverstackValueChanged)
+            if (Initial && evtcVersion >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
             {
                 OriginalAppliedDuration = evtcItem.BuffDmg;
             } 

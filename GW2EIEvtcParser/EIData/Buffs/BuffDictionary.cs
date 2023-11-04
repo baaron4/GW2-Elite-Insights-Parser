@@ -36,6 +36,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             } 
+            // handle duplicated application (seen mainly on buff initials)
             else if (buffEvent is BuffApplyEvent bae && bae.BuffInstance != 0)
             {
                 if (list.Any(x => x is BuffApplyEvent baeBefore && baeBefore.BuffInstance == bae.BuffInstance) && Math.Abs(bae.Time - bae.Time) <= 1)
