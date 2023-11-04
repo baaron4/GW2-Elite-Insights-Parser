@@ -135,10 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
 
             var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
-            var claimRemove = combatData.GetBuffData(ClaimBuff).OfType<BuffRemoveAllEvent>().ToList();
-
             var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
-            var dispelRemove = combatData.GetBuffData(DispelBuff).OfType<BuffRemoveAllEvent>().ToList();
 
             SkillItem claimSkill = skillData.Get(ClaimSAK);
             SkillItem dispelSkill = skillData.Get(DispelSAK);
@@ -148,11 +145,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in claims)
                 {
                     // Find the player agent that has the claim buff when the effect event happens
-                    if (claimApply.Where(x => x.Time < effect.Time).Any() && claimRemove.Where(x => x.Time > effect.Time).Any())
+                    BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null) 
                     {
-                        AgentItem player = claimApply.Where(x => x.Time < effect.Time).FirstOrDefault().To;
-                        res.Add(new AnimatedCastEvent(player, claimSkill, effect.Time, effect.Time));
-                    }
+                        res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
+                    };
                 }
             }
 
@@ -160,12 +157,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in dispels)
                 {
-                    // Find the player agent that has the dispel buff when the effect event happens
-                    if (dispelApply.Where(x => x.Time < effect.Time).Any() && dispelRemove.Where(x => x.Time > effect.Time).Any())
+                    BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null)
                     {
-                        AgentItem player = dispelApply.Where(x => x.Time < effect.Time).FirstOrDefault().To;
-                        res.Add(new AnimatedCastEvent(player, dispelSkill, effect.Time, effect.Time));
-                    }
+                        res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));
+                    };
                 }
             }
 

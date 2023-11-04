@@ -280,8 +280,10 @@ namespace GW2EIEvtcParser.ParsedData
             }
             var instantCastsFinder = new HashSet<InstantCastFinder>(ProfHelper.GetProfessionInstantCastFinders(players));
             fightData.Logic.GetInstantCastFinders().ForEach(x => instantCastsFinder.Add(x));
+            var instantCasts = new List<InstantCastEvent>(ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder.ToList()));
+            instantCasts.AddRange(toAdd.OfType<InstantCastEvent>());
             //
-            foreach (InstantCastEvent ice in ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder.ToList()))
+            foreach (InstantCastEvent ice in instantCasts)
             {
                 if (_instantCastData.TryGetValue(ice.Caster, out List<InstantCastEvent> instantCastList))
                 {
