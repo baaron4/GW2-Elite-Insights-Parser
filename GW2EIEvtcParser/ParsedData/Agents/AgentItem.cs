@@ -342,10 +342,10 @@ namespace GW2EIEvtcParser.ParsedData
         /// <param name="buffId"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
             AbstractSingleActor actor = log.FindActor(this);
-            return actor.HasBuff(log, buffId, time);
+            return actor.HasBuff(log, buffId, time, window);
         }
 
         /// <summary>

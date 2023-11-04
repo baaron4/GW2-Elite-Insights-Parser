@@ -315,10 +315,11 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="log"></param>
         /// <param name="buffId"></param>
         /// <param name="time"></param>
+        /// <param name="window"></param>
         /// <returns></returns>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
-            return _buffHelper.HasBuff(log, buffId, time);
+            return _buffHelper.HasBuff(log, buffId, time, window);
         }
 
         /// <summary>

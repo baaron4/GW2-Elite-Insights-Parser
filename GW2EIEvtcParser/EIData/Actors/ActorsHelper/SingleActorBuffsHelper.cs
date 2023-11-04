@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="buffId"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
@@ -138,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
-                return bgm.IsPresent(time);
+                return bgm.IsPresent(time, window);
             }
             else
             {
