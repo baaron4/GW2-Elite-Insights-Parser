@@ -402,8 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                Segment liftOff = p.GetBuffStatus(log, SourcePureOblivionBuff, c.Time + ParserHelper.ServerDelayConstant);
-                if (liftOff.Value > 0)
+                if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ParserHelper.ServerDelayConstant))
                 {
                     duration = 30000;
                 }
