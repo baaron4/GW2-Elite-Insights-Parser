@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             NewDuration = evtcItem.OverstackValue;
-            ExtendedDuration = evtcItem.Value;
+            ExtendedDuration = Math.Max(evtcItem.Value, 0);
         }
 
         internal override void TryFindSrc(ParsedEvtcLog log)
@@ -68,18 +68,18 @@ namespace GW2EIEvtcParser.ParsedData
             NewDuration -= activeTime;
             if (evtcVersion < ArcDPSEnums.ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion >= ArcDPSEnums.ArcDPSBuilds.BuffExtensionBroken)
             {
-                ExtendedDuration -= activeTime;
+                ExtendedDuration = Math.Max(ExtendedDuration - activeTime, 0);
             }
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
+            if (ExtendedDuration <= 0)
+            { 
+                // no need to bother with 0 extensions
+                return;
+            }
             simulator.Extend(ExtendedDuration, OldDuration, CreditedBy, Time, BuffInstance);
-        }
-
-        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
-        {
-            return base.IsBuffSimulatorCompliant(useBuffInstanceSimulator) && ExtendedDuration > 0; // security check
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)
