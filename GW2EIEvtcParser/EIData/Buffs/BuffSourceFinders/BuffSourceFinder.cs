@@ -94,6 +94,28 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
             return res;
         }
 
+        private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, int essenceOfSpeedCheck, IReadOnlyList<AgentItem> imperialImpactCheck)
+        {
+            // If uncertainty due to imbued melodies, return unknown
+            if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
+            {
+                return ParserHelper._unknownAgent;
+            }
+            // uncertainty due to essence of speed but not due to imperial impact
+            if (essenceOfSpeedCheck == 0 && !imperialImpactCheck.Any())
+            {
+                // the soulbeast
+                return dst;
+            }
+            // uncertainty due to imperial impact but not due to essence of speed
+            if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count == 1)
+            {
+                // the vindicator
+                return imperialImpactCheck.First();
+            }
+            return ParserHelper._unknownAgent;
+        }
+
 
         // Main method
         public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, uint buffInstance)
@@ -111,6 +133,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                 return ParserHelper._unknownAgent;
             }
             List<AgentItem> imperialImpactCheck = CouldBeImperialImpact(buffID, time, extension, log);
+            // Multiple imperial impact at the same time
             if (imperialImpactCheck.Count > 1)
             {
                 return ParserHelper._unknownAgent;
@@ -125,8 +148,12 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
             if (idsToCheck.Any())
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
-                // If only one cast item
-                if (cls.Count == 1)
+                // If multiple casters, return unknown
+                if (cls.Count > 1)
+                {
+                    return ParserHelper._unknownAgent;
+                }
+                else if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
                     // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
@@ -137,29 +164,14 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                     // otherwise the src is the caster
                     return item.Caster;
                 }
-                // If no cast item and 
-                else if (!cls.Any())
-                {               
-                    // If uncertainty due to imbued melodies, return unknown
-                    if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
-                    {
-                        return ParserHelper._unknownAgent;
-                    }
-                    // uncertainty due to essence of speed but not due to imperial impact
-                    if (essenceOfSpeedCheck == 0 && !imperialImpactCheck.Any())
-                    {
-                        // the soulbeast
-                        return dst;
-                    }
-                    // uncertainty due to imperial impact but not due to essence of speed
-                    if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count == 1)
-                    {
-                        // the vindicator
-                        return imperialImpactCheck.First();
-                    }
+                // If no cast item 
+                else
+                {
+                    return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactCheck);
                 }
             }
-            return essenceOfSpeedCheck >= 0 ? dst : ParserHelper._unknownAgent;
+            // No known cast skill ID for given extension, same as no cast being present
+            return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactCheck);
         }
 
     }
