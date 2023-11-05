@@ -409,6 +409,39 @@ namespace GW2EIEvtcParser.ParsedData
             EIMetaAndStatusParse(fightData, arcdpsVersion);
         }
 
+        private void OffsetBuffExtensionEvents(int evtcVersion)
+        {
+            if (evtcVersion <= ArcDPSBuilds.BuffExtensionBroken)
+            {
+                return;
+            }
+            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in _buffDataByDst)
+            {
+                var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                var extensions = pair.Value.OfType<BuffExtensionEvent>().ToList();
+                foreach (BuffExtensionEvent extensionEvent in extensions)
+                {
+                    if (extensionEvent.BuffInstance != 0)
+                    {
+                        if (dictApply.TryGetValue(extensionEvent.BuffInstance, out List<BuffApplyEvent> applies))
+                        {
+                            BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID);
+                            if (initialStackApplication != null)
+                            {
+                                var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
+                                if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out List<AbstractBuffStackEvent> stacks))
+                                {
+                                    sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID));
+                                }
+                                extensionEvent.OffsetNewDuration(sequence, evtcVersion);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
         {
             var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
@@ -497,6 +530,7 @@ namespace GW2EIEvtcParser.ParsedData
             operation.UpdateProgressWithCancellationCheck("Creating Buff Events");
             _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+            OffsetBuffExtensionEvents(evtcVersion);
             // damage events
             operation.UpdateProgressWithCancellationCheck("Creating Damage Events");
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());

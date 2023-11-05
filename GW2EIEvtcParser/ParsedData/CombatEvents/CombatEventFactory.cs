@@ -280,23 +280,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (buffEvent.IsOffcycle > 0)
             {
-                var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
-                if (evtcVersion > ArcDPSBuilds.BuffExtensionBroken && extensionEvent.BuffInstance != 0)
-                {
-                    var initialStackApplication = (BuffApplyEvent)buffEvents.LastOrDefault(x => x.Time <= extensionEvent.Time && x.To == extensionEvent.To && x.BuffID == extensionEvent.BuffID && x is BuffApplyEvent bae && bae.BuffInstance == extensionEvent.BuffInstance);
-                    if (initialStackApplication != null)
-                    {
-                        var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
-                        sequence.AddRange(buffEvents.Where(x => x.Time <= extensionEvent.Time && x.To == extensionEvent.To && x.BuffID == extensionEvent.BuffID && (
-                                    (x is BuffStackActiveEvent bsa && bsa.BuffInstance == extensionEvent.BuffInstance) ||
-                                    (x is BuffStackResetEvent bsr && bsr.BuffInstance == extensionEvent.BuffInstance)
-                                )
-                            )
-                        );
-                        extensionEvent.OffsetNewDuration(sequence, evtcVersion);
-                    }
-                } 
-                buffEvents.Add(extensionEvent);
+                buffEvents.Add(new BuffExtensionEvent(buffEvent, agentData, skillData));
             }
             else
             {
