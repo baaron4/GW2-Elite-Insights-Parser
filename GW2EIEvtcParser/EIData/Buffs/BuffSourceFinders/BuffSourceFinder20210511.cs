@@ -12,19 +12,26 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         }
 
         // Spec specific checks
-        protected override int CouldBeEssenceOfSpeed(AgentItem dst, long extension, long buffID, ParsedEvtcLog log)
+        protected override int CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
         {
             BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
             if (buffDescription != null && buffDescription.DurationCap == 0)
             {
-                return base.CouldBeEssenceOfSpeed(dst, extension, buffID, log);
+                return base.CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
             }
-            if (extension <= EssenceOfSpeed && dst.Spec == ParserHelper.Spec.Soulbeast)
+            if (dst.Spec == ParserHelper.Spec.Soulbeast && extension <= EssenceOfSpeed + ParserHelper.BuffSimulatorStackActiveDelayConstant)
             {
-                if (log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Herald) ||
-                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest) ||
-                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Chronomancer) ||
-                    log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
+                if (GetIDs(log, buffID, extension).Any())
+                {
+                    // uncertain, needs to check more
+                    return 0;
+                }
+                if (extension <= ImbuedMelodies + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
+                {
+                    // uncertain, needs to check more
+                    return 0;
+                }
+                if (extension <= ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
                 {
                     // uncertain, needs to check more
                     return 0;
@@ -44,7 +51,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
             var res = new HashSet<long>();
             foreach (KeyValuePair<long, HashSet<long>> pair in DurationToIDs)
             {
-                if (pair.Key >= extension)
+                if (extension <= pair.Key + ParserHelper.BuffSimulatorStackActiveDelayConstant)
                 {
                     res.UnionWith(pair.Value);
                 }
