@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                     }
                 }
             }
-            return ParserHelper._unknownAgent;
+            return essenceOfSpeedCheck >= 0 ? dst : ParserHelper._unknownAgent;
         }
 
     }
