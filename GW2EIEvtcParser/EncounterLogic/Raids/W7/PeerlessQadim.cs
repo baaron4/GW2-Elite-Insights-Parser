@@ -546,34 +546,65 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
+            string[] magmaColors = { "255, 215, 0", "255, 130, 50" };
             // Magma Drop warning
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaWarningAoE, out IReadOnlyList<EffectEvent> magmaWarnings))
             {
-                HealthUpdateEvent Qadim61Percent = log.CombatData.GetHealthUpdateEvents(log.AgentData.GetNPCsByID(ArcDPSEnums.TargetID.PeerlessQadim).FirstOrDefault()).Where(x => x.HPPercent <= 62).FirstOrDefault();
+                var dict = new Dictionary<long, List<EffectEvent>>();
+                long previousTime = int.MinValue;
                 foreach (EffectEvent effect in magmaWarnings)
                 {
-                    var connector = new PositionConnector(effect.Position);
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
-                    // If the effect time happens after the first qadim health update event under 62%, set color to orange, otherwise yellow;
-                    string color = effect.Time > Qadim61Percent.Time ? "rgba(255, 130, 50, 0.2)" : "rgba(255, 215, 0, 0.2)";
-                    var circle = new CircleDecoration(420, lifespan, color, connector);
-                    EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                    if (effect.Time - previousTime > 1000)
+                    {
+                        previousTime = effect.Time;
+                        dict[previousTime] = new List<EffectEvent>();
+                    }
+                    dict[previousTime].Add(effect);
+                }
+                int magmaColor = 0;
+                foreach (KeyValuePair<long, List<EffectEvent>> pair in dict)
+                {
+                    // Yellow for first, orange for second
+                    string colorToUse = magmaColors[magmaColor];
+                    magmaColor = (magmaColor + 1) % 2;
+                    foreach (EffectEvent effect in pair.Value)
+                    {
+                        var connector = new PositionConnector(effect.Position);
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.2)", connector);
+                        EnvironmentDecorations.Add(circle);
+                        EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                    }
                 }
             }
 
             // Magma Drop Activated
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaDamagingAoE, out IReadOnlyList<EffectEvent> magmas))
             {
-                HealthUpdateEvent Qadim61Percent = log.CombatData.GetHealthUpdateEvents(log.AgentData.GetNPCsByID(ArcDPSEnums.TargetID.PeerlessQadim).FirstOrDefault()).Where(x => x.HPPercent <= 62).FirstOrDefault();
+                var dict = new Dictionary<long, List<EffectEvent>>();
+                long previousTime = int.MinValue;
                 foreach (EffectEvent effect in magmas)
                 {
-                    var connector = new PositionConnector(effect.Position);
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600000);
-                    // If the effect time happens after the first qadim health update event under 62%, set color to orange, otherwise yellow;
-                    string color = effect.Time > Qadim61Percent.Time ? "rgba(255, 130, 50, 0.5)" : "rgba(255, 215, 0, 0.5)";
-                    var circle = new CircleDecoration(420, lifespan, color, connector);
-                    EnvironmentDecorations.Add(circle);
+                    if (effect.Time - previousTime > 1000)
+                    {
+                        previousTime = effect.Time;
+                        dict[previousTime] = new List<EffectEvent>();
+                    }
+                    dict[previousTime].Add(effect);
+                }
+                int magmaColor = 0;
+                foreach (KeyValuePair<long, List<EffectEvent>> pair in dict)
+                {
+                    // Yellow for first, orange for second
+                    string colorToUse = magmaColors[magmaColor];
+                    magmaColor = (magmaColor + 1) % 2;
+                    foreach (EffectEvent effect in pair.Value)
+                    {
+                        var connector = new PositionConnector(effect.Position);
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600000);
+                        var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.5)", connector);
+                        EnvironmentDecorations.Add(circle);
+                    }
                 }
             }
         }
