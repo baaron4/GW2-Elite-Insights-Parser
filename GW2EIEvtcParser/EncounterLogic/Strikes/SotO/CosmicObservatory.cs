@@ -189,6 +189,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (combatData.GetBuildEvent().Build < ArcDPSEnums.GW2Builds.DagdaNMHPChangedAndCMRelease)
+            {
+                return FightData.EncounterMode.Normal;
+            }
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dagda));
+            if (dagda == null)
+            {
+                throw new MissingKeyActorsException("Dagda not found");
+            }
+            return (dagda.GetHealth(combatData) > 56e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Cosmic Observatory";

@@ -61,6 +61,7 @@ namespace GW2EIEvtcParser
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             internal const ulong SOTOReleaseAndBalance = 150431;
             internal const ulong September2023Balance = 151966;
+            internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -78,7 +79,7 @@ namespace GW2EIEvtcParser
             internal const int NewLogStart = 20221111;
             internal const int FunctionalEffect2Events = 20230719;
             internal const int BuffExtensionBroken = 20230905;
-            internal const int BuffExtensionOverstackValueChanged = 20990000;
+            internal const int BuffExtensionOverstackValueChanged = 20231107;
             //
             internal const int EndOfLife = int.MaxValue;
         }
