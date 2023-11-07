@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         {
             double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
             Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs =
-                log.CombatData.GetBuffData(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
+                log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
             AbstractBuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
             AbstractBuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 

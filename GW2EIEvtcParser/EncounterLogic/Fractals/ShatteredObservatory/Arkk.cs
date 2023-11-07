@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
                                 {
-                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
+                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                                     long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
@@ -319,7 +319,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
                                 {
-                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffData(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
+                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                                     long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);

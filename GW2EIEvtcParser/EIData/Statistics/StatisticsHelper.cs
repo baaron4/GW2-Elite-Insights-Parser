@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
-                foreach (AbstractBuffEvent item in combatData.GetBuffData(player.AgentItem))
+                foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {

@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
             {
                 if (buffInstance > 0)
                 {
-                    BuffApplyEvent seedApply = log.CombatData.GetBuffData(buffID).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
+                    BuffApplyEvent seedApply = log.CombatData.GetBuffDataByInstanceID(buffID, buffInstance).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
                     if (seedApply != null)
                     {
                         return seedApply.By;

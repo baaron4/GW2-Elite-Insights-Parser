@@ -19,6 +19,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
         private readonly HashSet<long> _skillIds;
         private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
+        private Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>> _buffDataByInstanceID;
         private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
@@ -53,15 +54,15 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (p.Spec == Spec.Weaver)
                 {
-                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffData(p.AgentItem), _buffData, p.AgentItem, skillData));
+                    toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p.AgentItem), _buffData, p.AgentItem, skillData));
                 }
                 if (p.Spec == Spec.Virtuoso)
                 {
-                    toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffData(p.AgentItem), p.AgentItem, skillData));
+                    toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData));
                 }
                 if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBuffData(p.AgentItem), _buffData, skillData);
+                    ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), _buffData, skillData);
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
@@ -104,7 +105,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (toAdd.Any())
             {
-                _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+                BuildDependentContainers();
             }
         }
 
@@ -539,13 +540,54 @@ namespace GW2EIEvtcParser.ParsedData
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageDataById = brkDamageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+            BuildDependentContainers();
             //
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetBuildEvent().Build);
             }
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
+        }
+
+        private void BuildDependentContainers()
+        {
+            _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+            _buffDataByInstanceID = new Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>>();
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffData)
+            {
+                foreach (AbstractBuffEvent abe in pair.Value)
+                {
+                    if (!_buffDataByInstanceID.TryGetValue(abe.BuffID, out Dictionary<uint, List<AbstractBuffEvent>> dict))
+                    {
+                        dict = new Dictionary<uint, List<AbstractBuffEvent>>();
+                        _buffDataByInstanceID[abe.BuffID] = dict;
+                    }
+                    uint buffInstance = 0;
+                    if (abe is AbstractBuffApplyEvent abae)
+                    {
+                        buffInstance = abae.BuffInstance;
+                    }
+                    else if (abe is AbstractBuffStackEvent abse)
+                    {
+                        buffInstance = abse.BuffInstance;
+                    }
+                    else if (abe is BuffRemoveSingleEvent brse)
+                    {
+                        buffInstance = brse.BuffInstance;
+                    }
+                    if (buffInstance > 0)
+                    {
+                        if (dict.TryGetValue(buffInstance, out List<AbstractBuffEvent> list))
+                        {
+                            list.Add(abe);
+                        } 
+                        else
+                        {
+                            dict[buffInstance] = new List<AbstractBuffEvent> { abe };
+                        }
+                    }
+                }
+            }
         }
 
         // getters
@@ -832,6 +874,22 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<AbstractBuffEvent>();
         }
 
+        public IReadOnlyList<AbstractBuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
+        {
+            if (instanceID == 0)
+            {
+                return GetBuffData(buffID);
+            }
+            if (_buffDataByInstanceID.TryGetValue(buffID, out Dictionary<uint, List<AbstractBuffEvent>> dict))
+            {
+                if (dict.TryGetValue(instanceID, out List<AbstractBuffEvent> list))
+                {
+                    return list;
+                }
+            }
+            return new List<AbstractBuffEvent>();
+        }
+
         public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID)
         {
             if (_buffRemoveAllData.TryGetValue(buffID, out List<BuffRemoveAllEvent> res))
@@ -846,7 +904,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="dst"></param> Agent
         /// <returns></returns>
-        public IReadOnlyList<AbstractBuffEvent> GetBuffData(AgentItem dst)
+        public IReadOnlyList<AbstractBuffEvent> GetBuffDataByDst(AgentItem dst)
         {
             if (_buffDataByDst.TryGetValue(dst, out List<AbstractBuffEvent> res))
             {

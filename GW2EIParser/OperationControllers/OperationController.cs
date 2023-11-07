@@ -87,13 +87,16 @@ namespace GW2EIParser
             OpenableFiles.Clear();
         }
 
-        public void Start() { 
+        public void Start()
+        {
+            _stopWatch.Restart();
             _stopWatch.Start(); 
         }
 
         public void Stop() { 
             _stopWatch.Stop();
             Elapsed = ("Elapsed " + _stopWatch.ElapsedMilliseconds + " ms");
+            _stopWatch.Restart();
         }
 
         public void FinalizeStatus(string prefix)
