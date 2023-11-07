@@ -135,10 +135,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 0; i < phaseTimes.Count; i++)
             {
                 (long start, long end) = phaseTimes[i];
-                var phase = new PhaseData(start, end);
+                PhaseData phase;
                 if (i % 2 == 1)
                 {
-                    phase.Name = "Tormenteds " + (i + 1) / 2;
+                    phase = new PhaseData(start, end)
+                    {
+                        Name = "Tormenteds " + (i + 1) / 2
+                    };
                     var ids = new List<int>
                     {
                         (int)ArcDPSEnums.TrashID.TheTormented1,
@@ -149,7 +152,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    phase.Name = "Phase " + (i + 2) / 2;
+                    AbstractBuffEvent phasingBuffLoss = log.CombatData.GetBuffData(DagdaDuringPhase75_50_25).FirstOrDefault(x => x.To == mainTarget.AgentItem && x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
+                    if (phasingBuffLoss != null)
+                    {
+                        start = phasingBuffLoss.Time;
+                    }
+                    phase = new PhaseData(start, end)
+                    {
+                        Name = "Phase " + (i + 2) / 2
+                    };
                 }
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
