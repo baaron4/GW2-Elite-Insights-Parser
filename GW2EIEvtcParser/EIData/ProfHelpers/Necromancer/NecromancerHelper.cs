@@ -229,9 +229,10 @@ namespace GW2EIEvtcParser.EIData
                     SkillModeDescriptor skill;
                     string icon;
                     bool fromDodge = false;
-                    if (markCasts.Count(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant) == 1)
+                    var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                    if (markCastsOnEffect.Count == 1)
                     {
-                        skill = new SkillModeDescriptor(player, Spec.Necromancer, markCasts.FirstOrDefault(x => effect.Time - x.Time > 0 && effect.Time - x.Time < 1000).SkillId);
+                        skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.FirstOrDefault().SkillId);
                         if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
                         {
                             fromDodge = true;
