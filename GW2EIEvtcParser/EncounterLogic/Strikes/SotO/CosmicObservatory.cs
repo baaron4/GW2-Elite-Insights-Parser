@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -28,13 +29,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targetted by Shooting Stars", 0),
                 new PlayerDstBuffApplyMechanic(ResidualAnxiety, "Residual Anxiety", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", 0),
                 new PlayerDstBuffApplyMechanic(CosmicObservatoryLostControlBuff, "Lost Control", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Lst.Ctrl", "Lost Control (10 stacks of Residual Anxiety)", "Lost Control", 0),
-                new PlayerDstBuffApplyMechanic(Revealed, "Revealed", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targetted by Soul Feast", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.Dagda)),
+                new PlayerDstBuffApplyMechanic(Revealed, "Revealed", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targetted by Soul Feast", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
                 new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
-                new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0).UsingChecker((ahde, log) => ahde.HasHit && ahde.To.IsSpecies(ArcDPSEnums.TrashID.SoulFeast)),
+                new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0).UsingChecker((ahde, log) => ahde.HasHit && ahde.To.IsSpecies(TrashID.SoulFeast)),
                 new EnemyCastStartMechanic(ShootingStars, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
                 new EnemyCastStartMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
                 new EnemyCastStartMechanic(new long [] { SpinningNebulaCentral, SpinningNebulaWithTeleport }, "Spinning Nebula", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
-                new EnemyDstBuffApplyMechanic(Exposed31589, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Dagda)),
+                new EnemyDstBuffApplyMechanic(Exposed31589, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Dagda)),
                 new EnemySrcSkillMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", 1000).UsingChecker((ahde, log) => ahde.HealthDamage >= 0 && ahde.To.IsPlayer),
             }
             );
@@ -62,10 +63,37 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
         }
 
+        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            // Special check in CM but we always trust reward events
+            if (fightData.IsCM && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward) == null)
+            {
+                AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
+                if (dagda == null)
+                {
+                    throw new MissingKeyActorsException("Dagda not found");
+                }
+                HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HPPercent <= 1e-6);
+                if (hpUpdate != null)
+                {
+                    AbstractHealthDamageEvent lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
+                    if (fightData.Success)
+                    {
+                        fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
+                    } 
+                    else
+                    {
+                        fightData.SetSuccess(true, lastDamageEvent.Time);
+                    }
+                }
+            }
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dagda));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Dagda not found");
@@ -78,9 +106,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Cast check
             var tormentedIDs = new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.TheTormented1,
-                ArcDPSEnums.TrashID.TheTormented2,
-                ArcDPSEnums.TrashID.TheTormented3,
+                TrashID.TheTormented1,
+                TrashID.TheTormented2,
+                TrashID.TheTormented3,
             };
             var tormentedAgents = new List<AgentItem>();
             foreach (ArcDPSEnums.TrashID tormentedID in tormentedIDs)
@@ -144,9 +172,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     };
                     var ids = new List<int>
                     {
-                        (int)ArcDPSEnums.TrashID.TheTormented1,
-                        (int)ArcDPSEnums.TrashID.TheTormented2,
-                        (int)ArcDPSEnums.TrashID.TheTormented3,
+                        (int)TrashID.TheTormented1,
+                        (int)TrashID.TheTormented2,
+                        (int)TrashID.TheTormented3,
                     };
                     AddTargetsToPhase(phase, ids);
                 }
@@ -174,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curTormented = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.TheTormented1) || target.IsSpecies(ArcDPSEnums.TrashID.TheTormented2) || target.IsSpecies(ArcDPSEnums.TrashID.TheTormented3))
+                if (target.IsSpecies(TrashID.TheTormented1) || target.IsSpecies(TrashID.TheTormented2) || target.IsSpecies(TrashID.TheTormented3))
                 {
                     target.OverrideName(target.Character + " " + curTormented++);
                 }
@@ -185,10 +213,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>()
             {
-                (int)ArcDPSEnums.TargetID.Dagda,
-                (int)ArcDPSEnums.TrashID.TheTormented1,
-                (int)ArcDPSEnums.TrashID.TheTormented2,
-                (int)ArcDPSEnums.TrashID.TheTormented3,
+                (int)TargetID.Dagda,
+                (int)TrashID.TheTormented1,
+                (int)TrashID.TheTormented2,
+                (int)TrashID.TheTormented3,
             };
         }
 
@@ -196,17 +224,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<ArcDPSEnums.TrashID>()
             {
-                ArcDPSEnums.TrashID.SoulFeast
+                TrashID.SoulFeast
             };
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (combatData.GetBuildEvent().Build < ArcDPSEnums.GW2Builds.DagdaNMHPChangedAndCMRelease)
+            if (combatData.GetBuildEvent().Build < GW2Builds.DagdaNMHPChangedAndCMRelease)
             {
                 return FightData.EncounterMode.Normal;
             }
-            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dagda));
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
             if (dagda == null)
             {
                 throw new MissingKeyActorsException("Dagda not found");
