@@ -244,11 +244,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor target)
         {
-            var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
-            var attackTargets = new List<AgentItem>();
-            foreach (AttackTargetEvent c in attackTargetsAgents)
+            var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).ToList();
+            var attackTargets = new HashSet<AgentItem>();
+            foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
             {
                 attackTargets.Add(c.AttackTarget);
+                if (attackTargets.Count == 2)
+                {
+                    break;
+                }
             }
             var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
