@@ -348,17 +348,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return long.MaxValue;
             }).ToList();
             int index = 0;
+            var processedAttackTargets = new HashSet<AgentItem>();
             foreach (CombatItem at in attackTargetEvents)
             {
-                AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
-                var copyEventsFrom = new List<AgentItem>() { dragonVoid };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-                if (!targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || !targetables.Any())
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || !targetables.Any())
                 {
                     continue;
                 }
+                AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
+                var copyEventsFrom = new List<AgentItem>() { dragonVoid };
+                processedAttackTargets.Add(atAgent);
                 var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
                 //

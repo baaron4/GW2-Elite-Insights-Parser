@@ -301,8 +301,9 @@ namespace GW2EIEvtcParser
                 }
             }
             // Copy attack targets
-            var attackTargetAgents = new List<AgentItem>();
+            var attackTargetAgents = new HashSet<AgentItem>();
             var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
+            var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1).ToList();
             foreach (CombatItem c in attackTargets)
             {
                 var cExtra = new CombatItem(c);
@@ -310,7 +311,7 @@ namespace GW2EIEvtcParser
                 cExtra.OverrideDstAgent(to.Agent);
                 combatData.Add(cExtra);
                 AgentItem at = agentData.GetAgent(c.SrcAgent, c.Time);
-                if (combatData.Any(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1 && x.SrcMatchesAgent(at)))
+                if (targetableOns.Any(x => x.SrcMatchesAgent(at)))
                 {
                     attackTargetAgents.Add(at);
                 }

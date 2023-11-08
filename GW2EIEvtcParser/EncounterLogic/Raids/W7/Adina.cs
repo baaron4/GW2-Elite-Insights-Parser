@@ -62,11 +62,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             long first = 0;
             long final = fightData.FightEnd;
             var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
+            var processedAttackTargets = new HashSet<AgentItem>();
             foreach (CombatItem at in attackTargets)
             {
+                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
+                if (processedAttackTargets.Contains(atAgent))
+                {
+                    continue;
+                }
+                processedAttackTargets.Add(atAgent);
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
                 var copyEventsFrom = new List<AgentItem>() { hand };
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
