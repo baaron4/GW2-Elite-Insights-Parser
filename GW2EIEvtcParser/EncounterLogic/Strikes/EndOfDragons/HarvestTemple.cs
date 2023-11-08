@@ -337,23 +337,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            int index = 0;
+            var targetableEvents = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToDictionary(x => x.Key, x => x.Where(y => y.Time > 2000).ToList());
             attackTargetEvents = attackTargetEvents.OrderBy(x =>
             {
                 AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
-                // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
-                var targetables = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable && y.SrcMatchesAgent(atAgent) && y.Time > 2000).ToList();
-                return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+                if (targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables))
+                {
+                    return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+                }
+                return long.MaxValue;
             }).ToList();
+            int index = 0;
             foreach (CombatItem at in attackTargetEvents)
             {
                 AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
                 var copyEventsFrom = new List<AgentItem>() { dragonVoid };
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
-                var targetables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent) && x.Time > 2000).ToList();
                 // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-                if (!targetables.Any())
+                if (!targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || !targetables.Any())
                 {
                     continue;
                 }
