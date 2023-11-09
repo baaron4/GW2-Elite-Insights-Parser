@@ -92,37 +92,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
-            {
-                AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-                if (desmina == null)
-                {
-                    throw new MissingKeyActorsException("Desmina not found");
-                }
-                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
-                if (ooc != null)
-                {
-                    long time = 0;
-                    foreach (NPC mob in TrashMobs)
-                    {
-                        time = Math.Max(mob.LastAware, time);
-                    }
-                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
-                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
-                    {
-                        if (AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
-                        {
-                            fightData.SetSuccess(true, time);
-                        }
-                    }
-                }
-            }
-        }
-
-
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
