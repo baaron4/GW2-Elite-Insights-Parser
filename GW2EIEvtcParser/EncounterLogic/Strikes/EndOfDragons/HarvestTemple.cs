@@ -389,7 +389,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 // Regenerating back to full HP
-                                if (evt.DstAgent > lastHPUpdate && evt.DstAgent > 9900)
+                                // use mid life check to allow hp going back up to 100% around first aware
+                                if (evt.DstAgent > lastHPUpdate && evt.DstAgent > 9900 && evt.Time > (to.LastAware + to.FirstAware) / 2)
                                 {
                                     return false;
                                 }
@@ -844,7 +845,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 lastEnd = (int)(phaseTarget.LastAware + 6000);
                                 break;
                             case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
-                                if (phaseTarget.GetCurrentHealthPercent(log, target.FirstAware) > 50)
+                                if (phaseTarget.GetCurrentHealthPercent(log, Math.Max(target.FirstAware, phaseTarget.FirstAware + 500)) > 50)
                                 {
                                     // Soo-Won 1
                                     AbstractSingleActor killableHeart = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate));
