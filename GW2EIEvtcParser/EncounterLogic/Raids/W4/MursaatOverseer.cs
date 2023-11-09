@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -142,6 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
             {
+                skillData.NotAccurate.Add(ClaimSAK);
                 foreach (EffectEvent effect in claims)
                 {
                     BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
@@ -154,6 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
             {
+                skillData.NotAccurate.Add(DispelSAK);
                 foreach (EffectEvent effect in dispels)
                 {
                     BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
