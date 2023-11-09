@@ -320,11 +320,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddTetherDecorations(log, target, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
 
                     // Stun icon
-                    IEnumerable<Segment> stun = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                    foreach (Segment s in stun)
-                    {
-                        replay.AddOverheadIcon(s, target, BuffImages.Stun);
-                    }
+                    IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                    replay.AddOverheadIcons(stuns, target, BuffImages.Stun);
 
                     // Spawn animation
                     Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
