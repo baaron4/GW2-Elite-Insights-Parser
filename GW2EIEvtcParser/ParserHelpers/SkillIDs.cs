@@ -3700,6 +3700,7 @@
         public const long RelicOfCerusHit = 71252;
         public const long EmpoweredDespairEmbodiment = 71276;
         public const long PostObliterateNew = 71308;
+        public const long RelicOfKarakosaHealing = 71356;
     }
 
 }

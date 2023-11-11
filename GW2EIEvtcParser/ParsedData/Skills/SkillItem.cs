@@ -315,6 +315,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheDragonhunterTargetBuff, BuffImages.RelicOfTheDragonhunter },
             { RelicOfPeithaTargetBuff, BuffImages.RelicOfPeitha },
             { RelicOfFireworksBuffLoss, "https://i.imgur.com/o9suJSt.png" },
+            { RelicOfKarakosaHealing, "https://wiki.guildwars2.com/images/6/6e/Relic_of_Karakosa.png" },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Escort
