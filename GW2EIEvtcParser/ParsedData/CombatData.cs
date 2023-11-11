@@ -420,6 +420,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
                 var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                var dictExtensions = pair.Value.OfType<BuffExtensionEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
                 var extensions = pair.Value.OfType<BuffExtensionEvent>().ToList();
                 foreach (BuffExtensionEvent extensionEvent in extensions)
                 {
@@ -435,6 +436,15 @@ namespace GW2EIEvtcParser.ParsedData
                                 {
                                     sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID));
                                 }
+                                if (dictExtensions.TryGetValue(extensionEvent.BuffInstance, out List<BuffExtensionEvent> extensionsForBuffInstance))
+                                {
+                                    BuffExtensionEvent prevExt = extensionsForBuffInstance.LastOrDefault(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x != extensionEvent && x.BuffID == extensionEvent.BuffID);
+                                    if (prevExt != null)
+                                    {
+                                        sequence.Add(prevExt);
+                                    }
+                                }
+                                sequence = sequence.OrderBy(x => x.Time).ToList();
                                 extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                             }
                         }

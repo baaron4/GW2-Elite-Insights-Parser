@@ -9,13 +9,17 @@ namespace GW2EIEvtcParser.ParsedData
     {
         public long OldDuration => NewDuration - ExtendedDuration;
         public long ExtendedDuration { get; protected set; }
+        private long OriginalExtendedDuration { get; set; }
         public long NewDuration { get; protected set; }
+        private long OriginalNewDuration { get; set; }
         private bool _sourceFinderRan = false;
 
         internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             NewDuration = evtcItem.OverstackValue;
+            OriginalNewDuration = NewDuration;
             ExtendedDuration = Math.Max(evtcItem.Value, 0);
+            OriginalExtendedDuration = ExtendedDuration;
         }
 
         internal override void TryFindSrc(ParsedEvtcLog log)
@@ -23,7 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (!_sourceFinderRan && By == ParserHelper._unknownAgent)
             {
                 _sourceFinderRan = true;
-                if (ExtendedDuration > 0)
+                if (ExtendedDuration > 1)
                 {
                     By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance);
                 }
@@ -34,12 +38,14 @@ namespace GW2EIEvtcParser.ParsedData
         {
             long activeTime = 0;
             long previousTime = long.MinValue;
+            long originalStackDuration = 0;
             for (int i = 0; i < events.Count; i++) {
                 AbstractBuffEvent cur = events[i];
                 if (i == 0)
                 {
                     if (cur is BuffApplyEvent bae)
                     {
+                        originalStackDuration = bae.OriginalAppliedDuration;
                         if (bae.Initial)
                         {
                             activeTime += bae.OriginalAppliedDuration - bae.AppliedDuration;
@@ -54,12 +60,27 @@ namespace GW2EIEvtcParser.ParsedData
                     if (cur is BuffStackActiveEvent)
                     {
                         // means stack was not active between previous and cur
+                        activeTime = 0;
                     } 
-                    else if (cur is BuffStackResetEvent)
+                    else if (cur is BuffStackResetEvent bsre)
                     {
                         // means stack was active between previous and cur
                         activeTime += cur.Time - previousTime;
-                    } 
+                        // Total duration gets reset to given value
+                        originalStackDuration = bsre.ResetToDuration;
+                    }
+                    else if (cur is BuffExtensionEvent bee)
+                    {
+                        // This is a stack reset in disguise
+                        if (bee.OriginalNewDuration <= originalStackDuration) 
+                        {
+                            activeTime = 0;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
                     else
                     {
                         throw new InvalidOperationException("OffsetNewDuration elements after the first should either be StackActive or StackReset events");
@@ -67,7 +88,12 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 previousTime = cur.Time;
             }
-            activeTime += Time - previousTime; 
+            activeTime += Time - previousTime;
+            if (NewDuration <= originalStackDuration)
+            {
+                ExtendedDuration = activeTime;
+                return;
+            }
             NewDuration -= activeTime;
             if (evtcVersion < ArcDPSEnums.ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion >= ArcDPSEnums.ArcDPSBuilds.BuffExtensionBroken)
             {
@@ -77,7 +103,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            if (ExtendedDuration <= 0)
+            if (ExtendedDuration <= 1)
             { 
                 // no need to bother with 0 extensions
                 return;
