@@ -66,8 +66,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            // Special check in CM but we always trust reward events
-            if (fightData.IsCM && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward) == null)
+            // Special check since CM release, normal mode broke too, but we always trust reward events
+            if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward) == null)
             {
                 AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
                 if (dagda == null)
