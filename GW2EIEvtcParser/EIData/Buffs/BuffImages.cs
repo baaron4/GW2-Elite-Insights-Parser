@@ -125,7 +125,7 @@
 
         #region Gear
         // Sigils
-
+        internal const string SuperiorSigilOfImpact = "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png";
         internal const string SuperiorSigilOfConcentration = "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png";
         internal const string MinorSigilOfCorruption = "https://wiki.guildwars2.com/images/5/50/Minor_Sigil_of_Corruption.png";
         internal const string MajorSigilOfCorruption = "https://wiki.guildwars2.com/images/d/dd/Major_Sigil_of_Corruption.png";
@@ -150,6 +150,15 @@
         // Runes
         internal const string SuperiorRuneOfTheMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
         internal const string SuperiorRuneOfTheCavalier = "https://wiki.guildwars2.com/images/9/94/Superior_Rune_of_the_Cavalier.png";
+        internal const string SuperiorRuneOfTheScholar = "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png";
+        internal const string SuperiorRuneOfTheEagle = "https://wiki.guildwars2.com/images/9/9b/Superior_Rune_of_the_Eagle.png";
+        internal const string SuperiorRuneOfTheThief = "https://wiki.guildwars2.com/images/9/96/Superior_Rune_of_the_Thief.png";
+        internal const string SuperiorRuneOfTheFlameLegion = "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png";
+        internal const string SuperiorRuneOfTheSpellbreaker = "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png";
+        internal const string SuperiorRuneOfTheIce = "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png";
+        internal const string SuperiorRuneOfStrength = "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png";
+        internal const string SuperiorRuneOfFire = "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png";
+        internal const string SuperiorRuneOfRage = "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png";
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
         internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
         internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
@@ -176,6 +185,7 @@
         internal const string RelicOfPeitha = "https://wiki.guildwars2.com/images/4/4f/Relic_of_Peitha.png";
         internal const string RelicOfTheAstralWard = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Astral_Ward.png";
         internal const string RelicOfVass = "https://wiki.guildwars2.com/images/f/f2/Relic_of_Vass.png";
+        internal const string RelicOfNourys = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
         #endregion Gear
 
         #region Fractal

@@ -3701,6 +3701,10 @@
         public const long EmpoweredDespairEmbodiment = 71276;
         public const long PostObliterateNew = 71308;
         public const long RelicOfKarakosaHealing = 71356;
+        public const long RelicOfNayosHealing = 71382;
+        public const long NouryssHungerDamageBuff = 71431;
+        public const long NouryssHungerStacksBuff = 71711;
+        public const long NouryssHungerStartGainingStacksBuff = 71723;
     }
 
 }

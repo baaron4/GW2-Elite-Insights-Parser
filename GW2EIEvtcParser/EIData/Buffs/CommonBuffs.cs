@@ -195,6 +195,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Relic of Mabon", RelicOfMabon, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfMabon),
             new Buff("Relic of Peitha", RelicOfPeithaTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, BuffImages.RelicOfPeitha),
             new Buff("Relic of Vass", RelicOfVass, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, BuffImages.RelicOfVass),
+            new Buff("Nourys's Hunger (Active)", NouryssHungerStartGainingStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.RelicOfNourys),
+            new Buff("Nourys's Hunger (Stacks)", NouryssHungerStacksBuff, Source.Gear,  BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, BuffImages.RelicOfNourys),
+            new Buff("Nourys's Hunger (Damage Buff)", NouryssHungerDamageBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfNourys),
         };
 
     }
