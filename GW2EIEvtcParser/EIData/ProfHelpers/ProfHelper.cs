@@ -78,6 +78,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
                 .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing),
+            new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
             new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
