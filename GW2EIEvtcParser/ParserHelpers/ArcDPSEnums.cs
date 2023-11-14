@@ -882,10 +882,13 @@ namespace GW2EIEvtcParser
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
             // Cosmic Observatory
-            TheTormented1 = 25829,
-            TheTormented2 = 26000,
-            TheTormented3 = 26016,
+            TheTormented = 26016,
+            VeteranTheTormented = 25829,
+            EliteTheTormented = 26000,
+            ChampionTheTormented = 25623,
+            TormentedPhantom = 25604,
             SoulFeast = 26069,
+            Zojja = 26011,
             // Temple of Febe
             EmbodimentOfGluttony = 25677,
             EmbodimentOfRage = 25686,

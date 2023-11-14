@@ -1581,6 +1581,7 @@
         internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
         internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
         internal const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
+        internal const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
         #endregion Misc
     }
 }

@@ -356,6 +356,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashJadeMawTentacle = "https://i.imgur.com/SfB9gJG.png";
         private const string TrashInspectorEllenKiel = "https://i.imgur.com/TyYmSnn.png";
         private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
+        private const string TrashTheTormented = "https://i.imgur.com/kEytVae.png";
+        private const string TrashSoulFeast = "https://i.imgur.com/iNp5Rnx.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -1123,9 +1125,11 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented1, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented2, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented3, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.VeteranTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.EliteTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.ChampionTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.SoulFeast, TrashSoulFeast },
         };
 
         /// <summary>

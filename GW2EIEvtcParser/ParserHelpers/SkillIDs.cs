@@ -3612,6 +3612,7 @@
         public const long PoolOfDespair1 = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGaze = 69814;
+        public const long DagdaDemonicAuraTimer = 69827;
         public const long EnviousGazeDoubleBeam2 = 69829;
         public const long RelicOfTheNightmare = 69849;
         public const long RelicOfFireworks = 69855;
@@ -3623,6 +3624,7 @@
         public const long RelicOfMabon = 69992;
         public const long ShootingStarsTargetBuff = 70026;
         public const long InsatiableHunger4 = 70031;
+        public const long ImmuneToDamage = 70037;
         public const long RelicOfAkeem = 70044;
         public const long CrushingRegretEmbodiment = 70084;
         public const long SkyscaleFireballDamage = 70087;
@@ -3630,6 +3632,7 @@
         public const long SpinningNebulaWithTeleport = 70103; // The attack when Dagda teleports off the center
         public const long EmpoweredRegretCerus = 70123;
         public const long EmpoweredRageEmbodiment = 70181;
+        public const long DagdaSharedDestruction = 70182;
         public const long RelicOfTheAfflicted = 70223;
         public const long CryOfRageSmall = 70235;
         public const long MaliciousIntentTargetBuff = 70245;
@@ -3666,6 +3669,7 @@
         public const long PoolOfDespair2 = 70659;
         public const long CryOfRageLarge = 70668;
         public const long EmpoweredGluttonyEmbodiment = 70687;
+        public const long SummonedPhantom = 70724;
         public const long RelicOfTheFlock = 70765;
         public const long RelicOfTheThief = 70767;
         public const long TornadoOfTorment = 70781;
@@ -3693,6 +3697,7 @@
         public const long RelicOfTheAstralWard = 71134;
         public const long RelicOfDagdaBuff = 71139;
         public const long CrushingRegretCerus = 71142;
+        public const long DagdaDemonicAura = 71161;
         public const long RelicOfTheCitadel = 71166;
         public const long RelicOfDagdaHit = 71202;
         public const long RelicOfTheFirebrand = 71217;
@@ -3701,6 +3706,7 @@
         public const long EmpoweredDespairEmbodiment = 71276;
         public const long PostObliterateNew = 71308;
         public const long RelicOfKarakosaHealing = 71356;
+        public const long PlanetaryWeight = 71373;
         public const long RelicOfNayosHealing = 71382;
         public const long NouryssHungerDamageBuff = 71431;
         public const long NouryssHungerStacksBuff = 71711;
