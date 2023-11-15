@@ -242,6 +242,35 @@ namespace GW2EIEvtcParser.ParsedData
             { DreadVisageAspectSkill, "Dead Visage (Aspect)" },
             { RendingStormSkill, "Rending Storm (Axe)" },
             { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
+            // World vs World
+            // - Arrow Cart
+            { DeployArrowCart, "Deploy Arrow Cart" },
+            { DeploySuperiorArrowCart, "Deploy Superior Arrow Cart" },
+            { DeployGuildArrowCart, "Deploy Guild Arrow Cart" },
+            // - Ballista
+            { DeployBallista, "Deploy Ballista" },
+            { DeploySuperiorBallista, "Deploy Superior Ballista" },
+            { DeployGuildBallista, "Deploy Guild Ballista" },
+            // - Catapult
+            { DeployCatapult, "Deploy Catapult" },
+            { DeploySuperiorCatapult, "Deploy Superior Catapult" },
+            { DeployGuildCatapult, "Deploy Guild Catapult" },
+            // - Flame Ram
+            { DeployFlameRam, "Deploy Flame Ram" },
+            { DeploySuperiorFlameRam, "Deploy Superior Flame Ram" },
+            { DeployGuildFlameRam, "Deploy Guild Flame Ram" },
+            // - Golem
+            { DeployAlphaSiegeSuit, "Deploy Alpha Siege Golem" },
+            { DeployOmegaSiegeSuit, "Deploy Omega Siege Golem" },
+            { DeployGuildSiegeSuit, "Deploy Guild Siege Golem" },
+            // - Shield Generator
+            { DeployShieldGenerator, "Deploy Shield Generator" },
+            { DeploySuperiorShieldGenerator, "Deploy Superior Shield Generator" },
+            { DeployGuildShieldGenerator, "Deploy Guild Shield Generator" },
+            // - Trebuchet
+            { DeployTrebuchet, "Deploy Trebuchet" },
+            { DeploySuperiorTrebuchet, "Deploy Superior Trebuchet" },
+            { DeployGuildTrebuchet, "Deploy Guild Trebuchet" },
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
@@ -323,6 +352,7 @@ namespace GW2EIEvtcParser.ParsedData
             { HaresSpeedSkill, "https://wiki.guildwars2.com/images/0/05/Hare%27s_Speed.png" },
             // Mounts
             { TailSpin, "https://wiki.guildwars2.com/images/f/f2/Tail_Spin.png" },
+            { Lance, "https://wiki.guildwars2.com/images/f/f8/Lance.png" },
             // Slothasor
             { Eat, "https://wiki.guildwars2.com/images/7/7b/Eat.png" },
             // Eater of Souls
@@ -453,6 +483,7 @@ namespace GW2EIEvtcParser.ParsedData
             { LesserSignetOfVampirism, BuffImages.SignetOfVampirism },
             { SignetOfVampirismHeal, BuffImages.SignetOfVampirism },
             { MarkOfBloodOrChillblains, "https://i.imgur.com/oMv0Emd.png" },
+            { VampiricStrikes, BuffImages.VampiricPresence },
             // Ranger
             { WindborneNotes, "https://wiki.guildwars2.com/images/8/84/Windborne_Notes.png" },
             { InvigoratingBond, "https://wiki.guildwars2.com/images/0/0d/Invigorating_Bond.png" },
@@ -538,6 +569,7 @@ namespace GW2EIEvtcParser.ParsedData
             { GenerousAbundanceCentaur, "https://wiki.guildwars2.com/images/1/1a/Generous_Abundance.png" },
             { GenerousAbundanceOther, "https://wiki.guildwars2.com/images/1/1a/Generous_Abundance.png" },
             { GlaringResolve, "https://wiki.guildwars2.com/images/5/55/Fierce_Infusion.png" },
+            { ElevatedCompassion, "https://wiki.guildwars2.com/images/f/f4/Elevated_Compassion.png" },
             // Thief
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
             { DetonatePlasma, "https://wiki.guildwars2.com/images/3/3d/Detonate_Plasma.png" },
@@ -631,7 +663,7 @@ namespace GW2EIEvtcParser.ParsedData
             // - Xera
             { InterventionSAK, "https://wiki.guildwars2.com/images/3/3f/Intervention.png" },
             // - Cairn
-            { CelestialDashSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            { CelestialDashSAK, BuffImages.CelestialDash },
             // - Mursaar Overseer
             { ClaimSAK, BuffImages.Claim },
             { DispelSAK, BuffImages.Dispel },
@@ -657,9 +689,102 @@ namespace GW2EIEvtcParser.ParsedData
             // - Dadga (Cosmic Observatory)
             { PurifyingLight, "https://wiki.guildwars2.com/images/1/1e/Purifying_Light_%28Dagda%29.png" },
             // - Artsariiv
-            { NovaLaunchSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            { NovaLaunchSAK, BuffImages.CelestialDash },
             // - Arkk
-            { HypernovaLaunchSAK, "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png" },
+            { HypernovaLaunchSAK, BuffImages.CelestialDash },
+            // World vs World
+            // - Mortar
+            { ConcussionBarrageDamage, "https://wiki.guildwars2.com/images/e/e0/Fire_Incendiary_Shells.png" },
+            { ConcussionBarrageSkill, "https://wiki.guildwars2.com/images/e/e0/Fire_Incendiary_Shells.png" },
+            { FireExplosiveShellsDamage, "https://wiki.guildwars2.com/images/2/2a/Fire_Exploding_Shells.png" },
+            { FireExplosiveShellsSkill, "https://wiki.guildwars2.com/images/2/2a/Fire_Exploding_Shells.png" },
+            // - Arrow Cart
+            { DeployArrowCart, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorArrowCart, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildArrowCart, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Ballista
+            { DeployBallista, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorBallista, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildBallista, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Catapult
+            { DeployCatapult, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorCatapult, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildCatapult, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Flame Ram
+            { DeployFlameRam, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorFlameRam, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildFlameRam, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Golem
+            { DeployAlphaSiegeSuit, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployOmegaSiegeSuit, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildSiegeSuit, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { PunchSiegeGolem, "https://wiki.guildwars2.com/images/8/8f/Punch.png" },
+            { WhirlingAssaultSiegeGolem, "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png" },
+            { HealingShieldBubble, "https://wiki.guildwars2.com/images/e/e3/Shield_Bubble.png" },
+            { PullSiegeGolem, "https://wiki.guildwars2.com/images/4/41/Pull_%28Siege_Golem%29.png" },
+            { EjectSiegeGolem, "https://wiki.guildwars2.com/images/b/ba/Eject.png" },
+            // - Shield Generator
+            { DeployShieldGenerator, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorShieldGenerator, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildShieldGenerator, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Trebuchet
+            { DeployTrebuchet, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeploySuperiorTrebuchet, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            { DeployGuildTrebuchet, "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png" },
+            // - Dragon Banner
+            { DragonsMight, "https://wiki.guildwars2.com/images/9/9b/Dragon%27s_Might.png" },
+            { DragonTalon1, "https://wiki.guildwars2.com/images/e/e9/Dragon_Talon.png" },
+            { DragonTalon2, "https://wiki.guildwars2.com/images/e/e9/Dragon_Talon.png" },
+            { DragonTalon3, "https://wiki.guildwars2.com/images/e/e9/Dragon_Talon.png" },
+            { DragonBlast, "https://wiki.guildwars2.com/images/3/3e/Dragon_Blast.png" },
+            { DragonsWings, "https://wiki.guildwars2.com/images/4/45/Dragon%27s_Wings.png" },
+            { DragonsBreath, "https://wiki.guildwars2.com/images/2/29/Dragon%27s_Breath_%28skill%29.png" },
+            // Stomp Finishers
+            { Finisher, "https://wiki.guildwars2.com/images/0/00/Basic_Finisher.png" },
+            { RabbitRankFinisher, "https://wiki.guildwars2.com/images/d/d5/Rabbit_Rank_Finisher.png" },
+            { DeerRankFinisher, "https://wiki.guildwars2.com/images/5/58/Deer_Rank_Finisher.png" },
+            { DolyakRankFinisher, "https://wiki.guildwars2.com/images/b/bd/Dolyak_Rank_Finisher.png" },
+            { WolfRankFinisher, "https://wiki.guildwars2.com/images/b/b4/Wolf_Rank_Finisher.png" },
+            { TigerRankFinisher, "https://wiki.guildwars2.com/images/9/9b/Tiger_Rank_Finisher.png" },
+            { BearRankFinisher, "https://wiki.guildwars2.com/images/0/08/Bear_Rank_Finisher.png" },
+            { SharkRankFinisher, "https://wiki.guildwars2.com/images/1/18/Shark_Rank_Finisher.png" },
+            { PhoenixRankFinisher, "https://wiki.guildwars2.com/images/c/cf/Phoenix_Rank_Finisher.png" },
+            { DragonRankFinisher, "https://wiki.guildwars2.com/images/d/d0/Dragon_Rank_Finisher.png" },
+            { MordremRabbitFinisher, "https://wiki.guildwars2.com/images/e/e7/Mordrem_Rabbit_Finisher.png" },
+            { MordremDeerFinisher, "https://wiki.guildwars2.com/images/c/c1/Mordrem_Deer_Finisher.png" },
+            { MordremDolyakFinisher, "https://wiki.guildwars2.com/images/7/7a/Mordrem_Dolyak_Finisher.png" },
+            { MordremWolfFinisher, "https://wiki.guildwars2.com/images/1/13/Mordrem_Wolf_Finisher.png" },
+            { MordremTigerFinisher, "https://wiki.guildwars2.com/images/d/d2/Mordrem_Tiger_Finisher.png" },
+            { MordremBearFinisher, "https://wiki.guildwars2.com/images/2/21/Mordrem_Bear_Finisher.png" },
+            { MordremSharkFinisher, "https://wiki.guildwars2.com/images/d/d0/Mordrem_Shark_Finisher.png" },
+            { MordremPhoenixFinisher, "https://wiki.guildwars2.com/images/c/cf/Mordrem_Phoenix_Finisher.png" },
+            { MordremDragonFinisher, "https://wiki.guildwars2.com/images/5/50/Mordrem_Dragon_Finisher.png" },
+            { AscalonianLeaderFinisher, "https://wiki.guildwars2.com/images/f/fc/Permanent_Ascalonian-Leader_Finisher.png" },
+            { CuteQuagganFinisher, "https://wiki.guildwars2.com/images/8/83/Cute-Quaggan_Finisher.png" },
+            { BirthdayFinisher, "https://wiki.guildwars2.com/images/9/95/Birthday_Finisher.png" },
+            { ChoyaFinisher, "https://wiki.guildwars2.com/images/2/23/Choya_Finisher.png" },
+            { CowFinisher, "https://wiki.guildwars2.com/images/c/cc/Cow_Finisher.png" },
+            { GiftFinisher, "https://wiki.guildwars2.com/images/2/26/Gift_Finisher.png" },
+            { GolemPummelerFinisher, "https://wiki.guildwars2.com/images/e/e3/Golem_Pummeler_Finisher.png" },
+            { GraveFinisher, "https://wiki.guildwars2.com/images/7/7d/Grave_Finisher.png" },
+            { GreatJungleWurmFinisher, "https://wiki.guildwars2.com/images/0/01/Great_Jungle_Wurm_Finisher.png" },
+            { GuildFlagFinisher, "https://wiki.guildwars2.com/images/e/e6/Guild_Flag_Finisher.png" },
+            { GuildShieldFinisher, "https://wiki.guildwars2.com/images/a/a1/Guild_Shield_Finisher.png" },
+            { HiddenMinstrelFinisher, "https://wiki.guildwars2.com/images/a/a3/Hidden_Minstrel_Finisher.png" },
+            { LeyLineFinisher, "https://wiki.guildwars2.com/images/7/73/Ley_Line_Finisher.png" },
+            { LlamaFinisher, "https://wiki.guildwars2.com/images/3/3a/Llama_Finisher.png" },
+            { MadKingFinisher, "https://wiki.guildwars2.com/images/e/e6/Mad_King_Finisher.png" },
+            { MysticalDragonFinisher, "https://wiki.guildwars2.com/images/6/6d/Mystical_Dragon_Finisher.png" },
+            { RainbowUnicornFinisher, "https://wiki.guildwars2.com/images/6/69/Rainbow_Unicorn_Finisher.png" },
+            { RevenantFinisher, "https://wiki.guildwars2.com/images/1/1c/Revenant_Finisher.png" },
+            { SandsharkFinisher, "https://wiki.guildwars2.com/images/2/29/Sandshark_Finisher.png" },
+            { ScarecrowFinisher, "https://wiki.guildwars2.com/images/3/39/Scarecrow_Finisher.png" },
+            { SnowGlobeFinisher, "https://wiki.guildwars2.com/images/4/47/Snow_Globe_Finisher.png" },
+            { SnowmanFinisher, "https://wiki.guildwars2.com/images/8/8c/Snowman_Finisher.png" },
+            { SuperExplosiveFinisher, "https://wiki.guildwars2.com/images/8/8c/Super_Explosive_Finisher.png" },
+            { TwistedWatchworkFinisher, "https://wiki.guildwars2.com/images/0/02/Twisted_Watchwork_Finisher.png" },
+            { WhumpTheGiantFinisher, "https://wiki.guildwars2.com/images/a/ab/Whump_the_Giant_Finisher.png" },
+            { WizardLightningFinisher, "https://wiki.guildwars2.com/images/d/d1/Wizard_Lightning_Finisher.png" },
         };
 
         private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
