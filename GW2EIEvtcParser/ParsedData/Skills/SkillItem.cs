@@ -70,6 +70,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter" },
             { RelicOfPeithaTargetBuff, "Relic of Peitha" },
             { RelicOfFireworksBuffLoss, "Relic of Fireworks (Buff Loss)" },
+            { MabonsStrength, "Relic of Mabon" },
+            { NouryssHungerDamageBuff, "Relic of Nourys" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -343,6 +345,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfIsgarrenTargetBuff, BuffImages.RelicOfIsgarren },
             { RelicOfTheDragonhunterTargetBuff, BuffImages.RelicOfTheDragonhunter },
             { RelicOfPeithaTargetBuff, BuffImages.RelicOfPeitha },
+            { MabonsStrength, BuffImages.RelicOfMabon },
+            { NouryssHungerDamageBuff, BuffImages.RelicOfNourys },
             { RelicOfFireworksBuffLoss, "https://i.imgur.com/o9suJSt.png" },
             { RelicOfKarakosaHealing, "https://wiki.guildwars2.com/images/6/6e/Relic_of_Karakosa.png" },
             { RelicOfNayosHealing, "https://wiki.guildwars2.com/images/e/e4/Relic_of_Nayos.png" },
