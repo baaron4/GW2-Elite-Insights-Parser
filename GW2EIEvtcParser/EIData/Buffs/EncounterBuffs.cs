@@ -570,6 +570,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Soul Feast Something", SoulFeastSomethingBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Lost Control (Cosmic Observatory)", CosmicObservatoryLostControlBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Unknown),
             new Buff("Shooting Stars Target", ShootingStarsTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+            new Buff("Demonic Aura", DagdaDemonicAura, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ChampionOfTheCrown),
+            new Buff("Demonic Aura Timer", DagdaDemonicAuraTimer, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Planetary Weight", PlanetaryWeight, Source.FightSpecific, BuffStackType.Stacking, 6, BuffClassification.Other, BuffImages.ChallengeOfTheAncients),
+            new Buff("Summoned Phantom", SummonedPhantom, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Immune to Damage", ImmuneToDamage, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),

@@ -30,6 +30,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
+            new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
             new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -40,6 +41,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(RelicOfVass, RelicOfVass)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(NouryssHungerDamageBuff, NouryssHungerDamageBuff)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MabonsStrength, MabonsStrength)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
             //{
@@ -77,6 +82,12 @@ namespace GW2EIEvtcParser.EIData
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
                 .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTBarrierCastFinder(RelicOfTheFlock, RelicOfTheFlock)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),

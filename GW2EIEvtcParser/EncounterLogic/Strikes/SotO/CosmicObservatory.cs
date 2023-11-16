@@ -30,8 +30,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(ResidualAnxiety, "Residual Anxiety", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", 0),
                 new PlayerDstBuffApplyMechanic(CosmicObservatoryLostControlBuff, "Lost Control", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Lst.Ctrl", "Lost Control (10 stacks of Residual Anxiety)", "Lost Control", 0),
                 new PlayerDstBuffApplyMechanic(Revealed, "Revealed", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targetted by Soul Feast", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
+                new PlayerDstBuffApplyMechanic(DagdaSharedDestruction, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Shar.Des.T", "Targetted by Shared Destruction (Greens)", "Shared Destruction Target (Green)", 0),
+                new PlayerDstBuffApplyMechanic(new long [] { TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 }, "Target Order", new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
                 new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
                 new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0).UsingChecker((ahde, log) => ahde.HasHit && ahde.To.IsSpecies(TrashID.SoulFeast)),
+                new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0).UsingChecker((ahde, log) => ahde.HasHit && ahde.To.IsSpecies(TargetID.Dagda)).UsingEnable(x => x.FightData.IsCM),
                 new EnemyCastStartMechanic(ShootingStars, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
                 new EnemyCastStartMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
                 new EnemyCastStartMechanic(new long [] { SpinningNebulaCentral, SpinningNebulaWithTeleport }, "Spinning Nebula", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
@@ -55,12 +58,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
+
+            // Lost Control
             IEnumerable<Segment> lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
 
             // Shooting Stars Target Overhead
             var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             replay.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
+
+            // Target Order (CM)
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
+            replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -104,14 +116,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Cast check
-            var tormentedIDs = new List<ArcDPSEnums.TrashID>()
+            var tormentedIDs = new List<TrashID>()
             {
-                TrashID.TheTormented1,
-                TrashID.TheTormented2,
-                TrashID.TheTormented3,
+                TrashID.TheTormented,
+                TrashID.VeteranTheTormented,
+                TrashID.EliteTheTormented,
+                TrashID.ChampionTheTormented,
             };
             var tormentedAgents = new List<AgentItem>();
-            foreach (ArcDPSEnums.TrashID tormentedID in tormentedIDs)
+            foreach (TrashID tormentedID in tormentedIDs)
             {
                 tormentedAgents.AddRange(log.AgentData.GetNPCsByID(tormentedID));
             }
@@ -172,9 +185,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     };
                     var ids = new List<int>
                     {
-                        (int)TrashID.TheTormented1,
-                        (int)TrashID.TheTormented2,
-                        (int)TrashID.TheTormented3,
+                        (int)TrashID.TheTormented,
+                        (int)TrashID.VeteranTheTormented,
+                        (int)TrashID.EliteTheTormented,
+                        (int)TrashID.ChampionTheTormented,
                     };
                     AddTargetsToPhase(phase, ids);
                 }
@@ -200,11 +214,27 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             int curTormented = 1;
+            int curVeteranTormented = 1;
+            int curEliteTormented = 1;
+            int curChampionTormented = 1;
             foreach (AbstractSingleActor target in Targets)
             {
-                if (target.IsSpecies(TrashID.TheTormented1) || target.IsSpecies(TrashID.TheTormented2) || target.IsSpecies(TrashID.TheTormented3))
+                switch (target.ID)
                 {
-                    target.OverrideName(target.Character + " " + curTormented++);
+                    case (int)TrashID.TheTormented:
+                        target.OverrideName(target.Character + " " + curTormented++);
+                        break;
+                    case (int)TrashID.VeteranTheTormented:
+                        target.OverrideName("Veteran " + target.Character + " " + curVeteranTormented++);
+                        break;
+                    case (int)TrashID.EliteTheTormented:
+                        target.OverrideName("Elite " + target.Character + " " + curEliteTormented++);
+                        break;
+                    case (int)TrashID.ChampionTheTormented:
+                        target.OverrideName("Champion " + target.Character + " " + curChampionTormented++);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -214,17 +244,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>()
             {
                 (int)TargetID.Dagda,
-                (int)TrashID.TheTormented1,
-                (int)TrashID.TheTormented2,
-                (int)TrashID.TheTormented3,
+                (int)TrashID.TheTormented,
+                (int)TrashID.VeteranTheTormented,
+                (int)TrashID.EliteTheTormented,
+                (int)TrashID.ChampionTheTormented,
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>()
+            return new List<TrashID>()
             {
-                TrashID.SoulFeast
+                TrashID.SoulFeast,
+                TrashID.TormentedPhantom,
             };
         }
 
