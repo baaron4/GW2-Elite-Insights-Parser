@@ -10,11 +10,14 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class SoullessHorror : HallOfChains
     {
+        private static readonly Point3D ChestOfDesminaPosition = new Point3D(-9349.45f, 258.757f, -807.954f);
         public SoullessHorror(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -39,7 +42,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             });
             Extension = "sh";
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.ChestGadget;
+            ChestID = ArcDPSEnums.ChestID.ChestOfDesmina;
             Icon = EncounterIconSoullessHorror;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
@@ -94,8 +98,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffData(Determined895).Where(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
-                    fightData.SetSuccess(true, buffOnDeath.Time);
+                    if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
+                    {
+                        fightData.SetSuccess(true, buffOnDeath.Time);
+                    }
                 }
+            }
+        }
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            FindChestGadget(ChestID, agentData, combatData, ChestOfDesminaPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            ComputeFightTargets(agentData, combatData, extensions);
+            // discard hp update events after determined apply
+            AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
+            if (soullessHorror == null)
+            {
+                throw new MissingKeyActorsException("Soulless Horror not found");
+            }
+            CombatItem determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
+            if (determined895Apply != null)
+            {
+                combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time).ToList().ForEach(x => x.OverrideSrcAgent(0));
             }
         }
 
