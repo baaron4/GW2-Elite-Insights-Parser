@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal void SetEndEventOnStartEvent(IReadOnlyDictionary<long, List<EffectEvent>> effectEventsByTrackingID)
+        protected void SetEndEventOnStartEvent(IReadOnlyDictionary<long, List<EffectEvent>> effectEventsByTrackingID)
         {
             if (effectEventsByTrackingID.TryGetValue(TrackingID, out List<EffectEvent> effectEvents))
             {
