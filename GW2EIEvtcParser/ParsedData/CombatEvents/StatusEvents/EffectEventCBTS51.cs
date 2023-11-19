@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -7,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         const float OrientationConvertConstant = 1f/1000.0f;
 
-        private static Point3D ReadOrientation(CombatItem evtcItem)
+        internal static Point3D ReadOrientation(CombatItem evtcItem)
         {
             var orientationBytes = new byte[3 * sizeof(short)];
             int offset = 0;
@@ -40,7 +42,7 @@ namespace GW2EIEvtcParser.ParsedData
             return durationUInt[0];
         }
 
-        private static uint ReadTrackingID(CombatItem evtcItem)
+        internal static uint ReadTrackingID(CombatItem evtcItem)
         {
             var trackingIDBytes = new byte[sizeof(uint)];
             int offset = 0;
@@ -55,12 +57,16 @@ namespace GW2EIEvtcParser.ParsedData
             return trackingIDUInt[0];
         }
 
-        internal EffectEventCBTS51(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal EffectEventCBTS51(CombatItem evtcItem, AgentData agentData, Dictionary<long, List<EffectEvent>> effectEventsByTrackingID) : base(evtcItem, agentData)
         {
             Orientation = ReadOrientation(evtcItem);
             Duration = ReadDuration(evtcItem);
             TrackingID = ReadTrackingID(evtcItem);
             OnNonStaticPlatform = evtcItem.IsFlanking > 0;
+            if (TrackingID != 0)
+            {
+                Add(effectEventsByTrackingID, TrackingID, this);
+            }
         }
 
     }

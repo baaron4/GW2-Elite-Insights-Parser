@@ -803,6 +803,34 @@ namespace GW2EIEvtcParser
             }
             return res;
         }
+        public static void Add<TKey, TValue>(Dictionary<TKey, List<TValue>> dict, TKey key, TValue evt)
+        {
+            if (dict.TryGetValue(key, out List<TValue> list))
+            {
+                list.Add(evt);
+            }
+            else
+            {
+                dict[key] = new List<TValue>()
+                {
+                    evt
+                };
+            }
+        }
+        public static void Add<TKey, TValue>(Dictionary<TKey, HashSet<TValue>> dict, TKey key, TValue evt)
+        {
+            if (dict.TryGetValue(key, out HashSet<TValue> list))
+            {
+                list.Add(evt);
+            }
+            else
+            {
+                dict[key] = new HashSet<TValue>()
+                {
+                    evt
+                };
+            }
+        }
 
         public static int IndexOf<T>(this IReadOnlyList<T> self, T elementToFind)
         {

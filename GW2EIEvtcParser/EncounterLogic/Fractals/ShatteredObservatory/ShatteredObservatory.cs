@@ -73,10 +73,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in domes)
                 {
-                    if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
+                    if (effect.EndEvent != null)
                     {
-                        int start = (int)effect.Time;
-                        EnvironmentDecorations.Add(new CircleDecoration(220, (start, (int)end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
+                        EnvironmentDecorations.Add(new CircleDecoration(220, (effect.Time, effect.EndEvent.Time), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
                     }
                 }
             }

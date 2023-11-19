@@ -2,25 +2,12 @@
 using System.IO;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     internal static class CombatEventFactory
     {
-        private static void Add<TKey, TValue>(Dictionary<TKey, List<TValue>> dict, TKey key, TValue evt)
-        {
-            if (dict.TryGetValue(key, out List<TValue> list))
-            {
-                list.Add(evt);
-            }
-            else
-            {
-                dict[key] = new List<TValue>()
-                {
-                    evt
-                };
-            }
-        }
 
         public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, int evtcVersion)
         {
@@ -219,25 +206,30 @@ namespace GW2EIEvtcParser.ParsedData
                     switch(stateChangeEvent.IsStateChange)
                     {
                         case StateChange.Effect_45:
+                            // End event, not supported for 45
+                            if (stateChangeEvent.SkillID == 0)
+                            {
+                                return;
+                            }
                             effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
                             break;
                         case StateChange.Effect_51:
-                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData);
-                            
-                            if (effectEvt.TrackingID != 0)
+                            if (stateChangeEvent.SkillID == 0)
                             {
-                                Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
+                                var endEvent = new EffectEndEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
+                                return;
+                            } 
+                            else
+                            {
+                                effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
                             }
                             break;
                         default:
                             throw new InvalidDataException("Invalid effect state change");
                     }
                     statusEvents.EffectEvents.Add(effectEvt);
-                    if (!effectEvt.IsEnd)
-                    {
-                        Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
-                        Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
-                    }
+                    Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
+                    Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     if (effectEvt.IsAroundDst)
                     {
                         Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);

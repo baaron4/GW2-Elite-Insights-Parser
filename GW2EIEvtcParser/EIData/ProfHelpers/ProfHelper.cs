@@ -564,9 +564,9 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
         {
-            if (log.CombatData.TryGetEffectEndByTrackingId(effect.TrackingID, effect.Time, out long end))
+            if (effect.EndEvent != null)
             {
-                return end;
+                return effect.EndEvent.Time;
             }
             if (associatedBuff != null)
             {

@@ -1113,27 +1113,6 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
-        public IReadOnlyList<EffectEvent> GetEffectEventsByTrackingID(long trackingID)
-        {
-            if (_statusEvents.EffectEventsByTrackingID.TryGetValue(trackingID, out List<EffectEvent> list))
-            {
-                return list;
-            }
-            return new List<EffectEvent>();
-        }
-
-        public bool TryGetEffectEndByTrackingId(long trackingID, long time, out long end)
-        {
-            end = 0;
-            EffectEvent endEvent = GetEffectEventsByTrackingID(trackingID).FirstOrDefault(effect => effect.IsEnd && effect.Time >= time);
-            if (endEvent != null)
-            {
-                end = endEvent.Time;
-                return true;
-            }
-            return false;
-        }
-
         public bool TryGetEffectEventsByGUID(string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
