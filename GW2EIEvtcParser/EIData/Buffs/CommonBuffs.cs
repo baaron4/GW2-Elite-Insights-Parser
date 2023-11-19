@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Relic of the Weaver", RelicOfTheWeaver, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheWeaver),
             new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheZephyrite),
             new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfCerus),
-            new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfDagda),
+            new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffStackType.Stacking, 1, BuffClassification.Gear, BuffImages.RelicOfDagda),
             new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, BuffImages.RelicOfIsgarren),
             new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfLyhr),
             new Buff("Mabon's Strength", MabonsStrength, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, BuffImages.RelicOfMabon),
