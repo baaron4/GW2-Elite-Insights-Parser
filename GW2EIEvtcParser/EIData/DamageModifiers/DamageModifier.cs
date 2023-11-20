@@ -42,8 +42,6 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
         internal static readonly GainComputerByMultiPresence ByMultiPresence = new GainComputerByMultiPresence();
-        internal static readonly GainComputerNonMultiplier ByPresenceNonMultiplier = new GainComputerNonMultiplier();
-        internal static readonly GainComputerBySkill BySkill = new GainComputerBySkill();
         internal static readonly GainComputerByStack ByStack = new GainComputerByStack();
         internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new GainComputerByMultiplyingStack();
         internal static readonly GainComputerByAbsence ByAbsence = new GainComputerByAbsence();

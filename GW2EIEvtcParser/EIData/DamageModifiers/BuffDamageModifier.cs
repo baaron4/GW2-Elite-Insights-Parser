@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
-        internal DamageModifier UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
+        internal virtual DamageModifier UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
         {
             GainAdjuster = gainAdjuster;
             return this;
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
             return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
         }
 
-        protected double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected virtual double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
             int stack = Tracker.GetStack(bgms, dl.Time);
             // When gain per stack is 0, we only count hits done under the buff or in its absence

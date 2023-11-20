@@ -28,10 +28,5 @@ namespace GW2EIEvtcParser.EIData
             }
             return res;
         }
-
-        internal override DamageModifier UsingChecker(DamageLogChecker dlChecker)
-        {
-            throw new InvalidOperationException("Checker is already required for DamageLog modifiers");
-        }
     }
 }
