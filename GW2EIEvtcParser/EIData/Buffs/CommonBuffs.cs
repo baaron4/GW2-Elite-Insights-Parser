@@ -181,7 +181,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Relic of Fireworks", RelicOfFireworks, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfFireworks),
             new Buff("Relic of the Daredevil", RelicOfTheDaredevil, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, BuffImages.RelicOfTheDaredevil),
             new Buff("Relic of the Deadeye", RelicOfTheDeadeye, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDeadeye),
-            new Buff("Relic of the Defender", RelicOfTheDefender, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDefender),
             new Buff("Relic of the Firebrand", RelicOfTheFirebrand, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheFirebrand),
             new Buff("Relic of the Herald", RelicOfTheHerald, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheHerald),
             new Buff("Relic of the Scourge", RelicOfTheScourge, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheScourge),
