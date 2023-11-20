@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All ).UsingApproximate(true),
+            }, DamageModifierMode.All ).UsingApproximate(true),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
