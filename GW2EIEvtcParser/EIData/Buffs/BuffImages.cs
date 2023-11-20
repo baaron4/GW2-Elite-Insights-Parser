@@ -111,6 +111,9 @@
         internal const string DragonBanner = "https://wiki.guildwars2.com/images/c/c0/Dragon_Banner.png";
         internal const string TurtleBanner = "https://wiki.guildwars2.com/images/9/96/Turtle_Banner.png";
         internal const string CentaurBanner = "https://wiki.guildwars2.com/images/d/da/Centaur_Banner.png";
+        internal const string RendingThrashCentaurBanner = "https://wiki.guildwars2.com/images/3/31/Rending_Thrash.png";
+        internal const string CripplingStrikeCentaurBanner = "https://wiki.guildwars2.com/images/1/1d/Crippling_Strike_%28Centaur_Banner_skill%29.png";
+        internal const string KickDustCentaurBanner = "https://wiki.guildwars2.com/images/0/0a/Kick_Dust.png";
         internal const string ThoughtlessPotion = "https://wiki.guildwars2.com/images/c/c4/Thoughtless_Potion_%28effect%29.png";
         internal const string GlidingDisabled = "https://wiki.guildwars2.com/images/8/81/Gliding_Disabled.png";
         internal const string MountsDisabled = "https://wiki.guildwars2.com/images/6/6e/Mounts_Disabled.png";
