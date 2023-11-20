@@ -18,13 +18,13 @@ namespace GW2EIEvtcParser.EIData
 
             public override double ComputeGain(double gainPerStack, int stack)
             {
-                return 1.0;
+                throw new InvalidOperationException("No Compute Gain on GainComputerBySkill");
             }
         }
 
         private static readonly GainComputerBySkill skillGainComputer = new GainComputerBySkill();
 
-        internal SkillDamageModifier(string name, string tooltip, long skillID, DamageSource damageSource, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, 100, srctype, compareType, src, icon, skillGainComputer, mode)
+        internal SkillDamageModifier(string name, string tooltip, long skillID, DamageSource damageSource, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, icon, skillGainComputer, mode)
         {
             base.UsingChecker((evt, log) => evt.SkillId == skillID);
         }

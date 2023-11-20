@@ -36,9 +36,8 @@ namespace GW2EIEvtcParser.EIData
         protected virtual double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
         {
             int stack = Tracker.GetStack(bgms, dl.Time);
-            // When gain per stack is 0, we only count hits done under the buff or in its absence
-            double gain = GainComputer.ComputeGain(GainPerStack == 0.0 ? 1.0 : ComputeAdjustedGain(dl, log), stack);
-            return gain > 0.0 ? (GainPerStack == 0.0 ? 0.0 : gain * dl.HealthDamage) : -1.0;
+            double gain = GainComputer.ComputeGain(ComputeAdjustedGain(dl, log), stack);
+            return gain > 0.0 ? gain * dl.HealthDamage : -1.0;
         }
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)

@@ -53,6 +53,10 @@ namespace GW2EIEvtcParser.EIData
             ID = Name.GetHashCode();
             _dmgSrc = damageSource;
             GainPerStack = gainPerStack;
+            if (GainPerStack == 0.0)
+            {
+                throw new InvalidOperationException("Gain per stack can't be 0");
+            }
             _compareType = compareType;
             _srcType = srctype;
             Src = src;
