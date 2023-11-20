@@ -91,19 +91,19 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffDamageModifierTarget(Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+                .UsingSourceActivatorByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByAbsence)
+                .UsingSourceActivatorByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierTarget(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+                .UsingSourceActivatorByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByAbsence)
+                .UsingSourceActivatorByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+                .UsingSourceActivatorByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)

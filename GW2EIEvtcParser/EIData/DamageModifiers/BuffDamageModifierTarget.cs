@@ -17,31 +17,31 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffDamageModifierTarget UsingSourceActivator(long activatorID, GainComputerByAbsence gainComputerSource)
+        internal BuffDamageModifierTarget UsingSourceActivatorByAbsence(long activatorID)
         {
             _trackerSource = new BuffsTrackerSingle(activatorID);
-            _gainComputerSource = gainComputerSource;
+            _gainComputerSource = ByAbsence;
             return this;
         }
 
-        internal BuffDamageModifierTarget UsingSourceActivator(long activatorID, GainComputerByPresence gainComputerSource)
+        internal BuffDamageModifierTarget UsingSourceActivatorByAbsence(long[] activatorIDs)
+        {
+            _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
+            _gainComputerSource = ByAbsence;
+            return this;
+        }
+
+        internal BuffDamageModifierTarget UsingSourceActivatorByPresence(long activatorID)
         {
             _trackerSource = new BuffsTrackerSingle(activatorID);
-            _gainComputerSource = gainComputerSource;
+            _gainComputerSource = ByPresence;
             return this;
         }
 
-        internal BuffDamageModifierTarget UsingSourceActivator(long[] activatorIDs, GainComputerByAbsence gainComputerSource)
+        internal BuffDamageModifierTarget UsingSourceActivatorByPresence(long[] activatorIDs)
         {
             _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
-            _gainComputerSource = gainComputerSource;
-            return this;
-        }
-
-        internal BuffDamageModifierTarget UsingSourceActivator(long[] activatorIDs, GainComputerByPresence gainComputerSource)
-        {
-            _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
-            _gainComputerSource = gainComputerSource;
+            _gainComputerSource = ByPresence;
             return this;
         }
 
