@@ -192,6 +192,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
+                    // Is this reliable?
+                    /*CombatItem achievementTrackApply = combatData.Where(x => (x.SkillID == AchievementEligibilityMineControl || x.SkillID == AchievementEligibilityFastSiege) && x.IsBuffApply()).FirstOrDefault();
+                    if (achievementTrackApply != null)
+                    {
+                        startToUse = achievementTrackApply.Time;
+                    }*/
                 }
                 else
                 {
@@ -199,6 +205,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return startToUse;
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (_hasPreEvent)
+            {
+                AgentItem glenna = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Glenna).FirstOrDefault();
+                if (glenna == null)
+                {
+                    throw new MissingKeyActorsException("Glenna not found");
+                }
+                var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
+                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100)) 
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+                return FightData.EncounterStartStatus.Normal;
+            } 
+            else if (combatData.GetLogStartNPCUpdateEvents().Any())
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            } 
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
