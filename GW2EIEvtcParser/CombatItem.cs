@@ -257,6 +257,11 @@ namespace GW2EIEvtcParser
             return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None) || IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
         }
 
+        internal bool IsBuffRemoval()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.None && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove != ArcDPSEnums.BuffRemove.None;
+        }
+
         internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (DstIsAgent(extensions))
@@ -295,7 +300,7 @@ namespace GW2EIEvtcParser
 
         internal bool StartCasting()
         {
-            if (IsExtension)
+            if (IsStateChange != ArcDPSEnums.StateChange.None)
             {
                 return false;
             }
@@ -304,7 +309,7 @@ namespace GW2EIEvtcParser
 
         internal bool EndCasting()
         {
-            if (IsExtension)
+            if (IsStateChange != ArcDPSEnums.StateChange.None)
             {
                 return false;
             }
