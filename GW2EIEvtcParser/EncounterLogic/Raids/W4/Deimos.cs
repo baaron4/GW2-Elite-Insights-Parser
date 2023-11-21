@@ -384,6 +384,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // We expect pre event with logs with LogStartNPCUpdate events
+            if (!_hasPreEvent && combatData.GetLogStartNPCUpdateEvents().Any())
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            }
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
