@@ -39,9 +39,13 @@ namespace GW2EIEvtcParser.ParsedData
         public bool Success { get; private set; }
 
         internal enum EncounterMode { NotSet, CM, Normal, CMNoName, Story }
+        private EncounterMode _encounterMode = EncounterMode.NotSet;
+        public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
+        internal enum EncounterStartStatus { NotSet, Normal, Late, NoPreEvent }
+        private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
+        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late;
+        public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
 
-        private EncounterMode _encounterStatus = EncounterMode.NotSet;
-        public bool IsCM => _encounterStatus == EncounterMode.CMNoName || _encounterStatus == EncounterMode.CM;
         // Constructors
         internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
         {
@@ -304,9 +308,13 @@ namespace GW2EIEvtcParser.ParsedData
             TriggerID = Logic.GetTriggerID();
         }
 
-        internal void SetFightName(CombatData combatData, AgentData agentData)
+        internal void CompleteFightName(CombatData combatData, AgentData agentData)
         {
-            FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
+            FightName = Logic.GetLogicName(combatData, agentData) 
+                + (_encounterMode == EncounterMode.CM ? " CM" : "") 
+                + (_encounterMode == EncounterMode.Story ? " Story" : "")
+                + (IsLateStart ? " (Late Start)" : "") 
+                + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
         public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -346,15 +354,16 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        internal void SetEncounterMode(CombatData combatData, AgentData agentData)
+        internal void ProcessEncounterStatus(CombatData combatData, AgentData agentData)
         {
-            if (_encounterStatus == EncounterMode.NotSet)
+            if (_encounterMode == EncounterMode.NotSet)
             {
-                _encounterStatus = Logic.GetEncounterMode(combatData, agentData, this);
-                if (_encounterStatus == EncounterMode.Story)
+                _encounterMode = Logic.GetEncounterMode(combatData, agentData, this);
+                if (_encounterMode == EncounterMode.Story)
                 {
                     Logic.InvalidateEncounterID();
                 }
+                _encounterStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
             }
         }
 
