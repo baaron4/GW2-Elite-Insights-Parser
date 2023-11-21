@@ -10,17 +10,18 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Dhuum : HallOfChains
     {
-        private bool _isBugged;
+        private bool _hasPrevent;
         private int _greenStart;
 
         public Dhuum(int triggerID) : base(triggerID)
         {
-            _isBugged = false;
+            _hasPrevent = true;
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -179,11 +180,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Sometimes the pre event is not in the evtc
             IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, log.FightData.FightStart, 20000);
-            if (dhuumCast.Any(x => !(x is InstantCastEvent) && x.SkillId != WeaponDraw && x.SkillId != WeaponStow))
+            if (!_hasPrevent)
             {
                 // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);
-                _isBugged = true;
             }
             else
             {
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // from pre event end to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End : mainFight.End, hasRitual));
             }
-            else if (_isBugged)
+            else if (!_hasPrevent)
             {
                 // from start to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, 0, dhuumFight != null ? dhuumFight.End : fightDuration, hasRitual));
@@ -255,6 +255,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return startToUse;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            AgentItem dhuum = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).FirstOrDefault();
+            if (dhuum == null)
+            {
+                throw new MissingKeyActorsException("Dhuum not found");
+            }
+            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow || x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // We expect pre event in all logs
+            if (!_hasPrevent)
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            }
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
         }
 
         private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
@@ -348,7 +372,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                     }
-                    if (!_isBugged)
+                    if (_hasPrevent)
                     {
                         if (_greenStart == 0)
                         {
