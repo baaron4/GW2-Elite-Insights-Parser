@@ -332,13 +332,26 @@ namespace GW2EIEvtcParser.EIData
             // Firestorm
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out IReadOnlyList<EffectEvent> firestorms))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
+                var firestormCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword).ToList();
                 foreach (EffectEvent effect in firestorms)
                 {
+                    SkillModeDescriptor skill;
+                    string icon;
+                    var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                    if (firestormCastsOnEffect.Count == 1)
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.FirstOrDefault().SkillId);
+                        icon = skill.SkillID == FirestormGlyphOfStorms ? ParserIcons.EffectFirestormGlyph : ParserIcons.EffectFirestormFieryGreatsword;
+                    }
+                    else
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
+                        icon = ParserIcons.EffectFirestormGlyphOrFieryGreatsword;
+                    }
                     (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 10000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFirestormGlyphOrFieryGreatsword, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
 
