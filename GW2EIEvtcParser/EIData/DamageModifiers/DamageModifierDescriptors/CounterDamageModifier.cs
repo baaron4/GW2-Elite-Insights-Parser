@@ -24,11 +24,11 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly GainComputerCounter counterGainComputer = new GainComputerCounter();
 
-        internal CounterDamageModifier(long id, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, int.MaxValue, srctype, compareType, Source.Item, counterGainComputer, icon, mode)
+        internal CounterDamageModifier(long id, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
         {
         }
 
-        internal CounterDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, Source.Item, counterGainComputer, icon, mode)
+        internal CounterDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
         {
         }
         internal override DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
