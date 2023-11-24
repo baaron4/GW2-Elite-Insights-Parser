@@ -15,8 +15,6 @@ namespace GW2EIEvtcParser.EIData
     public abstract class DamageModifier : IVersionable
     {
 
-        public enum DamageSource { All, NoPets };
-
         private DamageType _compareType { get; }
         private DamageType _srcType { get; }
         private DamageSource _dmgSrc { get; }

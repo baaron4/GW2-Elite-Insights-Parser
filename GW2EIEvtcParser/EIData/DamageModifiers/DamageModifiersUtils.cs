@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW };
+        public enum DamageSource { All, NoPets };
 
         internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
