@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.SkillIDs;
 using System;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {

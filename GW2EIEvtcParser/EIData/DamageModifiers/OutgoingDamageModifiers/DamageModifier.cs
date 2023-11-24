@@ -6,6 +6,7 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -14,7 +15,6 @@ namespace GW2EIEvtcParser.EIData
     public abstract class DamageModifier : IVersionable
     {
 
-        public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW };
         public enum DamageSource { All, NoPets };
 
         private DamageType _compareType { get; }
@@ -34,17 +34,8 @@ namespace GW2EIEvtcParser.EIData
         public int ID { get; }
         public string Tooltip { get; protected set; }
 
-        protected DamageModifierMode Mode { get; } = DamageModifierMode.All;
-
-        internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
+        internal DamageModifierMode Mode { get; } = DamageModifierMode.All;
         private List<DamageLogChecker> _dlCheckers { get; set; }
-
-
-        internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
-        internal static readonly GainComputerByMultiPresence ByMultiPresence = new GainComputerByMultiPresence();
-        internal static readonly GainComputerByStack ByStack = new GainComputerByStack();
-        internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new GainComputerByMultiplyingStack();
-        internal static readonly GainComputerByAbsence ByAbsence = new GainComputerByAbsence();
 
         internal DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
         {
