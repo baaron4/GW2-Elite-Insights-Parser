@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(KingOfFires, KingOfFires).WithBuilds(GW2Builds.July2019Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(AlwaysAngry, "Always Angry", "7% per stack", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, ByPresence, BuffImages.AlwaysAngry, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
             new BuffDamageModifier(Berserk, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),

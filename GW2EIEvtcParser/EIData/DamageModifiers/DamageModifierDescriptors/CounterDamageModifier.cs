@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class CounterDamageModifier : BuffDamageModifier
+    internal class CounterDamageModifier : BuffDamageModifier
     {
         private class GainComputerCounter : GainComputer
         {
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
         internal CounterDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, Source.Item, counterGainComputer, icon, mode)
         {
         }
-        internal override DamageModifier UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
+        internal override DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
         {
             throw new InvalidOperationException("Not Possible to adjust gain for counter damage modifiers");
         }

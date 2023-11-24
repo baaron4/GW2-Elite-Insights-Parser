@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
-            var AllDamageModifiers = new List<List<DamageModifier>>
+            var AllDamageModifiers = new List<List<DamageModifierDescriptor>>
             {
                 CommonDamageModifiers.ItemDamageModifiers,
                 CommonDamageModifiers.GearDamageModifiers,
@@ -68,9 +68,9 @@ namespace GW2EIEvtcParser.EIData
                 CatalystHelper.DamageMods,
             };
             var currentDamageMods = new List<DamageModifier>();
-            foreach (List<DamageModifier> boons in AllDamageModifiers)
+            foreach (List<DamageModifierDescriptor> boons in AllDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)));
+                currentDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
             }
             DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>

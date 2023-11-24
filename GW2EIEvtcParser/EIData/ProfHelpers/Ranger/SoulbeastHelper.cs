@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),

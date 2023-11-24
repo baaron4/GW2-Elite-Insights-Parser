@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class SkillDamageModifier : DamageModifier
+    internal class SkillDamageModifier : DamageModifierDescriptor
     {
         private class GainComputerBySkill : GainComputer
         {
@@ -30,15 +30,15 @@ namespace GW2EIEvtcParser.EIData
             base.UsingChecker((evt, log) => evt.SkillId == skillID);
         }
 
-        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
+        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
                 if (CheckCondition(evt, log))
                 {
-                    res.Add(new DamageModifierEvent(evt, this, evt.HealthDamage));
+                    res.Add(new DamageModifierEvent(evt, damageModifier, evt.HealthDamage));
                 }
             }
             return res;

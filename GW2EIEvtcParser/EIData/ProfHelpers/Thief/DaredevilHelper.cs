@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             //new DamageCastFinder(30520, 30520), // Debilitating Arc
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.LotusTraining, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
             new BuffDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.LotusTraining, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2021Balance),

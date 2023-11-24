@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffDamageModifierTarget : BuffDamageModifier
+    internal class BuffDamageModifierTarget : BuffDamageModifier
     {
         private BuffsTracker _trackerSource { get; set; } = null;
         private GainComputer _gainComputerSource { get; set; } = null;
@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             }
             return base.Keep(mode, parserSettings);
         }
-        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
+        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
             if (_trackerSource != null)
@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
                 if (CheckCondition(evt, log))
@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                     IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                     if (IsSourceActivated(bgmsSource, evt))
                     {
-                        res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
+                        res.Add(new DamageModifierEvent(evt, damageModifier, ComputeGain(bgms, evt, log)));
                     }
                 }
             }

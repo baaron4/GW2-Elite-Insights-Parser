@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingSrcSpecChecker(Spec.Tempest),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HarmoniousConduit, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.October2019Balance),

@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
             new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),

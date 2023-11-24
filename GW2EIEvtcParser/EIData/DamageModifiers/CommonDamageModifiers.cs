@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class CommonDamageModifiers
     {
-        internal static readonly List<DamageModifier> ItemDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> ItemDamageModifiers = new List<DamageModifierDescriptor>
         {
             new DamageLogDamageModifier("Moving Bonus", "Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Item, BuffImages.BowlOfSeaweedSalad, (x, log) => x.IsMoving, DamageModifierMode.All),
             new BuffDamageModifier(FractalOffensive, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, BuffImages.FractalOffensive, DamageModifierMode.PvE),
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             new CounterDamageModifier(WritOfMasterfulStrength, "Writ of Masterful Strength", "200 power if hp >=90%", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, BuffImages.WritOfMasterfulStrength, DamageModifierMode.All)
                 .UsingChecker((x, log) => x.IsOverNinety),
         };
-        internal static readonly List<DamageModifier> GearDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> GearDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Runes
             new DamageLogDamageModifier("Scholar Rune", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.PvE),
             new BuffDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.sPvPWvW),
         };
-        internal static readonly List<DamageModifier> SharedDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> SharedDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifierTarget(Exposed31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.Exposed, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffDamageModifier(Emboldened, "Emboldened", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Emboldened, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.June2022Balance),
         };
-        internal static readonly List<DamageModifier> FightSpecificDamageModifiers = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> FightSpecificDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
             new BuffDamageModifierTarget(UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>

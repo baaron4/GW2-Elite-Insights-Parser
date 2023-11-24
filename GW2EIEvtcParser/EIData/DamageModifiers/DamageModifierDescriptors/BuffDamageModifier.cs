@@ -6,7 +6,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BuffDamageModifier : DamageModifier
+    internal class BuffDamageModifier : DamageModifierDescriptor
     {
         internal delegate double DamageGainAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
             Tracker = new BuffsTrackerMulti(new List<long>(ids));
         }
 
-        internal virtual DamageModifier UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
+        internal virtual DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
         {
             GainAdjuster = gainAdjuster;
             return this;
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             return gain > 0.0 ? gain * dl.HealthDamage : -1.0;
         }
 
-        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
+        internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
@@ -49,12 +49,12 @@ namespace GW2EIEvtcParser.EIData
                 return new List<DamageModifierEvent>();
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
                 if (CheckCondition(evt, log))
                 {
-                    res.Add(new DamageModifierEvent(evt, this, ComputeGain(bgms, evt, log)));
+                    res.Add(new DamageModifierEvent(evt, damageModifier, ComputeGain(bgms, evt, log)));
                 }
             }
             res.RemoveAll(x => x.DamageGain == -1.0);
