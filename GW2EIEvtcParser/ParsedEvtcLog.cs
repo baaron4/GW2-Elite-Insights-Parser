@@ -78,10 +78,10 @@ namespace GW2EIEvtcParser
                 }
             }
             //
-            operation.UpdateProgressWithCancellationCheck("Checking CM");
-            FightData.SetEncounterMode(CombatData, AgentData);
+            operation.UpdateProgressWithCancellationCheck("Checking Encounter Status");
+            FightData.ProcessEncounterStatus(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Setting Fight Name");
-            FightData.SetFightName(CombatData, AgentData);
+            FightData.CompleteFightName(CombatData, AgentData);
             //
             var friendlies = new List<AbstractSingleActor>();
             friendlies.AddRange(PlayerList);

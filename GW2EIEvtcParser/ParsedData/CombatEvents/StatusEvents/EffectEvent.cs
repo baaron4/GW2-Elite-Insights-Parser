@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             // We can only set the EndEventOnce
-            if (EndEvent != null)
+            if (EndEvent == null)
             {
                 EndEvent = endEvent;
             }

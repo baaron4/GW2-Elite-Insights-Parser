@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 dc.Add(new Segment(cTime, nextTime, 1));
             }
-            else if (index == 0)
+            else if (index == 0 && cTime - minTime > 50)
             {
                 dc.Add(new Segment(minTime, cTime, 1));
             }

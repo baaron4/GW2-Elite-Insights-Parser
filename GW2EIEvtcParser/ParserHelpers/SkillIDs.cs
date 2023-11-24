@@ -122,6 +122,7 @@
         public const long MeteorShower = 5501;
         public const long WaterTrident = 5510;
         public const long RideTheLightningSkill = 5529;
+        public const long FirestormFieryGreatsword = 5531;
         public const long CleansingFire = 5535;
         public const long LightningFlash = 5536;
         public const long ArcaneBlast = 5539;
@@ -163,6 +164,7 @@
         public const long Updraft = 5687;
         public const long ArcaneShieldDamage = 5703;
         public const long StaticFieldLightingHammer = 5732;
+        public const long FirestormGlyphOfStorms = 5736;
         public const long GlyphOfElementalPowerFireBuff = 5739;
         public const long GlyphOfElementalPowerAirBuff = 5740;
         public const long GlyphOfElementalPowerWaterBuff = 5741;
