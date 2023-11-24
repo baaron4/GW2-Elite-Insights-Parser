@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
@@ -19,37 +18,37 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        internal BuffDamageModifierFoe UsingSourceActivatorByAbsence(long activatorID)
+        internal BuffDamageModifierFoe UsingActorCheckerByAbsence(long activatorID)
         {
             _trackerSource = new BuffsTrackerSingle(activatorID);
             _gainComputerSource = ByAbsence;
             return this;
         }
 
-        internal BuffDamageModifierFoe UsingSourceActivatorByAbsence(long[] activatorIDs)
+        internal BuffDamageModifierFoe rUsingActorCheckerByAbsence(long[] activatorIDs)
         {
             _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
             _gainComputerSource = ByAbsence;
             return this;
         }
 
-        internal BuffDamageModifierFoe UsingSourceActivatorByPresence(long activatorID)
+        internal BuffDamageModifierFoe UsingActorCheckerByPresence(long activatorID)
         {
             _trackerSource = new BuffsTrackerSingle(activatorID);
             _gainComputerSource = ByPresence;
             return this;
         }
 
-        internal BuffDamageModifierFoe UsingSourceActivatorByPresence(long[] activatorIDs)
+        internal BuffDamageModifierFoe UsingActorCheckerByPresence(long[] activatorIDs)
         {
             _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
             _gainComputerSource = ByPresence;
             return this;
         }
 
-        protected bool IsSourceActivated(IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource, AbstractHealthDamageEvent dl)
+        protected bool CheckActor(IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource, long time)
         {
-            return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time)) > 0.0;
+            return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, time)) > 0.0;
         }
 
         internal override bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
@@ -79,7 +78,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
                     IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
-                    if (IsSourceActivated(bgmsSource, evt))
+                    if (CheckActor(bgmsSource, evt.Time))
                     {
                         res.Add(new DamageModifierEvent(evt, damageModifier, ComputeGain(bgms, evt, log)));
                     }
