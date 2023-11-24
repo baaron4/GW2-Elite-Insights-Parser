@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -51,7 +52,15 @@ namespace GW2EIEvtcParser.EIData
             return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, dl.Time)) > 0.0;
         }
 
-
+        internal override bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        {
+            // Remove target  based damage mods from PvP contexts
+            if (mode == FightLogic.ParseMode.WvW || mode == FightLogic.ParseMode.sPvP)
+            {
+                return false;
+            }
+            return base.Keep(mode, parserSettings);
+        }
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);

@@ -98,10 +98,10 @@ namespace GW2EIEvtcParser.EIData
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
-        internal bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        internal virtual bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
-            // Remove target and approx based damage mods from PvP contexts
-            if (this is BuffDamageModifierTarget || Approximate)
+            // Remove approx based damage mods from PvP contexts
+            if (Approximate)
             {
                 if (mode == FightLogic.ParseMode.WvW || mode == FightLogic.ParseMode.sPvP)
                 {
