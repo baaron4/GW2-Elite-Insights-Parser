@@ -18,6 +18,22 @@ namespace GW2EIJSON
             /// </summary>
             public long DamageTaken { get; set; }
             /// <summary>
+            /// Total condition damage taken
+            /// </summary>
+            public long ConditionDamageTaken { get; set; }
+            /// <summary>
+            /// Total power damage taken
+            /// </summary>
+            public long PowerDamageTaken { get; set; }
+            /// <summary>
+            /// Total strike damage taken
+            /// </summary>
+            public long StrikeDamageTaken { get; set; }
+            /// <summary>
+            /// Total life leech damage taken
+            /// </summary>
+            public long LifeLeechDamageTaken { get; set; }
+            /// <summary>
             /// Total damage taken while downed
             /// </summary>
             public long DownedDamageTaken { get; set; }

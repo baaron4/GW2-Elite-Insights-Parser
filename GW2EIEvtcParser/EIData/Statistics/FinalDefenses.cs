@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
     {
         //public long allHealReceived;
         public int DamageTaken { get; }
-        public int CondiDamageTaken { get; }
+        public int ConditionDamageTaken { get; }
         public int PowerDamageTaken { get; }
         public int LifeLeechDamageTaken { get; }
         public int StrikeDamageTaken { get; }
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (damageEvent.ConditionDamageBased(log))
                     {
-                        CondiDamageTaken += damageEvent.HealthDamage;
+                        ConditionDamageTaken += damageEvent.HealthDamage;
                     }
                     else
                     {
