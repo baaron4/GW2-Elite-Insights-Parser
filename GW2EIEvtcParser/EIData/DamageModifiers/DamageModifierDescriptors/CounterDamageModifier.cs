@@ -36,10 +36,11 @@ namespace GW2EIEvtcParser.EIData
             throw new InvalidOperationException("Not Possible to adjust gain for counter damage modifiers");
         }
 
-        protected override double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
         {
+            gain = 0;
             int stack = Tracker.GetStack(bgms, dl.Time);
-            return stack > 0.0 ? 0.0 : -1.0;
+            return stack > 0.0;
         }
     }
 }

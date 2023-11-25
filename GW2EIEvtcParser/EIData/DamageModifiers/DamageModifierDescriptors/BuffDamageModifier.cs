@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
@@ -34,11 +35,11 @@ namespace GW2EIEvtcParser.EIData
             return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
         }
 
-        protected virtual double ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
         {
             int stack = Tracker.GetStack(bgms, dl.Time);
-            double gain = GainComputer.ComputeGain(ComputeAdjustedGain(dl, log), stack);
-            return gain > 0.0 ? gain * dl.HealthDamage : -1.0;
+            gain = GainComputer.ComputeGain(ComputeAdjustedGain(dl, log), stack);
+            return gain != 0;
         }
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
@@ -52,12 +53,11 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
-                if (CheckCondition(evt, log))
+                if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
-                    res.Add(new DamageModifierEvent(evt, damageModifier, ComputeGain(bgms, evt, log)));
+                    res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }
             }
-            res.RemoveAll(x => x.DamageGain == -1.0);
             return res;
         }
     }

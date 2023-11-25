@@ -15,16 +15,24 @@ namespace GW2EIEvtcParser.EIData
             base.UsingChecker(checker);
         }
 
+        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+        {
+            gain = GainComputer.ComputeGain(GainPerStack, 1);
+            return true;
+        }
+
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             var res = new List<DamageModifierEvent>();
-            double gain = GainComputer.ComputeGain(GainPerStack, 1);
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-            foreach (AbstractHealthDamageEvent evt in typeHits)
-            {
-                if (CheckCondition(evt, log))
+            if (ComputeGain(null, null, log, out double gain)) {
+
+                IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+                foreach (AbstractHealthDamageEvent evt in typeHits)
                 {
-                    res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
+                    if (CheckCondition(evt, log))
+                    {
+                        res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
+                    }
                 }
             }
             return res;

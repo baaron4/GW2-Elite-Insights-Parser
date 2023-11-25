@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
@@ -129,6 +130,8 @@ namespace GW2EIEvtcParser.EIData
             }
             return false;
         }
+
+        protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain);
 
         internal DamageModifierDescriptor UsingApproximate(bool approximate)
         {

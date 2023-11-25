@@ -74,17 +74,13 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
-                if (CheckCondition(evt, log))
+                AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
+                IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+                if (CheckActor(bgmsSource, evt.Time) && ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
-                    AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
-                    IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
-                    if (CheckActor(bgmsSource, evt.Time))
-                    {
-                        res.Add(new DamageModifierEvent(evt, damageModifier, ComputeGain(bgms, evt, log)));
-                    }
+                    res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }
             }
-            res.RemoveAll(x => x.DamageGain == -1.0);
             return res;
         }
     }
