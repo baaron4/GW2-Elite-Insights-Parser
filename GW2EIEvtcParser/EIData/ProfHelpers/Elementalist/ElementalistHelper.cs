@@ -95,13 +95,13 @@ namespace GW2EIEvtcParser.EIData
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierFoe(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .rUsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
+                .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierFoe(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierFoe(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-                .rUsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
+                .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             new BuffDamageModifierFoe(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })

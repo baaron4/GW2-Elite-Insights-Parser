@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        internal BuffDamageModifierFoe rUsingActorCheckerByAbsence(long[] activatorIDs)
+        internal BuffDamageModifierFoe UsingActorCheckerByAbsence(long[] activatorIDs)
         {
             _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
             _gainComputerSource = ByAbsence;
