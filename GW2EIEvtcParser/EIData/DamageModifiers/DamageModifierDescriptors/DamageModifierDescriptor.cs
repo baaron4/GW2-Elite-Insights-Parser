@@ -30,7 +30,6 @@ namespace GW2EIEvtcParser.EIData
         public ParserHelper.Source Src { get; }
         public string Icon { get; }
         public string Name { get; }
-        public int ID { get; }
         public string Tooltip { get; protected set; }
 
         internal DamageModifierMode Mode { get; } = DamageModifierMode.All;
@@ -40,7 +39,6 @@ namespace GW2EIEvtcParser.EIData
         {
             Tooltip = tooltip;
             Name = name;
-            ID = Name.GetHashCode();
             DmgSrc = damageSource;
             GainPerStack = gainPerStack;
             if (GainPerStack == 0.0)

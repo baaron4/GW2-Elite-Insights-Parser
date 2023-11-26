@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         public ParserHelper.Source Src => DamageModDescriptor.Src;
         public string Icon => DamageModDescriptor.Icon;
         public string Name => DamageModDescriptor.Name;
-        public int ID => DamageModDescriptor.ID;
+        public int ID { get; protected set; }
         public string Tooltip => DamageModDescriptor.Tooltip;
 
         internal DamageModifier(DamageModifierDescriptor damageModDescriptor)
