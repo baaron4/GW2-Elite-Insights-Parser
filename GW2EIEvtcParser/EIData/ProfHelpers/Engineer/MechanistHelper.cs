@@ -55,13 +55,13 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             // Need to check mech specy id for those
-            new BuffDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta4)
                 .UsingChecker((x,log) =>
                 {
                     return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
                 }),
-            new BuffDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta4)
                 .UsingChecker((x,log) =>
                 {

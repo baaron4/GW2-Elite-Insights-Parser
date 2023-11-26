@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+            new BuffOnActorDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

@@ -27,17 +27,17 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HarmoniousConduit, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HarmoniousConduit, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.October2019Balance),
-            new BuffDamageModifier(TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.October2019Balance, GW2Builds.August2022Balance),
-            new BuffDamageModifier(TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.sPvPWvW)
+            new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.sPvPWvW)
                 .WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifier(TranscendentTempest, "Transcendent Tempest", "15% after overload", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "15% after overload", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.August2022Balance, GW2Builds.SOTOReleaseAndBalance),
-            new BuffDamageModifier(TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
-            new BuffDamageModifier(TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.June2023Balance),
         };
 

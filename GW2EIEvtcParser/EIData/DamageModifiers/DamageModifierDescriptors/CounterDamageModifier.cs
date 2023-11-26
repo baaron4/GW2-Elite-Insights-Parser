@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class CounterDamageModifier : BuffDamageModifier
+    internal class CounterDamageModifier : BuffOnActorDamageModifier
     {
         private class GainComputerCounter : GainComputer
         {
