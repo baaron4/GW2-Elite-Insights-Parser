@@ -12,6 +12,10 @@ namespace GW2EIEvtcParser.EIData
     {
         //public long allHealReceived;
         public int DamageTaken { get; }
+        public int ConditionDamageTaken { get; }
+        public int PowerDamageTaken { get; }
+        public int LifeLeechDamageTaken { get; }
+        public int StrikeDamageTaken { get; }
         public int DownedDamageTaken { get; } 
         public double BreakbarDamageTaken { get; }
         public int BlockedCount { get; }
@@ -55,33 +59,53 @@ namespace GW2EIEvtcParser.EIData
         internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from)
         {
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
-            foreach (AbstractHealthDamageEvent dl in damageLogs)
+            foreach (AbstractHealthDamageEvent damageEvent in damageLogs)
             {
-                DamageTaken += dl.HealthDamage;
-                DamageBarrier += dl.ShieldDamage;
-                if (dl.IsBlocked)
+                DamageTaken += damageEvent.HealthDamage;
+                if (damageEvent is NonDirectHealthDamageEvent ndhd)
+                {
+                    if (damageEvent.ConditionDamageBased(log))
+                    {
+                        ConditionDamageTaken += damageEvent.HealthDamage;
+                    }
+                    else
+                    {
+                        PowerDamageTaken += damageEvent.HealthDamage;
+                        if (ndhd.IsLifeLeech)
+                        {
+                            LifeLeechDamageTaken += damageEvent.HealthDamage;
+                        }
+                    }
+                }
+                else
+                {
+                    StrikeDamageTaken += damageEvent.HealthDamage;
+                    PowerDamageTaken += damageEvent.HealthDamage;
+                }
+                DamageBarrier += damageEvent.ShieldDamage;
+                if (damageEvent.IsBlocked)
                 {
                     BlockedCount++;
                 }
-                if (dl.IsBlind)
+                if (damageEvent.IsBlind)
                 {
                     MissedCount++;
                 }
-                if (dl.IsAbsorbed)
+                if (damageEvent.IsAbsorbed)
                 {
                     InvulnedCount++;
                 }
-                if (dl.IsEvaded)
+                if (damageEvent.IsEvaded)
                 {
                     EvadedCount++;
                 }
-                if (dl.HasInterrupted)
+                if (damageEvent.HasInterrupted)
                 {
                     InterruptedCount++;
                 }
-                if (dl.AgainstDowned)
+                if (damageEvent.AgainstDowned)
                 {
-                    DownedDamageTaken += dl.HealthDamage;
+                    DownedDamageTaken += damageEvent.HealthDamage;
                 }
             }
             DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.Skill.IsDodge(log.SkillData));

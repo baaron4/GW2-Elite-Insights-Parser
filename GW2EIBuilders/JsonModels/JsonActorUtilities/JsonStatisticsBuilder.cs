@@ -14,6 +14,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             var jsonDefensesAll = new JsonDefensesAll
             {
                 DamageTaken = defStats.DamageTaken,
+                ConditionDamageTaken = defStats.ConditionDamageTaken,
+                StrikeDamageTaken = defStats.StrikeDamageTaken,
+                LifeLeechDamageTaken = defStats.LifeLeechDamageTaken,
+                PowerDamageTaken = defStats.PowerDamageTaken,
                 DownedDamageTaken = defStats.DownedDamageTaken,
                 BreakbarDamageTaken = defStats.BreakbarDamageTaken,
                 BlockedCount = defStats.BlockedCount,

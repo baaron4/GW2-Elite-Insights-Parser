@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             return _shroudTransform.Contains(id);
         }
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
         };
 
