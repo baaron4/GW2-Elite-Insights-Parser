@@ -16,8 +16,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(TestOfFaith, EffectGUIDs.DragonhunterTestOfFaith).UsingSrcSpecChecker(Spec.Dragonhunter),
-            new EffectCastFinder(FragmentsOfFaith, EffectGUIDs.DragonhunterFragmentsOfFaith).UsingSrcSpecChecker(Spec.Dragonhunter),
+            new EffectCastFinder(TestOfFaith, EffectGUIDs.DragonhunterTestOfFaith)
+                .UsingSrcSpecChecker(Spec.Dragonhunter),
+            new EffectCastFinder(FragmentsOfFaith, EffectGUIDs.DragonhunterFragmentsOfFaith)
+                .UsingSrcSpecChecker(Spec.Dragonhunter),
         };
 
         private static bool CheckTether(ParsedEvtcLog log, AgentItem src, AgentItem dst, long time)

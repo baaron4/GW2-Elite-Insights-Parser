@@ -53,6 +53,7 @@ function findSkill(isBuff, id) {
     } else {
         skill = logData.skillMap["s" + id] || {};
     }
+    skill.id = id;
     if (!apiRenderServiceOkay) {
         buildFallBackURL(skill);
     }

@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 // General
                 new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
-                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleCM}, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
+                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleSelectCM }, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPoolNM, VoidPoolCM }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
-            return "The Dragonvoid";
+            return "Harvest Temple";
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -358,9 +358,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
                 var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
-                // Events to be copied
-                var posFacingHPEventsToCopy = combatData.Where(x => x.SrcMatchesAgent(dragonVoid) && (x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
-                posFacingHPEventsToCopy.AddRange(combatData.Where(x => x.SrcMatchesAgent(atAgent) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation)));
                 //
                 foreach (CombatItem targetOn in targetOns)
                 {
@@ -380,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     ulong lastHPUpdate = ulong.MaxValue;
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
-                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra,
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                         (evt, from, to) =>
                         {
                             if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
@@ -668,7 +665,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 50;
                             int lifespan = 15000;
-                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z), (float)Math.Sin(beeLaunchEffect.Orientation.Z)), end + lifespan);
+                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(-beeLaunchEffect.Orientation.Z), (float)Math.Sin(-beeLaunchEffect.Orientation.Z)), end + lifespan);
                             //replay.Decorations.Add(new CircleDecoration(true, 0, 280, (end, end + lifespan), "rgba(250, 50, 0, 0.4)", new InterpolationConnector(new List<Point3D>() { initialPosition, finalPosition})));
                         }
                     }

@@ -8,13 +8,15 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
     internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
     {
         private List<AbstractCastEvent> _vindicatorDodges = null;
+        protected long ImperialImpactExtension { get; set; }
         public BuffSourceFinder20210921(HashSet<long> boonIds) : base(boonIds)
         {
+            ImperialImpactExtension = 2000;
         }
 
         protected override List<AgentItem> CouldBeImperialImpact(long extension, long time, ParsedEvtcLog log)
         {
-            if (extension > 2000)
+            if (extension > ImperialImpactExtension)
             {
                 return new List<AgentItem>();
             }

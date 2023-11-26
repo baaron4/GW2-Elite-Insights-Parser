@@ -596,10 +596,11 @@ namespace GW2EIEvtcParser
             long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
             operation.UpdateProgressWithCancellationCheck("Combat Event Count " + cbtItemCount);
             int discardedCbtEvents = 0;
+            bool keepOnlyExtensionEvents = false;
             for (long i = 0; i < cbtItemCount; i++)
             {
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                if (!IsValid(combatItem, operation))
+                if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
                 {
                     discardedCbtEvents++;
                     continue;
@@ -616,6 +617,10 @@ namespace GW2EIEvtcParser
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && combatItem.SrcAgent != 0)
                 {
                     _gw2Build = combatItem.SrcAgent;
+                }
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.LogEnd)
+                {
+                    keepOnlyExtensionEvents = true;
                 }
             }
             operation.UpdateProgressWithCancellationCheck("Combat Event Discarded " + discardedCbtEvents);

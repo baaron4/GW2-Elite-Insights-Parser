@@ -21,6 +21,32 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new PlayerDstBuffApplyMechanic(Insatiable, "Insatiable", new MechanicPlotlySetting(Symbols.Hourglass, Colors.Pink), "Ins.A", "Insatiable Applied (Absorbed Gluttony Orb)", "Insatiable Application", 0),
+                new PlayerDstBuffApplyMechanic(MaliciousIntentTargetBuff, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
+                new PlayerDstHitMechanic(new long [] { CrushingRegretEmbodiment, CrushingRegretCerus }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Green.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
+                new PlayerDstHitMechanic(new long [] { WailOfDespair1, WailOfDespair2 }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Small AoE)", "Wail of Despair Hit", 0),
+                new PlayerDstHitMechanic(new long [] { PoolOfDespair1, PoolOfDespair2 }, "Pool of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "PoolDesp.H", "Hit by Pool of Despair (Big AoE)", "Pool of Despair Hit", 0),
+                new PlayerDstHitMechanic(EnviousGaze, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (One Beam)", "Envious Gaze Hit (One Beam)", 0),
+                new PlayerDstHitMechanic(new long [] { EnviousGazeDoubleBeam1, EnviousGazeDoubleBeam2 }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "EmpEnvGaz.H", "Hit by Envious Gaze (Double Beam)", "Envious Gaze Hit (Double Beam)", 0),
+                new PlayerDstHitMechanic(CryOfRageSmall, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "CryRage.H", "Hit by Cry of Rage (Small)", "Cry of Rage Hit (Small)", 0),
+                new PlayerDstHitMechanic(CryOfRageLarge, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "LrgCryRage.H", "Hit by Cry of Rage (Large)", "Cry of Rage Hit (Large)", 0),
+                new PlayerDstHitMechanic(EnragedSmash, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
+                new PlayerDstHitMechanic(MaliciousIntent, "Malicious Intent", new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent", "Malicious Intent Hit", 0),
+                new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
+                new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, "Empowered Despair", new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredEnvyCerus, "Empowered Envy", new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "EmpEnvy.A", "Gained Empowered Envy", "Empowered Envy Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredGluttonyCerus, "Empowered Gluttony", new MechanicPlotlySetting(Symbols.Square, Colors.Brown), "EmpGlu.A", "Gained Empowered Gluttony", "Empowered Gluttony Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredMaliceCerus, "Empowered Malice", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "EmpMal.A", "Gained Empowered Malice", "Empowered Malice Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredRageCerus, "Empowered Rage", new MechanicPlotlySetting(Symbols.Square, Colors.LightOrange), "EmpRage.A", "Gained Empowered Rage", "Empowered Rage Application", 0),
+                new EnemyDstBuffApplyMechanic(EmpoweredRegretCerus, "Empowered Regret", new MechanicPlotlySetting(Symbols.Square, Colors.LightGrey), "EmpReg.A", "Gained Empowered Regret", "Empowered Regret Application", 0),
+                new EnemyCastStartMechanic(EnragedSmash, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
+                new EnemyCastStartMechanic(new long [] { InsatiableHunger1, InsatiableHunger2, InsatiableHunger3, InsatiableHunger4, InsatiableHunger5, InsatiableHunger6, InsatiableHunger7, InsatiableHunger8, InsatiableHunger9, InsatiableHunger10 }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
+                new EnemyCastStartMechanic(EnviousGaze, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze (One Beam)", "Envious Gaze Cast (One Beam)", 0),
+                new EnemyCastStartMechanic(new long [] { EnviousGazeDoubleBeam1, EnviousGazeDoubleBeam2 }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Red), "EmpEnvGaz.C", "Casted Envious Gaze (Double Beam)", "Envious Gaze Cast (Double Beam)", 0),
+                new EnemyCastStartMechanic(PetrifySkill, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Pet.C", "Casted Petrify", "Petrify breakbar start", 0),
+                new EnemySrcHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkTeal), "Pet.F", "Petrify hit players and healed Cerus", "Petrify breakbar fail", 100),
             }
             );
             Icon = EncounterIconTempleOfFebe;
@@ -32,9 +58,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayTempleOfFebe,
-                            // TODO
-                            (1008, 1008),
-                            (0,0,0,0));
+                            (1149, 1149),
+                            (-2088, -6124, 2086, -1950));
         }
 
         protected override List<int> GetTargetsIDs()

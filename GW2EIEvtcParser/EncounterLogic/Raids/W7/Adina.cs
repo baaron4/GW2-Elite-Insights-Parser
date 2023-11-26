@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra);
+                    RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra, true);
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);

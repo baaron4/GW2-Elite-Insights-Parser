@@ -59,18 +59,19 @@
                         if (player.notInSquad) {
                             continue;
                         }
+                        var playerWeight = activeduration ? activeTimes[i] : 1;
                         if (!groupeAvg[player.group]) {
                             groupeAvg[player.group] = [];
                             groupCount[player.group] = 0;
                             groupConditionAvg[player.group] = 0;
                         }
-                        totalCount++;
-                        totalConditionAvg += uptimesStats[i].avg;
-                        groupConditionAvg[player.group] += uptimesStats[i].avg;
-                        groupCount[player.group]++;
+                        totalCount += playerWeight;
+                        totalConditionAvg += playerWeight * uptimesStats[i].avg;
+                        groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
+                        groupCount[player.group] += playerWeight;
                         for (var j = 0; j < uptimesStats[i].data.length; j++) {
-                            totalAvg[j] = (totalAvg[j] || 0) + (uptimesStats[i].data[j][0] || 0);
-                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + (uptimesStats[i].data[j][0] || 0);
+                            totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
                         }
                     }
                     for (var i = 0; i < groupeAvg.length; i++) {

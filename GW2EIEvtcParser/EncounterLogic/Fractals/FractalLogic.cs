@@ -102,16 +102,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        protected long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID)
+        protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID)
         {         
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            AgentItem target;
             if (logStartNPCUpdate != null)
             {
-                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
+                target = agentData.GetNPCsByIDAndAgent(targetID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(targetID).FirstOrDefault();
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, targetID, logStartNPCUpdate.DstAgent);
+            } 
+            else
+            {
+                target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             }
-            // Find target
-            AgentItem target = agentData.GetNPCsByID(targetID).FirstOrDefault();
             if (target == null)
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");

@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class ConjuredAmalgamate : MythwrightGambit
     {
         private readonly bool _cn;
+        private static readonly Point3D CAChestPosition = new Point3D(-4594f, -13004f, -2063.04f);
         public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -36,10 +37,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
             Extension = "ca";
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.ChestGadget;
             Icon = EncounterIconConjuredAmalgamate;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
+            ChestID = ArcDPSEnums.ChestID.CAChest;
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -132,6 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
                 rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
+            FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
             agentData.Refresh();
             AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             ComputeFightTargets(agentData, combatData, extensions);

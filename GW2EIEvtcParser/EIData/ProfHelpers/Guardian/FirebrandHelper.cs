@@ -14,16 +14,28 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new DamageCastFinder(FlameRushOld, FlameRushOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingDisableWithEffectData(),
-            new DamageCastFinder(FlameRush, FlameRush).WithBuilds(GW2Builds.February2023Balance),
-            new DamageCastFinder(FlameSurgeOld, FlameSurgeOld).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance).UsingDisableWithEffectData(),
-            new DamageCastFinder(FlameSurge, FlameSurge).WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(FlameRushOld, FlameRushOld)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance)
+                .UsingDisableWithEffectData(),
+            new DamageCastFinder(FlameRush, FlameRush)
+                .WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(FlameSurgeOld, FlameSurgeOld)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance)
+                .UsingDisableWithEffectData(),
+            new DamageCastFinder(FlameSurge, FlameSurge)
+                .WithBuilds(GW2Builds.February2023Balance),
             //new DamageCastFinder(42360,42360,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Echo of Truth
             //new DamageCastFinder(44008,44008,InstantCastFinder.DefaultICD, 0, GW2Builds.May2021Balance), // Voice of Truth
-            new DamageCastFinder(MantraOfFlameCast, MantraOfFlameDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingDisableWithEffectData(),
-            new DamageCastFinder(MantraOfTruthCast, MantraOfTruthDamage).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance).UsingDisableWithEffectData(),
+            new DamageCastFinder(MantraOfFlameCast, MantraOfFlameDamage)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance)
+                .UsingDisableWithEffectData(),
+            new DamageCastFinder(MantraOfTruthCast, MantraOfTruthDamage)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance)
+                .UsingDisableWithEffectData(),
             //
-            new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace).WithBuilds(GW2Builds.May2021Balance).UsingDisableWithEffectData(),
+            new EXTHealingCastFinder(MantraOfSolace, MantraOfSolace)
+                .WithBuilds(GW2Builds.May2021Balance)
+                .UsingDisableWithEffectData(),
             new EffectCastFinderByDst(MantraOfFlameCast, EffectGUIDs.FirebrandMantraOfFlameSymbol)
                 .UsingDstSpecChecker(Spec.Firebrand)
                 .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
@@ -46,8 +58,10 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstSpecChecker(Spec.Firebrand)
                 .WithBuilds(GW2Builds.February2023Balance),
             //
-            new DamageCastFinder(EchoOfTrue, EchoOfTrue).WithBuilds(GW2Builds.February2023Balance),
-            new DamageCastFinder(VoiceOfTruth, VoiceOfTruth).WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(EchoOfTrue, EchoOfTrue)
+                .WithBuilds(GW2Builds.February2023Balance),
+            new DamageCastFinder(VoiceOfTruth, VoiceOfTruth)
+                .WithBuilds(GW2Builds.February2023Balance),
             //
             new EffectCastFinderByDst(PortentOfFreedomOrUnhinderedDelivery, EffectGUIDs.FirebrandMantraOfLiberationSymbol)
                 .UsingDstSpecChecker(Spec.Firebrand)
@@ -59,12 +73,24 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstSpecChecker(Spec.Firebrand)
                 .WithBuilds(GW2Builds.February2023Balance),
             // tomes
-            new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
-            new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
-            new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
-            new BuffLossCastFinder(StowTome, TomeOfJusticeOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
-            new BuffLossCastFinder(StowTome, TomeOfResolveOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
-            new BuffLossCastFinder(StowTome, TomeOfCourageOpen).WithBuilds(GW2Builds.November2022Balance).UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
+            new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfJusticeOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfResolveOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
+            new BuffLossCastFinder(StowTome, TomeOfCourageOpen)
+                .WithBuilds(GW2Builds.November2022Balance)
+                .UsingBeforeWeaponSwap(true),
         };
 
         private static readonly HashSet<long> _firebrandTomes = new HashSet<long>

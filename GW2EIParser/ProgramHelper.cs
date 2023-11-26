@@ -148,7 +148,7 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.UploadToWingman)
             {
-#if !DEBUG2
+#if !DEBUG
                 if (!isWingmanCompatible)
                 {
                     traces.Add("Can not upload to Wingman: unsupported log");
