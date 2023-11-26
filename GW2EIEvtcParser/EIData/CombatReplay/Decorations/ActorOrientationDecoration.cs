@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
 
-        public ActorOrientationDecoration((int start, int end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
         {
             RotationConnectedTo = new AgentFacingConnector(agent);
         }
@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             return new ActorOrientationDecorationCombatReplayDescription(log, this, map);
         }
 
-        public override GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec Spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        public override GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
         {
             return this;
         }

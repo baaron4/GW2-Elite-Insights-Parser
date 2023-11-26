@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -18,16 +20,16 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM), 
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM), 
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirBuff)
                 .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
@@ -42,24 +44,26 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
-            new BuffDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.March2022Balance2, GW2Builds.SOTOBetaAndSilentSurfNM),
-            new BuffDamageModifier(RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance),
-            new BuffDamageModifier(RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.March2022Balance),
-            new BuffDamageModifier(FlameWheelSkill, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.sPvPWvW)
+            new BuffOnActorDamageModifier(FlameWheelSkill, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.sPvPWvW)
                 .WithBuilds(GW2Builds.March2022Balance),
-            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta2, GW2Builds.November2022Balance),
-            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
-                .WithBuilds(GW2Builds.November2022Balance),
-            new BuffDamageModifier(EmpoweringAuras, "Empowering Auras", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.November2022Balance),
+            new BuffOnActorDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(EmpoweringAuras, "Empowering Auras", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.September2023Balance),
         };
 
 
@@ -84,5 +88,31 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
             new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),
         };
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Elementalist;
+
+            AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployFireJadeSphere, DeployJadeSphereFire, ParserIcons.EffectDeployJadeSphereFire);
+            AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployWaterJadeSphere, DeployJadeSphereWater, ParserIcons.EffectDeployJadeSphereWater);
+            AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployAirJadeSphere, DeployJadeSphereAir, ParserIcons.EffectDeployJadeSphereAir);
+            AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, ParserIcons.EffectDeployJadeSphereEarth);
+        }
+
+        internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, string effectGUID, long skillId, string icon)
+        {
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> jadeSphere))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
+                foreach (EffectEvent effect in jadeSphere)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+        }
     }
 }

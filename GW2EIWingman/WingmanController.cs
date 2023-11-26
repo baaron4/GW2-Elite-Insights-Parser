@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +18,7 @@ namespace GW2EIWingman
     /// </summary>
     public static class WingmanController
     {
+        public delegate void TraceHandler(string trace);
 
         private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
         {
@@ -44,11 +40,11 @@ namespace GW2EIWingman
         private static string CheckUploadURL { get; } = BaseURL + "checkUpload";
         private static string UploadProcessedURL { get; } = BaseURL + "uploadProcessed";
 
-        private static bool IsDPSReportLinkValid(string dpsReportLink, List<string> traces)
+        private static bool IsDPSReportLinkValid(string dpsReportLink, TraceHandler traceHandler)
         {
             if (!dpsReportLink.Contains("https") && !dpsReportLink.Contains(".report"))
             {
-                traces.Add("Wingman: Invalid dps.report link");
+                traceHandler("Wingman: Invalid dps.report link");
                 return false;
             }
             return true;
@@ -70,14 +66,14 @@ namespace GW2EIWingman
         }
 
         // Connection checking
-        private static bool CheckConnection(List<string> traces)
+        private static bool CheckConnection(TraceHandler traceHandler)
         {
-            return _GetWingmanResponse("CheckConnection", TestConnectionURL, traces, HttpMethod.Get) == "True";
+            return _GetWingmanResponse("CheckConnection", TestConnectionURL, traceHandler, HttpMethod.Get) == "True";
         }
 
-        private static bool IsEIVersionValid(Version parserVersion, List<string> traces)
+        private static bool IsEIVersionValid(Version parserVersion, TraceHandler traceHandler)
         {
-            string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traces, HttpMethod.Get);
+            string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
             if (returnedVersion == null)
             {
                 return false;
@@ -87,21 +83,21 @@ namespace GW2EIWingman
             return parserVersion.CompareTo(expectedVersion) >= 0;
         }
 
-        public static bool CanBeUsed(Version parserVersion, List<string> traces)
+        public static bool CanBeUsed(Version parserVersion, TraceHandler traceHandler)
         {
-            return CheckConnection(traces) && IsEIVersionValid(parserVersion, traces);
+            return CheckConnection(traceHandler) && IsEIVersionValid(parserVersion, traceHandler);
         }
         //
 
-        public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
         {
-            if (!IsDPSReportLinkValid(dpsReportLink, traces))
+            if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
                 return null;
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traces, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -110,20 +106,20 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traces.Add("Wingman: CheckLogQueuedOrDB failed - " + e.Message);
+                traceHandler("Wingman: CheckLogQueuedOrDB failed - " + e.Message);
                 return null;
             }
         }
 
-        public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
         {
-            if (!IsDPSReportLinkValid(dpsReportLink, traces))
+            if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
                 return null;
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traces, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -132,20 +128,20 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traces.Add("Wingman: CheckLogQueued failed - " + e.Message);
+                traceHandler("Wingman: CheckLogQueued failed - " + e.Message);
                 return null;
             }
         }
 
-        public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
         {
-            if (!IsDPSReportLinkValid(dpsReportLink, traces))
+            if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
                 return null;
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traces, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -154,35 +150,35 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traces.Add("Wingman: ImportLogQueued failed - " + e.Message);
+                traceHandler("Wingman: ImportLogQueued failed - " + e.Message);
                 return null;
             }
         }
 
-        public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, List<string> traces, Version parserVersion)
+        public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
         {
             // Check if the URL is already present on Wingman
-            WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traces, parserVersion);
+            WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler, parserVersion);
             if (wingmanCheck != null)
             {
                 if (wingmanCheck.InDB || wingmanCheck.InQueue)
                 {
-                    traces.Add("Wingman: Upload failed - Log already present in Wingman DB");
+                    traceHandler("Wingman: Upload failed - Log already present in Wingman DB");
                     return false;
                 }
                 else
                 {
-                    WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traces, parserVersion);
+                    WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traceHandler, parserVersion);
                     if (wingmanUpload != null)
                     {
                         if (wingmanUpload.Success != 1)
                         {
-                            traces.Add("Wingman: Upload failed - " + wingmanUpload.Note);
+                            traceHandler("Wingman: Upload failed - " + wingmanUpload.Note);
                             return true;
                         }
                         else
                         {
-                            traces.Add("Wingman: Upload successful - " + wingmanUpload.Note);
+                            traceHandler("Wingman: Upload successful - " + wingmanUpload.Note);
                             return true;
                         }
                     }
@@ -192,7 +188,7 @@ namespace GW2EIWingman
             return false;
         }
 
-        public static bool CheckUploadPossible(FileInfo fi, string account, List<string> traces, Version parserVersion)
+        public static bool CheckUploadPossible(FileInfo fi, string account, TraceHandler traceHandler, Version parserVersion)
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
             var data = new Dictionary<string, string> { { "account", account }, { "filesize", fi.Length.ToString() }, { "timestamp", creationTime }, { "file", fi.Name } };
@@ -200,9 +196,9 @@ namespace GW2EIWingman
             {
                 return new FormUrlEncodedContent(data);
             };
-            return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traces, parserVersion, HttpMethod.Post, contentCreator) == "True";
+            return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traceHandler, parserVersion, HttpMethod.Post, contentCreator) == "True";
         }
-        public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, string suffix, List<string> traces, Version parserVersion)
+        public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, string suffix, TraceHandler traceHandler, Version parserVersion)
         {
             //var data = new Dictionary<string, string> { { "account", account }, { "file", File.ReadAllText(fi.FullName) }, { "jsonfile", jsonString }, { "htmlfile", htmlString } };
             byte[] fileBytes = File.ReadAllBytes(fi.FullName);
@@ -225,17 +221,17 @@ namespace GW2EIWingman
                 return multiPartContent;
             };
 
-            string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traces, parserVersion, HttpMethod.Post, contentCreator);
+            string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, parserVersion, HttpMethod.Post, contentCreator);
             return response != null && response != "False";
         }
 
         //
-        private static string _GetWingmanResponse(string requestName, string url, List<string> traces, HttpMethod method, Func<HttpContent> content = null)
+        private static string _GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, HttpMethod method, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traces.Add("Wingman: " + requestName + " tentative");
+                traceHandler("Wingman: " + requestName + " tentative");
                 var webService = new Uri(@url);
                 var requestMessage = new HttpRequestMessage(method, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -261,13 +257,13 @@ namespace GW2EIWingman
                     {
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        traces.Add("Wingman: " + requestName + " successful");
+                        traceHandler("Wingman: " + requestName + " successful");
                         return stringContents;
                     }
                 }
                 catch (Exception e)
                 {
-                    traces.Add("Wingman: " + requestName + " failed " + e.Message);
+                    traceHandler("Wingman: " + requestName + " failed " + e.Message);
                 }
                 finally
                 {
@@ -278,13 +274,13 @@ namespace GW2EIWingman
         }
 
 
-        private static string GetWingmanResponse(string requestName, string url, List<string> traces, Version parserVersion, HttpMethod method, Func<HttpContent> content = null)
+        private static string GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, Version parserVersion, HttpMethod method, Func<HttpContent> content = null)
         {
-            if (!CanBeUsed(parserVersion, traces))
+            if (!CanBeUsed(parserVersion, traceHandler))
             {
                 return default;
             }
-            return _GetWingmanResponse(requestName, url, traces, method, content);
+            return _GetWingmanResponse(requestName, url, traceHandler, method, content);
         }
 
     }

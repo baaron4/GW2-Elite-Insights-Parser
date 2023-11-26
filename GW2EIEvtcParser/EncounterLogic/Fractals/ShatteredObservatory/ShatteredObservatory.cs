@@ -65,5 +65,38 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return true;
         }
+
+        protected void AddCorporealReassignmentDecorations(ParsedEvtcLog log)
+        {
+            // Corporeal Reassignment domes & explosions
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out IReadOnlyList<EffectEvent> domes))
+            {
+                foreach (EffectEvent effect in domes)
+                {
+                    if (effect.EndEvent != null)
+                    {
+                        EnvironmentDecorations.Add(new CircleDecoration(220, (effect.Time, effect.EndEvent.Time), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
+                    }
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
+            {
+                foreach (EffectEvent effect in domeExplosions)
+                {
+                    int start = (int)effect.Time - 500;
+                    int end = (int)effect.Time;
+                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
+            {
+                foreach (EffectEvent effect in explosions)
+                {
+                    int start = (int)effect.Time;
+                    int end = start + 500;
+                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                }
+            }
+        }
     }
 }

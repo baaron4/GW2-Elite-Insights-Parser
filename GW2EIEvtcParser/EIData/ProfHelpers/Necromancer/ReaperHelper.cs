@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData.Buffs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -28,11 +29,11 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(ChillingNova, ChillingNova).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifierTarget(Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
-            new BuffDamageModifierTarget(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
-            new BuffDamageModifierTarget(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
+            new BuffOnFoeDamageModifierFoe(Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
+            new BuffOnFoeDamageModifierFoe(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
+            new BuffOnFoeDamageModifierFoe(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
             new DamageLogDamageModifier("Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, BuffImages.SoulEater, (x,log) =>
             {
                 Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
@@ -42,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 300.0;
-            }, ByPresence, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
+            }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

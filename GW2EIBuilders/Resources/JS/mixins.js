@@ -211,25 +211,51 @@ var sortedDistributionComponent = {
     }
 };
 
-var colSliderComponent = function (perpage) {
-  return {
-    data: function () {
-      return {
-        colStructure: {
-            offset: 0,
-            perpage: perpage
-        },
-      };
-    },
-    methods: {
-      isInColPage: function (index) {
-        return (
-          index >= this.colStructure.offset &&
-          index < this.colStructure.offset + this.colStructure.perpage
-        );
-      },
-    },
-  };
+var colSliderComponent = function (perpage, names = null) {
+    let data;
+    let methods;
+    if (names !== null) {
+        data = function () {
+            let res = {};
+            for (let i = 0; i < names.length; i++) {
+                res[names[i] + "ColStructure"] = {
+                    offset: 0,
+                    perpage: perpage,
+                };
+            }
+            return res;
+        };
+        methods = {};
+        for (let i = 0; i < names.length; i++) {
+            methods["isIn" + names[i][0].toUpperCase() + names[i].slice(1) + "ColPage"] = function (index) {
+                return (
+                    index >= this[names[i] + "ColStructure"].offset &&
+                    index < this[names[i] + "ColStructure"].offset + this[names[i] + "ColStructure"].perpage
+                );
+            }
+        }
+    } else {
+        data = function () {
+            return {
+                colStructure: {
+                    offset: 0,
+                    perpage: perpage,
+                },
+            };
+        };
+        methods = {
+            isInColPage: function (index) {
+                return (
+                    index >= this.colStructure.offset &&
+                    index < this.colStructure.offset + this.colStructure.perpage
+                );
+            },
+        }
+    }
+    return {
+        data: data,
+        methods: methods
+    };
 };
 
 var rowSliderComponent = function (perpage) {

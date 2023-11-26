@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
-                filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
             return filtered;
         }
@@ -112,6 +112,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
         {
             return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
+        }
+
+        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
+        {
+            var filteredList = new List<AbstractBuffEvent>();
+            foreach (long buffID in buffIDs)
+            {
+                filteredList.AddRange(GetFilteredList(combatData, buffID, target, beginWithStart, padEnd));
+            }
+            return filteredList;
+        }
+
+        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        {
+            return GetFilteredList(combatData, buffIDs, target.AgentItem, beginWithStart, padEnd);
         }
 
         internal static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)

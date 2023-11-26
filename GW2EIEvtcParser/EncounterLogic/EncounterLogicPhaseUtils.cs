@@ -46,13 +46,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var phases = new List<PhaseData>();
             long last = start;
-            var invuls = skillIDs.SelectMany(skillID => GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true)).ToList();
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true);
             invuls.RemoveAll(x => x.Time < 0);
             invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
             bool nextToAddIsSkipPhase = !beginWithStart;
-            for (int i = 0; i < invuls.Count; i++)
+            foreach (AbstractBuffEvent c in invuls)
             {
-                AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
                     long curEnd = Math.Min(c.Time, end);

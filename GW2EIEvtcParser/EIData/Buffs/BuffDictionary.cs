@@ -8,6 +8,8 @@ namespace GW2EIEvtcParser.EIData
     internal class BuffDictionary
     {
         private readonly Dictionary<long, List<AbstractBuffEvent>> _dict = new Dictionary<long, List<AbstractBuffEvent>>();
+        // Fast look up table for AddToList
+        private readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _dictExtensionAccelerator = new Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>>();
         // Constructors
         public BuffDictionary()
         {
@@ -18,32 +20,62 @@ namespace GW2EIEvtcParser.EIData
             return _dict.TryGetValue(buffID, out list);
         }
 
-        private static void AddToList(List<AbstractBuffEvent> list, AbstractBuffEvent buffEvent)
+        private static void AddToList(ParsedEvtcLog log, List<AbstractBuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, AbstractBuffEvent buffEvent)
         {
-            AbstractBuffEvent last = list.Last();
             // Essence of speed issue for Soulbeast
-            if (last is BuffExtensionEvent beeLast && buffEvent is BuffExtensionEvent beeCurrent 
-                && beeCurrent.BuffInstance == beeLast.BuffInstance && buffEvent.Time == last.Time
-                && Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+            if (buffEvent is BuffExtensionEvent beeCurrent)
             {
-                list.Remove(last);
+                if (beeCurrent.BuffInstance != 0)
+                {
+                    if (dictExtension.TryGetValue(beeCurrent.BuffInstance, out List<BuffExtensionEvent> listExtension))
+                    {
+                        BuffExtensionEvent beeLast = listExtension.LastOrDefault();
+                        if (beeLast != null && Math.Abs(buffEvent.Time - beeLast.Time) <= 1)
+                        {
+                            if (Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+                            {
+                                list.Remove(beeLast);
+                                listExtension.Remove(beeLast);
+                            }
+                            else if (Math.Abs(beeCurrent.NewDuration - beeLast.NewDuration) <= 1)
+                            {
+                                return;
+                            }
+                        }
+                        listExtension.Add(beeCurrent);
+                    } 
+                    else
+                    {
+                        dictExtension[beeCurrent.BuffInstance] = new List<BuffExtensionEvent>() { beeCurrent };
+                    }
+                }
+            } 
+            // handle duplicated application for buff initials
+            else if (buffEvent is BuffApplyEvent bae && bae.BuffInstance != 0 && bae.Initial)
+            {
+                var duplicated = log.CombatData.GetBuffDataByInstanceID(bae.BuffID, bae.BuffInstance).Where(x => x is BuffApplyEvent otherBae && x.To == bae.To && !otherBae.Initial && Math.Abs(otherBae.Time - bae.Time) <= 1).Any();
+                if (duplicated)
+                {
+                    return;
+                } 
             }
             list.Add(buffEvent);
         }
 
-            public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+        public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
         {
             if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
             {
                 return;
             }
             buffEvent.TryFindSrc(log);
-            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
+            if (!_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
-                AddToList(list, buffEvent);
-                return;
+                list = new List<AbstractBuffEvent>();
+                _dict[buff.ID] = list;
+                _dictExtensionAccelerator[buff.ID] = new Dictionary<uint, List<BuffExtensionEvent>>();
             }
-            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
+            AddToList(log, list, _dictExtensionAccelerator[buff.ID], buffEvent);
         }
 
         private BuffRemoveSingleEvent _lastRemovedRegen = null;
@@ -67,29 +99,14 @@ namespace GW2EIEvtcParser.EIData
                 _lastRemovedRegen = null;
             }
             buffEvent.TryFindSrc(log);
-            if (_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
+            if (!_dict.TryGetValue(buff.ID, out List<AbstractBuffEvent> list))
             {
-                AddToList(list, buffEvent);
-                return;
+                list = new List<AbstractBuffEvent>();
+                _dict[buff.ID] = list;
+                _dictExtensionAccelerator[buff.ID] = new Dictionary<uint, List<BuffExtensionEvent>>();
             }
-            _dict[buff.ID] = new List<AbstractBuffEvent>() { buffEvent };
+            AddToList(log, list, _dictExtensionAccelerator[buff.ID], buffEvent);
         }
-
-        /*private static int CompareBuffEventType(AbstractBuffEvent x, AbstractBuffEvent y)
-        {
-            if (x.Time < y.Time)
-            {
-                return -1;
-            }
-            else if (x.Time > y.Time)
-            {
-                return 1;
-            }
-            else
-            {
-                return x.CompareTo(y);
-            }
-        }*/
 
 
         public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
@@ -101,21 +118,21 @@ namespace GW2EIEvtcParser.EIData
                 lastDespawn = dsp.Time;
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
             {
-                foreach(KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _dict)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             trackedBuffs = new HashSet<Buff>();

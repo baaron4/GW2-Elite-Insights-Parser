@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -51,25 +54,25 @@ namespace GW2EIEvtcParser.EIData
             return newPt;
         }
 
-        public void Add(Point3D a)
+        private void Add(Point3D a)
         {
             X += a.X;
             Y += a.Y;
             Z += a.Z;
         }
-        public void Substract(Point3D a)
+        private void Substract(Point3D a)
         {
             X -= a.X;
             Y -= a.Y;
             Z -= a.Z;
         }
-        public void Multiply(Point3D a)
+        private void Multiply(Point3D a)
         {
             X *= a.X;
             Y *= a.Y;
             Z *= a.Z;
         }
-        public void MultiplyScalar(float a)
+        private void MultiplyScalar(float a)
         {
             X *= a;
             Y *= a;

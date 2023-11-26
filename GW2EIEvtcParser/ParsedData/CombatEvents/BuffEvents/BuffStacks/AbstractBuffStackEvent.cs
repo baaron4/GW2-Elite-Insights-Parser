@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractBuffStackEvent : AbstractBuffEvent
     {
-        protected uint BuffInstance { get; set; }
+        public uint BuffInstance { get; protected set; }
 
         internal AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {

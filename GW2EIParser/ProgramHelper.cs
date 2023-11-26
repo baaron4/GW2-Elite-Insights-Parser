@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Discord;
 using GW2EIBuilders;
@@ -14,13 +12,9 @@ using GW2EIDiscord;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
 using GW2EIWingman;
-using GW2EIWingman.WingmanUploadJsons;
 using GW2EIEvtcParser;
-using GW2EIEvtcParser.EIData;
 using GW2EIGW2API;
 using GW2EIParser.Exceptions;
-using static GW2EIEvtcParser.ParserHelper;
-using System.Xml.Linq;
 
 namespace GW2EIParser
 {
@@ -104,7 +98,7 @@ namespace GW2EIParser
         {
             if (Properties.Settings.Default.ParseMultipleLogs)
             {
-                if (!HasFormat() && Properties.Settings.Default.UploadToDPSReports)
+                if (!HasFormat() && (Properties.Settings.Default.UploadToDPSReports || (false && Properties.Settings.Default.UploadToWingman)))
                 {
                     return false;
                 }
@@ -113,24 +107,24 @@ namespace GW2EIParser
             return false;
         }
 
-        private static string[] UploadOperation(List<string> traces, FileInfo fInfo, ParsedEvtcLog log)
+        private static string[] UploadOperation(FileInfo fInfo, ParsedEvtcLog originalLog, OperationController originalController)
         {
             // Only upload supported 5 men, 10 men and golem logs, without anonymous players
-            var isWingmanCompatible = !log.ParserSettings.AnonymousPlayers && (
-                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
-                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
-                            log.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
+            var isWingmanCompatible = !originalLog.ParserSettings.AnonymousPlayers && (
+                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
+                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
+                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
                             );
             //Upload Process
             string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                traces.Add("Uploading to DPSReport using EI");
-                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, traces, Properties.Settings.Default.DPSReportUserToken,
-                log.ParserSettings.AnonymousPlayers,
-                log.ParserSettings.DetailedWvWParse);
+                originalController.UpdateProgressWithCancellationCheck("Uploading to DPSReport using EI");
+                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress(str), Properties.Settings.Default.DPSReportUserToken,
+                originalLog.ParserSettings.AnonymousPlayers,
+                originalLog.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
-                traces.Add("DPSReports using EI: " + uploadresult[0]);
+                originalController.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
                 /*
                 if (Properties.Settings.Default.UploadToWingman)
                 {
@@ -151,12 +145,13 @@ namespace GW2EIParser
 #if !DEBUG
                 if (!isWingmanCompatible)
                 {
-                    traces.Add("Can not upload to Wingman: unsupported log");
+                    originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: unsupported log");
                 } 
                 else
                 {
-                    string accName = log.LogData.PoV != null ? log.LogData.PoVAccount : null;
-                    if (WingmanController.CheckUploadPossible(fInfo, accName, traces, ParserVersion))
+                    string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
+
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, str => originalController.UpdateProgress(str), ParserVersion))
                     {
                         try
                         {
@@ -167,14 +162,15 @@ namespace GW2EIParser
                                                             true,
                                                             Properties.Settings.Default.CustomTooShort,
                                                             Properties.Settings.Default.DetailledWvW);
-                            ParsedEvtcLog logToUse = log;
-                            if (log.ParserSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
-                                log.ParserSettings.ParsePhases != expectedSettings.ParsePhases ||
-                                log.ParserSettings.ParseCombatReplay != expectedSettings.ParseCombatReplay)
+                            ParsedEvtcLog logToUse = originalLog;
+                            if (originalLog.ParserSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
+                                originalLog.ParserSettings.ParsePhases != expectedSettings.ParsePhases ||
+                                originalLog.ParserSettings.ParseCombatReplay != expectedSettings.ParseCombatReplay)
                             {
                                 // We need to create a parser that matches Wingman's expected settings
                                 var parser = new EvtcParser(expectedSettings, APIController);
-                                logToUse = parser.ParseLog(new ConsoleOperationController(fInfo.FullName), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
+                                originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog");
+                                logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
                             }
                             byte[] jsonFile, htmlFile;
                             var uploadResult = new UploadResults();
@@ -197,19 +193,24 @@ namespace GW2EIParser
                                 sw.Close();
                                 htmlFile = ms.ToArray();
                             }
+                            if (logToUse != originalLog)
+                            {
+                                originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
+                            }
                             string result = log.FightData.Success ? "kill" : "fail";
-                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{log.FightData.Logic.Extension}_{result}", traces, ParserVersion);
+                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{log.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress(str), ParserVersion);
                         }
                         catch (Exception e)
                         {
-                            traces.Add("Can not upload to Wingman: " + e.Message);
+                            originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: " + e.Message);
                         }
                     } 
                     else
                     {
-                        traces.Add("Can not upload to Wingman: log already uploaded");
+                        originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: log already uploaded");
                     }
                 }
+                originalController.UpdateProgressWithCancellationCheck("Wingman: operation completed");
 #endif
 
             }
@@ -222,10 +223,9 @@ namespace GW2EIParser
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
             operation.Reset();
-            var sw = new Stopwatch();
             try
             {
-                sw.Start();
+                operation.Start();
                 var fInfo = new FileInfo(operation.InputFile);
 
                 var parser = new EvtcParser(new EvtcParserSettings(Properties.Settings.Default.Anonymous,
@@ -244,12 +244,7 @@ namespace GW2EIParser
                     failureReason.Throw();
                 }
                 operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
-                var externalTraces = new List<string>();
-                string[] uploadStrings = UploadOperation(externalTraces, fInfo, log);
-                foreach (string trace in externalTraces)
-                {
-                    operation.UpdateProgressWithCancellationCheck(trace);
-                }
+                string[] uploadStrings = UploadOperation(fInfo, log, operation);
                 if (Properties.Settings.Default.SendEmbedToWebhook && Properties.Settings.Default.UploadToDPSReports)
                 {
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
@@ -276,10 +271,9 @@ namespace GW2EIParser
             }
             finally
             {
-                sw.Stop();
+                operation.Stop();
                 GC.Collect();
                 Thread.CurrentThread.CurrentCulture = before;
-                operation.Elapsed = ("Elapsed " + sw.ElapsedMilliseconds + " ms");
             }
         }
 

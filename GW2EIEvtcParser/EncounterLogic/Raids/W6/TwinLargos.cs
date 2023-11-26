@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -245,7 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -254,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
@@ -262,7 +263,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -271,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)
@@ -280,7 +281,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 960;
                         int duration = 3000;
                         int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                     }
                     var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
@@ -290,13 +291,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 500;
                         int width = 500;
                         int height = 250;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(false, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.8)", positionConnector).UsingRotationConnector(rotationConnextor));
-                            replay.Decorations.Add(new RectangleDecoration(true, 0, width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.2)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;
@@ -317,14 +317,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, toDropStart + timer, debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)));
-                ParametricPoint3D poisonNextPos = replay.PolledPositions.FirstOrDefault(x => x.Time >= toDropEnd);
-                ParametricPoint3D poisonPrevPos = replay.PolledPositions.LastOrDefault(x => x.Time <= toDropEnd);
-                if (poisonNextPos != null || poisonPrevPos != null)
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+                Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(true, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(100, 100, 100, 0.3)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
-                    replay.Decorations.Add(new CircleDecoration(false, toDropStart + duration, radius, (toDropEnd, toDropEnd + duration), "rgba(230, 230, 230, 0.4)", new InterpolatedPositionConnector(poisonPrevPos, poisonNextPos, toDropEnd), debuffRadius));
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
@@ -333,7 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
             }
         }
 

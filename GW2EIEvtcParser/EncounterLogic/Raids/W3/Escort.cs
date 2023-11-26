@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
                 new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, "Radiant Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
                 new PlayerDstBuffApplyMechanic(CrimsonAttunementPhantasm, "Crimson Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Crim.A", "Crimson Attunement Application", "Crimson Attunement Application", 150),
+                new PlayerSrcEffectMechanic(EffectGUIDs.EscortOverHere, "Over Here!", new MechanicPlotlySetting(Symbols.Star, Colors.White), "OverHere.C", "Used Over Here! (Special Action Key)", "Over Here! Cast", 0),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.LightBlue), "Inv.A", "Invulnerability Applied", "Invulnerability Applied", 150),
                 new EnemyCastStartMechanic(TeleportDisplacementField, "Teleport Displacement Field", new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
             }
@@ -191,6 +192,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
+                    // Is this reliable?
+                    /*CombatItem achievementTrackApply = combatData.Where(x => (x.SkillID == AchievementEligibilityMineControl || x.SkillID == AchievementEligibilityFastSiege) && x.IsBuffApply()).FirstOrDefault();
+                    if (achievementTrackApply != null)
+                    {
+                        startToUse = achievementTrackApply.Time;
+                    }*/
                 }
                 else
                 {
@@ -198,6 +205,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return startToUse;
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (_hasPreEvent)
+            {
+                AgentItem glenna = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Glenna).FirstOrDefault();
+                if (glenna == null)
+                {
+                    throw new MissingKeyActorsException("Glenna not found");
+                }
+                var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
+                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100)) 
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+                return FightData.EncounterStartStatus.Normal;
+            } 
+            else if (combatData.GetLogStartNPCUpdateEvents().Any())
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            } 
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -276,6 +309,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Attunements Overhead
             replay.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
             replay.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+        }
+
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new EffectCastFinder(OverHere, EffectGUIDs.EscortOverHere),
+            };
         }
     }
 }

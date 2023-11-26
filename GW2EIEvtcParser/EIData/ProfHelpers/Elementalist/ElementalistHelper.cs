@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -39,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new DamageCastFinder(LightningStrike, LightningStrike),
             new DamageCastFinder(LightningRod, LightningRod)
-                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), 
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new DamageCastFinder(LightningFlash, LightningFlash)/*.UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasEffectData)*/,
             new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
                 .UsingDstBaseSpecChecker(Spec.Elementalist),
@@ -54,71 +57,71 @@ namespace GW2EIEvtcParser.EIData
             // Hammer
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
                 .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
-                .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             // Fire
-            new BuffDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.July2020Balance, GW2Builds.EndOfLife),
-            new BuffDamageModifier(new long[] { FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(new long[] { FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-            new BuffDamageModifierTarget(Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE)
+            new BuffOnFoeDamageModifierFoe(Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-            new BuffDamageModifierTarget(Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.All)
+            new BuffOnFoeDamageModifierFoe(Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.July2019Balance),
             // Air
-            new DamageLogDamageModifier("Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
+            new DamageLogDamageModifier("Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
             // Earth
-            new BuffDamageModifierTarget(Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SerratedStones, DamageModifierMode.All),
+            new BuffOnFoeDamageModifierFoe(Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SerratedStones, DamageModifierMode.All),
             // Water
-            new DamageLogDamageModifier("Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, ByPresence, DamageModifierMode.PvE)
+            new DamageLogDamageModifier("Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-            new BuffDamageModifierTarget(Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+                .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
-            new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByAbsence)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+                .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
-            new BuffDamageModifierTarget(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
+                .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
-            new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByAbsence)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
+                .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
-            new BuffDamageModifierTarget(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-                .UsingSourceActivator(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement }, ByPresence)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+                .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-            new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, DamageModifierMode.All)
+            new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)
                 .UsingApproximate(true),
-            new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, DamageModifierMode.PvE)
+            new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
                 .UsingApproximate(true),
-            new DamageLogDamageModifier("Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, ByPresence, DamageModifierMode.sPvPWvW)
+            new DamageLogDamageModifier("Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
                 .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
                 .UsingApproximate(true),
-            //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, ByPresence, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+            //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             // Arcane
-            new BuffDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
-            new BuffDamageModifierTarget(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
+            new BuffOnFoeDamageModifierFoe(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.December2018Balance)
                 .UsingApproximate(true),
-            new BuffDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
@@ -143,7 +146,7 @@ namespace GW2EIEvtcParser.EIData
             // Forms
             new Buff("Mist Form", MistForm, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
             new Buff("Mist Form 2", MistForm2, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
-            new Buff("Ride the Lightning",RideTheLightning, Source.Elementalist, BuffClassification.Other, BuffImages.RideTheLightning),
+            new Buff("Ride the Lightning",RideTheLightningBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RideTheLightning),
             new Buff("Vapor Form", VaporForm, Source.Elementalist, BuffClassification.Other, BuffImages.VaporForm),
             new Buff("Tornado", Tornado, Source.Elementalist, BuffClassification.Other, BuffImages.Tornado),
             new Buff("Whirlpool", Whirlpool, Source.Elementalist, BuffClassification.Other, BuffImages.Whirlpool),
@@ -242,6 +245,137 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
+        }
+
+        public static IReadOnlyList<AnimatedCastEvent> ComputeUpdraftCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(Updraft);
+            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
+            {
+                foreach(EffectEvent effect in updrafts)
+                {
+                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
+                }
+            }
+            return res;
+        }
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Elementalist;
+
+            // Meteor Shower - Outer circle
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerCircle, out IReadOnlyList<EffectEvent> meteorShowerCircles))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, MeteorShower);
+                foreach (EffectEvent effect in meteorShowerCircles)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 9000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMeteorShower, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+                // The meteors
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out IReadOnlyList<EffectEvent> meteorShowersMeteors))
+                {
+                    foreach (EffectEvent effect in meteorShowersMeteors)
+                    {
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1330);
+                        var connector = new PositionConnector(effect.Position);
+                        // -750 to make the decoration faster than in game
+                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.Item2 - 750, lifespan.Item2), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.Item2 - 750, lifespan.Item2), color.WithAlpha(0.2f).ToString(), connector).UsingFilled(false).UsingGrowingEnd(lifespan.Item2, true).UsingSkillMode(skill));
+                    }
+                }
+            }
+
+            // Static Field (Staff)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldStaff, out IReadOnlyList<EffectEvent> staticFieldsStaff))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldStaff);
+                foreach (EffectEvent effect in staticFieldsStaff)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Static Field (Lightning Hammer)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldLightningHammer, out IReadOnlyList<EffectEvent> staticFieldsHammer))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldLightingHammer);
+                foreach (EffectEvent effect in staticFieldsHammer)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Updraft
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Updraft);
+                foreach (EffectEvent effect in updrafts)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 750);
+                    var connector = new PositionConnector(effect.Position);
+                    var circle = (CircleDecoration)new CircleDecoration(240, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill);
+                    replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Firestorm
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out IReadOnlyList<EffectEvent> firestorms))
+            {
+                var firestormCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword).ToList();
+                foreach (EffectEvent effect in firestorms)
+                {
+                    SkillModeDescriptor skill;
+                    string icon;
+                    var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                    if (firestormCastsOnEffect.Count == 1)
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.FirstOrDefault().SkillId);
+                        icon = skill.SkillID == FirestormGlyphOfStorms ? ParserIcons.EffectFirestormGlyph : ParserIcons.EffectFirestormFieryGreatsword;
+                    }
+                    else
+                    {
+                        skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
+                        icon = ParserIcons.EffectFirestormGlyphOrFieryGreatsword;
+                    }
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 10000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Geyser
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyser, out IReadOnlyList<EffectEvent> geysers))
+            {
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyserSplash, out IReadOnlyList<EffectEvent> geyserSplash))
+                {
+                    var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist);
+                    foreach (EffectEvent effect in geysers)
+                    {
+                        if (!geyserSplash.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                        {
+                            continue;
+                        }
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGeyser, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    }
+                }
+                
+            }
         }
     }
 }

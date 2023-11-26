@@ -315,10 +315,11 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="log"></param>
         /// <param name="buffId"></param>
         /// <param name="time"></param>
+        /// <param name="window"></param>
         /// <returns></returns>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
-            return _buffHelper.HasBuff(log, buffId, time);
+            return _buffHelper.HasBuff(log, buffId, time, window);
         }
 
         /// <summary>
@@ -489,11 +490,6 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
         {
-            if (!log.CanCombatReplay)
-            {
-                // no combat replay support on fight
-                return new List<GenericDecoration>();
-            }
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
@@ -783,14 +779,76 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Position will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             if (!positions.Any())
             {
                 return null;
             }
-            return positions.FirstOrDefault(x => x.Time >= time);
+            if (forwardWindow != 0)
+            {
+                return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
+            }
+            return positions.LastOrDefault(x => x.Time <= time);
+        }
+
+        public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
+        {
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
+            if (!positions.Any())
+            {
+                return null;
+            }
+            ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
+            ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
+            Point3D res;
+            if (prev != null && next != null)
+            {
+                long denom = next.Time - prev.Time;
+                if (denom == 0)
+                {
+                    res = prev;
+                }
+                else
+                {
+                    float ratio = (float)(time - prev.Time) / denom;
+                    res = new Point3D(prev, next, ratio);
+                }
+            }
+            else
+            {
+                res = prev ?? next;
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Rotation will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
+            if (!rotations.Any())
+            {
+                return null;
+            }
+            if (forwardWindow != 0)
+            {
+                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time); 
+            }
+            return rotations.LastOrDefault(x => x.Time <= time);
         }
 
     }

@@ -306,6 +306,15 @@ namespace GW2EIJSON
         /// If the fight is in challenge mode
         /// </summary>
         public bool IsCM { get; set; }
+        /// <summary>
+        /// True if EI detected that the encounter started later than expected. \n
+        /// This value being false does not mean the encounter could not have started later than expected.
+        /// </summary>
+        public bool IsLateStart { get; set; }
+        /// <summary>
+        /// True if an encounter that is supposed to have a pre-event does not have it.
+        /// </summary>
+        public bool MissingPreEvent { get; set; }
 
         /// <summary>
         /// If the log was parsed in anonymous mode

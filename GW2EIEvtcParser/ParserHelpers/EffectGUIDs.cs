@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser
         public const string Generic360Or600UnitRadius = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // somehow both? e.g. chaos vortex, medical dispersion field, reconstruction enclosure, barrier engine
         public const string Generic600UnitRadius = "9C7C1B2379CCDD4990001A38030E4495"; // e.g. ranger spirits, protect me
         public const string Generic900UnitRadius = "EB9EBC2CB610B448BB00B7FBCB191F28"; // e.g. call of the wild
+        public const string GenericTrapInactive = "D9F9B146BC2B914B874EA980B2FF0C00";
         public const string RuneOfNightmare = "149E616EB45B1E4982305B99A7952EA8";
         public const string StealthApply = "B44BAD999BEB2D4DB284745895B42BDD";
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
@@ -61,6 +62,25 @@ namespace GW2EIEvtcParser
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA";
         public const string ChronomancerTimeSink = "AB2E22E7EE74DA4C87DA777C62E475EA";
+        public const string ChronomancerWellGeneric = "643B0B821F470748BC877B089ACD0C18";
+        public const string ChronomancerWellOfEternity = "F574310CA199DF4488AFFA0216BA1454";
+        public const string ChronomancerWellOfEternityPulse = "AB9D0AC13EEBE7459CFA914542567F40"; // 1 pulse every second, 3 total
+        public const string ChronomancerWellOfEternityExplosion = "E35E0D4F892AAD4BB76B2A5C6F9DE8C1"; // 1 second after final pulse
+        public const string ChronomancerWellOfAction = "6CB76B96F4242C468BFE5FA5FA038D73";
+        public const string ChronomancerWellOfActionPulse = "FD2802E2DC92124F940DDDD998B8B57B"; // 1 pulse every second, 3 total
+        public const string ChronomancerWellOfActionExplosion = "F57C7DD4E9BDE348BF8583F97E1C01C1"; // 1 second after final pulse
+        public const string ChronomancerWellOfCalamity = "4C7071BBE735D843B12893898A4C2688";
+        public const string ChronomancerWellOfCalamityPulse = "D49238E0B3A365489A5B601EDB68F942"; // 1 pulse every second, 3 total
+        public const string ChronomancerWellOfCalamityExplosion = "CEB6C2416CF40C44B0C156BCBF247E24"; // 1 second after final pulse
+        public const string ChronomancerWellOfPrecognition = "AB99EA6C6534B74597277998C301866B";
+        public const string ChronomancerWellOfPrecognitionPulse = "E5F4B6BC7A9F084CAB5FD548163DF7CF"; // 1 pulse every second, 3 total
+        public const string ChronomancerWellOfPrecognitionExplosion = "9DDFE99A09A8FA45810B1ED41B310B74"; // 1 second after final pulse
+        public const string ChronomancerWellOfSenility = "9ED7EC5CDA3A7D4DB44998CE40C8CF31";
+        public const string ChronomancerWellOfSenilityPulse = "DF910E4C6F75DB4CB345889EA68808B2"; // 1 pulse every second, 3 total
+        public const string ChronomancerWellOfSenilityExplosion = "8799483A7E93AB4385451033145B3345"; // 1 second after final pulse
+        public const string ChronomancerGravityWell = "42B42983DA2E2D45876D201F1DCECE73";
+        public const string ChronomancerGravityWellPulse = "60A74BCA1ECF974FB31CE28ABDF6D8AE"; // 1 pulse every second, 3 total
+        public const string ChronomancerGravityWellExplosion = "E0D03976A4BC034E8ABFBBECCC828932"; // 1 second after final pulse
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
@@ -85,6 +105,16 @@ namespace GW2EIEvtcParser
         public const string NecromancerPlaguelandsPulse1 = "7E12B3B1896BC748AE50333267CDBFB9";
         public const string NecromancerPlaguelandsPulse2 = "A442AE5DFE73D04BBC19B050540E000A";
         public const string NecromancerPlaguelandsPulse3 = "253ADDAEC2009A499FA29C44E1D73F05";
+        public const string NecromancerMarkOfBloodOrChillblains = "A859FDB2593E2C4ABEFB51907393BBAA";
+        public const string NecromancerPutridMark = "651695CA0DB15E4F88E30BF58630B891";
+        public const string NecromancerReapersMark = "074AFD46220642429D67BF645CA81D65";
+        public const string NecromancerMarkOfBloodActivated1 = "31D543A5DCEF9643A59EF9498A55ACDE";
+        public const string NecromancerMarkOfBloodActivated2 = "5FA6527231BB8041AC783396142C6200";
+        public const string NecromancerChillblainsActivated = "831159227814DF4FA354CAD7E0755FEE";
+        public const string NecromancerPutridMarkActivated1 = "E52F2D6DBABA934882BBBB8F0832C777";
+        public const string NecromancerPutridMarkActivated2 = "EFB9CDA30AEBC744B9D377A99BEBC0B2";
+        public const string NecromancerPutridMarkActivated3 = "CAF4E62C2C5CC04499657C2A6A78087B"; // No src or dst
+        public const string NecromancerReapersMarkActivated = "255FBE1C15D0C6488BD018748184624F";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -96,15 +126,33 @@ namespace GW2EIEvtcParser
         public const string HarbingerCascadingCorruption = "EEDCAB61CD35E840909B03D398878B1C";
         public const string HarbingerDeathlyHaste = "9C06D9D9B0E22247A1752C426808CD80";
         public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
+        public const string HarbingerVitalDrawSelfDst = "667EAEE89766E14E883E6ECA5D3D267B"; // Target self
+        public const string HarbingerVitalDrawAoE = "859611F71893924989B056F6A011C160"; // Ground effect
         // Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
         //public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200"; // also used with mesmer the prestige, collides with some air traits
         public const string ElementalistSignetOfAir = "30A96C0E559DBD489FEE36DA96CC374A";
         //public const string ElementalistLightningFlash = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Conflicts with certain field combos, thief teleport skills, guardian judges/merciful intervention
+        public const string ElementalistMeteorShowerCircle = "0F42F49776A5F74E8A0CADC4BCF53904";
+        public const string ElementalistMeteorShowerMeteor = "F3DD685A8E52124A9FCC653C90EA789A";
+        public const string ElementalistStaticFieldStaff = "1ED1C9E57048CF419AFB9C31329FF51E";
+        public const string ElementalistStaticFieldLightningHammer = "E32640807FA71947BE21177E2C75043C";
+        public const string ElementalistUpdraft = "DFFD3374FA23D644A6D0BE37216938C5";
+        public const string ElementalistUpdraft2 = "0FA8EF1CE419504A9D03004D6CF5F073";
+        public const string ElementalistUpdraftWind = "DE8C1CE6E3AC3445911B214CA8021BDD";
+        public const string ElementalistFirestorm = "172F43AB94CB214D95A6EA7F7DFCE520"; // Same for Glyph of Storms and Conjured Fiery Greatsword
+        public const string ElementalistGeyserSplash = "C0FAFED39AEDD948B025AA1272B80A8B";
+        public const string ElementalistGeyser = "3A15A72D28971D4D8CE5C24DB66C5595";
+        public const string TempestOverloadFire1 = "675AE0297C86764ABC4A5988CE76A20E";
+        public const string TempestOverloadFire2 = "977D44CE34F6B9438BCDCFA074BBDCA8";
+        public const string TempestOverloadAir1 = "3CE58ECAB1EE9C4E96F70E3A64967F55";
+        public const string TempestOverloadAir2 = "E8EB2CDF97F34C42A8AAC0D3BA6551D0";
         public const string TempestFeelTheBurn = "C668B5DB6220D9448817B3E5F7DE6E46";
         public const string TempestEyeOfTheStorm1 = "52FEF389CF7D014BAA375EACF1826BB6";
         public const string TempestEyeOfTheStorm2 = "31FE88E9CCF82047895FD0EF19C9BBA0"; // happens at the same time as the other, could be relevant to check should collisions appear 
+        public const string TempestLightningOrb1 = "DE4C727C58DA0A4EB87D5433B2B64EAB";
+        public const string TempestLightningOrb2 = "AF5462A3F3500A4B8C91D6BEAFA62B62";
         public const string CatalystDeployFireJadeSphere = "AFC5D5C7DA63D64BAAD55F787205B64F";
         public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
         public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";
@@ -165,6 +213,13 @@ namespace GW2EIEvtcParser
         // Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
+        public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
+        public const string EngineerMineExplode1 = "885B7AAA68F09E48A926BFFE488DB5AD";
+        public const string EngineerMineExplode2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD";
+        public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
+        public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
+        public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration
+        public const string ScrapperFunctionGyroSpawn = "AC9C3749A245D741BC012CCAB224E37C"; // has owner, 1s duration
         public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
         public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
@@ -185,6 +240,15 @@ namespace GW2EIEvtcParser
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
         public const string RangerSignetOfTheHunt = "1A38CAE72C2F164BA3815441CA643A20";
         public const string RangerHunkerDown = "FAE87ED17A43E54AA3ABB3EAA2FDB754";
+        public const string RangerBarrage1 = "A982C451890E704BA918B6959175D2A4"; // has owner, repeating, has duration
+        public const string RangerBarrage2 = "90A4BD30E723C749A4E161C177F723A0"; // has owner, repeating
+        public const string RangerBonfire = "E68388DE0702F44BB3F7E457EE9410AF"; // has owner
+        public const string RangerFlameTrap = "371DA8262E27304BB1142A39FAED0731"; // has owner
+        public const string RangerFrostTrap = "B2A5125C3FDDFB448F130488D32568C2"; // has owner, has duration
+        public const string RangerFrostTrapTrigger = "A86A024FE2DDD147829551764894D716"; // has owner, no duration
+        public const string RangerVipersNest = "1964816830EF7B47827298789EF7227B"; // has owner
+        public const string RangerSpikeTrap = "E0223550EAC46A4C8CEC277CFC2B7927"; // has owner
+        public const string RangerPoisonousCloud = "FDD0241186BAFE4AA451767D082D0BA9"; // has owner
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
@@ -216,11 +280,30 @@ namespace GW2EIEvtcParser
         public const string ThiefShadowPortalActiveEntrance = "8535B486C1BCD24A87B7AC895FB26BB0";
         public const string ThiefShadowPortalActiveExit = "97AF46D347914E4FBDB37BFEC91C4711";
         public const string DeadeyeMercy = "B59FCEFCF1D5D84B9FDB17F11E9B52E6";
+        public const string SpecterWellOfGloom1 = "F4260FA8B35EFC40B6990F5015E486A3"; // These 3 effects happen before the AoE, the placement can be moved with skill retargetting
+        public const string SpecterWellOfGloom2 = "F5BD1268C23E0C4C85E7DFC927360EFE";
+        public const string SpecterWellOfGloom3 = "1B9672DFA1F1D74DB11ADF3F0956FCF0";
+        public const string SpecterWellOfGloom4 = "0FA258E85B5B2B4CBCF504F478558D3C"; // ~715ms delay - Using these two effects for the AoE placement (they happen after retargetting)
+        public const string SpecterWellOfGloom5 = "63B5CB22E35C094E948DA101CA247B25"; // ~715ms delay
+        public const string SpecterWellOfGloom6 = "D4CD6FCC1BABB042AA7E1779FF166F4B"; // ~960ms delay
+        public const string SpecterWellOfBounty1 = "E452C4E8FD6B9A4F9C3659782ECEDEA3";
+        public const string SpecterWellOfBounty2 = "704FF2761D3CA74AB7C12060F1D3D872"; // ~880ms delay
+        public const string SpecterWellOfTears1 = "AEB43693461D1846BB70C2AEAB47EE2B";
+        public const string SpecterWellOfTears2 = "21BF83968804A54DBF795C7A0AD385A5"; // ~1240ms delay
+        public const string SpecterWellOfTears3 = "5CBC62CDE1F5204E8E63EA785CF81D59"; // ~1240ms delay
+        public const string SpecterWellOfSilence1 = "51FCBBE627637D4C9EB9AC8A4CD216AC";
+        public const string SpecterWellOfSilence2 = "15A73155534B204D8C9F97F5C8ED6DA1"; // ~440ms delay
+        public const string SpecterWellOfSorrow1 = "036B9D5F24402C4A9ED923A0391E61C3";
+        public const string SpecterWellOfSorrow2 = "5A74A8FADB71B249BD245E2FBE1D8952"; // ~1240ms delay
+        public const string SpecterWellOfSorrow3 = "1B56F702912BE7428182CA57036AEE99"; // ~1240ms delay
+        public const string SpecterShadowfall1 = "FB21A6E213C240459BD8E9524088FA66";
+        public const string SpecterShadowfall2 = "D8E380E80E843A4092C8DD53C5A51F0F"; // ~880ms delay
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
         public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
         public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
+        public const string MAMAGrenadeBarrageIndicator = "8DDED161CE26964FA5952D821AD852F7";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
         public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
         public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
@@ -243,6 +326,18 @@ namespace GW2EIEvtcParser
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
+        public const string ArtsariivBeamingSmileIndicator = "C047F635A01A4441945CD0EB85AD3D2C"; // no owner
+        public const string ArtsariivBeamingSmile = "F01DC8CB8C6ACF4891BAE252FB950A24"; // no owner
+        public const string ArtsariivAoeIndicator = "7948A94F5DB40D45B947F82804598027"; // no owner
+        public const string ArtsariivAoeExplosion = "A09474AB8EBD2146B1A4299F3C918DB6"; // no owner
+        public const string ArtsariivObliterateIndicator = "8938C846962EA045B5726F53C3ECF6AF"; // no owner
+        public const string ArtsariivObliterateExplosion = "F2D51BED8214F1419A5D1684D2087093"; // no owner
+        public const string ArtsariivBlackSmoke = "172355593E35D6479A742472E29CA150";
+        public const string CorporealReassignmentDome = "1607FB8A58554A4E96E5AD04AF8E247A"; // owned by unknown agent
+        public const string CorporealReassignmentExplosionDome = "5B8F0DCE941DF544AD0966F6158A5127";
+        public const string CorporealReassignmentExplosion1 = "C93D2CA54BC7F84BBFA31B40DE056D21"; // owned by exploding player
+        public const string CorporealReassignmentExplosion2 = "DAD653E8823274409610A732BE8FA188"; // owned by exploding player
+        public const string HorizonStrikeArkk = "C5E4632E8131D342AA4F18222C68D8EB"; // owned by arkk
         // Silent Surf Fractal
         public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
@@ -251,11 +346,44 @@ namespace GW2EIEvtcParser
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
+        // Escort Glenna
+        public const string EscortOverHere = "64CD79C1A121EC42B1278DEF9280ED35";
+        // Xera
+        public const string XeraIntervention1 = "63C34770B4EFF64B8EAA21BB835BB560"; // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
+        public const string XeraIntervention2 = "79EA3F01274B4F418B2C571BAE1B9E17"; // 0 duration - Src Player
+        public const string XeraIntervention3 = "5FA6527231BB8041AC783396142C6200"; // 0 duration - No Src No Dst
         // Cairn
         public const string CairnDisplacement = "7798B97ED6B6EB489F7E33DF9FE6BD99";
         public const string CairnDashGreen = "D2E6D55CC94F79418BB907F063CBDD81";
+        // Mursaat Overseen
+        public const string MursaarOverseerDispelProjectile = "DE71A86A0867764BB5789265E8C0CF6A"; // No Src - Dst Jade Scout
+        public const string MursaarOverseerProtectBubble = "17BC358A51ED2D43BF2ABE8AB642B86B"; // Src player
+        public const string MursaarOverseerClaimMarker = "94F3501D777FAC439E78E143CE756B0A"; // No Src - No Dst
+        public const string MursaarOverseerShockwave = "0F62A1315A00FC438B2F1273E6BC4054";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Sabir
+        public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
+        // Qadim the Peerless
+        public const string QadimPeerlessRainOfChaos = "D8259BFD4E6B8348AF15D862F7DBC8FA";
+        public const string QadimPeerlessResidualImpactFireAoE = "EFAC2FC0F661404D84F0291CAB76FF0E";
+        public const string QadimPeerlessChaosCalledElectricShark = "7A5A2002C855A440BCC22E2C76B0C405";
+        public const string QadimPeerlessForceOfHavoc1 = "5F3B01764915FD41A02B2FBAD788651B"; // 2000 duration
+        public const string QadimPeerlessForceOfHavoc2 = "B2396CC1F4A73B4EAEA86F66978DC895"; // 1000 duration
+        public const string QadimPeerlessForceOfHavoc3 = "A2E91B50829AB64097D217E468189F52"; // 22400 duration
+        public const string QadimPeerlessEtherStrikesOrbs = "625838F1175E25459A5293CA6C911290"; // 1500 duration
+        public const string QadimPeerlessEtherStrikesAoEs = "A89E436B20CFC142B159F3D2195F75AE"; // 0 duration
+        public const string QadimPeerlessShowerOfChaosAoE = "845D252D05631740B3B2309457FB4338"; // 5000 duration
+        public const string QadimPeerlessShowerOfChaosExplosion = "3AAEF82C63C4424FAA0F55CD02256E00";
+        public const string QadimPeerlessShowerOfChaosOnPlayer1 = "27B83B9DF241F94DB16414852EA68354";
+        public const string QadimPeerlessShowerOfChaosOnPlayer2 = "0BA57434DC93604096B870FB98B3C4F1"; // Src Qadim
+        public const string QadimPeerlessMeteorIllusion1 = "00C4F7C59E4D8449B565CC00FC30D9DD"; // 5000 duration
+        public const string QadimPeerlessMeteorIllusion2 = "ED04DA4F2B31D74CBEF501CAFFDAFAAD"; // 4294967295 duration - Usable with ComputeDynamicEffectLifespan
+        public const string QadimPeerlessBrandstormLightning1 = "C5B4846F6A548D47B0856AA8A2CE283C"; // 0 duration
+        public const string QadimPeerlessBrandstormLightning2 = "995E6709BB16B44DBABCC707F10E5345"; // 3000 duration
+        public const string QadimPeerlessMagmaWarningAoE = "E269977C2FC9474EAAD1051CDAFAD653"; // 4000 duration - Src player
+        public const string QadimPeerlessMagmaLandingExplosion = "6617FA23565EE646ADAA7A646C895927"; // 1000 duration - No Src
+        public const string QadimPeerlessMagmaDamagingAoE = "BABE69EC5AC7AF48A2F14A9FB8920C7F"; // 600000 duration - Src Qadim
         // Boneskinner
         public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
         public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator
@@ -269,8 +397,36 @@ namespace GW2EIEvtcParser
         // Ankka
         public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         public const string DeathsHandOnPlayerCM = "9A64DC8F21EEC046BA1D4412863F2940";
-        public const string DeathsHandByAnkkaCM = "651CA3631083EF4A81159989AB58F787";
-        public const string DeathsHandByAnkkaNM = "805E3CE2A313584797C614082C44197D";
+        public const string DeathsHandByAnkkaRadius380 = "651CA3631083EF4A81159989AB58F787";
+        public const string DeathsHandByAnkkaRadius300 = "805E3CE2A313584797C614082C44197D";
+        // Kaineng Overlook
+        public const string KainengOverlookSharedDestructionGreen = "BFFF308926A8B647A729197D364C1095"; // 6250 duration
+        public const string KainengOverlookSharedDestructionGreenSuccess = "F2D28874FE961C40837B97DA1159A541";
+        public const string KainengOverlookSharedDestructionGreenFailure = "C460400C2CADAA4880CD74F95D011A36";
+        public const string KainengOverlookDragonSlashBurstRedAoE1 = "4BE73D3E16294149A1829230F9E1F363"; // 208000 duration
+        public const string KainengOverlookDragonSlashBurstRedAoE2 = "E9DDC9F070B9514F8B4C6F5D428356E4"; // 0 duration - probably the explosion effect on player hit
+        public const string KainengOverlookJadeMine1 = "DE7F3CF2B6C1794F97F5DC6F6B1C5F7C"; // 4294967295 duration
+        public const string KainengOverlookJadeMine2 = "FAAC4919C404C945ACEF2ABE3C8CCF08"; // 2000 duration
+        public const string KainengOverlookSniperRicochetBeamCM = "A5C623040E6810468F2C9E518DB09D83"; // 10000 duration
+        public const string KainengOverlookSmallOrangeAoE = "34724E94CD4E974C95A8D9D1D1162658";
+        public const string KainengOverlookTargetedExpulsion = "67C0C333F91A5443BA894BEE5E88E202"; // 5000 duration
+        public const string KainengOverlookJadeLobPulsingGreen = "D5CD93218B9CBE4B93B6B5D54ED71273";
+        public const string KainengOverlookJadeLobSomething = "D36F4CE327D701449358B19E23C8AED0";
+        public const string KainengOverlookEnforcerRushingJusticeFlames = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C"; // 4294967295 duration
+        public const string KainengOverlookEnforcerMiddleAoE = "BA8654BD3D252C4B9A170EE404FBEA15"; // 1500 duration
+        public const string KainengOverlookEnforcerMiddleRedAoE = "C0F88EBEA179344092D4BB193A741F1D"; // 0 duration
+        public const string KainengOverlookEnforcerOrbsAoE = "766B7DACFC18974B8F6AA46BCD779563"; // 2708 duration
+        public const string KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer = "D7FB6DB480A6D14DB4561E03172B705D"; // 8000 duration
+        public const string KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer = "D4089DD8E0040146B3899EB2955AAE87"; // 2000 duration
+        public const string KainengOverlookMindbladeRainOfBladesRedAoECM = "6814DF4DB1EB4541996056FF4E805AC4";
+        public const string KainengOverlookVolatileExpulsionAoE = "A673F658E9B67C41AD469BAD8E7ACEA7";
+        public const string KainengOverlookVolatileBurstAoE = "6C2F5A0A632627419B77D52D8CC9E4DB";
+        public const string KainengOverlookJadeBusterCannonWarning = "C047F635A01A4441945CD0EB85AD3D2C";
+        public const string KainengOverlookEnforcerHeavensPalmAoE = "BDF708225224C64183BA3CE2A609D37F"; // 5000 duration
+        public const string KainengOverlookEnforcerHeavensPalmAnimation = "92F0566A1A0A9E4B919C796DB434052C"; // Should be the actual palm
+        public const string KainengOverlookRitualistSpiritualLightningAoE = "3AEC5A729A1D624B80CABCFDA11D82C6";
+        public const string KainengOverlookDragonSlashWaveIndicator = "CB877C57D1423240BACDF8D6B52A440F";
+        public const string KainengOverlookStormOfSwordsIndicator = "F019EA6ADC183B4599FDF7E67071E181";
         // Harvest Temple
         public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
         public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";

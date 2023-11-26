@@ -303,4 +303,4 @@ The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-I
 
 Thank you to all our [contributors](https://github.com/baaron4/GW2-Elite-Insights-Parser/graphs/contributors).
 
-Special thanks to Linus for creating SVG images for the Combat Replay arenas.
+Special thanks to Linus and TBTerra for creating images for the Combat Replay arenas.

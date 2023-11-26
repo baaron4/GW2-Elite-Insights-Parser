@@ -10,17 +10,18 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Dhuum : HallOfChains
     {
-        private bool _isBugged;
+        private bool _hasPrevent;
         private int _greenStart;
 
         public Dhuum(int triggerID) : base(triggerID)
         {
-            _isBugged = false;
+            _hasPrevent = true;
             _greenStart = 0;
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -39,7 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Spirit transformation check
-                if (br.To.HasBuff(log, MortalCoilDhuum, br.Time))
+                if (br.To.HasBuff(log, MortalCoilDhuum, br.Time, ParserHelper.ServerDelayConstant))
                 {
                     return false;
                 }
@@ -51,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
              }),
             //new Mechanic(ResidualAffliction, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesApplication, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
+            new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
             new PlayerDstHitMechanic(DhuumShacklesHit, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0).UsingChecker((de,log) => de.HealthDamage > 0),
             new PlayerDstHitMechanic(ConeSlash, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
             new PlayerDstHitMechanic(Cull, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
@@ -63,6 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
             //new SkillOnPlayerMechanic(EndersEchoDamage , "Echo's Damage", new MechanicPlotlySetting(Symbols.Square,Color.Red), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             new PlayerDstBuffApplyMechanic(EchosPickup, "Echo's Pick up", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
+            new PlayerDstBuffApplyMechanic(SourcePureOblivionBuff, "Pure Oblivion", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Black), "10%", "Lifted by Pure Oblivion", "Pure Oblivion (10%)", 0),
             new PlayerDstBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0).UsingChecker( (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any())
             });
             Extension = "dhuum";
@@ -85,6 +87,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(DeathlyAura, DeathlyAura),
+                new BuffLossCastFinder(ExpelEnergySAK, ArcingAffliction).UsingChecker((brae, combatData, agentData, skillData) =>
+                {
+                    bool state = true;
+                    // Buff loss caused by the Greather Death Mark
+                    if (combatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                    {
+                        state = false;
+                    }
+                    // Buff loss at the time of the 10% starting
+                    if (combatData.GetBuffData(SourcePureOblivionBuff).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                    {
+                        state = false;
+                    }
+                    return state;
+                }),
             };
         }
 
@@ -163,11 +180,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Sometimes the pre event is not in the evtc
             IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, log.FightData.FightStart, 20000);
-            if (dhuumCast.Any(x => !(x is InstantCastEvent) && x.SkillId != WeaponDraw && x.SkillId != WeaponStow))
+            if (!_hasPrevent)
             {
                 // full fight does not contain the pre event
                 ComputeFightPhases(phases, castLogs, fightDuration, 0);
-                _isBugged = true;
             }
             else
             {
@@ -193,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // from pre event end to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End : mainFight.End, hasRitual));
             }
-            else if (_isBugged)
+            else if (!_hasPrevent)
             {
                 // from start to 10% or fight end if 10% not achieved
                 phases.AddRange(GetInBetweenSoulSplits(log, dhuum, 0, dhuumFight != null ? dhuumFight.End : fightDuration, hasRitual));
@@ -241,6 +257,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            AgentItem dhuum = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).FirstOrDefault();
+            if (dhuum == null)
+            {
+                throw new MissingKeyActorsException("Dhuum not found");
+            }
+            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow || x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // We expect pre event in all logs
+            if (!_hasPrevent)
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            }
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
+        }
+
         private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
         {
             { new Point3D(16897, 1225, -6215), 0 },
@@ -262,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == DeathMark).ToList();
-                    AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == 47396);
+                    AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                     foreach (AbstractCastEvent c in deathmark)
                     {
                         start = (int)c.Time;
@@ -276,55 +316,53 @@ namespace GW2EIEvtcParser.EncounterLogic
                             zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                         }
                         int spellCenterDistance = 200; //hitbox radius
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 3000);
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
+                        Point3D facing = target.GetCurrentRotation(log, start + 3000);
+                        Point3D targetPosition = target.GetCurrentPosition(log, start + 3000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            var loadingCircle = new CircleDecoration(radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position));
+                            replay.AddDecorationWithGrowing(loadingCircle, zoneActive);
+                            replay.Decorations.Add(new CircleDecoration(radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
 
                         }
                     }
                     var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
-                        start = (int)c.Time;
-                        end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(300, (c.Time, c.EndTime), "rgba(255, 150, 0, 0.5)", new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(circle, end);
                     }
                     var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
                     foreach (AbstractCastEvent c in slash)
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;
                         }
-                        replay.Decorations.Add(new PieDecoration(false, 0, 850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                        replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                     }
 
                     if (majorSplit != null)
                     {
                         start = (int)majorSplit.Time;
                         end = (int)log.FightData.FightEnd;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.DhuumDesmina:
                     break;
                 case (int)ArcDPSEnums.TrashID.Echo:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Enforcer:
                     break;
                 case (int)ArcDPSEnums.TrashID.Messenger:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
@@ -332,9 +370,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in stealths)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
                     }
-                    if (!_isBugged)
+                    if (_hasPrevent)
                     {
                         if (_greenStart == 0)
                         {
@@ -380,8 +418,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target)));
+                            var greenCircle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                            replay.AddDecorationWithGrowing(greenCircle, gend);
                         }
                     }
                     break;
@@ -403,8 +441,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                HealthUpdateEvent hpUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).FirstOrDefault(x => x.Time > c.Time);
-                if (hpUpdate != null && hpUpdate.HPPercent < 10.50)
+                if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ParserHelper.ServerDelayConstant))
                 {
                     duration = 30000;
                 }
@@ -415,59 +452,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
+                var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
+                replay.AddDecorationWithGrowing(circle, duration);
             }
             // bomb
             var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in bombDhuum)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 13000, 100, seg, "rgba(80, 180, 0, 0.5)", new AgentConnector(p)));
+                var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
+                replay.AddDecorationWithGrowing(circle, seg.Start + 13000);
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
             }
             // shackles connection
-            var shackles = GetFilteredList(log.CombatData, DhuumShacklesApplication, p, true, true).Concat(GetFilteredList(log.CombatData, DhuumShackles2, p, true, true)).ToList();
-            int shacklesStart = 0;
-            Player shacklesTarget = null;
-            foreach (AbstractBuffEvent c in shackles)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    shacklesStart = (int)c.Time;
-                    shacklesTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int shacklesEnd = (int)c.Time;
-                    if (shacklesTarget != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (shacklesStart, shacklesEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(shacklesTarget)));
-                    }
-                }
-            }
+            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, new long[] { DhuumShacklesBuff, DhuumShacklesBuff2 }, p, true, true);
+            replay.AddTether(shackles, "rgba(0, 255, 255, 0.5)");
+
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShackles, p, true, true);
-            int shacklesDmgStart = 0;
-            Player shacklesDmgTarget = null;
-            foreach (AbstractBuffEvent c in shacklesDmg)
-            {
-                if (c is BuffApplyEvent)
-                {
-                    shacklesDmgStart = (int)c.Time;
-                    shacklesDmgTarget = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.CreditedBy);
-                }
-                else
-                {
-                    int shacklesDmgEnd = (int)c.Time;
-                    if (shacklesDmgTarget != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (shacklesDmgStart, shacklesDmgEnd), "rgba(255, 200, 0, 0.5)", new AgentConnector(p), new AgentConnector(shacklesDmgTarget)));
-                    }
-                }
-            }
+            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
+            replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -60,6 +60,8 @@ namespace GW2EIEvtcParser
             internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             internal const ulong SOTOReleaseAndBalance = 150431;
+            internal const ulong September2023Balance = 151966;
+            internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -76,6 +78,8 @@ namespace GW2EIEvtcParser
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
             internal const int FunctionalEffect2Events = 20230719;
+            internal const int BuffExtensionBroken = 20230905;
+            internal const int BuffExtensionOverstackValueChanged = 20231107;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -293,7 +297,7 @@ namespace GW2EIEvtcParser
         {
             StackingConditionalLoss = 0, // the same thing as Stacking
             Queue = 1,
-            StackingSomething = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
+            StackingTargetUniqueSrc = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
             Regeneration = 3,
             Stacking = 4,
             Force = 5,
@@ -514,6 +518,7 @@ namespace GW2EIEvtcParser
         private const int Torch = -39;
         private const int BoundIcebroodElemental = -40;
         private const int CAChest = -41;
+        private const int ChestOfDesmina = -42;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -769,10 +774,13 @@ namespace GW2EIEvtcParser
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
             // Peerless Qadim
-            FriendlyPeerlessQadimPylon = 21996,
-            HostilePeerlessQadimPylon = 21962,
+            PeerlessQadimPylon = 21996,
+            PeerlessQadimAuraPylon = 21962,
             EntropicDistortion = 21973,
             EnergyOrb = 21946,
+            Brandstorm = 21978,
+            GiantQadimThePeerless = 21953,
+            DummyPeerlessQadim = 22005,
             // Fraenir
             IcebroodElemental = 22576,
             BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
@@ -875,10 +883,13 @@ namespace GW2EIEvtcParser
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
             // Cosmic Observatory
-            TheTormented1 = 25829,
-            TheTormented2 = 26000,
-            TheTormented3 = 26016,
+            TheTormented = 26016,
+            VeteranTheTormented = 25829,
+            EliteTheTormented = 26000,
+            ChampionTheTormented = 25623,
+            TormentedPhantom = 25604,
             SoulFeast = 26069,
+            Zojja = 26011,
             // Temple of Febe
             EmbodimentOfGluttony = 25677,
             EmbodimentOfRage = 25686,
@@ -925,16 +936,18 @@ namespace GW2EIEvtcParser
             FluxAnomalyCM4 = 17673,
             SolarBloom = 17732,
             // Artsariiv
-            TemporalAnomaly = 17870,
+            TemporalAnomalyArtsariiv = 17870,
             Spark = 17630,
             SmallArtsariiv = 17811, // tiny adds
             MediumArtsariiv = 17694, // small adds
             BigArtsariiv = 17937, // big adds
             CloneArtsariiv = SubArtsariiv, // clone adds
             // Arkk
-            TemporalAnomaly2 = 17720,
+            TemporalAnomalyArkk = 17720,
             Archdiviner = 17893,
-            Fanatic = 11282,
+            FanaticDagger1 = 11281,
+            FanaticDagger2 = 11282,
+            FanaticBow = 11288,
             EliteBrazenGladiator = 17730,
             BLIGHT = 16437,
             PLINK = 16325,
@@ -1128,6 +1141,7 @@ namespace GW2EIEvtcParser
 
         public enum ChestID : int
         {
+            ChestOfDesmina = ArcDPSEnums.ChestOfDesmina,
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
             CAChest = ArcDPSEnums.CAChest,

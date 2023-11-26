@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     _logic = _forceOverrideLogic;
                     break;
                 case BuffStackType.Stacking:
-                case BuffStackType.StackingSomething:
+                case BuffStackType.StackingTargetUniqueSrc:
                 case BuffStackType.StackingConditionalLoss:
                     _logic = _overrideLogic;
                     break;

@@ -1,0 +1,5 @@
+var class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics =
+[
+    [ "EXTJsonIncomingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics" ],
+    [ "EXTJsonOutgoingHealingStatistics", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics" ]
+];

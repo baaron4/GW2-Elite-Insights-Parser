@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSourceFinders
@@ -7,10 +8,10 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
     {
         public BuffSourceFinder20191001(HashSet<long> boonIds) : base(boonIds)
         {
-            ImbuedMelodies = -1;
+            ImbuedMelodies = int.MinValue;
         }
 
-        protected override bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedEvtcLog log)
+        protected override bool CouldBeImbuedMelodies(AgentItem agent, long buffID, long time, long extension, ParsedEvtcLog log)
         {
             return false;
         }

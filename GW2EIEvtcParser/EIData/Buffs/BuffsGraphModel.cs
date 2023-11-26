@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GW2EIEvtcParser.EIData.BuffSimulators;
@@ -55,8 +56,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public bool IsPresent(long time)
+        public bool IsPresent(long time, long window = 0)
         {
+            if (window != 0)
+            {
+                long absWindow = Math.Abs(window);
+                return GetBuffStatus(time - absWindow, time + absWindow).Any(x => x.Value > 0);
+            }
             return GetStackCount(time) > 0;
         }
 

@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -58,6 +59,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(PunishementAura, PunishementAura),
+                new EffectCastFinder(ProtectSAK, EffectGUIDs.MursaarOverseerProtectBubble),
             };
         }
 
@@ -95,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int shieldRadius = 100;
                     foreach (Segment seg in shields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
@@ -104,8 +106,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -127,6 +129,45 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Mursaat Overseer not found");
             }
             return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+
+            var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
+            var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+
+            SkillItem claimSkill = skillData.Get(ClaimSAK);
+            SkillItem dispelSkill = skillData.Get(DispelSAK);
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
+            {
+                skillData.NotAccurate.Add(ClaimSAK);
+                foreach (EffectEvent effect in claims)
+                {
+                    BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null) 
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
+                    }
+                }
+            }
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
+            {
+                skillData.NotAccurate.Add(DispelSAK);
+                foreach (EffectEvent effect in dispels)
+                {
+                    BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null)
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));
+                    }
+                }
+            }
+
+            return res;
         }
     }
 }

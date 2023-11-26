@@ -211,7 +211,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bending Chaos", BendingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.Target2),
             new Buff("Shifting Chaos", ShiftingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.ShiftingChaos),
             new Buff("Twisting Chaos", TwistingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.TwistingChaos),
-            new Buff("Intervention", Intervention, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
+            new Buff("Intervention (SAK)", InterventionSkillOwnerBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
+            new Buff("Intervention (Invuln)", InterventionInvulnerabilityBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Intervention),
             new Buff("Bloodstone Protection", BloodstoneProtection, Source.FightSpecific, BuffClassification.Other, BuffImages.BloodstoneProtection),
             new Buff("Bloodstone Blessed", BloodstoneBlessed, Source.FightSpecific, BuffClassification.Other, BuffImages.BloodstoneBlessed),
             new Buff("Void Zone", VoidZone, Source.FightSpecific, BuffClassification.Other, BuffImages.VoidZone),
@@ -226,6 +227,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Unseen Burden", UnseenBurden, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.UnseenBurden),
             new Buff("Countdown", Countdown, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Countdown),
             new Buff("Gaze Avoidance", GazeAvoidance, Source.FightSpecific, BuffClassification.Other, BuffImages.GazeAvoidance),
+            new Buff("Celestial Dash", CelestialDashBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Mursaat Overseer
             new Buff("Empowered", Empowered, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.Empowered),
             new Buff("Mursaat Overseer's Shield", MursaatOverseersShield, Source.FightSpecific, BuffClassification.Other, BuffImages.Dispel),
@@ -290,6 +292,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Hastened Demise", HastenedDemise, Source.FightSpecific, BuffClassification.Other, BuffImages.HastenedDemise),
             new Buff("Echo's Pick up", EchosPickup, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
             new Buff("Energy Threshold", EnergyThreshold, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm), // Dhuum & Eater of Souls
+            new Buff("Source: Pure Oblivion", SourcePureOblivionBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CounterMagicSkill),
             //////////////////////////////////////////////
             // CA
             new Buff("Greatsword Power", GreatswordPower, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.GreatswordPower),
@@ -363,6 +366,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Unbridled Chaos", UnbridledChaos, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ExposedEyes),
             new Buff("Rebellious Power", RebelliousPower, Source.FightSpecific, BuffStackType.Stacking, 40, BuffClassification.Other, BuffImages.InfusedShield),
             new Buff("Charged Soul", ChargedSoul, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.PartiallyProtected),
+            new Buff("Breakbar Target", QadimThePeerlessBreakbarTargetBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Power Surge", AchievementEligibilityPowerSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             //////////////////////////////////////////////
             // Fractals 
@@ -392,6 +396,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Corporeal Reassignment", CorporealReassignmentBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Blinding Radiance", BlindingRadiance, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Determination (Viirastra)", DeterminationViirastra, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
+            new Buff("Nova Launch", NovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Arkk 
             new Buff("Fixated (Bloom 3)", FixatedBloom3, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Bloom 2)", FixatedBloom2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
@@ -400,6 +405,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Cosmic Meteor", CosmicMeteor, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Diaphanous Shielding", DiaphanousShielding, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Electrocuted", Electrocuted, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AirAttunement),
+            new Buff("Hypernova Launch", HypernovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             // Ai, Keeper of the Peak
             new Buff("Tidal Barrier", TidalBarrier, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),
             new Buff("Whirlwind Shield", WhirlwindShield, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),
@@ -422,7 +428,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Gathering Shadows", GatheringShadowsBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.CaptainsInspiration),
             new Buff("Thess's Ward", ThesssWard, Source.FightSpecific, BuffClassification.Other, BuffImages.Hallucinations),
             new Buff("Spirit Fang", SpiritFang, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
-            new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffStackType.StackingSomething, 999, BuffClassification.Other, BuffImages.Target),
+            new Buff("Aspect Tether", AspectTetherBuff, Source.FightSpecific, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.Target),
             new Buff("Rending Storm Target (Axe 1)", RendingStormAxeTargetBuff1, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
             new Buff("Rending Storm Target (Axe 2)", RendingStormAxeTargetBuff2, Source.FightSpecific, BuffClassification.Other, BuffImages.ConjureFlameAxe),
             new Buff("Kanaxai Spread AoE", KanaxaiSpreadOrangeAoEBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
@@ -523,7 +529,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Equalization Matrix", EqualizationMatrix, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EqualizationMatrix),
             new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, BuffImages.PowerOfTheVoid),
             new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExtremeVulnerability),
-            new Buff("Fixated (Ankka & Kaineng Overlook)", FixatedAnkkaKainengOverlook, Source.FightSpecific, BuffStackType.StackingSomething, 999, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Ankka & Kaineng Overlook)", FixatedAnkkaKainengOverlook, Source.FightSpecific, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.Fixated),
             //new Buff("Shared Destruction (Li)", PoV_SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             //new Buff("Shared Destruction (Li CM)", PoV_SharedDestructionLiCM, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Debilitated", Debilitated, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Debuff, BuffImages.Debilitated),
@@ -560,10 +566,15 @@ namespace GW2EIEvtcParser.EIData
             // Cosmic Observatory       
             new Buff("Residual Anxiety", ResidualAnxiety, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ThrowCursedArtifact),
             new Buff("Beam of Light Duration", BeamOfLightDuration, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Dagda Phasing", DagdaDuringPhase75_50_25, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
+            new Buff("Dagda Phasing", DagdaDuringPhase75_50_25, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Soul Feast Something", SoulFeastSomethingBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Lost Control (Cosmic Observatory)", CosmicObservatoryLostControlBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Unknown),
             new Buff("Shooting Stars Target", ShootingStarsTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+            new Buff("Demonic Aura", DagdaDemonicAura, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ChampionOfTheCrown),
+            new Buff("Demonic Aura Timer", DagdaDemonicAuraTimer, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Planetary Weight", PlanetaryWeight, Source.FightSpecific, BuffStackType.Stacking, 6, BuffClassification.Other, BuffImages.ChallengeOfTheAncients),
+            new Buff("Summoned Phantom", SummonedPhantom, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Immune to Damage", ImmuneToDamage, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
@@ -582,6 +593,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Empowered Regret (Embodiment)", EmpoweredRegretEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),
             new Buff("Kryptis-Possessed", KryptisPossessed, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Invulnerability (Cerus)", InvulnerabilityCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),

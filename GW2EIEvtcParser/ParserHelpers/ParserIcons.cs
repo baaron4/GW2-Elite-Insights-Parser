@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static System.Net.WebRequestMethods;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers
@@ -19,6 +20,11 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// Generic enemy icon.
         /// </summary>
         public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
+
+        /// <summary>
+        /// Generic blue arrow up.
+        /// </summary>
+        public const string GenericBlueArrowUp = "https://i.imgur.com/0EnjyQX.png";
 
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
@@ -243,8 +249,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashHandOfErosionEruption = "https://i.imgur.com/reGQHhr.png";
         private const string TrashVoltaicWisp = "https://i.imgur.com/C1mvNGZ.png";
         private const string TrashParalyzingWisp = "https://i.imgur.com/YBl8Pqo.png";
-        private const string TrashHostilePeerlessQadimPylon = "https://i.imgur.com/b33vAEQ.png";
+        private const string TrashPeerlessQadimPylon = "https://i.imgur.com/Db5Pi3b.png";
+        private const string TrashPeerlessQadimAuraPylon = "https://i.imgur.com/ojjQQlR.png";
         private const string TrashEntropicDistortion = "https://i.imgur.com/MIpP5pK.png";
+        private const string TrashGiantQadimThePeerless = "https://i.imgur.com/qRhJSgR.png";
         private const string TrashSmallJumpyTornado = "https://i.imgur.com/WBJNgp7.png";
         private const string TrashOrbSpider = "https://i.imgur.com/FB5VM9X.png";
         private const string TrashSeekers = "https://i.imgur.com/FrPoluz.png";
@@ -347,6 +355,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheMossman = "https://i.imgur.com/jwFEGFA.png";
         private const string TrashJadeMawTentacle = "https://i.imgur.com/SfB9gJG.png";
         private const string TrashInspectorEllenKiel = "https://i.imgur.com/TyYmSnn.png";
+        private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
+        private const string TrashTheTormented = "https://i.imgur.com/kEytVae.png";
+        private const string TrashSoulFeast = "https://i.imgur.com/iNp5Rnx.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -490,8 +501,16 @@ namespace GW2EIEvtcParser.ParserHelpers
 
         // Skill effect decoration icons
         internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";
+        internal const string EffectThunderclap = "https://i.imgur.com/uaTRWqN.png";
+        internal const string EffectFunctionGyro = "https://i.imgur.com/HFg6kXZ.png";
         internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
         internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
+        internal const string EffectBarrage = "https://i.imgur.com/8XZHYwx.png";
+        internal const string EffectBonfire = "https://i.imgur.com/khgHSD5.png";
+        internal const string EffectFlameTrap = "https://i.imgur.com/Z0hDXFW.png";
+        internal const string EffectFrostTrap = "https://i.imgur.com/gW8yg4G.png";
+        internal const string EffectSpikeTrap = "https://i.imgur.com/sHgsGxe.png";
+        internal const string EffectVipersNest = "https://i.imgur.com/M7imyZL.png";
         internal const string EffectHunkerDown = "https://i.imgur.com/KkFFoJa.png";
         internal const string EffectInspiringReinforcement = "https://i.imgur.com/OItlXSb.png";
         internal const string EffectLineOfWarding = "https://i.imgur.com/XSix0GV.png";
@@ -515,6 +534,37 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectWellOfSuffering = "https://i.imgur.com/PPnNujO.png";
         internal const string EffectWindsOfDisenchantment = "https://i.imgur.com/IAW0hFN.png";
         internal const string EffectProtectiveSolace = "https://i.imgur.com/uBO48eB.png";
+        internal const string EffectWellOfGloom = "https://i.imgur.com/k4RSbxD.png";
+        internal const string EffectWellOfBounty = "https://i.imgur.com/ZgKMlgA.png";
+        internal const string EffectWellOfTears = "https://i.imgur.com/pbCS8tn.png";
+        internal const string EffectWellOfSilence = "https://i.imgur.com/ZQxshJM.png";
+        internal const string EffectWellOfSorrow = "https://i.imgur.com/B2gQzkY.png";
+        internal const string EffectShadowfall = "https://i.imgur.com/SfRb7bC.png";
+        internal const string EffectWellOfEternity = "https://i.imgur.com/TPisxaE.png";
+        internal const string EffectWellOfAction = "https://i.imgur.com/YnwzegV.png";
+        internal const string EffectWellOfCalamity = "https://i.imgur.com/ZrYTFnd.png";
+        internal const string EffectWellOfPrecognition = "https://i.imgur.com/ECcw4jT.png";
+        internal const string EffectWellOfSenility = "https://i.imgur.com/TyNZ8EN.png";
+        internal const string EffectGravityWell = "https://i.imgur.com/wtdZPRo.png";
+        internal const string EffectVitalDraw = "https://i.imgur.com/v0FW8mn.png";
+        internal const string EffectMarkOfBlood = "https://i.imgur.com/RXSaEJE.png";
+        internal const string EffectChillblains = "https://i.imgur.com/ViOzLNe.png";
+        internal const string EffectMarkOfBloodOrChillblains = "https://i.imgur.com/dAPDUFm.png";
+        internal const string EffectPutridMark = "https://i.imgur.com/wJ3V2Fm.png";
+        internal const string EffectReapersMark = "https://i.imgur.com/85VAsHR.png";
+        internal const string EffectMeteorShower = "https://i.imgur.com/ENXoZja.png";
+        internal const string EffectStaticField = "https://i.imgur.com/XixW4Ae.png";
+        internal const string EffectOverloadFire = "https://i.imgur.com/K34TWxW.png";
+        internal const string EffectOverloadAir = "https://i.imgur.com/VwMTUTD.png";
+        internal const string EffectUpdraft = "https://i.imgur.com/LQSmmJ1.png";
+        internal const string EffectFirestormGlyphOrFieryGreatsword = "https://i.imgur.com/BpsVQir.png";
+        internal const string EffectFirestormFieryGreatsword = "https://i.imgur.com/YuYYuGW.png";
+        internal const string EffectFirestormGlyph = "https://i.imgur.com/677TYqA.png";
+        internal const string EffectGeyser = "https://i.imgur.com/4h9HaFh.png";
+        internal const string EffectDeployJadeSphereFire = "https://i.imgur.com/qdkoYap.png";
+        internal const string EffectDeployJadeSphereWater = "https://i.imgur.com/xy0SAxK.png";
+        internal const string EffectDeployJadeSphereAir = "https://i.imgur.com/SvUQmyj.png";
+        internal const string EffectDeployJadeSphereEarth = "https://i.imgur.com/KG8ysd9.png";
 
         // Overhead icons
         // - Fixations
@@ -923,15 +973,19 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.ReanimatedSpite, TrashReanimatedSpite },
             { ArcDPSEnums.TrashID.SanctuaryPrism, TrashSanctuaryPrism },
             { ArcDPSEnums.TrashID.VoidBrandstalker, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.SpiritOfPain, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.SpiritOfDestruction, TrashSpiritOfDestructionOrPain },
+            { ArcDPSEnums.TrashID.SpiritOfPain, TrashSpiritOfDestructionOrPain },
             { ArcDPSEnums.TrashID.DragonEnergyOrb, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.HandOfErosion, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.HandOfEruption, TrashHandOfErosionEruption },
             { ArcDPSEnums.TrashID.VoltaicWisp, TrashVoltaicWisp },
             { ArcDPSEnums.TrashID.ParalyzingWisp, TrashParalyzingWisp },
-            { ArcDPSEnums.TrashID.HostilePeerlessQadimPylon, TrashHostilePeerlessQadimPylon },
+            { ArcDPSEnums.TrashID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
+            //{ ArcDPSEnums.TrashID.PeerlessQadimAuraPylon, TrashPeerlessQadimAuraPylon },
             { ArcDPSEnums.TrashID.EntropicDistortion, TrashEntropicDistortion },
+            //{ ArcDPSEnums.TrashID.Brandstorm, GenericEnemyIcon },
+            { ArcDPSEnums.TrashID.GiantQadimThePeerless, TrashGiantQadimThePeerless },
+            //{ ArcDPSEnums.TrashID.DummyPeerlessQadim, GenericEnemyIcon },
             { ArcDPSEnums.TrashID.SmallJumpyTornado, TrashSmallJumpyTornado },
             { ArcDPSEnums.TrashID.OrbSpider, TrashOrbSpider },
             { ArcDPSEnums.TrashID.Seekers, TrashSeekers },
@@ -950,19 +1004,20 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.VigilTactician, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Prisoner1, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Prisoner2, TrashGenericFriendlyTarget },
-            { ArcDPSEnums.TrashID.FriendlyPeerlessQadimPylon, TrashGenericFriendlyTarget },
             { ArcDPSEnums.TrashID.Mine, TrashMine },
             { ArcDPSEnums.TrashID.FleshWurm, TrashFleshWurm },
             { ArcDPSEnums.TrashID.Hands, TrashHands },
-            { ArcDPSEnums.TrashID.TemporalAnomaly, TrashTemporalAnomaly },
-            { ArcDPSEnums.TrashID.TemporalAnomaly2, TrashTemporalAnomaly },
+            { ArcDPSEnums.TrashID.TemporalAnomalyArtsariiv, TrashTemporalAnomaly },
+            { ArcDPSEnums.TrashID.TemporalAnomalyArkk, TrashTemporalAnomaly },
             { ArcDPSEnums.TrashID.DOC, TrashDOC_BLIGHT_PLINK_CHOP },
             { ArcDPSEnums.TrashID.BLIGHT, TrashDOC_BLIGHT_PLINK_CHOP },
             { ArcDPSEnums.TrashID.PLINK, TrashDOC_BLIGHT_PLINK_CHOP },
             { ArcDPSEnums.TrashID.CHOP, TrashDOC_BLIGHT_PLINK_CHOP },
             { ArcDPSEnums.TrashID.Archdiviner, TrashArchdiviner },
             { ArcDPSEnums.TrashID.EliteBrazenGladiator, TrashEliteBrazenGladiator },
-            { ArcDPSEnums.TrashID.Fanatic, TrashFanatic },
+            { ArcDPSEnums.TrashID.FanaticDagger1, TrashFanatic },
+            { ArcDPSEnums.TrashID.FanaticDagger2, TrashFanatic },
+            { ArcDPSEnums.TrashID.FanaticBow, TrashFanatic },
             { ArcDPSEnums.TrashID.FreeziesFrozenHeart, TrashFreeziesFrozenHeart },
             { ArcDPSEnums.TrashID.IceSpiker, TrashIceSpiker },
             { ArcDPSEnums.TrashID.IceStormer, TrashIceElemental },
@@ -1072,9 +1127,11 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented1, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented2, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.TheTormented3, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.TheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.VeteranTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.EliteTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.ChampionTheTormented, TrashTheTormented },
+            { ArcDPSEnums.TrashID.SoulFeast, TrashSoulFeast },
         };
 
         /// <summary>

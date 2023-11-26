@@ -5,6 +5,8 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -24,9 +26,9 @@ namespace GW2EIEvtcParser.EIData
                 .UsingSrcSpecChecker(Spec.Scrapper),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.July2019Balance)
         };
 
@@ -56,15 +58,28 @@ namespace GW2EIEvtcParser.EIData
         {
             Color color = Colors.Engineer;
 
+            // Function Gyro
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperFunctionGyro, out IReadOnlyList<EffectEvent> functionGyros))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Scrapper, FunctionGyro, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in functionGyros)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFunctionGyro, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
             // Defense Field
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperDefenseField, out IReadOnlyList<EffectEvent> defenseFields))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Scrapper, DefenseField, SkillModeCategory.ProjectileManagement | SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in defenseFields)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Scrapper, DefenseField, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement | GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDefenseField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Scrapper, DefenseField, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement | GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDefenseField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

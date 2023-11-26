@@ -236,11 +236,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return false;
         }
 
-        private static (EffectGUIDEvent guid, int radius, int duration) GetDeathsHandOnPlayerData(ParsedEvtcLog log)
-        {
-            return log.FightData.IsCM ? (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaCM), 380, 36000): (log.CombatData.GetEffectGUIDEvent(EffectGUIDs.DeathsHandByAnkkaNM), 300, 16000);
-        }
-
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -303,11 +298,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    (EffectGUIDEvent deathsHandGUID, int deathsHandOnPlayerRadius, int deathsHandOnPlayerDuration) = GetDeathsHandOnPlayerData(log);
-                    if (deathsHandGUID != null)
+                    //
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out IReadOnlyList<EffectEvent> deathsHandOnPlayerNM))
                     {
-                        var deathsHandEffects = log.CombatData.GetEffectEventsByEffectID(deathsHandGUID.ContentID).Where(x => x.Src == target.AgentItem).ToList();
-                        foreach (EffectEvent deathsHandEffect in deathsHandEffects)
+                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
+                        {
+                            if (log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                            {
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 300, 13000);
+                            }
+                        }
+                    }
+                    //
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out IReadOnlyList<EffectEvent> deathsHandOnPlayerCMOrInBetween))
+                    {
+                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
                         {
                             if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
                             {
@@ -317,9 +322,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             } 
-                            else
+                            else if (log.FightData.IsCM)
                             {
-                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, deathsHandOnPlayerRadius, deathsHandOnPlayerDuration);
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 33000);
                             }
                         }
                     }
@@ -330,19 +335,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
                     // Wall of Fear
-                    int firstMovementTime = 2550;
+                    long firstMovementTime = target.FirstAware + 2550;
                     int kraitsRadius = 420;
 
-                    replay.Decorations.Add(new CircleDecoration(true, (int)target.FirstAware + firstMovementTime, kraitsRadius, ((int)target.FirstAware, (int)target.FirstAware + firstMovementTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, kraitsRadius, ((int)target.FirstAware + firstMovementTime, (int)target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingGrowingEnd(firstMovementTime));
+                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.LichHallucination:
                     // Terrifying Apparition
-                    int awareTime = 1000;
+                    long awareTime = target.FirstAware + 1000;
                     int lichRadius = 280;
 
-                    replay.Decorations.Add(new CircleDecoration(true, (int)target.FirstAware + awareTime, lichRadius, ((int)target.FirstAware, (int)target.FirstAware + awareTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(true, 0, lichRadius, ((int)target.FirstAware + awareTime, (int)target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingGrowingEnd(awareTime));
+                    replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
@@ -351,9 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castTime = 2800;
                         int radius = 300;
                         int endTime = (int)c.Time + castTime;
-
-                        replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM:
@@ -363,9 +366,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castTime = 5600;
                         int radius = 450;
                         int endTime = (int)c.Time + castTime;
-
-                        replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ZhaitansReach:
@@ -375,9 +376,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 1900;
                         int endTime = (int)c.Time + castTime;
-
-                        replay.Decorations.Add(new DoughnutDecoration(true, endTime, 300, 500, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 500, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     // Ground Slam - AoE that knocks out
                     var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ).ToList();
@@ -389,9 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 66534 -> Fast AoE -- 66397 -> Slow AoE
                         if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamXJJ) { castTime = 2500; }
                         endTime = (int)c.Time + castTime;
-
-                        replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ReanimatedSpite:
@@ -409,18 +406,18 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            (EffectGUIDEvent deathsHandOnPlayerGUID, int deathsHandRadius, int deathsHandDuration) = GetDeathsHandOnPlayerData(log);
             if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
             {
                 foreach (Segment segment in value.BuffChart)
                 {
                     if (segment != null && segment.Start > 0 && segment.Value == 1)
                     {
+                        int deathsHandRadius = log.FightData.IsCM ? 380 : 300;
+                        int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;
                         // AoE on player
-                        replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)));
-                        // Logs without effects
-                        if (deathsHandOnPlayerGUID == null)
+                        replay.AddDecorationWithGrowing(new CircleDecoration(deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)), segment.End);
+                        // Logs without effects, we add the dropped AoE manually
+                        if (!log.CombatData.HasEffectData)
                         {
                             ParametricPoint3D playerPosition = p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).LastOrDefault();
                             if (playerPosition != null)
@@ -431,26 +428,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            //
+            // Tethering Players to Lich
             List<AbstractBuffEvent> lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
-            int lichTetherStart = 0;
-            AbstractSingleActor lichTetherSource = null;
-            foreach (AbstractBuffEvent lichTether in lichTethers)
-            {
-                if (lichTether is BuffApplyEvent)
-                {
-                    lichTetherStart = (int)lichTether.Time;
-                    lichTetherSource = TrashMobs.FirstOrDefault(x => x.AgentItem == lichTether.CreditedBy);
-                }
-                else
-                {
-                    int tetherEnd = (int)lichTether.Time;
-                    if (lichTetherSource != null)
-                    {
-                        replay.Decorations.Add(new LineDecoration(0, (lichTetherStart, tetherEnd), "rgba(0, 255, 255, 0.5)", new AgentConnector(p), new AgentConnector(lichTetherSource)));
-                    }
-                }
-            }
+            replay.AddTether(lichTethers, "rgba(0, 255, 255, 0.5)");
             // Reanimated Hatred Fixation
             IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
@@ -458,20 +438,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)
         {
+            int deathHandGrowStart = start;
+            int deathHandGrowEnd = deathHandGrowStart + delay;
             // Growing AoE
-            replay.Decorations.Add(new CircleDecoration(true, start + delay, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)));
+            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)), deathHandGrowEnd);
             // Damaging AoE
-            replay.Decorations.Add(new DoughnutDecoration(true, 0, radius - 10, radius, (start + delay, start + duration), "rgba(255, 0, 0, 0.4)", new PositionConnector(position)));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay, start + duration), "rgba(0, 100, 0, 0.2)", new PositionConnector(position)));
+            int AoEStart = deathHandGrowEnd;
+            int AoEEnd = AoEStart + duration;
+            replay.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), "rgba(255, 0, 0, 0.4)");
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)
         {
             int endTime = startCast + durationCast;
             var connector = new PositionConnector(position);
-            replay.Decorations.Add(new CircleDecoration(true, startCast + delay, radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", connector));
-            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", connector));
+            replay.Decorations.Add(new CircleDecoration(radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", connector).UsingGrowingEnd(startCast + delay));
+            replay.Decorations.Add(new CircleDecoration(radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", connector));
         }
     }
 }

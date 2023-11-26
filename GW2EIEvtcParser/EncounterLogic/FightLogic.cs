@@ -350,6 +350,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.Normal;
         }
 
+        internal virtual FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         protected virtual List<int> GetSuccessCheckIDs()
         {
             return new List<int>

@@ -8,9 +8,10 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -20,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
                 .UsingChecker((brae, combatData, agentData, skillData) => {
-                     return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
+                     return combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To);
                 })
                 .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
                 .UsingDisableWithEffectData(),
@@ -84,17 +85,17 @@ namespace GW2EIEvtcParser.EIData
             // fallback to blink or phase retreat
             new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
 
             new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionBuff).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
@@ -135,13 +136,13 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             // Domination
             // Empowered illusions require knowing all illusion species ID
             // We need illusion species ID to enable Vicious Expression on All
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
             //
             new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
@@ -152,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
             new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -162,7 +163,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
             new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -172,16 +173,16 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
             //
-            new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
             // Dueling
             // Superiority Complex can all the conditions be tracked?
             // Illusions
-            new BuffDamageModifier(CompoundingPower, "Compounding Power", "2% per stack (8s) after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(CompoundingPower, "Compounding Power", "2% per stack (8s) after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All),
             // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
             // Chaos       
-            new BuffDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.May2021Balance),
+            new BuffOnActorDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.May2021Balance),
         };
 
 
@@ -362,33 +363,35 @@ namespace GW2EIEvtcParser.EIData
             // Portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalEntre);
                 foreach (EffectEvent effect in portalInactives)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, PortalEntre));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, PortalEntre));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
 
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> portalActives))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalExeunt, SkillModeCategory.Portal);
                 foreach (IReadOnlyList<EffectEvent> group in portalActives)
                 {
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
                     {
-                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
+                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal));
-                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal);
+                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
                             first = icon;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal));
+                            replay.Decorations.Add(first.LineTo(icon, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(icon);
                     }
@@ -398,35 +401,38 @@ namespace GW2EIEvtcParser.EIData
             // Feedback
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out IReadOnlyList<EffectEvent> feedbacks))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, Feedback, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in feedbacks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, Feedback, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, Feedback, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Veil
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out IReadOnlyList<EffectEvent> veils))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, Veil, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in veils)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(false, 0, 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Null Field
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent>  nullFields))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, NullField, SkillModeCategory.Strip | SkillModeCategory.Cleanse);
                 foreach (EffectEvent effect in nullFields)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000); // 6s with trait
+                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 6000); // 6s with trait
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, NullField, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, NullField, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

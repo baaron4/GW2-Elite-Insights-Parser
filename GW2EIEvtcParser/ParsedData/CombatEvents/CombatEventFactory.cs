@@ -2,25 +2,12 @@
 using System.IO;
 using System.Linq;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     internal static class CombatEventFactory
     {
-        private static void Add<TKey, TValue>(Dictionary<TKey, List<TValue>> dict, TKey key, TValue evt)
-        {
-            if (dict.TryGetValue(key, out List<TValue> list))
-            {
-                list.Add(evt);
-            }
-            else
-            {
-                dict[key] = new List<TValue>()
-                {
-                    evt
-                };
-            }
-        }
 
         public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, int evtcVersion)
         {
@@ -203,7 +190,7 @@ namespace GW2EIEvtcParser.ParsedData
                     buffEvents.Add(new BuffStackResetEvent(stateChangeEvent, agentData, skillData));
                     break;
                 case StateChange.BuffInitial:
-                    buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData));
+                    buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData, evtcVersion));
                     break;
                 case StateChange.TickRate:
                     metaDataEvents.TickRateEvents.Add(new TickRateEvent(stateChangeEvent));
@@ -219,13 +206,22 @@ namespace GW2EIEvtcParser.ParsedData
                     switch(stateChangeEvent.IsStateChange)
                     {
                         case StateChange.Effect_45:
+                            // End event, not supported for 45
+                            if (stateChangeEvent.SkillID == 0)
+                            {
+                                return;
+                            }
                             effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
                             break;
                         case StateChange.Effect_51:
-                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData);
-                            if (effectEvt.TrackingID != 0)
+                            if (stateChangeEvent.SkillID == 0)
                             {
-                                Add(statusEvents.EffectEventsByTrackingID, effectEvt.TrackingID, effectEvt);
+                                var endEvent = new EffectEndEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
+                                return;
+                            } 
+                            else
+                            {
+                                effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
                             }
                             break;
                         default:
@@ -233,13 +229,10 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     statusEvents.EffectEvents.Add(effectEvt);
                     Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
+                    Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     if (effectEvt.IsAroundDst)
                     {
                         Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);
-                    }
-                    if (effectEvt.EffectID != 0)
-                    {
-                        Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                     }
                     break;
                 case StateChange.EffectIDToGUID:
@@ -275,7 +268,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData)
+        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, int evtcVersion)
         {
             if (buffEvent.IsOffcycle > 0)
             {
@@ -283,7 +276,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             else
             {
-                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData));
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
             }
         }
 

@@ -92,37 +92,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
-            {
-                AgentItem desmina = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-                if (desmina == null)
-                {
-                    throw new MissingKeyActorsException("Desmina not found");
-                }
-                ExitCombatEvent ooc = combatData.GetExitCombatEvents(desmina).LastOrDefault();
-                if (ooc != null)
-                {
-                    long time = 0;
-                    foreach (NPC mob in TrashMobs)
-                    {
-                        time = Math.Max(mob.LastAware, time);
-                    }
-                    DespawnEvent dspwn = combatData.GetDespawnEvents(desmina).LastOrDefault();
-                    if (time != 0 && dspwn == null && time + 500 <= desmina.LastAware)
-                    {
-                        if (AtLeastOnePlayerAlive(combatData, fightData, time, playerAgents))
-                        {
-                            fightData.SetSuccess(true, time);
-                        }
-                    }
-                }
-            }
-        }
-
-
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
@@ -169,7 +138,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment asylum in asylums)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.HollowedBomber:
@@ -184,8 +153,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int startCast = (int)bomb.Time;
                         int endCast = (int)bomb.EndTime;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target)));
+                        var circle = new CircleDecoration(480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(circle, expectedEnd);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.RiverOfSouls:
@@ -198,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)replay.TimeOffsets.start;
                         int end = (int)replay.TimeOffsets.end;
-                        replay.Decorations.Add(new RectangleDecoration(true, 0, 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration( 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Enervator:

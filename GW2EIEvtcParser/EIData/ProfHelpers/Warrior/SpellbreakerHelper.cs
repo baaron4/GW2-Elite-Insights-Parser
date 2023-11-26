@@ -7,6 +7,8 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -22,20 +24,20 @@ namespace GW2EIEvtcParser.EIData
 
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (boons)", "7.5% crit damage", DamageSource.NoPets, 7.5, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(NumberOfBoons, "Pure Strike (no boons)", "15% crit damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (boons)", "7.5% crit damage", DamageSource.NoPets, 7.5, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(NumberOfBoons, "Pure Strike (no boons)", "15% crit damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+            new BuffOnFoeDamageModifierFoe(MagebaneTether, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-            new BuffDamageModifierTarget(MagebaneTether, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
+            new BuffOnFoeDamageModifierFoe(MagebaneTether, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 AgentItem dst = x.To;
                 return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTether, x.Time);
@@ -58,12 +60,13 @@ namespace GW2EIEvtcParser.EIData
             // Winds of Disenchantment
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpellbreakerWindsOfDisenchantment, out IReadOnlyList<EffectEvent> windsOfDisenchantments))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Spellbreaker, WindsOfDisenchantment, SkillModeCategory.Strip | SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in windsOfDisenchantments)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Spellbreaker, WindsOfDisenchantment, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWindsOfDisenchantment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

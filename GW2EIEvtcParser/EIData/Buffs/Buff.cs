@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
                     case BuffStackType.Force:
                         return BuffType.Duration;
                     case BuffStackType.Stacking:
-                    case BuffStackType.StackingSomething:
+                    case BuffStackType.StackingTargetUniqueSrc:
                     case BuffStackType.StackingConditionalLoss:
                         return BuffType.Intensity;
                     default:

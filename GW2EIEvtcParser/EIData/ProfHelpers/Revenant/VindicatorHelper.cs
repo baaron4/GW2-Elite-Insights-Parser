@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -29,9 +30,11 @@ namespace GW2EIEvtcParser.EIData
             return _dodges.Contains(id);
         }
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2),
+            new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2, GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

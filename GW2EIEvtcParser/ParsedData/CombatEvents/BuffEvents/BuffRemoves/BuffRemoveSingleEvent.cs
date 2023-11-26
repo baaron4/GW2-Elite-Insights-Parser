@@ -1,27 +1,27 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.BuffSimulators;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
-        private readonly ArcDPSEnums.IFF _iff;
         public uint BuffInstance { get; protected set; }
 
         private readonly bool _byShouldntBeUnknown;
-        private bool _overstackOrNaturalEnd => (_iff == ArcDPSEnums.IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
+        private bool _overstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
 
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
-            _iff = evtcItem.IFF;
             // Sometimes there is a dstAgent value but the agent itself is not in the pool, such cases should not trigger _overstackOrNaturalEnd
             _byShouldntBeUnknown = evtcItem.DstAgent != 0;
             BuffInstance = evtcItem.Pad;
         }
 
-        internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint stackID) : base(by, to, time, removedDuration, buffSkill)
+        internal BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff, uint stackID) : base(by, to, time, removedDuration, buffSkill, iff)
         {
             BuffInstance = stackID;
+            _byShouldntBeUnknown = true;
         }
 
         internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(CreditedBy, RemovedDuration, 1, Time, ArcDPSEnums.BuffRemove.Single, BuffInstance);
+            simulator.Remove(CreditedBy, RemovedDuration, 1, Time, BuffRemove.Single, BuffInstance);
         }
         /*internal override int CompareTo(AbstractBuffEvent abe)
         {

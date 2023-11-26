@@ -2,12 +2,14 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -61,7 +63,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDisableWithEffectData(),
             new EffectCastFinderByDst(MagneticInversion, EffectGUIDs.EngineerMagneticInversion)
                 .UsingDstBaseSpecChecker(Spec.Engineer)
-                .UsingChecker((effect, combatData, agentData, skillData) => HasLostBuff(combatData, Absorb, effect.Dst, effect.Time)),
+                .UsingChecker((effect, combatData, agentData, skillData) => combatData.HasLostBuff(Absorb, effect.Dst, effect.Time)),
             // Kits
             new EngineerKitFinder(BombKit),
             new EngineerKitFinder(ElixirGun),
@@ -74,21 +76,21 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstBaseSpecChecker(Spec.Engineer),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
         {
             // Explosives
-            new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All)
+            new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
-            new DamageLogDamageModifier("Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All)
+            new DamageLogDamageModifier("Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
-            new DamageLogDamageModifier("Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), ByPresence, DamageModifierMode.All)
+            new DamageLogDamageModifier("Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.May2021Balance),
-            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-            new BuffDamageModifierTarget(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
+            new BuffOnFoeDamageModifierFoe(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.October2019Balance),
             new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
             {
@@ -99,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All ).UsingApproximate(true)
+            }, DamageModifierMode.All ).UsingApproximate(true)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
             {
@@ -110,7 +112,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.sPvPWvW )
+            }, DamageModifierMode.sPvPWvW )
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.August2022Balance),
             new DamageLogDamageModifier("Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
@@ -122,17 +124,17 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.PvE )
+            }, DamageModifierMode.PvE )
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.August2022Balance),
             // Firearms
-            new BuffDamageModifier(ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.All)
+            new BuffOnActorDamageModifier(ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.August2018Balance),
-            new BuffDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-            new BuffDamageModifierTarget(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All),
+            new BuffOnFoeDamageModifierFoe(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All),
             // Tools
-            new BuffDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -222,5 +224,22 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Engineer;
+
+            // Thunderclap
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out IReadOnlyList<EffectEvent> thunderclaps))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in thunderclaps)
+                {
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+        }
     }
 }
