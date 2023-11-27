@@ -12,6 +12,9 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> DamageModifiersPerSource { get; }
 
         public IReadOnlyDictionary<string, DamageModifier> DamageModifiersByName { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> IncomingDamageModifiersPerSource { get; }
+
+        public IReadOnlyDictionary<string, DamageModifier> IncomingDamageModifiersByName { get; }
 
         internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
@@ -82,6 +85,25 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return list.First();
             });
+            //
+            var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
+            {
+            };
+            var currentIncomingDamageMods = new List<DamageModifier>();
+            foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)
+            {
+                currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
+            }
+            IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
+            IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+            {
+                var list = x.ToList();
+                if (list.Count > 1)
+                {
+                    throw new InvalidDataException("Same name present multiple times in damage mods - " + x.First().Name);
+                }
+                return list.First();
+            });
         }
 
         public IReadOnlyList<DamageModifier> GetModifiersPerSpec(ParserHelper.Spec spec)
@@ -91,6 +113,20 @@ namespace GW2EIEvtcParser.EIData
             foreach (ParserHelper.Source src in srcs)
             {
                 if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
+                {
+                    res.AddRange(list);
+                }
+            }
+            return res;
+        }
+
+        public IReadOnlyList<DamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
+        {
+            var res = new List<DamageModifier>();
+            IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
+            foreach (ParserHelper.Source src in srcs)
+            {
+                if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
                 {
                     res.AddRange(list);
                 }

@@ -265,6 +265,16 @@ namespace GW2EIEvtcParser.EIData
             return _damageModifiersHelper.GetPresentDamageModifier(log);
         }
 
+        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return _damageModifiersHelper.GetIncomingDamageModifierStats(target, log, start, end);
+        }
+
+        public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)
+        {
+            return _damageModifiersHelper.GetPresentIncomingDamageModifier(log);
+        }
+
         // Buffs
         public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
         {
