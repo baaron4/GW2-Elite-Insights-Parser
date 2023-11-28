@@ -18,9 +18,9 @@ namespace GW2EIEvtcParser.EIData
         {
             new DamageLogDamageModifier("Moving Bonus", "Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Item, BuffImages.BowlOfSeaweedSalad, (x, log) => x.IsMoving, DamageModifierMode.All),
             new BuffOnActorDamageModifier(FractalOffensive, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, BuffImages.FractalOffensive, DamageModifierMode.PvE),
-            new CounterDamageModifier(WritOfMasterfulMalice, "Writ of Masterful Malice", "200 condition damage if hp >=90%", DamageSource.NoPets, DamageType.Condition, DamageType.Condition, Source.Item,  BuffImages.WritOfMasterfulMalice, DamageModifierMode.All)
+            new CounterOnActorDamageModifier(WritOfMasterfulMalice, "Writ of Masterful Malice", "200 condition damage if hp >=90%", DamageSource.NoPets, DamageType.Condition, DamageType.Condition, Source.Item,  BuffImages.WritOfMasterfulMalice, DamageModifierMode.All)
                 .UsingChecker((x, log) => x.IsOverNinety),
-            new CounterDamageModifier(WritOfMasterfulStrength, "Writ of Masterful Strength", "200 power if hp >=90%", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Item, BuffImages.WritOfMasterfulStrength, DamageModifierMode.All)
+            new CounterOnActorDamageModifier(WritOfMasterfulStrength, "Writ of Masterful Strength", "200 power if hp >=90%", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Item, BuffImages.WritOfMasterfulStrength, DamageModifierMode.All)
                 .UsingChecker((x, log) => x.IsOverNinety),
         };
         internal static readonly List<DamageModifierDescriptor> GearDamageModifiers = new List<DamageModifierDescriptor>
