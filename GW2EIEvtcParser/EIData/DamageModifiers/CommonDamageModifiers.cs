@@ -119,7 +119,6 @@ namespace GW2EIEvtcParser.EIData
                     return VulnerabilityAdditiveChecker(ahde, log, CacophonousMind, 5);
                 }),
             new CounterOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind (Invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.TwistedEarth, DamageModifierMode.PvE)
-                .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
                     return !VulnerabilityAdditiveChecker(ahde, log, CacophonousMind, 5);
@@ -131,7 +130,6 @@ namespace GW2EIEvtcParser.EIData
                     return VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
                 }),
             new CounterOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
-                .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
                     return !VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
@@ -144,7 +142,6 @@ namespace GW2EIEvtcParser.EIData
                     return VulnerabilityAdditiveChecker(ahde, log, PillarPandemonium, 20);
                 }),
             new CounterOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium (Invul)", "-20% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)
-                .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
                     return !VulnerabilityAdditiveChecker(ahde, log, PillarPandemonium, 20);
