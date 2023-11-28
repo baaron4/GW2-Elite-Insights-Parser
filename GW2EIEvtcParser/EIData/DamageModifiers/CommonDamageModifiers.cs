@@ -107,7 +107,6 @@ namespace GW2EIEvtcParser.EIData
         };
         internal static readonly List<DamageModifierDescriptor> FightSpecificDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffOnActorDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE).UsingGainAdjuster((dl, log) =>
             {
                 AbstractSingleActor target = log.FindActor(dl.To);
@@ -118,8 +117,6 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return 1.0;
             }),
-
-            new BuffOnActorDamageModifier(EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(Compromised, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Compromised, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Unstable, DamageModifierMode.PvE)
                 .UsingGainAdjuster((dl, log) =>
@@ -133,6 +130,52 @@ namespace GW2EIEvtcParser.EIData
                     return 1.0;
                 }),
             new BuffOnFoeDamageModifier(FracturedEnemy, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind", "-5% per stack, stacks additively with Vulnerability", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.TwistedEarth, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment cacophonousSegment = target.GetBuffStatus(log, CacophonousMind, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (cacophonousSegment != null && vulnSegment != null && cacophonousSegment.Value == 20 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura", "-10% per stack, stacks additively with Vulnerability", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment auraSegment = target.GetBuffStatus(log, DemonicAura, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (auraSegment != null && vulnSegment != null && auraSegment.Value == 10 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of the Void", "-25% per stack, multiplicative with itself", DamageSource.All, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByMultipliyingStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium", "-20% per stack, stacks additively with Vulnerability", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment pillarSegment = target.GetBuffStatus(log, PillarPandemonium, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (pillarSegment != null && vulnSegment != null && pillarSegment.Value == 5 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(IonShield, "Ion Shield", "-5% per stack while still capable of doing damage", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.IonShield, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
+                    return segment.Value < 20;
+                }),
+            new BuffOnActorDamageModifier(EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(BloodFueledPlayer, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(BloodFueledMatthias, "Blood Fueled Abo", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(FractalSavant, "Fractal Savant", "1%", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Malign9Infusion, DamageModifierMode.PvE),
@@ -142,6 +185,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(SoulReunited, "Soul Reunited", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.AllysAidPoweredUp, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(Phantasmagoria, "Phantasmagoria", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.VoidAffliction, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(StickingTogetherBuff, "Sticking Together", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.ActivateGreen, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(CrushingGuilt, "Crushing Guilt", "-5% per stack", DamageSource.NoPets, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.GuiltExploitation, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(Debilitated, "Debilitated", "-25% per stack", DamageSource.NoPets, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Debilitated, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(DebilitatedToxicSickness, "Debilitated (Toxic Sickness)", "-10% per stack", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Debilitated, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(SpectralDarkness, "Spectral Darkness", "-5% per stack", DamageSource.NoPets, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.SpectralDarkness, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(DragonsEndContributor1, "Dragon's End Contributor 1", "1%", DamageSource.NoPets, 1.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.SeraphMorale01, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(DragonsEndContributor2, "Dragon's End Contributor 2", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.SeraphMorale02, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(DragonsEndContributor3, "Dragon's End Contributor 3", "3%", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.SeraphMorale03, DamageModifierMode.PvE),

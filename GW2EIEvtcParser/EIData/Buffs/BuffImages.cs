@@ -441,6 +441,8 @@
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";
         internal const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
         internal const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
+        // Ai
+        internal const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
         // Open World
         internal const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
         internal const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
