@@ -26,9 +26,11 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 
         private static JsonDamageModifierData BuildJsonDamageModifierData(int ID, List<JsonDamageModifierItem> data)
         {
-            var jsonDamageModifierData = new JsonDamageModifierData();
-            jsonDamageModifierData.Id = ID;
-            jsonDamageModifierData.DamageModifiers = data;
+            var jsonDamageModifierData = new JsonDamageModifierData
+            {
+                Id = ID,
+                DamageModifiers = data
+            };
             return jsonDamageModifierData;
         }
 
@@ -76,6 +78,17 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
             {
                 AbstractSingleActor tar = log.FightData.Logic.Targets[i];
                 res[i] = GetDamageModifiers(phases.Select(x => player.GetDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
+            }
+            return res;
+        }
+
+        public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(AbstractSingleActor player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
+        {
+            var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
+            for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+            {
+                AbstractSingleActor tar = log.FightData.Logic.Targets[i];
+                res[i] = GetDamageModifiers(phases.Select(x => player.GetIncomingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
             }
             return res;
         }
