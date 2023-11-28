@@ -130,11 +130,44 @@ namespace GW2EIEvtcParser.EIData
                     return 1.0;
                 }),
             new BuffOnFoeDamageModifier(FracturedEnemy, "Fractured - Enemy", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
-            new BuffOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind", "-5% per stack", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.TwistedEarth, DamageModifierMode.PvE),
-            new BuffOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura", "-10% per stack", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE),
-            new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of the Void", "-25% per stack", DamageSource.All, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByMultipliyingStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
-            new BuffOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium", "-20% per stack", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.CaptainsInspiration, DamageModifierMode.PvE),
-            new BuffOnFoeDamageModifier(IonShield, "Ion Shield", "-5% per stack (up to 19 stacks)", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.IonShield, DamageModifierMode.PvE)
+            new BuffOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind", "-5% per stack, stacks additively with Vulnerability", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.TwistedEarth, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment cacophonousSegment = target.GetBuffStatus(log, CacophonousMind, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (cacophonousSegment != null && vulnSegment != null && cacophonousSegment.Value == 20 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura", "-10% per stack, stacks additively with Vulnerability", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment auraSegment = target.GetBuffStatus(log, DemonicAura, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (auraSegment != null && vulnSegment != null && auraSegment.Value == 10 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of the Void", "-25% per stack, multiplicative with itself", DamageSource.All, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByMultipliyingStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium", "-20% per stack, stacks additively with Vulnerability", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment pillarSegment = target.GetBuffStatus(log, PillarPandemonium, ahde.Time);
+                    Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, ahde.Time);
+                    if (pillarSegment != null && vulnSegment != null && pillarSegment.Value == 5 && vulnSegment.Value == 0)
+                    {
+                        return false;
+                    }
+                    return true;
+                }),
+            new BuffOnFoeDamageModifier(IonShield, "Ion Shield", "-5% per stack while still capable of doing damage", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.IonShield, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
                     AbstractSingleActor target = log.FindActor(ahde.To);
