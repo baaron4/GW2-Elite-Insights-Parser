@@ -22,6 +22,8 @@ namespace GW2EIEvtcParser.EIData
         public int ID { get; protected set; }
         public string Tooltip => DamageModDescriptor.Tooltip;
 
+        public bool Incoming { get; protected set; }
+
         internal DamageModifier(DamageModifierDescriptor damageModDescriptor)
         {
             DamageModDescriptor = damageModDescriptor;
