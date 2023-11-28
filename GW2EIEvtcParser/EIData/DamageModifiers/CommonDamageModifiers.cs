@@ -118,11 +118,23 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return VulnerabilityAdditiveChecker(ahde, log, CacophonousMind, 5);
                 }),
+            new CounterOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind (Invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.TwistedEarth, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster)
+                .UsingChecker((ahde, log) =>
+                {
+                    return !VulnerabilityAdditiveChecker(ahde, log, CacophonousMind, 5);
+                }),
             new BuffOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura", "-10% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
                 .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
                     return VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
+                }),
+            new CounterOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster)
+                .UsingChecker((ahde, log) =>
+                {
+                    return !VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
                 }),
             new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of the Void", "-25% per stack, multiplicative with itself", DamageSource.All, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByMultipliyingStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium", "-20% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)
@@ -131,12 +143,25 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return VulnerabilityAdditiveChecker(ahde, log, PillarPandemonium, 20);
                 }),
+            new CounterOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium (Invul)", "-20% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster)
+                .UsingChecker((ahde, log) =>
+                {
+                    return !VulnerabilityAdditiveChecker(ahde, log, PillarPandemonium, 20);
+                }),
             new BuffOnFoeDamageModifier(IonShield, "Ion Shield", "-5% per stack, while still capable of doing damage", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.IonShield, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
                     AbstractSingleActor target = log.FindActor(ahde.To);
                     Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                     return segment.Value < 20;
+                }),
+            new CounterOnFoeDamageModifier(IonShield, "Ion Shield (Invul)", "-5% per stack, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.IonShield, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    AbstractSingleActor target = log.FindActor(ahde.To);
+                    Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
+                    return segment.Value >= 20;
                 }),
             new BuffOnActorDamageModifier(EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
