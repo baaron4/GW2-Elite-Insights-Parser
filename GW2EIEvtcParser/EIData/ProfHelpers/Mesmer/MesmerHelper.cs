@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EIData
             // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
             // Chaos       
             new BuffOnActorDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
-            new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.November2023Balance), // Gain TBC
+            new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.November2023Balance),
         };
 
 
