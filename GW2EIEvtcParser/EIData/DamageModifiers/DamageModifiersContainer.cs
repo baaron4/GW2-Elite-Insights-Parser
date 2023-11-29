@@ -9,12 +9,12 @@ namespace GW2EIEvtcParser.EIData
     public class DamageModifiersContainer
     {
 
-        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> DamageModifiersPerSource { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<OutgoingDamageModifier>> DamageModifiersPerSource { get; }
 
-        public IReadOnlyDictionary<string, DamageModifier> DamageModifiersByName { get; }
-        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> IncomingDamageModifiersPerSource { get; }
+        public IReadOnlyDictionary<string, OutgoingDamageModifier> DamageModifiersByName { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<IncomingDamageModifier>> IncomingDamageModifiersPerSource { get; }
 
-        public IReadOnlyDictionary<string, DamageModifier> IncomingDamageModifiersByName { get; }
+        public IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName { get; }
 
         internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
         {
@@ -70,12 +70,12 @@ namespace GW2EIEvtcParser.EIData
                 WeaverHelper.DamageMods,
                 CatalystHelper.DamageMods,
             };
-            var currentDamageMods = new List<DamageModifier>();
+            var currentDamageMods = new List<OutgoingDamageModifier>();
             foreach (List<DamageModifierDescriptor> boons in AllDamageModifiers)
             {
                 currentDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
             }
-            DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
+            DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
             DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
                 var list = x.ToList();
@@ -89,12 +89,12 @@ namespace GW2EIEvtcParser.EIData
             var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
             {
             };
-            var currentIncomingDamageMods = new List<DamageModifier>();
+            var currentIncomingDamageMods = new List<IncomingDamageModifier>();
             foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)
             {
                 currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
             }
-            IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
+            IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
             IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
                 var list = x.ToList();
@@ -106,13 +106,13 @@ namespace GW2EIEvtcParser.EIData
             });
         }
 
-        public IReadOnlyList<DamageModifier> GetModifiersPerSpec(ParserHelper.Spec spec)
+        public IReadOnlyList<OutgoingDamageModifier> GetModifiersPerSpec(ParserHelper.Spec spec)
         {
-            var res = new List<DamageModifier>();
+            var res = new List<OutgoingDamageModifier>();
             IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
             foreach (ParserHelper.Source src in srcs)
             {
-                if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
+                if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<OutgoingDamageModifier> list))
                 {
                     res.AddRange(list);
                 }
@@ -120,13 +120,13 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        public IReadOnlyList<DamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
+        public IReadOnlyList<IncomingDamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
         {
-            var res = new List<DamageModifier>();
+            var res = new List<IncomingDamageModifier>();
             IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
             foreach (ParserHelper.Source src in srcs)
             {
-                if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
+                if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<IncomingDamageModifier> list))
                 {
                     res.AddRange(list);
                 }

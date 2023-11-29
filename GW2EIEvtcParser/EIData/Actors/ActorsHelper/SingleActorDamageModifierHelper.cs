@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
             }
             //
             var damageMods = new List<DamageModifier>();
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<DamageModifier> list))
+            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<OutgoingDamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EIData
             }
             //
             var damageMods = new List<DamageModifier>();
-            if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<DamageModifier> list))
+            if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<IncomingDamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
