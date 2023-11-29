@@ -13,7 +13,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData
         public bool SkillBased { get; set; }
         public bool Approximate { get; set; }
 
-        public static void AssembleDamageModifiers(ICollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
+        public static void AssembleDamageModifiers(IReadOnlyCollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
         {
             foreach (DamageModifier mod in damageMods)
             {
