@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                return FightData.EncounterStartStatus.Normal;
+                return base.GetEncounterStartStatus(combatData, agentData, fightData);
             }
         }
 

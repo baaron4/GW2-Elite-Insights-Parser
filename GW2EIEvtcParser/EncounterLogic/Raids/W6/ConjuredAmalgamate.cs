@@ -82,6 +82,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // Can be improved
+            if (_cn)
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA, fightData.FightStart, 90, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            } 
+            else
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate, fightData.FightStart, 90, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>

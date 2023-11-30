@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -24,6 +25,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                     RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
                 }
             }
+        }
+
+        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, double threshold, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        {
+            AbstractSingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
+            if (target == null)
+            {
+                // If tracked target is missing, then 0% hp
+                return true;
+            }
+            long minTime = Math.Max(target.FirstAware, time);
+            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault(x => x.Time <= minTime + 1000);
+            if (hpUpdate == null)
+            {
+                // If for some reason hp events are missing, we can't decide
+                return false;
+            }
+            return hpUpdate.HPPercent < threshold;
+        }
+
+        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, double threshold, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        {
+            return TargetHPPercentUnderThreshold((int)targetID, time, threshold, combatData, targets);
         }
 
         internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)

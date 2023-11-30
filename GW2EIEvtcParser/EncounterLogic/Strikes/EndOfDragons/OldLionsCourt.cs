@@ -83,6 +83,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (fightData.IsCM)
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, 90, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, 90, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, 90, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+
+            } 
+            else
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, 90, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, 90, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, 90, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
