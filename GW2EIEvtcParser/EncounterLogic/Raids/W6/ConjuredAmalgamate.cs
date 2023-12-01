@@ -87,14 +87,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Can be improved
             if (_cn)
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
             } 
             else
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }

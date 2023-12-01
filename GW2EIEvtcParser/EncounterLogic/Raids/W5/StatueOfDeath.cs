@@ -55,6 +55,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.GreenSpirit2
             };
         }
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EaterOfSouls, fightData.FightStart, 60, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {

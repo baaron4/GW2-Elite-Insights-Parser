@@ -119,9 +119,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Narella, fightData.FightStart, 90, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Zane, fightData.FightStart, 90, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Narella, fightData.FightStart, 90, combatData, Targets))
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Narella, fightData.FightStart, 80, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Zane, fightData.FightStart, 80, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Narella, fightData.FightStart, 80, combatData, Targets))
             {
                 return FightData.EncounterStartStatus.Late;
             }

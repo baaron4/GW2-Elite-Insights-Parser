@@ -205,14 +205,14 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (_hasElementalMode)
             {
-                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
             } 
             else if (_hasDarkMode)
             {
-                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }

@@ -85,11 +85,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
+            // Can be improved
             if (fightData.IsCM)
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, 90, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, 90, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, 80, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, 80, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
@@ -97,9 +98,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, 90, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, 90, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, 90, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, 80, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, 80, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, 80, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }

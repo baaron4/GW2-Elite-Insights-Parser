@@ -89,6 +89,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("(SE)", new Point3D(2941.51514f, 9321.848f)),
         };
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // Can be improved
+            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
