@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, double threshold, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
         {
             AbstractSingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
             if (target == null)
@@ -37,17 +37,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             long minTime = Math.Max(target.FirstAware, time);
             HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault(x => x.Time <= minTime + 1000);
-            if (hpUpdate == null)
+            var targetTotalHP = target.GetHealth(combatData);
+            if (hpUpdate == null || targetTotalHP < 0)
             {
                 // If for some reason hp events are missing, we can't decide
                 return false;
             }
-            return hpUpdate.HPPercent < threshold;
+            var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
+            double damageThreshold = damagingPlayers.Count * 120000;
+            double threshold = (1.0 - damageThreshold / targetTotalHP) * 100;
+            return hpUpdate.HPPercent < threshold - 2;
         }
 
-        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, double threshold, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
         {
-            return TargetHPPercentUnderThreshold((int)targetID, time, threshold, combatData, targets);
+            return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets);
         }
 
         internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)

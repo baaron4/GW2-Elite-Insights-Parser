@@ -88,9 +88,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Can be improved
             if (fightData.IsCM)
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, 80, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, 80, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, 80, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
@@ -98,9 +98,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, 80, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, 80, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, 80, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
