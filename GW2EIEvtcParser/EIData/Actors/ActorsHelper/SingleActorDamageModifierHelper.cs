@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             //
-            var damageMods = new List<DamageModifier>();
+            var damageMods = new List<OutgoingDamageModifier>();
             if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<OutgoingDamageModifier> list))
             {
                 damageMods.AddRange(list);
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerSpec(Actor.Spec));
             //
             var damageModifierEvents = new List<DamageModifierEvent>();
-            foreach (DamageModifier damageMod in damageMods)
+            foreach (OutgoingDamageModifier damageMod in damageMods)
             {
                 damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(Actor, log));
             }
@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             //
-            var damageMods = new List<DamageModifier>();
+            var damageMods = new List<IncomingDamageModifier>();
             if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<IncomingDamageModifier> list))
             {
                 damageMods.AddRange(list);
@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EIData
             damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(Actor.Spec));
             //
             var damageModifierEvents = new List<DamageModifierEvent>();
-            foreach (DamageModifier damageMod in damageMods)
+            foreach (IncomingDamageModifier damageMod in damageMods)
             {
                 damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(Actor, log));
             }
