@@ -113,7 +113,7 @@
                 return res;
             },
             hasDamageMods: function() {
-                return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.incDamageModMap).length !== 0 ;
+                return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.damageIncModMap).length !== 0 ;
             },
             hasMechanics: function() {
                 return logData.mechanicMap.length > 0 && !logData.noMechanics;
