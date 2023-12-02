@@ -176,14 +176,14 @@ namespace GW2EIBuilders.HtmlModels
             // Collect all personal damage mods by spec
             foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
             {
-                var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetModifiersPerSpec(pair.Key).Select(x => x.Name));
+                var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.Name));
                 var damageModsToUse = new HashSet<OutgoingDamageModifier>();
                 foreach (AbstractSingleActor actor in pair.Value)
                 {
                     var presentDamageMods = new HashSet<string>(actor.GetPresentDamageModifier(log).Intersect(specDamageModsName));
                     foreach (string name in presentDamageMods)
                     {
-                        damageModsToUse.Add(log.DamageModifiers.DamageModifiersByName[name]);
+                        damageModsToUse.Add(log.DamageModifiers.OutgoingDamageModifiersByName[name]);
                     }
                 }
                 damageModBySpecs[pair.Key] = damageModsToUse.ToList();
@@ -297,7 +297,7 @@ namespace GW2EIBuilders.HtmlModels
             {
                 allDamageMods.UnionWith(actor.GetPresentDamageModifier(log));
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<OutgoingDamageModifier> list))
+            if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<OutgoingDamageModifier> list))
             {
                 foreach (OutgoingDamageModifier dMod in list)
                 {
@@ -309,7 +309,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
+            if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 foreach (OutgoingDamageModifier dMod in list)
                 {
@@ -321,7 +321,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Item, out list))
+            if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out list))
             {
                 foreach (OutgoingDamageModifier dMod in list)
                 {
@@ -333,7 +333,7 @@ namespace GW2EIBuilders.HtmlModels
                     }
                 }
             }
-            if (log.DamageModifiers.DamageModifiersPerSource.TryGetValue(Source.Gear, out list))
+            if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 foreach (OutgoingDamageModifier dMod in list)
                 {

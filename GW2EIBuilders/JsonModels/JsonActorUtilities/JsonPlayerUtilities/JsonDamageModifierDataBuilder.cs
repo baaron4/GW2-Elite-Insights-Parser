@@ -42,7 +42,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
             {
                 foreach (string key in damageModDict.Keys)
                 {
-                    DamageModifier dMod = log.DamageModifiers.DamageModifiersByName[key];
+                    DamageModifier dMod = log.DamageModifiers.OutgoingDamageModifiersByName[key];
                     int iKey = dMod.ID;
                     string nKey = "d" + iKey;
                     if (!damageModDesc.ContainsKey(nKey))

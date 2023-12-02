@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Spite
             new BuffOnFoeDamageModifier(NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, BuffImages.SpitefulTalisman, DamageModifierMode.All),

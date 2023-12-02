@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheDragon, CallOfTheDragon), // Call of the Dragon
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),

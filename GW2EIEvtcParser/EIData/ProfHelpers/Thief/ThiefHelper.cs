@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Deadly arts
             new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),

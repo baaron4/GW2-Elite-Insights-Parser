@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Peak Performance
             new BuffOnActorDamageModifier(PeakPerformance, "Peak Performance", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.PeakPerformace, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2018Balance, GW2Builds.May2021Balance),

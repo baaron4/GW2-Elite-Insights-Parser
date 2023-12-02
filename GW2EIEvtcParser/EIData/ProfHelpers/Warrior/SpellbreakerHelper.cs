@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
 
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnFoeDamageModifier(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffOnFoeDamageModifier(NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),

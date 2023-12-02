@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.EIData
             }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
         };
 

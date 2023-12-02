@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderFromMinion(EnvelopingHaze, EffectGUIDs.UntamedEnvelopingHaze),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, BuffImages.FerociousSymbiosis, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.November2022Balance),
             new BuffOnActorDamageModifier(FerociousSymbiosis, "Ferocious Symbiosis", "4% per stack", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, BuffImages.FerociousSymbiosis, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),

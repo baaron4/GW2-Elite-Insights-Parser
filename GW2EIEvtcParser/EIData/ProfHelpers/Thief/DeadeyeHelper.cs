@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Deadeye), // Needs more testing to check for collisions
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
