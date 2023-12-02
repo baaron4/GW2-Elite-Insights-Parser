@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
             }, DamageModifierMode.PvEWvW)
                 .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-            new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All),
+            new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
             // Relics
             new BuffOnActorDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.All),
         };
