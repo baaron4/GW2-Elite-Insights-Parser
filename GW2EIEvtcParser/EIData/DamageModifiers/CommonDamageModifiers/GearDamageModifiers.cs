@@ -39,6 +39,8 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             new BuffOnActorDamageModifier(Fury, "Rage Rune", "5% under fury", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfRage, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+            new BuffOnFoeDamageModifier(Daze, "Rune of the Mesmer", "10% on dazed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheMesmer, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
             // Sigils
             new BuffOnFoeDamageModifier(new long[] { Stun, Knockdown }, "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorSigilOfImpact, DamageModifierMode.All),
             // Relics
@@ -67,6 +69,26 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            // Runes
+            new DamageLogDamageModifier("Rune of Hoelbrak", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+            new DamageLogDamageModifier("Rune of the Stars", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheStars, (x, log) => true, DamageModifierMode.All),
+            new DamageLogDamageModifier("Rune of Mercy", "-20%", DamageSource.NoPets, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
+                .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+            new DamageLogDamageModifier("Rune of the Scrapper", "-10% condition damamge", DamageSource.NoPets, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheScrapper, (x,log) =>
+            {
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
+            }, DamageModifierMode.PvEWvW)
+                .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+            new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All),
+            // Relics
+            new BuffOnActorDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.All),
         };
     }
 }

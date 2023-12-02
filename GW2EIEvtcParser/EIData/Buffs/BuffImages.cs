@@ -159,9 +159,15 @@
         internal const string SuperiorRuneOfTheFlameLegion = "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Flame_Legion.png";
         internal const string SuperiorRuneOfTheSpellbreaker = "https://wiki.guildwars2.com/images/1/1a/Superior_Rune_of_the_Spellbreaker.png";
         internal const string SuperiorRuneOfTheIce = "https://wiki.guildwars2.com/images/7/78/Superior_Rune_of_the_Ice.png";
+        internal const string SuperiorRuneOfTheMesmer = "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png";
         internal const string SuperiorRuneOfStrength = "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_Strength.png";
         internal const string SuperiorRuneOfFire = "https://wiki.guildwars2.com/images/4/4a/Superior_Rune_of_the_Fire.png";
         internal const string SuperiorRuneOfRage = "https://wiki.guildwars2.com/images/9/9e/Superior_Rune_of_Rage.png";
+        internal const string SuperiorRuneOfHoelbrak = "https://wiki.guildwars2.com/images/7/75/Superior_Rune_of_Hoelbrak.png";
+        internal const string SuperiorRuneOfTheScrapper = "https://wiki.guildwars2.com/images/5/58/Superior_Rune_of_the_Scrapper.png";
+        internal const string SuperiorRuneOfTheStars = "https://wiki.guildwars2.com/images/8/86/Superior_Rune_of_the_Stars.png";
+        internal const string SuperiorRuneOfMercy = "https://wiki.guildwars2.com/images/2/23/Superior_Rune_of_Mercy.png";
+        internal const string SuperiorRuneOfPerplexity = "https://wiki.guildwars2.com/images/1/1e/Superior_Rune_of_Perplexity.png";
         internal const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
         internal const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
         internal const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
