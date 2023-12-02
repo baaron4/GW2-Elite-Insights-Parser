@@ -37,6 +37,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Legendary Alliance Stance", LegendaryAllianceStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAllianceStance),

@@ -185,6 +185,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.May2021Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {

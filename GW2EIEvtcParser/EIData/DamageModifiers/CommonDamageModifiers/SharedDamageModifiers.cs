@@ -42,5 +42,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Emboldened, "Emboldened", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Emboldened, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.June2022Balance),
         };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
     }
 }

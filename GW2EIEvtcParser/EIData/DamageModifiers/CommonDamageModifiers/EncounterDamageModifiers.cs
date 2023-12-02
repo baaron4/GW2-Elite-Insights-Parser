@@ -94,5 +94,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(DragonsEndContributor10, "Dragon's End Contributor 10", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.SeraphMorale10, DamageModifierMode.PvE),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
     }
 }

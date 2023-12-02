@@ -44,6 +44,10 @@ namespace GW2EIEvtcParser.EIData
             }).WithBuilds(GW2Builds.August2022Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),

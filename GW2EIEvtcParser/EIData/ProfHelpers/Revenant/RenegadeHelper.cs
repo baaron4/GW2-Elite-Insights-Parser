@@ -27,6 +27,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),

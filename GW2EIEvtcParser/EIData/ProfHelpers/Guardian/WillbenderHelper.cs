@@ -162,6 +162,10 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.EODBeta1)
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             // Virtues

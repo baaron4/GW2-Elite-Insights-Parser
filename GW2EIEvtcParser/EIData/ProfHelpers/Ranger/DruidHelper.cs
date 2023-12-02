@@ -40,6 +40,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Ranger, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),

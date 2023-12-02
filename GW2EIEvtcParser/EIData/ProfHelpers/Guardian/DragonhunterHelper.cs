@@ -62,6 +62,10 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None).UsingApproximate(true).WithBuilds(GW2Builds.November2022Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Justice (Dragonhunter)", JusticeDragonhunter, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SpearOfLight),

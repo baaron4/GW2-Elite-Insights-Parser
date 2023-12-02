@@ -32,6 +32,10 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.July2019Balance)
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),

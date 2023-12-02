@@ -227,6 +227,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),

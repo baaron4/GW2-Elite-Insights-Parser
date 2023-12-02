@@ -59,6 +59,10 @@ namespace GW2EIEvtcParser.EIData
             }, DamageModifierMode.All ).UsingApproximate(true),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),

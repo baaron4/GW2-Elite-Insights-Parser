@@ -41,6 +41,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Unleashed, "Vow of the Untamed", "10% when unleashed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, BuffImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023BalanceHotFix),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {

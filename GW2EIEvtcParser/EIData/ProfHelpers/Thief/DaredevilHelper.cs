@@ -34,6 +34,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "10% if weakness on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Palm Strike", PalmStrike, Source.Daredevil, BuffClassification.Other, BuffImages.PalmStrike),

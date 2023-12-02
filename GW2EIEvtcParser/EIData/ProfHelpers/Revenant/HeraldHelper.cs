@@ -41,6 +41,10 @@ namespace GW2EIEvtcParser.EIData
             //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, BuffImages.ForcefulPersistence, GW2Builds.August2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {         
             // Skills

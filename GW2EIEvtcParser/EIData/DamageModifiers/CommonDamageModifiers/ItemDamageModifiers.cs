@@ -22,5 +22,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((x, log) => x.IsOverNinety),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor> {
+        };
+
     }
 }

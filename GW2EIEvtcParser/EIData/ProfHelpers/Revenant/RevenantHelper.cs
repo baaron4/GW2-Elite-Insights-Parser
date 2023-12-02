@@ -118,6 +118,10 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),

@@ -46,6 +46,10 @@ namespace GW2EIEvtcParser.EIData
             }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, BuffImages.ReapersShroud),

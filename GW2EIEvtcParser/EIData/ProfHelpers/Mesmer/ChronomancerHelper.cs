@@ -73,6 +73,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {

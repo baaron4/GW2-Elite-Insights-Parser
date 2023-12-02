@@ -55,6 +55,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {

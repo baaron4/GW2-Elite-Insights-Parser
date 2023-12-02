@@ -88,6 +88,55 @@ namespace GW2EIEvtcParser.EIData
             //
             var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
             {
+                ItemDamageModifiers.IncomingDamageModifiers,
+                EncounterDamageModifiers.IncomingDamageModifiers,
+                GearDamageModifiers.IncomingDamageModifiers,
+                SharedDamageModifiers.IncomingDamageModifiers,
+                //
+                RevenantHelper.IncomingDamageModifiers,
+                HeraldHelper.IncomingDamageModifiers,
+                RenegadeHelper.IncomingDamageModifiers,
+                VindicatorHelper.IncomingDamageModifiers,
+                //
+                WarriorHelper.IncomingDamageModifiers,
+                BerserkerHelper.IncomingDamageModifiers,
+                SpellbreakerHelper.IncomingDamageModifiers,
+                BladeswornHelper.IncomingDamageModifiers,
+                //
+                GuardianHelper.IncomingDamageModifiers,
+                DragonhunterHelper.IncomingDamageModifiers,
+                FirebrandHelper.IncomingDamageModifiers,
+                WillbenderHelper.IncomingDamageModifiers,
+                //
+                EngineerHelper.IncomingDamageModifiers,
+                ScrapperHelper.IncomingDamageModifiers,
+                HolosmithHelper.IncomingDamageModifiers,
+                MechanistHelper.IncomingDamageModifiers,
+                //
+                ThiefHelper.IncomingDamageModifiers,
+                DaredevilHelper.IncomingDamageModifiers,
+                DeadeyeHelper.IncomingDamageModifiers,
+                SpecterHelper.IncomingDamageModifiers,
+                //
+                RangerHelper.IncomingDamageModifiers,
+                DruidHelper.IncomingDamageModifiers,
+                SoulbeastHelper.IncomingDamageModifiers,
+                UntamedHelper.IncomingDamageModifiers,
+                //
+                MesmerHelper.IncomingDamageModifiers,
+                ChronomancerHelper.IncomingDamageModifiers,
+                MirageHelper.IncomingDamageModifiers,
+                VirtuosoHelper.IncomingDamageModifiers,
+                //
+                NecromancerHelper.IncomingDamageModifiers,
+                ReaperHelper.IncomingDamageModifiers,
+                ScourgeHelper.IncomingDamageModifiers,
+                HarbingerHelper.IncomingDamageModifiers,
+                //
+                ElementalistHelper.IncomingDamageModifiers,
+                TempestHelper.IncomingDamageModifiers,
+                WeaverHelper.IncomingDamageModifiers,
+                CatalystHelper.IncomingDamageModifiers,
             };
             var currentIncomingDamageMods = new List<IncomingDamageModifier>();
             foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)

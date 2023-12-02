@@ -137,6 +137,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),

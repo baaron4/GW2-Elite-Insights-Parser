@@ -208,6 +208,10 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {

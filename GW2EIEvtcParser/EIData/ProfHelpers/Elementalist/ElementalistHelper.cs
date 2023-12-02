@@ -125,6 +125,10 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {       

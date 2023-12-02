@@ -44,6 +44,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+        };
+
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Cooling Vapor", CoolingVapor, Source.Holosmith, BuffClassification.Other, BuffImages.CoolantBlast),
