@@ -257,7 +257,7 @@ namespace GW2EIBuilders
             {
                 FinalGameplayStats stats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 FinalOffensiveStats statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
-                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
                 if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
@@ -304,7 +304,7 @@ namespace GW2EIBuilders
             {
                 FinalGameplayStats gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 FinalOffensiveStats offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
-                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
                 if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))

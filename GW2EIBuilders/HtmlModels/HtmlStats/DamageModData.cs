@@ -12,7 +12,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 
         private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
         {
-            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetDamageModifierStats(null, log, phase.Start, phase.End);
+            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetOutgoingDamageModifierStats(null, log, phase.Start, phase.End);
             foreach (OutgoingDamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -40,7 +40,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             {
                 var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);
-                dModData = actor.GetDamageModifierStats(target, log, phase.Start, phase.End);
+                dModData = actor.GetOutgoingDamageModifierStats(target, log, phase.Start, phase.End);
                 foreach (OutgoingDamageModifier dMod in listToUse)
                 {
                     if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -122,7 +122,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 }
             }
         }
-        public static List<DamageModData> BuildDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<OutgoingDamageModifier> damageModsToUse)
+        public static List<DamageModData> BuildOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<OutgoingDamageModifier> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -132,7 +132,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             return pData;
         }
 
-        public static List<DamageModData> BuildIncDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<IncomingDamageModifier> damageModsToUse)
+        public static List<DamageModData> BuildIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<IncomingDamageModifier> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -142,7 +142,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             return pData;
         }
 
-        public static List<DamageModData> BuildPersonalDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> damageModsToUse)
+        public static List<DamageModData> BuildPersonalOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -152,7 +152,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             return pData;
         }
 
-        public static List<DamageModData> BuildPersonalIncDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> damageModsToUse)
+        public static List<DamageModData> BuildPersonalIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> damageModsToUse)
         {
             var pData = new List<DamageModData>();
             foreach (AbstractSingleActor actor in log.Friendlies)

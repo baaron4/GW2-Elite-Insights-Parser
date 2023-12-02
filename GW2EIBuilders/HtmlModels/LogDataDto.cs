@@ -170,7 +170,7 @@ namespace GW2EIBuilders.HtmlModels
             return boonsBySpec;
         }
 
-        private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<OutgoingDamageModifier> usedDamageMods)
+        private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalOutgoingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<OutgoingDamageModifier> usedDamageMods)
         {
             var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>();
             // Collect all personal damage mods by spec
@@ -180,7 +180,7 @@ namespace GW2EIBuilders.HtmlModels
                 var damageModsToUse = new HashSet<OutgoingDamageModifier>();
                 foreach (AbstractSingleActor actor in pair.Value)
                 {
-                    var presentDamageMods = new HashSet<string>(actor.GetPresentDamageModifier(log).Intersect(specDamageModsName));
+                    var presentDamageMods = new HashSet<string>(actor.GetPresentOutgoingDamageModifier(log).Intersect(specDamageModsName));
                     foreach (string name in presentDamageMods)
                     {
                         damageModsToUse.Add(log.DamageModifiers.OutgoingDamageModifiersByName[name]);
@@ -200,7 +200,7 @@ namespace GW2EIBuilders.HtmlModels
             return damageModBySpecs;
         }
 
-        private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<IncomingDamageModifier> usedDamageMods)
+        private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncomingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<IncomingDamageModifier> usedDamageMods)
         {
             var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>();
             // Collect all personal damage mods by spec
@@ -290,12 +290,12 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private void BuildDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods, 
+        private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods, 
             HashSet<string> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
         {
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                allDamageMods.UnionWith(actor.GetPresentDamageModifier(log));
+                allDamageMods.UnionWith(actor.GetPresentOutgoingDamageModifier(log));
             }
             if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<OutgoingDamageModifier> list))
             {
@@ -442,17 +442,17 @@ namespace GW2EIBuilders.HtmlModels
             //
             log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff/Damage Modifier dictionaries");
             Dictionary<Spec, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
-            Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persDamageModDict = BuildPersonalDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
-            Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncDamageModData(log, logData.DmgIncModifiersPers, usedIncDamageMods);
-            var allDamageMods = new HashSet<string>();
-            var commonDamageModifiers = new List<OutgoingDamageModifier>();
-            var itemDamageModifiers = new List<OutgoingDamageModifier>();
+            Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict = BuildPersonalOutgoingDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
+            Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncomingDamageModData(log, logData.DmgIncModifiersPers, usedIncDamageMods);
+            var allOutDamageMods = new HashSet<string>();
+            var commonOutDamageModifiers = new List<OutgoingDamageModifier>();
+            var itemOutDamageModifiers = new List<OutgoingDamageModifier>();
             var allIncDamageMods = new HashSet<string>();
             var commonIncDamageModifiers = new List<IncomingDamageModifier>();
             var itemIncDamageModifiers = new List<IncomingDamageModifier>();
             logData.BuildBuffDictionaries(log, usedBuffs);
-            logData.BuildDamageModDictionaries(log, usedDamageMods,
-                allDamageMods, commonDamageModifiers, itemDamageModifiers);
+            logData.BuildOutgoingDamageModDictionaries(log, usedDamageMods,
+                allOutDamageMods, commonOutDamageModifiers, itemOutDamageModifiers);
             logData.BuildIncomingDamageModDictionaries(log, usedIncDamageMods,
                 allIncDamageMods, commonIncDamageModifiers, itemIncDamageModifiers);
             //
@@ -462,7 +462,7 @@ namespace GW2EIBuilders.HtmlModels
             {
                 PhaseData phase = phases[i];
                 var phaseDto = new PhaseDto(phase, phases, log, persBuffDict, 
-                    commonDamageModifiers, itemDamageModifiers, persDamageModDict,
+                    commonOutDamageModifiers, itemOutDamageModifiers, persOutDamageModDict,
                     commonIncDamageModifiers, itemIncDamageModifiers, persIncDamageModDict
                     );
                 logData.Phases.Add(phaseDto);
