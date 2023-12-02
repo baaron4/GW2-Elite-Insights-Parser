@@ -73,6 +73,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // To investigate
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);

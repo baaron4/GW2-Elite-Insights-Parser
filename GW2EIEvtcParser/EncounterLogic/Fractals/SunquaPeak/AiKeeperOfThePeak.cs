@@ -201,6 +201,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (_hasElementalMode)
+            {
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            } 
+            else if (_hasDarkMode)
+            {
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.EncounterMode.CMNoName;

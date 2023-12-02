@@ -183,6 +183,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombEffects))

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -20,6 +22,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             Mode = ParseMode.Instanced10;
             EncounterCategoryInformation.Category = FightCategory.Strike;
             EncounterID |= EncounterIDs.EncounterMasks.StrikeMask;
+        }
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()

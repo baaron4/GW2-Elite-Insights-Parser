@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // full fight contains the pre event
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 // pre event done
                 if (invulDhuum != null)
                 {
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                return FightData.EncounterStartStatus.Normal;
+                return base.GetEncounterStartStatus(combatData, agentData, fightData);
             }
         }
 

@@ -171,6 +171,8 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        private static readonly Segment _emptySegment = new Segment(long.MinValue, long.MaxValue, 0);
+
         private static Segment GetBuffStatus(long buffId, long time, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
         {
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
@@ -179,7 +181,7 @@ namespace GW2EIEvtcParser.EIData
             }
             else
             {
-                return new Segment(long.MinValue, long.MaxValue, 0);
+                return _emptySegment;
             }
         }
 
@@ -209,7 +211,10 @@ namespace GW2EIEvtcParser.EIData
             }
             else
             {
-                return new List<Segment>();
+                return new List<Segment>()
+                {
+                    _emptySegment
+                };
             }
         }
 

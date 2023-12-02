@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
         internal enum EncounterStartStatus { NotSet, Normal, Late, NoPreEvent }
         private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
-        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late;
+        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
         public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
 
         // Constructors
