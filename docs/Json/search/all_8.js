@@ -21,7 +21,8 @@ var searchData=
   ['isfake_18',['IsFake',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7b2a754478c15d81ff69f2d55dc98ed1',1,'GW2EIJSON::JsonActor']]],
   ['isgearproc_19',['IsGearProc',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2273f3ce574afd5f6241fa09cfc970de',1,'GW2EIJSON::JsonLog::SkillDesc']]],
   ['isinstantcast_20',['IsInstantCast',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a13d7651069e5ab1b535d7be826ef1570',1,'GW2EIJSON::JsonLog::SkillDesc']]],
-  ['isnotaccurate_21',['IsNotAccurate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364',1,'GW2EIJSON::JsonLog::SkillDesc']]],
-  ['isswap_22',['IsSwap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a621c82c97ccd5b5892ddb95a00f95677',1,'GW2EIJSON::JsonLog::SkillDesc']]],
-  ['istraitproc_23',['IsTraitProc',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2fdf1a6737488ea50ca1cc783ee33cf9',1,'GW2EIJSON::JsonLog::SkillDesc']]]
+  ['islatestart_21',['IsLateStart',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3dae87c28216f2ecb937c1eaa5618346',1,'GW2EIJSON::JsonLog']]],
+  ['isnotaccurate_22',['IsNotAccurate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364',1,'GW2EIJSON::JsonLog::SkillDesc']]],
+  ['isswap_23',['IsSwap',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a621c82c97ccd5b5892ddb95a00f95677',1,'GW2EIJSON::JsonLog::SkillDesc']]],
+  ['istraitproc_24',['IsTraitProc',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2fdf1a6737488ea50ca1cc783ee33cf9',1,'GW2EIJSON::JsonLog::SkillDesc']]]
 ];
