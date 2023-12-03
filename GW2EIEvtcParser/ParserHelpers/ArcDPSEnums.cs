@@ -62,6 +62,7 @@ namespace GW2EIEvtcParser
             internal const ulong SOTOReleaseAndBalance = 150431;
             internal const ulong September2023Balance = 151966;
             internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
+            internal const ulong November2023Balance = 154949;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }

@@ -122,7 +122,11 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.December2018Balance)
                 .UsingApproximate(true),
             new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
-                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM, GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.November2023Balance),
         };
 
 
