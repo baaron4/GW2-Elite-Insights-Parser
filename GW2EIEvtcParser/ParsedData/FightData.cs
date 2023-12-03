@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.ParsedData
             FightName = Logic.GetLogicName(combatData, agentData) 
                 + (_encounterMode == EncounterMode.CM ? " CM" : "") 
                 + (_encounterMode == EncounterMode.Story ? " Story" : "")
-                + (IsLateStart ? " (Late Start)" : "") 
+                + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "") 
                 + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
