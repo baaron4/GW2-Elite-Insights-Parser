@@ -39,6 +39,10 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         {
             return GetSources(actor);
         }
+        public override long GetActualDuration()
+        {
+            return GetActualDurationPerStack().Max();
+        }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
         {
