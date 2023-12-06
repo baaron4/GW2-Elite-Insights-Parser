@@ -10,14 +10,14 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         private readonly AgentItem _src;
         private readonly AgentItem _seedSrc;
         private readonly bool _isExtension;
-        private long _originalDuration { get; }
+        private long _totalDuration { get; }
 
         protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Duration)
         {
             _src = buffStackItem.Src;
             _seedSrc = buffStackItem.SeedSrc;
             _isExtension = buffStackItem.IsExtension;
-            _originalDuration = buffStackItem.Duration;
+            _totalDuration = buffStackItem.TotalDuration;
         }
 
         public override void OverrideEnd(long end)
@@ -51,7 +51,12 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override IReadOnlyList<long> GetActualDurationPerStack()
         {
-            return new List<long>() { _originalDuration };
+            return new List<long>() { GetActualDuration() };
+        }
+
+        public override long GetActualDuration()
+        {
+            return _totalDuration;
         }
 
         public override IReadOnlyList<AgentItem> GetSources()

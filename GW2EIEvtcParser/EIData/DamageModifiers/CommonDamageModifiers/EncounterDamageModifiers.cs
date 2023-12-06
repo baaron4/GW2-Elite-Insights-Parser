@@ -34,12 +34,12 @@ namespace GW2EIEvtcParser.EIData
                 .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
-                    return VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
+                    return VulnerabilityAdditiveChecker(ahde, log, DagdaDemonicAura, 10);
                 }),
             new CounterOnFoeDamageModifier(DagdaDemonicAura, "Demonic Aura (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.ChampionOfTheCrown, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
-                    return !VulnerabilityAdditiveChecker(ahde, log, DemonicAura, 10);
+                    return !VulnerabilityAdditiveChecker(ahde, log, DagdaDemonicAura, 10);
                 }),
             new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of the Void", "-25% per stack, multiplicative with itself", DamageSource.All, -25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByMultipliyingStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(PillarPandemonium, "Pillar Pandemonium", "-20% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.CaptainsInspiration, DamageModifierMode.PvE)

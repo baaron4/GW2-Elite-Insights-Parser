@@ -30,6 +30,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return new List<AgentItem>() { GetSources().First() };
         }
 
+        public override long GetActualDuration()
+        {
+            return GetActualDurationPerStack().Sum();
+        }
+
         public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
         {
             if (GetSources().First() == actor.AgentItem)
