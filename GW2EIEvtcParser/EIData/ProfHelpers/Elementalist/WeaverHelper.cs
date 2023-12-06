@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -208,10 +209,6 @@ namespace GW2EIEvtcParser.EIData
                 .UsingTimeOffset(-extraOrbHammerDelay),
         };
 
-        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-        {
-        };
-
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
@@ -243,6 +240,12 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
             new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(WovenEarth, "Hardy Conduit", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
         };
 
 

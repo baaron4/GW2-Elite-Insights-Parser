@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser.EIData.Buffs
+﻿namespace GW2EIEvtcParser.EIData
 {
     /// <summary>
     /// Class containing URL <see cref="string"/> for buff icons.
@@ -1078,6 +1078,33 @@
         #endregion Enhancement
 
         #region Misc
+        // Consumables
+        internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
+        internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
+        internal const string DamageReduction5 = "https://wiki.guildwars2.com/images/8/8b/Damage_Reduction_%28five_percent%29.png";
+        internal const string HealthfulRejuvenation = "https://wiki.guildwars2.com/images/1/1c/Healthful_Rejuvenation.png";
+        internal const string DamageBonus5 = "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png";
+        internal const string SwiftMoaFeather = "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png";
+        internal const string OgrePetWhistle = "https://wiki.guildwars2.com/images/d/de/Ogre_Pet_Whistle.png";
+        internal const string FireElementalPowder = "https://wiki.guildwars2.com/images/9/9c/Pile_of_Cinnamon_and_Sugar.png";
+        internal const string SunspearParagonSupport = "https://wiki.guildwars2.com/images/1/17/Sunspear_Paragon_Support.png";
+        internal const string RavenSpiritShadow = "https://wiki.guildwars2.com/images/d/de/Raven_Spirit_Shadow.png";
+        // Others
+        internal const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
+        internal const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
+        internal const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";
+        internal const string BondOfVigorEffect = "https://wiki.guildwars2.com/images/b/b5/Bond_of_Vigor_%28effect%29.png";
+        internal const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
+        internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
+        internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
+        internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
+        internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
+        internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
+        internal const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
+        internal const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
+        #endregion Misc
+
+        #region Cast
         // Skills
         internal const string MagmaOrb = "https://wiki.guildwars2.com/images/e/e7/Magma_Orb.png";
         internal const string LavaFont = "https://wiki.guildwars2.com/images/4/48/Lava_Font.png";
@@ -1569,30 +1596,12 @@
         internal const string CompoundingChemicals = "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png";
         internal const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
         internal const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
-        // Consumables
-        internal const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
-        internal const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";
-        internal const string DamageReduction5 = "https://wiki.guildwars2.com/images/8/8b/Damage_Reduction_%28five_percent%29.png";
-        internal const string HealthfulRejuvenation = "https://wiki.guildwars2.com/images/1/1c/Healthful_Rejuvenation.png";
-        internal const string DamageBonus5 = "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png";
-        internal const string SwiftMoaFeather = "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png";
-        internal const string OgrePetWhistle = "https://wiki.guildwars2.com/images/d/de/Ogre_Pet_Whistle.png";
-        internal const string FireElementalPowder = "https://wiki.guildwars2.com/images/9/9c/Pile_of_Cinnamon_and_Sugar.png";
-        internal const string SunspearParagonSupport = "https://wiki.guildwars2.com/images/1/17/Sunspear_Paragon_Support.png";
-        internal const string RavenSpiritShadow = "https://wiki.guildwars2.com/images/d/de/Raven_Spirit_Shadow.png";
-        // Others
-        internal const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
-        internal const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
-        internal const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";
-        internal const string BondOfVigorEffect = "https://wiki.guildwars2.com/images/b/b5/Bond_of_Vigor_%28effect%29.png";
-        internal const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
-        internal const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
-        internal const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
-        internal const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
-        internal const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
-        internal const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
-        internal const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
-        internal const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
-        #endregion Misc
+        #endregion Cast
+
+        #region Traits
+        internal const string HardyConduit = "https://wiki.guildwars2.com/images/2/25/Hardy_Conduit.png";
+        internal const string StoneFlesh = "https://wiki.guildwars2.com/images/b/b9/Stone_Flesh.png";
+        internal const string GeomancersTraining = "https://wiki.guildwars2.com/images/b/b6/Geomancer%27s_Training.png";
+        #endregion Traits
     }
 }

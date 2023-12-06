@@ -68,6 +68,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnActorDamageModifier(HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, BuffImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
         };
 
 
