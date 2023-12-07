@@ -271,6 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
             long maxEnd = log.FightData.FightEnd;
 
             // Orange Tether from Aspect to player

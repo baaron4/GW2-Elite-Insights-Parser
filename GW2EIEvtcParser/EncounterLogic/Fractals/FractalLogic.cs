@@ -144,6 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ToxicSicknessPuke1, out IReadOnlyList<EffectEvent> sicknessEffects))
             {
                 var sicknessEffectsOnPlayer = sicknessEffects.Where(x => x.Dst == p.AgentItem).ToList();
