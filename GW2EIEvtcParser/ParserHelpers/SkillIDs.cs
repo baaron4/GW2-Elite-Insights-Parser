@@ -3323,6 +3323,7 @@
         public const long UnleashPet = 63344;
         public const long CoreReactorShot = 63345;
         public const long EndlessNight = 63358;
+        public const long ExigencyProtocol = 63361;
         public const long HauntShot = 63362;
         public const long ExplosiveKnuckle = 63365;
         public const long DischargeArray = 63367;

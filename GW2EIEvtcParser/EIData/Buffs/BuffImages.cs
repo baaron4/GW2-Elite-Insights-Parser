@@ -1303,6 +1303,7 @@
         internal const string ShiftSignet = "https://wiki.guildwars2.com/images/d/d1/Shift_Signet.png";
         internal const string OverclockSignet = "https://wiki.guildwars2.com/images/c/c7/Overclock_Signet.png";
         internal const string MechanicalGenius = "https://wiki.guildwars2.com/images/b/b0/Mechanical_Genius.png";
+        internal const string ExigencyProtocol = "https://wiki.guildwars2.com/images/6/66/Exigency_Protocols.png";
         internal const string ObjectInMotion = "https://wiki.guildwars2.com/images/d/da/Object_in_Motion.png";
         internal const string BulwarkGyro = "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png";
         internal const string ZealotsAggression = "https://wiki.guildwars2.com/images/7/7e/Zealot%27s_Aggression.png";
@@ -1602,6 +1603,9 @@
         internal const string HardyConduit = "https://wiki.guildwars2.com/images/2/25/Hardy_Conduit.png";
         internal const string StoneFlesh = "https://wiki.guildwars2.com/images/b/b9/Stone_Flesh.png";
         internal const string GeomancersTraining = "https://wiki.guildwars2.com/images/b/b6/Geomancer%27s_Training.png";
+        internal const string OverShield = "https://wiki.guildwars2.com/images/a/a1/Over_Shield.png";
+        internal const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
+        internal const string LightDensityAmplifier = "https://wiki.guildwars2.com/images/c/c2/Light_Density_Amplifier.png";
         #endregion Traits
     }
 }
