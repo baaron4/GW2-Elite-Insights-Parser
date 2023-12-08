@@ -1606,6 +1606,7 @@
         internal const string OverShield = "https://wiki.guildwars2.com/images/a/a1/Over_Shield.png";
         internal const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
         internal const string LightDensityAmplifier = "https://wiki.guildwars2.com/images/c/c2/Light_Density_Amplifier.png";
+        internal const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
         #endregion Traits
     }
 }
