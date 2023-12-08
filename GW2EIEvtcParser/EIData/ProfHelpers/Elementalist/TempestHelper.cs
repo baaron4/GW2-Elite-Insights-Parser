@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffOnActorDamageModifier(Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HardyConduit, DamageModifierMode.All).UsingChecker((dl, log) => dl.To.Spec == Spec.Tempest), // We only compute the added effectiveness
+            new BuffOnActorDamageModifier(Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
         };
 
 
