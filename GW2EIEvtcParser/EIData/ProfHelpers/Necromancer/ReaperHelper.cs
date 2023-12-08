@@ -48,6 +48,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.sPvPWvW),
+            new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
+            new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
+            new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.NoPets, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
+            // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
