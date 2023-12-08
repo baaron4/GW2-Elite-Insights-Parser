@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 long start = bloom.FirstAware;
                 long end = bloom.LastAware;
-                PhaseData phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < ServerDelayConstant);
+                PhaseData phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < 100); // some blooms can be delayed
                 if (phase != null)
                 {
                     phase.OverrideStart(Math.Min(phase.Start, start));
