@@ -1469,7 +1469,7 @@
         internal const string AssassinsPresence = "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png";
         internal const string MutilateDefenses = "https://wiki.guildwars2.com/images/5/5c/Mutilate_Defenses.png";
         internal const string InvokingHarmony = "https://wiki.guildwars2.com/images/e/ec/Invoking_Harmony.png";
-        internal const string UnyieldingDevotion = "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png";
+        internal const string UnyieldingSpirit = "https://wiki.guildwars2.com/images/4/4f/Unyielding_Devotion.png";
         internal const string SelflessAmplification = "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png";
         internal const string ThrillOfCombat = "https://wiki.guildwars2.com/images/3/30/Thrill_of_Combat.png";
         internal const string SteadfastRejuvenation = "https://wiki.guildwars2.com/images/b/bf/Steadfast_Rejuvenation.png";
@@ -1609,7 +1609,11 @@
         internal const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
         internal const string BeyondTheVeil = "https://wiki.guildwars2.com/images/c/c1/Beyond_the_Veil.png";
         internal const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";
-        internal const string SecondSking = "https://wiki.guildwars2.com/images/5/51/Second_Skin.png";
+        internal const string SecondSkin = "https://wiki.guildwars2.com/images/5/51/Second_Skin.png";
+        internal const string DemonicResistance = "https://wiki.guildwars2.com/images/b/b8/Demonic_Resistance.png";
+        internal const string CloseQuarters = "https://wiki.guildwars2.com/images/4/43/Close_Quarters.png";
+        internal const string DeterminedResolution = "https://wiki.guildwars2.com/images/c/c7/Determined_Resolution.png";
+        internal const string RighteousRebel = "https://wiki.guildwars2.com/images/e/e9/Righteous_Rebel.png";
         #endregion Traits
     }
 }

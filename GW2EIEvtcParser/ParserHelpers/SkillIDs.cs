@@ -1596,7 +1596,7 @@
         public const long WritOfMasterfulStrength = 33297;
         public const long ParietalOrigin = 33305;
         public const long WritOfBasicMalice = 33310;
-        public const long RiteOfTheGreatDwarfTraited = 33330;
+        public const long RiteOfTheGreatDwarfAncientEcho = 33330;
         public const long DragonTalon1 = 33336;
         public const long BowlOfCurryMusselSoup = 33337;
         public const long ShellShock = 33361;
@@ -2713,7 +2713,7 @@
         public const long SandstormShroudHit = 54958;
         public const long GlyphOfTheStarsCA = 55026;
         public const long FeelNoPainSavageInstinct = 55030;
-        public const long UnyieldingDevotion = 55044;
+        public const long UnyieldingSpirit = 55044;
         public const long GenerousAbundanceOther = 55047;
         public const long GlyphOfTheStars = 55048;
         public const long SkyscaleBlastSkill = 55536;
