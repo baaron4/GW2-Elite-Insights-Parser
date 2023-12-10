@@ -1616,6 +1616,7 @@
         internal const string DeterminedResolution = "https://wiki.guildwars2.com/images/c/c7/Determined_Resolution.png";
         internal const string RighteousRebel = "https://wiki.guildwars2.com/images/e/e9/Righteous_Rebel.png";
         internal const string MaraudersResilience = "https://wiki.guildwars2.com/images/5/5c/Marauder%27s_Resilience.png";
+        internal const string HardenedArmor = "https://wiki.guildwars2.com/images/0/0a/Hardened_Armor.png";
         #endregion Traits
     }
 }

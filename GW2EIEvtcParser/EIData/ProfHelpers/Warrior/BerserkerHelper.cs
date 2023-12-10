@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new CounterOnActorDamageModifier(FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, BuffImages.SavageInstinct, DamageModifierMode.All)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

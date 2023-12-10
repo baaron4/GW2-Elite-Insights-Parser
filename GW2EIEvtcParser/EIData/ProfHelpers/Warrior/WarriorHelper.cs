@@ -80,6 +80,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new CounterOnActorDamageModifier(EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.EndurePain, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.HardenedArmor, DamageModifierMode.All).WithBuilds(GW2Builds.March2020Balance),
+            new BuffOnActorDamageModifier(Rampage, "Rampage", "-25%", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(Rampage, "Rampage", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
