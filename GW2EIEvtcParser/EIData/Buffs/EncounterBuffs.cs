@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Backlashing Beam", BacklashingBeam, Source.FightSpecific, BuffClassification.Other, BuffImages.XerasBoon),
             new Buff("Clutched by Chaos", ClutchedByChaos, Source.FightSpecific, BuffClassification.Other, BuffImages.ProtectiveShadow),
             new Buff("Cleansed Conductor", CleansedConductor, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicBlastIntensity),
-            new Buff("Poisoned Power", PoisonedPower, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
+            new Buff("Poisoned Power", PoisonedPower, Source.FightSpecific, BuffClassification.Other, BuffImages.XerasFury),
             new Buff("Incorporeal", Incorporeal, Source.FightSpecific, BuffClassification.Other, BuffImages.MagicAura),
             new Buff("Flare-Up", FlareUp, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.MagicAura),
             new Buff("Unbridled Chaos", UnbridledChaos, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ExposedEyes),
@@ -406,6 +406,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Diaphanous Shielding", DiaphanousShielding, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.RedirectAnomaly),
             new Buff("Electrocuted", Electrocuted, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AirAttunement),
             new Buff("Hypernova Launch", HypernovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
+            new Buff("Reflective Shield", ReflectiveShieldBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ReflectiveShielding),
             // Ai, Keeper of the Peak
             new Buff("Tidal Barrier", TidalBarrier, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),
             new Buff("Whirlwind Shield", WhirlwindShield, Source.FightSpecific, BuffClassification.Other, BuffImages.PrimedBottle),
