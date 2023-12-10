@@ -61,6 +61,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSking, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSking, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSking, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

@@ -51,6 +51,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(FrostAura, "Frost Aura", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostAura, DamageModifierMode.All),
             new BuffOnActorDamageModifier(LightAura, "Light Aura", "-33%", DamageSource.All, -10.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.LightAura, DamageModifierMode.All),
             new BuffOnActorDamageModifier(DarkAura, "Dark Aura", "-33%", DamageSource.All, -20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.DarkAura, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
         };
     }
 }

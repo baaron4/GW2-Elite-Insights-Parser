@@ -1608,6 +1608,8 @@
         internal const string LightDensityAmplifier = "https://wiki.guildwars2.com/images/c/c2/Light_Density_Amplifier.png";
         internal const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
         internal const string BeyondTheVeil = "https://wiki.guildwars2.com/images/c/c1/Beyond_the_Veil.png";
+        internal const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";
+        internal const string SecondSking = "https://wiki.guildwars2.com/images/5/51/Second_Skin.png";
         #endregion Traits
     }
 }

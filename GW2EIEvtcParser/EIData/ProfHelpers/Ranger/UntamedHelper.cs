@@ -43,6 +43,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new CounterOnActorDamageModifier(PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, BuffImages.PerilousGift, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.EODBeta4),
+            new BuffOnActorDamageModifier(ForestsFortification, "Forest's Fortification", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, BuffImages.ForestsFortification, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1),
+            new BuffOnActorDamageModifier(Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, BuffImages.VowOfTheUntamed, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.March2022Balance),
+            new BuffOnActorDamageModifier(Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, BuffImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2022Balance),
+            new BuffOnActorDamageModifier(Unleashed, "Vow of the Untamed", "-25% when not unleashed", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, BuffImages.VowOfTheUntamed, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2022Balance),
         };
 
 
