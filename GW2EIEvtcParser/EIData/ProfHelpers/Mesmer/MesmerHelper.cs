@@ -189,6 +189,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
         };
 
 
