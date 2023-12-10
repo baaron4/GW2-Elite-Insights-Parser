@@ -36,6 +36,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.UnhinderedCombatant, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

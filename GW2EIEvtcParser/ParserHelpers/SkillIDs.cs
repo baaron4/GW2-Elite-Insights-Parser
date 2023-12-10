@@ -3776,6 +3776,7 @@
         public const long AspectTetherAvailableBuff = 69285; // enables aspect ability to tether?
         public const long Parachute = 69286;
         public const long HarrowshotLethargy = 69294;
+        public const long FluidStrikes = 69291;
         public const long SpiritFang = 69305;
         public const long AchievementEligibilityPeaceAndQuiet = 69312;
         public const long NaturalBalance = 69314;

@@ -1511,6 +1511,7 @@
         internal const string DaggerStorm = "https://wiki.guildwars2.com/images/c/c0/Dagger_Storm.png";
         internal const string Hiddenkiller = "https://wiki.guildwars2.com/images/e/ec/Hidden_Killer.png";
         internal const string InstantReflexes = "https://wiki.guildwars2.com/images/7/7d/Instant_Reflexes.png";
+        internal const string FluidStrikes = "https://wiki.guildwars2.com/images/b/bf/Fluid_Strikes.png";
         internal const string PeakPerformace = "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png";
         internal const string BerserkersPower = "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png";
         internal const string CullTheWeak = "https://wiki.guildwars2.com/images/7/72/Cull_the_Weak.png";
@@ -1614,6 +1615,7 @@
         internal const string CloseQuarters = "https://wiki.guildwars2.com/images/4/43/Close_Quarters.png";
         internal const string DeterminedResolution = "https://wiki.guildwars2.com/images/c/c7/Determined_Resolution.png";
         internal const string RighteousRebel = "https://wiki.guildwars2.com/images/e/e9/Righteous_Rebel.png";
+        internal const string MaraudersResilience = "https://wiki.guildwars2.com/images/5/5c/Marauder%27s_Resilience.png";
         #endregion Traits
     }
 }

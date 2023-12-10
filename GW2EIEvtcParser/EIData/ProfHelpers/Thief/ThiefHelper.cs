@@ -52,11 +52,23 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All),
             new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
             // Trickery
-            new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
+            new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
+            // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
+            new BuffOnActorDamageModifier(FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new DamageLogDamageModifier("Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
+            {
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
+            }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
         };
 
 
@@ -90,6 +102,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Hidden Killer", HiddenKiller, Source.Thief, BuffClassification.Other, BuffImages.Hiddenkiller),
             new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, BuffImages.LeadAttacks),
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
+            new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, BuffImages.FluidStrikes).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         };
 
         private static HashSet<int> Minions = new HashSet<int>()

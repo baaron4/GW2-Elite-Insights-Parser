@@ -36,8 +36,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.From).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -45,8 +44,7 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
             new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.From).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -55,8 +53,7 @@ namespace GW2EIEvtcParser.EIData
             }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
 
             new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.From).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -67,6 +64,30 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.To).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+                }
+                return false;
+            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+            new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.To).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+                }
+                return false;
+            }).WithBuilds(GW2Builds.August2022Balance),
+            new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(DeadeyesGaze).Where(y => y is BuffApplyEvent && y.To == x.To).LastOrDefault(y => y.Time <= x.Time);
+                if (effectApply != null)
+                {
+                    return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+                }
+                return false;
+            }).WithBuilds(GW2Builds.August2022Balance),
         };
 
 
