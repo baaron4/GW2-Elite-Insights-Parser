@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
