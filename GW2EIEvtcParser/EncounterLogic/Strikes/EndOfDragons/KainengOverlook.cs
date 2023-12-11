@@ -111,6 +111,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)ArcDPSEnums.TargetID.MinisterLi,
                 (int)ArcDPSEnums.TargetID.MinisterLiCM,
+                (int)ArcDPSEnums.TrashID.TheEnforcer,
+                (int)ArcDPSEnums.TrashID.TheMindblade,
+                (int)ArcDPSEnums.TrashID.TheMechRider,
+                (int)ArcDPSEnums.TrashID.TheRitualist,
+                (int)ArcDPSEnums.TrashID.TheSniper,
+                (int)ArcDPSEnums.TrashID.TheEnforcerCM,
+                (int)ArcDPSEnums.TrashID.TheMindbladeCM,
+                (int)ArcDPSEnums.TrashID.TheMechRiderCM,
+                (int)ArcDPSEnums.TrashID.TheRitualistCM,
+                (int)ArcDPSEnums.TrashID.TheSniperCM,
             };
         }
 
