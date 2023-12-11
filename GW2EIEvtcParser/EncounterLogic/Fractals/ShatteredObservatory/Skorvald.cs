@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
-                    phase.Name = "Split " + (i) / 2;
+                    phase.Name = "Split " + i / 2;
                     var ids = new List<int>
                     {
                         (int)TrashID.FluxAnomaly1,
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (int)TrashID.FluxAnomalyCM3,
                         (int)TrashID.FluxAnomalyCM4,
                     };
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    AddTargetsToPhase(phase, ids);
                 }
                 else
                 {
