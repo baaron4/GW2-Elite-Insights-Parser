@@ -30,7 +30,13 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonLog.Targets"/>
         public IReadOnlyList<int> Targets { get; set; }
-        
+
+        /// <summary>
+        /// Index of secondary targets tracked during the phase
+        /// </summary>
+        /// <seealso cref="JsonLog.Targets"/>
+        public IReadOnlyList<int> SecondaryTargets { get; set; }
+
         /// <summary>
         /// Index of sub phases
         /// </summary>
