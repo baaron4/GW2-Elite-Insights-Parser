@@ -1603,6 +1603,7 @@
         public const long MagicAuraBuff = 31903;
         public const long KickDustCentaurBannerSkill = 31932;
         public const long WritOfLearnedMalice = 31959;
+        public const long PresenceOfTheKeepI = 31967;
         public const long DragonBlast = 31968;
         public const long WritOfMasterfulAccuracy = 31970;
         public const long DragonTalon3 = 31975;
@@ -1610,6 +1611,7 @@
         public const long BombShell = 32009;
         public const long PunchGolem = 32039;
         public const long WritOfLearnedStrength = 32044;
+        public const long PresenceOfTheKeepIII = 32063;
         public const long WritOfStrength = 32105;
         public const long MordremTigerFinisher = 32108;
         public const long ForceBallDamage1 = 32114;
@@ -1633,6 +1635,7 @@
         public const long WritOfStudiedAccuracy = 32429;
         public const long MordremWolfFinisher = 32433;
         public const long DeployShieldGenerator = 32443;
+        public const long PresenceOfTheKeepVI = 32450;
         public const long SavedByTheShell = 32454;
         public const long SabotageDepot = 32458;
         public const long FractalOffensive = 32473;
@@ -1646,7 +1649,7 @@
         public const long MordremRabbitFinisher = 32584;
         public const long MordremDragonFinisher = 32624;
         public const long PlateOfJerkPoultry = 32662;
-        public const long PresenceOfTheKeep = 32699;
+        public const long PresenceOfTheKeepVIII = 32699;
         public const long CentaurBanner = 32740;
         public const long PowerHeartsAndMinds = 32762;
         public const long MarkedKeepBlue = 32795;
@@ -1699,6 +1702,7 @@
         public const long RiteOfTheGreatDwarfTraited = 33330;
         public const long DragonTalon1 = 33336;
         public const long BowlOfCurryMusselSoup = 33337;
+        public const long PresenceOfTheKeepVII = 33340;
         public const long ShellShock = 33361;
         public const long GuildObjectiveAuraIV = 33375;
         public const long WeakenedBuff1 = 33378;
@@ -1713,6 +1717,7 @@
         public const long BowlOfLemongrassMusselPasta = 33574;
         public const long GuildObjectiveAuraVIII = 33594;
         public const long BowlOfSawgillMushroomRisotto = 33617;
+        public const long PresenceOfTheKeepV = 33641;
         public const long WritOfStudiedStrength = 33647;
         public const long RigorousCertainty = 33652;
         public const long DragonBanner = 33678;
@@ -1732,6 +1737,7 @@
         public const long WritOfCalculatedAccuracy = 33798;
         public const long GlidingDisabledWarning = 33800;
         public const long WritOfMalice = 33803;
+        public const long PresenceOfTheKeepIV = 33807;
         public const long SpikeBarricade = 33823;
         public const long TurtleBanner = 33828;
         public const long GuildItemResearch = 33833;
@@ -1745,6 +1751,7 @@
         public const long GuildObjectiveAuraVI = 32928;
         public const long PieceOfUnderseaWurmSushi = 33936;
         public const long DragonsWings = 33963;
+        public const long PresenceOfTheKeepII = 33974;
         public const long ChillingFogBuff = 33978;
         public const long HardenedSiegeGear = 33983;
         public const long BowlOfTapiocaPudding = 34014;
@@ -1954,6 +1961,7 @@
         public const long ShiftingChaos = 35162;
         public const long BloodstoneProtection = 35168;
         public const long FireMortarEscortHit = 35171;
+        public const long ReflectiveShieldBuff = 35349;
         public const long SpinningCut = 35452;
         public const long PullCharge = 35761;
         public const long AnguishedTearOfAlbaMastery = 35919;
