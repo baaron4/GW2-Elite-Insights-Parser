@@ -118,7 +118,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (AbstractSingleActor target in phase.AllTargets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
-                SecondaryTargets.Add(phase.SecondaryTargets.IndexOf(target) >= 0);
+                SecondaryTargets.Add(phase.IsSecondaryTarget(target));
             }
             PlayerActiveTimes = new List<long>();
             foreach (AbstractSingleActor actor in log.Friendlies)

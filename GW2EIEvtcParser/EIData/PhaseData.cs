@@ -77,6 +77,11 @@ namespace GW2EIEvtcParser.EIData
             RefreshAllTargetsList();
         }
 
+        public bool IsSecondaryTarget(AbstractSingleActor target)
+        {
+            return _secondaryTargets.Contains(target);
+        }
+
         internal void RemoveSecondaryTarget(AbstractSingleActor target)
         {
             _secondaryTargets.Remove(target);
