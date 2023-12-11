@@ -520,6 +520,7 @@ namespace GW2EIEvtcParser
         private const int BoundIcebroodElemental = -40;
         private const int CAChest = -41;
         private const int ChestOfDesmina = -42;
+        private const int UnknownAnomaly = -43;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -927,6 +928,7 @@ namespace GW2EIEvtcParser
             NightmareHallucination2 = 17033, // (small adds, last phase)
             NightmareAltar = 35791,
             // Skorvald
+            UnknownAnomaly = ArcDPSEnums.UnknownAnomaly,
             FluxAnomaly1 = 17578,
             FluxAnomaly2 = 17929,
             FluxAnomaly3 = 17695,
