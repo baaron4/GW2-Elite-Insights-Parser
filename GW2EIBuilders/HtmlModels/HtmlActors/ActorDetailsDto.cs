@@ -41,7 +41,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 dto.Rotation.Add(SkillDto.BuildRotationData(log, actor, phase, usedSkills));
                 dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, null, phase, usedSkills, usedBuffs));
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (AbstractSingleActor target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.AllTargets)
                 {
                     dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, target, phase, usedSkills, usedBuffs));
                 }
@@ -67,7 +67,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 var dmgTargetsDto = new List<DmgDistributionDto>();
-                foreach (AbstractSingleActor target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.AllTargets)
                 {
                     dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
                 }
@@ -91,7 +91,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (phase.Targets.Contains(target))
+                if (phase.AllTargets.Contains(target))
                 {
                     dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetDMGDistData(log, target, phase, usedSkills, usedBuffs));
                     dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, target, phase, usedSkills, usedBuffs));
@@ -134,7 +134,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             };
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                if (phase.Targets.Contains(target))
+                if (phase.AllTargets.Contains(target))
                 {
                     dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetMinionDMGDistData(log, target, minion, phase, usedSkills, usedBuffs));
                 }

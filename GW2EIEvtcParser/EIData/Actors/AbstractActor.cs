@@ -70,22 +70,22 @@ namespace GW2EIEvtcParser.EIData
             return AgentItem.IsSpecies(id);
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TrashID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
         {
             return AgentItem.IsAnySpecies(ids);
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TargetID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TargetID> ids)
         {
             return AgentItem.IsAnySpecies(ids);
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.MinionID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.MinionID> ids)
         {
             return AgentItem.IsAnySpecies(ids);
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.ChestID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.ChestID> ids)
         {
             return AgentItem.IsAnySpecies(ids);
         }

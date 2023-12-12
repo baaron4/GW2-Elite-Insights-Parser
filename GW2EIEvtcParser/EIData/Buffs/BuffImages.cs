@@ -1598,6 +1598,7 @@
         internal const string CompoundingChemicals = "https://wiki.guildwars2.com/images/c/c9/Alchemical_Tinctures.png";
         internal const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
         internal const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
+        internal const string ReflectiveShielding = "https://wiki.guildwars2.com/images/c/c6/Reflective_Shielding.png";
         #endregion Cast
 
         #region Traits
@@ -1618,5 +1619,6 @@
         internal const string MaraudersResilience = "https://wiki.guildwars2.com/images/5/5c/Marauder%27s_Resilience.png";
         internal const string HardenedArmor = "https://wiki.guildwars2.com/images/0/0a/Hardened_Armor.png";
         #endregion Traits
+
     }
 }

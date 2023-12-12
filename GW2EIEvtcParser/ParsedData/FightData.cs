@@ -329,7 +329,10 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
-                _phases.RemoveAll(x => x.Targets.Count == 0);
+                _phases.RemoveAll(x => x.AllTargets.Count == 0);
+                if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target)))) {
+                    throw new InvalidOperationException("Phases can only have targets");
+                }
                 if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
                 {
                     throw new InvalidOperationException("Breakbar phases can only have one target");

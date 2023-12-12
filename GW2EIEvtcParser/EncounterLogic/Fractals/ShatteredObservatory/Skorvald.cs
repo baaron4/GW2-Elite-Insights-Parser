@@ -102,6 +102,35 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 manualFractalScaleSet = true;
             }
+            var fluxAnomalies = new List<AgentItem>();
+            var fluxIds = new List<int>
+                    {
+                        (int)TrashID.FluxAnomaly1,
+                        (int)TrashID.FluxAnomaly2,
+                        (int)TrashID.FluxAnomaly3,
+                        (int)TrashID.FluxAnomaly4,
+                        (int)TrashID.FluxAnomalyCM1,
+                        (int)TrashID.FluxAnomalyCM2,
+                        (int)TrashID.FluxAnomalyCM3,
+                        (int)TrashID.FluxAnomalyCM4,
+                    };
+            for (int i = 0; i < fluxIds.Count; i++)
+            {
+                fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIds[i]));
+            }
+            var refresh = false;
+            foreach (AgentItem fluxAnomaly in fluxAnomalies)
+            {
+                if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApply() && x.DstMatchesAgent(fluxAnomaly)))
+                {
+                    refresh = true;
+                    fluxAnomaly.OverrideID(TrashID.UnknownAnomaly);
+                }
+            }
+            if (refresh)
+            {
+                agentData.Refresh();
+            }
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
@@ -576,6 +605,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);

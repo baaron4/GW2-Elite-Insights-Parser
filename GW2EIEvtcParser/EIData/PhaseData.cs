@@ -23,6 +23,11 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         private readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
+        public IReadOnlyList<AbstractSingleActor> SecondaryTargets => _secondaryTargets;
+        private readonly List<AbstractSingleActor> _secondaryTargets = new List<AbstractSingleActor>();
+
+        public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Any() ? _allTargets : _targets;
+        private readonly List<AbstractSingleActor> _allTargets = new List<AbstractSingleActor>();
 
         internal PhaseData(long start, long end)
         {
@@ -45,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal void AddTarget(AbstractSingleActor target)
         {
-            if (target == null)
+            if (target == null || _targets.Contains(target))
             {
                 return;
             }
@@ -60,6 +65,40 @@ namespace GW2EIEvtcParser.EIData
         internal void AddTargets(IEnumerable<AbstractSingleActor> targets)
         {
             _targets.AddRange(targets.Where(x => x != null));
+        }
+
+        internal void AddSecondaryTarget(AbstractSingleActor target)
+        {
+            if (target == null || _secondaryTargets.Contains(target))
+            {
+                return;
+            }
+            _secondaryTargets.Add(target);
+            RefreshAllTargetsList();
+        }
+
+        public bool IsSecondaryTarget(AbstractSingleActor target)
+        {
+            return _secondaryTargets.Contains(target);
+        }
+
+        internal void RemoveSecondaryTarget(AbstractSingleActor target)
+        {
+            _secondaryTargets.Remove(target);
+            RefreshAllTargetsList();
+        }
+
+        internal void AddSecondaryTargets(IEnumerable<AbstractSingleActor> targets)
+        {
+            _secondaryTargets.AddRange(targets.Where(x => x != null));
+            RefreshAllTargetsList();
+        }
+
+        private void RefreshAllTargetsList()
+        {
+            _allTargets.Clear();
+            _allTargets.AddRange(_targets);
+            _allTargets.AddRange(_secondaryTargets);
         }
 
         internal void OverrideStart(long start)

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -73,6 +74,11 @@ namespace GW2EIEvtcParser.EIData
         /// <returns><see langword="true"/> if a GUID was found, otherwise <see langword="false"/></returns>
         public bool IsCommander(ParsedEvtcLog log)
         {
+            return IsCommander(log, out _);
+        }
+
+        public bool IsCommander(ParsedEvtcLog log, out string tagGUID)
+        {
             IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
 
             if (tagEvents.Count > 0)
@@ -84,17 +90,29 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID))
                         {
+                            tagGUID = marker.ContentGUID;
                             return true;
                         }
                     }
                     else if (tagEvent.TagID != 0)
                     {
+                        tagGUID = ParserIcons.BlueCommanderTagOverhead;
                         return true;
                     }
                 }
             }
-                       
+
+            tagGUID = null;
             return false;
+        }
+
+        protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+        {
+            base.InitAdditionalCombatReplayData(log);
+            if (IsCommander(log, out string tagGUID))
+            {
+                CombatReplay.AddRotatedOverheadIcon(new Segment(FirstAware, LastAware, 1), this, MarkerGUIDs.CommanderTagToIcon[tagGUID], 180f, 15);
+            }
         }
 
         public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)

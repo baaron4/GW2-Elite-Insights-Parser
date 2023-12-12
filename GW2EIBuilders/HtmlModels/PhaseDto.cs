@@ -17,6 +17,7 @@ namespace GW2EIBuilders.HtmlModels
         public double Start { get; set; }
         public double End { get; set; }
         public List<int> Targets { get; set; } = new List<int>();
+        public List<bool> SecondaryTargets { get; set; } = new List<bool>();
         public bool BreakbarPhase { get; set; }
 
         public List<List<object>> DpsStats { get; set; }
@@ -121,9 +122,10 @@ namespace GW2EIBuilders.HtmlModels
             Start = phase.Start / 1000.0;
             End = phase.End / 1000.0;
             BreakbarPhase = phase.BreakbarPhase;
-            foreach (AbstractSingleActor target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.AllTargets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+                SecondaryTargets.Add(phase.IsSecondaryTarget(target));
             }
             PlayerActiveTimes = new List<long>();
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -256,7 +258,7 @@ namespace GW2EIBuilders.HtmlModels
             MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase);
             EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase);
 
-            foreach (AbstractSingleActor target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.AllTargets)
             {
                 TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase, target));
                 TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
@@ -429,7 +431,7 @@ namespace GW2EIBuilders.HtmlModels
             {
                 var playerData = new List<List<object>>();
 
-                foreach (AbstractSingleActor target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.AllTargets)
                 {
                     playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
                 }
@@ -467,7 +469,7 @@ namespace GW2EIBuilders.HtmlModels
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 var playerData = new List<List<object>>();
-                foreach (AbstractSingleActor target in phase.Targets)
+                foreach (AbstractSingleActor target in phase.AllTargets)
                 {
                     FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
                     playerData.Add(GetOffensiveStatData(statsTarget));

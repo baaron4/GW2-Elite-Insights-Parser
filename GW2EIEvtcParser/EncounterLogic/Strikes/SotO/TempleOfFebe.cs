@@ -155,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName(target.Character + " (P" + curEnvy++ + ")");
                         if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curEnvy++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony:
@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName(target.Character + " (P" + curGluttony++ + ")");
                         if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curGluttony++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfMalice:
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName(target.Character + " (P" + curMalice++ + ")");
                         if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curMalice++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfRage:
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName(target.Character + " (P" + curRage++ + ")");
                         if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curRage++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     case (int)ArcDPSEnums.TrashID.EmbodimentOfRegret:
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         target.OverrideName(target.Character + " (P" + curRegret++ + ")");
                         if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                         {
-                            target.OverrideName("Empowered " + target.Character + " (P" + curRegret++ + ")");
+                            target.OverrideName("Empowered " + target.Character);
                         }
                         break;
                     default:

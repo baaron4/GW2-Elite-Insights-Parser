@@ -15,7 +15,7 @@
                 </div>
                 <div class="ml-3 d-flex flex-column justify-content-center">
                     <div class="mb-2" v-for="target in encounter.targets">
-                        <div v-if="encounter.targets.length > 1" class="small" style="text-align:center;">
+                        <div class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
                         <div v-if="target.health > 0" class="super-small" style="text-align:center;">
@@ -57,9 +57,17 @@
         computed: {
             encounter: function () {
                 var targets = [];
-                if (logData.phases[0].targets.length < 10 && !logData.targetless) {
-                    for (var i = 0; i < logData.phases[0].targets.length; i++) {
-                        var targetData = logData.targets[logData.phases[0].targets[i]];
+                var mainPhase = logData.phases[0];
+                if (!logData.targetless) {
+                    for (var i = 0; i < mainPhase.targets.length; i++) {
+                        if (mainPhase.secondaryTargets[i]) {
+                            continue;
+                        }
+                        if (targets.length >= 10) {
+                            break;
+                        }
+                        var targetIndex = mainPhase.targets[i];
+                        var targetData = logData.targets[targetIndex];
                         targets.push(targetData);
                     }
                 }
