@@ -36,7 +36,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     });
                 }
             }
-            foreach (AbstractSingleActor target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.AllTargets)
             {
                 var pTarget = new List<object[]>();
                 DataTarget.Add(pTarget);

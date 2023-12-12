@@ -221,6 +221,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Qadim not found");
             }
             phases[0].AddTarget(qadim);
+            var secondaryTargetIds = new HashSet<TrashID>
+                        {
+                           TrashID.WyvernMatriarch,
+                           TrashID.WyvernPatriarch,
+                           TrashID.AncientInvokedHydra,
+                           TrashID.ApocalypseBringer,
+                        };
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)));
             if (!requirePhases)
             {
                 return phases;

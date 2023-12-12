@@ -46,9 +46,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             else
             {
                 var targetIndex = new Dictionary<AbstractSingleActor, int>();
-                for (int p = 0; p < phase.Targets.Count; p++)
+                for (int p = 0; p < phase.AllTargets.Count; p++)
                 {
-                    targetIndex.Add(phase.Targets[p], p);
+                    targetIndex.Add(phase.AllTargets[p], p);
                     res.Add(new List<object>());
                 }
                 res.Add(new List<object>());
