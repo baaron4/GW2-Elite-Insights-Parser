@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -40,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return false;
                 }
                 // Spirit transformation check
-                if (br.To.HasBuff(log, MortalCoilDhuum, br.Time, ParserHelper.ServerDelayConstant))
+                if (br.To.HasBuff(log, MortalCoilDhuum, br.Time, ServerDelayConstant))
                 {
                     return false;
                 }
@@ -70,7 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 // Additional buff applications can happen, filting them out
                 AbstractBuffEvent firstAggroEvent = log.CombatData.GetBuffDataByDst(bae.To).Where(x => x.BuffID == DhuumsMessengerFixationBuff).FirstOrDefault();
-                if (firstAggroEvent != null && bae.Time > firstAggroEvent.Time && bae.Initial)
+                if (firstAggroEvent != null && bae.Time > firstAggroEvent.Time + ServerDelayConstant && bae.Initial)
                 {
                     return false;
                 }
@@ -455,7 +456,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
-                if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ParserHelper.ServerDelayConstant))
+                if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ServerDelayConstant))
                 {
                     duration = 30000;
                 }
