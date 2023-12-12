@@ -477,22 +477,22 @@ namespace GW2EIEvtcParser.ParsedData
             return IsSpecies((int)id);
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TrashID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
         {
             return ids.Any(x => IsSpecies(x));
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.TargetID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TargetID> ids)
         {
             return ids.Any(x => IsSpecies(x));
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.MinionID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.MinionID> ids)
         {
             return ids.Any(x => IsSpecies(x));
         }
 
-        public bool IsAnySpecies(IReadOnlyList<ArcDPSEnums.ChestID> ids)
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.ChestID> ids)
         {
             return ids.Any(x => IsSpecies(x));
         }
