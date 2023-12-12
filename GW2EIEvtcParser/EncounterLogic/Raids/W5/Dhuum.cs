@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow || x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
         }
 
