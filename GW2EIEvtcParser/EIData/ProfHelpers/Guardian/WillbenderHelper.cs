@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingApproximate(true)
                 .WithBuilds(GW2Builds.March2022Balance2),
             //
-            new CounterDamageModifier(RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, BuffImages.RushingJustice, DamageModifierMode.All)
+            new CounterOnActorDamageModifier(RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, BuffImages.RushingJustice, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta1)
         };
 

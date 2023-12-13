@@ -144,6 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ToxicSicknessPuke1, out IReadOnlyList<EffectEvent> sicknessEffects))
             {
                 var sicknessEffectsOnPlayer = sicknessEffects.Where(x => x.Dst == p.AgentItem).ToList();
@@ -181,6 +182,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 }
             }
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

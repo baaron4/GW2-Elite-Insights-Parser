@@ -236,6 +236,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Kenut, fightData.FightStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Nikare, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -307,6 +317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Water "Poison Bomb"
             var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in waterToDrop)

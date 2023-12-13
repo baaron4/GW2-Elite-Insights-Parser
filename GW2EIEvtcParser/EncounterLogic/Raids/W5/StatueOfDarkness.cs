@@ -81,6 +81,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfFate, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);

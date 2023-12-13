@@ -250,6 +250,20 @@ namespace GW2EIEvtcParser.EIData
         }
 
         /// <summary>
+        /// Add an overhead icon decoration
+        /// </summary>
+        /// <param name="segment">Lifespan interval</param>
+        /// <param name="actor">actor to which the decoration will be attached to</param>
+        /// <param name="icon">URL of the icon</param>
+        /// <param name="rotation">URL of the icon</param>
+        /// <param name="pixelSize">Size in pixel of the icon</param>
+        /// <param name="opacity">Opacity of the icon</param>
+        internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        {
+            Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
+        }
+
+        /// <summary>
         /// Add overhead icon decorations
         /// </summary>
         /// <param name="segments">Lifespan intervals</param>

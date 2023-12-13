@@ -16,7 +16,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
         public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
         {
             Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
-            foreach (AbstractSingleActor target in phase.Targets)
+            foreach (AbstractSingleActor target in phase.AllTargets)
             {
                Targets.Add(new TargetChartDataDto(log, phase, target));
             }

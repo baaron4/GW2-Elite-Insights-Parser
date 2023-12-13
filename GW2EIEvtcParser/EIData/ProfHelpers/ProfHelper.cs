@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfPeithaTargetBuff, EffectGUIDs.RelicOfPeitha)
+            new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             //{

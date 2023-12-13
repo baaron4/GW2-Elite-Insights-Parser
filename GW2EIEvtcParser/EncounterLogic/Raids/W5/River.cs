@@ -92,6 +92,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AgentItem desmina = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
+            if (desmina == null)
+            {
+                throw new MissingKeyActorsException("Desmina not found");
+            }
+            var desminaInitialPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
+            if (!combatData.GetMovementData(desmina).Any(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(desminaInitialPosition) < 100))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
@@ -127,6 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
         }
 

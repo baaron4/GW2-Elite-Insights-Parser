@@ -95,11 +95,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
+                    int phaseID = i / 2;
                     AddTargetsToPhaseAndFit(phase, ids, log);
                     if (phase.Targets.Count > 0)
                     {
                         AbstractSingleActor phaseTar = phase.Targets[0];
                         phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
+                    }
+                    switch (phaseID)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan)) && phase.Start < x.LastAware));
+                            break;
+                        case 3:
+                            phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles)) && phase.Start < x.LastAware));
+                            break;
+                        default:
+                            break;
                     }
                 }
                 else
@@ -110,13 +124,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     switch(phaseID)
                     {
                         case 2:
-                            phase.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Kernan)));
+                            phase.AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Kernan) && phase.Start < x.LastAware));
                             break;
                         case 3:
-                            phase.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Knuckles)));
+                            phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles)) && phase.Start < x.LastAware));
                             break;
                         case 4:
-                            phase.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Karde)));
+                            phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles) || x.IsSpecies(ArcDPSEnums.TrashID.Karde)) && phase.Start < x.LastAware));
                             break;
                         default:
                             break;
@@ -220,6 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // timed bombs
             var timedBombs = log.CombatData.GetBuffData(TimeBomb).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in timedBombs)

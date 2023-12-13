@@ -108,6 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
 #if DEBUG
             ProfHelper.DEBUG_ComputeProfessionCombatReplayActors(p, log, replay);
 #endif

@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // full fight contains the pre event
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveManualEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == dhuum.AgentItem && x.Time > 115000);
                 // pre event done
                 if (invulDhuum != null)
                 {
@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow || x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
         }
 
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                return FightData.EncounterStartStatus.Normal;
+                return base.GetEncounterStartStatus(combatData, agentData, fightData);
             }
         }
 
@@ -431,6 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));

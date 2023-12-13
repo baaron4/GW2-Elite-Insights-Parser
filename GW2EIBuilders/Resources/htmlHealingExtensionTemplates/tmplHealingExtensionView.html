@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="d-flex flex-row justify-content-center mt-1" id="healing-phase-nav">
-            <phase-component :phases="logdata.phases"></phase-component>
+            <phase-component :phases="reactiveLogdata.phases"></phase-component>
         </div>
         <div class="d-flex flex-row justify-content-center mb-2 mt-2" id="healing-actors">
             <div class="flex-row justify-content-center align-items-center flex-wrap mr-5">
-                <player-target-component :players="logdata.players"></player-target-component>
+                <player-target-component :players="reactiveLogdata.players"></player-target-component>
             </div>
             <div class="ml-5">
-                <player-component :players="logdata.players"></player-component>
+                <player-component :players="reactiveLogdata.players"></player-component>
             </div>
         </div>     
         <h2 class="text-center">{{ name }}</h2>
@@ -60,12 +60,12 @@
         data: function () {
             return {
                 tab: 0,
-                logdata: simpleLogData
+                reactiveLogdata: simpleLogData
             };
         },
         computed: {
             activePhase: function () {
-                var phases = this.logdata.phases;
+                var phases = this.reactiveLogdata.phases;
                 for (var i = 0; i < phases.length; i++) {
                     if (phases[i].active) {
                         return i;
@@ -76,7 +76,7 @@
                 return logData.phases[this.activePhase];
             },
             activePlayer: function () {
-                var players = this.logdata.players;
+                var players = this.reactiveLogdata.players;
                 for (var i = 0; i < players.length; i++) {
                     if (players[i].active) {
                         return i;
@@ -90,7 +90,7 @@
             activePlayerTargets: function () {
                 var res = [];
                 for (var i = 0; i < logData.players.length; i++) {
-                    var player = this.logdata.players[i];
+                    var player = this.reactiveLogdata.players[i];
                     if (player.targetActive) {
                         res.push(i);
                     }

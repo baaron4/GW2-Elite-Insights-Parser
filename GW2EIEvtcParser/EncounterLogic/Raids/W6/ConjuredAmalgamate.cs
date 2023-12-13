@@ -82,6 +82,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // Can be improved
+            if (_cn)
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            } 
+            else
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>
@@ -332,6 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Conjured Protection - Shield AoE
             IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();

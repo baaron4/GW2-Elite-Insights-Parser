@@ -38,8 +38,14 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return new Segment(Start, End, GetActiveStacks(actor));
         }
 
+        public Segment ToDurationSegment()
+        {
+            return new Segment(Start, End, GetActualDuration());
+        }
+
         public abstract void OverrideEnd(long end);
         public abstract IReadOnlyList<long> GetActualDurationPerStack();
+        public abstract long GetActualDuration();
 
         public abstract IReadOnlyList<AgentItem> GetSources();
         public abstract IReadOnlyList<AgentItem> GetActiveSources();

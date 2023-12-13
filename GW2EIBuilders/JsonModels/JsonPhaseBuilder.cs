@@ -20,12 +20,18 @@ namespace GW2EIBuilders.JsonModels
             jsPhase.End = phase.End;
             jsPhase.Name = phase.Name;
             var targets = new List<int>();
+            var secondaryTargets = new List<int>();
             jsPhase.BreakbarPhase = phase.BreakbarPhase;
             foreach (AbstractSingleActor tar in phase.Targets)
             {
                 targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }
+            foreach (AbstractSingleActor tar in phase.SecondaryTargets)
+            {
+                secondaryTargets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+            }
             jsPhase.Targets = targets;
+            jsPhase.SecondaryTargets = secondaryTargets;
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             if (!jsPhase.BreakbarPhase)
             {

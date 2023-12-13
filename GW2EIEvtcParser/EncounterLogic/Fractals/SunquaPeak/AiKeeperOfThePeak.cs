@@ -201,6 +201,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (_hasElementalMode)
+            {
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            } 
+            else if (_hasDarkMode)
+            {
+                if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.EncounterMode.CMNoName;
@@ -393,6 +412,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Tethering Players to Fears
             List<AbstractBuffEvent> fearFixations = GetFilteredList(log.CombatData, new long[] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, p, true, true);
             replay.AddTether(fearFixations, "rgba(255, 0, 255, 0.5)");

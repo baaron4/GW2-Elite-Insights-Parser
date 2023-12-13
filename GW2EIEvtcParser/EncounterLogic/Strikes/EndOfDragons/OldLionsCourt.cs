@@ -83,6 +83,31 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // Can be improved
+            if (fightData.IsCM)
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+
+            } 
+            else
+            {
+                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, combatData, Targets))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
@@ -282,6 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixation
             IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffData(FixatedOldLionsCourt).Where(buff => buff.To == p.AgentItem);
             IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeVermilion, ArcDPSEnums.TargetID.PrototypeVermilionCM }));

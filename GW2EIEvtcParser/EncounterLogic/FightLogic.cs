@@ -301,6 +301,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        protected void AddSecondaryTargetsToPhase(PhaseData phase, List<int> ids)
+        {
+            foreach (AbstractSingleActor target in Targets)
+            {
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
+                {
+                    phase.AddSecondaryTarget(target);
+                }
+            }
+        }
+
         protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
         {
             AddTargetsToPhase(phase, ids);

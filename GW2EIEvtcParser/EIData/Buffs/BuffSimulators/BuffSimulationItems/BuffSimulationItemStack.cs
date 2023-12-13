@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override IReadOnlyList<long> GetActualDurationPerStack()
         {
-            return new List<long>(Stacks.Select(x => x.GetActualDurationPerStack().First()));
+            return new List<long>(Stacks.Select(x => x.GetActualDuration()));
         }
 
         public override IReadOnlyList<AgentItem> GetSources()

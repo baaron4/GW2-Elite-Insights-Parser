@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
         internal enum EncounterStartStatus { NotSet, Normal, Late, NoPreEvent }
         private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
-        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late;
+        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
         public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
 
         // Constructors
@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.ParsedData
             FightName = Logic.GetLogicName(combatData, agentData) 
                 + (_encounterMode == EncounterMode.CM ? " CM" : "") 
                 + (_encounterMode == EncounterMode.Story ? " Story" : "")
-                + (IsLateStart ? " (Late Start)" : "") 
+                + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "") 
                 + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
@@ -329,7 +329,10 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
-                _phases.RemoveAll(x => x.Targets.Count == 0);
+                _phases.RemoveAll(x => x.AllTargets.Count == 0);
+                if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target)))) {
+                    throw new InvalidOperationException("Phases can only have targets");
+                }
                 if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
                 {
                     throw new InvalidOperationException("Breakbar phases can only have one target");
