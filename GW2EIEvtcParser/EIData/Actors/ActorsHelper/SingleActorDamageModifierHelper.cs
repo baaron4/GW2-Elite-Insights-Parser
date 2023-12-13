@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EIData
             damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
             _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
-            var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList()));
+            var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList()));
             foreach (AgentItem actor in damageModifiersEventsByTarget.Keys)
             {
                 _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);

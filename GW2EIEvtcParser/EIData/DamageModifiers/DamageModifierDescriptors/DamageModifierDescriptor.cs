@@ -60,10 +60,6 @@ namespace GW2EIEvtcParser.EIData
                     Tooltip += "<br>No Minions";
                     break;
             }
-            if (SrcType == DamageType.All)
-            {
-                throw new InvalidDataException("No known damage modifier that modifies every outgoing damage");
-            } 
             Tooltip += "<br>Applied on " + SrcType.DamageTypeToString();
             Tooltip += "<br>Compared against " + CompareType.DamageTypeToString();
             if (!Multiplier)

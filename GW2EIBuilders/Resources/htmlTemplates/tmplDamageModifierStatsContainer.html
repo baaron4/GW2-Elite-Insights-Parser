@@ -27,7 +27,7 @@
         template: `${template}`,
         data: function () {
             return {
-                mode: this.hasOutDamageMods ? 0 : 1,
+                mode: Object.keys(logData.damageModMap).length !== 0 ? 0 : 1,
             };
         },
         computed: {
