@@ -142,7 +142,7 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.UploadToWingman)
             {
-#if !DEBUG
+#if DEBUG
                 if (!isWingmanCompatible)
                 {
                     originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: unsupported log");
@@ -197,8 +197,8 @@ namespace GW2EIParser
                             {
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
                             }
-                            string result = log.FightData.Success ? "kill" : "fail";
-                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{log.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress(str), ParserVersion);
+                            string result = logToUse.FightData.Success ? "kill" : "fail";
+                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress(str), ParserVersion);
                         }
                         catch (Exception e)
                         {
