@@ -2562,6 +2562,7 @@
         public const long EnvironmentallyFriendly = 47625;
         public const long LastGraspJudgment = 47635;
         public const long ArcingAffliction = 47646;
+        public const long DhuumsMessengerFixationBuff = 47702; // From player applied to messenger
         public const long CorsairMaintenanceOil = 47734;
         public const long WurmSpit = 47756;
         public const long EnergyThresholdRiver = 47758;
