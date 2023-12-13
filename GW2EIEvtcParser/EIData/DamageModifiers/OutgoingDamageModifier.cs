@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public class OutgoingDamageModifier : DamageModifier
     {
-        internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor)
+        internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor, damageModDescriptor.DmgSrc)
         {
             ID = Name.GetHashCode();
             Incoming = false;
