@@ -79,7 +79,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Zeal
             new BuffOnFoeDamageModifier(Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.FieryWrath, DamageModifierMode.All),
@@ -104,6 +104,13 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.February2020Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.NoPets, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
+            new CounterOnActorDamageModifier(RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

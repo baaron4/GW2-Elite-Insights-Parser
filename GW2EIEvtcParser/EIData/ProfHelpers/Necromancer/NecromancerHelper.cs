@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Spite
             new BuffOnFoeDamageModifier(NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, BuffImages.SpitefulTalisman, DamageModifierMode.All),
@@ -64,6 +64,15 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(new long[] { DeathShroud, ReapersShroud, HarbingerShroud }, "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.sPvPWvW),
+            new BuffOnActorDamageModifier(DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.NoPets, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.BeyondTheVeil, DamageModifierMode.PvE)
+                .UsingChecker((dl, log) => dl.To.GetBuffStatus(log, DeathsCarapace, dl.Time).Value >= 10)
+                .WithBuilds(GW2Builds.October2019Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

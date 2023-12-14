@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingDstBaseSpecChecker(Spec.Engineer),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Explosives
             new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
@@ -135,6 +135,12 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All),
             // Tools
             new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
+            new BuffOnActorDamageModifier(IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, BuffImages.IronBlooded, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

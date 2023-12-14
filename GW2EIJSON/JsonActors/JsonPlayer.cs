@@ -141,7 +141,20 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
         public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>> DamageModifiersTarget { get; set; }
-        
+
+        /// <summary>
+        /// Incoming damage modifiers from all
+        /// </summary>
+        /// <seealso cref="JsonDamageModifierData"/>
+        public IReadOnlyList<JsonDamageModifierData> IncomingDamageModifiers { get; set; }
+
+        /// <summary>
+        /// Incoming damage modifiers from targets \n
+        /// Length == # of targets
+        /// </summary>
+        /// <seealso cref="JsonDamageModifierData"/>
+        public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>> IncomingDamageModifiersTarget { get; set; }
+
         /// <summary>
         /// List of buff status
         /// </summary>

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageCastFinder(CallOfTheDragon, CallOfTheDragon), // Call of the Dragon
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
             new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
@@ -40,6 +40,13 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "5% per active Facet", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.November2023Balance),
             new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "7% per active Facet", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2023Balance),
             //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, BuffImages.ForcefulPersistence, GW2Builds.August2018Balance, GW2Builds.EndOfLife, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(FacetOfNatureDwarf, "Face of Nature - Dwarf", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
+            new BuffOnActorDamageModifier(HardeningPersistence, "Hardnening Persistence", "-1% per stack", DamageSource.NoPets, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(HardeningPersistence, "Hardnening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

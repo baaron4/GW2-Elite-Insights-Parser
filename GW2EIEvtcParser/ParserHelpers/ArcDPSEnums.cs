@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser
             internal const ulong December2019Balance = 100690;
             internal const ulong February2020Balance = 102321;
             internal const ulong February2020Balance2 = 102389;
+            internal const ulong March2020Balance = 102724;
             internal const ulong July2020Balance = 104844;
             internal const ulong September2020SunquaPeakRelease = 106277;
             internal const ulong May2021Balance = 115190;

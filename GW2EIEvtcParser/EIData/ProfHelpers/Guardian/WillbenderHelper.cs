@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
                 .UsingChecker( (x, log) => {
@@ -160,6 +160,10 @@ namespace GW2EIEvtcParser.EIData
             //
             new CounterOnActorDamageModifier(RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, BuffImages.RushingJustice, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.EODBeta1)
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

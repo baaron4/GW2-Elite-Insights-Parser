@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Skills
             new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
@@ -225,6 +225,13 @@ namespace GW2EIEvtcParser.EIData
             // Nature Magic
             // We can't check buffs on minions yet
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostSpirit, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

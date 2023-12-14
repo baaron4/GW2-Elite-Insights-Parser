@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Fire
             new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
@@ -127,6 +127,22 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.November2023Balance),
             new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.November2023Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(new long[] { EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement }, "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
+            new DamageLogDamageModifier("Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) =>
+            {
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
+            }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
         };
 
 

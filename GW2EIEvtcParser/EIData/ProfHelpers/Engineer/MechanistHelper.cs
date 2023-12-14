@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(SkyCircus, SkyCircus),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Need to check mech specy id for those
             new BuffOnActorDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
@@ -69,6 +69,11 @@ namespace GW2EIEvtcParser.EIData
                 }),
         };
 
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.BarrierSignet, DamageModifierMode.All),
+        };
+
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
@@ -79,6 +84,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, BuffImages.SuperconductingSignet),
             new Buff("Overclock Signet", OverclockSignetBuff, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
             new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, BuffImages.MechanicalGenius),
+            new Buff("Exigency Protocols", ExigencyProtocol, Source.PetSpecific, BuffClassification.Other, BuffImages.ExigencyProtocol),
             //
             //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
             new Buff("Barrier Signet (J-Drive)", BarrierSignetJDrive, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),

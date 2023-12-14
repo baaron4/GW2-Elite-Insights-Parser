@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
             new BuffOnActorDamageModifier(Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
@@ -34,6 +34,10 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023Balance),
             new BuffOnActorDamageModifier(Blight, "Septic Corruption", "0.25% per blight stack", DamageSource.NoPets, 0.25, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
             new BuffOnActorDamageModifier(Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2023Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

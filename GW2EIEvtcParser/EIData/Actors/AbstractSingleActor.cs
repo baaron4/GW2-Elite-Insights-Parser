@@ -255,14 +255,24 @@ namespace GW2EIEvtcParser.EIData
 
         // Damage Modifiers
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            return _damageModifiersHelper.GetDamageModifierStats(target, log, start, end);       
+            return _damageModifiersHelper.GetOutgoingDamageModifierStats(target, log, start, end);       
         }
 
-        public IReadOnlyCollection<string> GetPresentDamageModifier(ParsedEvtcLog log)
+        public IReadOnlyCollection<string> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
         {
-            return _damageModifiersHelper.GetPresentDamageModifier(log);
+            return _damageModifiersHelper.GetPresentOutgoingDamageModifier(log);
+        }
+
+        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return _damageModifiersHelper.GetIncomingDamageModifierStats(target, log, start, end);
+        }
+
+        public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)
+        {
+            return _damageModifiersHelper.GetPresentIncomingDamageModifier(log);
         }
 
         // Buffs

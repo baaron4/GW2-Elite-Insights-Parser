@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData
         internal DamageModifierDescriptor DamageModDescriptor { get; }
 
         public DamageType CompareType => DamageModDescriptor.CompareType;
-        public DamageType SrcType => DamageModDescriptor.CompareType;
-        internal DamageSource DmgSrc => DamageModDescriptor.DmgSrc;
+        public DamageType SrcType => DamageModDescriptor.SrcType;
+        internal DamageSource DmgSrc { get; }
         public bool Multiplier => DamageModDescriptor.Multiplier;
         public bool SkillBased => DamageModDescriptor.SkillBased;
 
@@ -19,12 +19,37 @@ namespace GW2EIEvtcParser.EIData
         public ParserHelper.Source Src => DamageModDescriptor.Src;
         public string Icon => DamageModDescriptor.Icon;
         public string Name => DamageModDescriptor.Name;
-        public int ID => DamageModDescriptor.ID;
-        public string Tooltip => DamageModDescriptor.Tooltip;
+        public int ID { get; protected set; }
+        public string Tooltip { get; protected set; }
 
-        internal DamageModifier(DamageModifierDescriptor damageModDescriptor)
+        public bool Incoming { get; protected set; }
+
+        internal DamageModifier(DamageModifierDescriptor damageModDescriptor, DamageSource dmgSrc)
         {
             DamageModDescriptor = damageModDescriptor;
+            Tooltip = damageModDescriptor.InitialTooltip;
+            DmgSrc = dmgSrc;
+            switch (DmgSrc)
+            {
+                case DamageSource.All:
+                    Tooltip += "<br>Actor + Minions";
+                    break;
+                case DamageSource.NoPets:
+                    Tooltip += "<br>No Minions";
+                    break;
+                default:
+                    break;
+            }
+            Tooltip += "<br>Applied on " + SrcType.DamageTypeToString();
+            Tooltip += "<br>Compared against " + CompareType.DamageTypeToString();
+            if (!Multiplier)
+            {
+                Tooltip += "<br>Non multiplier";
+            }
+            if (Approximate)
+            {
+                Tooltip += "<br>Approximate";
+            }
         }
         internal abstract AgentItem GetFoe(AbstractHealthDamageEvent evt);
 

@@ -139,8 +139,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonPlayer.DeathRecap = deathRecaps.Select(x => JsonDeathRecapBuilder.BuildJsonDeathRecap(x)).ToList();
             }
             // 
-            jsonPlayer.DamageModifiers = JsonDamageModifierDataBuilder.GetDamageModifiers(phases.Select(x => player.GetDamageModifierStats(null, log, x.Start, x.End)).ToList(), log, damageModDesc);
-            jsonPlayer.DamageModifiersTarget = JsonDamageModifierDataBuilder.GetDamageModifiersTarget(player, log, damageModDesc, phases);
+            jsonPlayer.DamageModifiers = JsonDamageModifierDataBuilder.GetOutgoingDamageModifiers(phases.Select(x => player.GetOutgoingDamageModifierStats(null, log, x.Start, x.End)).ToList(), log, damageModDesc);
+            jsonPlayer.DamageModifiersTarget = JsonDamageModifierDataBuilder.GetOutgoingDamageModifiersTarget(player, log, damageModDesc, phases);
+            jsonPlayer.IncomingDamageModifiers = JsonDamageModifierDataBuilder.GetIncomingDamageModifiers(phases.Select(x => player.GetIncomingDamageModifierStats(null, log, x.Start, x.End)).ToList(), log, damageModDesc);
+            jsonPlayer.IncomingDamageModifiersTarget = JsonDamageModifierDataBuilder.GetIncomingDamageModifiersTarget(player, log, damageModDesc, phases);
             if (log.CombatData.HasEXTHealing)
             {
                 jsonPlayer.EXTHealingStats = EXTJsonPlayerHealingStatsBuilder.BuildPlayerHealingStats(player, log, settings, skillDesc, buffDesc);

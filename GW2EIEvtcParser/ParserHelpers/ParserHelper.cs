@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser
             Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast, Untamed,
             Engineer, Scrapper, Holosmith, Mechanist,
+            PetSpecific,
             FightSpecific,
             FractalInstability,
             Unknown

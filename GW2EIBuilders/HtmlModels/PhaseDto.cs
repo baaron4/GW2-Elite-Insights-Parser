@@ -96,6 +96,11 @@ namespace GW2EIBuilders.HtmlModels
         public List<DamageModData> DmgModifiersItem { get; set; }
         public List<DamageModData> DmgModifiersPers { get; set; }
 
+
+        public List<DamageModData> DmgIncModifiersCommon { get; set; }
+        public List<DamageModData> DmgIncModifiersItem { get; set; }
+        public List<DamageModData> DmgIncModifiersPers { get; set; }
+
         public List<List<BuffData>> TargetsCondiStats { get; set; }
         public List<BuffData> TargetsCondiTotals { get; set; }
         public List<BuffData> TargetsBoonTotals { get; set; }
@@ -108,7 +113,9 @@ namespace GW2EIBuilders.HtmlModels
         public List<AreaLabelDto> MarkupAreas { get; set; }
         public List<int> SubPhases { get; set; }
 
-        public PhaseDto(PhaseData phase, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict, IReadOnlyList<DamageModifier> commonDamageModifiers, IReadOnlyList<DamageModifier> itemDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<DamageModifier>> persDamageModDict)
+        public PhaseDto(PhaseData phase, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict, 
+            IReadOnlyList<OutgoingDamageModifier> commonOutDamageModifiers, IReadOnlyList<OutgoingDamageModifier> itemOutDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict,
+            IReadOnlyList<IncomingDamageModifier> commonIncDamageModifiers, IReadOnlyList<IncomingDamageModifier> itemIncDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict)
         {
             Name = phase.Name;
             Duration = phase.DurationInMS;
@@ -239,9 +246,12 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffGenActiveOGroupStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.OffGroup);
             DefBuffGenActiveSquadStats = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
             //
-            DmgModifiersCommon = DamageModData.BuildDmgModifiersData(log, phase, commonDamageModifiers);
-            DmgModifiersItem = DamageModData.BuildDmgModifiersData(log, phase, itemDamageModifiers);
-            DmgModifiersPers = DamageModData.BuildPersonalDmgModifiersData(log, phase, persDamageModDict);
+            DmgModifiersCommon = DamageModData.BuildOutgoingDmgModifiersData(log, phase, commonOutDamageModifiers);
+            DmgModifiersItem = DamageModData.BuildOutgoingDmgModifiersData(log, phase, itemOutDamageModifiers);
+            DmgModifiersPers = DamageModData.BuildPersonalOutgoingDmgModifiersData(log, phase, persOutDamageModDict);
+            DmgIncModifiersCommon = DamageModData.BuildIncomingDmgModifiersData(log, phase, commonIncDamageModifiers);
+            DmgIncModifiersItem = DamageModData.BuildIncomingDmgModifiersData(log, phase, itemIncDamageModifiers);
+            DmgIncModifiersPers = DamageModData.BuildPersonalIncomingDmgModifiersData(log, phase, persIncDamageModDict);
             TargetsCondiStats = new List<List<BuffData>>();
             TargetsCondiTotals = new List<BuffData>();
             TargetsBoonTotals = new List<BuffData>();

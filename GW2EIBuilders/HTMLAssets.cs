@@ -81,6 +81,7 @@ namespace GW2EIBuilders
                 Properties.Resources.tmplDamageDistTable,
                 Properties.Resources.tmplDamageDistTarget,
                 Properties.Resources.tmplDamageModifierTable,
+                Properties.Resources.tmplDamageModifierStatsContainer,
                 Properties.Resources.tmplDamageModifierStats,
                 Properties.Resources.tmplDamageModifierPersStats,
                 Properties.Resources.tmplDamageTable,

@@ -38,8 +38,13 @@ namespace GW2EIEvtcParser.EIData
             }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            // Investigate for Blood as Sand, add a custom buff like for weaver attunements/ virtuoso blades using effect events?
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -84,7 +89,16 @@ namespace GW2EIEvtcParser.EIData
                var skill = new SkillModeDescriptor(player, Spec.Scourge, ManifestSandShadeSkill);
                 foreach (EffectEvent effect in scourgeShades)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                    long duration;
+                    if (log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.WvW || log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.sPvP)
+                    {
+                        duration = log.LogData.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+                    } 
+                    else
+                    {
+                        duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+                    }
+                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, duration);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
