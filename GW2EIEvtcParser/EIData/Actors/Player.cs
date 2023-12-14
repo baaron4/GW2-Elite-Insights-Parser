@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     else if (tagEvent.TagID != 0)
                     {
-                        tagGUID = ParserIcons.BlueCommanderTagOverhead;
+                        tagGUID = MarkerGUIDs.BlueCommanderTag;
                         return true;
                     }
                 }
