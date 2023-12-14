@@ -112,6 +112,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         internal static class RewardIDs
         {
+            internal const ulong FreezieChest = 914;
             internal const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
             internal const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
             internal const ulong KodansCurrentChest1 = 1028; // Current, once a day
@@ -521,6 +522,7 @@ namespace GW2EIEvtcParser
         private const int CAChest = -41;
         private const int ChestOfDesmina = -42;
         private const int UnknownAnomaly = -43;
+        private const int SnowPile = -44;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -905,6 +907,7 @@ namespace GW2EIEvtcParser
             IceStormer = 21325,
             IceSpiker = 21337,
             IcyProtector = 21326,
+            SnowPile = ArcDPSEnums.SnowPile,
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,

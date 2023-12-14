@@ -358,6 +358,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
         private const string TrashTheTormented = "https://i.imgur.com/kEytVae.png";
         private const string TrashSoulFeast = "https://i.imgur.com/iNp5Rnx.png";
+        private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -572,6 +573,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string FixationGreenOverhead = "https://i.imgur.com/cDmJWrY.png";
         internal const string FixationPurpleOverhead = "https://i.imgur.com/UImUF0H.png";
         internal const string FixationRedOverhead = "https://i.imgur.com/wIYRfY6.png";
+        internal const string FixationYellowOverhead = "https://i.imgur.com/FAPQufJ.png";
         // - Squad Markers
         internal const string ArrowSquadMarkerOverhead = "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
         internal const string CircleSquadMarkerOverhead = "https://wiki.guildwars2.com/images/6/60/Commander_circle_marker.png";
@@ -1022,6 +1024,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IceSpiker, TrashIceSpiker },
             { ArcDPSEnums.TrashID.IceStormer, TrashIceElemental },
             { ArcDPSEnums.TrashID.IcyProtector, TrashIcyProtector },
+            { ArcDPSEnums.TrashID.SnowPile, TrashSnowPile },
             { ArcDPSEnums.TrashID.RiverOfSouls, TrashRiverOfSouls },
             { ArcDPSEnums.TrashID.WargBloodhound, TrashWargBloodhound },
             { ArcDPSEnums.TrashID.CrimsonMcLeod, TrashCrimsonMcLeod },
