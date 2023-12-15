@@ -67,7 +67,17 @@ namespace GW2EIEvtcParser.EIData
                     Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                     return segment.Value >= 20;
                 }),
-            new BuffOnFoeDamageModifier(IcyBarrier, "Icy Barrier", "-10% per stack", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ShieldOfIce, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(IcyBarrier, "Icy Barrier", "-10% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ShieldOfIce, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster)
+                .UsingChecker((ahde, log) =>
+                {
+                    return VulnerabilityAdditiveChecker(ahde, log, IcyBarrier, 10);
+                }),
+            new CounterOnFoeDamageModifier(IcyBarrier, "Icy Barrier (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damage", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.ShieldOfIce, DamageModifierMode.PvE)
+                .UsingChecker((ahde, log) =>
+                {
+                    return !VulnerabilityAdditiveChecker(ahde, log, IcyBarrier, 10);
+                }),
             new BuffOnActorDamageModifier(EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(BloodFueledPlayer, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),

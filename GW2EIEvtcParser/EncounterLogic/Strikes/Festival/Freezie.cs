@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -11,7 +12,6 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 new PlayerDstBuffApplyMechanic(AuroraBeamTargetBuff, "Aurora Beam", new MechanicPlotlySetting(Symbols.Star, Colors.Purple), "AuroraBeam.T", "Targetted by Aurora Beam", "Aurora Beam Target", 0),
-                new PlayerDstBuffApplyMechanic(GiantSnowballFreezieTargetBuff1, "5 a", new MechanicPlotlySetting(Symbols.Star, Colors.Purple, 5), "5.T", "5 by Aurora Beam", "5 Beam Target", 0),
+                new PlayerDstBuffApplyMechanic(GiantSnowballFreezieTargetBuff1, "Giant Snowball", new MechanicPlotlySetting(Symbols.Star, Colors.Purple, 5), "GiantSnowball.T", "Targetted by Giant Snowball", "Giant Snowball Target", 0),
                 new PlayerDstHitMechanic(new long [] { AuroraBeam1, AuroraBeam2, AuroraBeam3 }, "Aurora Beam", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Purple), "AuroraBeam.H", "Hit by Aurora Beam", "Aurora Beam Hit", 0),
                 new PlayerDstHitMechanic(GiantSnowballFreezieDamage, "Giant Snowball", new MechanicPlotlySetting(Symbols.Circle, Colors.White), "GiantSnowball.H", "Hit by Giant Snowball", "Giant Snowball Hit", 0),
                 new PlayerDstHitMechanic(Blizzard, "Blizzard", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Orange), "Blizzard.H", "Hit by Blizzard (Outer circle)", "Blizzard Hit", 0),
