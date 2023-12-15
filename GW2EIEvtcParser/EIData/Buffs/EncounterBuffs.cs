@@ -351,7 +351,7 @@ namespace GW2EIEvtcParser.EIData
             // Peerless Qadim
             new Buff("Erratic Energy", ErraticEnergy, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unstable),
             new Buff("Power Share", PowerShare, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.PowerShare),
-            new Buff("Sapping Surge", SappingSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.GuiltExploitation),
+            new Buff("Sapping Surge", SappingSurge, Source.FightSpecific, BuffClassification.Debuff, BuffImages.GuiltExploitation),
             new Buff("Chaos Corrosion", ChaosCorrosion, Source.FightSpecific, BuffClassification.Other, BuffImages.Fractured),
             new Buff("Fixated (Qadim the Peerless)", FixatedQadimThePeerless, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Magma Drop", MagmaDrop, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetedLocust),
