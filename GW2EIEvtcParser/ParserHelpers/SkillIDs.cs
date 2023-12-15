@@ -3202,7 +3202,7 @@
         public const long SignetOfVampirismSkill2 = 60625;
         public const long Enraged_200_strike_50_reduc = 60674;
         public const long Claw3 = 60842;
-        public const long Enraged_300_strike = 61006;
+        public const long Enraged_300_strike_75_reduc = 61006;
         public const long Stealth2Skill = 61081;
         public const long Enraged_100_strike_25_reduc = 61138;
         public const long ElementalManipulationWater1 = 61172;

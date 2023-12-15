@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Enraged 2 (200%)", Enraged_200, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged 3 (200%)", Enraged3_200, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged 4 (200%)", Enraged_200_strike_50_reduc, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
-            new Buff("Enraged (300%)", Enraged_300_strike, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
+            new Buff("Enraged (300%)", Enraged_300_strike_75_reduc, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged (500%)", Enraged_500, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Call of the Mists", CallOfTheMists, Source.FightSpecific, BuffClassification.Other, BuffImages.CallOfTheMists),
             new Buff("Untargetable", Untargetable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined ),
