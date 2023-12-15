@@ -8,8 +8,10 @@ namespace GW2EIEvtcParser.EIData
 {
     public class OutgoingDamageModifier : DamageModifier
     {
-        internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor)
+        internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor, damageModDescriptor.DmgSrc)
         {
+            ID = Name.GetHashCode();
+            Incoming = false;
         }
 
         public override int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)

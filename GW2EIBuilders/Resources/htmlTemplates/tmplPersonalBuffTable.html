@@ -24,7 +24,7 @@
                 bases: [],
                 mode: "Warrior",
                 cache: new Map(),
-                specToBase: specToBase
+                specToBase: SpecToBase
             };
         },
         computed: {
@@ -43,7 +43,7 @@
                         }
                     }
                     if (pBySpec.length) {
-                        aux.add(specToBase[spec]);
+                        aux.add(SpecToBase[spec]);
                         res.push({
                             ids: pBySpec,
                             name: spec

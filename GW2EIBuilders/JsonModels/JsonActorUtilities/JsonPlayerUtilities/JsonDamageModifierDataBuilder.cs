@@ -26,21 +26,23 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
 
         private static JsonDamageModifierData BuildJsonDamageModifierData(int ID, List<JsonDamageModifierItem> data)
         {
-            var jsonDamageModifierData = new JsonDamageModifierData();
-            jsonDamageModifierData.Id = ID;
-            jsonDamageModifierData.DamageModifiers = data;
+            var jsonDamageModifierData = new JsonDamageModifierData
+            {
+                Id = ID,
+                DamageModifiers = data
+            };
             return jsonDamageModifierData;
         }
 
 
-        public static List<JsonDamageModifierData> GetDamageModifiers(List<IReadOnlyDictionary<string, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(List<IReadOnlyDictionary<string, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
         {
             var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
             foreach (IReadOnlyDictionary<string, DamageModifierStat> damageModDict in damageModDicts)
             {
                 foreach (string key in damageModDict.Keys)
                 {
-                    DamageModifier dMod = log.DamageModifiers.DamageModifiersByName[key];
+                    DamageModifier dMod = log.DamageModifiers.OutgoingDamageModifiersByName[key];
                     int iKey = dMod.ID;
                     string nKey = "d" + iKey;
                     if (!damageModDesc.ContainsKey(nKey))
@@ -69,13 +71,60 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
             return res;
         }
 
-        public static List<JsonDamageModifierData>[] GetDamageModifiersTarget(AbstractSingleActor player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
+        public static List<JsonDamageModifierData> GetIncomingDamageModifiers(List<IReadOnlyDictionary<string, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc)
+        {
+            var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
+            foreach (IReadOnlyDictionary<string, DamageModifierStat> damageModDict in damageModDicts)
+            {
+                foreach (string key in damageModDict.Keys)
+                {
+                    DamageModifier dMod = log.DamageModifiers.IncomingDamageModifiersByName[key];
+                    int iKey = dMod.ID;
+                    string nKey = "d" + iKey;
+                    if (!damageModDesc.ContainsKey(nKey))
+                    {
+                        damageModDesc[nKey] = JsonLogBuilder.BuildDamageModDesc(dMod);
+                    }
+                    if (dict.TryGetValue(iKey, out List<JsonDamageModifierItem> list))
+                    {
+                        list.Add(BuildJsonDamageModifierItem(damageModDict[key]));
+                    }
+                    else
+                    {
+                        dict[iKey] = new List<JsonDamageModifierItem>
+                        {
+                            BuildJsonDamageModifierItem(damageModDict[key])
+                        };
+                    }
+                }
+            }
+
+            var res = new List<JsonDamageModifierData>();
+            foreach (KeyValuePair<int, List<JsonDamageModifierItem>> pair in dict)
+            {
+                res.Add(BuildJsonDamageModifierData(pair.Key, pair.Value));
+            }
+            return res;
+        }
+
+        public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(AbstractSingleActor player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
         {
             var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
             {
                 AbstractSingleActor tar = log.FightData.Logic.Targets[i];
-                res[i] = GetDamageModifiers(phases.Select(x => player.GetDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
+                res[i] = GetOutgoingDamageModifiers(phases.Select(x => player.GetOutgoingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
+            }
+            return res;
+        }
+
+        public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(AbstractSingleActor player, ParsedEvtcLog log, Dictionary<string, JsonLog.DamageModDesc> damageModDesc, IReadOnlyList<PhaseData> phases)
+        {
+            var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
+            for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+            {
+                AbstractSingleActor tar = log.FightData.Logic.Targets[i];
+                res[i] = GetIncomingDamageModifiers(phases.Select(x => player.GetIncomingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModDesc); ;
             }
             return res;
         }

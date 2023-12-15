@@ -83,7 +83,8 @@ namespace GW2EIBuilders.JsonModels
                 Description = damageModifier.Tooltip,
                 NonMultiplier = !damageModifier.Multiplier,
                 SkillBased = damageModifier.SkillBased,
-                Approximate = damageModifier.Approximate
+                Approximate = damageModifier.Approximate,
+                Incoming = damageModifier.Incoming,
             };
             return damageModDesc;
         }

@@ -130,7 +130,7 @@ const specs = [
     "Catalyst"
 ];
 
-const specToBase = {
+const SpecToBase = {
     Warrior: 'Warrior',
     Berserker: 'Warrior',
     Spellbreaker: 'Warrior',

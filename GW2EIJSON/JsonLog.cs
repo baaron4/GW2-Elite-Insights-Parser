@@ -192,6 +192,10 @@ namespace GW2EIJSON
             /// True if the modifier is an approximation
             /// </summary>
             public bool Approximate { get; set; }
+            /// <summary>
+            /// True if the modifier is an incoming damage modifier
+            /// </summary>
+            public bool Incoming { get; set; }
         }
         
         /// <summary>
