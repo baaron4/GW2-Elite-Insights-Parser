@@ -11,11 +11,13 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class BanditTrio : SalvationPass
     {
+        private static readonly Point3D ChestOfPrisonCampPosition = new Point3D(-903.703f, -9450.76f, -126.277008f);
         public BanditTrio(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
@@ -26,7 +28,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
             });
             Extension = "trio";
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.ChestGadget;
+            ChestID = ArcDPSEnums.ChestID.ChestOfPrisonCamp;
             Icon = EncounterIconBanditTrio;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000002;
@@ -59,35 +62,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (2688, 11906, 3712, 14210)*/);
         }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
-            {
-                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Prisoner2);
-                var prisonerDeaths = new List<DeadEvent>();
-                foreach (AgentItem prisoner in prisoners)
-                {
-                    prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
-                }
-                if (prisonerDeaths.Count == 0)
-                {
-                    AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella));
-                    if (narella == null)
-                    {
-                        throw new MissingKeyActorsException("Narella not found");
-                    }
-                    DeadEvent deadEvent = combatData.GetDeadEvents(narella.AgentItem).LastOrDefault();
-                    if (deadEvent != null)
-                    {
-                        fightData.SetSuccess(true, deadEvent.Time);
-                        return;
-                    }
-                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
-                }
-            }
-        }
-
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
@@ -115,6 +89,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 startToUse = Math.Min(narella.FirstAware, startToUse);
             }
             return startToUse;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            if (FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100))
+            {
+                agentData.Refresh();
+            }
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
