@@ -524,7 +524,7 @@ namespace GW2EIEvtcParser
         private const int ChestOfDesmina = -42;
         private const int UnknownAnomaly = -43;
         private const int ChestOfPrisonCamp = -44;
-        private const int SnowPile = -44;
+        private const int SnowPile = -45;
         public const int NonIdentifiedSpecies = 0;
 
         //
