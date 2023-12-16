@@ -39,12 +39,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000001;
         }
 
-        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
-        {
-            return new CombatReplayMap(CombatReplayFreezie,
-                            (1008, 1008),
-                            (-1420, 3010, 1580, 6010));
-        }
+        //protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        //{
+        //    return new CombatReplayMap(CombatReplayFreezie,
+        //                    (1008, 1008),
+        //                    (-1420, 3010, 1580, 6010));
+        //}
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
@@ -106,6 +106,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightData.SetSuccess(true, reward.Time);
             }
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AgentItem heart = agentData.GetNPCsByID(TrashID.FreeziesFrozenHeart).FirstOrDefault();
+            AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault();
+            HealthUpdateEvent heartHpUpdate = combatData.GetHealthUpdateEvents(heart).FirstOrDefault(x => x.Time >= freezie.FirstAware);
+            HealthUpdateEvent freezieHpUpdate = combatData.GetHealthUpdateEvents(freezie).FirstOrDefault(x => x.Time >= freezie.FirstAware);
+            if (heartHpUpdate.HPPercent > 0 || freezieHpUpdate.HPPercent <= 90)
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
