@@ -412,7 +412,6 @@
         // Strikes
         internal const string Hypothermia = "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png";
         internal const string Frostbite = "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png";
-        internal const string IcyBarrier = "https://wiki.guildwars2.com/images/3/38/Shield_of_Ice.png";
         internal const string Darkness = "https://wiki.guildwars2.com/images/c/c0/Darkness.png";
         internal const string Windfall = "https://wiki.guildwars2.com/images/6/65/Windfall.png";
         internal const string SoulBinder = "https://wiki.guildwars2.com/images/6/63/Use_Soul_Binder.png";

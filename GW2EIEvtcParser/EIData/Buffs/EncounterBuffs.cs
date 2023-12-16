@@ -444,7 +444,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Peace and Quiet", AchievementEligibilityPeaceAndQuiet, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Jade Sea Legs", AchievementEligibilityJadeSeaLegs, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            //////////////////////////////////////////////
+            // Strike Mission
+            new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood
             new Buff("Hypothermia", Hypothermia, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Hypothermia),
             new Buff("Achievement Eligibility: Ice Breaker", AchievementEligibilityIceBreaker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
@@ -478,8 +479,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: Slither-less", AchievementEligibilitySlitherLess, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Freezie
-            new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IcyBarrier),
-            new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
+            new Buff("Icy Barrier", IcyBarrier, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShieldOfIce),
+            new Buff("Aurora Beam Target", AuroraBeamTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Giant Snowball Target", GiantSnowballFreezieTargetBuff1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             // Mai Trin
             new Buff("Shared Destruction (Mai Trin)", SharedDestructionMaiTrin, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Shared Destruction CM (Mai Trin)", SharedDestructionMaiTrinCM, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),

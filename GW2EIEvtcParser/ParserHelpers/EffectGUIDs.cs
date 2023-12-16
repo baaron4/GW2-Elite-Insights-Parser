@@ -384,6 +384,10 @@ namespace GW2EIEvtcParser
         public const string QadimPeerlessMagmaWarningAoE = "E269977C2FC9474EAAD1051CDAFAD653"; // 4000 duration - Src player
         public const string QadimPeerlessMagmaLandingExplosion = "6617FA23565EE646ADAA7A646C895927"; // 1000 duration - No Src
         public const string QadimPeerlessMagmaDamagingAoE = "BABE69EC5AC7AF48A2F14A9FB8920C7F"; // 600000 duration - Src Qadim
+        // Freezie
+        public const string FreezieFrozenPatch = "2CE301ED692ACA4E964BFDFEED9D055E"; // 30000 duration
+        public const string FreezieOrangeAoE120 = "0760BCD6779C0248B480E59D41E785B4"; // Has multiple durations
+        public const string FreezieDoughnutRing = "3627917E07E3344EB97B795BE437DDF0"; // 10000 duration
         // Boneskinner
         public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
         public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator

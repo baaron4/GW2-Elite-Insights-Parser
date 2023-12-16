@@ -2727,6 +2727,7 @@
         public const long AchievementEligibilityTakingTurns = 52384;
         public const long UnbearableFlames = 52408;
         public const long ArmUp = 52430;
+        public const long AuroraBeamTargetBuff = 53456;
         public const long SeaOfFlame = 52461;
         public const long Parry = 52464;
         public const long AquaticDetainment = 52477;
@@ -2785,7 +2786,7 @@
         public const long HandOfGrenthRuneOfGrenth = 53406;
         public const long MarkedMistsArena = 53412;
         public const long AuroraBeam1 = 53445;
-        public const long FrostPatch = 53446;
+        public const long FrostPatchDamage = 53446;
         public const long IceCone2 = 53463;
         public const long Blizzard = 53464;
         public const long FireSnowball = 53471;
@@ -2797,9 +2798,11 @@
         public const long Enraged3_200 = 53498;
         public const long SteadfastRejuvenation = 53500;
         public const long IcyBarrier = 53510;
-        public const long GiantSnowballFreezie1 = 53511;
-        public const long GiantSnowballFreezie2 = 53514;
+        public const long GiantSnowballFreezieCast = 53511;
+        public const long GiantSnowballFreezieDamage = 53514;
+        public const long GiantSnowballFreezieTargetBuff1 = 53518;
         public const long JuttingIceSpikes2 = 53531;
+        public const long FrostPatchSkill = 53540;
         public const long IceCone1 = 53541;
         public const long AuroraBeam2 = 53549;
         public const long AiDarkPhaseEvent = 53569;
@@ -3133,6 +3136,7 @@
         public const long TormentingAura8 = 58859;
         public const long TormentingAura = 58860;
         public const long TormentingAura2 = 58861;
+        public const long GiantSnowballFreezieTargetBuff2 = 58880;
         public const long IceSlash = 59041;
         public const long AchievementEligibilityFlawlessFallen = 59042;
         public const long WhisperTeleportBack = 59054;
