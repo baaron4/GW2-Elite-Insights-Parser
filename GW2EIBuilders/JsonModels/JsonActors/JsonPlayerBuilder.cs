@@ -97,6 +97,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 {
                     jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states);
                 }
+                if (buffGraphs.TryGetValue(SkillIDs.NumberOfRangerPets, out states))
+                {
+                    jsonPlayer.ActiveRangerPets = JsonBuffsUptimeBuilder.GetBuffStates(states);
+                }
             }
             jsonPlayer.TargetDamageDist = targetDamageDist;
             jsonPlayer.DpsTargets = dpsTargets;

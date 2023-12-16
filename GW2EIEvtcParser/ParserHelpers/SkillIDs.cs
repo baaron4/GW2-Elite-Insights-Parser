@@ -50,6 +50,7 @@
         public const long RelicOfFireworksBuffLoss = -32;
         public const long MarkOfBloodOrChillblains = -33;
         public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
+        public const long NumberOfRangerPets = -35;
         ////////////////
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
@@ -105,7 +106,7 @@
         public const long Encumbered = 1159;
         public const long Bandage = 1175;
         public const long Quickness = 1187;
-        public const long JacarandasEmbrace = 1286; // Skill casted by Jacaranda's Embrace NPC
+        public const long JacarandasEmbraceMinion = 1286; // Skill casted by Jacaranda's Embrace NPC
         public const long GraspingVinesDamage = 1290;
         public const long AimedShotWvW = 1421;
         public const long WhirlingAssault = 1656;
@@ -1539,7 +1540,7 @@
         public const long BluePylonPower = 31413;
         public const long MagicStorm = 31419;
         public const long Takedown = 31430;
-        public const long BlackHole = 31436;
+        public const long BlackHoleMinion = 31436;
         public const long Determined31450 = 31450;
         public const long MagicAuraRedGuardian = 31462;
         public const long TemporalStasis = 31465;
@@ -1551,6 +1552,7 @@
         public const long SapperBombSkill = 31488;
         public const long SublimeConversion = 31496;
         public const long SpectralDarkness = 31498;
+        public const long BlackHoleSkill = 31503;
         public const long CelestialAvatar = 31508;
         public const long WingSwipeWyvern = 31520;
         public const long DistributedMagic = 31529;

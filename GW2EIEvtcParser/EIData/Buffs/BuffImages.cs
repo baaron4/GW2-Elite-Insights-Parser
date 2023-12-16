@@ -47,6 +47,7 @@
         internal const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
         internal const string RuneOfRanger = "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png";
         internal const string RuneOfMesmer = "https://wiki.guildwars2.com/images/2/24/Superior_Rune_of_the_Mesmer.png";
+        internal const string RangerPets = "https://i.imgur.com/Q8HBNzz.png";
         internal const string Downed = "https://wiki.guildwars2.com/images/d/dd/Downed.png";
         internal const string Exhaustion = "https://wiki.guildwars2.com/images/8/88/Exhaustion.png";
         internal const string Stealth = "https://wiki.guildwars2.com/images/1/19/Stealth.png";

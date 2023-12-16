@@ -53,6 +53,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
             new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
+            new Buff("Number of Ranger Pets", NumberOfRangerPets, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RangerPets),
             new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
             new Buff("Downed (Pet)", DownedPet, Source.Common, BuffClassification.Other, BuffImages.HealingPowerAttribute),
             new Buff("Exhaustion", Exhaustion, Source.Common, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.Exhaustion),

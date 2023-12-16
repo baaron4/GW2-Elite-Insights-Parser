@@ -502,6 +502,19 @@ namespace GW2EIEvtcParser.EIData
             return _canSummonClones.Contains(spec);
         }
 
+        private static readonly HashSet<Spec> _canUseRangerPets = new HashSet<Spec>()
+        {
+            Spec.Ranger,
+            Spec.Druid,
+            Spec.Soulbeast,
+            Spec.Untamed,
+        };
+
+        internal static bool CanUseRangerPets(Spec spec)
+        {
+            return _canUseRangerPets.Contains(spec);
+        }
+
         /// <summary>
         /// Minions that aren't profession-specific bound.
         /// </summary>

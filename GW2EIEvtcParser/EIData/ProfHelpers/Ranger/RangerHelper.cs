@@ -18,7 +18,17 @@ namespace GW2EIEvtcParser.EIData
     internal static class RangerHelper
     {
 
-        private static HashSet<int> NonSpiritMinions = new HashSet<int>()
+        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
+        {
+            (int)MinionID.FrostSpirit,
+            (int)MinionID.StoneSpirit,
+            (int)MinionID.StormSpirit,
+            (int)MinionID.SunSpirit,
+            (int)MinionID.WaterSpirit,
+            (int)MinionID.SpiritOfNatureRenewal,
+        };
+
+        private static HashSet<int> JuvenilePetIDs = new HashSet<int>()
         {
             (int)MinionID.JuvenileAlpineWolf,
             (int)MinionID.JuvenileArctodus,
@@ -82,6 +92,25 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileAetherHunter
         };
 
+        private static bool IsJuvenilePetID(int id)
+        {
+            return JuvenilePetIDs.Contains(id);
+        }
+
+        internal static bool IsJuvenilePet(AgentItem agentItem)
+        {
+            if (agentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            return IsJuvenilePetID(agentItem.ID);
+        }
+
+        internal static bool IsKnownMinionID(int id)
+        {
+            return IsJuvenilePetID(id) || SpiritIDs.Contains(id);
+        }
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
@@ -102,7 +131,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-            new MinionSpawnCastFinder(RangerPetSpawned, NonSpiritMinions.ToList()).UsingNotAccurate(true),
+            new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs.ToList()).UsingNotAccurate(true),
         };
 
 
@@ -283,8 +312,8 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
-            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, 1286, playerAgents);
-            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, 31436, playerAgents);
+            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
+            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
             var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
@@ -295,24 +324,9 @@ namespace GW2EIEvtcParser.EIData
             }
             else if (rangers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { 31503 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);
             }
-        }
-
-        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
-        {
-            (int)MinionID.FrostSpirit,
-            (int)MinionID.StoneSpirit,
-            (int)MinionID.StormSpirit,
-            (int)MinionID.SunSpirit,
-            (int)MinionID.WaterSpirit,
-            (int)MinionID.SpiritOfNatureRenewal,
-        };
-
-        internal static bool IsKnownMinionID(int id)
-        {
-            return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)

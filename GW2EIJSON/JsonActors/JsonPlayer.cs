@@ -62,6 +62,14 @@ namespace GW2EIJSON
         public IReadOnlyList<IReadOnlyList<int>> ActiveClones { get; set; }
 
         /// <summary>
+        /// Array of int[2] that represents the number of active ranger pets \n
+        /// Array[i][0] will be the time, Array[i][1] will be the number of ranger pets present from Array[i][0] to Array[i+1][0] \n
+        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
+        /// Only relevant for rangers.
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<int>> ActiveRangerPets { get; set; }
+
+        /// <summary>
         /// Array of Total DPS stats \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
