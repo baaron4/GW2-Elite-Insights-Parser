@@ -1571,7 +1571,7 @@
         public const long CultivatedSynergyPet = 31629;
         public const long GlyphOfUnitySomething = 31640;
         public const long CannonBarrage = 31643;
-        public const long Enraged1_200 = 31648;
+        public const long Enraged_200_strike = 31648;
         public const long MagicAuraGreenBuff = 31651;
         public const long GlyphOfUnityCA = 31657;
         public const long GlyphOfEquality = 31658;
@@ -1967,7 +1967,7 @@
         public const long AnguishedTearOfAlbaMastery = 35919;
         public const long WhirlingDevastation = 35940;
         public const long AchievementEligibilityFastSiege = 34982;
-        public const long Enraged2_200 = 36078;
+        public const long Enraged_200 = 36078;
         public const long MistlockInstabilityToxicTrail = 36204;
         public const long MistlockInstabilityMistsConvergence = 36224;
         public const long MistlockInstabilityAdrenalineRush = 36341;
@@ -2044,7 +2044,7 @@
         public const long Leap = 37577;
         public const long SpatialManipulation1 = 37611;
         public const long MindCrush = 37613;
-        public const long Empowered = 37626;
+        public const long EmpoweredMO = 37626;
         public const long SpatialManipulation2 = 37629;
         public const long OrbitalSweep = 37631;
         public const long SpatialManipulation3 = 37642;
@@ -2638,7 +2638,7 @@
         public const long BondOfLifeSkill = 49128;
         public const long BowlOfPoultrySatay = 49296;
         public const long PlateOfBeefRendang = 49686;
-        public const long Enraged1_100 = 50070;
+        public const long Enraged_100_strike = 50070;
         public const long AvocadoSmoothie = 50091;
         public const long BondOfLifeBuff = 50216;
         public const long HolographicSuperDrumstick = 50302;
@@ -2692,7 +2692,7 @@
         public const long CycloneBurst = 51999;
         public const long KenutAquaticAura = 52005;
         public const long PowerOfTheLamp = 52035;
-        public const long EnragedWywern = 52040;
+        public const long EnragedWyvern = 52040;
         public const long SummonDestroyer = 52054;
         public const long AugmentedPower = 52074;
         public const long ResistanceLavaElemental = 52075;
@@ -2763,7 +2763,7 @@
         public const long FieryMeteor = 52941;
         public const long Fixation = 52943;
         public const long ConjuredProtection = 52973;
-        public const long Shielded = 53003;
+        public const long ShieldedCA = 53003;
         public const long Fireball = 53013;
         public const long SeaSwell = 53018;
         public const long AchievementEligibilityStackingSwordsAndShields = 53023;
@@ -3204,11 +3204,11 @@
         public const long LethalCoalescence = 60545;
         public const long SignetOfVampirismHeal2 = 60618;
         public const long SignetOfVampirismSkill2 = 60625;
-        public const long Enraged4_200 = 60674;
+        public const long Enraged_200_strike_50_reduc = 60674;
         public const long Claw3 = 60842;
-        public const long Enraged_300 = 61006;
+        public const long Enraged_300_strike_75_reduc = 61006;
         public const long Stealth2Skill = 61081;
-        public const long Enraged2_100 = 61138;
+        public const long Enraged_100_strike_25_reduc = 61138;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt2 = 61177;
         public const long AchievementEligibilityDancingWithDemons = 61183;

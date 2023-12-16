@@ -256,7 +256,7 @@
                     case "Data":
                         var index = this.sortdata.index;
                         var modifier = this.modifiers[index];
-                        rows.sort((x,y) => order * this.getCellValue(x.data[index], modifier).localeCompare(this.getCellValue(y.data[index], modifier)));
+                        rows.sort((x,y) => order * (this.getNumericalCellValue(x.data[index], modifier) - this.getNumericalCellValue(y.data[index], modifier)));
                         break;
                     default:
                         return null;
@@ -290,6 +290,22 @@
                     gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
                 }
                 return res + "<br>" + gain;
+            },
+            getNumericalCellValue: function (item, mod) {
+                if (item[2] === 0) {
+                    if (item[0] > 0) {
+                        return Number.MAX_SAFE_INTEGER;
+                    }
+                    return 0;
+                }
+                if (mod.nonMultiplier) {
+                    return Number.MAX_SAFE_INTEGER;
+                }
+                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
+                if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease) || !isFinite(damageIncrease)) {
+                    return 0;
+                }
+                return damageIncrease;
             },
             getCellValue: function (item, mod) {
                 if (item[2] === 0) {
