@@ -28,6 +28,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(FixatedRigom, "Fixate: Rigom", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "R.Fix","Fixated by Rigom", "Fixate: Rigom",0),
             new PlayerDstBuffApplyMechanic(InevitableBetrayalBig, "Big Hug", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "B.Gr","Big Green (friends mechanic)", "Big Green",0),
             new PlayerDstBuffApplyMechanic(InevitableBetrayalSmall, "Small Hug", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "S.Gr","Small Green (friends mechanic)", "Small Green",0),
+            new EnemyDstBuffApplyMechanic(StrengthenedBondGuldhem, "Strengthened Bond: Guldhem", new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Orange), "G.Str","Strengthened Bond: Guldhem", "Strengthened: Guldhem",0),
+            new EnemyDstBuffApplyMechanic(StrengthenedBondRigom, "Strengthened Bond: Rigom", new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Red), "R.Str","Strengthened Bond: Rigom", "Strengthened: Rigom",0),
             new PlayerDstHitMechanic(SpearReturn, "Spear Return", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "S.Rt","Hit by Spear Return", "Spear Return",0),
             new PlayerDstHitMechanic(new long[] {InevitableBetrayalFailSmall, InevitableBetrayalFailBig}, "Inevitable Betrayal", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl","Inevitable Betrayal (failed Green)", "Failed Green",0),
             new PlayerDstHitMechanic(EffigyPulse, "Effigy Pulse", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),

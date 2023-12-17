@@ -2085,11 +2085,13 @@
         public const long Annihilate1 = 37929;
         public const long PunishementAura = 37952;
         public const long InevitableBetrayalBig = 37966;
+        public const long ClassicMisdirection = 37967;
         public const long DemonicShockWaveRight = 37980;
         public const long DemonicShockWaveCenter = 37982;
         public const long CosmicAura = 37989;
         public const long SamarogShockwave = 37996;
         public const long BrutalizeKill = 38013;
+        public const long StrengthenedBondRigom = 38018;
         public const long ProtectSAK = 38022;
         public const long DemonicShockWaveLeft = 38046;
         public const long SharedAgony = 38049;
@@ -2102,6 +2104,7 @@
         public const long BrutalizeCast = 38136;
         public const long UnseenBurden = 38153;
         public const long MursaatOverseersShield = 38155;
+        public const long StrengthenedBondGuldhem = 38161;
         public const long PrisonerSweep = 38168;
         public const long GreenTeleport = 38169;
         public const long SharedAgony25 = 38170;

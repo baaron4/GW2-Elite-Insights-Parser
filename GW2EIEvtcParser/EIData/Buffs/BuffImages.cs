@@ -334,7 +334,9 @@
         // Samarog
         internal const string SoulSwarm = "https://wiki.guildwars2.com/images/0/0e/Soul_Swarm_%28effect%29.png";
         internal const string FixateRigom = "https://wiki.guildwars2.com/images/f/f9/Fixate_%28Rigom%29.png";
+        internal const string StrengthenedBondRigom = "https://wiki.guildwars2.com/images/a/a2/Right-Side_Up.png";
         internal const string FixateGuldhem = "https://wiki.guildwars2.com/images/8/83/Fixate_%28Guldhem%29.png";
+        internal const string StrengthenedBondGuldhem = "https://wiki.guildwars2.com/images/3/33/Strengthened_Bond_%28Guldhem%29.png";
         internal const string Burrowed = "https://wiki.guildwars2.com/images/e/e3/Burrowed.png";
         // Deimos
         internal const string UnnaturalSignet = "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png";

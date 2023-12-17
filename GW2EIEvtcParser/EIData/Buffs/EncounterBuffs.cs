@@ -236,8 +236,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Claim", ClaimBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Claim),
             // Samarog
             new Buff("Fixated (Samarog)", FixatedSamarog, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Classic Misdirection", ClassicMisdirection, Source.FightSpecific, BuffClassification.Other, BuffImages.TearInstability),
             new Buff("Fixated (Guldhem)", FixatedGuldhem, Source.FightSpecific, BuffClassification.Other, BuffImages.FixateGuldhem),
+            new Buff("Strengthened Bond: Guldhem", StrengthenedBondGuldhem, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.StrengthenedBondGuldhem),
             new Buff("Fixated (Rigom)", FixatedRigom, Source.FightSpecific, BuffClassification.Other, BuffImages.FixateRigom),
+            new Buff("Strengthened Bond: Rigom", StrengthenedBondRigom, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.StrengthenedBondRigom),
             new Buff("Inevitable Betrayal (Big)", InevitableBetrayalBig, Source.FightSpecific, BuffClassification.Other, BuffImages.FeedingFrenzy),
             new Buff("Inevitable Betrayal (Small)", InevitableBetrayalSmall, Source.FightSpecific, BuffClassification.Other, BuffImages.FeedingFrenzy),
             new Buff("Soul Swarm", SoulSwarm, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulSwarm),

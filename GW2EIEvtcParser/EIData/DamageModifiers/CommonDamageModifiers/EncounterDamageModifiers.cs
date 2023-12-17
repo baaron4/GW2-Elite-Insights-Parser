@@ -148,6 +148,7 @@ namespace GW2EIEvtcParser.EIData
             //
             new BuffOnFoeDamageModifier(BloodFueledMatthias, "Blood Fueled Abo", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(EmpoweredMO, "Empowered (MO)", "25% per stack", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Empowered, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(StrengthenedBondGuldhem, "Strengthened_Bond:_Guldhem", "10% per stack", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.StrengthenedBondGuldhem, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(Devour, "Devour", "2% per stack", DamageSource.All, 2.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Devour, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(new long[] {AquaticAuraKenut, AquaticAuraNikare}, "Aquatic Aura", "2% per stack", DamageSource.All, 2.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ExposeWeakness, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(FracturedAllied, "Fractured (Ally)", "50% per stack", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Fractured, DamageModifierMode.PvE),
