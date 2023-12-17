@@ -384,7 +384,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     if (allIncDamageMods.Contains(dMod.Name))
                     {
-                        commonIncDamageModifiers.Add(dMod);
+                        itemIncDamageModifiers.Add(dMod);
                         DmgIncModifiersItem.Add(dMod.ID);
                         usedIncDamageMods.Add(dMod);
                     }
@@ -396,7 +396,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     if (allIncDamageMods.Contains(dMod.Name))
                     {
-                        commonIncDamageModifiers.Add(dMod);
+                        itemIncDamageModifiers.Add(dMod);
                         DmgIncModifiersItem.Add(dMod.ID);
                         usedIncDamageMods.Add(dMod);
                     }
