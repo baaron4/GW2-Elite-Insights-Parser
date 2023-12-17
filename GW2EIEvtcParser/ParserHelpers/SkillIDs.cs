@@ -112,7 +112,7 @@
         public const long WhirlingAssault = 1656;
         public const long Freeze1 = 1870;
         public const long LifeBlast = 2064;
-        public const long FlankingStringWvW = 2205;
+        public const long FlankingStrikeWvW = 2205;
         public const long HornetStingWvW = 2206;
         public const long BlindingPowderWvW = 2207;
         public const long CrashingWaves = 2654;
@@ -1763,7 +1763,7 @@
         public const long CripplingStrikeCentaurBannerSkill = 34037;
         public const long BowlOfPricklyPearTapiocaPudding = 34069;
         public const long WeakeningStrikes = 34081;
-        public const long SmokeAssault = 34090;
+        public const long SmokeAssaultSmokescale = 34090;
         public const long AlwaysAngry = 34099;
         public const long ShellShocked = 34108;
         public const long SpawnProtection = 34113;
@@ -2486,7 +2486,7 @@
         public const long MoaStanceSkill = 45970;
         public const long Claptosis = 45983;
         public const long RootSlap = 45990;
-        public const long NefariousFavor = 46040;
+        public const long NefariousFavorSomething = 46040;
         public const long PhotonWallDeployed = 46094;
         public const long MantraOfFlameCast = 46148;
         public const long BowlOfRedLentilSoup = 46214;
