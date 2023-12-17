@@ -286,8 +286,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             const int length = 2500;
             const int hitbox = 360;
+            const int offset = 60;
             var rotation = new AngleConnector(effect.Rotation.Z);
-            GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f), true);
+            GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f + offset), true);
             EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, position).UsingRotationConnector(rotation));
         }
 
