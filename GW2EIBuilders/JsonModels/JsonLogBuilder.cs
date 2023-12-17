@@ -121,6 +121,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
             jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
+            var personalDamageMods = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();
             var buffMap = new Dictionary<string, BuffDesc>();
             var damageModMap = new Dictionary<string, DamageModDesc>();
@@ -160,7 +161,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Targets = log.FightData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-            jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
+            jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods)).ToList();
             //
             if (log.LogData.LogErrors.Any())
             {
@@ -193,6 +194,7 @@ namespace GW2EIBuilders.JsonModels
             }
             //
             jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             jsonLog.SkillMap = skillMap;
             jsonLog.BuffMap = buffMap;
             jsonLog.DamageModMap = damageModMap;

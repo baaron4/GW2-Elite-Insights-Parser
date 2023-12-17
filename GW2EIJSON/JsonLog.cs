@@ -386,6 +386,12 @@ namespace GW2EIJSON
         public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; set; }
 
         /// <summary>
+        /// Dictionary of damage modifiers. The key is the profession, the value is a list of damage mod ids
+        /// </summary>
+        /// <seealso cref="DamageModMap"/>
+        public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalDamageMods { get; set; }
+
+        /// <summary>
         /// List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead
         /// </summary>
         /// <seealso cref="BuffMap"/>
