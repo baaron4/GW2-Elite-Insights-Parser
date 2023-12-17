@@ -292,20 +292,13 @@
                 return res + "<br>" + gain;
             },
             getNumericalCellValue: function (item, mod) {
-                if (item[2] === 0) {
-                    if (item[0] > 0) {
-                        return Number.MAX_SAFE_INTEGER;
-                    }
-                    return 0;
-                }
-                if (mod.nonMultiplier) {
+                var cellValue = this.getCellValue(item, mod);
+                if (cellValue === 'Tooltip') {
                     return Number.MAX_SAFE_INTEGER;
-                }
-                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
-                if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease) || !isFinite(damageIncrease)) {
+                } else if (cellValue === '-') {
                     return 0;
                 }
-                return damageIncrease;
+                return parseFloat(cellValue);
             },
             getCellValue: function (item, mod) {
                 if (item[2] === 0) {
