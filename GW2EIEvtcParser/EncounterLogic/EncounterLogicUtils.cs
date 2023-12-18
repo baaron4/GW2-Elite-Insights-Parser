@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
         {
             AbstractSingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
             if (target == null)
@@ -45,13 +45,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
             double damageThreshold = damagingPlayers.Count * 120000;
-            double threshold = (1.0 - damageThreshold / targetTotalHP) * 100;
+            double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
             return hpUpdate.HPPercent < threshold - 2;
         }
 
-        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
         {
-            return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets);
+            return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
         }
 
         internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
