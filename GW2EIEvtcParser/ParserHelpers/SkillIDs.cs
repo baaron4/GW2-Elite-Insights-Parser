@@ -1439,7 +1439,7 @@
         public const long SymbolOfEnergy = 29789;
         public const long LesserSignetOfVampirism = 29799;
         public const long ContinuumSplit = 29830;
-        public const long FlashFreezeDelayed = 29830;
+        public const long FlashFreezeDelayed = 29844;
         public const long WellOfRecall_Senility = 29856;
         public const long LiveVicariously = 29863;
         public const long LifeFromDeath = 29901;
@@ -1453,7 +1453,7 @@
         public const long ReapersFrostExecutionersScythe = 30070;
         public const long POV_SwapPets = 30084; // applied for 100ms, also used by eternal bond swap
         public const long BulwarkGyro = 30101;
-        public const long HuntersWard = 30117;
+        public const long HuntersWardImpacts = 30117;
         public const long InfusingTerrorBuff = 30129;
         public const long TimeAnchored = 30136;
         public const long ShredderGyroHit = 30176;
@@ -1495,6 +1495,7 @@
         public const long Thunderclap = 30713;
         public const long SignetOfHumility = 30739;
         public const long ContinuumShift = 30747;
+        public const long EchoOfMemory = 30769;
         public const long PulmonaryImpactSkill = 30770;
         public const long Rise = 30772;
         public const long HuntersMark = 30778;
@@ -1539,7 +1540,7 @@
         public const long ExitCelestialAvatar = 31411;
         public const long BluePylonPower = 31413;
         public const long MagicStorm = 31419;
-        public const long Takedown = 31430;
+        public const long TakedownSmokescale = 31430;
         public const long BlackHoleMinion = 31436;
         public const long Determined31450 = 31450;
         public const long MagicAuraRedGuardian = 31462;
@@ -1595,7 +1596,7 @@
         public const long PylonAttunementGreen = 31852;
         public const long GreenGuardianUnstableMagicSpike = 31860;
         public const long ClarionBond = 31865;
-        public const long EchoOfMemorySomething = 31864;
+        public const long EchoOfMemoryExtra = 31864;
         public const long EnterCelestialAvatar = 31869;
         public const long SpectralImpact = 31875;
         public const long ProtectiveShadow = 31877;
@@ -2298,7 +2299,7 @@
         public const long AirMajorAttunement = 41692;
         public const long MantraOfSolace = 41714;
         public const long Ferocious = 41720;
-        public const long Photosynthesize = 41710;
+        public const long PhotosynthesizeJacaranda = 41710;
         public const long TomeOfResolveSkill = 41780;
         public const long POV_StealWarmthBuff = 41788;
         public const long PlateOfSugarRibRoast = 41809;
@@ -2469,7 +2470,7 @@
         public const long Jaunt = 45449;
         public const long MantraOfLore = 45460;
         public const long SharpenSpinesBeastmode = 45479;
-        public const long SplitSurge = 45526;
+        public const long SplitSurgeSecondaryBeams = 45526;
         public const long LossAversion = 45534;
         public const long OrdersFromAbove = 45537;
         public const long TwiceAsVicious = 45600;
@@ -2596,7 +2597,7 @@
         public const long GreaterDeathMark = 48210;
         public const long BitingAura = 48218;
         public const long DeathlyAura = 48238;
-        public const long Bombshell = 48272;
+        public const long BombShellRiverOfSouls = 48272;
         public const long MortalCoilDhuum = 48281;
         public const long MistlockInstabilityFractalVindicators = 48296;
         public const long CorruptTheLiving = 48327;
@@ -3804,6 +3805,7 @@
         public const long Tranquil = 68065;
         public const long AchievementEligibilityVoidwalker = 68066;
         public const long VoidDischarge = 68071;
+        public const long RifleBurstGrenadeSkill = 68079;
         public const long VoidEmpowerment = 68083;
         public const long OverchargedCartridgesSkill = 68085;
         public const long Emboldened = 68087;
@@ -3811,7 +3813,7 @@
         public const long OverchargedCartridgesBuff = 68095;
         public const long ElementalRefreshmentBarrier = 68100;
         public const long POV_ShareTheVoidCounter = 68110;
-        public const long RifleBurstGrenadeSomething = 68121;
+        public const long RifleBurstGrenadeDamage = 68121;
         public const long AchievementEligibilityJumpingTheNopeRopes = 68123;
         public const long InfluenceOfTheVoid = 68124;
         public const long TacticalReload = 68126;
@@ -3903,7 +3905,7 @@
         public const long BleedingEdge = 69214;
         public const long AchievementEligibilityTheFearlessFew = 69222;
         public const long AspectedVolleyLethargy = 69224; // aspected volley is the basic attack
-        public const long FlyingCutterSomething = 69225;
+        public const long FlyingCutterExtra = 69225;
         public const long DeterminedKanaxai = 69236;
         public const long DualOrbitAirAndEarth = 69246;
         public const long DissectingDance = 69251;

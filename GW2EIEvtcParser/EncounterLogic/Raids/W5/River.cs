@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(Bombshell, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+                new PlayerDstHitMechanic(BombShellRiverOfSouls, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
                 new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
             }
             );
@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                     }
-                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == Bombshell).ToList();
+                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
