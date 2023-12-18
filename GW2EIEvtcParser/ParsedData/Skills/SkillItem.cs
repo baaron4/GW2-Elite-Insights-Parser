@@ -367,7 +367,6 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfKarakosaHealing, "https://wiki.guildwars2.com/images/6/6e/Relic_of_Karakosa.png" },
             { RelicOfNayosHealing, "https://wiki.guildwars2.com/images/e/e4/Relic_of_Nayos.png" },
             { RelicOfTheDefenderHealing, BuffImages.RelicOfTheDefender },
-            { RelicOfPeithaBlade, BuffImages.RelicOfPeitha },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Escort
