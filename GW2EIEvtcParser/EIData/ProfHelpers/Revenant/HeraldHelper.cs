@@ -44,9 +44,9 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffOnActorDamageModifier(FacetOfNatureDwarf, "Face of Nature - Dwarf", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
-            new BuffOnActorDamageModifier(HardeningPersistence, "Hardnening Persistence", "-1% per stack", DamageSource.NoPets, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
-            new BuffOnActorDamageModifier(HardeningPersistence, "Hardnening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
+            new BuffOnActorDamageModifier(HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.NoPets, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
