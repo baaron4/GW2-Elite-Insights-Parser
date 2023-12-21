@@ -102,6 +102,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return !(VulnerabilityAdditiveChecker(ahde, log, BloodShield, 90) || VulnerabilityAdditiveChecker(ahde, log, BloodShieldAbo, 90));
                 }),
+            new BuffOnActorDamageModifier(LethalInspiration, "Lethal Inspiration", "-90%, stacks additively with Vulnerability", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster),
             new BuffOnActorDamageModifier(BloodFueledPlayer, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(FractalSavant, "Fractal Savant", "1%", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Malign9Infusion, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(FractalProdigy, "Fractal Prodigy", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Mighty9Infusion, DamageModifierMode.PvE),
