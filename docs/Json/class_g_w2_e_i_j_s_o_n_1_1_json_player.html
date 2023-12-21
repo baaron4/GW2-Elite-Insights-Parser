@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.61.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.62.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -155,6 +155,13 @@ Array[i][0] will be the time, Array[i][1] will be the number of clones present f
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
 Only relevant for clone summoning capable specs. <br /></td></tr>
 <tr class="separator:a9925b6262d5390e63a8a6f697cb83abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bb01e9adf200a5ca45750b3d6a20df5" id="r_a2bb01e9adf200a5ca45750b3d6a20df5"><td class="memItemLeft" align="right" valign="top"><a id="a2bb01e9adf200a5ca45750b3d6a20df5" name="a2bb01e9adf200a5ca45750b3d6a20df5"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveRangerPets</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2bb01e9adf200a5ca45750b3d6a20df5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active ranger pets <br  />
+Array[i][0] will be the time, Array[i][1] will be the number of ranger pets present from Array[i][0] to Array[i+1][0] <br  />
+If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
+Only relevant for rangers. <br /></td></tr>
+<tr class="separator:a2bb01e9adf200a5ca45750b3d6a20df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1353f113c4abc3b85f8e99296ecd9ccd" id="r_a1353f113c4abc3b85f8e99296ecd9ccd"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a1353f113c4abc3b85f8e99296ecd9ccd">DpsTargets</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a1353f113c4abc3b85f8e99296ecd9ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br  />
 Length == # of targets and the length of each sub array is equal to # of phases.  <br /></td></tr>
@@ -194,6 +201,13 @@ Length == # of phases.  <br /></td></tr>
 <tr class="memdesc:a66dfa3821ed381c868664705249bd7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Damage modifiers against targets <br  />
 Length == # of targets.  <br /></td></tr>
 <tr class="separator:a66dfa3821ed381c868664705249bd7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab78a8c89a4ee36d82d88b9ba9591cfd0" id="r_ab78a8c89a4ee36d82d88b9ba9591cfd0"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ab78a8c89a4ee36d82d88b9ba9591cfd0">IncomingDamageModifiers</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ab78a8c89a4ee36d82d88b9ba9591cfd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming damage modifiers from all.  <br /></td></tr>
+<tr class="separator:ab78a8c89a4ee36d82d88b9ba9591cfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a568549d6ea41358edf87d71b9b3695a6" id="r_a568549d6ea41358edf87d71b9b3695a6"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a568549d6ea41358edf87d71b9b3695a6">IncomingDamageModifiersTarget</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a568549d6ea41358edf87d71b9b3695a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incoming damage modifiers from targets <br  />
+Length == # of targets.  <br /></td></tr>
+<tr class="separator:a568549d6ea41358edf87d71b9b3695a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5327a117260ac39307cbeb3ef49bec77" id="r_a5327a117260ac39307cbeb3ef49bec77"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a5327a117260ac39307cbeb3ef49bec77">BuffUptimes</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a5327a117260ac39307cbeb3ef49bec77"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status.  <br /></td></tr>
 <tr class="separator:a5327a117260ac39307cbeb3ef49bec77"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -577,6 +591,57 @@ Length == # of targets and the length of each sub array is equal to # of phases.
 
 <p>List of buff status on group generation. </p>
 <dl class="section see"><dt>See also</dt><dd>JsonPlayerBuffsGeneration</dd></dl>
+
+</div>
+</div>
+<a id="ab78a8c89a4ee36d82d88b9ba9591cfd0" name="ab78a8c89a4ee36d82d88b9ba9591cfd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab78a8c89a4ee36d82d88b9ba9591cfd0">&#9670;&#160;</a></span>IncomingDamageModifiers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; GW2EIJSON.JsonPlayer.IncomingDamageModifiers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Incoming damage modifiers from all. </p>
+<dl class="section see"><dt>See also</dt><dd>JsonDamageModifierData</dd></dl>
+
+</div>
+</div>
+<a id="a568549d6ea41358edf87d71b9b3695a6" name="a568549d6ea41358edf87d71b9b3695a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a568549d6ea41358edf87d71b9b3695a6">&#9670;&#160;</a></span>IncomingDamageModifiersTarget</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;<a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data.html">JsonDamageModifierData</a>&gt; &gt; GW2EIJSON.JsonPlayer.IncomingDamageModifiersTarget</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Incoming damage modifiers from targets <br  />
+Length == # of targets. </p>
+<dl class="section see"><dt>See also</dt><dd>JsonDamageModifierData</dd></dl>
 
 </div>
 </div>

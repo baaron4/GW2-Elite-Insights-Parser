@@ -27,6 +27,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "Mechanics", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aaf633aff95f5bd31cf06b229aa106d83", null ],
     [ "MissingPreEvent", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab8dbdb5f96fda513ad748bcb2df3d74c", null ],
     [ "PersonalBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#adeec27e4b0c355b6b6e70ed79fd58ade", null ],
+    [ "PersonalDamageMods", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a859e07554a06af4ea93cfa8284e85667", null ],
     [ "Phases", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6b302677ee39dc337c3fe30c033c5682", null ],
     [ "Players", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab76a91b6f150411570b96443a7711aa2", null ],
     [ "PresentFractalInstabilities", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae7632823761a550472d11de93ef38368", null ],
