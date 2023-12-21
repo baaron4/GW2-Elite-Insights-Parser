@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
                 }),
             new BuffOnActorDamageModifier(EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
-            new BuffOnActorDamageModifier(new long[] {BloodShield, BloodShieldAbo}, "Blood Shield", "-90% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodShield, DamageModifierMode.PvE)
+            new BuffOnFoeDamageModifier(new long[] {BloodShield, BloodShieldAbo}, "Blood Shield", "-90% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodShield, DamageModifierMode.PvE)
                 .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
                 {
@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return !(VulnerabilityAdditiveChecker(ahde, log, BloodShield, 90) || VulnerabilityAdditiveChecker(ahde, log, BloodShieldAbo, 90));
                 }),
-            new BuffOnActorDamageModifier(LethalInspiration, "Lethal Inspiration", "-90%, stacks additively with Vulnerability", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE)
+            new BuffOnFoeDamageModifier(LethalInspiration, "Lethal Inspiration", "-90%, stacks additively with Vulnerability", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE)
                 .UsingGainAdjuster(VulnerabilityAdjuster),
             new BuffOnActorDamageModifier(BloodFueledPlayer, "Blood Fueled", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnActorDamageModifier(FractalSavant, "Fractal Savant", "1%", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Malign9Infusion, DamageModifierMode.PvE),
