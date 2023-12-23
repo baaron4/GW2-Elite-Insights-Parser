@@ -28,20 +28,20 @@ namespace GW2EIEvtcParser.EIData
         /// <exception cref="InvalidOperationException"></exception>
         public AngleInterpolationConnector(IReadOnlyList<ParametricPoint3D> originPoints, IReadOnlyList<ParametricPoint3D> destinationPoints, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
         {
-            if (!originPoints.Any())
+            if (!originPoints.Any() || !destinationPoints.Any())
             {
                 throw new InvalidOperationException("Must at least have one point");
             }
-            if (originPoints.Count != destinationPoints.Count)
-            {
-                throw new InvalidOperationException("Origin and Destination must be of the same count");
-            }
             var angles = new List<ParametricPoint1D>();
-            for (int i = 0; i < originPoints.Count; i++)
+            for (int i = 0; i < Math.Min(originPoints.Count, destinationPoints.Count); i++)
             {
                 Point3D vector = destinationPoints[i] - originPoints[i];
                 float angle = Point3D.GetZRotationFromFacing(vector);
                 long time = originPoints[i].Time;
+                if (time != destinationPoints[i].Time)
+                {
+                    throw new InvalidOperationException("Origin and Destination points must have the same timestamp");
+                }
                 angles.Add(new ParametricPoint1D(angle, time));
             }
             Angles = angles;
