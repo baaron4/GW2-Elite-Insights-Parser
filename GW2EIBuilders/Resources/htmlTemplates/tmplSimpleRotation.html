@@ -104,27 +104,33 @@
         template: `${template}`,
         data: function () {
             var selectedSkills = {};
-            var skillList = [];
-            var rotation = this.target ? logData.targets[this.actorindex].details.rotation[this.phaseindex] : logData.players[this.actorindex].details.rotation[this.phaseindex];
-            for (var i = 0; i < rotation.length; i++) {
-                var rota = rotation[i];
-                var skillID = rota[1];
-                var skill = this.getSkill(skillID);
-                if (skill.isSwap || selectedSkills['s' + skillID]) {
-                    continue;
+            var skillListList = [];
+            for (var phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
+                var skillList = [];
+                var encounteredSkills = {};
+                var rotation = this.target ? logData.targets[this.actorindex].details.rotation[phaseIndex] : logData.players[this.actorindex].details.rotation[phaseIndex];
+                for (var i = 0; i < rotation.length; i++) {
+                    var rota = rotation[i];
+                    var skillID = rota[1];
+                    var skill = this.getSkill(skillID);
+                    if (skill.isSwap || encounteredSkills['s' + skillID]) {
+                        continue;
+                    }
+                    skillList.push({name: skill.name, id: skillID});
+                    encounteredSkills['s'+skillID] = true;
+                    selectedSkills['s'+skillID] = true;
                 }
-                skillList.push({name: skill.name, id: skillID});
-                selectedSkills['s'+skillID] = true;
+                skillList.sort((x,y) => {
+                    if (x.name < y.name) {
+                        return -1;
+                    }
+                    if (x.name > y.name) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                skillListList.push(skillList);
             }
-            skillList.sort((x,y) => {
-                if (x.name < y.name) {
-                    return -1;
-                }
-                if (x.name > y.name) {
-                    return 1;
-                }
-                return 0;
-            });
             return {
                 autoattack: true,
                 small: false,
@@ -136,7 +142,7 @@
                 hideGearProc: false,
                 hideSmallTime: true,
                 selectedSkills: selectedSkills,
-                skillList: skillList,
+                skillListList: skillListList,
             };
         },
         computed: {
@@ -151,6 +157,9 @@
             },
             RotationStatus: function() {
                 return RotationStatus;
+            },
+            skillList: function() {
+                return this.skillListList[this.phaseindex];
             }
         },
         methods: {
