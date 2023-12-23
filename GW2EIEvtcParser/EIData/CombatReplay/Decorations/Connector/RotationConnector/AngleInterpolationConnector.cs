@@ -35,13 +35,13 @@ namespace GW2EIEvtcParser.EIData
             var angles = new List<ParametricPoint1D>();
             for (int i = 0; i < Math.Min(originPoints.Count, destinationPoints.Count); i++)
             {
-                Point3D vector = destinationPoints[i] - originPoints[i];
-                float angle = Point3D.GetZRotationFromFacing(vector);
                 long time = originPoints[i].Time;
                 if (time != destinationPoints[i].Time)
                 {
                     throw new InvalidOperationException("Origin and Destination points must have the same timestamp");
                 }
+                Point3D vector = destinationPoints[i] - originPoints[i];
+                float angle = Point3D.GetZRotationFromFacing(vector);
                 angles.Add(new ParametricPoint1D(angle, time));
             }
             Angles = angles;
