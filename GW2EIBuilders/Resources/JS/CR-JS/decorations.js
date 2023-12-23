@@ -79,6 +79,37 @@ function noAngleFetcher(connection, master, start, end) {
     return 0;
 }
 
+function interpolatedAngleFetcher(connection, master, start, end) {
+    var index = -1;
+    var totalPoints = connection.angles.length / 2;
+    var time = animator.reactiveDataStatus.time;
+    for (var i = 0; i < totalPoints; i++) {
+        var posTime = connection.angles[2 * i + 1];
+        if (time < posTime) {
+            break;
+        }
+        index = i;
+    }
+    if (index === -1) {
+        return connection.angles[0];
+    } else if (index === totalPoints - 1) {
+        return connection.angles[2 * index];
+    } else {
+        var cur = connection.angles[2 * index];
+        var curTime = connection.angles[2 * index + 1];
+        var next = connection.angles[2 * (index + 1)];
+        var nextTime = connection.angles[2 * (index + 1) + 1];
+        // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
+        if (next - cur < -180) {
+            next += 360.0;
+        } else if (next - cur > 180) {
+            next -= 360.0;
+        }
+        var interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
+        return interpolatedAngle;
+    }
+}
+
 function staticAngleFetcher(connection, master, start, end) {
     var time = animator.reactiveDataStatus.time;
     var velocity = Math.min((time - start) / (end - start), 1.0);
@@ -120,7 +151,9 @@ class MechanicDrawable {
         this.rotationOffset = 0;
         this.rotationOffsetMode = RotationOffsetMode.addToMaster;
         if (rotationConnectedTo) {
-            if (rotationConnectedTo.angles) {
+            if (rotationConnectedTo.interpolationMethod >= 0) {
+                this.rotationConnectedTo = interpolatedAngleFetcher;
+            } else if (rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
             } else if (rotationConnectedTo.masterId) {
                 this.rotationFetcher = masterRotationFetcher;
