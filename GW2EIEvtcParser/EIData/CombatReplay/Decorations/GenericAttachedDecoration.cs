@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
 
-        public Connector ConnectedTo { get; }
+        public GeographicalConnector ConnectedTo { get; }
         public RotationConnector RotationConnectedTo { get; protected set; }
         public SkillModeDescriptor SkillMode;
 
-        protected GenericAttachedDecoration((long , long ) lifespan, Connector connector) : base(lifespan)
+        protected GenericAttachedDecoration((long , long ) lifespan, GeographicalConnector connector) : base(lifespan)
         {
             ConnectedTo = connector;
         }

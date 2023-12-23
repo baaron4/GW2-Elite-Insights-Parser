@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleDecoration(int width, int height, (long start, long end) lifespan, string color, Connector connector) : base( lifespan, color, connector)
+        public RectangleDecoration(int width, int height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base( lifespan, color, connector)
         {
             Height = height;
             Width = width;

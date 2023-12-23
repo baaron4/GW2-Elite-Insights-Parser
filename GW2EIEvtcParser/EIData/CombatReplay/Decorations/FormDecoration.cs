@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         public int GrowingEnd { get; private set; }
         public bool GrowingReverse { get; private set; }
 
-        protected FormDecoration((long , long) lifespan, string color, Connector connector) : base(lifespan, connector)
+        protected FormDecoration((long , long) lifespan, string color, GeographicalConnector connector) : base(lifespan, connector)
         {
             Color = color;
         }

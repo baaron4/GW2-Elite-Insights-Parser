@@ -7,22 +7,22 @@ namespace GW2EIEvtcParser.EIData
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleDecoration(int radius, (long start, long end) lifespan, string color, Connector connector) : base(lifespan, color, connector)
+        public CircleDecoration(int radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
         {
             Radius = radius;
         }
 
-        public CircleDecoration(int radius, int minRadius, (long start, long end) lifespan, string color, Connector connector) : base(lifespan, color, connector)
+        public CircleDecoration(int radius, int minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
         {
             Radius = radius;
             MinRadius = minRadius;
         }
 
-        public CircleDecoration(int radius, Segment lifespan, string color, Connector connector) : this(radius, (lifespan.Start, lifespan.End), color, connector)
+        public CircleDecoration(int radius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, (lifespan.Start, lifespan.End), color, connector)
         {
         }
 
-        public CircleDecoration(int radius, int minRadius, Segment lifespan, string color, Connector connector) : this(radius, minRadius, (lifespan.Start, lifespan.End), color, connector)
+        public CircleDecoration(int radius, int minRadius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, minRadius, (lifespan.Start, lifespan.End), color, connector)
         {
         }
 

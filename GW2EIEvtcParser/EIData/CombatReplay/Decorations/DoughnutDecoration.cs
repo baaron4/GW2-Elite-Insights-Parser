@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutDecoration(int innerRadius, int outerRadius, (long start, long end) lifespan, string color, Connector connector) : base(lifespan, color, connector)
+        public DoughnutDecoration(int innerRadius, int outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
