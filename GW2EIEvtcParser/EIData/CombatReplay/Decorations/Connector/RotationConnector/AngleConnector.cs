@@ -5,8 +5,14 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class AngleConnector : RotationConnector
     {
+        /// <summary>
+        /// Angle around Z axis in degrees
+        /// </summary>
         protected float StartAngle { get; set; }
 
+        /// <summary>
+        /// Angle speed around Z axis in degrees
+        /// </summary>
         protected float SpinAngle { get; set; }
 
         public AngleConnector(float startAngle)

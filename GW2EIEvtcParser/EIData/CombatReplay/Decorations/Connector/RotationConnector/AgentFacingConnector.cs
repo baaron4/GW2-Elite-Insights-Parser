@@ -6,6 +6,9 @@ namespace GW2EIEvtcParser.EIData
     {
         public AgentItem Agent { get; }
 
+        /// <summary>
+        /// Offset angle around Z axis, in degrees
+        /// </summary>
         public float RotationOffset { get; } = 0;
 
         public enum RotationOffsetMode
