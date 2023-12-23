@@ -14,7 +14,7 @@
                     <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
                 </div>
                 <div class="ml-3 d-flex flex-column justify-content-center">
-                    <div class="mb-2" v-for="target in encounter.targets">
+                    <div v-if="!wvw" class="mb-2" v-for="target in encounter.targets">
                         <div class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
@@ -27,7 +27,7 @@
                             {{ target.hpLeft ? target.hpLeft : 0 }}% remaining
                         </div>
                     </div>
-                    <div class="mb-2 text" :class="resultStatus.class">
+                    <div v-if="!wvw" class="mb-2 text" :class="resultStatus.class">
                         Result: {{resultStatus.text}}
                     </div>
                     <div class="mb-2">Duration: {{ encounter.duration }}</div>
@@ -42,6 +42,11 @@
     Vue.component("encounter-component", {
         props: [],
         template: `${template}`,
+        data: function () {
+            return {
+                wvw: logData.wvw
+            };
+        },
         methods: {
             getGradient: function (percent) {
                 var template = 'linear-gradient(to right, $left$, $middle$, $right$)';
