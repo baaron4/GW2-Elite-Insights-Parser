@@ -168,7 +168,7 @@ class MechanicDrawable {
         this.rotationOffsetMode = RotationOffsetMode.addToMaster;
         if (rotationConnectedTo) {
             if (rotationConnectedTo.interpolationMethod >= 0) {
-                this.rotationConnectedTo = interpolatedAngleFetcher;
+                this.rotationFetcher = interpolatedAngleFetcher;
             } else if (rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
             } else if (rotationConnectedTo.dstMasterId) {
