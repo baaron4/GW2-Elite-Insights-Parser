@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.ParsedData
         // Constructors
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
             Agent = agent;
             Name = name;
             Spec = spec;
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AgentItem(AgentItem other)
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
             Agent = other.Agent;
             Name = other.Name;
             Spec = other.Spec;
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AgentItem()
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
         }
 
         internal void OverrideIsNotInSquadFriendlyPlayer(bool status)
