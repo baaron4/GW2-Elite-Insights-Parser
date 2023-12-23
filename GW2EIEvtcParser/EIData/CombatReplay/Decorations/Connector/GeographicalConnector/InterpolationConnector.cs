@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -6,15 +8,14 @@ namespace GW2EIEvtcParser.EIData
     {
         protected IReadOnlyList<ParametricPoint3D> Positions { get; set; }
 
-        internal enum InterpolationMethod
-        {
-            Linear = 0
-        }
-
         private readonly InterpolationMethod _method;
 
         public InterpolationConnector(IReadOnlyList<ParametricPoint3D> positions, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
         {
+            if (!positions.Any())
+            {
+                throw new InvalidOperationException("Must at least have one point");
+            }
             Positions = positions;
             _method = interpolationMethod;
         }
