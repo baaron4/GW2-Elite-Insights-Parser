@@ -79,7 +79,7 @@ function noAngleFetcher(connection, master, start, end) {
     return 0;
 }
 
-function interpolatedAngleFetcher(connection, master, start, end) {
+function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
     var index = -1;
     var totalPoints = connection.angles.length / 2;
     var time = animator.reactiveDataStatus.time;
@@ -110,17 +110,33 @@ function interpolatedAngleFetcher(connection, master, start, end) {
     }
 }
 
-function staticAngleFetcher(connection, master, start, end) {
+function staticAngleFetcher(connection, master, dstMaster, start, end) {
     var time = animator.reactiveDataStatus.time;
     var velocity = Math.min((time - start) / (end - start), 1.0);
     return connection.angles[0] + velocity * connection.angles[1];
 }
 
-function masterRotationFetcher(connection, master, start, end) {
+function masterRotationFetcher(connection, master, dstMaster, start, end) {
     if (!master) {
         return null;
     }
     return master.getRotation();
+}
+
+function masterToMasterRotationFetcher(connection, master, dstMaster, start, end) {
+    if (!master || !dstMaster) {
+        return null;
+    }
+    var origin = master.getPosition();
+    var dst = dstMaster.getPosition();
+    if (!origin || !dst) {
+        return null;
+    }
+    var vector = {
+        x: dst.x - origin.x,
+        y: dst.y - origin.y,
+    }
+    return -ToDegrees(Math.atan2(vector.y, vector.x));
 }
 
 const RotationOffsetMode = {
@@ -155,6 +171,8 @@ class MechanicDrawable {
                 this.rotationConnectedTo = interpolatedAngleFetcher;
             } else if (rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
+            } else if (rotationConnectedTo.dstMasterId) {
+                this.rotationFetcher = masterToMasterRotationFetcher;
             } else if (rotationConnectedTo.masterId) {
                 this.rotationFetcher = masterRotationFetcher;
                 this.rotationOffset = rotationConnectedTo.rotationOffset;
@@ -163,6 +181,7 @@ class MechanicDrawable {
         }
         this.master = null;
         this.rotationMaster = null;
+        this.dstRotationMaster = null;
         // Skill mode
         this.ownerID = null;
         this.owner = null;
@@ -193,7 +212,7 @@ class MechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster, this.start, this.end);
+        return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster, this.dstRotationMaster, this.start, this.end);
     }
 
     getPosition() {
@@ -242,13 +261,22 @@ class MechanicDrawable {
                 return false;
             }
         }
-        if (this.rotationFetcher === masterRotationFetcher) {
+        if (this.rotationFetcher === masterRotationFetcher || this.rotationFetcher === masterToMasterRotationFetcher) {
             if (this.rotationMaster === null) {
                 let masterId = this.rotationConnectedTo.masterId;
                 this.rotationMaster = animator.getActorData(masterId);
             }
             if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
                 return false;
+            }
+            if (this.rotationFetcher === masterToMasterRotationFetcher) {
+                if (this.dstRotationMaster === null) {
+                    let dstMasterId = this.rotationConnectedTo.dstMasterId;
+                    this.dstRotationMaster = animator.getActorData(dstMasterId);
+                }
+                if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.ownerID)) {
+                    return false;
+                }
             }
         }
         if (this.ownerID !== null) {

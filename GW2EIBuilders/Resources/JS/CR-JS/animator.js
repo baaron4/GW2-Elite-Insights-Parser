@@ -31,6 +31,9 @@ facingIcon.onload = function () {
 function ToRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
+function ToDegrees(radians) {
+    return radians / (Math.PI / 180);
+}
 
 const resolutionMultiplier = 2.0;
 
