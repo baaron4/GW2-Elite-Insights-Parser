@@ -207,11 +207,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop).ToList();
-                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
-                    var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
-                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
-                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
-                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int magmaRadius = 850;
@@ -221,6 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
                         replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
+                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     foreach (AbstractCastEvent c in forceOfHavoc)
                     {
                         int roadLength = 2400;
@@ -243,6 +239,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                    var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
                     foreach (AbstractCastEvent c in forceOfRetal)
                     {
                         int radius = 650;
@@ -262,6 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
                     foreach (AbstractCastEvent c in etherStrikes)
                     {
                         int coneRadius = 2600;
@@ -276,6 +274,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
                         }
                     }
+                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
                     foreach (AbstractCastEvent c in causticChaos)
                     {
                         double acceleration = c.Acceleration;
@@ -304,6 +303,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
                     foreach (AbstractCastEvent c in expoReperc)
                     {
                         int radius = 650;
