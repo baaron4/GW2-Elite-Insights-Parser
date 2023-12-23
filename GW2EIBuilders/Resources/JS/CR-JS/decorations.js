@@ -136,7 +136,7 @@ function masterToMasterRotationFetcher(connection, master, dstMaster, start, end
         x: dst.x - origin.x,
         y: dst.y - origin.y,
     }
-    return -ToDegrees(Math.atan2(vector.y, vector.x));
+    return ToDegrees(Math.atan2(vector.y, vector.x));
 }
 
 const RotationOffsetMode = {
