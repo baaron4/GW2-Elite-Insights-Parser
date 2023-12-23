@@ -40,11 +40,11 @@ namespace GW2EIEvtcParser.EIData
             OffsetMode = rotationOffsetMode;
         }
 
-        public AgentFacingConnector(AbstractSingleActor agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetRotationFromFacing(rotationOffset), rotationOffsetMode)
+        public AgentFacingConnector(AbstractSingleActor agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
         {
         }
 
-        public AgentFacingConnector(AgentItem agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetRotationFromFacing(rotationOffset), rotationOffsetMode)
+        public AgentFacingConnector(AgentItem agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
         {
         }
         public class AgentFacingConnectorDescriptor : RotationConnectorDescriptor

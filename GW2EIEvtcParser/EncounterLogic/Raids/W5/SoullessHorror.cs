@@ -243,7 +243,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
                         var connector = new AgentConnector(target);
                         for (int i = 0; i < 8; i++)
                         {
@@ -263,7 +263,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
                         var connector = new AgentConnector(target);
                         for (int i = 0; i < 4; i++)
                         {
@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
                         var connector = new AgentConnector(target);
                         for (int i = 0; i < 4; i++)
                         {

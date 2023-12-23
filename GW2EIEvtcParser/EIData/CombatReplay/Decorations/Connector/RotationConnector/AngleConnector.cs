@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public AngleConnector(Point3D rotationVector)
         {
-            StartAngle = Point3D.GetRotationFromFacing(rotationVector);
+            StartAngle = Point3D.GetZRotationFromFacing(rotationVector);
             SpinAngle = 0;
         }
 

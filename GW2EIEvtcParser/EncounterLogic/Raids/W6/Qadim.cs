@@ -484,7 +484,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {
@@ -536,7 +536,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {
@@ -596,7 +596,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
                             for (int i = 0; i < coneAmount; i++)
                             {

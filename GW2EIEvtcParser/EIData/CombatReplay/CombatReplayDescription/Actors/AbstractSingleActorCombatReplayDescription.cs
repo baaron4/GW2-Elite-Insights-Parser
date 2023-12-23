@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (Point3D facing in replay.PolledRotations)
             {
-                angles.Add(-Point3D.GetRotationFromFacing(facing));
+                angles.Add(-Point3D.GetZRotationFromFacing(facing));
             }
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)

@@ -557,7 +557,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
                         var connector = new AgentConnector(target);
                         for (int i = 0; i < 6; i++)
                         {

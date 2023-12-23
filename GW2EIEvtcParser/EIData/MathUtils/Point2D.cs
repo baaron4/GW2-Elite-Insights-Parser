@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EIData
             Y = Mix(a.Y, b.Y, ratio);
         }
 
-        public static float GetRotationFromFacing(Point2D facing)
+        public static float GetZRotationFromFacing(Point2D facing)
         {
             return (float)Math.Round(ParserHelper.RadianToDegree(Math.Atan2(facing.Y, facing.X)), ParserHelper.CombatReplayDataDigit);
         }

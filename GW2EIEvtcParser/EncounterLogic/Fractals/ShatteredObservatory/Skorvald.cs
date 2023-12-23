@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = Point3D.GetRotationFromFacing(facingDirection);
+                        float degree = Point3D.GetZRotationFromFacing(facingDirection);
 
                         // Horizon Strike starting at Skorvald's facing point
                         if (c.SkillId == HorizonStrikeSkorvald4)
@@ -351,7 +351,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float degree = Point3D.GetRotationFromFacing(facingDirection);
+                        float degree = Point3D.GetZRotationFromFacing(facingDirection);
 
                         if (c.SkillId == CrimsonDawnSkorvaldCM2)
                         {
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
@@ -463,7 +463,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
@@ -508,7 +508,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
@@ -530,7 +530,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
                         // Left
                         AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation - angle, translation, cascadeCount);
@@ -568,7 +568,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
                         float startingDegree = rotation - angle * 2;
                         for (int i = 0; i < 5; i++)
