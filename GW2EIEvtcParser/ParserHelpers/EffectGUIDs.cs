@@ -470,6 +470,18 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleTailSlamIndicator = "49BD7FF8309E4047B4D17C83E660A461";
         // Old Lion's Court
         // Cosmic Observatory
+        public const string CosmicObservatoryDemonicBlastSliceIndicator = "A21A92783688A847963B86E96B8CC9BE";
+        public const string CosmicObservatoryDemonicBlastDagdaEffect1 = "D03CDF37E0AC8246ABD4E741ADD61427"; // 0 duration no effect end
+        public const string CosmicObservatoryDemonicBlastDagdaEffect2 = "3A19BC0143715C419504C25EA0B7ADFE"; // 0 duration no effect end
+        public const string CosmicObservatoryDemonicFever = "BDF708225224C64183BA3CE2A609D37F";
+        public const string CosmicObservatorySharedDestructionCosmicMeteorGreen = "3EEDE16455C8C8449237BCC77F107548";
+        public const string CosmicObservatorySharedDestructionCosmicMeteorGreenEnd = "FED0256743CC534695F30EB3655933AD";
+        public const string CosmicObservatorySpinningNebula = "8196855C5F76874CAF1DB683BD163811";
+        public const string CosmicObservatoryShootingStarsGreenArrow = "046AFA0B20E07447BDBB94A03FCA2662"; // 9000 duration
+        public const string CosmicObservatoryDemonicPoolsIndicator = "52C0855CB838424D91343DD5C176EC2E"; // 3000 duration
+        public const string CosmicObservatoryDemonicPoolsDamage = "F9020791BEE9BC41B6A17955120EDD32"; // 20000 duration - can end early
+        public const string CosmicObservatoryRainOfComets = "43A9C4FBF0628A4C9D38084854653547";
+        public const string CosmicObservatoryPlanetCrash = "B4529A29DF12BA4D913973FFAAE22926";
         // Temple of Febe
         public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
         public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player

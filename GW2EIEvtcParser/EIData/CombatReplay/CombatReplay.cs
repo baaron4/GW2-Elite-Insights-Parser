@@ -397,6 +397,39 @@ namespace GW2EIEvtcParser.EIData
                 Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
         }
+
+        /// <summary>
+        /// Add tether decoration connecting a player to an agent.<br></br>
+        /// The <paramref name="buffId"/> is sourced by an agent that isn't the one to tether to.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="player">The player to tether to <paramref name="toTetherAgentId"/>.</param>
+        /// <param name="buffId">ID of the buff sourced by <paramref name="buffSrcAgentId"/>.</param>
+        /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="color">Color of the tether.</param>
+        /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
+        internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
+        {
+            var buffEvents = log.CombatData.GetBuffData(buffId).Where(x => x.To == player.AgentItem && x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
+            var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
+            var buffRemoves = new HashSet<BuffRemoveManualEvent>(buffEvents.OfType<BuffRemoveManualEvent>());
+            var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId).ToList();
+
+            foreach (BuffApplyEvent buffApply in buffApplies)
+            {
+                long removalTime = buffRemoves.Where(x => x.Time > buffApply.Time) != null ? buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time).Time : log.FightData.LogEnd;
+                (long, long) lifespan = (buffApply.Time, removalTime);
+
+                foreach (AgentItem agent in agentsToTether)
+                {
+                    if ((Math.Abs(agent.FirstAware - buffApply.Time) < firstAwareThreshold || agent.FirstAware >= buffApply.Time) && agent.FirstAware < removalTime)
+                    {
+                        Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(agent), new AgentConnector(player)));
+                    }
+                }
+            }
+        }
     }
 }
 
