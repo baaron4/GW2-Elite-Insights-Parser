@@ -296,10 +296,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);
-                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(rotationConnector));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(new AgentFacingConnector(target)));
+                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }

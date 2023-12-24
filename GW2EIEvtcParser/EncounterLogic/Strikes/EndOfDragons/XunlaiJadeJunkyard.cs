@@ -432,9 +432,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Tethering Players to Lich
             List<AbstractBuffEvent> lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
             replay.AddTether(lichTethers, "rgba(0, 255, 255, 0.5)");
+
             // Reanimated Hatred Fixation
             IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
+            // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
+            replay.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)ArcDPSEnums.TargetID.Ankka, (int)ArcDPSEnums.TrashID.ReanimatedHatred, "rgba(255, 0, 255, 0.5)");
         }
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)
