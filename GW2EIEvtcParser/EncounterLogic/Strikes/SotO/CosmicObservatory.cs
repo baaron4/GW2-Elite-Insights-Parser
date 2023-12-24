@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TrashID.SoulFeast)),
                 new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda)).UsingEnable(x => x.FightData.IsCM),
                 new PlayerDstEffectMechanic(EffectGUIDs.CosmicObservatoryDemonicFever, "Demonic Fever", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "DemFev.T", "Targetted by Demonic Fever (Orange Spread AoEs)", "Demonic Fever Target", 0),
-                new EnemyDstBuffRemoveSingleMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Demonic Aura (Lost)", "Lost stacks of Demonic Aura", "Demonic Aura Stacks Lost").UsingChecker((abre, log) => abre.CreditedBy.IsPlayer),
+                new EnemyDstBuffRemoveSingleMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "DemAur.L", "Lost stacks of Demonic Aura", "Demonic Aura Stacks Lost").UsingChecker((abre, log) => abre.CreditedBy.IsPlayer),
                 new EnemyCastStartMechanic(ShootingStars, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
                 new EnemyCastStartMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
                 new EnemyCastStartMechanic(new long [] { SpinningNebulaCentral, SpinningNebulaWithTeleport }, "Spinning Nebula", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
@@ -67,18 +67,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)TargetID.Dagda:
-                    var phaseBuff = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     
                     // Red AoE during 75-50-25 % phases
                     var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast).ToList();
                     foreach (AbstractCastEvent cast in demonicBlasts)
                     {
-                        Segment phase = phaseBuff.Where(x => x.Start >= cast.Time).FirstOrDefault();
-                        if (phase is null || Math.Abs(cast.Time - phase.Start) > 4000)
+                        // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
+                        // We check if she has gained the buff to be sure that the phase has started.
+                        Segment phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrDefault();
+                        if (phaseBuff is null || Math.Abs(cast.Time - phaseBuff.Start) > 4000)
                         {
                             continue;
                         }
-                        (long, long) lifespan = (cast.Time, phase.End);
+                        (long, long) lifespan = (cast.Time, phaseBuff.End);
                         // Hardcoded positional value, Dagda isn't in the center but the AoE is
                         var connector = new PositionConnector(new Point3D(305.26892f, 920.6105f, -5961.992f));
                         var circle = new CircleDecoration(800, lifespan, "rgba(250, 50, 0, 0.4)", connector);
@@ -92,8 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
                         var connector = new AgentConnector(target);
                         var circle = new CircleDecoration(300, lifespan, "rgba(0, 191, 255, 0.2)", connector);
-                        replay.Decorations.Add(circle);
-                        replay.Decorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                        replay.AddDecorationWithGrowing(circle, lifespan.Item2);
                     }
 
                     // Shooting Stars - Green Arrow
@@ -102,8 +103,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int length = 1500;
                         int width = 100;
-                        int castTime = 6700;
-                        (long, long) lifespan = (cast.Time, cast.Time + castTime);
+                        int castDuration = 6700;
+                        (long, long) lifespan = (cast.Time, cast.Time + castDuration);
 
                         // The mechanic gets cancelled during the intermission phases since the CM release.
                         // Before then, the mechanic would continue during the phase and shoot.
@@ -114,22 +115,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (lifespan.Item1 < demonicBlastCast.Time && lifespan.Item2 > demonicBlastCast.Time)
                                 {
                                     lifespan.Item2 = demonicBlastCast.Time;
+                                    break;
                                 }
                             }
                         }
 
-                        // Find players targetted
-                        var players = log.PlayerList.Where(x => x.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd) != null).ToList();
-                        foreach (Player player in players)
+                        // Find the targetted player
+                        Player player = log.PlayerList.FirstOrDefault(x => x.HasBuff(log, ShootingStarsTargetBuff, cast.Time, ServerDelayConstant));
+                        if (player != null)
                         {
-                            // Find which player has the buff at the time of the cast
-                            Segment segment = player.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1 && Math.Abs(x.Start - cast.Time) < ServerDelayConstant).FirstOrDefault();
-                            if (segment != null)
-                            {
-                                var rotation = new AgentFacingAgentConnector(target, player);
-                                var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(length / 2, 0), true);
-                                replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, "rgba(0, 120, 0, 0.4)", connector).UsingRotationConnector(rotation));
-                            }
+                            var rotation = new AgentFacingAgentConnector(target, player);
+                            var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(length / 2, 0), true);
+                            replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, "rgba(0, 120, 0, 0.4)", connector).UsingRotationConnector(rotation));
                         }
                     }
                     break;
@@ -157,8 +154,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
             replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
 
-            // Soul Feast Tether to Player - The buff is applied by Dagda to the player - The Soul Feast spawns after the buff application
-            replay.AddTetherByThirdPartySrcBuff(log, p, Revealed, (int)TargetID.Dagda, (int)TrashID.SoulFeast, "rgba(255, 0, 255, 0.5)");
+            // Tethering the player to the Soul Feast.
+            // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
+            var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
+            var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem).ToList();
+            var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast).ToList();
+
+            foreach (BuffApplyEvent buffApply in buffAppliesPlayer)
+            {
+                // We check for the next Revealed application instead of its end event because it can be extended by normal player skills.
+                // Additionally, the spawning of Soul Feasts on a player can be interrupted when a 75-50-25 % phase start and moved to another player.                
+                // Checking for the next buff application prevents cross-tethering between players and feasts.
+
+                // The next application to any player
+                BuffApplyEvent nextApplicationEvent = buffAppliesAll.FirstOrDefault(x => x.Time > buffApply.Time);
+                long endTime = nextApplicationEvent != null ? nextApplicationEvent.Time : log.FightData.LogEnd;
+
+                foreach (AgentItem agent in agentsToTether)
+                {
+                    // Decoration life span ends on the Soul Feast dying
+                    DeadEvent deathEvent = log.CombatData.GetDeadEvents(agent).FirstOrDefault();
+                    var deathTime = deathEvent != null ? deathEvent.Time : agent.LastAware;
+                    (long, long) lifespan = (buffApply.Time, deathTime);
+
+                    // For each Soul Feast spawned, check the spawn time to be after the current buff apply and before the next
+                    if (agent.FirstAware >= buffApply.Time && agent.FirstAware < endTime)
+                    {
+                        replay.Decorations.Add(new LineDecoration(lifespan, "rgba(255, 0, 255, 0.5)", new AgentConnector(agent), new AgentConnector(p)));
+                    }
+                }
+            }
 
             // Demonic Fever - 7 Spreads
             if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.CosmicObservatoryDemonicFever, out IReadOnlyList<EffectEvent> demonicFever))
@@ -168,8 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
                     var connector = new AgentConnector(p);
                     var circle = new CircleDecoration(285, lifespan, "rgba(200, 120, 0, 0.2)", connector);
-                    replay.Decorations.Add(circle);
-                    replay.Decorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                    replay.AddDecorationWithGrowing(circle, lifespan.Item2);
                 }
             }
 
@@ -181,8 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
                     var connector = new AgentConnector(p);
                     var circle = new CircleDecoration(160, lifespan, "rgba(0, 120, 0, 0.4)", connector);
-                    replay.Decorations.Add(circle);
-                    replay.Decorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
+                    replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
                 }
             }
         }

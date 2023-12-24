@@ -413,12 +413,13 @@ namespace GW2EIEvtcParser.EIData
         {
             var buffEvents = log.CombatData.GetBuffData(buffId).Where(x => x.To == player.AgentItem && x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
             var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
-            var buffRemoves = new HashSet<BuffRemoveManualEvent>(buffEvents.OfType<BuffRemoveManualEvent>());
+            var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>().ToList();
             var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId).ToList();
 
             foreach (BuffApplyEvent buffApply in buffApplies)
             {
-                long removalTime = buffRemoves.Where(x => x.Time > buffApply.Time) != null ? buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time).Time : log.FightData.LogEnd;
+                BuffRemoveAllEvent remove = buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time);
+                long removalTime = remove != null ? remove.Time : log.FightData.LogEnd;
                 (long, long) lifespan = (buffApply.Time, removalTime);
 
                 foreach (AgentItem agent in agentsToTether)
