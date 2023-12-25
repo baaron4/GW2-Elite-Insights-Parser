@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in demonicFever)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
                     var circle = new CircleDecoration(285, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                     replay.AddDecorationWithGrowing(circle, lifespan.Item2);
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in cosmicMeteors)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
                     var connector = new AgentConnector(p);
                     var circle = new CircleDecoration(160, lifespan, "rgba(0, 120, 0, 0.4)", connector);
                     replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in demonicBlasts)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var connector = new PositionConnector(effect.Position);
                     var rotation = new AngleConnector(effect.Rotation.Z);
                     // Correcting life span for the hit time, 4000 is the entire animation, 2000 looks to be correct
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in demonicPoolsindicators)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(300, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in demonicPoolsDamage)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 20000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 20000);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(300, lifespan, "rgba(250, 50, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -260,7 +260,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in rainOfComets)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     var rotation = new AngleConnector(effect.Rotation.Z + 90);
                     var semicircle = new PieDecoration(1400, 180, lifespan, "rgba(250, 50, 0, 0.4)", connector);
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in planetCrash)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 666);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 666);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(1500, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
