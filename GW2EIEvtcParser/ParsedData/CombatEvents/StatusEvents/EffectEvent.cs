@@ -13,10 +13,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
         /// </summary>
         public long EffectID { get; }
+
         /// <summary>
-        /// End of the effect
+        /// End of the effect, provided by an <see cref="EffectEndEvent"/>
         /// </summary>
-        private EffectEndEvent EndEvent { get; set; }
+        private long DynamicEndTime { get; set; } = long.MinValue;
+
+        private bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
 
         /// <summary>
         /// Duration of the effect in milliseconds.
@@ -31,10 +34,9 @@ namespace GW2EIEvtcParser.ParsedData
         internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             EffectID = evtcItem.SkillID;
-            EndEvent = null;
         }
 
-        internal void SetEndEvent(EffectEndEvent endEvent)
+        internal void SetDynamicEndTime(EffectEndEvent endEvent)
         {
             // Security check
             if (TrackingID == 0)
@@ -42,9 +44,9 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             // We can only set the EndEventOnce
-            if (EndEvent == null)
+            if (!HasDynamicEndTime)
             {
-                EndEvent = endEvent;
+                DynamicEndTime = endEvent.Time;
             }
         }
 
@@ -57,9 +59,9 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
         {
-            if (EndEvent != null)
+            if (HasDynamicEndTime)
             {
-                return EndEvent.Time;
+                return DynamicEndTime;
             }
             if (associatedBuff != null)
             {
@@ -93,8 +95,9 @@ namespace GW2EIEvtcParser.ParsedData
 
         /// <summary>
         /// Computes the lifespan of an effect.
-        /// Will default to 0 duration if all other methods fail.
-        /// This method is to be used when the duration of the effect is not static (ex: a trap AoE getting triggered or when a trait can modify the duration).
+        /// Will use default duration if all other methods fail
+        /// defaultDuration is ignored for <see cref="EffectEventCBTS45"/> and considered as 0.
+        /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
         /// See <see cref="ComputeEndTime"/> for information about computed end times.
         /// </summary>
         public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)

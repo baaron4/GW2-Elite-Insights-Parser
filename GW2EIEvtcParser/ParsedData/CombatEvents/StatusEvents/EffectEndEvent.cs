@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
                 EffectEvent startEvent = effectEvents.LastOrDefault(x => x.Time <= Time);
                 if (startEvent != null)
                 {
-                    startEvent.SetEndEvent(this);
+                    startEvent.SetDynamicEndTime(this);
                 }
             }
         }
