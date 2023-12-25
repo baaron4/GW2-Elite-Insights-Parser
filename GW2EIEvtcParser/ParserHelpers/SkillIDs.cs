@@ -1537,6 +1537,7 @@
         public const long GlyphOfEqualityCA = 31401;
         public const long SeedOfLife = 31406;
         public const long BanditKick = 31408;
+        public const long SapperBombDamageBuff = 31409;
         public const long ExitCelestialAvatar = 31411;
         public const long BluePylonPower = 31413;
         public const long MagicStorm = 31419;
@@ -1805,6 +1806,7 @@
         public const long ShardsOfRageAbomination = 34411;
         public const long Surrender = 34413;
         public const long Corruption1 = 34416;
+        public const long FlakShotNarella = 34417;
         public const long BloodFueledPlayer = 34422;
         public const long AbominationTransformation = 34427;
         public const long BloodFueledMatthias = 34428;
@@ -1821,6 +1823,7 @@
         public const long FieryVortex = 34466;
         public const long NarcolepsyBuff = 34467;
         public const long ShieldHuman = 34468;
+        public const long ThrowOilKeg = 34471;
         public const long DownpourBuff = 34472;
         public const long Corruption2 = 34473;
         public const long TantrumDamage = 34479;
@@ -1837,6 +1840,7 @@
         public const long BloodShield = 34518;
         public const long POV_MushroomKingsBlessingBuff = 34523;
         public const long HeatWave = 34526;
+        public const long Beehive = 34533;
         public const long ToxicCloud2 = 34537;
         public const long Thunder = 34543;
         public const long TantrumSkill = 34547;

@@ -22,10 +22,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
+            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
+            new PlayerDstBuffApplyMechanic(Blind, "Blinded", new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.Zane)),
+            new PlayerDstBuffApplyMechanic(Burning, "Burning", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.Narella)),
+            new PlayerDstBuffApplyMechanic(SlowBurn, "Slow Burn", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Pink), "Targeted.B", "Applied Targeted Buff (Berg)", "Targeted Application (Berg)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Berg)),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Purple), "Targeted.A", "Applied Targeted Buff (Any)", "Targeted Application (Any)", 0),
+            new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.Cage)),
+            new PlayerCastStartMechanic(ThrowOilKeg, "Throw", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
+            new PlayerCastStartMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Beehive.T", "Threw Beehive", "Beehive Throw", 0),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(ArcDPSEnums.TargetID.Berg)),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
             new PlayerDstHitMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
             new PlayerDstHitMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
             new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new PlayerDstHitMechanic(FlakShotNarella, "Flak SHot", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
             });
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.ChestGadget;
@@ -50,6 +61,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.Berg,
                 (int)ArcDPSEnums.TargetID.Zane,
                 (int)ArcDPSEnums.TargetID.Narella
+            };
+        }
+
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TrashID.Cage
             };
         }
 
@@ -93,10 +112,26 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            if (FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100))
+            // Cage
+            AgentItem cage = combatData.Where(x => x.DstAgent == 224100 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
+            if (cage != null)
             {
-                agentData.Refresh();
+                cage.OverrideType(AgentItem.AgentType.NPC);
+                cage.OverrideID(ArcDPSEnums.TrashID.Cage);
             }
+
+            // Bombs
+            var bombs = combatData.Where(x => x.DstAgent == 0 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240).ToList();
+            foreach (AgentItem bomb in bombs)
+            {
+                bomb.OverrideType(AgentItem.AgentType.NPC);
+                bomb.OverrideID(ArcDPSEnums.TrashID.Bombs);
+            }
+
+            // Reward Chest
+            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            
+            agentData.Refresh();
             ComputeFightTargets(agentData, combatData, extensions);
         }
 
@@ -206,6 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Prisoner1,
                 ArcDPSEnums.TrashID.Prisoner2,
                 ArcDPSEnums.TrashID.InsectSwarm,
+                ArcDPSEnums.TrashID.Bombs,
             };
         }
 
@@ -220,6 +256,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Berg:
+                    var overheadSmash = cls.Where(x => x.SkillId == OverheadSmashBerg).ToList();
+                    foreach (AbstractCastEvent c in overheadSmash)
+                    {
+                        int radius = 550;
+                        int angle = 80;
+                        (long, long) lifespan = (c.Time, c.Time + c.ActualDuration);
+                        Point3D facing = target.GetCurrentRotation(log, lifespan.Item1 + 600, lifespan.Item2);
+                        if (facing != null)
+                        {
+                            var rotationConnector = new AngleConnector(facing);
+                            var agentConnector = new AgentConnector(target);
+                            var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, "rgba(200, 120, 0, 0.2)", agentConnector).UsingRotationConnector(rotationConnector);
+                            replay.AddDecorationWithGrowing(cone, lifespan.Item2);
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TargetID.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == HailOfBulletsZane).ToList();

@@ -525,6 +525,8 @@ namespace GW2EIEvtcParser
         private const int UnknownAnomaly = -43;
         private const int ChestOfPrisonCamp = -44;
         private const int SnowPile = -45;
+        private const int Cage = -46;
+        private const int Bombs = -47;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -571,6 +573,8 @@ namespace GW2EIEvtcParser
             Slubling4 = 16104,
             PoisonMushroom = ArcDPSEnums.PoisonMushroom,
             // Trio
+            Cage = ArcDPSEnums.Cage,
+            Bombs = ArcDPSEnums.Bombs,
             BanditSaboteur = 16117,
             Warg = 7481,
             VeteranTorturedWarg = 16129,
