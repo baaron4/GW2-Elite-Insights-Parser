@@ -385,7 +385,7 @@ namespace GW2EIEvtcParser.EIData
             (long, long) lifespan;
             if (overrideDuration == false)
             {
-                lifespan = ProfHelper.ComputeEffectLifespan(log, effect, effect.Duration);
+                lifespan = effect.ComputeLifespan(log, effect.Duration);
             }
             else
             {

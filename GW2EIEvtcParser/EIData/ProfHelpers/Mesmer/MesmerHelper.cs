@@ -373,7 +373,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalEntre);
                 foreach (EffectEvent effect in portalInactives)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeaving);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EIData
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
                     {
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);
                         var connector = new PositionConnector(effect.Position);
                         replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
                         GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, Feedback, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in feedbacks)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 7000); // 7s with trait
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -423,7 +423,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, Veil, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in veils)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 7000); // 7s with trait
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
@@ -436,7 +436,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, NullField, SkillModeCategory.Strip | SkillModeCategory.Cleanse);
                 foreach (EffectEvent effect in nullFields)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 6000); // 6s with trait
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000); // 6s with trait
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));

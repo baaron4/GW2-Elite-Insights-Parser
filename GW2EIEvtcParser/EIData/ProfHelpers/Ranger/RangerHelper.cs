@@ -339,7 +339,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDownPetTurtle, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in hunkerDowns)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHunkerDown, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -351,7 +351,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in barrages)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600); // ~600ms interval
+                    (long, long) lifespan = effect.ComputeLifespan(log, 600); // ~600ms interval
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBarrage, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -363,7 +363,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in bonfires)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBonfire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -375,7 +375,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in frostTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFrostTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -387,7 +387,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in flameTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFlameTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in vipersNests)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVipersNest, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in spikeTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000); // roughly time displayed ingame
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpikeTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -427,7 +427,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                             var connector = new PositionConnector(effect.Position);
                             var rotationConnector = new AngleConnector(effect.Rotation.Z);
                             replay.Decorations.Add(new RectangleDecoration(400, 60, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));

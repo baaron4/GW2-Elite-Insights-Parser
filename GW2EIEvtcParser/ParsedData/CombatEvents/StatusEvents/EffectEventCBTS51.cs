@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -67,6 +68,29 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Add(effectEventsByTrackingID, TrackingID, this);
             }
+        }
+
+        protected override long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            if (EndEvent != null)
+            {
+                return EndEvent.Time;
+            }
+            if (associatedBuff != null)
+            {
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                    .OfType<BuffRemoveAllEvent>()
+                    .FirstOrDefault(x => x.To == agent && x.Time >= Time);
+                if (remove != null)
+                {
+                    return remove.Time;
+                }
+            }
+            if (Duration > 0 && Duration <= maxDuration)
+            {
+                return Time + Duration;
+            }
+            return Time + maxDuration;
         }
 
     }

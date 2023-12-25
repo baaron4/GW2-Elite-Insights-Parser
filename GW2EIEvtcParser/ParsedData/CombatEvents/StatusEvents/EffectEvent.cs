@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -45,6 +46,42 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 EndEvent = endEvent;
             }
+        }
+
+        /// <summary>
+        /// Computes the end time of an effect.
+        /// <br/>
+        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
+        /// Afterwards the effect duration is used, if greater 0 and less than max duration.
+        /// Finally, it defaults to max duration.
+        /// </summary>
+        protected abstract long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null);
+
+
+        /// <summary>
+        /// Computes the lifespan of an effect.
+        /// Will use default duration if all other methods fail
+        /// See <see cref="ComputeEndTime"/> for information about computed end times.
+        /// </summary>
+        public (long start, long end) ComputeLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            long start = Time;
+            long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
+            return (start, end);
+        }
+
+        /// <summary>
+        /// Computes the lifespan of an effect.
+        /// Will default to 0 duration if all other methods fail.
+        /// This method is to be used when the duration of the effect is not static (ex: a trap AoE getting triggered or when a trait can modify the duration).
+        /// See <see cref="ComputeEndTime"/> for information about computed end times.
+        /// </summary>
+        public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            long durationToUse = defaultDuration;
+            long start = Time;
+            long end = ComputeEndTime(log, durationToUse, agent, associatedBuff);
+            return (start, end);
         }
     }
 }

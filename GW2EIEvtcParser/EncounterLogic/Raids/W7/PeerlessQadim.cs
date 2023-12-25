@@ -457,7 +457,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (previousAoeCounter == 1) { radius *= 2; } // 420
                     if (previousAoeCounter == 2) { radius = 680; } // In game it's not 840 as it's meant to be
 
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var circle = new CircleDecoration(radius, lifespan, "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
@@ -469,7 +469,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in residualImpact)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                     var circle = new CircleDecoration(75, lifespan, "rgba(230, 40, 0, 0.1)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration("rgba(255, 0, 0, 0.4)"));
@@ -483,7 +483,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     // Each shark effect appears every 120 ms
                     // The logged duration is 0, we set it at 120 to give it the impression of a single effect moving around
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 120);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 120);
                     EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, "rgba(108, 122, 137, 0.4)", new PositionConnector(effect.Position)));
                 }
             }
@@ -494,7 +494,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in etherStrikes)
                 {
                     // The actual effect duration is 0
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1500);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1500);
                     EnvironmentDecorations.Add(new CircleDecoration(150, lifespan, "rgba(108, 122, 137, 0.1)", new PositionConnector(effect.Position)));
                 }
             }
@@ -508,7 +508,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     bool failedOrb = false;
                     string color = "rgba(108, 122, 137, 0.2)";
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     if (landedOrbExplosions != null)
                     {
                         failedOrb = landedOrbExplosions.Any(x => effect.Position.Distance2DToPoint(x.Position) < 1e-6);
@@ -531,7 +531,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in meteorIllusionOrbs)
                 {
                     // The actual effect duration is 4294967295
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0);
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
                     EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, "rgba(255, 255, 255, 0.5)", connector).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, "rgba(255, 215, 0, 0.4)", connector));
@@ -543,7 +543,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in brandstormLightning)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var circle = new CircleDecoration(220, lifespan, "rgba(200, 120, 0, 0.1)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
@@ -574,7 +574,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (EffectEvent effect in pair.Value)
                     {
                         var connector = new PositionConnector(effect.Position);
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                         var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.2)", connector);
                         EnvironmentDecorations.Add(circle);
                         EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
@@ -605,7 +605,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (EffectEvent effect in pair.Value)
                     {
                         var connector = new PositionConnector(effect.Position);
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600000);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                         var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.5)", connector);
                         EnvironmentDecorations.Add(circle);
                     }

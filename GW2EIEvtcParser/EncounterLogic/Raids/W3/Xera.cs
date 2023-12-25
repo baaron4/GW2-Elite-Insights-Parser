@@ -389,7 +389,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in intervention)
                 {
                     // Effect has duration of 4294967295 but the skill lasts only 6000
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 6000);
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
                     var circle = new CircleDecoration(240, lifespan, "rgba(255, 200, 0, 0.3)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(0, 50, 200, 0.4)"));

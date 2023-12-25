@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in frozenPatches)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 30000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 30000);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     EnvironmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, "rgba(255, 250, 250, 0.4)", connector).UsingRotationConnector(rotationConnector));
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in blizzards)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 10000);
                     var connector = new PositionConnector(effect.Position);
                     string orange = "rgba(250, 150, 0, 0.2)";
                     EnvironmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, orange, connector));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -29,6 +30,26 @@ namespace GW2EIEvtcParser.ParsedData
         internal EffectEventCBTS45(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
             Orientation = ReadOrientation(evtcItem);
+        }
+
+        protected override long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            if (associatedBuff != null)
+            {
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                    .OfType<BuffRemoveAllEvent>()
+                    .FirstOrDefault(x => x.To == agent && x.Time >= Time);
+                if (remove != null)
+                {
+                    return remove.Time;
+                }
+            }
+            return Time + maxDuration;
+        }
+
+        public override (long, long) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            return base.ComputeDynamicLifespan(log, 0, agent, associatedBuff);
         }
 
     }

@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // This prevents the late green effect from appearing in the combat replay, since it doesn't exist in game.
                     if (!greenEndEffectEvents.Any(x => Math.Abs(x.Time - effect.Time) < 200 || Math.Abs(x.Time - greenDuration - effect.Time) < 200))
                     {
-                        AddSharedDestructionDecoration(p, replay, ProfHelper.ComputeEffectLifespan(log, effect, greenDuration), true);
+                        AddSharedDestructionDecoration(p, replay, effect.ComputeLifespan(log, greenDuration), true);
                     }
                 }
             }
@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in spreads)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
                     replay.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new AgentConnector(p);
                     replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers4)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                     var connector = new AgentConnector(p);
                     replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
@@ -324,7 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in heavensPalm)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
                     replay.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
                 }
@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in waveEffect)
                         {
                             int durationCone = 1000;
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, durationCone);
+                            (long, long) lifespan = effect.ComputeLifespan(log, durationCone);
                             AddDragonSlashWaveDecoration(log, target, replay, lifespan, durationCone);
                         }
                     }
@@ -391,7 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in warningRectangle)
                         {
-                            (long, long) lifespanWarning = ProfHelper.ComputeEffectLifespan(log, effect, warningDuration);
+                            (long, long) lifespanWarning = effect.ComputeLifespan(log, warningDuration);
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                             var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, "rgba(200, 120, 0, 0.2)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
@@ -430,7 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in volatileExpulsion)
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                             var connector = new AgentConnector(target);
                             var circle = new CircleDecoration(380, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                             replay.AddDecorationWithGrowing(circle, lifespan.Item2);
@@ -443,7 +443,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in volatileBurst)
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                             var connector = new AgentConnector(target);
                             var doughnut = new DoughnutDecoration(100, 500, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                             replay.AddDecorationWithGrowing(doughnut, lifespan.Item2);
@@ -464,7 +464,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in smolReds)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 20800);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 20800);
                     var connector = new PositionConnector(effect.Position);
                     int damageDelay = 1610;
                     long warningEnd = lifespan.Item1 + damageDelay;
@@ -480,7 +480,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mines)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0);
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
                     EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, "rgba(250, 50, 0, 0.4)", connector));
                 }
@@ -493,7 +493,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in electricRain)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2400);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2400);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(100, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -507,7 +507,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in jadeLob)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1500);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1500);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(100, lifespan, "rgba(0, 200, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -520,7 +520,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in enforcerOrbsAoEs)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2708);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2708);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 200, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -533,7 +533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeReds)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     int damageDelay = 2000;
                     long warningEnd = lifespan.Item1 + damageDelay;
@@ -550,7 +550,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in rushingJustice)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     EnvironmentDecorations.Add(new RectangleDecoration( 50, 145, lifespan, "rgba(250, 50, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
@@ -562,7 +562,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in spiritualLightning)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(90, lifespan, "rgba(200, 120, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
@@ -575,7 +575,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in stormOfSwords)
                 {
-                    (long, long) lifespanIndicator = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespanIndicator = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
                     var indicatorCircle = new CircleDecoration(200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(indicatorCircle);

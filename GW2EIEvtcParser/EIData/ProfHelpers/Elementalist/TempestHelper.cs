@@ -77,7 +77,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             continue;
                         }
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                         var connector = new PositionConnector(effect.Position);
                         replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                         replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadFire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             continue;
                         }
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                         var connector = new PositionConnector(effect.Position);
                         replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
                         replay.Decorations.Add(new IconDecoration(ParserIcons.EffectOverloadAir, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
