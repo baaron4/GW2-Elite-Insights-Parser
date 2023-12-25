@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return false;
             }
             var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
-            long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= hpUpdate.Time && x.Time <= hpUpdate.Time + 1000).Sum(x => x.HealthDamage);
+            long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= time && x.Time <= time + 1000).Sum(x => x.HealthDamage);
             double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2*damageDoneWithinOneSec);
             double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
             return hpUpdate.HPPercent < threshold - 2;
