@@ -3989,6 +3989,7 @@
         public const long InsatiableHunger8 = 69861;
         public const long RelicOfCerusBuff = 69867;
         public const long RelicOfPeithaTargetBuff = 69882;
+        public const long ChargingConstellationDamage = 69950;
         public const long RelicOfVass = 69961;
         public const long SpinningNebulaCentral = 69989; // The attack when Dagda doesn't teleport off the center
         public const long RelicOfMabon = 69992;
@@ -4003,7 +4004,7 @@
         public const long SpinningNebulaWithTeleport = 70103; // The attack when Dagda teleports off the center
         public const long EmpoweredRegretCerus = 70123;
         public const long EmpoweredRageEmbodiment = 70181;
-        public const long DagdaSharedDestruction = 70182;
+        public const long DagdaSharedDestruction_MeteorCrash = 70182; // Game maps it to Shared Destruction - Damage is Meteor Crash
         public const long RelicOfPeithaBlade = 70196;
         public const long RelicOfTheAfflicted = 70223;
         public const long CryOfRageSmall = 70235;
@@ -4032,6 +4033,7 @@
         public const long SoulFeast = 70567;
         public const long SoulFeastSomethingBuff = 70572; // Applied by Soul Feast to Soul Feast
         public const long PetrifySkill = 70575;
+        public const long ChargingConstellation = 70584; // unknown
         public const long PurifyingLight = 70607;
         public const long RelicOfTheSunless = 70617;
         public const long EmpoweredMaliceEmbodiment = 70621;
@@ -4057,6 +4059,7 @@
         public const long RelicOfTheScourge = 70975;
         public const long InvulnerabilityEmbodiment = 70986;
         public const long DimensionBreach = 71002;
+        public const long MeteorCrash = 71042; // Health % damage, can't be tracked
         public const long DemonicFever = 71047;
         public const long RelicOfTheIce = 71051;
         public const long Starburst = 71071; // Dagda Autochain 3 - Projectile

@@ -582,6 +582,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Planetary Weight", PlanetaryWeight, Source.FightSpecific, BuffStackType.Stacking, 6, BuffClassification.Other, BuffImages.ChallengeOfTheAncients),
             new Buff("Summoned Phantom", SummonedPhantom, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Immune to Damage", ImmuneToDamage, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Shared Destruction Target (Meteor Crash)", DagdaSharedDestruction_MeteorCrash, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),

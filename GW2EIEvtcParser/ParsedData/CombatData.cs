@@ -418,37 +418,49 @@ namespace GW2EIEvtcParser.ParsedData
             }
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in _buffDataByDst)
             {
-                var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                var dictExtensions = pair.Value.OfType<BuffExtensionEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
+                var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
+                var dictExtensions = pair.Value.OfType<BuffExtensionEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
                 var extensions = pair.Value.OfType<BuffExtensionEvent>().ToList();
-                foreach (BuffExtensionEvent extensionEvent in extensions)
+                foreach (KeyValuePair<uint, Dictionary<long, List<BuffExtensionEvent>>> extensionPair in dictExtensions)
                 {
-                    if (extensionEvent.BuffInstance != 0)
+                    if (extensionPair.Key == 0)
                     {
-                        if (dictApply.TryGetValue(extensionEvent.BuffInstance, out List<BuffApplyEvent> applies))
+                        continue;
+                    }
+                    if (dictApply.TryGetValue(extensionPair.Key, out Dictionary<long, List<BuffApplyEvent>> appliesPerBuffID))
+                    {
+                        foreach (KeyValuePair<long, List<BuffExtensionEvent>> extensionByBuffIDPair in extensionPair.Value)
                         {
-                            BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID);
-                            if (initialStackApplication != null)
+                            if (appliesPerBuffID.TryGetValue(extensionByBuffIDPair.Key, out List<BuffApplyEvent> applies))
                             {
-                                var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
-                                if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out List<AbstractBuffStackEvent> stacks))
+                                BuffExtensionEvent previousExtension = null;
+                                foreach (BuffExtensionEvent extensionEvent in extensionByBuffIDPair.Value)
                                 {
-                                    sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID));
-                                }
-                                if (dictExtensions.TryGetValue(extensionEvent.BuffInstance, out List<BuffExtensionEvent> extensionsForBuffInstance))
-                                {
-                                    BuffExtensionEvent prevExt = extensionsForBuffInstance.LastOrDefault(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x != extensionEvent && x.BuffID == extensionEvent.BuffID);
-                                    if (prevExt != null)
+                                    BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
+                                    if (initialStackApplication != null)
                                     {
-                                        sequence.Add(prevExt);
+                                        var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
+                                        if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out Dictionary<long, List<AbstractBuffStackEvent>> stacksPerBuffID))
+                                        {
+                                            if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out List<AbstractBuffStackEvent> stacks))
+                                            {
+                                                sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
+                                            }
+                                        }
+                                        if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
+                                        {
+                                            sequence.Add(previousExtension);
+                                        }
+                                        previousExtension = extensionEvent;
+                                        sequence = sequence.OrderBy(x => x.Time).ToList();
+                                        extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                                     }
                                 }
-                                sequence = sequence.OrderBy(x => x.Time).ToList();
-                                extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                             }
                         }
                     }
+
                 }
             }
         }
