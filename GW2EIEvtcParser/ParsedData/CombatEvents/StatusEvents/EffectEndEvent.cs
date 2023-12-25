@@ -6,7 +6,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public abstract class EffectEndEvent : AbstractEffectEvent
+    internal abstract class EffectEndEvent : AbstractEffectEvent
     {
 
         internal EffectEndEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)

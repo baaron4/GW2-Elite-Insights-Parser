@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// End of the effect
         /// </summary>
-        public EffectEndEvent EndEvent { get; private set; }
+        private EffectEndEvent EndEvent { get; set; }
 
         /// <summary>
         /// Duration of the effect in milliseconds.
@@ -55,7 +55,28 @@ namespace GW2EIEvtcParser.ParsedData
         /// Afterwards the effect duration is used, if greater 0 and less than max duration.
         /// Finally, it defaults to max duration.
         /// </summary>
-        protected abstract long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null);
+        protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+        {
+            if (EndEvent != null)
+            {
+                return EndEvent.Time;
+            }
+            if (associatedBuff != null)
+            {
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                    .OfType<BuffRemoveAllEvent>()
+                    .FirstOrDefault(x => x.To == agent && x.Time >= Time);
+                if (remove != null)
+                {
+                    return remove.Time;
+                }
+            }
+            if (Duration > 0 && Duration <= maxDuration)
+            {
+                return Time + Duration;
+            }
+            return Time + maxDuration;
+        }
 
 
         /// <summary>

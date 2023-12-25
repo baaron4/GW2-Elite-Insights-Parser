@@ -352,6 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 EnvironmentDecorations = new List<GenericDecoration>();
                 ComputeEnvironmentCombatReplayDecorations(log);
+                EnvironmentDecorations.RemoveAll(x => x.Lifespan.end <= x.Lifespan.start);
             }
             return EnvironmentDecorations;
         }

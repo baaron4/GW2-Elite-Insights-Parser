@@ -4,7 +4,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class EffectEndEventCBTS51 : EffectEndEvent
+    internal class EffectEndEventCBTS51 : EffectEndEvent
     {
         internal EffectEndEventCBTS51(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, List<EffectEvent>> effectEventsByTrackingID) : base(evtcItem, agentData)
         {

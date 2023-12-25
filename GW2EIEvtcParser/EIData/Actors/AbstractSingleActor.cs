@@ -496,6 +496,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 InitAdditionalCombatReplayData(log);
             }
+            CombatReplay.Decorations.RemoveAll(x => x.Lifespan.end <= x.Lifespan.start);
         }
 
         public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
