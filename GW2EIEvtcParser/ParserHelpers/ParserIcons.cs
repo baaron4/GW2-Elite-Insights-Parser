@@ -359,6 +359,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheTormented = "https://i.imgur.com/kEytVae.png";
         private const string TrashSoulFeast = "https://i.imgur.com/iNp5Rnx.png";
         private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
+        private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
+        private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -884,6 +886,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IcePatch, TrashIcePatch },
             { ArcDPSEnums.TrashID.BanditSaboteur, TrashBanditSaboteur },
             { ArcDPSEnums.TrashID.NarellaTornado, TrashTornado },
+            { ArcDPSEnums.TrashID.Cage, TrashCage },
+            { ArcDPSEnums.TrashID.Bombs, TrashBombs },
             { ArcDPSEnums.TrashID.Tornado, TrashTornado },
             { ArcDPSEnums.TrashID.Jade, TrashJade },
             { ArcDPSEnums.TrashID.AngryZommoros, TrashAngryChillZommoros },

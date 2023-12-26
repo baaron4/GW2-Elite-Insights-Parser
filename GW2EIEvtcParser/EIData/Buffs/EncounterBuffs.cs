@@ -137,6 +137,7 @@ namespace GW2EIEvtcParser.EIData
             // Sabetha    
             new Buff("Shell-Shocked", ShellShocked, Source.FightSpecific, BuffClassification.Other, BuffImages.ShellShocked),
             new Buff("Sapper Bomb", SapperBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
+            new Buff("Sapper Bomb Damage", SapperBombDamageBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
             new Buff("Time Bomb", TimeBomb, Source.FightSpecific, BuffClassification.Other, BuffImages.TimeBomb),
             //////////////////////////////////////////////
             // Slothasor

@@ -187,6 +187,8 @@ namespace GW2EIEvtcParser.ParsedData
             { NarcolepsySkill, "Sleeping" },
             { FearMeSlothasor, "Fear Me!" },
             { PurgeSlothasor, "Purge" },
+            // Bandit Trio
+            { ThrowOilKeg, "Throw (Oil Keg)" },
             // Matthias
             { ShieldHuman, "Shield (Human)" },
             { AbominationTransformation, "Abomination Transformation" },
@@ -818,6 +820,9 @@ namespace GW2EIEvtcParser.ParsedData
             // - Slothasor
             { PurgeSlothasor, "https://wiki.guildwars2.com/images/a/aa/Purge.png" },
             { Eat, "https://wiki.guildwars2.com/images/7/7b/Eat.png" },
+            // - Bandit Trio
+            { Beehive, BuffImages.ThrowJar },
+            { ThrowOilKeg, "https://wiki.guildwars2.com/images/5/5f/Throw_Keg.png" },
             // - Matthias
             { UnstableBloodMagic, "https://wiki.guildwars2.com/images/a/aa/Purge.png" },
             // - Escort Glenna
