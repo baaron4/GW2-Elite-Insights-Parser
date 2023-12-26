@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // time starts at first smash
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID))
             {
-                CombatItem armSmashGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
+                CombatItem armSmashGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent).hex == EffectGUIDs.CAArmSmash);
                 if (armSmashGUID != null)
                 {
                     CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);

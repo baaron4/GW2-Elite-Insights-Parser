@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// HashSet containing the types of Commander Tag GUIDs.
         /// </summary>
-        public static IReadOnlyCollection<string> CommanderTagMarkersGUIDs { get; set; } = new HashSet<string>()
+        public static IReadOnlyCollection<string> CommanderTagMarkersHexGUIDs { get; set; } = new HashSet<string>()
         {
             RedCommanderTag,
             OrangeCommanderTag,
@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// HashSet containing the types of Squad Marker GUIDs.
         /// </summary>
-        public static IReadOnlyCollection<string> SquadOverheadMarkersGUIDs { get; set; } = new HashSet<string>()
+        public static IReadOnlyCollection<string> SquadOverheadMarkersHexGUIDs { get; set; } = new HashSet<string>()
         {
             ArrowOverhead,
             CircleOverhead,

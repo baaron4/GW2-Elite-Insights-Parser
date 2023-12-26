@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in greenEndEffectEvents)
                 {
-                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
+                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).HexContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
                     AddSharedDestructionDecoration(p, replay, (effect.Time - greenDuration, effect.Time), isSuccess);
                 }
             }

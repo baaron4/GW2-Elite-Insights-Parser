@@ -1125,6 +1125,12 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByGUID(string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
@@ -1137,7 +1143,13 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
-        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1147,7 +1159,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
-        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1158,7 +1176,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
-        /// <summary>Returns effect events for the given agent and effect GUIDs.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUIDs.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1179,7 +1203,13 @@ namespace GW2EIEvtcParser.ParsedData
             return found;
         }
 
-        /// <summary>Returns effect events for the given agent <b>including</b> minions and the given effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1191,6 +1221,13 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
+        /// <summary>
+        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUIDs.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1215,6 +1252,11 @@ namespace GW2EIEvtcParser.ParsedData
         /// Returns effect events for the given agent and effect GUID.
         /// The same effects happening within epsilon milliseconds are grouped together.
         /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="groupedEffectEvents"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
         public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
         {
             var effectGroups = new List<List<EffectEvent>>();
@@ -1247,6 +1289,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _statusEvents.EffectEvents;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <returns></returns>
         public EffectGUIDEvent GetEffectGUIDEvent(string effectGUID)
         {
             if (_metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt))
@@ -1256,6 +1303,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectID">ID of the effect</param>
+        /// <returns></returns>
         public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
         {
             if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
@@ -1265,7 +1317,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="markerGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <returns></returns>
         public MarkerGUIDEvent GetMarkerGUIDEvent(string markerGUID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(markerGUID, out MarkerGUIDEvent evt))
@@ -1275,6 +1331,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="markerID">ID of the marker</param>
+        /// <returns></returns>
         public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
