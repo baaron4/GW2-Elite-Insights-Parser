@@ -2534,6 +2534,8 @@
         public const long SuperiorSigilOfTheStars = 46953;
         public const long MushroomKingsBlessing = 46970;
         public const long AchievementEligibilityNecroDancer = 46994;
+        public const long KingsWrathConeAoE = 47005;
+        public const long Hailstorm = 47013;
         public const long Glaciate = 47022;
         public const long Flare = 47074;
         public const long EndersEchoDamage = 47076;
@@ -2572,6 +2574,7 @@
         public const long EnvironmentallyFriendly = 47625;
         public const long LastGraspJudgment = 47635;
         public const long ArcingAffliction = 47646;
+        public const long IceBreaker = 47679;
         public const long DhuumsMessengerFixationBuff = 47702; // From player applied to messenger
         public const long CorsairMaintenanceOil = 47734;
         public const long WurmSpit = 47756;
@@ -2584,12 +2587,13 @@
         public const long ChoyaFinisher = 47904;
         public const long QuadSlashSecondSet = 47915;
         public const long OneTrackMind = 47929;
+        public const long NumbingBreachCast = 47930;
         public const long SoulSiphon2 = 47939;
         public const long ReclaimedEnergySkill = 47942;
         public const long BrokenKingFirstCast = 47981;
         public const long Imbibe = 48007;
         public const long DhuumDamagingShacklesBuff = 48042;
-        public const long KingsWrath = 48066;
+        public const long KingsWrathConeShards = 48066;
         public const long DeepAbyss = 48150;
         public const long MortalCoilRiver = 48154;
         public const long ArcingAfflictionHit = 48121;
