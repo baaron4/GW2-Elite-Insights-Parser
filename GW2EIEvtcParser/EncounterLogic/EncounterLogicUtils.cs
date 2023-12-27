@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
             }
             long minTime = Math.Max(target.FirstAware, time);
-            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime);
+            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HPPercent > 0));
             var targetTotalHP = target.GetHealth(combatData);
             if (hpUpdate == null || targetTotalHP < 0)
             {
