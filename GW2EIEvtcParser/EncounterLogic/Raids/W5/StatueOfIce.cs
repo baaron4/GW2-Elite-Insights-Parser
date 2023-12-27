@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -145,10 +146,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent green in greens)
                 {
+                    string color = "rgba(0, 120, 0, 0.4)";
+
                     // Ice Breaker - Failed Greens
-                    log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out IReadOnlyList<EffectEvent> failedGreens);
-                    EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.X == green.Position.X && x.Position.Y == green.Position.Y);
-                    string color = failedGreen != null ? "rgba(120, 0, 0, 0.4)" : "rgba(0, 120, 0, 0.4)";
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out IReadOnlyList<EffectEvent> failedGreens))
+                    {
+                        EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.Distance2DToPoint(green.Position) < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
+                        if (failedGreen != null)
+                        {
+                            color = "rgba(120, 0, 0, 0.4)";
+                        }
+                    }
 
                     (long, long) lifespan = green.ComputeLifespan(log, 15000);
                     var circle = new CircleDecoration(120, lifespan, color, new PositionConnector(green.Position));
