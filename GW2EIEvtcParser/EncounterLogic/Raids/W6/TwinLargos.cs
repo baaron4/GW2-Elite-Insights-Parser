@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using System.Collections;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -244,6 +245,39 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return FightData.EncounterStartStatus.Late;
             }
             return FightData.EncounterStartStatus.Normal;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            ComputeFightTargets(agentData, combatData, extensions);
+            // discard hp update events after determined apply
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
+            if (nikare == null)
+            {
+                throw new MissingKeyActorsException("Nikare not found");
+            }
+            var nikareHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem)).ToList();
+            if (nikareHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+            {
+                CombatItem lastHPUpdate = nikareHPUpdates.Last();
+                if (lastHPUpdate.DstAgent == 10000)
+                {
+                    lastHPUpdate.OverrideSrcAgent(0);
+                }
+            }
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+            if (kenut != null)
+            {
+                var kenutHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem)).ToList();
+                if (kenutHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+                {
+                    CombatItem lastHPUpdate = kenutHPUpdates.Last();
+                    if (lastHPUpdate.DstAgent == 10000)
+                    {
+                        lastHPUpdate.OverrideSrcAgent(0);
+                    }
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
