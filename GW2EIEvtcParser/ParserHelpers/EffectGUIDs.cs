@@ -360,6 +360,13 @@ namespace GW2EIEvtcParser
         public const string MursaarOverseerProtectBubble = "17BC358A51ED2D43BF2ABE8AB642B86B"; // Src player
         public const string MursaarOverseerClaimMarker = "94F3501D777FAC439E78E143CE756B0A"; // No Src - No Dst
         public const string MursaarOverseerShockwave = "0F62A1315A00FC438B2F1273E6BC4054";
+        // Broken King
+        public const string BrokenKingNumbingBreachIndicator = "5341E83B29B534408E90DBE7BE6F452D";
+        public const string BrokenKingNumbingBreachDamage = "1BF014091BFD1E40A11ED36B92601342";
+        public const string BrokenKingHailstormGreen = "C97A7665B2AA6C4482026D4F2562E25E";
+        public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
+        public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
+        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6bFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
         // Sabir

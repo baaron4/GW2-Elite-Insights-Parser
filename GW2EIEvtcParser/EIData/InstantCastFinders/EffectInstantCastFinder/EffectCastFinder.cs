@@ -9,6 +9,7 @@ namespace GW2EIEvtcParser.EIData
     internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
         private readonly string _effectGUID;
+        private int _speciesId = 0;
 
         protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
         {
@@ -64,6 +65,12 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal EffectCastFinder UsingAgentRedirectionIfUnknown(int speciesID)
+        {
+            _speciesId = speciesID;
+            return this;
+        }
+
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
@@ -85,6 +92,14 @@ namespace GW2EIEvtcParser.EIData
                         {
                             lastTime = effectEvent.Time;
                             AgentItem caster = GetAgent(effectEvent);
+                            if (_speciesId > 0 && caster.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+                            {
+                                AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
+                                if (agent != null)
+                                {
+                                    caster = agent;
+                                }
+                            }
                             res.Add(new InstantCastEvent(GetTime(effectEvent, caster, combatData), skillData.Get(SkillID), caster));
                         }
                     }

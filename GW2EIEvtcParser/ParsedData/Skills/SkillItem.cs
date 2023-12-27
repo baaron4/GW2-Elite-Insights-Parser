@@ -206,6 +206,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ProtectSAK, "Protect" },
             // Soulless Horror
             { IssueChallengeSAK, "Issue Challenge" },
+            // Broken King
+            { NumbingBreachCast, "Numbing Breach (Cast)" },
             // Dhuum
             { MajorSoulSplit, "Major Soul Split" },
             { ExpelEnergySAK, "Expel Energy" },
