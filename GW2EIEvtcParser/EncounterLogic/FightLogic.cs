@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -422,5 +423,29 @@ namespace GW2EIEvtcParser.EncounterLogic
             ComputeFightTargets(agentData, combatData, extensions);
         }
 
+        /// <summary>
+        /// Create a <see cref="List{}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/>.<br></br>
+        /// The buff must be present on any player at the end of the encounter.<br></br>
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="buff">The buff ID to add.</param>
+        /// <param name="stack">Amount of buff stacks (0-99).</param>
+        /// <returns>
+        /// A <see cref="List{T}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/> if present, otherwise empty.<br></br>
+        /// To be used to add as range to <see cref="InstanceBuffs"/>.
+        /// </returns>
+        internal static List<(Buff, int)> SetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
+        {
+            var buffs = new List<(Buff, int)>();
+            foreach (Player p in log.PlayerList)
+            {
+                if (p.HasBuff(log, buff, log.FightData.FightEnd - ServerDelayConstant))
+                {
+                    buffs.Add((log.Buffs.BuffsByIds[buff], stack));
+                    break;
+                }
+            }
+            return buffs;
+        }
     }
 }

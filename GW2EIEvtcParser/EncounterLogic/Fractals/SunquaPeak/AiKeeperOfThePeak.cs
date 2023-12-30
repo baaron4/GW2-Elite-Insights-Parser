@@ -378,9 +378,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
             {
-                IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
-                IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
-                if (dwd.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Any())
                 {
                     int counter = 0;
                     foreach (Player p in log.PlayerList)
@@ -396,16 +394,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
                     }
                 }
-                if (energyDispersal.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
                 {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
-                            break;
-                        }
-                    }
+                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
                 }
             }
         }
