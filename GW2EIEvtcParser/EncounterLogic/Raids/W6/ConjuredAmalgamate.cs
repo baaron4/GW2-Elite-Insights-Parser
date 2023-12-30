@@ -254,6 +254,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor target)
         {
+            if (target == null)
+            {
+                return new List<long>();
+            }
             var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).ToList();
             var attackTargets = new HashSet<AgentItem>();
             foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
@@ -281,7 +285,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
+            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
             phases[0].AddTarget(ca);
+            phases[0].AddSecondaryTarget(leftArm);
+            phases[0].AddSecondaryTarget(rightArm);
             if (!requirePhases)
             {
                 return phases;
@@ -303,37 +311,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 phase.Name = name;
             }
-            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-            if (leftArm != null)
+            int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
+            if (leftArm != null || rightArm != null)
             {
-                List<long> targetables = GetTargetableTimes(log, leftArm);
-                for (int i = 1; i < phases.Count; i += 2)
+                List<long> targetablesL = GetTargetableTimes(log, leftArm);
+                List<long> targetablesR = GetTargetableTimes(log, rightArm);
+                for (int i = 1; i < phases.Count; i++)
                 {
                     PhaseData phase = phases[i];
-                    if (targetables.Exists(x => phase.InInterval(x)))
+                    if (!phase.Name.Contains("Arm"))
                     {
-                        phase.Name = "Left " + phase.Name;
-                        phase.AddTarget(leftArm);
+                        continue;
                     }
-                }
-            }
-            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
-            if (rightArm != null)
-            {
-                List<long> targetables = GetTargetableTimes(log, rightArm);
-                for (int i = 1; i < phases.Count; i += 2)
-                {
-                    PhaseData phase = phases[i];
-                    if (targetables.Exists(x => phase.InInterval(x)))
+                    var leftExists = targetablesL.Exists(x => phase.InInterval(x));
+                    var rightExists = targetablesR.Exists(x => phase.InInterval(x));
+                    if (leftExists && rightExists)
                     {
-                        if (phase.Name.Contains("Left"))
-                        {
-                            phase.Name = "Both Arms Phase";
-                        }
-                        else
-                        {
-                            phase.Name = "Right " + phase.Name;
-                        }
+                        phase.Name = "Both Arms Phase " + (++bothArmPhase);
+                        phase.AddTarget(leftArm);
+                        phase.AddTarget(rightArm);
+                    } 
+                    else if (leftExists)
+                    {
+                        phase.Name = "Left Arm Phase " + (++leftArmPhase);
+                        phase.AddTarget(leftArm);
+                    } 
+                    else if (rightExists)
+                    {
+                        phase.Name = "Right Arm Phase " + (++rightArmPhase);
                         phase.AddTarget(rightArm);
                     }
                 }
