@@ -287,20 +287,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
-            }
-        }
-
-        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
-        {
-            foreach (Player p in log.PlayerList)
-            {
-                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
-                    break;
-                }
+                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
             }
         }
 

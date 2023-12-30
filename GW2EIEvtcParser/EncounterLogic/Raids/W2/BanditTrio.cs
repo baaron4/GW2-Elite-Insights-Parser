@@ -319,17 +319,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> environmentallyFriendly = log.CombatData.GetBuffData(EnvironmentallyFriendly);
-            if (environmentallyFriendly.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, EnvironmentallyFriendly, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[EnvironmentallyFriendly], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
             }
         }
     }

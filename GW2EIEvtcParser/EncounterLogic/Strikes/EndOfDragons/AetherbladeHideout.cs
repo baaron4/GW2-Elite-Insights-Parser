@@ -304,23 +304,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
             
-            if(log.FightData.Success)
+            if (log.FightData.Success)
             {
-                IReadOnlyList<AbstractBuffEvent> triangulation = log.CombatData.GetBuffData(AchievementEligibilityTriangulation);
-                bool hasTriangulationBeenAdded = false;
-                if (triangulation.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
                 {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityTriangulation, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
-                            hasTriangulationBeenAdded = true;
-                            break;
-                        }
-                    }
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
                 }
-                if (!hasTriangulationBeenAdded && CustomCheckTriangulationEligibility(log))
+                else if (CustomCheckTriangulationEligibility(log))
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
                 }
