@@ -194,18 +194,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> elementalElegy = log.CombatData.GetBuffData(AchievementEligibilityElementalElegy);
 
-            if (elementalElegy.Any() && log.FightData.Success)
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityElementalElegy, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityElementalElegy], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
             }
         }
     }

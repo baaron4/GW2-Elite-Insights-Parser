@@ -54,17 +54,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> slipperySlublings = log.CombatData.GetBuffData(SlipperySlubling);
-            if (slipperySlublings.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, SlipperySlubling, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[SlipperySlubling], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
             }
         }
 

@@ -61,6 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(Claw, "Claw", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new PlayerDstHitMechanic(SwapQadim, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerDstBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            new PlayerStatusMechanic<DeadEvent>("Taking Turns", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns", "Achievement Eligibility: Taking Turns", "Taking Turns", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingEnable((log) => CustomCheckTakingTurns(log)).UsingAchievementEligibility(true),
             new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
@@ -183,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BurningCrucible, BurningCrucible), // Burning Crucible
+                new DamageCastFinder(BurningCrucible, BurningCrucible),
             };
         }
 
@@ -241,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phase.Name = "Qadim P" + (i) / 2;
                     var pyresFirstAware = new List<long>();
-                    var pyres = new List<ArcDPSEnums.TrashID>
+                    var pyres = new List<TrashID>
                         {
                             TrashID.PyreGuardian,
                             TrashID.PyreGuardianProtect,
@@ -296,9 +297,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>()
+            return new List<TrashID>()
             {
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
@@ -1032,21 +1033,122 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityTakingTurns).Any()) { CheckAchievementBuff(log, AchievementEligibilityTakingTurns); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any()) { CheckAchievementBuff(log, AchievementEligibilityManipulateTheManipulator); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
+                {
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                }
+                else if (CustomCheckManipulateTheManipulator(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityManipulateTheManipulator], 1));
+                }
             }
         }
 
-        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
+        /// <summary>
+        /// Check the player positions for the achievement eligiblity.<br></br>
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
+        private static bool CustomCheckTakingTurns(ParsedEvtcLog log)
         {
+            // Z coordinates info:
+            // The player in the lamp is roughly at -81
+            // The death zone from falling off the platform is roughly at -2950
+            // The main fight platform is at roughly at -4700
+
+            var lamps = log.AgentData.GetNPCsByID(TrashID.QadimLamp).ToList();
+            int lampLabyrinthZ = -250; // Height Threshold
+
             foreach (Player p in log.PlayerList)
             {
-                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
+                IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
+                var exitBuffs = log.CombatData.GetBuffData(PowerOfTheLamp).OfType<BuffApplyEvent>().Where(x => x.To == p.AgentItem).ToList();
+
+                // Count the times the player has entered and exited the lamp.
+                // A player that has entered the lamp but never exites and remains alive is elible for the achievement.
+
+                int entered = 0;
+                int exited = 0;
+
+                for (int i = 0; i < lamps.Count; i++)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
-                    break;
+                    if (positions.Any(x => x.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                    {
+                        entered++;
+                    }
+
+                    var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.FightData.FightEnd;
+                    var segment = new Segment(lamps[i].LastAware, end, 1);
+
+                    if (exitBuffs.Any(x => segment.ContainsPoint(x.Time)))
+                    {
+                        exited++;
+                    }
+
+                    if (entered > 1) { return false; } // Failed achievement
                 }
             }
+
+            return true; // Successful achievement
+        }
+
+        /// <summary>
+        /// Check the NPC positions for the achievement eligiblity.<br></br>
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
+        private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
+        {
+            AbstractSingleActor qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
+            AbstractSingleActor hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
+            AbstractSingleActor bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
+            AbstractSingleActor matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
+            AbstractSingleActor patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
+
+            if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
+            {
+                return !DistanceCheck(log, qadim, hydra) &&
+                    !DistanceCheck(log, qadim, bringer) &&
+                    !DistanceCheck(log, qadim, matriarch) &&
+                    !DistanceCheck(log, qadim, patriarch);
+            }
+            
+            return false;
+        }
+
+        /// <summary>
+        /// Find out if the distance points between <paramref name="qadim"/> and an <paramref name="add"/> goes under 2000 range.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="qadim"></param>
+        /// <param name="add"></param>
+        /// <returns><see langword="true"/> if distance goes under 2000, otherwise <see langword="false"/>.</returns>
+        private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
+        {
+            // Get positions of Ancient Invoked Hydra, Apocalypse Bringer, Wyvern Matriarch and Patriarch
+            var addPositions = add.GetCombatReplayPolledPositions(log).ToList();
+            if (addPositions.Count == 0)
+            {
+                return true;
+            }
+            // Get positions of Qadim during the times of the adds being present
+            var qadimPositions = qadim.GetCombatReplayPolledPositions(log).Where(x => x.Time >= addPositions.First().Time && x.Time <= addPositions.Last().Time).ToList();
+            if (qadimPositions.Count == 0)
+            {
+                return true;
+            }
+
+            // For each matching position polled, check if the distance between points is under 2000
+            for (int i = 0; i < Math.Min(addPositions.Count, qadimPositions.Count); i++)
+            {
+                if (qadimPositions[i].DistanceToPoint(addPositions[i]) < 2000)
+                {
+                    return true;
+                }
+            }
+
+            // Never went under 2000 range
+            return false;
         }
     }
 }

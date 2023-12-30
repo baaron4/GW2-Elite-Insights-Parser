@@ -150,21 +150,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                IReadOnlyList<AbstractBuffEvent> mildlyInsane = log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane);
-                bool hasBeenAdded = false;
-                if (mildlyInsane.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
                 {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityMildlyInsane, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
-                            hasBeenAdded = true;
-                            break;
-                        }
-                    }
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
                 }
-                if (!hasBeenAdded && CustomCheckMildlyInsaneEligibility(log))
+                else if(CustomCheckMildlyInsaneEligibility(log))
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
                 }
