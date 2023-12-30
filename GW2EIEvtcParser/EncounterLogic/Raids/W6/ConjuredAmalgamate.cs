@@ -287,17 +287,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, CAInvul, ca, true, false));
+            int burnPhase = 0, armPhase = 0;
             for (int i = 1; i < phases.Count; i++)
             {
                 string name;
                 PhaseData phase = phases[i];
                 if (i % 2 == 1)
                 {
-                    name = "Arm Phase";
+                    name = "Arm Phase " + (++armPhase);
                 }
                 else
                 {
-                    name = "Burn Phase";
+                    name = "Burn Phase " + (++burnPhase);
                     phase.AddTarget(ca);
                 }
                 phase.Name = name;
