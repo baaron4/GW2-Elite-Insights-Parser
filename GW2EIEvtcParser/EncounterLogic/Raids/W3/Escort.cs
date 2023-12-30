@@ -287,8 +287,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
             }
         }
 

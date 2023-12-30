@@ -197,7 +197,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
             {
-                InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
             }
         }
     }

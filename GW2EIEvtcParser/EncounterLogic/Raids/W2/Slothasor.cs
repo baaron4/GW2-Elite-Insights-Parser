@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
             {
-                InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
             }
         }
 

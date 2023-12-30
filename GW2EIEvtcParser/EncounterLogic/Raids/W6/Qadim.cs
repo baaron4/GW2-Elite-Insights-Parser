@@ -1035,7 +1035,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
                 {
-                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
                 }
                 else if (CustomCheckManipulateTheManipulator(log))
                 {

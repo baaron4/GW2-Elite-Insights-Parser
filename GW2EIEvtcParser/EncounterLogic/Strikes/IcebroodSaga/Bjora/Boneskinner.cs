@@ -89,7 +89,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
             {
-                InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
             }
         }
 

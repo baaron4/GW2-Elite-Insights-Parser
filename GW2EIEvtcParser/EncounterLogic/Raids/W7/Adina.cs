@@ -363,7 +363,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
             {
-                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
             }
         }
     }

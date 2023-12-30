@@ -431,10 +431,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="buff">The buff ID to add.</param>
         /// <param name="stack">Amount of buff stacks (0-99).</param>
         /// <returns>
-        /// A <see cref="List{T}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/> if present, otherwise empty.<br></br>
+        /// A <see cref="IReadOnlyList{T}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/> if present, otherwise empty.<br></br>
         /// To be used to add as range to <see cref="InstanceBuffs"/>.
         /// </returns>
-        internal static List<(Buff, int)> SetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
+        protected static IReadOnlyList<(Buff, int)> GetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
         {
             var buffs = new List<(Buff, int)>();
             foreach (Player p in log.PlayerList)

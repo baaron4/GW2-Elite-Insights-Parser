@@ -396,7 +396,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
                 {
-                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
                 }
             }
         }

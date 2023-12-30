@@ -293,7 +293,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
             {
-                InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
             }
         }
 

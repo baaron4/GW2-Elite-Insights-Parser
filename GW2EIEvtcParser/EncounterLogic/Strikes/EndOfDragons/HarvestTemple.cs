@@ -1147,7 +1147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
                 {
-                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityVoidwalker));
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityVoidwalker));
                 }
                 else if (CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
                 {

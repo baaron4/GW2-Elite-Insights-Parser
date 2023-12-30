@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
                 {
-                    InstanceBuffs.AddRange(SetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
                 }
                 else if (CustomCheckTriangulationEligibility(log))
                 {
