@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -213,7 +213,7 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -226,7 +226,7 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 10000); // 10s with trait
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration( 500, 70, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new RectangleDecoration( 500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -250,7 +250,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = enter.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(enter.Position);
-                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                     GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     replay.Decorations.Add(icon);
                     entranceDecorations.Add(icon);
@@ -162,12 +162,12 @@ namespace GW2EIEvtcParser.EIData
                     var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowPortal, SkillModeCategory.Portal); 
                     (long, long) lifespan = exit.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(exit.Position);
-                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                     GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                     if (entranceDecoration != null)
                     {
-                        replay.Decorations.Add(entranceDecoration.LineTo(icon, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, color, 0.5).UsingSkillMode(skill));
                     }
                     replay.Decorations.Add(icon);
                 }
@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

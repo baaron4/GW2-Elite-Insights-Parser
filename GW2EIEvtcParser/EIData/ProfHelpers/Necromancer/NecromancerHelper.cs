@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 6000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EIData
                     int start = (int)effect.Time - 500;
                     int end = (int)effect.Time;
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, (start, end), color.WithAlpha(0.5f).ToString(), connector).UsingGrowingEnd(end).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, (start, end), color, 0.5, connector).UsingGrowingEnd(end).UsingSkillMode(skill));
                 }
             }
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands, out IReadOnlyList<EffectEvent> plaguelands))
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -257,7 +257,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, fromDodge ? 6000 : 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -269,7 +269,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -281,7 +281,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration( 300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration( 300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -294,7 +294,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -319,7 +319,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

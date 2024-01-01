@@ -348,7 +348,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimAuraPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
-                    replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Green, 0.3, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.GiantQadimThePeerless:
                     // Trim the first giant Qadim, it exists since log start.

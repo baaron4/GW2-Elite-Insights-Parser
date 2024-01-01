@@ -480,7 +480,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // shackles connection
             List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, new long[] { DhuumShacklesBuff, DhuumShacklesBuff2 }, p, true, true);
-            replay.AddTether(shackles, "rgba(0, 255, 255, 0.5)");
+            replay.AddTether(shackles, Colors.Teal, 0.5);
 
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.

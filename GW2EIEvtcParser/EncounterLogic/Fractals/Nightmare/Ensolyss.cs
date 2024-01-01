@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         replay.AddDecorationWithGrowing(new CircleDecoration(600, (start, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), expectedHitEnd);
                         // Shockwave
-                        replay.Decorations.Add(new CircleDecoration( 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(endTimeWave));
+                        replay.Decorations.Add(new CircleDecoration( 1500, (attackEnd, endTimeWave), Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(endTimeWave));
                     }
 
                     // 66% & 33% Breakbars
@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 2000;
                     int start = (int)waveEffect.Time;
                     int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(1150, (start, effectEnd), "rgba(255, 200, 0, 0.4)", new PositionConnector(waveEffect.Position)).UsingFilled(false).UsingGrowingEnd(effectEnd));
+                    EnvironmentDecorations.Add(new CircleDecoration(1150, (start, effectEnd), Colors.Yellow, 0.4, new PositionConnector(waveEffect.Position)).UsingFilled(false).UsingGrowingEnd(effectEnd));
                 }
             }
         }

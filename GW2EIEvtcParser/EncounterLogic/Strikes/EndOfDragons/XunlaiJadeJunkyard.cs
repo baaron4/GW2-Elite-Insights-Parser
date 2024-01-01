@@ -431,7 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Tethering Players to Lich
             List<AbstractBuffEvent> lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
-            replay.AddTether(lichTethers, "rgba(0, 255, 255, 0.5)");
+            replay.AddTether(lichTethers, Colors.Teal, 0.5);
 
             // Reanimated Hatred Fixation
             IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);

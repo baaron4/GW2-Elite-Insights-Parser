@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int hitTime = (int)c.ExpectedEndTime;
                         int endTime = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), "rgba(255, 120, 0, 2)", new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, false, "rgba(255, 0, 0, 2)");
+                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, Colors.Red, 0.2, false);
                     }
 
                     // Leap with shockwaves

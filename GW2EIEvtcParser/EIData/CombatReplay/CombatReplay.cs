@@ -195,12 +195,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 0, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -219,12 +219,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
 
@@ -244,12 +244,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -268,12 +268,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -377,8 +377,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="opacity"></param>
         internal void AddDecorationWithBorder(FormDecoration decoration, Color color, double opacity)
         {
-            Decorations.Add(decoration);
-            Decorations.Add(decoration.GetBorderDecoration(color.WithAlpha(opacity).ToString(true)));
+            AddDecorationWithBorder(decoration, color.WithAlpha(opacity).ToString(true));
         }
 
         /// <summary>
@@ -388,10 +387,22 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="color"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, bool reverseGrowing = false, string color = null)
+        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, string color = null, bool reverseGrowing = false)
         {
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));
+        }
+
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
+        {
+            AddDecorationWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
         }
 
         /// <summary>
