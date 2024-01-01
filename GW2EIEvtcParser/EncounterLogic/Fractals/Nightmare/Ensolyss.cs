@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (!shield15_0Added && percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
                                 {
                                     int effectEnd = (int)target.LastAware;
-                                    replay.Decorations.Add(new CircleDecoration(280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(280, ((int)shieldEffect.Time, effectEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
                                     shield15_0Added = true;
                                 }
                                 else if (!shield15_0Added)
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     {
                                         attackEnd = (int)percent15treshhold.Start;
                                     }
-                                    replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
                                     replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
                                 }
                             }

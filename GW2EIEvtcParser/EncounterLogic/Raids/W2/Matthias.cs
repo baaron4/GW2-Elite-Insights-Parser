@@ -305,7 +305,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.IcePatch:
-                    replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Tornado:
                     replay.Decorations.Add(new CircleDecoration( 90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));

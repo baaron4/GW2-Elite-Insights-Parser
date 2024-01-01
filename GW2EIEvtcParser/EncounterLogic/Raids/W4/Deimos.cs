@@ -542,7 +542,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                         if (!log.FightData.IsCM)
                         {
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
                         }
                     }
                     var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1)).ToList();

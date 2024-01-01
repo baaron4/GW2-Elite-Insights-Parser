@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                     break;
                 case (int)ArcDPSEnums.TrashID.BlueGuardian:
-                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, "rgba(0, 0, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenGuardian:
                     replay.Decorations.Add(new CircleDecoration(1500, lifespan, "rgba(0, 255, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));

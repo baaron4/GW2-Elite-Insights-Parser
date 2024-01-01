@@ -221,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 6200;
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
                             replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), effectEnd, true);
                         }
                     }
