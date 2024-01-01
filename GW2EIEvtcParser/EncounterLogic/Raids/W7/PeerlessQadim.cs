@@ -213,8 +213,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D pylonPosition = target.GetCurrentPosition(log, end);
-                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
-                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
+                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                     }
                     var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     foreach (AbstractCastEvent c in forceOfHavoc)

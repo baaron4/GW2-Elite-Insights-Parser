@@ -177,7 +177,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
                         int impactRadius = (int)target.HitboxWidth / 2 + 100;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)), hitTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), Colors.Orange, 0.2, new PositionConnector(targetPosition)), hitTime);
                         // 3 rounds of decorations for the 3 waves
                         if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
                         {
@@ -206,8 +206,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int safeTime = endFirstAndSecondAoe + 1000;
                             int dangerTime = 77000;
 
-                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
-                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
                             replay.AddDecorationWithGrowing(new CircleDecoration(540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)), safeTime);
                             replay.Decorations.Add(new CircleDecoration(540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
                         }

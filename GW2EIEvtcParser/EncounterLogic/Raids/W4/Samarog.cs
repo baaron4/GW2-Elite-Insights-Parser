@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Guldhem:
                     break;
                 case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
-                    replay.Decorations.Add(new CircleDecoration(240, ((int)target.FirstAware, (int)target.LastAware), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(240, ((int)target.FirstAware, (int)target.LastAware), Colors.Orange, 0.1, new AgentConnector(target)));
                     break;
                 default:
                     break;

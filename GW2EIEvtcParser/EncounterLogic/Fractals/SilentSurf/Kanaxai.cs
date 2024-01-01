@@ -478,7 +478,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 3000;
                     int start = (int)harrowshot.Time;
                     int end = (int)harrowshot.Time + duration;
-                    var circle = new CircleDecoration(280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position));
+                    var circle = new CircleDecoration(280, (start, end), Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                 }

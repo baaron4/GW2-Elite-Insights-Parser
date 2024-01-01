@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                         // Position of the jump back
                         var jumpPosition = new Point3D((float)613.054, (float)-85.3458, (float)-7075.265);
-                        var circle = new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.1)", new PositionConnector(jumpPosition));
+                        var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
                         replay.AddDecorationWithGrowing(circle, endTime);
                     }
                     // Douse in Darkness
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int timings = 300;
 
                         // Jump up
-                        var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
+                        var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(jumpUpCircle, endJump);
                         // Pull
                         for (int i = 0; i < 4; i++)
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Landing
                         long pullTime = c.Time + jumpTime + 1700;
                         long finalTime = pullTime + 1500;
-                        var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
+                        var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(landingCircle, finalTime);
                     }
                     // Cascade

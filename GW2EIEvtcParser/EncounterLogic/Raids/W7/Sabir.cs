@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (targetPosition != null)
                         {
                             replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(targetPosition)));
                             replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(start + duration));
                         }
                     }

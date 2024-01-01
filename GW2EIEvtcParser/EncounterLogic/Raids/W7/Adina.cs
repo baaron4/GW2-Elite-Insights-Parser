@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
                     }
                     //
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
 
                     }

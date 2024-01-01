@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
-                replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), zealousEnd);
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
             }
             // Unbalanced
             IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

@@ -419,7 +419,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int endTime = (int)c.Time + 1333;
-                        replay.AddDecorationWithGrowing(new CircleDecoration( 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( 300, (start, endTime), Colors.LightOrange, 0.1, new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)TrashID.NightmareHallucination2:

@@ -417,7 +417,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in xeraFury)
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), seg.End);
+                replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);
 
             }
             // Fixated Statue tether to Player

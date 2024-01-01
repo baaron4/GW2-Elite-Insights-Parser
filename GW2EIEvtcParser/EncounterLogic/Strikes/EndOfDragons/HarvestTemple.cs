@@ -703,7 +703,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + duration;
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
                             int radius = 2700;
-                            var circle = new CircleDecoration(radius, (start, end), "rgba(250, 250, 250, 0.05)", new PositionConnector(orbEffect.Position));
+                            var circle = new CircleDecoration(radius, (start, end), Colors.White, 0.05, new PositionConnector(orbEffect.Position));
                             replay.AddDecorationWithGrowing(circle, end);
                         }
                     }

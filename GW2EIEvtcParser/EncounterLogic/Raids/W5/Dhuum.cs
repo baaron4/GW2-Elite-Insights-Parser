@@ -335,7 +335,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var loadingCircle = new CircleDecoration(radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position));
                             replay.AddDecorationWithGrowing(loadingCircle, zoneActive);
                             replay.Decorations.Add(new CircleDecoration(radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (zoneDeadly, zoneEnd), Colors.Orange, 0.5, new PositionConnector(position)));
 
                         }
                     }
