@@ -228,9 +228,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentInterpolatedPosition(log, start);
                         if (position != null)
                         {
-                            var circle = new CircleDecoration(380, (start, end), "rgba(255, 150, 0, 0.5)", new PositionConnector(position));
+                            var circle = new CircleDecoration(380, (start, end), Colors.LightOrange, 0.5, new PositionConnector(position));
                             replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
-                            replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), Colors.LightOrange, 0.5, new PositionConnector(position)));
                         }
                     }
                     var deathBloom = cls.Where(x => x.SkillId == DeathBloom).ToList();
@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 8; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 4; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
@@ -286,20 +286,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 4; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Scythe:
-                    replay.Decorations.Add(new CircleDecoration(80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
-                    replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
+                    replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last())));
                     break;
                 case (int)ArcDPSEnums.TrashID.SurgingSoul:
                     List<ParametricPoint3D> positions = replay.Positions;

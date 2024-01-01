@@ -278,7 +278,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, end);
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
                     }
                     var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman).ToList();
                     foreach (AbstractCastEvent c in hadouken)
@@ -302,13 +302,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.Spirit:
                 case (int)ArcDPSEnums.TrashID.Spirit2:
-                    replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.IcePatch:
                     replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Tornado:
-                    replay.Decorations.Add(new CircleDecoration( 90, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration( 90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -324,7 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in corruptedMatthias)
             {
                 int corruptedMatthiasEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
                 Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
                 if (position != null)
                 {

@@ -538,7 +538,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = start + 5000;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                         if (!log.FightData.IsCM)
                         {
@@ -562,13 +562,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 6; i++)
                         {
                             var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector1));
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
                             if (i % 5 != 0)
                             {
                                 var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector2));
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
                             }
                         }
                     }
@@ -589,7 +589,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Tear:
                     break;
                 case (int)ArcDPSEnums.TrashID.Hands:
-                    replay.Decorations.Add(new CircleDecoration(90, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Oil:
                     int delayOil = 3000;

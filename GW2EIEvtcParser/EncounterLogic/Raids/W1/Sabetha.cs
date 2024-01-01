@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(facing)));
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
@@ -190,9 +190,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration( radius, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration( radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     break;
@@ -213,7 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
-                            replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.Yellow, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     break;
@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)c.Time;
                 int end = start + 3000;
-                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(0, 280, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)).UsingFilled(false), true, end);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(0, 280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
             }
             // Sapper bombs
             var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();

@@ -103,8 +103,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), "rgba(0,100,255,0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), "rgba(0,100,255,0.3)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
                     }
                     break;
                 default:

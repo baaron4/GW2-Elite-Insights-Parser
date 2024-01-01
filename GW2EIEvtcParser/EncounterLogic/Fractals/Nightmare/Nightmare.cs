@@ -29,12 +29,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long endTime = effect.Time + cotDuration;
                     if (innerRadius == 0)
                     {
-                        replay.Decorations.Add(new CircleDecoration(outerRadius, (effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new CircleDecoration(outerRadius, (effect.Time, endTime), Colors.Orange, 0.2, new PositionConnector(effect.Position)));
                         replay.Decorations.Add(new CircleDecoration(outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                     }
                     else
                     {
-                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (effect.Time, endTime), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
+                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (effect.Time, endTime), Colors.Orange, 0.2, new PositionConnector(effect.Position)));
                         replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (endTime, endTime + 150), "rgba(250, 120, 0, 0.4)", new PositionConnector(effect.Position)));
                     }
                 }

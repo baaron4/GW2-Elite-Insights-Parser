@@ -176,8 +176,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
                             var openingAngle = 60;
-                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start, start + preCastTime), "rgba(255,200,0,0.1)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start, start + preCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), Colors.Orange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     var tantrum = cls.Where(x => x.SkillId == TantrumSkill).ToList();
@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration(300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target));
+                        var circle = new CircleDecoration(300, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     var shakes = cls.Where(x => x.SkillId == SporeRelease).ToList();
@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration( 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target));
+                        var circle = new CircleDecoration( 700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     break;

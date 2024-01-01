@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
-                replay.Decorations.Add(new LineDecoration((start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                replay.Decorations.Add(new LineDecoration((start, (int)end), Colors.Yellow, 0.5, new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
@@ -298,14 +298,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)), segment.End);
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, Colors.Orange, 0.2, new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -430,7 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1500;
                     int start = (int)aoe.Time;
                     int effectEnd = start + duration;
-                    var circle = new CircleDecoration( 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+                    var circle = new CircleDecoration( 380, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
                 }
@@ -506,7 +506,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             int start = (int)aoe.Time;
             int effectEnd = start + duration;
-            var circle = new CircleDecoration(180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+            var circle = new CircleDecoration(180, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
             EnvironmentDecorations.Add(circle);
             EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
         }

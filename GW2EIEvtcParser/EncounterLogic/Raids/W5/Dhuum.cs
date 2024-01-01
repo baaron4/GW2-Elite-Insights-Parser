@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
-                        var circle = new CircleDecoration(300, (c.Time, c.EndTime), "rgba(255, 150, 0, 0.5)", new AgentConnector(target));
+                        var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, end);
                     }
                     var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
@@ -355,7 +355,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                        replay.Decorations.Add(new PieDecoration(850, 60, (start, end), Colors.LightOrange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                     }
 
                     if (majorSplit != null)
@@ -368,7 +368,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.DhuumDesmina:
                     break;
                 case (int)ArcDPSEnums.TrashID.Echo:
-                    replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Enforcer:
                     break;
@@ -376,7 +376,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     // Fixation tether to player
                     List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
-                    replay.AddTether(fixations, "rgba(255, 0, 0, 0.4)");
+                    replay.AddTether(fixations, Colors.Red, 0.4);
                     break;
                 case (int)ArcDPSEnums.TrashID.Deathling:
                     break;
@@ -486,7 +486,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
             List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
-            replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
+            replay.AddTether(shacklesDmg, Colors.Yellow, 0.5);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

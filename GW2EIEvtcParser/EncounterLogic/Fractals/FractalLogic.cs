@@ -160,8 +160,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int effectEnd = effectStart + duration;
                         var rotationConnector = new AgentFacingConnector(p);
                         var connector = new AgentConnector(p);
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectStart, effectEnd), "rgba(0, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectEnd, effectEnd + 200), "rgba(0, 100, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectStart, effectEnd), Colors.DarkGreen, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectEnd, effectEnd + 200), Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotationConnector));
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int effectEnd = start + duration;
                     var circle = new CircleDecoration(120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
 
                     int pulseDuration = 1000;
                     int pulse = start + pulseDuration;

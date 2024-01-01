@@ -39,6 +39,10 @@ namespace GW2EIEvtcParser.EIData
         public abstract FormDecoration Copy();
 
         public abstract FormDecoration GetBorderDecoration(string borderColor = null);
+        public FormDecoration GetBorderDecoration(Color borderColor, double opacity)
+        {
+            return GetBorderDecoration(borderColor.WithAlpha(opacity).ToString(true));
+        }
 
     }
 }

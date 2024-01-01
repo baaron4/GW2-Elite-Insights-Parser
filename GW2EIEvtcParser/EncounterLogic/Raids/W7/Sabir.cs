@@ -175,17 +175,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (targetPosition != null)
                         {
-                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(targetPosition)));
                             replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
                             replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(start + duration));
                         }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
                 case (int)ArcDPSEnums.TrashID.ParalyzingWisp:

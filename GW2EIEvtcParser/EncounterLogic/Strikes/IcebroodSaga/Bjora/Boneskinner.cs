@@ -116,10 +116,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
-                            var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
+                            var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
                             replay.AddDecorationWithGrowing(pie, endHitTime);
                             // Lingering AoE to match in game display
-                            replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     // Crushing Cruelty
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             long duration = c.Time + jumpTime + timings * i;
                             long end = c.Time + jumpTime + timings * (i + 1);
-                            replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
+                            replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
                         }
                         // Landing
                         long pullTime = c.Time + jumpTime + 1700;
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1800;
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
-                    var circle = new CircleDecoration(100, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position));
+                    var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, new PositionConnector(indicator.Position));
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                     EnvironmentDecorations.Add(circle);
                 }
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int end = (int)claw.Time + duration;
                     var circle = new CircleDecoration(100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         var connector = new PositionConnector(indicator.Position);
                         var rotationConnector = new AngleConnector(rotation);
-                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), "rgba(255, 0, 0, 0.2)");
+                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
                     }
                 }
             }

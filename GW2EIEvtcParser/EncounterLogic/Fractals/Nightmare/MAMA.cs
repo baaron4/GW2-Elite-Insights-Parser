@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (int i = 0; i < 3; i++)
                             {
                                 int shockWaveStart = hitTime + i * 120;
-                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
                             }
                         }
                     }
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
                             replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)), effectEnd, true);
+                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), effectEnd, true);
                         }
                     }
 
@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + duration;
                             int radius = 140;
                             var connector = new PositionConnector(effect.Position);
-                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingFilled(false), true, end);
+                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingFilled(false), true, end);
                         }
                     }
 
@@ -261,9 +261,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int windUpStart = (int)c.Time - windUpDuration;
 
                         // Wind Up - Knight in air
-                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), c.Time, true);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), Colors.Orange, 0.2, new AgentConnector(target)), c.Time, true);
                         // Hit - Knight falling
-                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
                     }
 
                     // Pull AoE
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int hitTime = (int)c.ExpectedEndTime;
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
                     }
                     break;
                 default:

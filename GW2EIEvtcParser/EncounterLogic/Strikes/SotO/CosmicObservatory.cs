@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long, long) lifespan = (cast.Time, phaseBuff.End);
                         // Hardcoded positional value, Dagda isn't in the center but the AoE is
                         var connector = new PositionConnector(new Point3D(305.26892f, 920.6105f, -5961.992f));
-                        var circle = new CircleDecoration(800, lifespan, "rgba(250, 50, 0, 0.4)", connector);
+                        var circle = new CircleDecoration(800, lifespan, Colors.Red, 0.4, connector);
                         replay.Decorations.Add(circle);
                     }
 
@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
-                    var circle = new CircleDecoration(285, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(285, lifespan, Colors.Orange, 0.2, connector);
                     replay.AddDecorationWithGrowing(circle, lifespan.Item2);
                 }
             }
@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var rotation = new AngleConnector(effect.Rotation.Z);
                     // Correcting life span for the hit time, 4000 is the entire animation, 2000 looks to be correct
                     lifespan.Item2 -= 2000;
-                    var slice = new PieDecoration(1500, 30, lifespan, "rgba(250, 50, 0, 0.2)", connector);
+                    var slice = new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector);
                     EnvironmentDecorations.Add(slice.UsingRotationConnector(rotation));
                     EnvironmentDecorations.Add(slice.Copy().UsingGrowingEnd(lifespan.Item2).UsingRotationConnector(rotation));
                 }
@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(300, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -250,7 +250,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 20000);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(300, lifespan, "rgba(250, 50, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                 }
             }
@@ -263,7 +263,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                    var semicircle = new PieDecoration(1400, 180, lifespan, "rgba(250, 50, 0, 0.4)", connector);
+                    var semicircle = new PieDecoration(1400, 180, lifespan, Colors.Red, 0.4, connector);
                     EnvironmentDecorations.Add(semicircle.UsingRotationConnector(rotation));
                 }
             }
@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 666);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(1500, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(1500, lifespan, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                 }
             }

@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 long agonyStart = c.Time;
                 long agonyEnd = agonyStart + 62000;
-                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)).UsingFilled(false));
+                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), Colors.Red, 0.5, new AgentConnector(p)).UsingFilled(false));
             }
         }
 

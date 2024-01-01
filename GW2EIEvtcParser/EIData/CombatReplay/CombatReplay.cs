@@ -369,6 +369,17 @@ namespace GW2EIEvtcParser.EIData
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color));
         }
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        /// <param name="opacity"></param>
+        internal void AddDecorationWithBorder(FormDecoration decoration, Color color, double opacity)
+        {
+            Decorations.Add(decoration);
+            Decorations.Add(decoration.GetBorderDecoration(color.WithAlpha(opacity).ToString(true)));
+        }
 
         /// <summary>
         /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
@@ -413,6 +424,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
+        /// </summary>
+        /// <param name="tethers">Buff events of the tethers.</param>
+        /// <param name="color">color of the tether</param>
+        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, Color color, double opacity)
+        {
+            AddTether(tethers, color.WithAlpha(opacity).ToString(true));
+        }
 
         /// <summary>
         /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
@@ -420,9 +440,10 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="log">The log.</param>
         /// <param name="effect">Tether effect.</param>
         /// <param name="color">Color of the tether decoration.</param>
+        /// <param name="opacity">Opacity of the tether decoration.</param>
         /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
         /// <param name="overrideDuration">Wether to override the duration or not.</param>
-        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, string color, int duration = 0, bool overrideDuration = false)
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
         {
             if (!effect.IsAroundDst) { return; }
 
@@ -438,7 +459,7 @@ namespace GW2EIEvtcParser.EIData
 
             if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
             {
-                Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
+                Decorations.Add(new LineDecoration(lifespan, color, opacity, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
         }
 

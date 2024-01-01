@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var rotationConnector = new AngleConnector(facing);
                             var agentConnector = new AgentConnector(target);
-                            var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, "rgba(200, 120, 0, 0.2)", agentConnector).UsingRotationConnector(rotationConnector);
+                            var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
                             replay.AddDecorationWithGrowing(cone, lifespan.Item2);
                         }
                     }
@@ -289,9 +289,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     break;

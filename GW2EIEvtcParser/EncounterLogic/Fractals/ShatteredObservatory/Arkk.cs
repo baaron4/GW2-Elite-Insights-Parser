@@ -279,7 +279,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 int offset = 520; // ~520ms at the start and between
                                 int duration = 2600;
-                                string color = "rgba(250, 120, 0, 0.2)";
                                 var connector = new AgentConnector(target);
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
@@ -298,10 +297,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         {
                                             break;
                                         }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
                                     }
                                 }
                                 break;
@@ -314,7 +313,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 int offset = 520; // ~520ms at the start and between
                                 int duration = 2600;
-                                string color = "rgba(250, 120, 0, 0.2)";
                                 var connector = new AgentConnector(target);
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
@@ -333,10 +331,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         {
                                             break;
                                         }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
                                     }
                                 }
                                 break;
@@ -377,8 +375,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)effect.Time;
                     int end = start + 2600; // effect has 3833ms duration for some reason
                     var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
-                    EnvironmentDecorations.Add(new PieDecoration( 1400, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration( 1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
                 }
             }
         }

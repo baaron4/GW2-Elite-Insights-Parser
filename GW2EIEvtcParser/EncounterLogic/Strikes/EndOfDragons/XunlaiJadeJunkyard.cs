@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long firstMovementTime = target.FirstAware + 2550;
                     int kraitsRadius = 420;
 
-                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingGrowingEnd(firstMovementTime));
+                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(firstMovementTime));
                     replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.LichHallucination:
@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long awareTime = target.FirstAware + 1000;
                     int lichRadius = 280;
 
-                    replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingGrowingEnd(awareTime));
+                    replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(awareTime));
                     replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
@@ -356,7 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castTime = 2800;
                         int radius = 300;
                         int endTime = (int)c.Time + castTime;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM:
@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castTime = 5600;
                         int radius = 450;
                         int endTime = (int)c.Time + castTime;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ZhaitansReach:
@@ -376,7 +376,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 1900;
                         int endTime = (int)c.Time + castTime;
-                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     // Ground Slam - AoE that knocks out
                     var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ).ToList();
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 66534 -> Fast AoE -- 66397 -> Slow AoE
                         if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamXJJ) { castTime = 2500; }
                         endTime = (int)c.Time + castTime;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), endTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ReanimatedSpite:
@@ -416,7 +416,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int deathsHandRadius = log.FightData.IsCM ? 380 : 300;
                         int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;
                         // AoE on player
-                        replay.AddDecorationWithGrowing(new CircleDecoration(deathsHandRadius, segment, "rgba(250, 120, 0, 0.2)", new AgentConnector(p)), segment.End);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
                         // Logs without effects, we add the dropped AoE manually
                         if (!log.CombatData.HasEffectData)
                         {
@@ -445,18 +445,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             int deathHandGrowStart = start;
             int deathHandGrowEnd = deathHandGrowStart + delay;
             // Growing AoE
-            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (deathHandGrowStart, deathHandGrowEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(position)), deathHandGrowEnd);
+            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (deathHandGrowStart, deathHandGrowEnd), Colors.Orange, 0.2, new PositionConnector(position)), deathHandGrowEnd);
             // Damaging AoE
             int AoEStart = deathHandGrowEnd;
             int AoEEnd = AoEStart + duration;
-            replay.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), "rgba(255, 0, 0, 0.4)");
+            replay.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), Colors.Red, 0.4);
         }
 
         private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, int radius, int delay, Point3D position)
         {
             int endTime = startCast + durationCast;
             var connector = new PositionConnector(position);
-            replay.Decorations.Add(new CircleDecoration(radius, (startCast, startCast + delay), "rgba(250, 120, 0, 0.2)", connector).UsingGrowingEnd(startCast + delay));
+            replay.Decorations.Add(new CircleDecoration(radius, (startCast, startCast + delay), Colors.Orange, 0.2, connector).UsingGrowingEnd(startCast + delay));
             replay.Decorations.Add(new CircleDecoration(radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", connector));
         }
     }

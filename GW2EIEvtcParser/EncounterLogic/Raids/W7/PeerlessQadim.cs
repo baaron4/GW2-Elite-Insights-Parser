@@ -271,7 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
                     // Sapping Surge, bad red tether
-                    AddTetherDecorations(log, target, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
+                    AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
 
                     // Stun icon
                     IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -338,12 +338,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(450, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimPylon:
                     // Red tether from Qadim to the Pylon during breakbar
                     List<AbstractBuffEvent> breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
-                    replay.AddTether(breakbarBuffs, "rgba(255, 0, 0, 0.4)");
+                    replay.AddTether(breakbarBuffs, Colors.Red, 0.4);
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimAuraPylon:
                     break;
@@ -414,9 +414,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Sapping Surge, bad red tether
-            AddTetherDecorations(log, p, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
+            AddTetherDecorations(log, p, replay, SappingSurge, Colors.Red, 0.4);
             // Kinetic Abundance, good blue tether
-            AddTetherDecorations(log, p, replay, KineticAbundance, "rgba(0, 255, 0, 0.4)");
+            AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
             // Add custom arrow overhead for the player lifted up
             var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless).ToList();
@@ -458,7 +458,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (previousAoeCounter == 2) { radius = 680; } // In game it's not 840 as it's meant to be
 
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var circle = new CircleDecoration(radius, lifespan, "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -472,7 +472,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                     var circle = new CircleDecoration(75, lifespan, "rgba(230, 40, 0, 0.1)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration("rgba(255, 0, 0, 0.4)"));
+                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.Red, 0.4));
                 }
             }
 
@@ -613,7 +613,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, string color)
+        private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
         {
             var tethers = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
             var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
@@ -635,7 +635,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         tetherEnd = (int)log.FightData.FightEnd;
                     }
-                    replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(actor), new AgentConnector(src)));
+                    replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, opacity, new AgentConnector(actor), new AgentConnector(src)));
                 }
             }
         }
