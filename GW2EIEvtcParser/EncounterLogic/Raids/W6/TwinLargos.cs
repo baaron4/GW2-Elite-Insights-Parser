@@ -153,11 +153,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
-                                p2.Name += " (Fallback)";
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -174,11 +175,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
-                                p2.Name += " (Fallback)";
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                         // P1/P2 and P3 are merged
@@ -188,11 +190,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p3.OverrideStart(hit.Time);
+                                p3.Name += " (Fallback)";
                             }
                             else
                             {
                                 p3.OverrideStart(p2.End);
-                                p3.Name += " (Fallback)";
+                                p3.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -207,10 +210,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (hit != null)
                 {
                     p1.OverrideStart(hit.Time);
+                    p1.Name += " (Fallback)";
                 } 
                 else
                 {
-                    p1.Name += " (Fallback)";
+                    p1.Name += " (Bad Fallback)";
                 }
             }
         }
