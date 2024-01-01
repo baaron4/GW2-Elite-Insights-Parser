@@ -117,6 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            targetPhases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
