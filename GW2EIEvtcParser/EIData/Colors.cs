@@ -34,6 +34,12 @@ namespace GW2EIEvtcParser.EIData
             return new Color(R, G, B, alpha);
         }
 
+        /// <summary>Creates a new color with adjusted alpha value</summary>
+        public Color WithAlpha(double alpha)
+        {
+            return WithAlpha((float)alpha);
+        }
+
         public string ToString(bool withAlpha = true)
         {
             return withAlpha ? $"rgba({R}, {G}, {B}, {A})" : $"rgb({R}, {G}, {B})";

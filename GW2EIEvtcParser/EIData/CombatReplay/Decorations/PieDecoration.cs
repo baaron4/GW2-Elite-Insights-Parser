@@ -14,6 +14,10 @@ namespace GW2EIEvtcParser.EIData
             OpeningAngle = openingAngle;
         }
 
+        public PieDecoration(int radius, float openingAngle, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, openingAngle, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
+
         public override FormDecoration Copy()
         {
             return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
