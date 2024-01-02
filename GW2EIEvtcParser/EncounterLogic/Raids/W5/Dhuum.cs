@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Player Souls - Filter out souls without master
             var yourSoul = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100 && x.Master != null && x.Master.IsPlayer)
+                .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100)
                 .ToList();
             foreach (AgentItem soul in yourSoul)
             {
@@ -638,34 +638,37 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
 
             // Soul split
-            // Only works for logs that have a soul attached to a player as master.
-            IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.Master == p.AgentItem).ToList();
-            foreach (AgentItem soul in souls)
+            IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul);
+            IReadOnlyList<AgentItem> soulsWithMaster = souls.Where(x => x.Master == p.AgentItem).ToList();
+            IReadOnlyList<AgentItem> soulsWithoutMaster = souls.Where(x => x.Master == null && x.FirstAware > 100).ToList(); // Filter out souls present at encouter start
+
+            // Souls with a master - Only check Hastened Demise
+            foreach (AgentItem soul in soulsWithMaster)
             {
                 Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
                 Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
                 if (hastenedDemise != null && soulPosition != null)
                 {
-                    (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
-                    long soulSplitDeathTime = hastenedDemise.Start + 10000;
+                    AddSoulSplitDecorations(p, replay, soul, hastenedDemise, soulPosition);
+                }
+            }
 
-                    int radius = (int)(soul.HitboxWidth / 2);
-                    var positionConnector = new PositionConnector(soulPosition);
-                    var playerConnector = new AgentConnector(p);
-
-                    // Soul outer circle
-                    var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, "rgba(255, 255, 255, 1)", positionConnector).UsingFilled(false);
-                    // Soul tether to player
-                    var line = new LineDecoration(soulLifespan, "rgba(255, 255, 255, 1)", positionConnector, playerConnector);
-                    // Soul icon
-                    var icon = new IconDecoration("https://i.imgur.com/rAyuxqS.png", 16, 1, soulLifespan, positionConnector);
-                    // Red circle indicating timer
-                    var death = new CircleDecoration(radius, hastenedDemise, "rgba(255, 0, 0, 0.2)", positionConnector);
-
-                    replay.Decorations.Add(hitbox);
-                    replay.Decorations.Add(line);
-                    replay.Decorations.Add(icon);
-                    replay.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
+            // Souls without a master - Check for the player-to-soul buff application
+            foreach (AgentItem soul in soulsWithoutMaster)
+            {
+                var buffs = GetFilteredList(log.CombatData, DhuumPlayerToSoulTrackBuff, soul, true, true).Where(x => x is BuffApplyEvent).ToList();
+                foreach (AbstractBuffEvent buff in buffs)
+                {
+                    if (buff.CreditedBy == p.AgentItem)
+                    {
+                        Segment buffFromPlayer = soul.GetBuffStatus(log, DhuumPlayerToSoulTrackBuff, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
+                        Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
+                        Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
+                        if (buffFromPlayer != null && hastenedDemise != null && soulPosition != null)
+                        {
+                            AddSoulSplitDecorations(p, replay, soul, hastenedDemise, soulPosition);
+                        }
+                    }
                 }
             }
         }
@@ -776,6 +779,38 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Dhuum not found");
             }
             return (target.GetHealth(combatData) > 35e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        /// <summary>
+        /// Adds the Soul Split decorations.
+        /// </summary>
+        /// <param name="p">The player.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="soul">The Soul to tether to the player.</param>
+        /// <param name="hastenedDemise">The segment of the buff on the player.</param>
+        /// <param name="soulPosition">The position of the Soul.</param>
+        internal static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, Segment hastenedDemise, Point3D soulPosition)
+        {
+            (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
+            long soulSplitDeathTime = hastenedDemise.Start + 10000;
+
+            int radius = (int)(soul.HitboxWidth / 2);
+            var positionConnector = new PositionConnector(soulPosition);
+            var playerConnector = new AgentConnector(p);
+
+            // Soul outer circle
+            var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, "rgba(255, 255, 255, 1)", positionConnector).UsingFilled(false);
+            // Soul tether to player
+            var line = new LineDecoration(soulLifespan, "rgba(255, 255, 255, 1)", positionConnector, playerConnector);
+            // Soul icon
+            var icon = new IconDecoration("https://i.imgur.com/rAyuxqS.png", 16, 1, soulLifespan, positionConnector);
+            // Red circle indicating timer
+            var death = new CircleDecoration(radius, hastenedDemise, "rgba(255, 0, 0, 0.2)", positionConnector);
+
+            replay.Decorations.Add(hitbox);
+            replay.Decorations.Add(line);
+            replay.Decorations.Add(icon);
+            replay.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
         }
     }
 }
