@@ -345,7 +345,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castDuration = 5400;
                         int expectedEndCastTime = (int)c.Time + castDuration;
-                        double actualDuration = target.ComputeCastTimeWithQuickness(log, c.Time, castDuration);
+                        double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
                         if (actualDuration > 0)
                         {
                             replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // If the aspect has Sugar Rush AND Quickness
                         if (hasSugarRush && quickness != null)
                         {
-                            double actualDuration = target.ComputeCastTimeWithQuicknessAndSugarRush(log, c.Time, castDuration);
+                            double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, c.Time, castDuration);
                             var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
                             replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
@@ -392,7 +392,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // If the aspect has Sugar rush AND NOT Quickness
                         if (hasSugarRush && quickness == null)
                         {
-                            var actualDuration = AbstractSingleActor.ComputeCastTimeWithSugarRush(castDuration);
+                            var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
                             var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
                             replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
@@ -400,7 +400,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // If the aspect DOESN'T have Sugar rush but HAS Quickness
                         if (!hasSugarRush && quickness != null)
                         {
-                            double actualDuration = target.ComputeCastTimeWithQuickness(log, c.Time, castDuration);
+                            double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
                             var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
                             replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }

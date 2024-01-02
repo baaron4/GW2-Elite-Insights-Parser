@@ -528,7 +528,6 @@ namespace GW2EIEvtcParser
         private const int Cage = -46;
         private const int Bombs = -47;
         private const int YourSoul = -48;
-        private const int TheVortexOfSouls = -49;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -707,7 +706,6 @@ namespace GW2EIEvtcParser
             UnderworldReaper = 19831,
             DhuumDesmina = 19481,
             YourSoul = ArcDPSEnums.YourSoul,
-            TheVortexOfSouls = ArcDPSEnums.TheVortexOfSouls,
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,

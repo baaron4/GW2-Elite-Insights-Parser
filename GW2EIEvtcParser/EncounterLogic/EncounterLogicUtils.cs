@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -235,6 +236,55 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="Quickness"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="startCastTime">Starting time of the cast.</param>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long expectedEndCastTime = startCastTime + castDuration;
+            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            if (quickness != null)
+            {
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                return castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="MistlockInstabilitySugarRush"/>.
+        /// </summary>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithSugarRush(long castDuration)
+        {
+            return castDuration * 0.8;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="Quickness"/> and <see cref="MistlockInstabilitySugarRush"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="startCastTime">Starting time of the cast.</param>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long expectedEndCastTime = startCastTime + castDuration;
+            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            if (quickness != null)
+            {
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                double castTimeWithSugarRush = ComputeCastTimeWithSugarRush(castDuration);
+                return castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
+            }
+            return 0;
         }
     }
 }

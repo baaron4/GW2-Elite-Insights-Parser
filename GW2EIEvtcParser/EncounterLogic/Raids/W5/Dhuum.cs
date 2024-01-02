@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             long defaultCastDuration = 1550;
 
                             // Compute cast time of the Death Mark with Quickness
-                            double computedDuration = target.ComputeCastTimeWithQuickness(log, start, defaultCastDuration);
+                            double computedDuration = ComputeCastTimeWithQuickness(log, target, start, defaultCastDuration);
                             if (computedDuration > 0)
                             {
                                 defaultCastDuration = Math.Min(defaultCastDuration, (int)Math.Ceiling(computedDuration));
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 int expectedEndCastTime = (int)effect.Time + castDuration;
 
                                 // Find if Dhuum has stolen quickness
-                                double actualDuration = target.ComputeCastTimeWithQuickness(log, effect.Time, castDuration);
+                                double actualDuration = ComputeCastTimeWithQuickness(log, target, effect.Time, castDuration);
 
                                 // Dhuum can interrupt his own cast with other skills and the effect duration logged of 10000 isn't correct.
                                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, castDuration);
