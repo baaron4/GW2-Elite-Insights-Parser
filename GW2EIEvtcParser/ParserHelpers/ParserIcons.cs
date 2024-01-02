@@ -22,9 +22,24 @@ namespace GW2EIEvtcParser.ParserHelpers
         public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
         /// <summary>
-        /// Generic blue arrow up.
+        /// Generic blue arrow pointing upwards.
         /// </summary>
         public const string GenericBlueArrowUp = "https://i.imgur.com/0EnjyQX.png";
+
+        /// <summary>
+        /// Generic Green arrow pointing upwards.
+        /// </summary>
+        public const string GenericGreenArrowUp = "https://i.imgur.com/Nlu3u04.png";
+
+        /// <summary>
+        /// Generic Red arrow pointing upwards.
+        /// </summary>
+        public const string GenericRedArrowUp = "https://i.imgur.com/hCrbYA6.png";
+
+        /// <summary>
+        /// Generic Purple arrow pointing upwards.
+        /// </summary>
+        public const string GenericPurpleArrowUp = "https://i.imgur.com/DBq6i0R.png";
 
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
@@ -361,6 +376,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
         private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
         private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
+        private const string TrashDhuumSoul = "https://i.imgur.com/rAyuxqS.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -867,6 +883,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.Messenger, TrashTormentedDeadMessenger },
             { ArcDPSEnums.TrashID.Enforcer, TrashEnforcer },
             { ArcDPSEnums.TrashID.Echo, TrashEcho },
+            { ArcDPSEnums.TrashID.YourSoul, TrashDhuumSoul },
             { ArcDPSEnums.TrashID.KeepConstructCore, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.ExquisiteConjunction, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.Jessica, TrashKeepConstructGhosts },

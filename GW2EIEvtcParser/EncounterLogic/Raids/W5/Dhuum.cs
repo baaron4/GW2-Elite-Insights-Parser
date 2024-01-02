@@ -5,6 +5,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -52,18 +53,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return true;
              }),
-            //new Mechanic(ResidualAffliction, "Residual Affliction", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Yellow), "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, "Soul Shackle", new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
+            new PlayerDstBuffApplyMechanic(Superspeed, "Superspeed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Grey), "SupSpeed.Orb", "Gained Superspeed from Desmina (Walked over orb)", "Took Superspeed orb", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TrashID.DhuumDesmina)),
             new PlayerDstHitMechanic(DhuumShacklesHit, "Soul Shackle", new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0).UsingChecker((de,log) => de.HealthDamage > 0),
             new PlayerDstHitMechanic(ConeSlash, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
-            new PlayerDstHitMechanic(Cull, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
+            new PlayerDstHitMechanic(CullDamage, "Cull", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
             new PlayerDstHitMechanic(PutridBomb, "Putrid Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
             new PlayerDstHitMechanic(CataclysmicCycle, "Cataclysmic Cycle", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg","Damage when sucked to close to middle", "Suck dmg",0),
             new PlayerDstHitMechanic(DeathMark, "Death Mark", new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0),
             new PlayerDstHitMechanic(GreaterDeathMark, "Greater Death Mark", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
-          //  new Mechanic(MortalCoilDhuum, "Mortal Coil", ParseEnum.BossIDS.Dhuum, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green Orbs",
+            new PlayerDstHitMechanic(RendingSwipe, "Rending Swipe", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightOrange), "Enf.Swipe", "Hit by Dhuum's Enforcer Rending Swipe", "Rending Swipe Hit", 0),
             new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
-            //new SkillOnPlayerMechanic(EndersEchoDamage , "Echo's Damage", new MechanicPlotlySetting(Symbols.Square,Color.Red), "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             new PlayerDstBuffApplyMechanic(EchosPickup, "Echo's Pick up", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU","Picked up by Ender's Echo", "Ender's Pick up", 3000),
             new PlayerDstBuffApplyMechanic(SourcePureOblivionBuff, "Pure Oblivion", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Black), "10%", "Lifted by Pure Oblivion", "Pure Oblivion (10%)", 0),
             new PlayerDstBuffRemoveMechanic(EchosPickup, "Freed from Echo", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0).UsingChecker( (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any()),
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i)
                 {
                     CanBeSubPhase = false
-                }); ;
+                });
                 start = cataCycle.EndTime;
             }
             phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
@@ -178,7 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
+            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum));
             if (dhuum == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
@@ -229,6 +229,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[i].AddTarget(dhuum);
             }
+            // Add enforcers
+            foreach (PhaseData phase in phases)
+            {
+                var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && x.FirstAware >= phase.Start && x.LastAware <= phase.End  && phase.CanBeSubPhase).ToList();
+                phase.AddSecondaryTargets(enforcers);
+            }
             return phases;
         }
 
@@ -236,30 +242,30 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.Dhuum,
-                (int)ArcDPSEnums.TrashID.UnderworldReaper,
+                (int)TargetID.Dhuum,
+                (int)TrashID.Echo,
+                (int)TrashID.Enforcer,
+                (int)TrashID.UnderworldReaper,
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            return new List<TrashID>
             {
-                ArcDPSEnums.TrashID.Echo,
-                ArcDPSEnums.TrashID.Enforcer,
-                ArcDPSEnums.TrashID.Messenger,
-                ArcDPSEnums.TrashID.Deathling,
-                ArcDPSEnums.TrashID.DhuumDesmina
+                TrashID.Messenger,
+                TrashID.Deathling,
+                TrashID.DhuumDesmina
             };
         }
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem messenger = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Messenger).MinBy(x => x.FirstAware);
+                AgentItem messenger = agentData.GetNPCsByID(TrashID.Messenger).MinBy(x => x.FirstAware);
                 if (messenger != null)
                 {
                     startToUse = messenger.FirstAware;
@@ -270,13 +276,32 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem dhuum = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).FirstOrDefault();
+            AgentItem dhuum = agentData.GetNPCsByID(TargetID.Dhuum).FirstOrDefault();
             if (dhuum == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
-            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+            _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);  
             base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+
+            // Player Souls - Filter out souls without master
+            var yourSoul = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100 && x.Master != null && x.Master.IsPlayer)
+                .ToList();
+            foreach (AgentItem soul in yourSoul)
+            {
+                soul.OverrideType(AgentItem.AgentType.NPC);
+                soul.OverrideID(TrashID.YourSoul);
+            }
+            agentData.Refresh();
+
+            // Adding counting number to the Enforcers
+            var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer)).ToList();
+            for (int i = 0; i < enforcers.Count; i++)
+            {
+                enforcers[i].OverrideName(enforcers[i].Character + " " + (i + 1));
+            }
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -305,59 +330,171 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            // TODO: correct position
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Dhuum:
+                case (int)TargetID.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == DeathMark).ToList();
                     AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
-                    foreach (AbstractCastEvent c in deathmark)
+                    // Using new effects method for logs that contain them
+                    if (!log.CombatData.HasEffectData)
                     {
-                        start = (int)c.Time;
-                        int zoneActive = start + 1550;
-                        int zoneDeadly = zoneActive + 6000; //point where the zone becomes impossible to walk through unscathed
-                        int zoneEnd = zoneActive + 120000;
-                        int radius = 450;
-                        if (majorSplit != null)
+                        foreach (AbstractCastEvent c in deathmark)
                         {
-                            zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
-                            zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
-                        }
-                        int spellCenterDistance = 200; //hitbox radius
-                        Point3D facing = target.GetCurrentRotation(log, start + 3000);
-                        Point3D targetPosition = target.GetCurrentPosition(log, start + 3000);
-                        if (facing != null && targetPosition != null)
-                        {
-                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            var loadingCircle = new CircleDecoration(radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position));
-                            replay.AddDecorationWithGrowing(loadingCircle, zoneActive);
-                            replay.Decorations.Add(new CircleDecoration(radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (zoneDeadly, zoneEnd), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
+                            start = (int)c.Time;
+                            long defaultCastDuration = 1550;
 
+                            // Compute cast time of the Death Mark with Quickness
+                            double computedDuration = target.ComputeCastTimeWithQuickness(log, start, defaultCastDuration);
+                            if (computedDuration > 0)
+                            {
+                                defaultCastDuration = Math.Min(defaultCastDuration, (int)Math.Ceiling(computedDuration));
+                            }
+
+                            long zoneActive = start + defaultCastDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
+                            long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
+                            long zoneEnd = zoneActive + 120000; // End of the AoE
+                            int radius = 450;
+
+                            if (majorSplit != null)
+                            {
+                                zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
+                                zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
+                            }
+                            int spellCenterDistance = 200; //hitbox radius
+                            Point3D facing = target.GetCurrentRotation(log, start + 3000);
+                            Point3D targetPosition = target.GetCurrentPosition(log, start + 3000);
+                            if (facing != null && targetPosition != null)
+                            {
+                                var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
+                                var positionConnector = new PositionConnector(position);
+
+                                (long, long) lifespanWarning = (start, zoneActive);
+                                (long, long) lifespanActivation = (zoneActive, zoneDeadly);
+                                (long, long) lifespanDeadly = (zoneDeadly, zoneEnd);
+
+                                // Warning
+                                var circleOrange = new CircleDecoration(radius, lifespanWarning, "rgba(250, 120, 0, 0.2)", positionConnector);
+                                var circleRed = new CircleDecoration(radius, lifespanWarning, "rgba(255, 0, 0, 0.4)", positionConnector);
+                                replay.Decorations.Add(circleOrange);
+                                replay.Decorations.Add(circleRed.UsingGrowingEnd(lifespanWarning.Item2));
+
+                                // Activation
+                                var greenCircle = new CircleDecoration(radius, lifespanActivation, "rgba(200, 255, 100, 0.5)", positionConnector);
+                                replay.Decorations.Add(greenCircle);
+                                replay.Decorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
+
+                                // Deadly
+                                var redCircle = new CircleDecoration(radius, lifespanDeadly, "rgba(255, 0, 0, 0.4)", positionConnector);
+                                replay.Decorations.Add(redCircle);
+                            }
                         }
                     }
+
+                    // Cataclysmic Cycle - Suction during Major Soul Split
                     var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         var circle = new CircleDecoration(300, (c.Time, c.EndTime), "rgba(255, 150, 0, 0.5)", new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, end);
                     }
-                    var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
-                    foreach (AbstractCastEvent c in slash)
+
+                    // Cone Slash
+                    // Using new effects method for logs that contain them
+                    if (!log.CombatData.HasEffectData)
                     {
-                        start = (int)c.Time;
-                        end = (int)c.EndTime;
-                        Point3D facing = target.GetCurrentRotation(log, start);
-                        if (facing == null)
+                        var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
+                        foreach (AbstractCastEvent c in slash)
                         {
-                            continue;
+                            start = (int)c.Time;
+                            end = (int)c.EndTime;
+                            // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
+                            Point3D facing = target.GetCurrentRotation(log, start + 200, 200);
+                            if (facing == null)
+                            {
+                                continue;
+                            }
+                            replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                         }
-                        replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                    }
+                    else
+                    {
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumConeSlash, out IReadOnlyList<EffectEvent> coneSlashes))
+                        {
+                            foreach (EffectEvent effect in coneSlashes)
+                            {
+                                int castDuration = 3250;
+                                int expectedEndCastTime = (int)effect.Time + castDuration;
+
+                                // Find if Dhuum has stolen quickness
+                                double actualDuration = target.ComputeCastTimeWithQuickness(log, effect.Time, castDuration);
+
+                                // Dhuum can interrupt his own cast with other skills and the effect duration logged of 10000 isn't correct.
+                                (long, long) lifespan = effect.ComputeDynamicLifespan(log, castDuration);
+                                (long, long) supposedLifespan = (effect.Time, effect.Time + castDuration);
+
+                                // If Dhuum has stolen quickness, find the minimum cast duration
+                                if (actualDuration > 0)
+                                {
+                                    supposedLifespan.Item2 = effect.Time + Math.Min(castDuration, (long)Math.Ceiling(actualDuration));
+                                }
+
+                                // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
+                                Point3D facing = target.GetCurrentRotation(log, effect.Time + 200, 200);
+                                if (facing == null)
+                                {
+                                    continue;
+                                }
+
+                                var position = new PositionConnector(effect.Position);
+                                var rotation = new AngleConnector(facing);
+
+                                var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingRotationConnector(rotation);
+                                var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
+                                replay.Decorations.Add(coneDec);
+                                replay.Decorations.Add(coneGrowing);
+                            }
+                        }
                     }
 
+                    // Scythe Swing - AoEs
+                    var scytheSwing = cls.Where(x => x.SkillId == ScytheSwing).ToList();
+                    for (int i = 0; i < scytheSwing.Count; i++)
+                    {
+                        var endNextSwing = i < scytheSwing.Count -1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
+
+                        // AoE Indicator
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out IReadOnlyList<EffectEvent> scytheSwingIndicators))
+                        {
+                            int radius = 45;
+                            int radiusIncrease = 5;
+                            foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < endNextSwing))
+                            {
+                                // Computing lifespan through secondary effect and position.
+                                (long start, long end) lifespan = indicator.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumScytheSwingDamage);
+                                var circle = new CircleDecoration(radius, lifespan, "rgba(255, 120, 0, 0.2)", new PositionConnector(indicator.Position));
+                                replay.Decorations.Add(circle);
+                                radius += radiusIncrease;
+                            }
+                        }
+
+                        // Brief damage indicator
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingDamage, out IReadOnlyList<EffectEvent> scytheSwingDamage))
+                        {
+                            int radius = 45;
+                            int radiusIncrease = 5;
+                            foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < endNextSwing))
+                            {
+                                // The effect has 0 duration, setting it to 250
+                                (long start, long end) lifespan = (damage.Time, damage.Time + 250);
+                                var circle = new CircleDecoration(radius, lifespan, "rgba(97, 104, 51, 0.5)", new PositionConnector(damage.Position));
+                                replay.Decorations.Add(circle);
+                                radius += radiusIncrease;
+                            }
+                        }
+                    }
                     if (majorSplit != null)
                     {
                         start = (int)majorSplit.Time;
@@ -365,22 +502,37 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.DhuumDesmina:
+                case (int)TrashID.DhuumDesmina:
                     break;
-                case (int)ArcDPSEnums.TrashID.Echo:
+                case (int)TrashID.Echo:
                     replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     break;
-                case (int)ArcDPSEnums.TrashID.Enforcer:
+                case (int)TrashID.Enforcer:
+                    var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe).ToList();
+                    foreach (AbstractCastEvent c in rendingSwipes)
+                    {
+                        long castDuration = 667;
+                        (long, long) lifespan = (c.Time, c.Time + castDuration);
+                        Point3D facing = target.GetCurrentRotation(log, c.Time, 200);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        var agentConnector = new AgentConnector(target);
+                        var rotationConnector = new AngleConnector(facing);
+                        var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, "rgba(250, 120, 0, 0.2)", agentConnector).UsingRotationConnector(rotationConnector);
+                        replay.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
+                    }
                     break;
-                case (int)ArcDPSEnums.TrashID.Messenger:
+                case (int)TrashID.Messenger:
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
                     // Fixation tether to player
                     List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                     replay.AddTether(fixations, "rgba(255, 0, 0, 0.4)");
                     break;
-                case (int)ArcDPSEnums.TrashID.Deathling:
+                case (int)TrashID.Deathling:
                     break;
-                case (int)ArcDPSEnums.TrashID.UnderworldReaper:
+                case (int)TrashID.UnderworldReaper:
                     var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in stealths)
                     {
@@ -432,7 +584,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            var greenCircle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                            var greenCircle = new CircleDecoration(240, (gstart, gend), "rgba(0, 120, 0, 0.4)", new AgentConnector(target));
                             replay.AddDecorationWithGrowing(greenCircle, gend);
                         }
                     }
@@ -448,11 +600,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Dhuum not found");
-            }
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;
@@ -467,8 +614,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     end = (int)removedBuff.Time;
                 }
-                var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
+                var lifespan = new Segment(start, end, 1);
+                var circle = new CircleDecoration(100, lifespan, "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
                 replay.AddDecorationWithGrowing(circle, duration);
+                replay.AddOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp);
             }
             // bomb
             var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -487,11 +636,141 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
             List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
             replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
+
+            // Soul split
+            // Only works for logs that have a soul attached to a player as master.
+            IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.Master == p.AgentItem).ToList();
+            foreach (AgentItem soul in souls)
+            {
+                Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
+                Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
+                if (hastenedDemise != null && soulPosition != null)
+                {
+                    (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
+                    long soulSplitDeathTime = hastenedDemise.Start + 10000;
+
+                    int radius = (int)(soul.HitboxWidth / 2);
+                    var positionConnector = new PositionConnector(soulPosition);
+                    var playerConnector = new AgentConnector(p);
+
+                    // Soul outer circle
+                    var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, "rgba(255, 255, 255, 1)", positionConnector).UsingFilled(false);
+                    // Soul tether to player
+                    var line = new LineDecoration(soulLifespan, "rgba(255, 255, 255, 1)", positionConnector, playerConnector);
+                    // Soul icon
+                    var icon = new IconDecoration("https://i.imgur.com/rAyuxqS.png", 16, 1, soulLifespan, positionConnector);
+                    // Red circle indicating timer
+                    var death = new CircleDecoration(radius, hastenedDemise, "rgba(255, 0, 0, 0.2)", positionConnector);
+
+                    replay.Decorations.Add(hitbox);
+                    replay.Decorations.Add(line);
+                    replay.Decorations.Add(icon);
+                    replay.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
+                }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Death Mark - First Warning (2 seconds)
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out IReadOnlyList<EffectEvent> deathMarkFirstIndicators))
+            {
+                foreach (EffectEvent effect in deathMarkFirstIndicators)
+                {
+                    (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.DhuumDeathMarkSecondIndicator);
+                    var connector = new PositionConnector(effect.Position);
+                    var circleOrange = new CircleDecoration(450, lifespan, "rgba(250, 120, 0, 0.2)", connector);
+                    var circleRed = new CircleDecoration(450, lifespan, "rgba(255, 0, 0, 0.4)", connector);
+                    EnvironmentDecorations.Add(circleOrange);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.Item2));
+                }
+            }
+
+            // Death Mark - Death Zone
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkDeathZone, out IReadOnlyList<EffectEvent> deathMarkDeathZones))
+            {
+                foreach (EffectEvent effect in deathMarkDeathZones)
+                {
+                    int warningDuration = 6000;
+                    int radius = 450;
+                    (long, long) lifespan = effect.ComputeLifespan(log, 120000);
+                    (long, long) lifespanActivation = (lifespan.Item1, lifespan.Item1 + warningDuration);
+                    (long, long) lifespanDeadly = (lifespan.Item1 + warningDuration, lifespan.Item2);
+
+                    var connector = new PositionConnector(effect.Position);
+
+                    // Green indicator for the safe zone - Activation
+                    var greenCircle = new CircleDecoration(radius, lifespanActivation, "rgba(200, 255, 100, 0.5)", connector);
+                    EnvironmentDecorations.Add(greenCircle);
+                    EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
+                    // Damage zone
+                    var redCircle = new CircleDecoration(radius, lifespanDeadly, "rgba(255, 0, 0, 0.4)", connector);
+                    EnvironmentDecorations.Add(redCircle);
+                }
+            }
+
+            // Cull - Circle orange AoE indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullAoEIndicator, out IReadOnlyList<EffectEvent> cullingAoEs))
+            {
+                foreach (EffectEvent effect in cullingAoEs)
+                {
+                    // Effect duration is 0, we get the effect start time of the cracks
+                    (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumCullCracksIndicator);
+                    var connector = new PositionConnector(effect.Position);
+                    var greenCircle = new CircleDecoration(300, lifespan, "rgba(250, 120, 0, 0.2)", connector);
+                    EnvironmentDecorations.Add(greenCircle);
+                    EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespan.Item2));
+                }
+            }
+
+            // Cull - Black cracks spawning indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksIndicator, out IReadOnlyList<EffectEvent> cullingCracksIndicators))
+            {
+                foreach (EffectEvent effect in cullingCracksIndicators)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(230 / 2, 0), true);
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z -90);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(0, 0, 0, 0.3)", connector).UsingRotationConnector(rotationConnector);
+                    EnvironmentDecorations.Add(rectangle);
+                }
+            }
+
+            // Cull - Cracks explosion
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksDamage, out IReadOnlyList<EffectEvent> cullingCracksDamage))
+            {
+                foreach (EffectEvent effect in cullingCracksDamage)
+                {
+                    // Effect duration is 0, using it as a wind-up to the hit by 500ms
+                    (long, long) lifespan = (effect.Time - 500, effect.Time);
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(230 / 2, 0), true);
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(173, 255, 225, 0.4)", connector).UsingRotationConnector(rotationConnector);
+                    EnvironmentDecorations.Add(rectangle);
+                    EnvironmentDecorations.Add(rectangle.Copy().UsingGrowingEnd(effect.Time));
+                }
+            }
+
+            // Superspeed Orbs
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumSuperspeedOrb, out IReadOnlyList<EffectEvent> superspeedOrbs))
+            {
+                foreach (EffectEvent effect in superspeedOrbs)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, long.MaxValue);
+                    var position = new PositionConnector(effect.Position);
+                    var circle = (CircleDecoration)new CircleDecoration(50, lifespan, "rgba(255, 255, 255, 0.5)", position).UsingFilled(false);
+                    var centralDot = new CircleDecoration(20, lifespan, "rgba(203, 195, 227, 0.5)", position);
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(centralDot);
+                }
+            }
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Dhuum));
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Dhuum not found");

@@ -2541,6 +2541,7 @@
         public const long EndersEchoDamage = 47076;
         public const long ReclaimedEnergyBuff = 47090;
         public const long FollowersAsylum = 47122;
+        public const long ScytheSwing = 47123;
         public const long GreensEaterofSouls = 47153;
         public const long DhuumShacklesHit = 47164;
         public const long ImminentDemise = 47181;
@@ -2625,7 +2626,9 @@
         public const long MortalCoilStatueOfDeath = 48583;
         public const long DhuumShacklesBuff2 = 48591;
         public const long HowlingDeath = 48662;
-        public const long Cull = 48752;
+        public const long DhuumPlayerToSoulTrackBuff = 48670; // Buff applied from the player to the soul gadget
+        public const long CullDamage = 48752;
+        public const long CullSkill = 48758;
         public const long PutridBomb = 48760;
         public const long HastenedDemise = 48773;
         public const long LightCarrier = 48779;
