@@ -83,12 +83,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FillSubLogics(agentData);
             foreach (FightLogic logic in _subLogics)
             {
-                logic.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+                logic.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
                 _targets.AddRange(logic.Targets);
                 _trashMobs.AddRange(logic.TrashMobs);
                 _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);

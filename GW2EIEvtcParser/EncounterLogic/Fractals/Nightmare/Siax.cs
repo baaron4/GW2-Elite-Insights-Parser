@@ -117,9 +117,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("SW", new Point3D(891.370f, -3722.450f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
                 if (target.IsSpecies(TargetID.Siax))

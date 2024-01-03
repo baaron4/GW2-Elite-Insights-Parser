@@ -274,7 +274,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem dhuum = agentData.GetNPCsByID(TargetID.Dhuum).FirstOrDefault();
             if (dhuum == null)
@@ -295,7 +295,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             agentData.Refresh();
 
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
             // Adding counting number to the Enforcers
             var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer)).ToList();

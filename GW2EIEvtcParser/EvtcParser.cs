@@ -987,7 +987,7 @@ namespace GW2EIEvtcParser
             }
             //
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
-            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _enabledExtensions);
+            _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");

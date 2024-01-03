@@ -418,7 +418,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return this;
         }
 
-        internal virtual void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal virtual void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
         }

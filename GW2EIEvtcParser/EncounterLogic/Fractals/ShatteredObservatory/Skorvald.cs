@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var manualFractalScaleSet = false;
             if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
             if (skorvald == null)
             {

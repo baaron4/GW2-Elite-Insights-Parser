@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // make those into npcs
             IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate);

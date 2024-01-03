@@ -235,9 +235,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             var countDict = new Dictionary<int, int>();
             var bigPhantasmIDs = new HashSet<int>
             {
