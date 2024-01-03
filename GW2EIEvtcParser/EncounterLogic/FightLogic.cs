@@ -144,9 +144,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected virtual List<int> GetTargetsSortIDs()
+        protected virtual Dictionary<int, int> GetTargetsSortIDs()
         {
-            return GetTargetsIDs();
+            var res = new Dictionary<int, int>();
+            for (int i = 0; i < GetTargetsIDs().Count; i++)
+            {
+                res.Add(GetTargetsIDs()[i], i);
+            }
+            return res;
         }
 
         protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -188,15 +193,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             _targets = _targets.OrderBy(x => x.FirstAware).ToList();
-            List<int> targetSortIDs = GetTargetsSortIDs();
+            Dictionary<int, int> targetSortIDs = GetTargetsSortIDs();
             _targets = _targets.OrderBy(x =>
             {
-                int id = targetSortIDs.IndexOf(x.ID);
-                if (id < 0)
+            if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
                 {
-                    id = int.MaxValue;
+                    return sortKey;
                 }
-                return id;
+                return int.MaxValue;
             }).ToList();
             //
             List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();

@@ -111,11 +111,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<int> GetTargetsSortIDs()
+        protected override Dictionary<int, int> GetTargetsSortIDs()
         {
-            return new List<int>()
+            return new Dictionary<int, int>()
             {
-                (int)ArcDPSEnums.TargetID.Adina,
+                { (int)ArcDPSEnums.TargetID.Adina, 0 },
+                { (int)ArcDPSEnums.TrashID.HandOfErosion, 1 },
+                { (int)ArcDPSEnums.TrashID.HandOfEruption, 1 },
             };
         }
 
