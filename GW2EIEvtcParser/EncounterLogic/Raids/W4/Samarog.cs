@@ -137,19 +137,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            /*var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
-            if (spearAgents.Any())
+            // With lingering agents, last aware of the spears are properly set
+            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
             {
-                foreach (AgentItem spear in spearAgents)
+                var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+                if (spearAgents.Any())
                 {
-                    spear.OverrideType(AgentItem.AgentType.NPC);
-                    spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion);
+                    foreach (AgentItem spear in spearAgents)
+                    {
+                        spear.OverrideType(AgentItem.AgentType.NPC);
+                        spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion);
+                    }
+                    agentData.Refresh();
                 }
-                agentData.Refresh();
-            }*/
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            }
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             int curGuldhem = 1;
             int curRigom = 1;
             foreach (AbstractSingleActor target in Targets)

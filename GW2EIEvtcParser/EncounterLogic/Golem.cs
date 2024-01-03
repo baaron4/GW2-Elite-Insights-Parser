@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new BuffGainCastFinder(MushroomKingsBlessing, POV_MushroomKingsBlessingBuff).UsingICD(500),
             };
         }
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
             foreach (CombatItem c in combatData)

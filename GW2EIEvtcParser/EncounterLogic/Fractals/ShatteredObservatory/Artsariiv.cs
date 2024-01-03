@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("W", new Point3D(9295.668f, 1450.060f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
             if (artsariivs.Any())
@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC trashMob in _trashMobs)
             {
                 if (trashMob.IsSpecies(TrashID.SmallArtsariiv))
