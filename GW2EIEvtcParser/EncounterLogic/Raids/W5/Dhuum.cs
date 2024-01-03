@@ -775,7 +775,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="soul">The Soul to tether to the player.</param>
         /// <param name="hastenedDemise">The segment of the buff on the player.</param>
         /// <param name="soulPosition">The position of the Soul.</param>
-        internal static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, Segment hastenedDemise, Point3D soulPosition)
+        private static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, Segment hastenedDemise, Point3D soulPosition)
         {
             (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
             long soulSplitDeathTime = hastenedDemise.Start + 10000;
