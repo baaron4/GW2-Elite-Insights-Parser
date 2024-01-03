@@ -246,10 +246,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.McLeodTheSilent,
-                (int)ArcDPSEnums.TargetID.DummyTarget,
-                (int)ArcDPSEnums.TrashID.WargBloodhound,
                 (int)ArcDPSEnums.TrashID.RadiantMcLeod,
                 (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
+                (int)ArcDPSEnums.TrashID.WargBloodhound,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
             };
         }
 

@@ -111,6 +111,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<int> GetTargetsSortIDs()
+        {
+            return new List<int>()
+            {
+                (int)ArcDPSEnums.TargetID.Adina,
+            };
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
