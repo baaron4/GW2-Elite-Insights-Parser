@@ -443,15 +443,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     supposedLifespan.Item2 = effect.Time + Math.Min(castDuration, (long)Math.Ceiling(actualDuration));
                                 }
 
-                                // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
-                                Point3D facing = target.GetCurrentRotation(log, effect.Time + 200, 200);
-                                if (facing == null)
-                                {
-                                    continue;
-                                }
-
                                 var position = new PositionConnector(effect.Position);
-                                var rotation = new AngleConnector(facing);
+                                var rotation = new AngleConnector(effect.Rotation.Z + 90);
 
                                 var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingRotationConnector(rotation);
                                 var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
@@ -465,14 +458,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var scytheSwing = cls.Where(x => x.SkillId == ScytheSwing).ToList();
                     for (int i = 0; i < scytheSwing.Count; i++)
                     {
-                        var endNextSwing = i < scytheSwing.Count -1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
+                        var nextSwing = i < scytheSwing.Count -1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
 
                         // AoE Indicator
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out IReadOnlyList<EffectEvent> scytheSwingIndicators))
                         {
                             int radius = 45;
                             int radiusIncrease = 5;
-                            foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < endNextSwing))
+                            foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // Computing lifespan through secondary effect and position.
                                 (long start, long end) lifespan = indicator.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumScytheSwingDamage);
@@ -487,7 +480,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int radius = 45;
                             int radiusIncrease = 5;
-                            foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < endNextSwing))
+                            foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // The effect has 0 duration, setting it to 250
                                 (long start, long end) lifespan = (damage.Time, damage.Time + 250);
