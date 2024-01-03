@@ -288,10 +288,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100)
                 .ToList();
+            var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApply() && x.SkillID == DhuumPlayerToSoulTrackBuff)
+                .Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), agentData.GetAgent(x.DstAgent, x.Time)))
+                .Where(x => x.Item1.IsPlayer)
+                .GroupBy(x => x.Item2)
+                .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).ToList());
             foreach (AgentItem soul in yourSoul)
             {
-                soul.OverrideType(AgentItem.AgentType.NPC);
-                soul.OverrideID(TrashID.YourSoul);
+                if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out List<AgentItem> appliers) && appliers.Any())
+                {
+                    soul.OverrideType(AgentItem.AgentType.NPC);
+                    soul.OverrideID(TrashID.YourSoul);
+                    if (soul.GetFinalMaster() != appliers.First())
+                    {
+                        soul.SetMaster(appliers.First());
+                    }
+                }
             }
             agentData.Refresh();
 
@@ -612,7 +624,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var lifespan = new Segment(start, end, 1);
                 var circle = new CircleDecoration(100, lifespan, "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
                 replay.AddDecorationWithGrowing(circle, duration);
-                replay.AddOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp);
+                replay.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
             }
             // bomb
             var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -620,7 +632,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
                 replay.AddDecorationWithGrowing(circle, seg.Start + 13000);
-                replay.AddOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead);
+                replay.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
             }
             // shackles connection
             List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, new long[] { DhuumShacklesBuff, DhuumShacklesBuff2 }, p, true, true);
@@ -633,37 +645,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddTether(shacklesDmg, "rgba(255, 200, 0, 0.5)");
 
             // Soul split
-            IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul);
-            IReadOnlyList<AgentItem> soulsWithMaster = souls.Where(x => x.Master == p.AgentItem).ToList();
-            IReadOnlyList<AgentItem> soulsWithoutMaster = souls.Where(x => x.Master == null && x.FirstAware > 100).ToList(); // Filter out souls present at encouter start
+            IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem).ToList();
 
-            // Souls with a master - Only check Hastened Demise
-            foreach (AgentItem soul in soulsWithMaster)
+            // check Hastened Demise
+            foreach (AgentItem soul in souls)
             {
                 Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
                 Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
                 if (hastenedDemise != null && soulPosition != null)
                 {
                     AddSoulSplitDecorations(p, replay, soul, hastenedDemise, soulPosition);
-                }
-            }
-
-            // Souls without a master - Check for the player-to-soul buff application
-            foreach (AgentItem soul in soulsWithoutMaster)
-            {
-                var buffs = GetFilteredList(log.CombatData, DhuumPlayerToSoulTrackBuff, soul, true, true).Where(x => x is BuffApplyEvent).ToList();
-                foreach (AbstractBuffEvent buff in buffs)
-                {
-                    if (buff.CreditedBy == p.AgentItem)
-                    {
-                        Segment buffFromPlayer = soul.GetBuffStatus(log, DhuumPlayerToSoulTrackBuff, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
-                        Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
-                        Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
-                        if (buffFromPlayer != null && hastenedDemise != null && soulPosition != null)
-                        {
-                            AddSoulSplitDecorations(p, replay, soul, hastenedDemise, soulPosition);
-                        }
-                    }
                 }
             }
         }

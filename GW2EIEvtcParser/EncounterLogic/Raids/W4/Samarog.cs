@@ -207,11 +207,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(240, spearLifespan, "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
                     if (log.CombatData.GetBuffData(SpearOfAggressionBuff).Any(x => x.To == target.AgentItem))
                     {
-                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15, 0.8f);
+                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
                     } 
                     else
                     {
-                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15, 0.8f);
+                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15);
                     }
                     break;
                 default:
