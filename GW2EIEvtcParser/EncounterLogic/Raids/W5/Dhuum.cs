@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Add enforcers
             foreach (PhaseData phase in phases)
             {
-                var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && x.FirstAware >= phase.Start && x.LastAware <= phase.End  && phase.CanBeSubPhase).ToList();
+                var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && Math.Min(phase.End, x.LastAware) - Math.Max(phase.Start, x.FirstAware) > 0 && phase.CanBeSubPhase).ToList();
                 phase.AddSecondaryTargets(enforcers);
             }
             return phases;
@@ -282,7 +282,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Dhuum not found");
             }
             _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);  
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
 
             // Player Souls - Filter out souls without master
             var yourSoul = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
@@ -295,6 +294,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 soul.OverrideID(TrashID.YourSoul);
             }
             agentData.Refresh();
+
+            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
 
             // Adding counting number to the Enforcers
             var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer)).ToList();
@@ -345,15 +346,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             start = (int)c.Time;
                             long defaultCastDuration = 1550;
+                            long castDuration = 0;
 
                             // Compute cast time of the Death Mark with Quickness
                             double computedDuration = ComputeCastTimeWithQuickness(log, target, start, defaultCastDuration);
                             if (computedDuration > 0)
                             {
-                                defaultCastDuration = Math.Min(defaultCastDuration, (int)Math.Ceiling(computedDuration));
+                                castDuration = Math.Min(defaultCastDuration, (int)Math.Ceiling(computedDuration));
                             }
 
-                            long zoneActive = start + defaultCastDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
+                            long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
                             long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
                             long zoneEnd = zoneActive + 120000; // End of the AoE
                             int radius = 450;
@@ -364,8 +366,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                             }
                             int spellCenterDistance = 200; //hitbox radius
-                            Point3D facing = target.GetCurrentRotation(log, start + 3000);
-                            Point3D targetPosition = target.GetCurrentPosition(log, start + 3000);
+                            Point3D facing = target.GetCurrentRotation(log, start + castDuration);
+                            Point3D targetPosition = target.GetCurrentPosition(log, start + castDuration);
                             if (facing != null && targetPosition != null)
                             {
                                 var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
@@ -803,7 +805,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Soul tether to player
             var line = new LineDecoration(soulLifespan, "rgba(255, 255, 255, 1)", positionConnector, playerConnector);
             // Soul icon
-            var icon = new IconDecoration("https://i.imgur.com/rAyuxqS.png", 16, 1, soulLifespan, positionConnector);
+            var icon = new IconDecoration(ParserIcons.DhuumPlayerSoul, 16, 1, soulLifespan, positionConnector);
             // Red circle indicating timer
             var death = new CircleDecoration(radius, hastenedDemise, "rgba(255, 0, 0, 0.2)", positionConnector);
 

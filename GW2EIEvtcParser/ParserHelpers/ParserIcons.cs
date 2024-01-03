@@ -376,7 +376,6 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
         private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
         private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
-        private const string TrashDhuumSoul = "https://i.imgur.com/rAyuxqS.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -662,6 +661,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
         internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
 
+        // NPC / Gadgets Icons not private
+        internal const string DhuumPlayerSoul = "https://i.imgur.com/rAyuxqS.png";
+
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
         /// </summary>
@@ -883,7 +885,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.Messenger, TrashTormentedDeadMessenger },
             { ArcDPSEnums.TrashID.Enforcer, TrashEnforcer },
             { ArcDPSEnums.TrashID.Echo, TrashEcho },
-            { ArcDPSEnums.TrashID.YourSoul, TrashDhuumSoul },
+            { ArcDPSEnums.TrashID.YourSoul, DhuumPlayerSoul },
             { ArcDPSEnums.TrashID.KeepConstructCore, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.ExquisiteConjunction, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.Jessica, TrashKeepConstructGhosts },
