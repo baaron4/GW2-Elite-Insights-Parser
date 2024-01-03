@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return demonicBonds.Any();
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
             bool needsDummy = !needsRefresh;

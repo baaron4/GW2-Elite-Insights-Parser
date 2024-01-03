@@ -203,8 +203,8 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData,
-            List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData,
+            AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW);
             if (!sooWons.Any())

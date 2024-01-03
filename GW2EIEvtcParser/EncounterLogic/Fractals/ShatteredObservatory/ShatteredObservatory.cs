@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return participatingPlayerAgents;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Set manual FractalScale for old logs without the event
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ( GW2Builds.September2020SunquaPeakRelease, 99),
                 ( GW2Builds.SOTOBetaAndSilentSurfNM, 98),
             });
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         }
 
         /// <summary>
