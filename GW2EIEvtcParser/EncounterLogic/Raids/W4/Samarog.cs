@@ -203,7 +203,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Guldhem:
                     break;
                 case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
-                    replay.Decorations.Add(new CircleDecoration(240, ((int)target.FirstAware, (int)target.LastAware), "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    var spearLifespan = new Segment(target.FirstAware, target.LastAware, 1);
+                    replay.Decorations.Add(new CircleDecoration(240, spearLifespan, "rgba(255, 100, 0, 0.1)", new AgentConnector(target)));
+                    if (log.CombatData.GetBuffData(SpearOfAggressionBuff).Any(x => x.To == target.AgentItem))
+                    {
+                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15, 0.8f);
+                    } 
+                    else
+                    {
+                        replay.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15, 0.8f);
+                    }
                     break;
                 default:
                     break;

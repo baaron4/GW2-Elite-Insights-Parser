@@ -2113,6 +2113,7 @@
         public const long PrisonerSweep = 38168;
         public const long GreenTeleport = 38169;
         public const long SharedAgony25 = 38170;
+        public const long SpearOfRevulsionBuff = 38174;
         public const long SpearReturn = 38180;
         public const long EnemyTile = 38184;
         public const long WeakMinded = 38187;
@@ -2120,6 +2121,7 @@
         public const long Annihilate2 = 38208;
         public const long SharedAgony75 = 38209;
         public const long SharedAgony3 = 38210;
+        public const long SpearOfAggressionBuff = 38212;
         public const long CelestialDashBuff = 38217;
         public const long FixatedGuldhem = 38223;
         public const long UnnaturalSignet = 38224;
