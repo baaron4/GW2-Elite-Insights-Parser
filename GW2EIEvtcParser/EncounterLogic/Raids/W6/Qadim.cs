@@ -379,10 +379,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int radius = 0;
                             radius = effect != middleEvent ? 150 : 400;
-                            (long, long) lifespan = effect.ComputeLifespan(log, 2600);
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
                             var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.5)", new PositionConnector(effect.Position));
                             EnvironmentDecorations.Add(circle);
-                            EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                            EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
                         }
                     }
                 }
