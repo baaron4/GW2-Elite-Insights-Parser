@@ -373,12 +373,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var positions = orbs.Select(x => x.Position).ToList();
                     Point3D middle = positions.FirstOrDefault(x => Point3D.IsInTriangle2D(x, positions.Where(y => y != x).ToList()));
                     EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position == middle);
-
-                    foreach (EffectEvent effect in orbs)
+                    if (middleEvent != null)
                     {
-                        int radius = 0;
-                        if (middleEvent != null)
+                        foreach (EffectEvent effect in orbs)
                         {
+                            int radius = 0;
                             radius = effect != middleEvent ? 150 : 400;
                             (long, long) lifespan = effect.ComputeLifespan(log, 2600);
                             var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.5)", new PositionConnector(effect.Position));
