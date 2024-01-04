@@ -378,6 +378,8 @@ namespace GW2EIEvtcParser
         public const string DhuumDeathMarkDeathZone = "B8F90FE6AF4F2A4C84D349861A098392"; // 120000 duration
         public const string DhuumSuperspeedOrb = "8F89945581099142B598977188BAC8E1"; // max duration - has end effect
         public const string DhuumConeSlash = "21BA95CC014CC944A71E2A6FB28D9A86";
+        // Qadim
+        public const string QadimCMOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
         // Sabir
