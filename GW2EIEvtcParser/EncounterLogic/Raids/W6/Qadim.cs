@@ -718,7 +718,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
-                    int finalPhasePlatformSwapDuration = 33000;
+                    int finalPhasePlatformSwapDuration = log.FightData.IsCM ? 33000 : 30000;
                     float threshold = 1f;
                     switch (target.Character)
                     {
