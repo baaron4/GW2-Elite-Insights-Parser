@@ -13,6 +13,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -713,53 +714,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     const float hiddenOpacity = 0.2f;
                     const float visibleOpacity = 1f;
+                    const float noOpacity = -1f;
                     var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
-                    if (log.CombatData.TryGetEffectEventsByDstWithGUID(target.AgentItem, EffectGUIDs.QadimPlatformStartsOrEndsMoving, out IReadOnlyList<EffectEvent> effects))
-                    {
-                        int a = 0;
-                    }
-                    bool firstFound;
                     int velocityIndex = 0;
                     int finalPhasePlatformSwapDuration = 33000;
                     float threshold = 1f;
                     switch (target.Character)
                     {
                         case "00":
-                            firstFound = false;
-                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (new Point3D(-76.52588f, 44.1894531f, 22.7294922f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
-                                    firstFound = true;
-                                    break;
-                                }
-                            }
-                            if (firstFound)
-                            {
-                                velocityIndex++;
-                                bool secondFound = false;
-                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                {
-                                    if (new Point3D(0, 0, 0).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                    {
-                                        secondFound = true;
-                                        break;
-                                    }
-                                }
-                                if (secondFound)
-                                {
-                                    velocityIndex++;
-                                    for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                    {
-                                        if (new Point3D(0, 0, 0).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                        {
-                                            opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
-                                            opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
-                                            break;
-                                        }
-                                    }
+                                    PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
                                 }
                             }
                             break;
@@ -771,83 +739,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             break;
                         case "02":
-                            firstFound = false;
-                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (new Point3D(-0.122070313f, 77.88086f, 4.54101563f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                                 {
-                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
-                                    firstFound = true;
-                                    break;
-                                }
-                            }
-                            if (firstFound)
-                            {
-                                velocityIndex++;
-                                bool secondFound = false;
-                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                {
-                                    if (new Point3D(37.0361328f, -13.94043f, -22.7294922f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                    if (PlatformHelper(replay.Velocities, opacities, new Point3D(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time + 10000));
-                                        secondFound = true;
-                                        break;
-                                    }
-                                }
-                                if (secondFound)
-                                {
-                                    bool thirdFound = false;
-                                    velocityIndex++;
-                                    for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                    {
-                                        if (new Point3D(153.723145f, -110.742188f, -3.63769531f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                        {
-                                            opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
-                                            thirdFound = true;
-                                            break;
-                                        }
-                                    }
-                                    if (thirdFound)
-                                    {
-
-                                        velocityIndex++;
-                                        for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                        {
-                                            if (new Point3D(0f, 0f, 0f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                            {
-                                                opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
-                                                opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
-                                                break;
-                                            }
-                                        }
+                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
                                     }
                                 }
                             }
                             break;
-
                         case "03":
-                            firstFound = false;
-                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (new Point3D(348.474121f, -123.4375f, 10.9130859f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                {
-                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
-                                    firstFound = true;
-                                    break;
-                                }
-                            }
-                            if (firstFound)
-                            {
-                                velocityIndex++;
-                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
-                                {
-                                    if (new Point3D(0f, 0f, 0f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
-                                    {
-                                        opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
-                                        opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
-                                        break;
-                                    }
-                                }
+                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
                             }
                             break;
                         case "04":
@@ -865,7 +771,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         default:
                             break;
                     }
-                    var platformDecoration = new BackgroundIconDecoration("https://i.imgur.com/DbXr5Fo.png", 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
+                    var platformDecoration = new BackgroundIconDecoration(ParserIcons.QadimPlatform, 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
                     RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                     replay.Decorations.Add(platformDecoration.UsingRotationConnector(platformRotationConnector));
                     break;
@@ -916,7 +822,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // It would be way nicer to calculate them here, but we don't have a nice vector library
             // and it would double the amount of work.
 
-            const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
+            const string platformImageUrl = ParserIcons.QadimPlatform;
             const double hiddenOpacity = 0.2;
 
             bool isCM = log.FightData.IsCM;
