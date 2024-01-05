@@ -186,6 +186,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var platformNames = new List<string>()
             {
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
                 "00",
                 "01",
                 "02",
@@ -718,20 +728,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
-                    int finalPhasePlatformSwapDuration = log.FightData.IsCM ? 33000 : 30000;
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
+                    if (qadim == null)
+                    {
+                        throw new MissingKeyActorsException("Qadim not found");
+                    }
+                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
+                    long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                     float threshold = 1f;
                     switch (target.Character)
                     {
                         case "00":
+                        case "0":
                             if (PlatformHelper(replay.Velocities, opacities, new Point3D(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
+                                    PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                 }
                             }
                             break;
                         case "01":
+                        case "1":
                             ParametricPoint3D found = replay.Velocities.FirstOrDefault(x => new Point3D(-28.3569336f, -49.2431641f, 90.90576f).DistanceToPoint(x) < threshold);
                             if (found != null)
                             {
@@ -739,31 +757,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             break;
                         case "02":
+                        case "2":
                             if (PlatformHelper(replay.Velocities, opacities, new Point3D(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (PlatformHelper(replay.Velocities, opacities, new Point3D(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                                 {
                                     if (PlatformHelper(replay.Velocities, opacities, new Point3D(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
+                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                     }
                                 }
                             }
                             break;
                         case "03":
+                        case "3":
                             if (PlatformHelper(replay.Velocities, opacities, new Point3D(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
+                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                             }
                             break;
                         case "04":
+                        case "4":
                             if (PlatformHelper(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
                             {
                                 if (PlatformHelper(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                                 {
                                     if (PlatformHelper(replay.Velocities, opacities, new Point3D(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
+                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                     }
                                 }
                             }
@@ -780,7 +801,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static bool PlatformHelper(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D compare, float opacity, int inIndex, out int outIndex, long timeOffset, long hideAfter, float hiddenOpacity)
+        private static bool PlatformHelper(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D compare, float opacity, int inIndex, out int outIndex, long timeOffset, long forceHideTime, float hiddenOpacity)
         {
             float threshold = 1f;
             for (int velocityIndex = inIndex; velocityIndex < velocities.Count; velocityIndex++)
@@ -790,9 +811,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (opacity >= 0)
                     {
                         opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
-                        if (hideAfter > 0 && opacity != hiddenOpacity)
+                        if (forceHideTime > 0 && opacity != hiddenOpacity)
                         {
-                            opacities.Add(new ParametricPoint1D(hiddenOpacity, velocities[velocityIndex].Time + timeOffset + hideAfter));
+                            opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
                         }
                     }
                     outIndex = velocityIndex + 1;
