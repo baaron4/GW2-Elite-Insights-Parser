@@ -387,11 +387,11 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if agent is downed at given time
+        /// Checks if the agent is downed at given time.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Downed time.</param>
+        /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
@@ -399,11 +399,24 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if agent is dead at given time
+        /// Checks if the agent is downed during a segment of time.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
+        public bool IsDowned(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDowned(log, start, end);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dead at given time
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Death time.</param>
+        /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
         public bool IsDead(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
@@ -411,15 +424,41 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if agent is dc/not spawned at given time
+        /// Checks if the agent is dead during a segment of time.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
+        public bool IsDead(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDead(log, start, end);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dc/not spawned at given time
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Presence time.</param>
+        /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
         public bool IsDC(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.IsDC(log, time);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dc/not spawned during a segment of time.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
+        public bool IsDC(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDC(log, start, end);
         }
 
         public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)

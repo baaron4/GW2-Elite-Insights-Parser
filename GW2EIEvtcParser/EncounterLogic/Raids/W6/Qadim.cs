@@ -378,7 +378,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
-            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
+
+            // Incineration Orbs - CM
+            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
             {
                 foreach (IReadOnlyList<EffectEvent> orbs in cmOrbs)
                 {
@@ -389,16 +391,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in orbs)
                         {
-                            int radius = 0;
-                            radius = effect != middleEvent ? 150 : 400;
+                            int radius = effect == middleEvent ? 540 : 180;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
-                            var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.5)", new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle2 = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
                             EnvironmentDecorations.Add(circle);
-                            EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                            EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
                         }
                     }
                 }
             }
+
+            // Incineration Orbs - Pyres
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPyresIncinerationOrbs, out IReadOnlyList<EffectEvent> pyreOrbs))
+            {
+                foreach (EffectEvent effect in pyreOrbs)
+                {
+                    int radius = 240;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
+                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }
+
+            // Bouncing blue orbs
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbEvents))
             {
                 foreach (EffectEvent effect in blueOrbEvents)
@@ -408,6 +426,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(circle);
                 }
             }
+
+            // Inferno - Qadim's AoEs on every platform
+            // ! Disabled until we have a working solution for effects on moving platforms
+            /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimInfernoAoEs, out IReadOnlyList<EffectEvent> infernoAoEs))
+            {
+                foreach (EffectEvent effect in infernoAoEs)
+                {
+                    int radius = 150;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }*/
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
