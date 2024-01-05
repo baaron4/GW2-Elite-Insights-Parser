@@ -112,6 +112,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool refresh = false;
+            if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
+            {
+                var platformAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                foreach (AgentItem platform in platformAgents)
+                {
+                    platform.OverrideType(AgentItem.AgentType.NPC);
+                    platform.OverrideID(TrashID.QadimPlatform);
+                }
+                refresh = refresh || platformAgents.Any();
+            }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
             var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
@@ -120,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 lamp.OverrideType(AgentItem.AgentType.NPC);
                 lamp.OverrideID(TrashID.QadimLamp);
             }
-            bool refresh = lampAgents.Count > 0;
+            refresh = refresh || lampAgents.Any();
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -301,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<TrashID>()
             {
-                TrashID.QadimPlatform,
+                //TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -639,8 +650,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.QadimPlatform:
-                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
-                    //CombatReplay.DebugEffects(target, log, replay, new HashSet<long>());
+                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.6)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     break;
                 default:
                     break;

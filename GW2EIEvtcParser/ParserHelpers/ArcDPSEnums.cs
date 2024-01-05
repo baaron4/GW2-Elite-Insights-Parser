@@ -788,6 +788,7 @@ namespace GW2EIEvtcParser
             SmallJumpyTornado = 21961,
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
+            SabirPlatform = 21998,
             // Peerless Qadim
             PeerlessQadimPylon = 21996,
             PeerlessQadimAuraPylon = 21962,

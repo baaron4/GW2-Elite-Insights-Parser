@@ -664,6 +664,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         // NPC / Gadgets Icons not private
         internal const string DhuumPlayerSoul = "https://i.imgur.com/rAyuxqS.png";
 
+
+        internal const string NoImage = "";
+
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
         /// </summary>
@@ -924,6 +927,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.GreaterMagmaElemental2, TrashGreaterMagmaElemental },
             { ArcDPSEnums.TrashID.LavaElemental1, TrashLavaElemental },
             { ArcDPSEnums.TrashID.LavaElemental2, TrashLavaElemental },
+            { ArcDPSEnums.TrashID.QadimPlatform, NoImage},
             { ArcDPSEnums.TrashID.PyreGuardian, TrashPyreGuardianKillerTornado },
             { ArcDPSEnums.TrashID.SmallKillerTornado, TrashPyreGuardianKillerTornado},
             { ArcDPSEnums.TrashID.BigKillerTornado, TrashPyreGuardianKillerTornado },
@@ -934,6 +938,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.PyreGuardianResolution, TrashPyreGuardianResolution },
             { ArcDPSEnums.TrashID.PyreGuardianStab, TrashPyreGuardianStab },
             { ArcDPSEnums.TrashID.PyreGuardianProtect, TrashPyreGuardianProtect },
+            { ArcDPSEnums.TrashID.SabirPlatform, NoImage},
             { ArcDPSEnums.TrashID.ReaperOfFlesh, TrashReaperofFlesh },
             { ArcDPSEnums.TrashID.Kernan, TrashKernan },
             { ArcDPSEnums.TrashID.Knuckles, TrashKnuckles },
