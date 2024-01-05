@@ -378,11 +378,13 @@ namespace GW2EIEvtcParser
         public const string DhuumDeathMarkDeathZone = "B8F90FE6AF4F2A4C84D349861A098392"; // 120000 duration
         public const string DhuumSuperspeedOrb = "8F89945581099142B598977188BAC8E1"; // max duration - has end effect
         public const string DhuumConeSlash = "21BA95CC014CC944A71E2A6FB28D9A86";
-        // Qadim
-        public const string QadimCMOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF";
-        public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Qadim
+        public const string QadimCMIncinerationOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF"; // 2600 duration - 180 corner orb - 540 central orb
+        public const string QadimPyresIncinerationOrbs = "D3D9E94418D8094BAE0E0C510DDF2A91"; // 2300 duration - 240 radius
+        public const string QadimInfernoAoEs = "37DF91103EC45240AA7910575F1FC55F"; // On non static platform - 3000 duration - 150 radius
+        public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
         // Sabir
         public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Qadim the Peerless
