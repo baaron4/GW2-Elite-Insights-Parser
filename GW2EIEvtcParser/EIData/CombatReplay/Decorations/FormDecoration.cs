@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EIData
 
         public virtual FormDecoration UsingGrowingEnd(long growingEnd, bool reverse = false)
         {
-            if (GrowingReverse)
+            if (growingEnd < 0)
             {
                 throw new InvalidDataException("GrowingEnd must be positive");
             }
