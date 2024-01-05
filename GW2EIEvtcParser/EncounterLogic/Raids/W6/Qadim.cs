@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Qadim : MythwrightGambit
     {
-
+        private bool _manualPlatforms = true;
         public Qadim(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -183,12 +183,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                     target.OverrideName("Stab " + target.Character);
                 }
             }
+            var platformNames = new List<string>()
+            {
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+            };
+            _manualPlatforms = TrashMobs.Count(x => platformNames.Contains(x.Character)) != 12;
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
             // Can be improved
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -312,7 +333,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<TrashID>()
             {
-                //TrashID.QadimPlatform,
+                TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -377,7 +398,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            if (_manualPlatforms)
+            {
+                AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            }
 
             // Incineration Orbs - CM
             if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
@@ -683,11 +707,194 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.QadimPlatform:
-                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.6)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                    if (_manualPlatforms)
+                    {
+                        return;
+                    }
+                    const float hiddenOpacity = 0.2f;
+                    const float visibleOpacity = 1f;
+                    var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
+                    var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
+                    if (log.CombatData.TryGetEffectEventsByDstWithGUID(target.AgentItem, EffectGUIDs.QadimPlatformStartsOrEndsMoving, out IReadOnlyList<EffectEvent> effects))
+                    {
+                        int a = 0;
+                    }
+                    bool firstFound;
+                    int velocityIndex = 0;
+                    int finalPhasePlatformSwapDuration = 33000;
+                    float threshold = 1f;
+                    switch (target.Character)
+                    {
+                        case "00":
+                            firstFound = false;
+                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            {
+                                if (new Point3D(-76.52588f, 44.1894531f, 22.7294922f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                {
+                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
+                                    firstFound = true;
+                                    break;
+                                }
+                            }
+                            if (firstFound)
+                            {
+                                velocityIndex++;
+                                bool secondFound = false;
+                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                {
+                                    if (new Point3D(0, 0, 0).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                    {
+                                        secondFound = true;
+                                        break;
+                                    }
+                                }
+                                if (secondFound)
+                                {
+                                    velocityIndex++;
+                                    for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                    {
+                                        if (new Point3D(0, 0, 0).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                        {
+                                            opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
+                                            opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "01":
+                            ParametricPoint3D found = replay.Velocities.FirstOrDefault(x => new Point3D(-28.3569336f, -49.2431641f, 90.90576f).DistanceToPoint(x) < threshold);
+                            if (found != null)
+                            {
+                                opacities.Add(new ParametricPoint1D(hiddenOpacity, found.Time));
+                            }
+                            break;
+                        case "02":
+                            firstFound = false;
+                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            {
+                                if (new Point3D(-0.122070313f, 77.88086f, 4.54101563f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                {
+                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
+                                    firstFound = true;
+                                    break;
+                                }
+                            }
+                            if (firstFound)
+                            {
+                                velocityIndex++;
+                                bool secondFound = false;
+                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                {
+                                    if (new Point3D(37.0361328f, -13.94043f, -22.7294922f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                    {
+                                        opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time + 10000));
+                                        secondFound = true;
+                                        break;
+                                    }
+                                }
+                                if (secondFound)
+                                {
+                                    bool thirdFound = false;
+                                    velocityIndex++;
+                                    for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                    {
+                                        if (new Point3D(153.723145f, -110.742188f, -3.63769531f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                        {
+                                            opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
+                                            thirdFound = true;
+                                            break;
+                                        }
+                                    }
+                                    if (thirdFound)
+                                    {
+
+                                        velocityIndex++;
+                                        for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                        {
+                                            if (new Point3D(0f, 0f, 0f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                            {
+                                                opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
+                                                opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
+                        case "03":
+                            firstFound = false;
+                            for (velocityIndex = 0; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                            {
+                                if (new Point3D(348.474121f, -123.4375f, 10.9130859f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                {
+                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time));
+                                    firstFound = true;
+                                    break;
+                                }
+                            }
+                            if (firstFound)
+                            {
+                                velocityIndex++;
+                                for (; velocityIndex < replay.Velocities.Count; velocityIndex++)
+                                {
+                                    if (new Point3D(0f, 0f, 0f).DistanceToPoint(replay.Velocities[velocityIndex]) < threshold)
+                                    {
+                                        opacities.Add(new ParametricPoint1D(visibleOpacity, replay.Velocities[velocityIndex].Time));
+                                        opacities.Add(new ParametricPoint1D(hiddenOpacity, replay.Velocities[velocityIndex].Time + finalPhasePlatformSwapDuration));
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "04":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
+                            {
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                                {
+                                    if (PlatformHelper(replay.Velocities, opacities, new Point3D(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapDuration, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    var platformDecoration = new BackgroundIconDecoration("https://i.imgur.com/DbXr5Fo.png", 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
+                    RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                    replay.Decorations.Add(platformDecoration.UsingRotationConnector(platformRotationConnector));
                     break;
                 default:
                     break;
             }
+        }
+
+        private static bool PlatformHelper(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D compare, float opacity, int inIndex, out int outIndex, long timeOffset, long hideAfter, float hiddenOpacity)
+        {
+            float threshold = 1f;
+            for (int velocityIndex = inIndex; velocityIndex < velocities.Count; velocityIndex++)
+            {
+                if (compare.DistanceToPoint(velocities[velocityIndex]) < threshold)
+                {
+                    if (opacity >= 0)
+                    {
+                        opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
+                        if (hideAfter > 0 && opacity != hiddenOpacity)
+                        {
+                            opacities.Add(new ParametricPoint1D(hiddenOpacity, velocities[velocityIndex].Time + timeOffset + hideAfter));
+                        }
+                    }
+                    outIndex = velocityIndex + 1;
+                    return true;
+                }
+            }
+            outIndex = 0;
+            return false;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
