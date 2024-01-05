@@ -813,7 +813,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ),
                 (
                     // First Qadim phase, packed together except for pyre platforms
-                    qadimPhase1Time, 10000, new[]
+                    qadimPhase1Time + startOffset, 10000, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (protectionPyre1.x, protectionPyre1.y, zDefault, Math.PI, 1.0),
