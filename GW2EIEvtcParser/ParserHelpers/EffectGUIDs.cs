@@ -380,6 +380,7 @@ namespace GW2EIEvtcParser
         public const string DhuumConeSlash = "21BA95CC014CC944A71E2A6FB28D9A86";
         // Qadim
         public const string QadimCMOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF";
+        public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
         // Sabir

@@ -301,6 +301,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<TrashID>()
             {
+                TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -385,6 +386,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                             EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
                         }
                     }
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbEvents))
+            {
+                foreach (EffectEvent effect in blueOrbEvents)
+                {
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
+                    var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 255, 0.5)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
                 }
             }
         }
@@ -628,6 +638,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     break;
+                case (int)TrashID.QadimPlatform:
+                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                    //CombatReplay.DebugEffects(target, log, replay, new HashSet<long>());
+                    break;
                 default:
                     break;
             }
@@ -813,7 +827,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ),
                 (
                     // First Qadim phase, packed together except for pyre platforms
-                    qadimPhase1Time + startOffset, 10000, new[]
+                    qadimPhase1Time, 10000, new[]
                     {
                         (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
                         (protectionPyre1.x, protectionPyre1.y, zDefault, Math.PI, 1.0),
