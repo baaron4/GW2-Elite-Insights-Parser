@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EIData
                         else
                         {
                             ParametricPoint3D last = PolledRotations.Last().Time > pt.Time ? PolledRotations.Last() : pt;
-                            if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate)
+                            if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate)
                             {
                                 PolledRotations.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
                             }
