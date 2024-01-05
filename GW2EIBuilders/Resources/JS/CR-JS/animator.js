@@ -201,6 +201,9 @@ class Animator {
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                         break;
+                    case "BackgroundIconDecoration":
+                        this.backgroundActorData.push( new BackgroundIconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacities, actor.heights));
+                        break;
                     case "IconOverheadDecoration":
                         this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
                         break;

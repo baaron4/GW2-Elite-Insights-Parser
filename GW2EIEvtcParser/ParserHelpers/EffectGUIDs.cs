@@ -385,6 +385,7 @@ namespace GW2EIEvtcParser
         public const string QadimPyresIncinerationOrbs = "D3D9E94418D8094BAE0E0C510DDF2A91"; // 2300 duration - 240 radius
         public const string QadimInfernoAoEs = "37DF91103EC45240AA7910575F1FC55F"; // On non static platform - 3000 duration - 150 radius
         public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
+        public const string QadimPlatformStartsOrEndsMoving = "98891680AFB80A4E9CAFCCBD1662DF88";
         // Sabir
         public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Qadim the Peerless
