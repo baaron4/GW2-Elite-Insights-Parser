@@ -91,9 +91,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)TargetID.Qadim,
                 (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.WyvernMatriarch,
                 (int)TrashID.WyvernPatriarch,
-                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.QadimLamp,
             };
         }
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            ComputeFightTargets(agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
                 if (target.IsSpecies(TrashID.PyreGuardianProtect))
