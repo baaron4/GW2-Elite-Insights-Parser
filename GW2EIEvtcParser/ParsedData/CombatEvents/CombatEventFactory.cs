@@ -227,6 +227,12 @@ namespace GW2EIEvtcParser.ParsedData
                         default:
                             throw new InvalidDataException("Invalid effect state change");
                     }
+#if !DEBUG
+                    if (effectEvt.OnNonStaticPlatform)
+                    {
+                        break;
+                    }
+#endif
                     statusEvents.EffectEvents.Add(effectEvt);
                     Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
