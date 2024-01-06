@@ -819,7 +819,7 @@ class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
         for (var i = 0; i < totalPoints; i++) {
             let opacityTime = opacities[2 * i + 1];
             if (time < opacityTime) {
-                if (opacityTime - time <= 1000) interpolate = opacityTime;
+                if (opacityTime - time <= 1500) interpolate = opacityTime;
                 index = i - 1;
                 break;
             }
@@ -828,7 +828,7 @@ class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
         if (index === -1) {
             return opacities[0];
         } else if (interpolate > 0) {
-            return opacities[2 * (index + 1)] - (interpolate - time) * (opacities[2 * (index + 1)] - opacities[2 * index ]) / 1000;
+            return opacities[2 * (index + 1)] - (interpolate - time) * (opacities[2 * (index + 1)] - opacities[2 * index ]) / 1500;
         } else {
             return opacities[2 * index];
         }

@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
                             {
                                 velocity = Velocities[velocityTablePos];
                             }
-                            if (velocity == null || (Math.Abs(velocity.X) <= 1e-1 && Math.Abs(velocity.Y) <= 1e-1 && Math.Abs(velocity.Z) <= 1e-1))
+                            if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && (velocity == null || velocity.Length() < 1e-3))
                             {
                                 PolledPositions.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
                             }
