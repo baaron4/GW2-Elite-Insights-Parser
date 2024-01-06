@@ -860,8 +860,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             break;
                         case "10":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (PlatformHelper(replay.Velocities, opacities, new Point3D(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        }
+                                    }
+                                }
+                            }
                             break;
                         case "11":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
                             break;
                         default:
                             break;
@@ -885,10 +902,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (opacity >= 0)
                     {
                         opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
-                        if (forceHideTime > 0 && opacity != hiddenOpacity)
-                        {
-                            opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
-                        }
+                    }
+                    if (forceHideTime > 0 && opacity != hiddenOpacity)
+                    {
+                        opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
                     }
                     outIndex = velocityIndex + 1;
                     return true;
