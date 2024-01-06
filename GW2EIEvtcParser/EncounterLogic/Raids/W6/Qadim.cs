@@ -802,7 +802,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime + 17000, hiddenOpacity);
+                                    if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbs))
+                                        {
+                                            EffectEvent lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
+                                            if (lastBlueOrb != null)
+                                            {
+                                                (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
+                                                opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             break;
