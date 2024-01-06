@@ -220,6 +220,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.Ianim,
             };
         }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.KeepConstruct, 0 },
+                {(int)ArcDPSEnums.TrashID.Jessica, 1 },
+                {(int)ArcDPSEnums.TrashID.Olson, 1 },
+                {(int)ArcDPSEnums.TrashID.Engul, 1 },
+                {(int)ArcDPSEnums.TrashID.Faerla, 1 },
+                {(int)ArcDPSEnums.TrashID.Caulle, 1 },
+                {(int)ArcDPSEnums.TrashID.Henley, 1 },
+                {(int)ArcDPSEnums.TrashID.Galletta, 1 },
+                {(int)ArcDPSEnums.TrashID.Ianim, 1 },
+            };
+        }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {

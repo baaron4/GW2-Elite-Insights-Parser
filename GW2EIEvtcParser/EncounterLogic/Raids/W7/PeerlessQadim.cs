@@ -56,8 +56,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>()
             {
                 (int)ArcDPSEnums.TargetID.PeerlessQadim,
-                (int)ArcDPSEnums.TrashID.PeerlessQadimPylon,
                 (int)ArcDPSEnums.TrashID.EntropicDistortion,
+                (int)ArcDPSEnums.TrashID.PeerlessQadimPylon,
             };
         }
 

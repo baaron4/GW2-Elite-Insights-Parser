@@ -129,6 +129,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.BlueKnight
             };
         }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)TargetID.MAMA, 0 },
+                {(int)TrashID.GreenKnight, 1 },
+                {(int)TrashID.RedKnight, 1 },
+                {(int)TrashID.BlueKnight, 1 },
+            };
+        }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {

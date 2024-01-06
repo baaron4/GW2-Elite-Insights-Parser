@@ -102,6 +102,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+                {(int)ArcDPSEnums.TrashID.AspectOfTorment, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfLethargy, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfExposure, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfDeath, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfFear, 1 },
+            };
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.EncounterMode.CMNoName;
