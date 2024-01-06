@@ -448,9 +448,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>()
             {
                 (int)TargetID.Dagda,
-                (int)TrashID.VeteranTheTormented,
-                (int)TrashID.EliteTheTormented,
                 (int)TrashID.ChampionTheTormented,
+                (int)TrashID.EliteTheTormented,
+                (int)TrashID.VeteranTheTormented,
             };
         }
 

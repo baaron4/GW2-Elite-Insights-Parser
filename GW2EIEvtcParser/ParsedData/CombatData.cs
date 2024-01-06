@@ -1283,6 +1283,39 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
+        /// <summary>
+        /// Returns effect events for the given effect GUID.
+        /// The same effects happening within epsilon milliseconds are grouped together.
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="groupedEffectEvents"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
+        public bool TryGetGroupedEffectEventsByGUID(string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
+        {
+            var effectGroups = new List<List<EffectEvent>>();
+            groupedEffectEvents = effectGroups;
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                var processedTimes = new HashSet<long>();
+                foreach (EffectEvent first in effects)
+                {
+                    if (processedTimes.Contains(first.Time))
+                    {
+                        continue;
+                    }
+                    var group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                    foreach (EffectEvent effect in group)
+                    {
+                        processedTimes.Add(effect.Time);
+                    }
+
+                    effectGroups.Add(group);
+                }
+                return true;
+            }
+            return false;
+        }
 
         public IReadOnlyList<EffectEvent> GetEffectEvents()
         {

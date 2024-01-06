@@ -102,10 +102,10 @@
                 var x = item[0];
                 var duration = this.getSkillDuration(item);
                 var drawItem = false;
+                var [actorNoInstantRotation, actorNoInstantRotationIndex] = this.actorNoInstantRotation;
                 if (x <= time && time <= x + duration) {
                     drawItem = true;
-                } else if (item[3] === RotationStatus.INSTANT) {
-                    var [actorNoInstantRotation, actorNoInstantRotationIndex] = this.actorNoInstantRotation;
+                } else if (item[3] === RotationStatus.INSTANT && actorNoInstantRotation.length) {
                     var idNoInstant =  this.findRotationIndex(actorNoInstantRotation, time, 0, actorNoInstantRotation.length - 1);
                     id = Math.min(id, actorNoInstantRotationIndex[idNoInstant]);
                     if (id !== idNoInstant) {

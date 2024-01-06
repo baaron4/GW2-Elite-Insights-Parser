@@ -111,6 +111,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                { (int)ArcDPSEnums.TargetID.Adina, 0 },
+                { (int)ArcDPSEnums.TrashID.HandOfErosion, 1 },
+                { (int)ArcDPSEnums.TrashID.HandOfEruption, 1 },
+            };
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);

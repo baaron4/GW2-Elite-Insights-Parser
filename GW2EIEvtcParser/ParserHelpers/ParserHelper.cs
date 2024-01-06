@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser
         internal const int CombatReplaySkillDefaultSizeInPixel = 22;
         internal const int CombatReplaySkillDefaultSizeInWorld = 90;
         internal const int CombatReplayOverheadDefaultSizeInPixel = 20;
-        internal const float CombatReplayOverheadDefaultOpacity = 1.0f;
+        internal const float CombatReplayOverheadDefaultOpacity = 0.8f;
 
         public const int MinionLimit = 1500;
 

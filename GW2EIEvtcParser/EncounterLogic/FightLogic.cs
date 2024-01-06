@@ -42,10 +42,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
         public IReadOnlyList<AbstractSingleActor> Targets => _targets;
         public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
-        protected List<NPC> _trashMobs { get; } = new List<NPC>();
-        protected List<AbstractSingleActor> _nonPlayerFriendlies { get; } = new List<AbstractSingleActor>();
-        protected List<AbstractSingleActor> _targets { get; } = new List<AbstractSingleActor>();
-        protected List<AbstractSingleActor> _hostiles { get; } = new List<AbstractSingleActor>();
+        protected List<NPC> _trashMobs { get; private set; } = new List<NPC>();
+        protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _targets { get; private set; } = new List<AbstractSingleActor>();
+        protected List<AbstractSingleActor> _hostiles { get; private set; } = new List<AbstractSingleActor>();
 
         protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
 
@@ -143,6 +143,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 GenericTriggerID
             };
         }
+
+        protected virtual Dictionary<int, int> GetTargetsSortIDs()
+        {
+            var res = new Dictionary<int, int>();
+            for (int i = 0; i < GetTargetsIDs().Count; i++)
+            {
+                res.Add(GetTargetsIDs()[i], i);
+            }
+            return res;
+        }
+
         protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>();
@@ -181,7 +192,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _targets.Add(new NPC(agentItem));
                 }
             }
-            _targets.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            _targets = _targets.OrderBy(x => x.FirstAware).ToList();
+            Dictionary<int, int> targetSortIDs = GetTargetsSortIDs();
+            _targets = _targets.OrderBy(x =>
+            {
+            if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
+                {
+                    return sortKey;
+                }
+                return int.MaxValue;
+            }).ToList();
             //
             List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();
             if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
@@ -201,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _trashMobs.Add(new NPC(a));
             }
 #endif
-            _trashMobs.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            _trashMobs = _trashMobs.OrderBy(x => x.FirstAware).ToList();
             //
             List<int> friendlyNPCIDs = GetFriendlyNPCIDs();
             foreach (int id in friendlyNPCIDs)
@@ -212,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _nonPlayerFriendlies.Add(new NPC(agentItem));
                 }
             }
-            _nonPlayerFriendlies.Sort((x, y) => x.FirstAware.CompareTo(y.FirstAware));
+            _nonPlayerFriendlies = _nonPlayerFriendlies.OrderBy(x => x.FirstAware).ToList();
             FinalizeComputeFightTargets();
         }
 

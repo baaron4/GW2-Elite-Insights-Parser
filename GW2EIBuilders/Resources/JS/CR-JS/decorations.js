@@ -731,14 +731,21 @@ class IconMechanicDrawable extends MechanicDrawable {
         this.pixelSize = pixelSize;
         this.worldSize = worldSize;
         this.opacity = opacity;
+        this.canRotate = false;
     }
 
     getSize() {
         if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
             return this.worldSize;
-        } else {
+        } else if (this.pixelSize > 0){
             return this.pixelSize / animator.scale;
+        } else if (this.worldSize > 0){
+            return this.worldSize;
         }
+    }
+
+    getOpacity() {
+        return this.opacity;
     }
 
     getSecondaryOffset() {
@@ -760,14 +767,71 @@ class IconMechanicDrawable extends MechanicDrawable {
         const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
-        ctx.globalAlpha = this.opacity;
+        ctx.globalAlpha = this.getOpacity();
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        // Don't rotate the icon
-        ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        if(!this.canRotate) {
+            // Don't rotate the icon
+            ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        }
         ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
+    }
+}
+
+class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
+    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacities, heights) {
+        super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, 0);
+        this.canRotate = true;
+        this.opacities = opacities;
+        this.heights = heights;
+    }
+
+    getHeight() {
+        let index = -1;
+        const heights = this.heights;
+        const totalPoints = heights.length / 2;
+        const time = animator.reactiveDataStatus.time;
+        for (var i = 0; i < totalPoints; i++) {
+            let heightTime = heights[2 * i + 1];
+            if (time < heightTime) {
+                index = i - 1;
+                break;
+            }
+            index = i;
+        }
+        if (index === -1) {
+            return heights[0];
+        } else if (index === totalPoints - 1) {
+            return heights[2 * index]
+        } else {
+            return heights[2 * index];
+        }
+    }
+
+    getOpacity() {
+        let index = -1;
+        const opacities = this.opacities;
+        const totalPoints = opacities.length / 2;
+        const time = animator.reactiveDataStatus.time;
+        let interpolate = 0;
+        for (var i = 0; i < totalPoints; i++) {
+            let opacityTime = opacities[2 * i + 1];
+            if (time < opacityTime) {
+                if (opacityTime - time <= 1000) interpolate = opacityTime;
+                index = i - 1;
+                break;
+            }
+            index = i;
+        }
+        if (index === -1) {
+            return opacities[0];
+        } else if (interpolate > 0) {
+            return opacities[2 * (index + 1)] - (interpolate - time) * (opacities[2 * (index + 1)] - opacities[2 * index ]) / 1000;
+        } else {
+            return opacities[2 * index];
+        }
     }
 }
 

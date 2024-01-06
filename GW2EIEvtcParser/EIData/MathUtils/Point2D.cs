@@ -111,5 +111,43 @@ namespace GW2EIEvtcParser.EIData
         {
             return (float)Math.Round(ParserHelper.RadianToDegree(Math.Atan2(facing.Y, facing.X)), ParserHelper.CombatReplayDataDigit);
         }
+        /// <summary>
+        /// Returs true if p is inside or on the edges the triangle defined by p0, p1 and p2
+        /// Triangle can be clockwise or counter clock wise
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="p0"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static bool IsInTriangle(Point2D p, Point2D p0, Point2D p1, Point2D p2)
+        {
+            // barycentric coordinates
+            // https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+            // properly handles clockwise or counter clockwise
+            var s = (p0.X - p2.X) * (p.Y - p2.Y) - (p0.Y - p2.Y) * (p.X - p2.X);
+            var t = (p1.X - p0.X) * (p.Y - p0.Y) - (p1.Y - p0.Y) * (p.X - p0.X);
+
+            if ((s < 0) != (t < 0) && s != 0 && t != 0)
+            {
+                return false;
+            }
+
+            var d = (p2.X - p1.X) * (p.Y - p1.Y) - (p2.Y - p1.Y) * (p.X - p1.X);
+            return d == 0 || (d < 0) == (s + t <= 0);
+        }
+
+        /// <summary>
+        /// Returns true if p in inside or on the edges of the triangle defined by points
+        /// points must have exactly 3 values, returns false otherwise
+        /// Triangle can be clockwise or counter clock wise
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static bool IsInTriangle2D(Point2D p, IReadOnlyList<Point2D> points)
+        {
+            return points.Count == 3 && IsInTriangle(p, points[0], points[1], points[2]);
+        }
     }
 }

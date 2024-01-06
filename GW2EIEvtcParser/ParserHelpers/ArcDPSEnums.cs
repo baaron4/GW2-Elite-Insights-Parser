@@ -529,6 +529,8 @@ namespace GW2EIEvtcParser
         private const int SnowPile = -45;
         private const int Cage = -46;
         private const int Bombs = -47;
+        private const int YourSoul = -48;
+        private const int QadimPlatform = -49;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -706,6 +708,7 @@ namespace GW2EIEvtcParser
             Deathling = 19759,
             UnderworldReaper = 19831,
             DhuumDesmina = 19481,
+            YourSoul = ArcDPSEnums.YourSoul,
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,
@@ -731,6 +734,7 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
+            QadimPlatform = ArcDPSEnums.QadimPlatform,
             AngryZommoros = 20961,
             ChillZommoros = 21118,
             AssaultCube = 21092,
@@ -785,6 +789,7 @@ namespace GW2EIEvtcParser
             SmallJumpyTornado = 21961,
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
+            SabirPlatform = 21998,
             // Peerless Qadim
             PeerlessQadimPylon = 21996,
             PeerlessQadimAuraPylon = 21962,

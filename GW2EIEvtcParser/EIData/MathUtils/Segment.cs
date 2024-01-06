@@ -34,9 +34,13 @@ namespace GW2EIEvtcParser.EIData
 
         public bool IntersectSegment(long start, long end)
         {
-            if (Start >= End)
+            if (Start > End)
             {
                 return false;
+            }
+            else if (Start == End)
+            {
+                return ContainsPoint(start);
             }
             long maxStart = Math.Max(start, Start);
             long minEnd = Math.Min(end, End);

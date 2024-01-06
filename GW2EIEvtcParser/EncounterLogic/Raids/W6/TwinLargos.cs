@@ -117,6 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            targetPhases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
@@ -138,7 +139,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void FallBackPhases(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
         {
             IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
-            // clean Nikare related bugs
+            // clean Nikare/Kenut missing enter combat events related bugs
             switch (phases.Count)
             {
                 case 2:
@@ -152,10 +153,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -172,10 +175,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                         // P1/P2 and P3 are merged
@@ -185,10 +190,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p3.OverrideStart(hit.Time);
+                                p3.Name += " (Fallback)";
                             }
                             else
                             {
                                 p3.OverrideStart(p2.End);
+                                p3.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -203,6 +210,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (hit != null)
                 {
                     p1.OverrideStart(hit.Time);
+                    p1.Name += " (Fallback)";
+                } 
+                else
+                {
+                    p1.Name += " (Bad Fallback)";
                 }
             }
         }

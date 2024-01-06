@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -100,15 +101,30 @@ namespace GW2EIEvtcParser.EIData
             (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
             return downs.Any(x => x.ContainsPoint(time));
         }
+        public bool IsDowned(ParsedEvtcLog log, long start, long end)
+        {
+            (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
+            return downs.Any(x => x.IntersectSegment(start, end));
+        }
         public bool IsDead(ParsedEvtcLog log, long time)
         {
             (IReadOnlyList<Segment> deads,_ , _) = _statusHelper.GetStatus(log);
             return deads.Any(x => x.ContainsPoint(time));
         }
+        public bool IsDead(ParsedEvtcLog log, long start, long end)
+        {
+            (IReadOnlyList<Segment> deads, _, _) = _statusHelper.GetStatus(log);
+            return deads.Any(x => x.IntersectSegment(start, end));
+        }
         public bool IsDC(ParsedEvtcLog log, long time)
         {
             (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
             return dcs.Any(x => x.ContainsPoint(time));
+        }
+        public bool IsDC(ParsedEvtcLog log, long start, long end)
+        {
+            (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
+            return dcs.Any(x => x.IntersectSegment(start, end));
         }
 
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
@@ -536,7 +552,7 @@ namespace GW2EIEvtcParser.EIData
             CastEvents.AddRange(log.CombatData.GetInstantCastData(AgentItem));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
-                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == SkillIDs.WeaponSwap)
+                if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == WeaponSwap)
                 {
                     CastEvents[CastEvents.Count - 1] = wepSwap;
                 }
@@ -861,6 +877,5 @@ namespace GW2EIEvtcParser.EIData
             }
             return rotations.LastOrDefault(x => x.Time <= time);
         }
-
     }
 }

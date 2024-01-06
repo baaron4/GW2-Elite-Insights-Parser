@@ -91,9 +91,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)TargetID.Qadim,
                 (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.WyvernMatriarch,
                 (int)TrashID.WyvernPatriarch,
-                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.QadimLamp,
             };
         }
@@ -112,6 +112,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool refresh = false;
+            if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
+            {
+                var platformAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                foreach (AgentItem platform in platformAgents)
+                {
+                    platform.OverrideType(AgentItem.AgentType.NPC);
+                    platform.OverrideID(TrashID.QadimPlatform);
+                }
+                refresh = refresh || platformAgents.Any();
+            }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
             var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
@@ -120,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 lamp.OverrideType(AgentItem.AgentType.NPC);
                 lamp.OverrideID(TrashID.QadimLamp);
             }
-            bool refresh = lampAgents.Count > 0;
+            refresh = refresh || lampAgents.Any();
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -152,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            ComputeFightTargets(agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
                 if (target.IsSpecies(TrashID.PyreGuardianProtect))
@@ -301,6 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<TrashID>()
             {
+                //TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -366,6 +378,69 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+
+            // Incineration Orbs - CM
+            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
+            {
+                foreach (IReadOnlyList<EffectEvent> orbs in cmOrbs)
+                {
+                    var positions = orbs.Select(x => x.Position).ToList();
+                    Point3D middle = positions.FirstOrDefault(x => Point3D.IsInTriangle2D(x, positions.Where(y => y != x).ToList()));
+                    EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position == middle);
+                    if (middleEvent != null)
+                    {
+                        foreach (EffectEvent effect in orbs)
+                        {
+                            int radius = effect == middleEvent ? 540 : 180;
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
+                            var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle2 = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                            EnvironmentDecorations.Add(circle);
+                            EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
+                        }
+                    }
+                }
+            }
+
+            // Incineration Orbs - Pyres
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPyresIncinerationOrbs, out IReadOnlyList<EffectEvent> pyreOrbs))
+            {
+                foreach (EffectEvent effect in pyreOrbs)
+                {
+                    int radius = 240;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
+                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }
+
+            // Bouncing blue orbs
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbEvents))
+            {
+                foreach (EffectEvent effect in blueOrbEvents)
+                {
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
+                    var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 255, 0.5)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                }
+            }
+
+            // Inferno - Qadim's AoEs on every platform
+            // ! Disabled until we have a working solution for effects on moving platforms
+            /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimInfernoAoEs, out IReadOnlyList<EffectEvent> infernoAoEs))
+            {
+                foreach (EffectEvent effect in infernoAoEs)
+                {
+                    int radius = 150;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }*/
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -606,6 +681,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                    break;
+                case (int)TrashID.QadimPlatform:
+                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.6)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     break;
                 default:
                     break;

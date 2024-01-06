@@ -367,8 +367,25 @@ namespace GW2EIEvtcParser
         public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
         public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
         public const string BrokenKingKingsWrathConeAoEDamage = "22AC6bFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
+        // Dhuum
+        public const string DhuumScytheSwingIndicator = "91A23D51294E80458BE9C3C89A2ED138"; // 1200 duration
+        public const string DhuumScytheSwingDamage = "C79F5D95E11070448A39ACD7F6C5D0D3"; // 0 duration
+        public const string DhuumCullAoEIndicator = "1BB71ED45AF4354AB65BBEB976E8CFEE"; // 0 duration
+        public const string DhuumCullCracksIndicator = "F28528CBE08E0D43B3227A157CD1CCF2"; // dynamic duration, earlier cracks have longer duration than last ones.
+        public const string DhuumCullCracksDamage = "13B5022FBF7D884C9AA9ED667FEEC22F"; // 0 duration
+        public const string DhuumDeathMarkFirstIndicator = "6A0D725CD03D8D48BEA939CD1BBA7A9A"; // 2000 duration - Soul split warning indicator
+        public const string DhuumDeathMarkSecondIndicator = "4BA74BA044B7BD4BB1E3392641078D97"; // 1000 duration - Hit indicator (black smoke)
+        public const string DhuumDeathMarkDeathZone = "B8F90FE6AF4F2A4C84D349861A098392"; // 120000 duration
+        public const string DhuumSuperspeedOrb = "8F89945581099142B598977188BAC8E1"; // max duration - has end effect
+        public const string DhuumConeSlash = "21BA95CC014CC944A71E2A6FB28D9A86";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Qadim
+        public const string QadimCMIncinerationOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF"; // 2600 duration - 180 corner orb - 540 central orb
+        public const string QadimPyresIncinerationOrbs = "D3D9E94418D8094BAE0E0C510DDF2A91"; // 2300 duration - 240 radius
+        public const string QadimInfernoAoEs = "37DF91103EC45240AA7910575F1FC55F"; // On non static platform - 3000 duration - 150 radius
+        public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
+        public const string QadimPlatformStartsOrEndsMoving = "98891680AFB80A4E9CAFCCBD1662DF88";
         // Sabir
         public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Qadim the Peerless
