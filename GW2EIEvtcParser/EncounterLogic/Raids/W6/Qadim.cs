@@ -810,7 +810,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                             if (lastBlueOrb != null)
                                             {
                                                 (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
-                                                opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
+                                                if (Math.Abs(end - log.FightData.FightEnd) > 500)
+                                                {
+                                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
+                                                }
                                             }
                                         }
                                     }
@@ -819,7 +822,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             break;
                         case "07":
                         case "7":
-                            //replay.Decorations.Add(new RectangleDecoration(500, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 1)", new AgentConnector(target)));
                             if (PlatformHelper(replay.Velocities, opacities, new Point3D(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
@@ -830,6 +832,36 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     }
                                 }
                             }
+                            break;
+                        case "08":
+                        case "8":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (PlatformHelper(replay.Velocities, opacities, new Point3D(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                            {
+                                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "09":
+                        case "9":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "10":
+                            break;
+                        case "11":
                             break;
                         default:
                             break;
