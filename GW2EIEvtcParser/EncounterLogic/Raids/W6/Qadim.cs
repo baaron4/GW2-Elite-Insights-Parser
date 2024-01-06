@@ -789,6 +789,37 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                             }
                             break;
+                        case "05":
+                        case "5":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                PlatformHelper(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "06":
+                        case "6":
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime + 17000, hiddenOpacity);
+                                }
+                            }
+                            break;
+                        case "07":
+                        case "7":
+                            //replay.Decorations.Add(new RectangleDecoration(500, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 1)", new AgentConnector(target)));
+                            if (PlatformHelper(replay.Velocities, opacities, new Point3D(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if(PlatformHelper(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        PlatformHelper(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
