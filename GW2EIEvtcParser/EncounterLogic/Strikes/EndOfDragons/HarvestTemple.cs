@@ -242,6 +242,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidGiant
             };
         }
+
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidJormag, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidSooWon, 0 },
+                {(int)ArcDPSEnums.TrashID.PushableVoidAmalgamate, 1 },
+                {(int)ArcDPSEnums.TrashID.KillableVoidAmalgamate, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidSaltsprayDragon, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidObliterator, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidGoliath, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidTimeCaster, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidGiant, 1},
+            };
+        }
+
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
