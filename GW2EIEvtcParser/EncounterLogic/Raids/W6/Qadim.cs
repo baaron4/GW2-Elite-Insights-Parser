@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int radius = effect == middleEvent ? 540 : 180;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
-                            var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                             var circle2 = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
                             EnvironmentDecorations.Add(circle);
                             EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
@@ -409,7 +409,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int radius = 240;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
-                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                     var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
@@ -435,7 +435,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int radius = 150;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
-                    var circle = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                     var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Riposte
                     var riposte = cls.Where(x => x.SkillId == QadimRiposte).ToList();
@@ -491,7 +491,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     var eleBreath = cls.Where(x => x.SkillId == ElementalBreath).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
@@ -524,7 +524,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(range / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
                             replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(rotationConnextor));
-                            replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), "rgba(0,100,255,0.5)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), Colors.LightBlue, 0.5, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     //Breath
@@ -656,7 +656,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Pizza
                     var forceWave = cls.Where(x => x.SkillId == WaveOfForce).ToList();
@@ -683,7 +683,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.QadimPlatform:
-                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), "rgba(100, 100, 100, 0.6)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), Colors.LightGrey, 0.6, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     break;
                 default:
                     break;

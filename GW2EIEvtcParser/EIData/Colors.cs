@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
         public static Color Green = new Color(0, 255, 0);
         public static Color GreenishYellow = new Color(220, 255, 0);
         public static Color DarkGreen = new Color(0, 128, 0);
-        public static Color DarkBlue = new Color(0, 70, 128);
+        public static Color DarkBlue = new Color(0, 0, 128);
         public static Color Teal = new Color(0, 255, 255);
         public static Color DarkTeal = new Color(0, 160, 150);
         public static Color LightBlue = new Color(0, 140, 255);
@@ -72,6 +72,7 @@ namespace GW2EIEvtcParser.EIData
         public static Color DarkMagenta = new Color(128, 0, 128);
         public static Color Blue = new Color(0, 0, 255);
         public static Color White = new Color(255, 255, 255);
+        public static Color DarkWhite = new Color(180, 180, 180);
         public static Color Grey = new Color(60, 60, 60);
         public static Color LightGrey = new Color(120, 120, 120);
         public static Color Black = new Color(0, 0, 0);

@@ -196,7 +196,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in brutalize)
                     {
-                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Rigom:
@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (guldhem != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(seg, "rgba(255, 100, 0, 0.3)", new AgentConnector(p), new AgentConnector(guldhem)));
+                    replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(guldhem)));
                 }
             }
             //fixated Rigom
@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
                 if (rigom != null)
                 {
-                    replay.Decorations.Add(new LineDecoration(seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p), new AgentConnector(rigom)));
+                    replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(rigom)));
                 }
             }
         }

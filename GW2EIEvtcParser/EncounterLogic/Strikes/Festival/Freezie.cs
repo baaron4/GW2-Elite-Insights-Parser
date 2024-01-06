@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespan(log, 30000);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    EnvironmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, "rgba(255, 250, 250, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                    EnvironmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, Colors.White, 0.4, connector).UsingRotationConnector(rotationConnector));
                 }
             }
 
@@ -216,11 +216,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000);
                     var connector = new PositionConnector(effect.Position);
-                    string orange = "rgba(250, 150, 0, 0.2)";
-                    EnvironmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, orange, connector));
+                    EnvironmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, Colors.Orange, 0.2, connector));
                     // Thicker Borders
-                    EnvironmentDecorations.Add(new DoughnutDecoration(760, 780, lifespan, orange, connector));
-                    EnvironmentDecorations.Add(new DoughnutDecoration(980, 1000, lifespan, orange, connector));
+                    EnvironmentDecorations.Add(new DoughnutDecoration(760, 780, lifespan, Colors.Orange, 0.2, connector));
+                    EnvironmentDecorations.Add(new DoughnutDecoration(980, 1000, lifespan, Colors.Orange, 0.2, connector));
                 }
             }
         }

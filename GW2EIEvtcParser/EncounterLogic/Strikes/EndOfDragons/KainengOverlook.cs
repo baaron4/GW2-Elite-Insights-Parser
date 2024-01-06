@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Fixation
             replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
-            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
             // Shared Destruction (Green)
             int greenDuration = 6250;
@@ -615,11 +615,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)
         {
-            string green = "rgba(0, 120, 0, 0.4)";
-            string color = isSuccessful ? green : "rgba(120, 0, 0, 0.4)";
+            Color green = Colors.DarkGreen;
+            Color color = isSuccessful ? green : Colors.DarkRed;
             var connector = new AgentConnector(p);
-            replay.Decorations.Add(new CircleDecoration(180, lifespan, green, connector).UsingGrowingEnd(lifespan.Item2));
-            replay.Decorations.Add(new CircleDecoration(180, lifespan, color, connector));
+            replay.Decorations.Add(new CircleDecoration(180, lifespan, green, 0.4, connector).UsingGrowingEnd(lifespan.Item2));
+            replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.4, connector));
         }
     }
 }

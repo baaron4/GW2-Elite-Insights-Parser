@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     var breath = cls.Where(x => x.SkillId == Halitosis).ToList();
                     foreach (AbstractCastEvent c in breath)
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
+                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }

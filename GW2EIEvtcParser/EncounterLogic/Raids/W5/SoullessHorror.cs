@@ -176,7 +176,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.SoullessHorror:
                     // arena reduction
                     var center = new Point3D(-10581, 825, -817);
-                    string destroyedRingColor = "rgba(255, 120, 30, 0.3)";
                     List<(double, int, int)> destroyedRings;
                     if (log.FightData.IsCM)
                     {
@@ -202,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Segment hpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value <= hpVal);
                         if (hpUpdate != null)
                         {
-                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), destroyedRingColor, new PositionConnector(center));
+                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
                             replay.AddDecorationWithGrowing(doughnut, hpUpdate.Start + 3000);
                         }
                         else
@@ -217,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
                     var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
@@ -309,12 +308,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                         break;
                     }
                     else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                         break;
                     }
                     break;

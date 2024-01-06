@@ -280,7 +280,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in kcOrbCollect)
                     {
-                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(target)).UsingFilled(false), true, seg.End);
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -422,7 +422,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Fixated Statue tether to Player
             List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, new long[] { StatueFixated1, StatueFixated2 }, p, true, true);
-            replay.AddTether(fixatedStatue, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixatedStatue, Colors.Magenta, 0.5);
             // Fixation Overhead
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);

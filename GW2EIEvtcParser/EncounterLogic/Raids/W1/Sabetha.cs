@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var breakbar = cls.Where(x => x.SkillId == PlatformQuake).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Karde:

@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
                     var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();

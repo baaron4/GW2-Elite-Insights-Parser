@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in shields)
             {
-                replay.Decorations.Add(new CircleDecoration(250, seg, "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.5, new AgentConnector(target)));
             }
         }
 
@@ -292,8 +292,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", positionConnector).UsingRotationConnector(rotationConnextor));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Red, 0.1, positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.7, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;
@@ -328,7 +328,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
                 if (position != null)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new PositionConnector(position)), corruptedMatthiasEnd + 100000);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
             }

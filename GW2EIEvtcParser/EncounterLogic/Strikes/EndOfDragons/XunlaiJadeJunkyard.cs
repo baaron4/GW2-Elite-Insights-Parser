@@ -339,7 +339,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int kraitsRadius = 420;
 
                     replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(firstMovementTime));
-                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.LichHallucination:
                     // Terrifying Apparition
@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int lichRadius = 280;
 
                     replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(awareTime));
-                    replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), "rgba(250, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
@@ -437,7 +437,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
             // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
-            replay.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)ArcDPSEnums.TargetID.Ankka, (int)ArcDPSEnums.TrashID.ReanimatedHatred, "rgba(255, 0, 255, 0.5)");
+            replay.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)ArcDPSEnums.TargetID.Ankka, (int)ArcDPSEnums.TrashID.ReanimatedHatred, Colors.Magenta, 0.5);
         }
 
         private static void AddDeathsHandDecoration(CombatReplay replay, Point3D position, int start, int delay, int radius, int duration)
@@ -457,7 +457,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int endTime = startCast + durationCast;
             var connector = new PositionConnector(position);
             replay.Decorations.Add(new CircleDecoration(radius, (startCast, startCast + delay), Colors.Orange, 0.2, connector).UsingGrowingEnd(startCast + delay));
-            replay.Decorations.Add(new CircleDecoration(radius, (startCast + delay, endTime), "rgba(250, 0, 0, 0.2)", connector));
+            replay.Decorations.Add(new CircleDecoration(radius, (startCast + delay, endTime), Colors.Red, 0.2, connector));
         }
     }
 }

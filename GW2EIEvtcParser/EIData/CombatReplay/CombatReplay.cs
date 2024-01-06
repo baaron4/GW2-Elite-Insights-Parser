@@ -507,6 +507,22 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
+        /// <summary>
+        /// Add tether decoration connecting a player to an agent.<br></br>
+        /// The <paramref name="buffId"/> is sourced by an agent that isn't the one to tether to.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="player">The player to tether to <paramref name="toTetherAgentId"/>.</param>
+        /// <param name="buffId">ID of the buff sourced by <paramref name="buffSrcAgentId"/>.</param>
+        /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="color">Color of the tether.</param>
+        /// <param name="opacity">Opacity of the tether.</param>
+        /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
+        internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, Color color, double opacity, int firstAwareThreshold = 2000)
+        {
+             AddTetherByThirdPartySrcBuff(log, player, buffId, buffSrcAgentId, toTetherAgentId, color.WithAlpha(opacity).ToString(true), firstAwareThreshold);
+        }
     }
 }
 

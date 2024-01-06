@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
-                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
+                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                     }
                     //
                     var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();

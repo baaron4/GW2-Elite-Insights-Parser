@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
             List<AbstractBuffEvent> phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
-            replay.AddTether(phantasmagorias, "rgba(0, 100, 255, 0.5)");
+            replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -367,7 +367,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();

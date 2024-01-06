@@ -575,7 +575,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in signets)
                     {
-                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, Colors.Teal, 0.4, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Gambler:
@@ -606,7 +606,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.DemonicBond:
                     replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
                     var demonicCenter = new Point3D(-8092.57f, 4176.98f);
-                    replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(target), new PositionConnector(demonicCenter)));
+                    replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                     AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                     if (shackledPrisoner != null)
                     {
@@ -643,7 +643,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                         Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
+                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
                 default:

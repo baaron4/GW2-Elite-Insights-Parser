@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
@@ -296,10 +296,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);
-                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), Colors.Orange, 0.3, connector).UsingRotationConnector(rotationConnector));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), Colors.LightGrey, 0.7, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int radiusAnomaly = (int)target.HitboxWidth / 2;
                     if (firstEntropicPosition != null)
                     {
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), "rgba(255, 0, 0, 0.3)", new PositionConnector(firstEntropicPosition)), start);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(firstEntropicPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in criticalMass)
             {
-                replay.Decorations.Add(new CircleDecoration(200, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p)).UsingFilled(false));
+                replay.Decorations.Add(new CircleDecoration(200, seg, Colors.Red, 0.3, new AgentConnector(p)).UsingFilled(false));
             }
             // Magma drop
             var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -507,7 +507,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in whiteOrbAoEs)
                 {
                     bool failedOrb = false;
-                    string color = "rgba(108, 122, 137, 0.2)";
+                    Color color = Colors.LightGrey;
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     if (landedOrbExplosions != null)
                     {
@@ -515,12 +515,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     if (failedOrb)
                     {
-                        color = "rgba(120, 0, 0, 0.4)";
+                        color = Colors.DarkRed;
                     }
                     // Main circle
-                    var circle = new CircleDecoration(190, lifespan, color, new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(190, lifespan, color, 0.3, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration("rgba(255, 255, 255, 0.5)"));
+                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.White, 0.5));
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
                 }
             }
@@ -533,7 +533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // The actual effect duration is 4294967295
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, "rgba(255, 255, 255, 0.5)", connector).UsingFilled(false));
+                    EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, Colors.White, 0.5, connector).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, "rgba(255, 215, 0, 0.4)", connector));
                 }
             }

@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var rotation = new AgentFacingAgentConnector(target, player);
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(length / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, "rgba(0, 120, 0, 0.4)", connector).UsingRotationConnector(rotation));
+                            replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotation));
                         }
                     }
                     break;
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // For each Soul Feast spawned, check the spawn time to be after the current buff apply and before the next
                     if (agent.FirstAware >= buffApply.Time && agent.FirstAware < endTime)
                     {
-                        replay.Decorations.Add(new LineDecoration(lifespan, "rgba(255, 0, 255, 0.5)", new AgentConnector(agent), new AgentConnector(p)));
+                        replay.Decorations.Add(new LineDecoration(lifespan, Colors.Magenta, 0.5, new AgentConnector(agent), new AgentConnector(p)));
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
                     var connector = new AgentConnector(p);
-                    var circle = new CircleDecoration(160, lifespan, "rgba(0, 120, 0, 0.4)", connector);
+                    var circle = new CircleDecoration(160, lifespan, Colors.DarkGreen, 0.4, connector);
                     replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
                 }
             }

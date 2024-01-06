@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
-                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -319,7 +319,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
-                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;
@@ -374,11 +374,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
@@ -387,7 +387,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {
-                replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, Colors.LightBlue, 0.3, new AgentConnector(p)));
             }
         }
 

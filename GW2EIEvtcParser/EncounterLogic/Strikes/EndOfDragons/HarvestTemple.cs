@@ -615,7 +615,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 end = (int)voidShellRemovals[voidShellRemovalOffset++].Time;
                             }
-                            replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(0, 180, 255, 0.3)", new PositionConnector(purificationZoneEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.LightBlue, 0.3, new PositionConnector(purificationZoneEffect.Position)));
                             purificationAdd++;
                             if (purificationAdd >= voidShellAppliesCount)
                             {
@@ -646,9 +646,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int startLoad = (int)fireBallEffect.Time - 2000;
                             int endLoad = (int)fireBallEffect.Time;
-                            var circle = new CircleDecoration(180, (startLoad, endLoad), "rgba(250, 0, 0, 0.2)", new PositionConnector(fireBallEffect.Position));
+                            var circle = new CircleDecoration(180, (startLoad, endLoad), Colors.Red, 0.2, new PositionConnector(fireBallEffect.Position));
                             replay.AddDecorationWithGrowing(circle, endLoad);
-                            replay.Decorations.Add(new CircleDecoration(180, (endLoad, endLoad + 2000), "rgba(250, 0, 0, 0.4)", new PositionConnector(fireBallEffect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(180, (endLoad, endLoad + 2000), Colors.Red, 0.4, new PositionConnector(fireBallEffect.Position)));
                         }
                     }
                     //
@@ -660,7 +660,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int end = start + 5000;
                             var connector = new PositionConnector(voidZoneEffect.Position);
                             var rotationConnector = new AngleConnector(voidZoneEffect.Rotation.Z);
-                            var rectangle = (RectangleDecoration)new RectangleDecoration(90, 230, (start, end), "rgba(150, 0, 150, 0.2)", connector).UsingRotationConnector(rotationConnector);
+                            var rectangle = (RectangleDecoration)new RectangleDecoration(90, 230, (start, end), Colors.DarkMagenta, 0.2, connector).UsingRotationConnector(rotationConnector);
                             replay.AddDecorationWithGrowing(rectangle, end);
                         }
                     }
@@ -713,7 +713,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)breakbar.Time;
                         int end = (int)target.LastAware;
-                        replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //
                     break;
@@ -782,7 +782,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int indicatorStart = (int)effect.Time;
                             int aoeStart = indicatorStart + indicatorDuration;
                             int aoeEnd = Math.Min(aoeStart + aoeDuration, (int)target.LastAware);
-                            replay.AddDecorationWithGrowing(new RectangleDecoration(700, 2900, (indicatorStart, aoeEnd), "rgba(255, 127, 0, 0.2)", new PositionConnector(effect.Position)), aoeStart);
+                            replay.AddDecorationWithGrowing(new RectangleDecoration(700, 2900, (indicatorStart, aoeEnd), Colors.Orange, 0.2, new PositionConnector(effect.Position)), aoeStart);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe, out IReadOnlyList<EffectEvent> kralkBeamAoeEffects))
@@ -791,7 +791,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = Math.Min((int)effect.Time + 5000, (int)target.LastAware);
-                            replay.Decorations.Add(new CircleDecoration(350, (start, end), "rgba(0, 0, 0, 0.4)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(350, (start, end), Colors.Black, 0.4, new PositionConnector(effect.Position)));
                         }
                     }
                     break;
@@ -932,7 +932,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)effect.Time;
                             int end = start + 1600;
-                            replay.AddDecorationWithGrowing(new RectangleDecoration(3000, 750, (start, end), "rgba(200, 0, 0, 0.2)", new PositionConnector(effect.Position)), end);
+                            replay.AddDecorationWithGrowing(new RectangleDecoration(3000, 750, (start, end), Colors.Red, 0.2, new PositionConnector(effect.Position)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTsunami1, out IReadOnlyList<EffectEvent> tsunamiEffects))
@@ -942,11 +942,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // AoE indicator
                             int indicatorEnd = (int)effect.Time;
                             int indicatorStart = indicatorEnd - 1600;
-                            replay.AddDecorationWithGrowing(new CircleDecoration(235, (indicatorStart, indicatorEnd), "rgba(250, 0, 0, 0.2)", new PositionConnector(effect.Position)), indicatorEnd);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(235, (indicatorStart, indicatorEnd), Colors.Red, 0.2, new PositionConnector(effect.Position)), indicatorEnd);
                             // Expanding wave - radius and duration are estimates, can't seem to line up the decoration with actual hits
                             int waveStart = (int)effect.Time;
                             int waveEnd = waveStart + 4500;
-                            replay.Decorations.Add(new CircleDecoration(2000, (waveStart, waveEnd), "rgba(0, 0, 250, 0.5)", new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(waveEnd));
+                            replay.Decorations.Add(new CircleDecoration(2000, (waveStart, waveEnd), Colors.Blue, 0.5, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(waveEnd));
                         }
                     }
                     break;
@@ -1101,9 +1101,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int duration = 5000;
                 int start = (int)green.Time - duration;
                 int end = (int)green.Time;
-                string color = isSuccessful ? "rgba(0, 120, 0, 0.4)" : "rgba(120, 0, 0, 0.4)";
-                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), "rgba(0, 120, 0, 0.4)", new PositionConnector(green.Position)).UsingGrowingEnd(end));
-                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), color, new PositionConnector(green.Position)));
+                Color color = isSuccessful ? Colors.DarkGreen : Colors.DarkRed;
+                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(end));
+                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), color, 0.4, new PositionConnector(green.Position)));
             }
         }
 

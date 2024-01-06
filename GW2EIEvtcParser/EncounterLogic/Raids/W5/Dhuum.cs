@@ -390,7 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 (long, long) lifespanDeadly = (zoneDeadly, zoneEnd);
 
                                 // Warning
-                                var circleOrange = new CircleDecoration(radius, lifespanWarning, "rgba(250, 120, 0, 0.2)", positionConnector);
+                                var circleOrange = new CircleDecoration(radius, lifespanWarning, Colors.Orange, 0.2, positionConnector);
                                 var circleRed = new CircleDecoration(radius, lifespanWarning, "rgba(255, 0, 0, 0.4)", positionConnector);
                                 replay.Decorations.Add(circleOrange);
                                 replay.Decorations.Add(circleRed.UsingGrowingEnd(lifespanWarning.Item2));
@@ -430,7 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 continue;
                             }
-                            replay.Decorations.Add(new PieDecoration(850, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new PieDecoration(850, 60, (start, end), Colors.LightOrange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     else
@@ -458,8 +458,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 var position = new PositionConnector(effect.Position);
                                 var rotation = new AngleConnector(effect.Rotation.Z + 90);
 
-                                var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingRotationConnector(rotation);
-                                var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, "rgba(250, 120, 0, 0.2)", position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
+                                var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                                var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
                                 replay.Decorations.Add(coneDec);
                                 replay.Decorations.Add(coneGrowing);
                             }
@@ -527,7 +527,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var agentConnector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, "rgba(250, 120, 0, 0.2)", agentConnector).UsingRotationConnector(rotationConnector);
+                        var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
                         replay.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
                     }
                     break;
@@ -591,7 +591,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            var greenCircle = new CircleDecoration(240, (gstart, gend), "rgba(0, 120, 0, 0.4)", new AgentConnector(target));
+                            var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
                             replay.AddDecorationWithGrowing(greenCircle, gend);
                         }
                     }
@@ -670,7 +670,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.DhuumDeathMarkSecondIndicator);
                     var connector = new PositionConnector(effect.Position);
-                    var circleOrange = new CircleDecoration(450, lifespan, "rgba(250, 120, 0, 0.2)", connector);
+                    var circleOrange = new CircleDecoration(450, lifespan, Colors.Orange, 0.2, connector);
                     var circleRed = new CircleDecoration(450, lifespan, "rgba(255, 0, 0, 0.4)", connector);
                     EnvironmentDecorations.Add(circleOrange);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.Item2));
@@ -708,7 +708,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Effect duration is 0, we get the effect start time of the cracks
                     (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumCullCracksIndicator);
                     var connector = new PositionConnector(effect.Position);
-                    var greenCircle = new CircleDecoration(300, lifespan, "rgba(250, 120, 0, 0.2)", connector);
+                    var greenCircle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(greenCircle);
                     EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -722,7 +722,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
                     var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(230 / 2, 0), true);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z -90);
-                    var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(0, 0, 0, 0.3)", connector).UsingRotationConnector(rotationConnector);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, Colors.Black, 0.3, connector).UsingRotationConnector(rotationConnector);
                     EnvironmentDecorations.Add(rectangle);
                 }
             }
@@ -749,7 +749,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, long.MaxValue);
                     var position = new PositionConnector(effect.Position);
-                    var circle = (CircleDecoration)new CircleDecoration(50, lifespan, "rgba(255, 255, 255, 0.5)", position).UsingFilled(false);
+                    var circle = (CircleDecoration)new CircleDecoration(50, lifespan, Colors.White, 0.5, position).UsingFilled(false);
                     var centralDot = new CircleDecoration(20, lifespan, "rgba(203, 195, 227, 0.5)", position);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(centralDot);
@@ -785,13 +785,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             var playerConnector = new AgentConnector(p);
 
             // Soul outer circle
-            var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, "rgba(255, 255, 255, 1)", positionConnector).UsingFilled(false);
+            var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, Colors.White, 0.8, positionConnector).UsingFilled(false);
             // Soul tether to player
-            var line = new LineDecoration(soulLifespan, "rgba(255, 255, 255, 1)", positionConnector, playerConnector);
+            var line = new LineDecoration(soulLifespan, Colors.White, 0.8, positionConnector, playerConnector);
             // Soul icon
             var icon = new IconDecoration(ParserIcons.DhuumPlayerSoul, 16, 1, soulLifespan, positionConnector);
             // Red circle indicating timer
-            var death = new CircleDecoration(radius, hastenedDemise, "rgba(255, 0, 0, 0.2)", positionConnector);
+            var death = new CircleDecoration(radius, hastenedDemise, Colors.Red, 0.2, positionConnector);
 
             replay.Decorations.Add(hitbox);
             replay.Decorations.Add(line);
