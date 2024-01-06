@@ -451,10 +451,9 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="log">The log.</param>
         /// <param name="effect">Tether effect.</param>
         /// <param name="color">Color of the tether decoration.</param>
-        /// <param name="opacity">Opacity of the tether decoration.</param>
         /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
         /// <param name="overrideDuration">Wether to override the duration or not.</param>
-        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, string color, int duration = 0, bool overrideDuration = false)
         {
             if (!effect.IsAroundDst) { return; }
 
@@ -470,8 +469,22 @@ namespace GW2EIEvtcParser.EIData
 
             if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
             {
-                Decorations.Add(new LineDecoration(lifespan, color, opacity, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
+                Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
+        }
+
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="effect">Tether effect.</param>
+        /// <param name="color">Color of the tether decoration.</param>
+        /// <param name="opacity">Opacity of the tether decoration.</param>
+        /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
+        /// <param name="overrideDuration">Wether to override the duration or not.</param>
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
+        {
+            AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(true), duration, overrideDuration);
         }
 
         /// <summary>
