@@ -165,6 +165,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.Ankka, 0 },
+                {(int)ArcDPSEnums.TrashID.ReanimatedAntipathy, 1 },
+                {(int)ArcDPSEnums.TrashID.ReanimatedSpite, 1 },
+            };
+        }
+
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
             return new List<ArcDPSEnums.TrashID>

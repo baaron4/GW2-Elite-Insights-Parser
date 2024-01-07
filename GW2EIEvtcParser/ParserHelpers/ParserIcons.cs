@@ -664,6 +664,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         // NPC / Gadgets Icons not private
         internal const string DhuumPlayerSoul = "https://i.imgur.com/rAyuxqS.png";
 
+        // - Other
+        internal const string QadimPlatform = "https://i.imgur.com/DbXr5Fo.png";
 
         internal const string NoImage = "";
 

@@ -99,10 +99,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Desmina not found");
             }
-            var desminaInitialPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
-            if (!combatData.GetMovementData(desmina).Any(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(desminaInitialPosition) < 100))
+            if (combatData.HasMovementData)
             {
-                return FightData.EncounterStartStatus.Late;
+                var desminaInitialPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
+                if (!combatData.GetMovementData(desmina).Any(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(desminaInitialPosition) < 100))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
             }
             return FightData.EncounterStartStatus.Normal;
         }

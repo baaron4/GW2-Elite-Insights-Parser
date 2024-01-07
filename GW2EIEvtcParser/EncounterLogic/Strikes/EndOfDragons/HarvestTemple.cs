@@ -16,6 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class HarvestTemple : EndOfDragonsStrike
     {
+
+        private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets { get; set; }
         public HarvestTemple(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -242,6 +244,27 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidGiant
             };
         }
+
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidJormag, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan, 0 },
+                {(int)ArcDPSEnums.TargetID.TheDragonVoidSooWon, 0 },
+                {(int)ArcDPSEnums.TrashID.PushableVoidAmalgamate, 1 },
+                {(int)ArcDPSEnums.TrashID.KillableVoidAmalgamate, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidSaltsprayDragon, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidObliterator, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidGoliath, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidTimeCaster, 1 },
+                {(int)ArcDPSEnums.TrashID.VoidGiant, 1},
+            };
+        }
+
         protected override HashSet<int> GetUniqueNPCIDs()
         {
             return new HashSet<int>
@@ -567,6 +590,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            FirstAwareSortedTargets = Targets.OrderBy(x => x.FirstAware).ToList();
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -835,7 +859,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         EffectEvent lastEffect = poolEffects.Last();
                         int lastStart = (int)lastEffect.Time;
                         int lastEnd = Int32.MaxValue;
-                        AbstractSingleActor phaseTarget = FindActiveOrNextPhase(target.FirstAware);
+                        AbstractSingleActor phaseTarget = FindActiveOrNextPhaseTarget(target.FirstAware);
                         switch (phaseTarget.ID)
                         {
                             case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
@@ -991,11 +1015,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            AbstractSingleActor activeDragon = Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
-            return activeDragon ?? Targets.FirstOrDefault(x => x.FirstAware >= time);
+            AbstractSingleActor activeDragon = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+            return activeDragon ?? FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware >= time);
         }
 
-        private AbstractSingleActor FindActiveOrNextPhase(long time)
+        private AbstractSingleActor FindActiveOrNextPhaseTarget(long time)
         {
             var targetIDs = new List<int> {
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
@@ -1007,8 +1031,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            AbstractSingleActor activeTarget = Targets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && targetIDs.Contains(x.ID));
-            return activeTarget ?? Targets.FirstOrDefault(x => x.FirstAware >= time);
+            AbstractSingleActor activeTarget = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && targetIDs.Contains(x.ID));
+            return activeTarget ?? FirstAwareSortedTargets.MinBy(x => x.FirstAware >= time);
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)

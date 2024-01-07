@@ -13,12 +13,13 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Qadim : MythwrightGambit
     {
-
+        private bool _manualPlatforms = true;
         public Qadim(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -183,12 +184,55 @@ namespace GW2EIEvtcParser.EncounterLogic
                     target.OverrideName("Stab " + target.Character);
                 }
             }
+            var platformNames = new List<string>()
+            {
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+            };
+            _manualPlatforms = TrashMobs.Count(x => platformNames.Contains(x.Character)) != 12;
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            // Can be improved
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            AgentItem qadim = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
+            if (qadim == null)
+            {
+                throw new MissingKeyActorsException("Qadim not found");
+            }
+            if (combatData.HasMovementData)
+            {
+                var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
+                if (!combatData.GetMovementData(qadim).Any(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(qadimAroundInitialPosition) < 100))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
+                (Targets.Any(x => x.IsSpecies(TrashID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -312,7 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<TrashID>()
             {
-                //TrashID.QadimPlatform,
+                TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -377,7 +421,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            if (_manualPlatforms)
+            {
+                AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            }
 
             // Incineration Orbs - CM
             if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
@@ -683,11 +730,214 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.QadimPlatform:
-                    replay.Decorations.Add(new RectangleDecoration(1000, 500, (target.FirstAware, target.LastAware), Colors.LightGrey, 0.6, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                    if (_manualPlatforms)
+                    {
+                        return;
+                    }
+                    const float hiddenOpacity = 0.1f;
+                    const float visibleOpacity = 1f;
+                    const float noOpacity = -1f;
+                    var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
+                    var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
+                    int velocityIndex = 0;
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
+                    if (qadim == null)
+                    {
+                        throw new MissingKeyActorsException("Qadim not found");
+                    }
+                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
+                    long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
+                    float threshold = 1f;
+                    switch (target.Character)
+                    {
+                        case "00":
+                        case "0":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                }
+                            }
+                            break;
+                        case "01":
+                        case "1":
+                            ParametricPoint3D found = replay.Velocities.FirstOrDefault(x => new Point3D(-28.3569336f, -49.2431641f, 90.90576f).DistanceToPoint(x) < threshold);
+                            if (found != null)
+                            {
+                                opacities.Add(new ParametricPoint1D(hiddenOpacity, found.Time));
+                            }
+                            break;
+                        case "02":
+                        case "2":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "03":
+                        case "3":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "04":
+                        case "4":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "05":
+                        case "5":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "06":
+                        case "6":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbs))
+                                        {
+                                            EffectEvent lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
+                                            if (lastBlueOrb != null)
+                                            {
+                                                (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
+                                                if (Math.Abs(end - log.FightData.FightEnd) > 500)
+                                                {
+                                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "07":
+                        case "7":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if(AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "08":
+                        case "8":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                            {
+                                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "09":
+                        case "9":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "10":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "11":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    var platformDecoration = new BackgroundIconDecoration(ParserIcons.QadimPlatform, 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
+                    RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                    replay.Decorations.Add(platformDecoration.UsingRotationConnector(platformRotationConnector));
                     break;
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Returns true if velocity was found
+        /// </summary>
+        /// <param name="velocities">Velocities of the platform</param>
+        /// <param name="opacities">Opacities of the platform, will be filled</param>
+        /// <param name="referenceVelocity">Velocity to find</param>
+        /// <param name="opacity">Opacity to add, won't be added if <0</param>
+        /// <param name="startIndex"></param>
+        /// <param name="foundIndexPlusOne"></param>
+        /// <param name="timeOffset">Time to be added to found velocity time</param>
+        /// <param name="forceHideTime">If > 0, forces the addition of a hidden opacity at given time</param>
+        /// <param name="hiddenOpacity">Hidden opacity value</param>
+        /// <returns></returns>
+        private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
+        {
+            float threshold = 1f;
+            for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
+            {
+                if (referenceVelocity.DistanceToPoint(velocities[velocityIndex]) < threshold)
+                {
+                    if (opacity >= 0)
+                    {
+                        opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
+                    }
+                    if (forceHideTime > 0 && opacity != hiddenOpacity)
+                    {
+                        opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
+                    }
+                    foundIndexPlusOne = velocityIndex + 1;
+                    return true;
+                }
+            }
+            foundIndexPlusOne = 0;
+            return false;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -700,7 +950,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
+        private static void AddManuallyAnimatedPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
@@ -709,8 +959,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             // It would be way nicer to calculate them here, but we don't have a nice vector library
             // and it would double the amount of work.
 
-            const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
-            const double hiddenOpacity = 0.2;
+            const string platformImageUrl = ParserIcons.QadimPlatform;
+            const double hiddenOpacity = 0.1;
 
             bool isCM = log.FightData.IsCM;
 
