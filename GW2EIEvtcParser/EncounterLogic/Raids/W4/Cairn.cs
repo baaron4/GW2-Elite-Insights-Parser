@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent displacement in displacementEffects)
                 {
-                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position));
+                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
                 }
@@ -159,8 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 dashGreenEnd = endEvent.Time + 3300; // from skill def
                             }
-                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
                         }
                     }
                     //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);

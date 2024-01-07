@@ -401,7 +401,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstPhantasmPosition != null)
                     {
-                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), "rgba(220, 50, 0, 0.3)", new PositionConnector(firstPhantasmPosition)), start);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(firstPhantasmPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenPhantasm:

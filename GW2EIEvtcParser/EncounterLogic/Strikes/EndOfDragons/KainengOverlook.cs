@@ -413,13 +413,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.TheEnforcerCM:
                     // Blue tether from Enforcer to Mindblade when they're close to each other
                     List<AbstractBuffEvent> enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                    replay.AddTether(enforcerInspiration, "rgba(0, 0, 255, 0.1)");
+                    replay.AddTether(enforcerInspiration, Colors.Blue, 0.1);
                     break;
                 case (int)ArcDPSEnums.TrashID.TheMindblade:
                 case (int)ArcDPSEnums.TrashID.TheMindbladeCM:
                     // Blue tether from Mindblade to Enforcer when they're close to each other
                     List<AbstractBuffEvent> mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                    replay.AddTether(mindbladeInspiration, "rgba(0, 0, 255, 0.1)");
+                    replay.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
                     break;
                 case (int)ArcDPSEnums.TrashID.TheRitualist:
                 case (int)ArcDPSEnums.TrashID.TheRitualistCM:

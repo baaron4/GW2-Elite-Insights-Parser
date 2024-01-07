@@ -106,8 +106,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), Colors.Red, 0.05, new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), Colors.Red, 0.25, new AgentConnector(target)));
                     }
                     break;
                 default:

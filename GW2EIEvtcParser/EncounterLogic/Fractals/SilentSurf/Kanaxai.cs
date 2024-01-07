@@ -533,7 +533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="growing">Duration of the channel.</param>
         private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), "rgba(255, 55, 0, 0.2)", new AgentConnector(target)), growing);
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), Colors.Red, 0.2, new AgentConnector(target)), growing);
         }
     }
 }

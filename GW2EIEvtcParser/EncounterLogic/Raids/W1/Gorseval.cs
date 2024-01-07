@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
                     }
                     IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)c.Time;
                             int end = (int)c.EndTime;
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0, 125, 255, 0.3)", new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)));
                             // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
                             int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
                             int phaseIndex;

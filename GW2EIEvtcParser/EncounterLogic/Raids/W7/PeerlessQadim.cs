@@ -312,11 +312,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
-                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
 
                             foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PeerlessQadimAuraPylon)))
                             {
-                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
+                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
                             }
                         }
                     }
@@ -544,7 +544,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in brandstormLightning)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var circle = new CircleDecoration(220, lifespan, "rgba(200, 120, 0, 0.1)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(220, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }

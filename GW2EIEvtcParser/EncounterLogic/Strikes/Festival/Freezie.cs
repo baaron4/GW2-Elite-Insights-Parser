@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(120, lifespan, "rgba(250, 150, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }

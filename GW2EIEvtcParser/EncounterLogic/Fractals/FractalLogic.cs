@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 5000;
                     int start = (int)fluxEffect.Time;
                     int effectEnd = start + duration;
-                    var circle = new CircleDecoration(120, (start, effectEnd), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position));
+                    var circle = new CircleDecoration(120, (start, effectEnd), Colors.Blue, 0.1, new PositionConnector(fluxEffect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
 
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int previousPulse = start;
                     for (int pulses = 0; pulses < 5; pulses++)
                     {
-                        EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), "rgba(0, 0, 255, 0.1)", new PositionConnector(fluxEffect.Position)).UsingGrowingEnd(pulse));
+                        EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), Colors.Blue, 0.1, new PositionConnector(fluxEffect.Position)).UsingGrowingEnd(pulse));
                         previousPulse = pulse;
                         pulse += pulseDuration;
                     }

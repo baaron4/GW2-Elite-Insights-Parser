@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)magicSpike.Time;
                     int end = start + 2000;
-                    var circle = new CircleDecoration(90, (start, end), "rgba(0,50,255,0.2)", new PositionConnector(magicSpike.Position));
+                    var circle = new CircleDecoration(90, (start, end), Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                 }

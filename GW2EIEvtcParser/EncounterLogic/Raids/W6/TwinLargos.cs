@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
@@ -328,7 +328,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
                         int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)

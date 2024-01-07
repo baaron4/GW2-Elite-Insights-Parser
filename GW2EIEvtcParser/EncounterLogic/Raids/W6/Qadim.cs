@@ -441,7 +441,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int radius = effect == middleEvent ? 540 : 180;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
                             var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                            var circle2 = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                            var circle2 = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                             EnvironmentDecorations.Add(circle);
                             EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
                         }
@@ -457,7 +457,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int radius = 240;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
                     var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
                 }
@@ -469,7 +469,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in blueOrbEvents)
                 {
                     (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
-                    var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 255, 0.5)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(100, lifespan, Colors.Blue, 0.5, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                 }
             }
@@ -483,7 +483,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int radius = 150;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
                     var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                    var circleRed = new CircleDecoration(radius, lifespan, "rgba(255, 0, 0, 0.4)", new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
                 }

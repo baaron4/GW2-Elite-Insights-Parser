@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 16000;
                         foreach (EffectEvent effect in poisonEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(240, ((int)effect.Time, (int)effect.Time + duration), Colors.Green, 0.2, new PositionConnector(effect.Position)));
                         }
                     }
                     // Nightmare Hallucinations Spawn Event

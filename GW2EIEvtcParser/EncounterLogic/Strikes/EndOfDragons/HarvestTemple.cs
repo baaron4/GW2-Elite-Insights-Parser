@@ -696,7 +696,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)beeLaunchEffect.Time;
                             int end = start + 3000;
                             replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), Colors.Red, 0.4, new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
-                            var circle = new CircleDecoration(280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position));
+                            var circle = new CircleDecoration(280, (start, end), Colors.LightOrange, 0.2, new PositionConnector(beeLaunchEffect.Position));
                             replay.AddDecorationWithGrowing(circle, end);
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 210;
@@ -782,7 +782,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.AddDecorationWithGrowing(new CircleDecoration(560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(560, (start, end), Colors.Orange, 0.2, new PositionConnector(jawPosition)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
@@ -791,7 +791,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)bigJawEffect.Time;
                             int end = start + 7500;
-                            replay.AddDecorationWithGrowing(new CircleDecoration( 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration( 1700, (start, end), Colors.Orange, 0.2, new AgentConnector(target)), end);
                             replay.Decorations.Add(new CircleDecoration(1700, (end, end + 4000), Colors.Red, 0.4, new AgentConnector(target)));
                         }
                     }
