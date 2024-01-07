@@ -214,6 +214,19 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
+            AgentItem qadim = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
+            if (qadim == null)
+            {
+                throw new MissingKeyActorsException("Qadim not found");
+            }
+            if (combatData.HasMovementData)
+            {
+                var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
+                if (!combatData.GetMovementData(qadim).Any(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(qadimAroundInitialPosition) < 100))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
             if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
                 (Targets.Any(x => x.IsSpecies(TrashID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
             {

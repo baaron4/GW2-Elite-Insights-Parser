@@ -216,10 +216,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Glenna not found");
                 }
-                var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
-                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100)) 
+                if (combatData.HasMovementData)
                 {
-                    return FightData.EncounterStartStatus.Late;
+                    var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
+                    if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100))
+                    {
+                        return FightData.EncounterStartStatus.Late;
+                    }
                 }
                 return FightData.EncounterStartStatus.Normal;
             } 
