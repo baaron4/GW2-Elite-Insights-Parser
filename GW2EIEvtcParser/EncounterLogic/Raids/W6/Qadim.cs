@@ -214,9 +214,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            // Can be improved
             if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
-                TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets))
+                (Targets.Any(x => x.IsSpecies(TrashID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
             {
                 return FightData.EncounterStartStatus.Late;
             }
