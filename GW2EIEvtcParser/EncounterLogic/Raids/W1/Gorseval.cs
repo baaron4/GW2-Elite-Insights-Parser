@@ -261,8 +261,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int impactTime = start + impactPoint;
                         int end = Math.Min((int)c.EndTime, impactTime);
                         int radius = 320;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), Colors.Red, 0.4, new AgentConnector(target)));
                     }
                     var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in protection)
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedSoul:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
-                    replay.Decorations.Add(new CircleDecoration(220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingFilled(false));
                     break;
                 default:
                     break;

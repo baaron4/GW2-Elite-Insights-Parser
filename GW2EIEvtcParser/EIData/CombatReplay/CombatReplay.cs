@@ -185,12 +185,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 0, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 0, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
             IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList(); ;
@@ -205,12 +205,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 0, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 0, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -229,12 +229,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
 
@@ -254,12 +254,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -278,12 +278,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, "rgba(0, 255, 255, 0.5)", new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Insert(0, new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -379,6 +379,16 @@ namespace GW2EIEvtcParser.EIData
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color));
         }
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        /// <param name="opacity"></param>
+        internal void AddDecorationWithBorder(FormDecoration decoration, Color color, double opacity)
+        {
+            AddDecorationWithBorder(decoration, color.WithAlpha(opacity).ToString(true));
+        }
 
         /// <summary>
         /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
@@ -387,10 +397,22 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="color"></param>
         /// <param name="growingEnd"></param>
         /// <param name="reverseGrowing"></param>
-        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, bool reverseGrowing = false, string color = null)
+        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, string color = null, bool reverseGrowing = false)
         {
             Decorations.Add(decoration);
             Decorations.Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));
+        }
+
+        /// <summary>
+        /// Add the decoration twice, the 2nd one being a non filled copy using given extra parameters
+        /// </summary>
+        /// <param name="decoration">Must be filled</param>
+        /// <param name="color"></param>
+        /// <param name="growingEnd"></param>
+        /// <param name="reverseGrowing"></param>
+        internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
+        {
+            AddDecorationWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
         }
 
         /// <summary>
@@ -423,6 +445,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
+        /// </summary>
+        /// <param name="tethers">Buff events of the tethers.</param>
+        /// <param name="color">color of the tether</param>
+        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, Color color, double opacity)
+        {
+            AddTether(tethers, color.WithAlpha(opacity).ToString(true));
+        }
 
         /// <summary>
         /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
@@ -450,6 +481,20 @@ namespace GW2EIEvtcParser.EIData
             {
                 Decorations.Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
             }
+        }
+
+        /// <summary>
+        /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="effect">Tether effect.</param>
+        /// <param name="color">Color of the tether decoration.</param>
+        /// <param name="opacity">Opacity of the tether decoration.</param>
+        /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
+        /// <param name="overrideDuration">Wether to override the duration or not.</param>
+        internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
+        {
+            AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(true), duration, overrideDuration);
         }
 
         /// <summary>
@@ -484,6 +529,22 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
+        }
+        /// <summary>
+        /// Add tether decoration connecting a player to an agent.<br></br>
+        /// The <paramref name="buffId"/> is sourced by an agent that isn't the one to tether to.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="player">The player to tether to <paramref name="toTetherAgentId"/>.</param>
+        /// <param name="buffId">ID of the buff sourced by <paramref name="buffSrcAgentId"/>.</param>
+        /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+        /// <param name="color">Color of the tether.</param>
+        /// <param name="opacity">Opacity of the tether.</param>
+        /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
+        internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, Color color, double opacity, int firstAwareThreshold = 2000)
+        {
+             AddTetherByThirdPartySrcBuff(log, player, buffId, buffSrcAgentId, toTetherAgentId, color.WithAlpha(opacity).ToString(true), firstAwareThreshold);
         }
     }
 }

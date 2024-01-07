@@ -7,9 +7,12 @@ namespace GW2EIEvtcParser.EIData
         public int Radius { get; }
         public int MinRadius { get; }
 
-        public CircleDecoration(int radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
+        public CircleDecoration(int radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : this(radius, 0, lifespan, color, connector)
         {
-            Radius = radius;
+        }
+
+        public CircleDecoration(int radius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, 0, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
         }
 
         public CircleDecoration(int radius, int minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
@@ -18,11 +21,22 @@ namespace GW2EIEvtcParser.EIData
             MinRadius = minRadius;
         }
 
+        public CircleDecoration(int radius, int minRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, minRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
+
         public CircleDecoration(int radius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, (lifespan.Start, lifespan.End), color, connector)
+        {
+        }
+        public CircleDecoration(int radius, Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
         }
 
         public CircleDecoration(int radius, int minRadius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, minRadius, (lifespan.Start, lifespan.End), color, connector)
+        {
+        }
+
+        public CircleDecoration(int radius, int minRadius, Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, minRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
         }
 

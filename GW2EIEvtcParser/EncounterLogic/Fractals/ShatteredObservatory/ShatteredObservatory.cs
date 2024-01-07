@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time;
                     int end = start + 500;
-                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
         }

@@ -12,6 +12,9 @@ namespace GW2EIEvtcParser.EIData
             Height = height;
             Width = width;
         }
+        public RectangleDecoration(int width, int height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
         //
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)

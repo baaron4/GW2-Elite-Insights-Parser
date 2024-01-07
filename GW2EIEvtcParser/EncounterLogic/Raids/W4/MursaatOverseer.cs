@@ -97,7 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int shieldRadius = 100;
                     foreach (Segment seg in shields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)

@@ -128,9 +128,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
                     var wave = cls.Where(x => x.SkillId == GravityWave).ToList();
@@ -143,9 +143,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int secondRadius = 700;
                         int thirdRadius = 1000;
                         int fourthRadius = 1300;
-                        replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), Colors.Purple, 0.3, new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
                     {
@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 long agonyStart = c.Time;
                 long agonyEnd = agonyStart + 62000;
-                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)).UsingFilled(false));
+                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), Colors.Red, 0.5, new AgentConnector(p)).UsingFilled(false));
             }
         }
 

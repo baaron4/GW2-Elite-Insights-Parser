@@ -213,8 +213,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D pylonPosition = target.GetCurrentPosition(log, end);
-                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), "rgba(255, 50, 50, 0.2)", new PositionConnector(pylonPosition)), end);
-                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), "rgba(255, 50, 0, 0.5)", new PositionConnector(pylonPosition)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
+                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                     }
                     var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     foreach (AbstractCastEvent c in forceOfHavoc)
@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                             for (int i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
@@ -271,7 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), "rgba(255, 100, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
@@ -296,10 +296,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);
-                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), "rgba(255,100,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), Colors.Orange, 0.3, connector).UsingRotationConnector(rotationConnector));
                             if (end > start + aimTime)
                             {
-                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), "rgba(100,100,100,0.7)", connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), Colors.LightGrey, 0.7, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.EntropicDistortion:
                     // Sapping Surge, bad red tether
-                    AddTetherDecorations(log, target, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
+                    AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
 
                     // Stun icon
                     IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -334,21 +334,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int radiusAnomaly = (int)target.HitboxWidth / 2;
                     if (firstEntropicPosition != null)
                     {
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), "rgba(255, 0, 0, 0.3)", new PositionConnector(firstEntropicPosition)), start);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(firstEntropicPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(450, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimPylon:
                     // Red tether from Qadim to the Pylon during breakbar
                     List<AbstractBuffEvent> breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
-                    replay.AddTether(breakbarBuffs, "rgba(255, 0, 0, 0.4)");
+                    replay.AddTether(breakbarBuffs, Colors.Red, 0.4);
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimAuraPylon:
                     break;
                 case (int)ArcDPSEnums.TrashID.EnergyOrb:
-                    replay.Decorations.Add(new CircleDecoration(200, (start, end), "rgba(0, 255, 0, 0.3)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Green, 0.3, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.GiantQadimThePeerless:
                     // Trim the first giant Qadim, it exists since log start.
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in criticalMass)
             {
-                replay.Decorations.Add(new CircleDecoration(200, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(p)).UsingFilled(false));
+                replay.Decorations.Add(new CircleDecoration(200, seg, Colors.Red, 0.3, new AgentConnector(p)).UsingFilled(false));
             }
             // Magma drop
             var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -414,9 +414,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Sapping Surge, bad red tether
-            AddTetherDecorations(log, p, replay, SappingSurge, "rgba(255, 0, 0, 0.4)");
+            AddTetherDecorations(log, p, replay, SappingSurge, Colors.Red, 0.4);
             // Kinetic Abundance, good blue tether
-            AddTetherDecorations(log, p, replay, KineticAbundance, "rgba(0, 255, 0, 0.4)");
+            AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
             // Add custom arrow overhead for the player lifted up
             var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless).ToList();
@@ -458,7 +458,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (previousAoeCounter == 2) { radius = 680; } // In game it's not 840 as it's meant to be
 
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var circle = new CircleDecoration(radius, lifespan, "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -472,7 +472,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                     var circle = new CircleDecoration(75, lifespan, "rgba(230, 40, 0, 0.1)", new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration("rgba(255, 0, 0, 0.4)"));
+                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.Red, 0.4));
                 }
             }
 
@@ -507,7 +507,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in whiteOrbAoEs)
                 {
                     bool failedOrb = false;
-                    string color = "rgba(108, 122, 137, 0.2)";
+                    Color color = Colors.LightGrey;
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     if (landedOrbExplosions != null)
                     {
@@ -515,12 +515,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     if (failedOrb)
                     {
-                        color = "rgba(120, 0, 0, 0.4)";
+                        color = Colors.DarkRed;
                     }
                     // Main circle
-                    var circle = new CircleDecoration(190, lifespan, color, new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(190, lifespan, color, 0.3, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration("rgba(255, 255, 255, 0.5)"));
+                    EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.White, 0.5));
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
                 }
             }
@@ -533,7 +533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // The actual effect duration is 4294967295
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, "rgba(255, 255, 255, 0.5)", connector).UsingFilled(false));
+                    EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, Colors.White, 0.5, connector).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, "rgba(255, 215, 0, 0.4)", connector));
                 }
             }
@@ -613,7 +613,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, string color)
+        private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
         {
             var tethers = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
             var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
@@ -635,7 +635,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         tetherEnd = (int)log.FightData.FightEnd;
                     }
-                    replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(actor), new AgentConnector(src)));
+                    replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, opacity, new AgentConnector(actor), new AgentConnector(src)));
                 }
             }
         }

@@ -252,7 +252,7 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -420.0f), true); // 900 units in front, 60 behind
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration(240, 960, lifespan, color.WithAlpha(0.5f).ToString(), connector)
+                    replay.Decorations.Add(new RectangleDecoration(240, 960, lifespan, color, 0.5, connector)
                         .UsingFilled(false)
                         .UsingRotationConnector(rotationConnector)
                         .UsingSkillMode(inspiringReinforcementSkill));
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0, effect.Dst, ProtectiveSolaceTabletBuff); // manually disabled or when no more ressources
                     var connector = new AgentConnector(effect.Dst);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.2f).ToString(), connector)
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector)
                         .UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                         .UsingSkillMode(skill));

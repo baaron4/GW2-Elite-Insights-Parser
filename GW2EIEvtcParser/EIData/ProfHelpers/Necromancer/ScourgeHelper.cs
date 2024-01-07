@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (long, long) lifespan = effect.ComputeLifespan(log, 8000, player.AgentItem, PathUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration( 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration( 90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                         GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
@@ -76,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
+                            replay.Decorations.Add(first.LineTo(icon, color, 0.5).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(icon);
                     }
@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     (long, long) lifespan = effect.ComputeLifespan(log, duration);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

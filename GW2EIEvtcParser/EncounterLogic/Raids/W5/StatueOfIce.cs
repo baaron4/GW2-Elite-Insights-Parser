@@ -103,8 +103,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), "rgba(0,100,255,0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), "rgba(0,100,255,0.3)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
                     }
                     break;
                 default:
@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent green in greens)
                 {
-                    string color = "rgba(0, 120, 0, 0.4)";
+                    Color color = Colors.DarkGreen;
 
                     // Ice Breaker - Failed Greens
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out IReadOnlyList<EffectEvent> failedGreens))
@@ -154,12 +154,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.Distance2DToPoint(green.Position) < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
                         if (failedGreen != null)
                         {
-                            color = "rgba(120, 0, 0, 0.4)";
+                            color = Colors.DarkRed;
                         }
                     }
 
                     (long, long) lifespan = green.ComputeLifespan(log, 15000);
-                    var circle = new CircleDecoration(120, lifespan, color, new PositionConnector(green.Position));
+                    var circle = new CircleDecoration(120, lifespan, color, 0.4, new PositionConnector(green.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
                 }

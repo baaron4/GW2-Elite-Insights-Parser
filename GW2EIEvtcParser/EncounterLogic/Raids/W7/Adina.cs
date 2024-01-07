@@ -150,8 +150,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int angle in new List<int> { 90, 270 })
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
                     }
                     //
@@ -165,8 +165,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (int angle in new List<int> { 30, 150, 270})
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
 
                     }
@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long start = c.Time;
                         int duration = 4600; // cycle 3 from skill def
                         int radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)).UsingGrowingEnd(start + duration));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), Colors.LightOrange, 0.4, new AgentConnector(target)).UsingGrowingEnd(start + duration));
                     }
                     break;
                 default:

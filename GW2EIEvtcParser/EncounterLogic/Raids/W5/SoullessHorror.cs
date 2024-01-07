@@ -176,7 +176,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.SoullessHorror:
                     // arena reduction
                     var center = new Point3D(-10581, 825, -817);
-                    string destroyedRingColor = "rgba(255, 120, 30, 0.3)";
                     List<(double, int, int)> destroyedRings;
                     if (log.FightData.IsCM)
                     {
@@ -202,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Segment hpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value <= hpVal);
                         if (hpUpdate != null)
                         {
-                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), destroyedRingColor, new PositionConnector(center));
+                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
                             replay.AddDecorationWithGrowing(doughnut, hpUpdate.Start + 3000);
                         }
                         else
@@ -217,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
                     var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
@@ -228,9 +227,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentInterpolatedPosition(log, start);
                         if (position != null)
                         {
-                            var circle = new CircleDecoration(380, (start, end), "rgba(255, 150, 0, 0.5)", new PositionConnector(position));
+                            var circle = new CircleDecoration(380, (start, end), Colors.LightOrange, 0.5, new PositionConnector(position));
                             replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
-                            replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), Colors.LightOrange, 0.5, new PositionConnector(position)));
                         }
                     }
                     var deathBloom = cls.Where(x => x.SkillId == DeathBloom).ToList();
@@ -248,7 +247,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 8; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
@@ -268,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 4; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
@@ -286,20 +285,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 0; i < 4; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), "rgba(255,200,0,0.5)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
                         }
 
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Scythe:
-                    replay.Decorations.Add(new CircleDecoration(80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
-                    replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
+                    replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last())));
                     break;
                 case (int)ArcDPSEnums.TrashID.SurgingSoul:
                     List<ParametricPoint3D> positions = replay.Positions;
@@ -309,12 +308,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                         break;
                     }
                     else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
-                        replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                         break;
                     }
                     break;

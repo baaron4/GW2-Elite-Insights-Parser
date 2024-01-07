@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.2, connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
                         GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
@@ -369,7 +369,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(decoration, color.WithAlpha(0.3f).ToString()).UsingSkillMode(skill));
+                            replay.Decorations.Add(first.LineTo(decoration, color, 0.3).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(decoration);
                     }

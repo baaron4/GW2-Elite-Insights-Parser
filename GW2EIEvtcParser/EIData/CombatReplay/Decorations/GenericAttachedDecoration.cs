@@ -23,6 +23,11 @@ namespace GW2EIEvtcParser.EIData
             return new LineDecoration((start, end), color, ConnectedTo, other.ConnectedTo);
         }
 
+        public LineDecoration LineTo(GenericAttachedDecoration other, Color color, double opacity)
+        {
+            return LineTo(other, color.WithAlpha(opacity).ToString(true));
+        }
+
         public virtual GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
         {
             RotationConnectedTo = rotationConnectedTo;

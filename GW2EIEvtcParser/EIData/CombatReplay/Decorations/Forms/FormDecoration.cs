@@ -15,6 +15,10 @@ namespace GW2EIEvtcParser.EIData
             Color = color;
         }
 
+        protected FormDecoration((long, long) lifespan, Color color, double opacity, GeographicalConnector connector) : this(lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
+
         public virtual FormDecoration UsingFilled(bool filled)
         {
             Filled = filled;
@@ -35,6 +39,10 @@ namespace GW2EIEvtcParser.EIData
         public abstract FormDecoration Copy();
 
         public abstract FormDecoration GetBorderDecoration(string borderColor = null);
+        public FormDecoration GetBorderDecoration(Color borderColor, double opacity)
+        {
+            return GetBorderDecoration(borderColor.WithAlpha(opacity).ToString(true));
+        }
 
     }
 }

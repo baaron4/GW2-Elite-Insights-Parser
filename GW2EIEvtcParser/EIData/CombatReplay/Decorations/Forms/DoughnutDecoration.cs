@@ -12,6 +12,9 @@ namespace GW2EIEvtcParser.EIData
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
+        public DoughnutDecoration(int innerRadius, int outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
         //
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
