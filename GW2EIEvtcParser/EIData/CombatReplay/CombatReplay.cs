@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
                             {
                                 velocity = Velocities[velocityTablePos];
                             }
-                            if (velocity == null || (Math.Abs(velocity.X) <= 1e-1 && Math.Abs(velocity.Y) <= 1e-1))
+                            if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && (velocity == null || velocity.Length() < 1e-3))
                             {
                                 PolledPositions.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
                             }
@@ -144,7 +144,17 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
+                            ParametricPoint3D last = PolledRotations.Last().Time > pt.Time ? PolledRotations.Last() : pt;
+                            if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate)
+                            {
+                                PolledRotations.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
+                            }
+                            else
+                            {
+                                float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
+                                PolledRotations.Add(new ParametricPoint3D(last, ptn, ratio, i));
+                            }
+
                         }
                     }
                 }
