@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser
         // Relics
         public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
         public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
-        public const string RelicOfCerusEye2 = "521b6C72BF291E4E8A895A0827AF1727";
+        public const string RelicOfCerusEye2 = "521B6C72BF291E4E8A895A0827AF1727";
         public const string RelicOfCerusBeam = "513AEEF08C217942A798831BD9F4903E"; // 1 second delayed
         public const string RelicOfCerusBeam2 = "43F06D75DF774C4DBB1383B8621B1047"; // 1 second delayed
         public const string RelicOfIce = "54F2B4920F7E2D4FAA56CED739BA2C41";
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
-        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
+        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser
         public const string BrokenKingHailstormGreen = "C97A7665B2AA6C4482026D4F2562E25E";
         public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
         public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
-        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6bFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
+        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6BFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
         // Dhuum
         public const string DhuumScytheSwingIndicator = "91A23D51294E80458BE9C3C89A2ED138"; // 1200 duration
         public const string DhuumScytheSwingDamage = "C79F5D95E11070448A39ACD7F6C5D0D3"; // 0 duration
