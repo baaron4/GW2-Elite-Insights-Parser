@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleMordremothPoisonRoarImpact = "E500544171F13643899C178EC3FB38A9";
         public const string HarvestTempleZhaitanPutridDelugeImpact = "FE8B96A200376B4BA75297FF2367C5C4";
         public const string HarvestTempleZhaitanPutridDelugeAoE = "82A8BC954DD69E4DBBF526EE1C6A3E74";
-        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808Ef8E6C654A";
+        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808EF8E6C654A";
         public const string HarvestTempleSpreadCM = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelectNM = "0CD6F76C1BF9C049A2FCE4D86CB46475";
         public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
