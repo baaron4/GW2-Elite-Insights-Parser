@@ -822,71 +822,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidAmalgamate:
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPool, out IReadOnlyList<EffectEvent> allPoolEffects))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidPool, out IReadOnlyList<EffectEvent> poolEffects))
                     {
-                        var poolEffects = allPoolEffects.Where(x => x.Src == target.AgentItem).ToList();
-                        if (!poolEffects.Any())
+                        if (poolEffects.Any())
                         {
-                            break;
+                            // To be safe
+                            poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
+                            double radius = 100.0;
+                            double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
+                            for (int i = 0; i < poolEffects.Count - 1; i++)
+                            {
+                                EffectEvent curEffect = poolEffects[i];
+                                EffectEvent nextEffect = poolEffects[i + 1];
+                                int start = (int)curEffect.Time;
+                                int end = (int)nextEffect.Time;
+                                replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
+                                radius += radiusIncrement;
+                            }
+                            EffectEvent lastEffect = poolEffects.Last();
+                            var lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
+                            // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
+                            if (lifespan.start == lifespan.end)
+                            {
+                                lifespan.end = lifespan.start + 4000;
+                            }
+                            replay.AddDecorationWithBorder(new CircleDecoration((int)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                         }
-                        // sort pool effects by time so that we can grow each effect
-                        poolEffects.Sort((a, b) => a.Time.CompareTo(b.Time));
-                        double radius = 100.0;
-                        double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
-                        for (int i = 0; i < poolEffects.Count - 1; i++)
-                        {
-                            EffectEvent curEffect = poolEffects[i];
-                            EffectEvent nextEffect = poolEffects[i + 1];
-                            int start = (int)curEffect.Time;
-                            int end = (int)nextEffect.Time;
-                            replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
-                            radius += radiusIncrement;
-                        }
-                        // last pool effect ends slightly differently depending on phase
-                        // in general, purification -> boss: 2 seconds
-                        // boss -> boss: 2 seconds
-                        // boss -> purification: 6 seconds
-                        // - purification 1 -> jormag: 2 seconds after breakbar broken
-                        // - jormag -> primordus: 2 seconds after phasing
-                        // - primordus -> kralkatorrik: 2 seconds after phasing
-                        // - kralk -> puri 2: 6 seconds after phasing (about when timecaster spawns)
-                        // - puri 2 -> mordremoth: 2 seconds after breakbar broken
-                        // - mordremoth -> zhaitan: 2 seconds after phasing
-                        // - zhaitan -> puri 3: 6 seconds after phasing (about when saltspray spawns)
-                        // - puri 3 -> soo won 1: 2 seconds after breakbar broken
-                        // - soo won 1 -> puri 4: 1 second
-                        // Ideally there's a purification effect that signals the end of the void pools, but it has not been identified yet.
-                        EffectEvent lastEffect = poolEffects.Last();
-                        int lastStart = (int)lastEffect.Time;
-                        int lastEnd = Int32.MaxValue;
-                        AbstractSingleActor phaseTarget = FindActiveOrNextPhaseTarget(target.FirstAware);
-                        switch (phaseTarget.ID)
-                        {
-                            case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
-                            case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
-                            case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
-                                lastEnd = (int)(phaseTarget.LastAware + 2000);
-                                break;
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
-                                lastEnd = (int)(phaseTarget.LastAware + 6000);
-                                break;
-                            case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
-                                if (phaseTarget.GetCurrentHealthPercent(log, Math.Max(target.FirstAware, phaseTarget.FirstAware + 500)) > 50)
-                                {
-                                    // Soo-Won 1
-                                    AbstractSingleActor killableHeart = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate));
-                                    if (killableHeart != null)
-                                    {
-                                        lastEnd = (int)(killableHeart.FirstAware + 1000);
-                                    }
-                                }
-                                break;
-                        }
-                        replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (lastStart, lastEnd), "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
