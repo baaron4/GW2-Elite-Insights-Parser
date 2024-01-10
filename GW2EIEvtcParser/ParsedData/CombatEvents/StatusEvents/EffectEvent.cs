@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Computes the lifespan of an effect.<br></br>
         /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
-        /// Checks the matcching effects Src.
+        /// Checks the matching effects Src.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
@@ -121,6 +121,28 @@ namespace GW2EIEvtcParser.ParsedData
             long start = Time;
             long end = start + Duration;
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !IsAroundDst);
+                if (firstEffect != null)
+                {
+                    end = firstEffect.Time;
+                }
+            }
+            return (start, end);
+        }
+
+        /// <summary>
+        /// Computes the lifespan of an effect.<br></br>
+        /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+        /// <returns>The computed start and end times.</returns>
+        public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, string secondaryEffectGUID)
+        {
+            long start = Time;
+            long end = start + Duration;
+            if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
             {
                 EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !IsAroundDst);
                 if (firstEffect != null)
