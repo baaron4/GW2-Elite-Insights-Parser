@@ -62,14 +62,6 @@ namespace GW2EIEvtcParser.ParsedData
                     string[] splitStr = Name.Split('\0');
                     if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
                     {
-                        if (!splitStr[0].Any(char.IsDigit))
-                        {
-                            IsNotInSquadFriendlyPlayer = true;
-                        } 
-                        else
-                        {
-                            Name = Spec.ToString() + " " + Name;
-                        }
                         Type = AgentType.NonSquadPlayer;
                     }
                 }
