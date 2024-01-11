@@ -478,7 +478,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem timecaster = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidTimeCaster).FirstOrDefault();
             if (timecaster != null)
             {
-                var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware).ToList();
+                var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware && x.FirstAware < timecaster.LastAware + 2000).ToList();
                 var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
                 int referenceLength = 200;
                 gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y.DstAgent, y.Value).Length() - referenceLength) < 10)).ToList();
@@ -1042,10 +1042,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // Orb to AoE effects
-                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) match in orbToAoeMatches)
+                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) in orbToAoeMatches)
                                 {
-                                    EffectEvent aoe = match.aoe;
-                                    EffectEvent orb = match.orb;
                                     foreach (ParametricPoint3D point in positions)
                                     {
                                         if (aoe.Position.Distance2DToPoint(point) < 0.5)
@@ -1060,10 +1058,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // AoE to AoE effects
-                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) match in aoeToAoeMatches)
+                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) in aoeToAoeMatches)
                                 {
-                                    EffectEvent endingAoE = match.endingAoE;
-                                    EffectEvent startingAoE = match.startingAoE;
                                     long endingAoEDuration = 0;
                                     long startingAoEDuration = 0;
                                     foreach (ParametricPoint3D point in positions)
@@ -1111,10 +1107,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // Orb to AoE effects
-                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) match in orbToAoeMatches)
+                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) in orbToAoeMatches)
                                 {
-                                    EffectEvent aoe = match.aoe;
-                                    EffectEvent orb = match.orb;
                                     // Add aoe
                                     (long start, long end) lifespanAoE = (aoe.Time, aoe.Time + aoe.Duration);
                                     replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
@@ -1123,10 +1117,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // AoE to AoE effects
-                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) match in aoeToAoeMatches)
+                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) in aoeToAoeMatches)
                                 {
-                                    EffectEvent endingAoE = match.Item1;
-                                    EffectEvent startingAoE = match.startingAoE;
                                     // Add aoe
                                     (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoE.Duration);
                                     replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
