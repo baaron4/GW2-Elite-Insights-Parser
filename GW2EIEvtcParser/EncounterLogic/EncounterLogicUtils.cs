@@ -286,5 +286,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return 0;
         }
+
+        internal static long ComputeEndCastTimeByStun(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long standardEndCastTime = startCastTime + castDuration;
+            Segment stunSegment = actor.GetBuffStatus(log, Stun, startCastTime, standardEndCastTime).FirstOrDefault(x => x.Value > 0);
+            if (stunSegment != null)
+            {
+                return stunSegment.Start;
+            }
+            return standardEndCastTime;
+        }
     }
 }

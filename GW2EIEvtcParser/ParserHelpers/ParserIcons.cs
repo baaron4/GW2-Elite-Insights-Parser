@@ -322,7 +322,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheMindblade = "https://i.imgur.com/KyMgGQD.png";
         private const string TrashTheRitualist = "https://i.imgur.com/gG5p3Hz.png";
         private const string TrashTheSniper = "https://i.imgur.com/RWIjUoe.png";
-        private const string TrashVoidAmalgamate = "https://i.imgur.com/BuKbosz.png";
+        private const string TrashPushableVoidAmalgamate = "https://i.imgur.com/BuKbosz.png";
+        private const string TrashKillableVoidAmalgamate = "https://i.imgur.com/fSFEiPm.png";
         private const string TrashKraitHallucination = "https://i.imgur.com/JtISLvT.png";
         private const string TrashQuagganHallucination = "https://i.imgur.com/8dHLEfj.png";
         private const string TrashLichHallucination = "https://i.imgur.com/IXKqCYT.png";
@@ -376,6 +377,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
         private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
         private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
+        private const string TrashGravityBall = "https://i.imgur.com/7zm0q8A.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -1102,6 +1104,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.VoidSkullpiercer, TrashVoidSkullpiercer },
             { ArcDPSEnums.TrashID.VoidTimeCaster, TrashVoidTimeCaster },
             { ArcDPSEnums.TrashID.VoidTimeCaster2, TrashVoidTimeCaster },
+            { ArcDPSEnums.TrashID.GravityBall, TrashGravityBall },
             { ArcDPSEnums.TrashID.VoidThornheart1, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidThornheart2, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidBrandfang1, TrashVoidBrandfang },
@@ -1128,8 +1131,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.TheRitualistCM, TrashTheRitualist },
             { ArcDPSEnums.TrashID.TheSniper, TrashTheSniper },
             { ArcDPSEnums.TrashID.TheSniperCM, TrashTheSniper },
-            { ArcDPSEnums.TrashID.PushableVoidAmalgamate, TrashVoidAmalgamate },
-            { ArcDPSEnums.TrashID.KillableVoidAmalgamate, TrashVoidAmalgamate },
+            { ArcDPSEnums.TrashID.PushableVoidAmalgamate, TrashPushableVoidAmalgamate },
+            { ArcDPSEnums.TrashID.KillableVoidAmalgamate, TrashKillableVoidAmalgamate },
             { ArcDPSEnums.TrashID.FluxAnomaly1, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly2, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly3, TrashFluxAnomaly },

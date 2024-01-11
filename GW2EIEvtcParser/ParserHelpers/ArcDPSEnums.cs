@@ -531,6 +531,7 @@ namespace GW2EIEvtcParser
         private const int Bombs = -47;
         private const int YourSoul = -48;
         private const int QadimPlatform = -49;
+        private const int GravityBall = -50;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -877,7 +878,7 @@ namespace GW2EIEvtcParser
             TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
-            // Void Amalgamate
+            // Harvest Temple - Void Amalgamate
             PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
             VoidAmalgamate = 24375,
             KillableVoidAmalgamate = 23956,
@@ -899,6 +900,7 @@ namespace GW2EIEvtcParser
             VoidMelter = 24223,
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
+            GravityBall = ArcDPSEnums.GravityBall,
             // Cosmic Observatory
             TheTormented = 26016,
             VeteranTheTormented = 25829,
