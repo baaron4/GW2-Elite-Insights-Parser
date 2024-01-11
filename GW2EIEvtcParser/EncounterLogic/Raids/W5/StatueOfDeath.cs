@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascading = 1500;
                         int duration = 15000 + cascading;
                         end = start + duration;
-                        int radius = 900;
+                        uint radius = 900;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         Point3D position = target.GetCurrentPosition(log, start);
                         if (facing != null && position != null)

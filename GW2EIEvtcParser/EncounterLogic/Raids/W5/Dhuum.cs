@@ -370,7 +370,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
                             long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
                             long zoneEnd = zoneActive + 120000; // End of the AoE
-                            int radius = 450;
+                            uint radius = 450;
 
                             if (majorSplit != null)
                             {
@@ -475,8 +475,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // AoE Indicator
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out IReadOnlyList<EffectEvent> scytheSwingIndicators))
                         {
-                            int radius = 45;
-                            int radiusIncrease = 5;
+                            uint radius = 45;
+                            uint radiusIncrease = 5;
                             foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // Computing lifespan through secondary effect and position.
@@ -490,8 +490,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Brief damage indicator
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingDamage, out IReadOnlyList<EffectEvent> scytheSwingDamage))
                         {
-                            int radius = 45;
-                            int radiusIncrease = 5;
+                            uint radius = 45;
+                            uint radiusIncrease = 5;
                             foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // The effect has 0 duration, setting it to 250
@@ -683,7 +683,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in deathMarkDeathZones)
                 {
                     int warningDuration = 6000;
-                    int radius = 450;
+                    uint radius = 450;
                     (long, long) lifespan = effect.ComputeLifespan(log, 120000);
                     (long, long) lifespanActivation = (lifespan.Item1, lifespan.Item1 + warningDuration);
                     (long, long) lifespanDeadly = (lifespan.Item1 + warningDuration, lifespan.Item2);
@@ -780,7 +780,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
             long soulSplitDeathTime = hastenedDemise.Start + 10000;
 
-            int radius = (int)(soul.HitboxWidth / 2);
+            uint radius = (soul.HitboxWidth / 2);
             var positionConnector = new PositionConnector(soulPosition);
             var playerConnector = new AgentConnector(p);
 

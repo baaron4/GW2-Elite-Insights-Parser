@@ -176,10 +176,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.SoullessHorror:
                     // arena reduction
                     var center = new Point3D(-10581, 825, -817);
-                    List<(double, int, int)> destroyedRings;
+                    List<(double, uint, uint)> destroyedRings;
                     if (log.FightData.IsCM)
                     {
-                        destroyedRings = new List<(double, int, int)>()
+                        destroyedRings = new List<(double, uint, uint)>()
                             {
                                 (100, 1330, 1550),
                                 (90, 1120, 1330),
@@ -189,14 +189,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     else
                     {
-                        destroyedRings = new List<(double, int, int)>()
+                        destroyedRings = new List<(double, uint, uint)>()
                             {
                                 (90, 1330, 1550),
                                 (66, 1120, 1330),
                                 (33, 910, 1120),
                             };
                     }
-                    foreach ((double hpVal, int innerRadius, int outerRadius) in destroyedRings)
+                    foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
                     {
                         Segment hpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value <= hpVal);
                         if (hpUpdate != null)

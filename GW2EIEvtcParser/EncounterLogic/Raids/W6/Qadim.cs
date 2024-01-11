@@ -439,7 +439,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in orbs)
                         {
-                            int radius = effect == middleEvent ? 540 : 180;
+                            uint radius = (uint)(effect == middleEvent ? 540 : 180);
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
                             var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                             var circle2 = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in pyreOrbs)
                 {
-                    int radius = 240;
+                    uint radius = 240;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
                     var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                     var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
@@ -494,7 +494,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            int ccRadius = 200;
+            uint ccRadius = 200;
             switch (target.ID)
             {
                 case (int)TargetID.Qadim:
@@ -502,14 +502,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var breakbar = cls.Where(x => x.SkillId == QadimCC).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
-                        int radius = ccRadius;
                         replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Riposte
                     var riposte = cls.Where(x => x.SkillId == QadimRiposte).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
-                        int radius = 2200;
+                        uint radius = 2200;
                         replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), Colors.Red, 0.5, new AgentConnector(target)));
                     }
                     //Big Hit
@@ -519,8 +518,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 2230;
                         int duration = 2680;
-                        int radius = 2000;
-                        int impactRadius = 40;
+                        uint radius = 2000;
+                        uint impactRadius = 40;
                         int spellCenterDistance = 300;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
@@ -538,14 +537,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
-                        int radius = ccRadius;
                         replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     var eleBreath = cls.Where(x => x.SkillId == ElementalBreath).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1300;
+                        uint radius = 1300;
                         int delay = 2600;
                         int duration = 1000;
                         int openingAngle = 70;
@@ -565,8 +563,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCast = Math.Min(3500, c.ActualDuration);
                         int duration = Math.Min(6500, c.ActualDuration);
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                        int range = 2800;
-                        int span = 2400;
+                        uint range = 2800;
+                        uint span = 2400;
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(range / 2, 0), true);
@@ -580,7 +578,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in matBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1000;
+                        uint radius = 1000;
                         int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 70;
@@ -599,8 +597,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in matSwipe)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 700;
-                        int radiusDecrement = 100;
+                        uint maxRadius = 700;
+                        uint radiusDecrement = 100;
                         int delay = 1435;
                         int openingAngle = 59;
                         int angleIncrement = 60;
@@ -610,7 +608,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
                                 replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
@@ -624,7 +622,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var patCC = cls.Where(x => x.SkillId == PatriarchCC).ToList();
                     foreach (AbstractCastEvent c in patCC)
                     {
-                        int radius = ccRadius;
                         replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.4)", new AgentConnector(target)));
                     }
                     //Breath
@@ -632,7 +629,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in patBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1000;
+                        uint radius = 1000;
                         int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 60;
@@ -651,8 +648,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in patSwipe)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 700;
-                        int radiusDecrement = 100;
+                        uint maxRadius = 700;
+                        uint radiusDecrement = 100;
                         int delay = 1435;
                         int openingAngle = 59;
                         int angleIncrement = 60;
@@ -662,7 +659,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
                                 replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
@@ -677,7 +674,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1800;
                         int duration = 3000;
-                        int maxRadius = 2000;
+                        uint maxRadius = 2000;
                         replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp).ToList();
@@ -686,8 +683,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1600;
                         int duration = 3500;
-                        int maxRadius = 2000;
-                        int impactRadius = 500;
+                        uint maxRadius = 2000;
+                        uint impactRadius = 500;
                         int spellCenterDistance = 270; //hitbox radius
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
@@ -703,7 +700,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var summon = cls.Where(x => x.SkillId == SummonDestroyer).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
-                        int radius = ccRadius;
                         replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Pizza
@@ -711,8 +707,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in forceWave)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 1000;
-                        int radiusDecrement = 200;
+                        uint maxRadius = 1000;
+                        uint radiusDecrement = 200;
                         int delay = 1560;
                         int openingAngle = 44;
                         int angleIncrement = 45;
@@ -722,7 +718,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
                                 replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));

@@ -2,8 +2,8 @@
 {
     public class DoughnutDecorationCombatReplayDescription : FormDecorationCombatReplayDescription
     {
-        public int InnerRadius { get; }
-        public int OuterRadius { get; }
+        public uint InnerRadius { get; }
+        public uint OuterRadius { get; }
 
         internal DoughnutDecorationCombatReplayDescription(ParsedEvtcLog log, DoughnutDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {

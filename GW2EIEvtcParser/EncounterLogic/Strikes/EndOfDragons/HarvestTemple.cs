@@ -634,7 +634,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)purificationZoneEffect.Time;
                             int end = (int)log.FightData.FightEnd;
-                            int radius = 280;
+                            uint radius = 280;
                             if (voidShellRemovalOffset < voidShellRemovals.Count)
                             {
                                 end = (int)voidShellRemovals[voidShellRemovalOffset++].Time;
@@ -726,7 +726,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)orbEffect.Time;
                             int end = start + duration;
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
-                            int radius = 2700;
+                            uint radius = 2700;
                             var circle = new CircleDecoration(radius, (start, end), Colors.White, 0.05, new PositionConnector(orbEffect.Position));
                             replay.AddDecorationWithGrowing(circle, end);
                         }
@@ -836,19 +836,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 EffectEvent nextEffect = poolEffects[i + 1];
                                 int start = (int)curEffect.Time;
                                 int end = (int)nextEffect.Time;
-                                replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
+                                replay.AddDecorationWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
                                 radius += radiusIncrement;
                             }
                             EffectEvent lastEffect = poolEffects.Last();
-                            var lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
-                            var lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
+                            (long start, long end) lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
+                            (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
                             lifespan.end = Math.Min(lifespan.end, lifespanPuriOrb.end);
                             // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
                             if (lifespan.start == lifespan.end)
                             {
                                 lifespan.end = lifespan.start + 4000;
                             }
-                            replay.AddDecorationWithBorder(new CircleDecoration((int)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
+                            replay.AddDecorationWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                         }
                     }
                     break;
@@ -955,7 +955,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in groundSlam)
                     {
                         int castTime = 0;
-                        int radius = 400;
+                        uint radius = 400;
                         int endTime = 0;
                         // 66534 -> Fast AoE -- 64526 -> Slow AoE
                         if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamHT) { castTime = 2500; }
@@ -1020,7 +1020,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, int radius)
+        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, uint radius)
         {
             var redSelectedEffectsOnPlayer = redSelectedEffects.Where(x => x.Dst == p.AgentItem).ToList();
             foreach (EffectEvent redSelectedEffect in redSelectedEffectsOnPlayer)
@@ -1037,7 +1037,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, int radius, int duration)
+        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, uint radius, int duration)
         {
             var spreadEffectsOnPlayer = spreadEffects.Where(x => x.Dst == p.AgentItem).ToList();
             foreach (EffectEvent spreadEffect in spreadEffectsOnPlayer)
@@ -1064,7 +1064,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private void AddPlacedVoidPoolDecoration(IReadOnlyList<EffectEvent> redPuddleEffects, int radius, int duration)
+        private void AddPlacedVoidPoolDecoration(IReadOnlyList<EffectEvent> redPuddleEffects, uint radius, int duration)
         {
             foreach (EffectEvent effect in redPuddleEffects)
             {

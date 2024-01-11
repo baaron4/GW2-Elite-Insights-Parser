@@ -293,7 +293,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time + 100;
                         int duration = 3900;
-                        int radius = 1200;
+                        uint radius = 1200;
                         int angle = 70;
                         int shiftingAngle = 45;
                         int sliceSpawnInterval = 750;
@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId)).ToList();
                     foreach (AbstractCastEvent c in crimsonDawn)
                     {
-                        int radius = 1200;
+                        uint radius = 1200;
                         int angle = 295;
                         int start = (int)c.Time;
                         int duration = 3000;
@@ -395,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent solarBoltEffect in solarBoltEffects)
                         {
-                            int aoeRadius = 100;
+                            uint aoeRadius = 100;
                             int aoeTimeout = 12000;
                             int start = (int)solarBoltEffect.Time;
                             int attackEnd = start + aoeTimeout;
@@ -441,7 +441,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)kickEffect.Time;
                             int end = start + 300;
-                            replay.Decorations.Add(new RectangleDecoration(300, (int)target.HitboxWidth, (start, end), Colors.Red, 0.2, new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
+                            replay.Decorations.Add(new RectangleDecoration(300, target.HitboxWidth, (start, end), Colors.Red, 0.2, new PositionConnector(kickEffect.Position)).UsingRotationConnector(new AngleConnector(kickEffect.Rotation.Z - 90)));
                         }
                     }
 
@@ -481,7 +481,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
                     foreach (AbstractCastEvent c in solarStomp)
                     {
-                        int radius = 280;
+                        uint radius = 280;
                         int castTime = 2250;
                         int start = (int)c.Time;
                         int attackEnd = start + castTime;
@@ -544,7 +544,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int duration = 1933;
-                        int radius = 160;
+                        uint radius = 160;
                         int attackEnd = start + duration;
                         int waveEnd = attackEnd + 2250;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), attackEnd);
@@ -594,7 +594,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent mistBombEffect in mistBombEffects)
                 {
-                    int aoeRadius = 130;
+                    uint aoeRadius = 130;
                     int aoeTimeout = 300;
                     int start = (int)mistBombEffect.Time;
                     int attackEnd = start + aoeTimeout;
@@ -611,7 +611,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
-        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)
+        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, uint radius, int angle)
         {
             var connector = new AgentConnector(target);
             var frontRotationConnector = new AngleConnector(degree);
@@ -626,7 +626,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
         }
 
-        private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
+        private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, uint radius)
         {
             replay.Decorations.Add(new CircleDecoration(radius, (start, attackEnd), "rgba(120, 0, 0, 0.6)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(attackEnd));
         }
@@ -647,11 +647,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var rotationConnector = new AngleConnector(rotation);
             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
-            replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, (int)target.HitboxWidth, (start, attackEnd), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), attackEnd);
+            replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, target.HitboxWidth, (start, attackEnd), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), attackEnd);
 
             for (int i = 0; i < cascadeCount; i++)
             {
-                replay.Decorations.Add(new RectangleDecoration(300, (int)target.HitboxWidth, (attackEnd, attackEnd + 300), Colors.Red, 0.2, positionConnector).UsingRotationConnector(rotationConnector));
+                replay.Decorations.Add(new RectangleDecoration(300, target.HitboxWidth, (attackEnd, attackEnd + 300), Colors.Red, 0.2, positionConnector).UsingRotationConnector(rotationConnector));
                 attackEnd += 300;
                 translation += 300;
             }

@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (replay.Rotations.Any())
                     {
                         int duration = 4000;
-                        int radius = 600;
+                        uint radius = 600;
                         int openingAngle = 36;
                         int effectStart = (int)sicknessEffect.Time;
                         int effectEnd = effectStart + duration;

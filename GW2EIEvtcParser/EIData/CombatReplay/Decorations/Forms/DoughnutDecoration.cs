@@ -4,15 +4,23 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class DoughnutDecoration : FormDecoration
     {
-        public int OuterRadius { get; }
-        public int InnerRadius { get; }
+        public uint OuterRadius { get; }
+        public uint InnerRadius { get; }
 
-        public DoughnutDecoration(int innerRadius, int outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
         {
+            if (innerRadius == 0 )
+            {
+                throw new InvalidOperationException("InnerRadius must be strictly positive, use CircleDecoration instead");
+            }
+            if (outerRadius <= innerRadius)
+            {
+                throw new InvalidOperationException("OuterRadius must be > then InnerRadius");
+            }
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
-        public DoughnutDecoration(int innerRadius, int outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
         }
         //

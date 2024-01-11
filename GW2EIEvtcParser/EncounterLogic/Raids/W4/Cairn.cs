@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1400;
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
-                        int width = 1400; int height = 80;
+                        uint width = 1400; uint height = 80;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
@@ -139,10 +139,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCastTime = 1200;
                         int duration = 600;
-                        int firstRadius = 400;
-                        int secondRadius = 700;
-                        int thirdRadius = 1000;
-                        int fourthRadius = 1300;
+                        uint firstRadius = 400;
+                        uint secondRadius = 700;
+                        uint thirdRadius = 1000;
+                        uint fourthRadius = 1300;
                         replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), Colors.Purple, 0.3, new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));

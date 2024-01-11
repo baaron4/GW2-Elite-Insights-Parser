@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int distributedMagicDuration = 6700;
                         int impactDuration = 110;
-                        int arenaRadius = 1600;
+                        uint arenaRadius = 1600;
                         var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen).ToList();
                         foreach (AbstractCastEvent c in distributedMagicGreen)
                         {

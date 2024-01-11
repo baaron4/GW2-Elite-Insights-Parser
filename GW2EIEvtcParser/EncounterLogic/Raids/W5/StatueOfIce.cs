@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int range = 450;
+                        uint range = 450;
                         int angle = 100;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)

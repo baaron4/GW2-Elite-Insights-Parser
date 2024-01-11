@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
                     var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    int CAShieldRadius = 500;
+                    uint CAShieldRadius = 500;
                     foreach (Segment seg in shieldCA)
                     {
                         replay.Decorations.Add(new CircleDecoration(CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
@@ -195,7 +195,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.ConjuredShield:
                     var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    int ShieldShieldRadius = 100;
+                    uint ShieldShieldRadius = 100;
                     foreach (Segment seg in shieldShield)
                     {
                         replay.Decorations.Add(new CircleDecoration(ShieldShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
@@ -356,7 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)c.Time;
                 int duration = 10000;
-                int radius = 300;
+                uint radius = 300;
                 Point3D position = p.GetCurrentInterpolatedPosition(log, start);
                 if (position != null)
                 {

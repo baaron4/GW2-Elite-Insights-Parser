@@ -2,8 +2,8 @@
 {
     public class RectangleDecorationCombatReplayDescription : FormDecorationCombatReplayDescription
     {
-        public int Height { get; }
-        public int Width { get; }
+        public uint Height { get; }
+        public uint Width { get; }
 
         internal RectangleDecorationCombatReplayDescription(ParsedEvtcLog log, RectangleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {

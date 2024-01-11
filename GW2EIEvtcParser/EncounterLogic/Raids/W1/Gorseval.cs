@@ -260,7 +260,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int impactPoint = 1185;
                         int impactTime = start + impactPoint;
                         int end = Math.Min((int)c.EndTime, impactTime);
-                        int radius = 320;
+                        uint radius = 320;
                         replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), Colors.Red, 0.4, new AgentConnector(target)));
                     }

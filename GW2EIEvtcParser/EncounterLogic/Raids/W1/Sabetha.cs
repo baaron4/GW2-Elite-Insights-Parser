@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCastTime = 2800;
                         int duration = 10000;
-                        int width = 1300; int height = 60;
+                        uint width = 1300; uint height = 60;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int firstConeEnd = firstConeStart + 400;
                         int secondConeEnd = secondConeStart + 400;
                         int thirdConeEnd = thirdConeStart + 400;
-                        int radius = 1500;
+                        uint radius = 1500;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = start + 4000;
-                        int radius = 600;
+                        uint radius = 600;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {

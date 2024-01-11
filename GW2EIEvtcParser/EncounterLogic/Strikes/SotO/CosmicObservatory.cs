@@ -101,8 +101,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var shootingStars = casts.Where(x => x.SkillId == ShootingStars).ToList();
                     foreach (AbstractCastEvent cast in shootingStars)
                     {
-                        int length = 1500;
-                        int width = 100;
+                        uint length = 1500;
+                        uint width = 100;
                         int castDuration = 6700;
                         (long, long) lifespan = (cast.Time, cast.Time + castDuration);
 

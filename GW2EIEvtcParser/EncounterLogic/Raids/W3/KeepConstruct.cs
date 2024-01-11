@@ -315,7 +315,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int bladeDelay = 150;
                     int duration = 1000;
                     float bladeOpeningAngle = 360 * 3 / 32;
-                    int bladeRadius = 1600;
+                    uint bladeRadius = 1600;
                     foreach (AbstractCastEvent c in blades1)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
