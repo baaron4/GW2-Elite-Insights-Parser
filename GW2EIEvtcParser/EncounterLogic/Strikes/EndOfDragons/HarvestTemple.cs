@@ -907,6 +907,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             EffectEvent lastEffect = poolEffects.Last();
                             (long start, long end) lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
+                            (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
+                            lifespan.end = Math.Min(lifespan.end, lifespanPuriOrb.end);
                             // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
                             if (lifespan.start == lifespan.end)
                             {
