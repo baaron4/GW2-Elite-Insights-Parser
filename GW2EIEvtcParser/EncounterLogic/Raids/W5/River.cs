@@ -101,8 +101,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             if (combatData.HasMovementData)
             {
-                var desminaInitialPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
-                if (!combatData.GetMovementData(desmina).Any(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(desminaInitialPosition) < 100))
+                var desminaEncounterStartPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
+                var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+                if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }

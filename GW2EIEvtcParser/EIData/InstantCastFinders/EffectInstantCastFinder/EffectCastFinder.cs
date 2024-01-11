@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
         private readonly string _effectGUID;
-        private int _speciesId = 0;
+        private int _speciesId { get; set; } = 0;
 
         protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
         {

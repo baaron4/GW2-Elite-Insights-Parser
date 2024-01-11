@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Energy Threshold", EnergyThreshold, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm), // Dhuum & Eater of Souls
             new Buff("Source: Pure Oblivion", SourcePureOblivionBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CounterMagicSkill),
             new Buff("Messenger Fixation", DhuumsMessengerFixationBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            new Buff("Player to Soul Split Buff", DhuumPlayerToSoulTrackBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Player to Soul Split Buff", DhuumPlayerToSoulTrackBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             //////////////////////////////////////////////
             // CA
             new Buff("Greatsword Power", GreatswordPower, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.GreatswordPower),

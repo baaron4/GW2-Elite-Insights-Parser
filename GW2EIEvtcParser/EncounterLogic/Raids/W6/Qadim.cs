@@ -222,7 +222,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (combatData.HasMovementData)
             {
                 var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
-                if (!combatData.GetMovementData(qadim).Any(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(qadimAroundInitialPosition) < 100))
+                var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+                if (!positions.Any(x => x.Distance2DToPoint(qadimAroundInitialPosition) < 150))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }

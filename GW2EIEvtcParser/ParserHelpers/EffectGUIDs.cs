@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser
         // Relics
         public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
         public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
-        public const string RelicOfCerusEye2 = "521b6C72BF291E4E8A895A0827AF1727";
+        public const string RelicOfCerusEye2 = "521B6C72BF291E4E8A895A0827AF1727";
         public const string RelicOfCerusBeam = "513AEEF08C217942A798831BD9F4903E"; // 1 second delayed
         public const string RelicOfCerusBeam2 = "43F06D75DF774C4DBB1383B8621B1047"; // 1 second delayed
         public const string RelicOfIce = "54F2B4920F7E2D4FAA56CED739BA2C41";
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
-        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
+        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser
         public const string BrokenKingHailstormGreen = "C97A7665B2AA6C4482026D4F2562E25E";
         public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
         public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
-        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6bFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
+        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6BFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
         // Dhuum
         public const string DhuumScytheSwingIndicator = "91A23D51294E80458BE9C3C89A2ED138"; // 1200 duration
         public const string DhuumScytheSwingDamage = "C79F5D95E11070448A39ACD7F6C5D0D3"; // 0 duration
@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleMordremothPoisonRoarImpact = "E500544171F13643899C178EC3FB38A9";
         public const string HarvestTempleZhaitanPutridDelugeImpact = "FE8B96A200376B4BA75297FF2367C5C4";
         public const string HarvestTempleZhaitanPutridDelugeAoE = "82A8BC954DD69E4DBBF526EE1C6A3E74";
-        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808Ef8E6C654A";
+        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808EF8E6C654A";
         public const string HarvestTempleSpreadCM = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelectNM = "0CD6F76C1BF9C049A2FCE4D86CB46475";
         public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
@@ -483,6 +483,8 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
+        public const string HarvestTemplePurificationOrbSpawns = "4F982CD060507C44A25844BF0ADFCB54";
+        public const string HarvestTempleVoidPoolOrbGettingReadyToBeDangerous = "D11320204E28E643A48469AA8E4845BA";
         public const string HarvestTempleVoidPool = "912F68E45158C14E9A30D6011B7B0C7F";
         public const string HarvestTempleSooWonClaw = "CB877C57D1423240BACDF8D6B52A440F";
         public const string HarvestTempleTormentOfTheVoidClawIndicator = "3F24896D3EF8D5459B399DAC8D0AD150"; // AoE indicator for bouncing orbs after Soo-Won's Claw Slap attack

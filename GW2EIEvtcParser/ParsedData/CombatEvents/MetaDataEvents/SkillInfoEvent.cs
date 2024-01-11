@@ -15,8 +15,9 @@ namespace GW2EIEvtcParser.ParsedData
         public float Range1 { get; protected set; }
 
         public float TooltipTime { get; protected set; }
+        public IReadOnlyList<SkillTiming> SkillTimings => _SkillTimings;
 
-        public List<SkillTiming> SkillTimings { get; } = new List<SkillTiming>();
+        private List<SkillTiming> _SkillTimings { get; } = new List<SkillTiming>();
 
         internal SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
         {
@@ -63,11 +64,12 @@ namespace GW2EIEvtcParser.ParsedData
             Recharge = skillInfoFloats[0];
             Range0 = skillInfoFloats[1];
             Range1 = skillInfoFloats[2];
+            TooltipTime = skillInfoFloats[3];
         }
 
         private void BuildFromSkillTiming(CombatItem evtcItem)
         {
-            SkillTimings.Add(new SkillTiming(evtcItem));
+            _SkillTimings.Add(new SkillTiming(evtcItem));
         }
 
     }
