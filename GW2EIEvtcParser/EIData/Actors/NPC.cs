@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return ParserHelper.GetNPCIcon(ID);
+            return AgentItem.Type == AgentItem.AgentType.Gadget ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
