@@ -1260,7 +1260,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
         {
             var effectGroups = new List<List<EffectEvent>>();
-            groupedEffectEvents = effectGroups;
+            groupedEffectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
                 var processedTimes = new HashSet<long>();
                 foreach (EffectEvent first in effects)
@@ -1279,6 +1279,7 @@ namespace GW2EIEvtcParser.ParsedData
                         effectGroups.Add(group);
                     }
                 }
+                groupedEffectEvents = effectGroups;
                 return true;
             }
             return false;
@@ -1294,7 +1295,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool TryGetGroupedEffectEventsByGUID(string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
         {
             var effectGroups = new List<List<EffectEvent>>();
-            groupedEffectEvents = effectGroups;
+            groupedEffectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
             {
                 var processedTimes = new HashSet<long>();
@@ -1312,6 +1313,7 @@ namespace GW2EIEvtcParser.ParsedData
 
                     effectGroups.Add(group);
                 }
+                groupedEffectEvents = effectGroups;
                 return true;
             }
             return false;
