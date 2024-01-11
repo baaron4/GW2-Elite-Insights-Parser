@@ -866,21 +866,23 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Crystal Barrage
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikCrystalBarrageImpact, out IReadOnlyList<EffectEvent> crystalBarrage))
                     {
-                        log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleScalableOrangeAoE, out IReadOnlyList<EffectEvent> aoeIndicator);
-                        foreach (EffectEvent impactEffect in crystalBarrage)
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleScalableOrangeAoE, out IReadOnlyList<EffectEvent> aoeIndicator))
                         {
-                            foreach (EffectEvent indicator in aoeIndicator.Where(x => Math.Abs(x.Time - impactEffect.Time) < 5000 && impactEffect.Time > x.Time))
+                            foreach (EffectEvent impactEffect in crystalBarrage)
                             {
-                                if (impactEffect.Position.Distance2DToPoint(indicator.Position) < 60)
+                                foreach (EffectEvent indicator in aoeIndicator.Where(x => Math.Abs(x.Time - impactEffect.Time) < 5000 && impactEffect.Time > x.Time))
                                 {
-                                    int radius = 320;
-                                    (long start, long end) lifespan = (indicator.Time, indicator.Time + (impactEffect.Time - indicator.Time));
-                                    var positionConnector = new PositionConnector(impactEffect.Position);
-                                    var warning = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                                    var impect = new CircleDecoration(radius, (lifespan.end, lifespan.end + 250), Colors.White, 0.3, positionConnector);
-                                    replay.AddDecorationWithGrowing(warning, lifespan.end);
-                                    replay.AddDecorationWithBorder(impect, Colors.DarkPurple, 0.5);
-                                    break;
+                                    if (impactEffect.Position.Distance2DToPoint(indicator.Position) < 60)
+                                    {
+                                        int radius = 320;
+                                        (long start, long end) lifespan = (indicator.Time, indicator.Time + (impactEffect.Time - indicator.Time));
+                                        var positionConnector = new PositionConnector(impactEffect.Position);
+                                        var warning = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
+                                        var impect = new CircleDecoration(radius, (lifespan.end, lifespan.end + 250), Colors.White, 0.3, positionConnector);
+                                        replay.AddDecorationWithGrowing(warning, lifespan.end);
+                                        replay.AddDecorationWithBorder(impect, Colors.DarkPurple, 0.5);
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1130,28 +1132,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
 
-                    // Generic Orange AoE - Used in multiple sections of the encounter - Used for the void orbs during the tail and claw slams
-                    log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleScalableOrangeAoE, out IReadOnlyList<EffectEvent> genericOrangeAoE);
-
                     // Tail Slam
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out IReadOnlyList<EffectEvent> tailSlamEffects))
                     {
-                        foreach (EffectEvent tailSlamEffect in tailSlamEffects)
+                        // Generic Orange AoE - Used in multiple sections of the encounter
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleScalableOrangeAoE, out IReadOnlyList<EffectEvent> genericOrangeAoE))
                         {
-                            // Filtering the effects
-                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tailSlamEffect.Time) < 2000 && x.Time < tailSlamEffect.Time + 10000).ToList();
-
-                            // Tail Slam AoE
-                            (long start, long end) lifespanTail = tailSlamEffect.ComputeLifespan(log, 1600);
-                            replay.AddDecorationWithGrowing(new RectangleDecoration(3000, 750, lifespanTail, Colors.Red, 0.2, new PositionConnector(tailSlamEffect.Position)), lifespanTail.end);
-
-                            // Void Orbs AoEs
-                            foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
+                            foreach (EffectEvent tailSlamEffect in tailSlamEffects)
                             {
-                                (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
-                                replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
-                                // Add projectile
-                                replay.AddProjectile(tailSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                // Filtering the effects
+                                var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tailSlamEffect.Time) < 2000 && x.Time < tailSlamEffect.Time + 10000).ToList();
+
+                                // Tail Slam AoE
+                                (long start, long end) lifespanTail = tailSlamEffect.ComputeLifespan(log, 1600);
+                                replay.AddDecorationWithGrowing(new RectangleDecoration(3000, 750, lifespanTail, Colors.Red, 0.2, new PositionConnector(tailSlamEffect.Position)), lifespanTail.end);
+
+                                // Void Orbs AoEs
+                                foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
+                                {
+                                    (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
+                                    // Add projectile
+                                    replay.AddProjectile(tailSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                }
                             }
                         }
                     }
@@ -1159,21 +1162,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Tsunami Slam AoE indicator
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonTsunamiSlamIndicator, out IReadOnlyList<EffectEvent> tsunamiSlamIndicators))
                     {
-                        foreach (EffectEvent tsunamiSlamEffect in tsunamiSlamIndicators)
+                        // Generic Orange AoE - Used in multiple sections of the encounter
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleScalableOrangeAoE, out IReadOnlyList<EffectEvent> genericOrangeAoE))
                         {
-                            // Filtering the effects
-                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000).ToList();
-
-                            (long start, long end) lifespanClawAoE = tsunamiSlamEffect.ComputeLifespan(log, 1600);
-                            replay.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);
-
-                            // Void Orbs AoEs
-                            foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
+                            foreach (EffectEvent tsunamiSlamEffect in tsunamiSlamIndicators)
                             {
-                                (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
-                                replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
-                                // Add projectile
-                                replay.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                // Filtering the effects
+                                var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000).ToList();
+
+                                (long start, long end) lifespanClawAoE = tsunamiSlamEffect.ComputeLifespan(log, 1600);
+                                replay.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);
+
+                                // Void Orbs AoEs
+                                foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
+                                {
+                                    (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
+                                    // Add projectile
+                                    replay.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                }
                             }
                         }
                     }
