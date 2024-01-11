@@ -213,7 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 _trashMobs.Add(new NPC(a));
             }
-#if DEBUG
+#if DEBUG2
             var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID) && !x.GetFinalMaster().IsPlayer).ToList();
             unknownAList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.LastAware - x.FirstAware > 1000 && !x.GetFinalMaster().IsPlayer));
             foreach (AgentItem a in unknownAList)
