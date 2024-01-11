@@ -297,5 +297,38 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return standardEndCastTime;
         }
+
+
+        /// <summary>
+        /// Matches an effect to another effect by proximity and filters out additional effects.
+        /// </summary>
+        /// <param name="startEffects">List of the initial effects for the positions.</param>
+        /// <param name="endEffects">List of the final effects for the positions.</param>
+        /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
+        internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
+        {
+            var matchedEffects = new List<(EffectEvent, EffectEvent, float)>();
+            foreach (EffectEvent startEffect in startEffects)
+            {
+                var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
+                if (candidateEffectEvents.Any())
+                {
+                    EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
+                    float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);
+                    matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
+                }
+            }
+
+            var filteredPairings = matchedEffects
+                .GroupBy(p => p.Item1) // Group by aoe
+                .SelectMany(group =>
+                {
+                    var minDistance = group.Min(p => p.Item3); // Find minimal distance in each group
+                    return group.Where(p => Math.Abs(p.Item3 - minDistance) < float.Epsilon); // Filter by minimal distance
+                })
+                .ToList();
+
+            return filteredPairings;
+        }
     }
 }

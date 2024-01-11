@@ -938,7 +938,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             (long start, long end) lifespan = (effect.Time, effect.Time + 1600); // Assumed duration, effect has 0
                             var positionConnector = new PositionConnector(effect.Position);
-                            var shockwave = (CircleDecoration)new CircleDecoration(2000, lifespan, Colors.LightGrey, 0.5, positionConnector).UsingFilled(false).UsingGrowingEnd(lifespan.end);
+                            var shockwave = (CircleDecoration)new CircleDecoration(2000, lifespan, Colors.Black, 0.6, positionConnector).UsingFilled(false).UsingGrowingEnd(lifespan.end);
                             replay.Decorations.Add(shockwave);
                         }
                     }
@@ -979,7 +979,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in screamOfZhaitan)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
-                            var circle = new CircleDecoration(1720, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(1720, lifespan, Colors.LightRed, 0.1, new PositionConnector(effect.Position));
                             replay.AddDecorationWithGrowing(circle, lifespan.end);
                         }
                     }
@@ -999,19 +999,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Claw Swipe - Bouncing Void Orbs
-                    if (log.LogData.EvtcVersion < ArcDPSEnums.ArcDPSBuilds.FunctionalEffect2Events)
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonVoidOrbs1, out IReadOnlyList<EffectEvent> clawVoidOrbs))
                     {
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonVoidOrbs1, out IReadOnlyList<EffectEvent> clawVoidOrbs))
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> clawVoidOrbsAoEs))
                         {
-                            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> clawVoidOrbsAoEs))
-                            {
-                                // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                                var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
-                                List<(EffectEvent, EffectEvent, float)> orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
-                                List<(EffectEvent, EffectEvent, float)> aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
+                            // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
+                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
+                            List<(EffectEvent, EffectEvent, float)> orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
+                            List<(EffectEvent, EffectEvent, float)> aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
 
-                                // Hard coded the orb positions and the durations for older logs
-                                var positions = new List<ParametricPoint3D>()
+                            // Hard coded the orb positions and the durations for older logs
+                            var positions = new List<ParametricPoint3D>()
                                 {
                                     new ParametricPoint3D(1527.933f, -20447.47f, -15420.13f, 803),
                                     new ParametricPoint3D(74.92969f, -20728.86f, -15420.13f, 803),
@@ -1035,103 +1033,67 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     new ParametricPoint3D(493.4647f, -18997.94f, -15420.13f, 1133),
                                 };
 
-                                // Orb indicator near the swipe cone
-                                foreach (EffectEvent orb in clawVoidOrbs)
-                                {
-                                    (long start, long end) lifespan = orb.ComputeLifespan(log, 2080);
-                                    var circle = new CircleDecoration(25, lifespan, Colors.Black, 0.5, new PositionConnector(orb.Position));
-                                    replay.Decorations.Add(circle);
-                                }
+                            // Orb indicator near the swipe cone
+                            foreach (EffectEvent orb in clawVoidOrbs)
+                            {
+                                (long start, long end) lifespan = orb.ComputeLifespan(log, 2080);
+                                var circle = new CircleDecoration(25, lifespan, Colors.Black, 0.5, new PositionConnector(orb.Position));
+                                replay.Decorations.Add(circle);
+                            }
 
-                                // Orb to AoE effects
-                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) in orbToAoeMatches)
+                            // Orb to AoE effects
+                            foreach ((EffectEvent aoe, EffectEvent orb, float distance) in orbToAoeMatches)
+                            {
+                                (long start, long end) lifespanAoE = (aoe.Time, aoe.Time + aoe.Duration);
+                                if (aoe.Duration == 0)
                                 {
                                     foreach (ParametricPoint3D point in positions)
                                     {
                                         if (aoe.Position.Distance2DToPoint(point) < 0.5)
                                         {
-                                            // Add aoe
-                                            (long start, long end) lifespanAoE = (aoe.Time, aoe.Time + point.Time);
-                                            replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
-                                            // Add projectile
-                                            replay.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
+                                            lifespanAoE.end = lifespanAoE.start + point.Time;
+                                            break;
                                         }
                                     }
                                 }
+                                // Add aoe
+                                replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
+                                // Add projectile
+                                replay.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
+                            }
 
-                                // AoE to AoE effects
-                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) in aoeToAoeMatches)
+                            // AoE to AoE effects
+                            foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) in aoeToAoeMatches)
+                            {
+                                long endingAoEDuration = endingAoE.Duration;
+                                long startingAoEDuration = startingAoE.Duration;
+                                if (endingAoEDuration == 0 || startingAoEDuration == 0)
                                 {
-                                    long endingAoEDuration = 0;
-                                    long startingAoEDuration = 0;
                                     foreach (ParametricPoint3D point in positions)
                                     {
                                         if (endingAoEDuration != 0 && startingAoEDuration != 0)
                                         {
                                             break;
                                         }
-                                        if (endingAoE.Position.Distance2DToPoint(point) < 0.5)
+                                        if (endingAoEDuration == 0 && endingAoE.Position.Distance2DToPoint(point) < 0.5)
                                         {
                                             endingAoEDuration = point.Time;
                                         }
-                                        if (startingAoE.Position.Distance2DToPoint(point) < 0.5)
+                                        if (startingAoEDuration == 0 && startingAoE.Position.Distance2DToPoint(point) < 0.5)
                                         {
                                             startingAoEDuration = point.Time;
                                         }
                                     }
-                                    // Add aoe
-                                    (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoEDuration);
-                                    replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
-                                    // Add projectile - Starts when the previous AoE ends because it's bouncing
-                                    (long start, long end) lifespanAnimation = (startingAoE.Time + startingAoEDuration, endingAoE.Time + endingAoEDuration);
-                                    replay.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
                                 }
+                                // Add aoe
+                                (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoEDuration);
+                                replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
+                                // Add projectile - Starts when the previous AoE ends because it's bouncing
+                                (long start, long end) lifespanAnimation = (startingAoE.Time + startingAoEDuration, endingAoE.Time + endingAoEDuration);
+                                replay.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
                             }
                         }
                     }
-                    else
-                    {
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonVoidOrbs1, out IReadOnlyList<EffectEvent> clawVoidOrbs))
-                        {
-                            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> clawVoidOrbsAoEs))
-                            {
-                                // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                                var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
-                                List<(EffectEvent, EffectEvent, float)> orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
-                                List<(EffectEvent, EffectEvent, float)> aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
-
-                                // Orb indicator near the swipe cone
-                                foreach (EffectEvent orb in clawVoidOrbs)
-                                {
-                                    (long start, long end) lifespan = orb.ComputeLifespan(log, 2080);
-                                    var circle = new CircleDecoration(25, lifespan, Colors.Black, 0.5, new PositionConnector(orb.Position));
-                                    replay.Decorations.Add(circle);
-                                }
-
-                                // Orb to AoE effects
-                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) in orbToAoeMatches)
-                                {
-                                    // Add aoe
-                                    (long start, long end) lifespanAoE = (aoe.Time, aoe.Time + aoe.Duration);
-                                    replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
-                                    // Add projectile
-                                    replay.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
-                                }
-
-                                // AoE to AoE effects
-                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) in aoeToAoeMatches)
-                                {
-                                    // Add aoe
-                                    (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoE.Duration);
-                                    replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
-                                    // Add projectile - Starts when the previous AoE ends because it's bouncing
-                                    (long start, long end) lifespanAnimation = (startingAoE.Time + startingAoE.Duration, endingAoE.Time + endingAoE.Duration);
-                                    replay.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
-                                }
-                            }
-                        }
-                    }
-
                     // Tail Slam
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out IReadOnlyList<EffectEvent> tailSlamEffects))
                     {
@@ -1214,19 +1176,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT).ToList();
                     foreach (AbstractCastEvent c in groundSlam)
                     {
-                        int castTime = 0;
+                        int castTime = c.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
                         int radius = 400;
-                        int endTime = 0;
-                        // 66534 -> Fast AoE -- 64526 -> Slow AoE
-                        if (c.SkillId == ZhaitansReachGroundSlam)
-                        {
-                            castTime = 800;
-                        }
-                        else if (c.SkillId == ZhaitansReachGroundSlamHT)
-                        {
-                            castTime = 2500;
-                        }
-                        endTime = (int)c.Time + castTime;
+                        long endTime = c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     break;
@@ -1245,13 +1197,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // Shooting animation
                                 long animationDuration = brandedArtilleryAoE.Time - c.Time;
                                 (long start, long end) lifespan = (c.Time, c.Time + (animationDuration));
-                                replay.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
 
                                 // Landing indicator
                                 int radius = 240;
                                 var positionConnector = new PositionConnector(brandedArtilleryAoE.Position);
                                 var aoeCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                 replay.AddDecorationWithGrowing(aoeCircle, lifespan.end);
+                                // Projective decoration
+                                replay.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
                             }
                         }
                     }
@@ -1423,7 +1376,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Shatter Earth
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidSaltsprayDragonShatterEarth, out IReadOnlyList<EffectEvent> shatterEarth))
                     {
-                        int counter = 1;
+                        int counter = 0;
                         foreach (EffectEvent effect in shatterEarth)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1550);
@@ -1432,21 +1385,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int outerRadius = 0;
                             switch (counter)
                             {
-                                case 1:
+                                case 0:
                                     innerRadius = 180;
                                     outerRadius = 300;
                                     var circle = new CircleDecoration(140, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                     replay.AddDecorationWithGrowing(circle, lifespan.end);
                                     break;
+                                case 1:
                                 case 2:
                                 case 3:
-                                case 4:
                                     innerRadius = 120;
                                     outerRadius = 180;
                                     break;
+                                case 4:
                                 case 5:
                                 case 6:
-                                case 7:
                                     innerRadius = 100;
                                     outerRadius = 150;
                                     break;
@@ -1455,14 +1408,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             var doughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                             replay.AddDecorationWithGrowing(doughnut, lifespan.end);
-                            if (counter < 7)
-                            {
-                                counter++;
-                            }
-                            else
-                            {
-                                counter = 1;
-                            }
+                            counter = (counter + 1) % 7;
                         }
                     }
                     break;
@@ -1821,36 +1767,5 @@ namespace GW2EIEvtcParser.EncounterLogic
             return true;
         }
 
-        /// <summary>
-        /// Matches an effect to another effect by proximity and filters out additional effects.
-        /// </summary>
-        /// <param name="startEffects">List of the initial effects for the positions.</param>
-        /// <param name="endEffects">List of the final effects for the positions.</param>
-        /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
-        private static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
-        {
-            var matchedEffects = new List<(EffectEvent, EffectEvent, float)>();
-            foreach (EffectEvent startEffect in startEffects)
-            {
-                var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
-                if (candidateEffectEvents.Any())
-                {
-                    EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
-                    float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);
-                    matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
-                }
-            }
-
-            var filteredPairings = matchedEffects
-                .GroupBy(p => p.Item1) // Group by aoe
-                .SelectMany(group =>
-                {
-                    var minDistance = group.Min(p => p.Item3); // Find minimal distance in each group
-                    return group.Where(p => Math.Abs(p.Item3 - minDistance) < float.Epsilon); // Filter by minimal distance
-                })
-                .ToList();
-
-            return filteredPairings;
-        }
     }
 }
