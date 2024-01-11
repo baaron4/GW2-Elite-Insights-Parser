@@ -474,25 +474,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate);
                 needRefreshAgentPool = true;
             }
+            // Gravity Ball - Timecaster gadget
+            AgentItem timecaster = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidTimeCaster).FirstOrDefault();
+            if (timecaster != null)
+            {
+                var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware).ToList();
+                var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
+                int referenceLength = 200;
+                gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y.DstAgent, y.Value).Length() - referenceLength) < 10)).ToList();
+                foreach (AgentItem ball in gravityBalls)
+                {
+                    ball.OverrideType(AgentItem.AgentType.NPC);
+                    ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
+                    ball.SetMaster(timecaster);
+                    needRefreshAgentPool = true;
+                }
+            }
             if (needRefreshAgentPool)
             {
                 agentData.Refresh();
-            }
-            // Gravity Ball - Timecaster gadget
-            var gravityBalls = combatData.Where(x => x.DstAgent == 0 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null).ToList();
-            var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
-            int referenceLength = 200;
-            gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y.DstAgent, y.Value).Length() - referenceLength) < 10)).ToList();
-            AgentItem timecaster = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidTimeCaster).FirstOrDefault();
-            foreach (AgentItem ball in gravityBalls)
-            {
-                ball.OverrideType(AgentItem.AgentType.NPC);
-                ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
-                if (timecaster != null)
-                {
-                    ball.SetMaster(timecaster);
-                }
-                needRefreshAgentPool = true;
             }
             // Add missing agents
             for (int i = index; i < idsToUse.Count; i++)
@@ -1042,10 +1042,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // Orb to AoE effects
-                                foreach ((EffectEvent, EffectEvent, float) match in orbToAoeMatches)
+                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) match in orbToAoeMatches)
                                 {
-                                    EffectEvent aoe = match.Item1;
-                                    EffectEvent orb = match.Item2;
+                                    EffectEvent aoe = match.aoe;
+                                    EffectEvent orb = match.orb;
                                     foreach (ParametricPoint3D point in positions)
                                     {
                                         if (aoe.Position.Distance2DToPoint(point) < 0.5)
@@ -1056,20 +1056,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                                             // Add projectile
                                             replay.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
                                         }
-                                        break;
                                     }
                                 }
 
                                 // AoE to AoE effects
-                                foreach ((EffectEvent, EffectEvent, float) match in aoeToAoeMatches)
+                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) match in aoeToAoeMatches)
                                 {
-                                    EffectEvent endingAoE = match.Item1;
-                                    EffectEvent startingAoE = match.Item2;
+                                    EffectEvent endingAoE = match.endingAoE;
+                                    EffectEvent startingAoE = match.startingAoE;
                                     long endingAoEDuration = 0;
                                     long startingAoEDuration = 0;
                                     foreach (ParametricPoint3D point in positions)
                                     {
-                                        if (endingAoEDuration != 0 && startingAoEDuration != 0) { break; }
+                                        if (endingAoEDuration != 0 && startingAoEDuration != 0)
+                                        {
+                                            break;
+                                        }
                                         if (endingAoE.Position.Distance2DToPoint(point) < 0.5)
                                         {
                                             endingAoEDuration = point.Time;
@@ -1109,10 +1111,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // Orb to AoE effects
-                                foreach ((EffectEvent, EffectEvent, float) match in orbToAoeMatches)
+                                foreach ((EffectEvent aoe, EffectEvent orb, float distance) match in orbToAoeMatches)
                                 {
-                                    EffectEvent aoe = match.Item1;
-                                    EffectEvent orb = match.Item2;
+                                    EffectEvent aoe = match.aoe;
+                                    EffectEvent orb = match.orb;
                                     // Add aoe
                                     (long start, long end) lifespanAoE = (aoe.Time, aoe.Time + aoe.Duration);
                                     replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
@@ -1121,10 +1123,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
 
                                 // AoE to AoE effects
-                                foreach ((EffectEvent, EffectEvent, float) match in aoeToAoeMatches)
+                                foreach ((EffectEvent endingAoE, EffectEvent startingAoE, float distance) match in aoeToAoeMatches)
                                 {
                                     EffectEvent endingAoE = match.Item1;
-                                    EffectEvent startingAoE = match.Item2;
+                                    EffectEvent startingAoE = match.startingAoE;
                                     // Add aoe
                                     (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoE.Duration);
                                     replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
@@ -1165,13 +1167,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Tsunami Slam AoE indicator
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonTsunamiSlamIndicator, out IReadOnlyList<EffectEvent> tsunamiSlamIndicators))
                     {
-                        foreach (EffectEvent clawSlamEffect in tsunamiSlamIndicators)
+                        foreach (EffectEvent tsunamiSlamEffect in tsunamiSlamIndicators)
                         {
                             // Filtering the effects
-                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - clawSlamEffect.Time) < 2000 && x.Time < clawSlamEffect.Time + 10000).ToList();
+                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000).ToList();
 
-                            (long start, long end) lifespanClawAoE = clawSlamEffect.ComputeLifespan(log, 1600);
-                            replay.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(clawSlamEffect.Position)), lifespanClawAoE.end);
+                            (long start, long end) lifespanClawAoE = tsunamiSlamEffect.ComputeLifespan(log, 1600);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);
 
                             // Void Orbs AoEs
                             foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
@@ -1179,7 +1181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
                                 replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
                                 // Add projectile
-                                replay.AddProjectile(clawSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                replay.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
                             }
                         }
                     }
@@ -1217,7 +1219,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int radius = 400;
                         int endTime = 0;
                         // 66534 -> Fast AoE -- 64526 -> Slow AoE
-                        if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamHT) { castTime = 2500; }
+                        if (c.SkillId == ZhaitansReachGroundSlam)
+                        {
+                            castTime = 800;
+                        }
+                        else if (c.SkillId == ZhaitansReachGroundSlamHT)
+                        {
+                            castTime = 2500;
+                        }
                         endTime = (int)c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
@@ -1256,7 +1265,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int minRadius = 0;
                             int radiusIncrease = 40;
-                            float initialOpacity = 1;
+                            float initialOpacity = 0.5f;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1600);
                             var positionConnector = new PositionConnector(effect.Position);
                             // The indicator has 8 circles
@@ -1264,7 +1273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int maxRadius = minRadius + radiusIncrease;
                                 float opacity = initialOpacity / i;
-                                var circle = new DoughnutDecoration(minRadius, maxRadius, lifespan, Colors.Orange, opacity, positionConnector);
+                                var circle = new CircleDecoration(maxRadius, minRadius, lifespan, Colors.Orange, opacity, positionConnector);
                                 replay.AddDecorationWithBorder(circle, Colors.Orange, 0.2);
                                 minRadius = maxRadius;
                             }
@@ -1362,7 +1371,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             EffectEvent nextWhirlpool = hydroBurstWhirlpools.FirstOrDefault(x => Math.Abs(x.Time - effect.Time) < 500 && x.Time > effect.Time);
                             radius = counter % 3 == 0 ? radius + 10 : radius;
                             // if there isn't a next one, reset the radius to the starting value
-                            if (nextWhirlpool == null) { radius = 90; }
+                            if (nextWhirlpool == null)
+                            {
+                                radius = 90;
+                            }
                             counter++;
                         }
                     }
@@ -1444,7 +1456,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                             var doughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                             replay.AddDecorationWithGrowing(doughnut, lifespan.end);
-                            if (counter < 7) { counter++; } else { counter = 1; }
+                            if (counter < 7)
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                counter = 1;
+                            }
                         }
                     }
                     break;
@@ -1794,7 +1813,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(orb).GetBuffGraphs(log);
                 if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out BuffsGraphModel bgm))
                 {
-                    if (bgm.BuffChart.Any(x => x.Value >= 3)) { return false; }
+                    if (bgm.BuffChart.Any(x => x.Value >= 3))
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -1806,24 +1828,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="startEffects">List of the initial effects for the positions.</param>
         /// <param name="endEffects">List of the final effects for the positions.</param>
         /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
-        private static List<(EffectEvent, EffectEvent, float)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
+        private static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
         {
             var matchedEffects = new List<(EffectEvent, EffectEvent, float)>();
             foreach (EffectEvent startEffect in startEffects)
             {
-                float minimalDistance = 0;
-                EffectEvent matchedEffect = null;
-                foreach (EffectEvent endEffect in endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000))
+                var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
+                if (candidateEffectEvents.Any())
                 {
-                    float currentDistance = endEffect.Position.Distance2DToPoint(startEffect.Position);
-                    if (currentDistance < minimalDistance || minimalDistance == 0)
-                    {
-                        minimalDistance = currentDistance;
-                        matchedEffect = endEffect;
-                    }
-                }
-                if (matchedEffect != null)
-                {
+                    EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
+                    float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);
                     matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
                 }
             }
