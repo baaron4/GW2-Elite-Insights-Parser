@@ -352,7 +352,7 @@ class FormMechanicDrawable extends MechanicDrawable {
             return 1.0;
         }
         var time = animator.reactiveDataStatus.time;
-        var value = Math.min((time - this.start) / (Math.abs(this.growingEnd) - this.start), 1.0);
+        var value = Math.min((time - this.start) / (this.growingEnd - this.start), 1.0);
         if (this.growingReverse) {
             value = 1 - value;
         }
