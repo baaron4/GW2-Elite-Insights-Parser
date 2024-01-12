@@ -683,7 +683,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)purificationZoneEffect.Time;
                             int end = (int)log.FightData.FightEnd;
-                            int radius = 280;
+                            uint radius = 280;
                             if (voidShellRemovalOffset < voidShellRemovals.Count)
                             {
                                 end = (int)voidShellRemovals[voidShellRemovalOffset++].Time;
@@ -745,7 +745,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)beeLaunchEffect.Time;
                             int end = start + 3000;
                             replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), Colors.Red, 0.4, new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
-                            var circle = new CircleDecoration(280, (start, end), "rgba(250, 150, 0, 0.2)", new PositionConnector(beeLaunchEffect.Position));
+                            var circle = new CircleDecoration(280, (start, end), Colors.LightOrange, 0.2, new PositionConnector(beeLaunchEffect.Position));
                             replay.AddDecorationWithGrowing(circle, end);
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 210;
@@ -775,7 +775,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int start = (int)orbEffect.Time;
                             int end = start + duration;
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
-                            int radius = 2700;
+                            uint radius = 2700;
                             var circle = new CircleDecoration(radius, (start, end), Colors.White, 0.05, new PositionConnector(orbEffect.Position));
                             replay.AddDecorationWithGrowing(circle, end);
                         }
@@ -830,7 +830,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.AddDecorationWithGrowing(new CircleDecoration(560, (start, end), "rgba(200, 100, 0, 0.2)", new PositionConnector(jawPosition)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(560, (start, end), Colors.Orange, 0.2, new PositionConnector(jawPosition)), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
@@ -839,7 +839,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             int start = (int)bigJawEffect.Time;
                             int end = start + 7500;
-                            replay.AddDecorationWithGrowing(new CircleDecoration( 1700, (start, end), "rgba(200, 100, 0, 0.2)", new AgentConnector(target)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration( 1700, (start, end), Colors.Orange, 0.2, new AgentConnector(target)), end);
                             replay.Decorations.Add(new CircleDecoration(1700, (end, end + 4000), Colors.Red, 0.4, new AgentConnector(target)));
                         }
                     }
@@ -877,7 +877,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     if (impactEffect.Position.Distance2DToPoint(indicator.Position) < 60)
                                     {
-                                        int radius = 320;
+                                        uint radius = 320;
                                         (long start, long end) lifespan = (indicator.Time, indicator.Time + (impactEffect.Time - indicator.Time));
                                         var positionConnector = new PositionConnector(impactEffect.Position);
                                         var warning = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
@@ -908,7 +908,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 EffectEvent nextEffect = poolEffects[i + 1];
                                 int start = (int)curEffect.Time;
                                 int end = (int)nextEffect.Time;
-                                replay.AddDecorationWithBorder(new CircleDecoration((int)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
+                                replay.AddDecorationWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
                                 radius += radiusIncrement;
                             }
                             EffectEvent lastEffect = poolEffects.Last();
@@ -920,7 +920,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 lifespan.end = lifespan.start + 4000;
                             }
-                            replay.AddDecorationWithBorder(new CircleDecoration((int)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
+                            replay.AddDecorationWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                         }
                     }
                     break;
@@ -1180,7 +1180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in groundSlam)
                     {
                         int castTime = c.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
-                        int radius = 400;
+                        uint radius = 400;
                         long endTime = c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
@@ -1202,7 +1202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 (long start, long end) lifespan = (c.Time, c.Time + (animationDuration));
 
                                 // Landing indicator
-                                int radius = 240;
+                                uint radius = 240;
                                 var positionConnector = new PositionConnector(brandedArtilleryAoE.Position);
                                 var aoeCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                 replay.AddDecorationWithGrowing(aoeCircle, lifespan.end);
@@ -1218,15 +1218,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in gravityCrushIndicators)
                         {
-                            int minRadius = 0;
-                            int radiusIncrease = 40;
+                            uint minRadius = 0;
+                            uint radiusIncrease = 40;
                             float initialOpacity = 0.5f;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1600);
                             var positionConnector = new PositionConnector(effect.Position);
                             // The indicator has 8 circles
                             for (int i = 1; i <= 8; i++)
                             {
-                                int maxRadius = minRadius + radiusIncrease;
+                                uint maxRadius = minRadius + radiusIncrease;
                                 float opacity = initialOpacity / i;
                                 var circle = new CircleDecoration(maxRadius, minRadius, lifespan, Colors.Orange, opacity, positionConnector);
                                 replay.AddDecorationWithBorder(circle, Colors.Orange, 0.2);
@@ -1257,7 +1257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var deathScreams = casts.Where(x => x.SkillId == DeathScream).ToList();
                     foreach (AbstractCastEvent c in deathScreams)
                     {
-                        int radius = 500;
+                        uint radius = 500;
                         long castDuration = 1680;
                         long supposedEndCast = c.Time + castDuration;
                         long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
@@ -1272,7 +1272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in bileIndicators)
                         {
-                            int radius = 250;
+                            uint radius = 250;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1400);
                             var positionConnector = new PositionConnector(effect.Position);
                             var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
@@ -1285,7 +1285,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in bileAoEs)
                         {
-                            int radius = 250;
+                            uint radius = 250;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 10000);
                             var positionConnector = new PositionConnector(effect.Position);
                             var circle = new CircleDecoration(radius, lifespan, Colors.DarkGreen, 0.2, positionConnector);
@@ -1299,7 +1299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in callLightnings)
                         {
-                            int radius = 50;
+                            uint radius = 50;
                             (long start, long end) lifespan = (effect.Time - 2000, effect.Time);
                             var positionConnector = new PositionConnector(effect.Position);
                             var circleIndicator = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
@@ -1312,7 +1312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Hydro Burst - Whirlpools
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidSaltsprayDragonHydroBurstWhirlpools, out IReadOnlyList<EffectEvent> hydroBurstWhirlpools))
                     {
-                        int radius = 90;
+                        uint radius = 90;
                         int counter = 1;
                         foreach (EffectEvent effect in hydroBurstWhirlpools)
                         {
@@ -1339,7 +1339,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in frozenFuryCone)
                         {
-                            int radius = 690;
+                            uint radius = 690;
                             int angle = 60;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1350);
                             var positionConnector = new PositionConnector(effect.Position);
@@ -1354,8 +1354,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in frozenFuryRectangles)
                         {
-                            int width = 200;
-                            int height = 800;
+                            uint width = 200;
+                            uint height = 800;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1600);
                             var positionConnector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -30), true);
                             var rotationConnector = new AngleConnector(effect.Rotation.Z + 90);
@@ -1384,8 +1384,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1550);
                             var positionConnector = new PositionConnector(effect.Position);
-                            int innerRadius = 0;
-                            int outerRadius = 0;
+                            uint innerRadius = 0;
+                            uint outerRadius = 0;
                             switch (counter)
                             {
                                 case 0:
@@ -1420,7 +1420,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var abominationSwipes = casts.Where(x => x.SkillId == AbominationSwipe).ToList();
                     foreach (AbstractCastEvent c in abominationSwipes)
                     {
-                        int radius = 300;
+                        uint radius = 300;
                         int angle = 40;
                         long castDuration = 2368;
                         long supposedEndCast = c.Time + castDuration;
@@ -1436,8 +1436,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var charges = casts.Where(x => x.SkillId == VoidObliteratorChargeWindup).ToList();
                     foreach (AbstractCastEvent c in charges)
                     {
-                        int length = 2000;
-                        int width = (int)target.HitboxWidth;
+                        uint length = 2000;
+                        uint width = target.HitboxWidth;
                         long castDuration = 1000;
                         long supposedEndCast = c.Time + castDuration;
                         long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
@@ -1456,7 +1456,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var wyvernBreaths = casts.Where(x => x.SkillId == VoidObliteratorWyvernBreathSkill).ToList();
                     foreach (AbstractCastEvent c in wyvernBreaths)
                     {
-                        int radius = 750;
+                        uint radius = 750;
                         int openingAngle = 60;
                         long castDuration = 3400;
                         long supposedEndCast = c.Time + castDuration;
@@ -1485,7 +1485,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in wyvernBreahFires)
                         {
-                            int radius = 80;
+                            uint radius = 80;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 30000);
                             var positionConnector = new PositionConnector(effect.Position);
                             var circle = new CircleDecoration(radius, lifespan, Colors.Yellow, 0.2, positionConnector);
@@ -1498,7 +1498,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in clawShockwave)
                         {
-                            int radius = 1000; // Assumed radius
+                            uint radius = 1000; // Assumed radius
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2500); // Assumed duration
                             var positionConnector = new PositionConnector(effect.Position);
                             var shockwave = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.LightGrey, 0.5, positionConnector).UsingFilled(false).UsingGrowingEnd(lifespan.end);
@@ -1523,7 +1523,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 replay.AddProjectile(obliteratorPosition, bombAoE.Position, lifespan, Colors.Red);
 
                                 // Landed Firebomb
-                                int radius = 120;
+                                uint radius = 120;
                                 (long start, long end) lifespanAoE = bombAoE.ComputeLifespan(log, 21000);
                                 var positionConnector = new PositionConnector(bombAoE.Position);
                                 var fireCircle = new CircleDecoration(radius, lifespanAoE, Colors.Yellow, 0.2, positionConnector);
@@ -1537,7 +1537,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var glacialSlams = casts.Where(x => x.SkillId == GlacialSlam).ToList();
                     foreach (AbstractCastEvent c in glacialSlams)
                     {
-                        int radius = 600;
+                        uint radius = 600;
                         long castDuration = 1880;
                         long supposedEndCast = c.Time + castDuration;
                         long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
@@ -1552,7 +1552,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in glacialSlamsAoE)
                         {
-                            int radius = 600;
+                            uint radius = 600;
                             int duration = 5000;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                             var positionConnector = new PositionConnector(effect.Position);
@@ -1609,7 +1609,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="replay">Combat Replay.</param>
         /// <param name="redSelectedEffects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
-        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, int radius)
+        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, uint radius)
         {
             var redSelectedEffectsOnPlayer = redSelectedEffects.Where(x => x.Dst == p.AgentItem).ToList();
             foreach (EffectEvent redSelectedEffect in redSelectedEffectsOnPlayer)
@@ -1635,7 +1635,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="spreadEffects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
         /// <param name="duration">Duration of the AoE.</param>
-        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, int radius, int duration)
+        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, uint radius, int duration)
         {
             var spreadEffectsOnPlayer = spreadEffects.Where(x => x.Dst == p.AgentItem).ToList();
             foreach (EffectEvent spreadEffect in spreadEffectsOnPlayer)
@@ -1668,7 +1668,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="redPuddleEffects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
         /// <param name="duration">Duration of the AoE.</param>
-        private void AddPlacedVoidPoolDecoration(IReadOnlyList<EffectEvent> redPuddleEffects, int radius, int duration)
+        private void AddPlacedVoidPoolDecoration(IReadOnlyList<EffectEvent> redPuddleEffects, uint radius, int duration)
         {
             foreach (EffectEvent effect in redPuddleEffects)
             {

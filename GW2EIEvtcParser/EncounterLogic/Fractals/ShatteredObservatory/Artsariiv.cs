@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                    new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
                                    new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
                                 };
-                                    int[] radius = { 400, 290, 180, 70 };
+                                    uint[] radius = { 400, 290, 180, 70 };
                                     long nextInvul = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == target.AgentItem && x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
                                     for (int i = 0; i < 4; i++)
                                     {

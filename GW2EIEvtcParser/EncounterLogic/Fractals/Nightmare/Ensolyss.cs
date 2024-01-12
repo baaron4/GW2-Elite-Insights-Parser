@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int duration = 1550;
                         int openingAngle = 144;
-                        int radius = 600;
+                        uint radius = 600;
                         int start = (int)c.Time;
                         int attackEnd = (int)c.Time + duration;
                         Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
@@ -395,7 +395,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new RectangleDecoration(1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), Colors.Orange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, (startLine, lineEffectEnd), Colors.Orange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 
@@ -409,7 +409,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int lineEffectEnd = (int)c.Time + 1000;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new RectangleDecoration(1700, (int)target.HitboxWidth, (startLine, lineEffectEnd), Colors.Orange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, (startLine, lineEffectEnd), Colors.Orange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
 

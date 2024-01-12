@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
-                        int magmaRadius = 850;
+                        uint magmaRadius = 850;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D pylonPosition = target.GetCurrentPosition(log, end);
@@ -219,10 +219,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
                     foreach (AbstractCastEvent c in forceOfHavoc)
                     {
-                        int roadLength = 2400;
-                        int roadWidth = 360;
+                        uint roadLength = 2400;
+                        uint roadWidth = 360;
                         int hitboxOffset = 200;
-                        int subdivisions = 100;
+                        uint subdivisions = 100;
                         int rollOutTime = 3250;
                         start = (int)c.Time;
                         int preCastTime = 1500;
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && position != null)
                         {
                             replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
-                            for (int i = 0; i < subdivisions; i++)
+                            for (uint i = 0; i < subdivisions; i++)
                             {
                                 var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
                                 replay.Decorations.Add(new RectangleDecoration(roadLength / subdivisions, roadWidth, (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
                     foreach (AbstractCastEvent c in forceOfRetal)
                     {
-                        int radius = 650;
+                        uint radius = 650;
                         double radiusIncrement = 433.3;
                         int preCastTime = 1800;
                         int timeBetweenCascades = 200;
@@ -252,17 +252,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (position != null)
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
-                            for (int i = 0; i < cascades; i++)
+                            for (uint i = 0; i < cascades; i++)
                             {
-                                replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
-                                replay.Decorations.Add(new DoughnutDecoration(radius + (int)(radiusIncrement * i), radius + (int)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
+                                replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                                replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
                             }
                         }
                     }
                     var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
                     foreach (AbstractCastEvent c in etherStrikes)
                     {
-                        int coneRadius = 2600;
+                        uint coneRadius = 2600;
                         int coneAngle = 60;
                         start = (int)c.Time;
                         end = start + 250;
@@ -287,8 +287,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             ratio = acceleration * 0.6 + 1;
                         }
-                        int chaosLength = 2600;
-                        int chaosWidth = 100;
+                        uint chaosLength = 2600;
+                        uint chaosWidth = 100;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         int aimTime = (int)(c.ExpectedDuration * ratio);
@@ -306,17 +306,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
                     foreach (AbstractCastEvent c in expoReperc)
                     {
-                        int radius = 650;
+                        uint radius = 650;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
-                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new PositionConnector(position)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
 
                             foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PeerlessQadimAuraPylon)))
                             {
-                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), "rgba(255, 220, 0, 0.2)", new AgentConnector(pylon)), end);
+                                replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
                             }
                         }
                     }
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     // Spawn animation
                     Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
-                    int radiusAnomaly = (int)target.HitboxWidth / 2;
+                    uint radiusAnomaly = target.HitboxWidth / 2;
                     if (firstEntropicPosition != null)
                     {
                         replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(firstEntropicPosition)), start);
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Magma drop
             var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            int magmaRadius = 420;
+            uint magmaRadius = 420;
             int magmaOffset = 4000;
             int magmaDuration = 600000;
             string[] magmaColors = { "255, 215, 0", "255, 130, 50" };
@@ -450,7 +450,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in rainOfChaos)
                 {
                     // By skill definition, baseRadius = 210 with a scaleMultiplier of 2.0
-                    int radius = 210;
+                    uint radius = 210;
                     // Check if and count how many effects are present before the current one.
                     // Each effect spawns every 3200ms - using 7000ms as a treshold to find a maximum of two.
                     int previousAoeCounter = rainOfChaos.Count(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 7000);
@@ -544,7 +544,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in brandstormLightning)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var circle = new CircleDecoration(220, lifespan, "rgba(200, 120, 0, 0.1)", new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(220, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }

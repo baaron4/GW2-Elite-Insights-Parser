@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascading = 1500;
                         int duration = 15000 + cascading;
                         end = start + duration;
-                        int radius = 900;
+                        uint radius = 900;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         Point3D position = target.GetCurrentPosition(log, start);
                         if (facing != null && position != null)
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
-                        var circle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                        var circle = new CircleDecoration(240, (gstart, gend), Colors.Green, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, gend);
                     }
                     break;

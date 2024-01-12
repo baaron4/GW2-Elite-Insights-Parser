@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData
     internal class IconOverheadDecoration : IconDecoration
     {
 
-        public IconOverheadDecoration(string icon, int pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(icon, pixelSize, Math.Min((int)connector.Agent.HitboxWidth / 2, 250), opacity, lifespan, connector)
+        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity, lifespan, connector)
         {
         }
 
-        public IconOverheadDecoration(string icon, int pixelSize, float opacity, Segment lifespan, AgentConnector connector) : base(icon, pixelSize, Math.Min((int)connector.Agent.HitboxWidth / 2, 250), opacity, lifespan, connector)
+        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, Segment lifespan, AgentConnector connector) : base(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity, lifespan, connector)
         {
         }
 

@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
                 //             if (anomalyPos != null)
                 //             {
-                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(anomalyPos)));
+                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(anomalyPos)));
                 //             }
                 //         }
                 //     }

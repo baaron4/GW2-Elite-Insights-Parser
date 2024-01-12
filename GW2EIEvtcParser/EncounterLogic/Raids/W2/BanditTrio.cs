@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var overheadSmash = cls.Where(x => x.SkillId == OverheadSmashBerg).ToList();
                     foreach (AbstractCastEvent c in overheadSmash)
                     {
-                        int radius = 550;
+                        uint radius = 550;
                         int angle = 80;
                         (long, long) lifespan = (c.Time, c.Time + c.ActualDuration);
                         Point3D facing = target.GetCurrentRotation(log, lifespan.Item1 + 600, lifespan.Item2);
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long firstConeEnd = firstConeStart + 400;
                         long secondConeEnd = secondConeStart + 400;
                         long thirdConeEnd = thirdConeStart + 400;
-                        int radius = 1500;
+                        uint radius = 1500;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {

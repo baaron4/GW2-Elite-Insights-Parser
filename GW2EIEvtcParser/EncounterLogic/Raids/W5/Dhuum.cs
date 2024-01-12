@@ -370,7 +370,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
                             long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
                             long zoneEnd = zoneActive + 120000; // End of the AoE
-                            int radius = 450;
+                            uint radius = 450;
 
                             if (majorSplit != null)
                             {
@@ -391,7 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                                 // Warning
                                 var circleOrange = new CircleDecoration(radius, lifespanWarning, Colors.Orange, 0.2, positionConnector);
-                                var circleRed = new CircleDecoration(radius, lifespanWarning, "rgba(255, 0, 0, 0.4)", positionConnector);
+                                var circleRed = new CircleDecoration(radius, lifespanWarning, Colors.Red, 0.4, positionConnector);
                                 replay.Decorations.Add(circleOrange);
                                 replay.Decorations.Add(circleRed.UsingGrowingEnd(lifespanWarning.Item2));
 
@@ -401,7 +401,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 replay.Decorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
 
                                 // Deadly
-                                var redCircle = new CircleDecoration(radius, lifespanDeadly, "rgba(255, 0, 0, 0.4)", positionConnector);
+                                var redCircle = new CircleDecoration(radius, lifespanDeadly, Colors.Red, 0.4, positionConnector);
                                 replay.Decorations.Add(redCircle);
                             }
                         }
@@ -475,13 +475,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // AoE Indicator
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out IReadOnlyList<EffectEvent> scytheSwingIndicators))
                         {
-                            int radius = 45;
-                            int radiusIncrease = 5;
+                            uint radius = 45;
+                            uint radiusIncrease = 5;
                             foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // Computing lifespan through secondary effect and position.
                                 (long start, long end) lifespan = indicator.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumScytheSwingDamage);
-                                var circle = new CircleDecoration(radius, lifespan, "rgba(255, 120, 0, 0.2)", new PositionConnector(indicator.Position));
+                                var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(indicator.Position));
                                 replay.Decorations.Add(circle);
                                 radius += radiusIncrease;
                             }
@@ -490,8 +490,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Brief damage indicator
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingDamage, out IReadOnlyList<EffectEvent> scytheSwingDamage))
                         {
-                            int radius = 45;
-                            int radiusIncrease = 5;
+                            uint radius = 45;
+                            uint radiusIncrease = 5;
                             foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // The effect has 0 duration, setting it to 250
@@ -512,7 +512,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.DhuumDesmina:
                     break;
                 case (int)TrashID.Echo:
-                    replay.Decorations.Add(new CircleDecoration(120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)TrashID.Enforcer:
                     var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe).ToList();
@@ -532,7 +532,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.Messenger:
-                    replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                     // Fixation tether to player
                     List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                     replay.AddTether(fixations, Colors.Red, 0.4);
@@ -671,7 +671,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.DhuumDeathMarkSecondIndicator);
                     var connector = new PositionConnector(effect.Position);
                     var circleOrange = new CircleDecoration(450, lifespan, Colors.Orange, 0.2, connector);
-                    var circleRed = new CircleDecoration(450, lifespan, "rgba(255, 0, 0, 0.4)", connector);
+                    var circleRed = new CircleDecoration(450, lifespan, Colors.Red, 0.4, connector);
                     EnvironmentDecorations.Add(circleOrange);
                     EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.Item2));
                 }
@@ -683,7 +683,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in deathMarkDeathZones)
                 {
                     int warningDuration = 6000;
-                    int radius = 450;
+                    uint radius = 450;
                     (long, long) lifespan = effect.ComputeLifespan(log, 120000);
                     (long, long) lifespanActivation = (lifespan.Item1, lifespan.Item1 + warningDuration);
                     (long, long) lifespanDeadly = (lifespan.Item1 + warningDuration, lifespan.Item2);
@@ -695,7 +695,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(greenCircle);
                     EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
                     // Damage zone
-                    var redCircle = new CircleDecoration(radius, lifespanDeadly, "rgba(255, 0, 0, 0.4)", connector);
+                    var redCircle = new CircleDecoration(radius, lifespanDeadly, Colors.Red, 0.4, connector);
                     EnvironmentDecorations.Add(redCircle);
                 }
             }
@@ -780,7 +780,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
             long soulSplitDeathTime = hastenedDemise.Start + 10000;
 
-            int radius = (int)(soul.HitboxWidth / 2);
+            uint radius = (soul.HitboxWidth / 2);
             var positionConnector = new PositionConnector(soulPosition);
             var playerConnector = new AgentConnector(p);
 

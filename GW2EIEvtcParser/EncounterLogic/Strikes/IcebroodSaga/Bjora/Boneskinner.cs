@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 3330;
                         int hitTime = 1179;
-                        int radius = 1500;
+                        uint radius = 1500;
                         int endHitTime = (int)c.Time + hitTime;
                         int endCastTime = (int)c.Time + castTime;
 
@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in crushingCruelty)
                     {
                         int hitTime = 2833;
-                        int radius = 1500;
+                        uint radius = 1500;
                         long endTime = c.Time + hitTime;
 
                         // Position of the jump back
@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in douseInDarkness)
                     {
                         int jumpTime = 2500;
-                        int radius = 1500;
+                        uint radius = 1500;
                         long endJump = c.Time + jumpTime;
                         int timings = 300;
 
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, int width, int height)
+        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, uint width, uint height)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
             {

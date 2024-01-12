@@ -2,8 +2,8 @@
 {
     public class CircleDecorationCombatReplayDescription : FormDecorationCombatReplayDescription
     {
-        public int Radius { get; }
-        public int MinRadius { get; }
+        public uint Radius { get; }
+        public uint MinRadius { get; }
 
         internal CircleDecorationCombatReplayDescription(ParsedEvtcLog log, CircleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {

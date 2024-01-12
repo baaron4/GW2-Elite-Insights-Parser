@@ -5,8 +5,8 @@ namespace GW2EIEvtcParser.EIData
     public abstract class GenericIconDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
     {
         public string Image { get; }
-        public int PixelSize { get; }
-        public int WorldSize { get; }
+        public uint PixelSize { get; }
+        public uint WorldSize { get; }
 
         internal GenericIconDecorationCombatReplayDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {

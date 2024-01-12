@@ -594,7 +594,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Oil:
                     int delayOil = 3000;
                     replay.Decorations.Add(new CircleDecoration(200, (start, start + delayOil), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(start + delayOil));
-                    replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
                     AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));

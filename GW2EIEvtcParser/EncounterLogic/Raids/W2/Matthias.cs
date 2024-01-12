@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 750;
-                        int width = 4000; int height = 130;
+                        uint width = 4000; uint height = 130;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {

@@ -8,13 +8,13 @@ namespace GW2EIEvtcParser.EIData
     {
         public IReadOnlyList<ParametricPoint1D> Opacities { get; }
         public IReadOnlyList<ParametricPoint1D> Heights { get; }
-        public BackgroundIconDecoration(string icon, int pixelSize, int worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(icon, pixelSize, worldSize, lifespan, connector)
+        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(icon, pixelSize, worldSize, lifespan, connector)
         {
             Opacities = opacities;
             Heights = heights;
         }
 
-        public BackgroundIconDecoration(string icon, int pixelSize, int worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)
+        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)
         {
         }
 

@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in domes)
                 {
-                    EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
+                    EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time - 500;
                     int end = (int)effect.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))

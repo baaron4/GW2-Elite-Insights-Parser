@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent displacement in displacementEffects)
                 {
-                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position));
+                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
                 }
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1400;
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
-                        int width = 1400; int height = 80;
+                        uint width = 1400; uint height = 80;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
@@ -139,10 +139,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCastTime = 1200;
                         int duration = 600;
-                        int firstRadius = 400;
-                        int secondRadius = 700;
-                        int thirdRadius = 1000;
-                        int fourthRadius = 1300;
+                        uint firstRadius = 400;
+                        uint secondRadius = 700;
+                        uint thirdRadius = 1000;
+                        uint fourthRadius = 1300;
                         replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), Colors.Purple, 0.3, new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
@@ -159,8 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 dashGreenEnd = endEvent.Time + 3300; // from skill def
                             }
-                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
                         }
                     }
                     //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);

@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
-                    replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(255, 155, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -392,7 +392,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
                     var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(0, 50, 200, 0.4)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
                 }
             }
         }

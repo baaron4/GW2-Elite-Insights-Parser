@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="icon">URL of the icon</param>
         /// <param name="pixelSize">Size in pixel of the icon</param>
         /// <param name="opacity">Opacity of the icon</param>
-        internal void AddOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        internal void AddOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
         {
             Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
         }
@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="rotation">URL of the icon</param>
         /// <param name="pixelSize">Size in pixel of the icon</param>
         /// <param name="opacity">Opacity of the icon</param>
-        internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
         {
             Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
         }
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="icon">URL of the icon</param>
         /// <param name="pixelSize">Size in pixel of the icon</param>
         /// <param name="opacity">Opacity of the icon</param>
-        internal void AddOverheadIcons(IEnumerable<Segment> segments, AbstractSingleActor actor, string icon, int pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        internal void AddOverheadIcons(IEnumerable<Segment> segments, AbstractSingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
         {
             foreach (Segment segment in segments)
             {
@@ -556,7 +556,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="color">Color of the decoration.</param>
         /// <param name="opacity">Opacity of the color.</param>
         /// <param name="radius">Radius of the circle.</param>
-        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, int radius = 50)
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
         {
             AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
         }
@@ -569,7 +569,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="lifespan">Duration of the animation.</param>
         /// <param name="color">Color of the decoration.</param>
         /// <param name="radius">Radius of the circle.</param>
-        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, int radius = 50)
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
         {
             var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
             var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);

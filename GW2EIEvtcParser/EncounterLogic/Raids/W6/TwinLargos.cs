@@ -310,8 +310,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        uint radius = 800;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
@@ -327,8 +327,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        uint radius = 800;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 960;
                         int duration = 3000;
-                        int radius = 1200;
+                        uint radius = 1200;
                         replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                     }
                     var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
@@ -345,8 +345,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1000;
                         int duration = 500;
-                        int width = 500;
-                        int height = 250;
+                        uint width = 500;
+                        uint height = 250;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
@@ -370,8 +370,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int timer = 5000;
                 int duration = 83000;
-                int debuffRadius = 100;
-                int radius = 500;
+                uint debuffRadius = 100;
+                uint radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
                 replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
@@ -384,7 +384,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Bubble (Aquatic Detainment)
             var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            int bubbleRadius = 100;
+            uint bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {
                 replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, Colors.LightBlue, 0.3, new AgentConnector(p)));

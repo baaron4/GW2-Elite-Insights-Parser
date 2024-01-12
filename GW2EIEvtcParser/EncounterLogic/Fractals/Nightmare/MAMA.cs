@@ -186,12 +186,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        int impactRadius = (int)target.HitboxWidth / 2 + 100;
+                        uint impactRadius = target.HitboxWidth / 2 + 100;
                         replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), Colors.Orange, 0.2, new PositionConnector(targetPosition)), hitTime);
                         // 3 rounds of decorations for the 3 waves
                         if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
                         {
-                            int shockwaveRadius = 1300;
+                            uint shockwaveRadius = 1300;
                             int duration = 2680;
                             for (int i = 0; i < 3; i++)
                             {
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = (int)effect.Duration;
                             int start = (int)effect.Time;
                             int end = start + duration;
-                            int radius = 140;
+                            uint radius = 140;
                             var connector = new PositionConnector(effect.Position);
                             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingFilled(false), true, end);
                         }
