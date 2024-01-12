@@ -556,7 +556,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="color">Color of the decoration.</param>
         /// <param name="opacity">Opacity of the color.</param>
         /// <param name="radius">Radius of the circle.</param>
-        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, int radius = 50)
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
         {
             AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
         }
@@ -569,7 +569,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="lifespan">Duration of the animation.</param>
         /// <param name="color">Color of the decoration.</param>
         /// <param name="radius">Radius of the circle.</param>
-        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, int radius = 50)
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
         {
             var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
             var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
