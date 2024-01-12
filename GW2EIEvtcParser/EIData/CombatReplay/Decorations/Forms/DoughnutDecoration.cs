@@ -9,10 +9,6 @@ namespace GW2EIEvtcParser.EIData
 
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(lifespan, color, connector)
         {
-            if (innerRadius == 0 )
-            {
-                throw new InvalidOperationException("InnerRadius must be strictly positive, use CircleDecoration instead");
-            }
             if (outerRadius <= innerRadius)
             {
                 throw new InvalidOperationException("OuterRadius must be > then InnerRadius");
