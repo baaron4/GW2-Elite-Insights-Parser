@@ -409,7 +409,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fixated (Bloom 1)", FixatedBloom1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Bloom 4)", FixatedBloom4, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Cosmic Meteor", CosmicMeteor, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Diaphanous Shielding", DiaphanousShielding, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.RedirectAnomaly),
+            new Buff("Diaphanous Shielding", DiaphanousShielding, Source.FightSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Electrocuted", Electrocuted, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AirAttunement),
             new Buff("Hypernova Launch", HypernovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.CelestialDash),
             new Buff("Reflective Shield", ReflectiveShieldBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ReflectiveShielding),

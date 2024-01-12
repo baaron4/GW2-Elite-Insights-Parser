@@ -581,6 +581,11 @@ namespace GW2EIEvtcParser
             return ParserIcons.BaseResProfIcons.TryGetValue(spec, out string icon) ? icon : ParserIcons.UnknownProfessionIcon;
         }
 
+        internal static string GetGadgetIcon()
+        {
+            return "https://wiki.guildwars2.com/images/1/17/Gadgeteer.png";
+        }
+
         internal static string GetNPCIcon(int id)
         {
             if (id == 0)

@@ -3306,8 +3306,9 @@
         public const long EmpathicManipulationGuilt = 61602;
         public const long EmpathicManipulation2 = 61604;
         public const long EmpathicManipulationSorrow = 61606;
-        public const long Charge2 = 61713;
-        public const long Charge3 = 61895;
+        public const long VoidObliteratorChargeWindup = 61713;
+        public const long VoidObliteratorFirebomb = 61838;
+        public const long VoidObliteratorCharge = 61895;
         public const long VirtuosoBlade4 = 62505;
         public const long LethalTempo = 62509;
         public const long AdvancingStrikeSkill = 62523;
@@ -3500,7 +3501,7 @@
         public const long AerialDefense = 63605;
         public const long Stormfall = 63607;
         public const long EnergyTransfer = 63621;
-        public const long NightmareEpoch2 = 63691;
+        public const long NightmareEpochDamage = 63691;
         public const long Slash2 = 63701;
         public const long RainOfBlades = 63739;
         public const long VoidPoolKralkatorrik = 63746;
@@ -3565,6 +3566,7 @@
         public const long BowlOfFishStew = 64829;
         public const long LethalInspiration = 64834;
         public const long AchievementEligibilityTheFloorIsVoid = 64848;
+        public const long VoidObliteratorWyvernBreathSkill = 64849;
         public const long VoidPurgeOW = 64851;
         public const long ImmuneToDamageAndConditions = 64843;
         public const long VoidEnergy = 64867;
@@ -3574,7 +3576,7 @@
         public const long ExplosiveUppercutNM = 64920;
         public const long DragonsEndContributor4 = 64924;
         public const long RedfishSushi = 64931;
-        public const long SlamZhaitan = 64932;
+        public const long ZhaitanTailSlam = 64932;
         public const long ExposedPlayer = 64936;
         public const long DragonSlashBurst2 = 64940;
         public const long DeadlyAim = 64947;
@@ -3600,7 +3602,7 @@
         public const long ThrowIce = 65119;
         public const long PutridDeluge = 65132;
         public const long ElectricBlast = 65157;
-        public const long GravityCrush = 65180;
+        public const long GravityCrushDamage = 65180;
         public const long TailSlam = 65192;
         public const long SwordWave = 65182;
         public const long BowlOfKimchiTofuStew = 65197;
@@ -3626,7 +3628,7 @@
         public const long ExplosiveLeap = 65428;
         public const long EnhancedDestructiveAuraSkill2 = 65432;
         public const long UnrelentingAssault = 65461;
-        public const long WyvernBreath = 65462;
+        public const long VoidObliteratorWyvernBreathDamage = 65462;
         public const long EnhancementDragonsEnd = 65475;
         public const long MagicDischarge = 65488;
         public const long FrozenFury = 65498;
@@ -3658,7 +3660,7 @@
         public const long PlateOfKimchiPancakes = 65769;
         public const long TargetOrder1 = 65869;
         public const long SharedDestructionMaiTrin = 65900;
-        public const long Claw2 = 65903;
+        public const long VoidObliteratorClaw = 65903;
         public const long BlockOfTofu = 65937;
         public const long BoomingCommand2 = 65949;
         public const long FlameBreath = 65959;
@@ -3671,7 +3673,7 @@
         public const long EnhancedDestructiveAuraBuff = 66019;
         public const long BoomingCommand1 = 66021;
         public const long HarvestTempleTargetedExpulsionNM = 66025;
-        public const long NightmareEpoch1 = 66059;
+        public const long NightmareEpochSkill = 66059;
         public const long AnkkaLichHallucinationFixation = 66075;
         public const long NightmareFusilladeSide = 66089;
         public const long DragonSlashRushNM1 = 66090;
@@ -3735,6 +3737,7 @@
         public const long ToxicBullet3 = 67163;
         public const long SlamTurtle = 67179;
         public const long PlateOfImperialPalaceSpecial = 67265;
+        public const long VoidTimeCasterGravityCrushSkill = 67289;
         public const long FocusedDestruction2 = 67295;
         public const long VolatileExpulsion1 = 67327;
         public const long DragonsEndContributor6 = 67352;

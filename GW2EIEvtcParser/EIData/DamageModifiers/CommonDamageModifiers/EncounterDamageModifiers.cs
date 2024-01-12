@@ -19,6 +19,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnFoeDamageModifier(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Unstable, DamageModifierMode.PvE)
                 .UsingGainAdjuster(VulnerabilityAdjuster),
             new BuffOnFoeDamageModifier(FracturedEnemy, "Fractured - Enemy", "50% per stack", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(DiaphanousShielding, "Diaphanous Shielding", "-10% per stack, stacks additively with Vulnerability", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.DiaphanousShielding, DamageModifierMode.PvE)
+                .UsingGainAdjuster(VulnerabilityAdjuster),
             new BuffOnFoeDamageModifier(CacophonousMind, "Cacophonous Mind", "-5% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.TwistedEarth, DamageModifierMode.PvE)
                 .UsingGainAdjuster(VulnerabilityAdjuster)
                 .UsingChecker((ahde, log) =>
@@ -148,6 +150,7 @@ namespace GW2EIEvtcParser.EIData
                     return !VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
                 }),
             //
+            new BuffOnFoeDamageModifier(DiaphanousShielding, "Diaphanous Shielding", "25% per stack", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.DiaphanousShielding, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(BloodFueledMatthias, "Blood Fueled Abo", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(EmpoweredMO, "Empowered (MO)", "25% per stack", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Empowered, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(StrengthenedBondGuldhem, "Strengthened_Bond:_Guldhem", "10% per stack", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.StrengthenedBondGuldhem, DamageModifierMode.PvE),

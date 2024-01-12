@@ -546,6 +546,36 @@ namespace GW2EIEvtcParser.EIData
         {
              AddTetherByThirdPartySrcBuff(log, player, buffId, buffSrcAgentId, toTetherAgentId, color.WithAlpha(opacity).ToString(true), firstAwareThreshold);
         }
+
+        /// <summary>
+        /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
+        /// </summary>
+        /// <param name="startingPoint">Starting position.</param>
+        /// <param name="endingPoint">Ending position.</param>
+        /// <param name="lifespan">Duration of the animation.</param>
+        /// <param name="color">Color of the decoration.</param>
+        /// <param name="opacity">Opacity of the color.</param>
+        /// <param name="radius">Radius of the circle.</param>
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, int radius = 50)
+        {
+            AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
+        }
+
+        /// <summary>
+        /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
+        /// </summary>
+        /// <param name="startingPoint">Starting position.</param>
+        /// <param name="endingPoint">Ending position.</param>
+        /// <param name="lifespan">Duration of the animation.</param>
+        /// <param name="color">Color of the decoration.</param>
+        /// <param name="radius">Radius of the circle.</param>
+        internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, int radius = 50)
+        {
+            var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
+            var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
+            var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
+            Decorations.Add(shootingCircle);
+        }
     }
 }
 
