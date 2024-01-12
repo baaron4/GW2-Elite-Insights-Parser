@@ -4,13 +4,15 @@
     {
         public bool Fill { get; }
         public int GrowingEnd { get; }
+        public bool GrowingReverse { get; }
         public string Color { get; }
 
         internal FormDecorationCombatReplayDescription(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Fill = decoration.Filled;
             Color = decoration.Color;
-            GrowingEnd = decoration.GrowingReverse ? -decoration.GrowingEnd : decoration.GrowingEnd;
+            GrowingEnd = decoration.GrowingEnd;
+            GrowingReverse = decoration.GrowingReverse;
         }
 
     }

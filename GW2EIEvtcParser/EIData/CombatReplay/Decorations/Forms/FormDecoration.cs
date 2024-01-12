@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         protected FormDecoration((long , long) lifespan, string color, GeographicalConnector connector) : base(lifespan, connector)
         {
             Color = color;
+            GrowingEnd = (int)lifespan.Item1;
         }
 
         protected FormDecoration((long, long) lifespan, Color color, double opacity, GeographicalConnector connector) : this(lifespan, color.WithAlpha(opacity).ToString(true), connector)
@@ -27,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
 
         public virtual FormDecoration UsingGrowingEnd(long growingEnd, bool reverse = false)
         {
-            GrowingEnd = growingEnd < Lifespan.start ? Lifespan.start : (int)growingEnd;
+            GrowingEnd = growingEnd <= Lifespan.start ? Lifespan.start : (int)growingEnd;
             GrowingReverse = reverse;
             return this;
         }

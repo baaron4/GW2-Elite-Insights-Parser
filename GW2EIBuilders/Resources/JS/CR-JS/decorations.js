@@ -339,20 +339,21 @@ class FacingMechanicDrawable extends MechanicDrawable {
 }
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo) {
+    constructor(start, end, fill, growingData, color, connectedTo, rotationConnectedTo) {
         super(start, end, connectedTo, rotationConnectedTo);
         this.fill = fill;
-        this.growingEnd = growingEnd;
+        this.growingEnd = growingData.end;
+        this.growingReverse = growingData.reverse;
         this.color = color;
     }
 
     getPercent() {
-        if (this.growingEnd === 0) {
+        if (this.growingEnd <= this.start) {
             return 1.0;
         }
         var time = animator.reactiveDataStatus.time;
         var value = Math.min((time - this.start) / (Math.abs(this.growingEnd) - this.start), 1.0);
-        if (this.growingEnd < 0) {
+        if (this.growingReverse) {
             value = 1 - value;
         }
         return value;
@@ -360,8 +361,8 @@ class FormMechanicDrawable extends MechanicDrawable {
 }
 
 class CircleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, radius, connectedTo, rotationConnectedTo, minRadius) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, radius, connectedTo, rotationConnectedTo, minRadius) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.radius = radius;
         this.minRadius = minRadius;
     }
@@ -393,8 +394,8 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
@@ -413,7 +414,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         ctx.save();
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
-        if (this.growingEnd < 0) {    
+        if (this.growingReverse) {    
             ctx.arc(0, 0, this.outerRadius , 2 * Math.PI, 0, false);
             ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
         }  else {
@@ -434,8 +435,8 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, width, height, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, width, height, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.height = height;
         this.width = width;
     }
@@ -467,8 +468,8 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 }
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.openingAngleRadians = ToRadians(openingAngle);
         this.halfOpeningAngle = 0.5 * openingAngle;
         this.radius = radius;
@@ -504,8 +505,8 @@ class PieMechanicDrawable extends FormMechanicDrawable {
 }
 
 class LineMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, growingEnd, color, connectedFrom, connectedTo) {
-        super(start, end, false, growingEnd, color, connectedTo, null);
+    constructor(start, end, growingData, color, connectedFrom, connectedTo) {
+        super(start, end, false, growingData, color, connectedTo, null);
         this.connectedFrom = connectedFrom;
         this.targetPositionFetcher = null;
         if (connectedFrom.interpolationMethod >= 0) {
@@ -565,7 +566,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         const percent = this.getPercent();
         var ctx = animator.mainContext;
         ctx.save();
-        if (this.growingEnd < 0) {
+        if (this.growingReverse) {
             this.moveContext(ctx, target, 0);
             ctx.beginPath();
             ctx.moveTo(0, 0);
