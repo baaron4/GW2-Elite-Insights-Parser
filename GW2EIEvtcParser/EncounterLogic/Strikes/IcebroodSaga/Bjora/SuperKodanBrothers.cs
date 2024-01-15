@@ -105,6 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases[0].AddTarget(voice);
             phases[0].AddTarget(claw);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)));
             long fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
