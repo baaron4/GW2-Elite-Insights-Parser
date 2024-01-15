@@ -1105,6 +1105,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.VoidTimeCaster, TrashVoidTimeCaster },
             { ArcDPSEnums.TrashID.VoidTimeCaster2, TrashVoidTimeCaster },
             { ArcDPSEnums.TrashID.GravityBall, TrashGravityBall },
+            { ArcDPSEnums.TrashID.JormagMovingFrostBeam, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.VoidThornheart1, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidThornheart2, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidBrandfang1, TrashVoidBrandfang },

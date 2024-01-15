@@ -320,6 +320,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate,
                 ArcDPSEnums.TrashID.DragonEnergyOrb,
                 ArcDPSEnums.TrashID.GravityBall,
+                ArcDPSEnums.TrashID.JormagMovingFrostBeam,
             };
         }
 
@@ -491,6 +492,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                     ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
                     ball.SetMaster(timecaster);
                     needRefreshAgentPool = true;
+                }
+            }
+            {
+                AgentItem jormagAgent = agentData.GetNPCsByID(ArcDPSEnums.TargetID.TheDragonVoidJormag).FirstOrDefault();
+                if (jormagAgent != null)
+                {
+                    var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+                        .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
+                        .Distinct()
+                        .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value).Length() > 0) > 2)
+                        .ToList();
+                    foreach (AgentItem frostBeam in frostBeams)
+                    {
+                        frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam);
+                        frostBeam.OverrideType(AgentItem.AgentType.NPC);
+                        frostBeam.SetMaster(jormagAgent);
+                        needRefreshAgentPool = true;
+                    }
                 }
             }
             if (needRefreshAgentPool)
@@ -814,6 +833,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // ice field
                             replay.AddDecorationWithGrowing(new CircleDecoration(1200, (start, fieldEnd), "rgba(69, 182, 254, 0.1)", new PositionConnector(effect.Position)), start + spreadDuration);
                         }
+                    }
+                    break;
+                case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeam:
+                    VelocityEvent frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                    // Beams are immobile at spawn for around 3 seconds
+                    if (frostBeamMoveStartVelocity != null)
+                    {
+                        replay.Trim(frostBeamMoveStartVelocity.Time, target.LastAware);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:

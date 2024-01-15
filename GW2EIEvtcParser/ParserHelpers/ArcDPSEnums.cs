@@ -532,6 +532,7 @@ namespace GW2EIEvtcParser
         private const int YourSoul = -48;
         private const int QadimPlatform = -49;
         private const int GravityBall = -50;
+        private const int JormagMovingFrostBeam = -51;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -842,6 +843,30 @@ namespace GW2EIEvtcParser
             BloodLegionBlademaster = 22993,
             CharrTank = 22953,
             SonsOfSvanirHighShaman = 22283,
+            // Harvest Temple - Void Amalgamate
+            PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
+            VoidAmalgamate = 24375,
+            KillableVoidAmalgamate = 23956,
+            DragonBodyVoidAmalgamate = ArcDPSEnums.DragonBodyVoidAmalgamate,
+            VoidTangler = 25138,
+            VoidColdsteel = 23945,
+            VoidAbomination = 23936,
+            VoidSaltsprayDragon = 23846,
+            VoidObliterator = 23995,
+            VoidRotswarmer = 24590,
+            VoidGiant = 24450,
+            VoidSkullpiercer = 25177,
+            VoidTimeCaster = 25025,
+            VoidBrandbomber = 24783,
+            VoidBurster = 24464,
+            VoidWarforged1 = 24129,
+            VoidWarforged2 = 24855,
+            VoidStormseer = 24677,
+            VoidMelter = 24223,
+            VoidGoliath = 24761,
+            DragonEnergyOrb = DragonOrb,
+            GravityBall = ArcDPSEnums.GravityBall,
+            JormagMovingFrostBeam = ArcDPSEnums.JormagMovingFrostBeam,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,
             ScarletPhantomNormalBeam = 24404,
@@ -878,29 +903,6 @@ namespace GW2EIEvtcParser
             TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
-            // Harvest Temple - Void Amalgamate
-            PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
-            VoidAmalgamate = 24375,
-            KillableVoidAmalgamate = 23956,
-            DragonBodyVoidAmalgamate = ArcDPSEnums.DragonBodyVoidAmalgamate,
-            VoidTangler = 25138,
-            VoidColdsteel = 23945,
-            VoidAbomination = 23936,
-            VoidSaltsprayDragon = 23846,
-            VoidObliterator = 23995,
-            VoidRotswarmer = 24590,
-            VoidGiant = 24450,
-            VoidSkullpiercer = 25177,
-            VoidTimeCaster = 25025,
-            VoidBrandbomber = 24783,
-            VoidBurster = 24464,
-            VoidWarforged1 = 24129,
-            VoidWarforged2 = 24855,
-            VoidStormseer = 24677,
-            VoidMelter = 24223,
-            VoidGoliath = 24761,
-            DragonEnergyOrb = DragonOrb,
-            GravityBall = ArcDPSEnums.GravityBall,
             // Cosmic Observatory
             TheTormented = 26016,
             VeteranTheTormented = 25829,
