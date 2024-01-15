@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 RegroupTargetsByID(id, agentData, combatItems, extensions);
             }
             //
-            List<int> targetIDs = GetTargetsIDs();
+            var targetIDs = new HashSet<int>(GetTargetsIDs());
             foreach (int id in targetIDs)
             {
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return int.MaxValue;
             }).ToList();
             //
-            List<ArcDPSEnums.TrashID> trashIDs = GetTrashMobsIDs();
+            var trashIDs = new HashSet<TrashID>(GetTrashMobsIDs());
             if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
@@ -223,7 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 #endif
             _trashMobs = _trashMobs.OrderBy(x => x.FirstAware).ToList();
             //
-            List<int> friendlyNPCIDs = GetFriendlyNPCIDs();
+            var friendlyNPCIDs = new HashSet<int>(GetFriendlyNPCIDs());
             foreach (int id in friendlyNPCIDs)
             {
                 IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
