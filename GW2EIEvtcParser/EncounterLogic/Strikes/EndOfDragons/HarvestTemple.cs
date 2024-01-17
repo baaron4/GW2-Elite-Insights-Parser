@@ -851,13 +851,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusSmallJaw, out IReadOnlyList<EffectEvent> smallJawEffects))
                     {
                         // The effect is slightly shifted on X
-                        var jawPosition = new Point3D(610, -21400.3f, -15417.3f);
                         foreach (EffectEvent smallJawEffect in smallJawEffects)
                         {
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.AddDecorationWithGrowing(new CircleDecoration(560, (start, end), Colors.Orange, 0.2, new PositionConnector(jawPosition)), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(580, (start, end), Colors.Orange, 0.2, new PositionConnector(new Point3D(612.426f, smallJawEffect.Position.Y, smallJawEffect.Position.Z))), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
