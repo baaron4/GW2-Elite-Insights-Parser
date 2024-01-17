@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new CombatReplayMap(CombatReplayHarvestTemple,
                             (1024, 1024),
-                            (-812, -21820, 2037, -18971)/*,
+                            (-844, -21845, 2055, -18946)/*,
                             (-15360, -36864, 15360, 39936),
                             (3456, 11012, 4736, 14212)*/);
         }
@@ -856,7 +856,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 3500;
                             int start = (int)smallJawEffect.Time - duration;
                             int end = (int)smallJawEffect.Time;
-                            replay.AddDecorationWithGrowing(new CircleDecoration(580, (start, end), Colors.Orange, 0.2, new PositionConnector(new Point3D(612.426f, smallJawEffect.Position.Y, smallJawEffect.Position.Z))), end);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(580, (start, end), Colors.Orange, 0.2, new PositionConnector(new Point3D(604.687866f, smallJawEffect.Position.Y, smallJawEffect.Position.Z))), end);
                         }
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusBigJaw, out IReadOnlyList<EffectEvent> bigJawEffects))
