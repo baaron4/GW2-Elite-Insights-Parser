@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -13,14 +14,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class StatueOfIce : HallOfChains
     {
-        // TODO - add CR icons and some mechanics
         public StatueOfIce(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstHitMechanic(KingsWrath, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
-            new PlayerDstHitMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.LightBlue), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
-            new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Frozen Wind (Stood in Green)", "Green Stack",0),
+                new PlayerDstHitMechanic(KingsWrathConeAoE, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
+                new PlayerDstHitMechanic(KingsWrathConeShards, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Cone Shards", "Hit by King's Wrath (Frontal Cone Shards)", "King's Wrath Cone Shards Hit", 0),
+                new PlayerDstHitMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.AsteriskOpen, Colors.LightBlue), "Cracks", "Stood on Numbing Breach (Ice Cracks in the Ground)", "Cracks", 0),
+                new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Frozen Wind (Stood in Green)", "Green Stack", 0),
+                new PlayerDstBuffApplyMechanic(Glaciate, "Glaciate", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Glaciate", "Glaciated (Frozen by 4th Stack of Frozen Wind)", "Glaciate", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, "Ice Breaker", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "Ice Breaker", "Hailstorm Explosion (Missed Green)", "Ice Breaker (Green Missed)", 0),
             }
             );
             Extension = "brokenking";
@@ -40,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem brokenKing = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.BrokenKing).FirstOrDefault();
+            AgentItem brokenKing = agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).FirstOrDefault();
             if (brokenKing == null)
             {
                 throw new MissingKeyActorsException("Broken King not found");
@@ -86,12 +89,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.BrokenKing:
-                    var Cone = cls.Where(x => x.SkillId == KingsWrath).ToList();
+                    var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int range = 450;
+                        uint range = 450;
                         int angle = 100;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
@@ -100,21 +103,77 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), "rgba(0,100,255,0.2)", connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), "rgba(0,100,255,0.3)", connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
                     }
                     break;
                 default:
                     break;
             }
+        }
 
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Numbing Breach - Cracks - White smoke indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachIndicator, out IReadOnlyList<EffectEvent> cracksIndicators))
+            {
+                foreach (EffectEvent effect in cracksIndicators)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1000);
+                    var connector = new PositionConnector(effect.Position);
+                    var circle = new CircleDecoration(115, lifespan, "rgba(219, 233, 244, 0.2)", connector);
+                    EnvironmentDecorations.Add(circle);
+                }
+            }
+
+            // Numbing Breach - Cracks - Damage zone
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachDamage, out IReadOnlyList<EffectEvent> cracks))
+            {
+                foreach (EffectEvent effect in cracks)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 30000);
+                    var connector = new PositionConnector(effect.Position);
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(40, 230, lifespan, "rgba(66, 130, 253, 0.2)", connector).UsingRotationConnector(rotationConnector);
+                    EnvironmentDecorations.Add(rectangle);
+                }
+            }
+
+            // Hailstorm - Greens
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingHailstormGreen, out IReadOnlyList<EffectEvent> greens))
+            {
+                foreach (EffectEvent green in greens)
+                {
+                    Color color = Colors.DarkGreen;
+
+                    // Ice Breaker - Failed Greens
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out IReadOnlyList<EffectEvent> failedGreens))
+                    {
+                        EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.Distance2DToPoint(green.Position) < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
+                        if (failedGreen != null)
+                        {
+                            color = Colors.DarkRed;
+                        }
+                    }
+
+                    (long, long) lifespan = green.ComputeLifespan(log, 15000);
+                    var circle = new CircleDecoration(120, lifespan, color, 0.4, new PositionConnector(green.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
+                }
+            }
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BitingAura, BitingAura), // Biting Aura
+                new DamageCastFinder(BitingAura, BitingAura),
+                new EffectCastFinder(Hailstorm, EffectGUIDs.BrokenKingHailstormGreen),
+                new EffectCastFinder(IceBreaker, EffectGUIDs.BrokenKingIceBreakerGreenExplosion)
+                    .UsingAgentRedirectionIfUnknown((int)ArcDPSEnums.TargetID.BrokenKing),
             };
         }
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

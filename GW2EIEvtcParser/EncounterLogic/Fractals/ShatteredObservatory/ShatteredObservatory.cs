@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return participatingPlayerAgents;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Set manual FractalScale for old logs without the event
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ( GW2Builds.September2020SunquaPeakRelease, 99),
                 ( GW2Builds.SOTOBetaAndSilentSurfNM, 98),
             });
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         }
 
         /// <summary>
@@ -73,10 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in domes)
                 {
-                    if (effect.EndEvent != null)
-                    {
-                        EnvironmentDecorations.Add(new CircleDecoration(220, (effect.Time, effect.EndEvent.Time), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingFilled(false));
-                    }
+                    EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
@@ -85,7 +82,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time - 500;
                     int end = (int)effect.Time;
-                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(new CircleDecoration(220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
@@ -94,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time;
                     int end = start + 500;
-                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), "rgba(200, 50, 0, 0.2)", new PositionConnector(effect.Position)).UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(new CircleDecoration(2000, (start, end), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(end));
                 }
             }
         }

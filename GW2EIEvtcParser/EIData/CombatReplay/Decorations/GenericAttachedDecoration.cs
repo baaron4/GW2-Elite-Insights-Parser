@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
 
-        public Connector ConnectedTo { get; }
+        public GeographicalConnector ConnectedTo { get; }
         public RotationConnector RotationConnectedTo { get; protected set; }
         public SkillModeDescriptor SkillMode;
 
-        protected GenericAttachedDecoration((long , long ) lifespan, Connector connector) : base(lifespan)
+        protected GenericAttachedDecoration((long , long ) lifespan, GeographicalConnector connector) : base(lifespan)
         {
             ConnectedTo = connector;
         }
@@ -21,6 +21,11 @@ namespace GW2EIEvtcParser.EIData
             int start = Math.Max(Lifespan.start, other.Lifespan.start);
             int end = Math.Min(Lifespan.end, other.Lifespan.end);
             return new LineDecoration((start, end), color, ConnectedTo, other.ConnectedTo);
+        }
+
+        public LineDecoration LineTo(GenericAttachedDecoration other, Color color, double opacity)
+        {
+            return LineTo(other, color.WithAlpha(opacity).ToString(true));
         }
 
         public virtual GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)

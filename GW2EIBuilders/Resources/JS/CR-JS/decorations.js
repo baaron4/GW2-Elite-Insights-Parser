@@ -79,17 +79,64 @@ function noAngleFetcher(connection, master, start, end) {
     return 0;
 }
 
-function staticAngleFetcher(connection, master, start, end) {
+function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
+    var index = -1;
+    var totalPoints = connection.angles.length / 2;
+    var time = animator.reactiveDataStatus.time;
+    for (var i = 0; i < totalPoints; i++) {
+        var posTime = connection.angles[2 * i + 1];
+        if (time < posTime) {
+            break;
+        }
+        index = i;
+    }
+    if (index === -1) {
+        return connection.angles[0];
+    } else if (index === totalPoints - 1) {
+        return connection.angles[2 * index];
+    } else {
+        var cur = connection.angles[2 * index];
+        var curTime = connection.angles[2 * index + 1];
+        var next = connection.angles[2 * (index + 1)];
+        var nextTime = connection.angles[2 * (index + 1) + 1];
+        // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
+        if (next - cur < -180) {
+            next += 360.0;
+        } else if (next - cur > 180) {
+            next -= 360.0;
+        }
+        var interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
+        return interpolatedAngle;
+    }
+}
+
+function staticAngleFetcher(connection, master, dstMaster, start, end) {
     var time = animator.reactiveDataStatus.time;
     var velocity = Math.min((time - start) / (end - start), 1.0);
     return connection.angles[0] + velocity * connection.angles[1];
 }
 
-function masterRotationFetcher(connection, master, start, end) {
+function masterRotationFetcher(connection, master, dstMaster, start, end) {
     if (!master) {
         return null;
     }
     return master.getRotation();
+}
+
+function masterToMasterRotationFetcher(connection, master, dstMaster, start, end) {
+    if (!master || !dstMaster) {
+        return null;
+    }
+    var origin = master.getPosition();
+    var dst = dstMaster.getPosition();
+    if (!origin || !dst) {
+        return null;
+    }
+    var vector = {
+        x: dst.x - origin.x,
+        y: dst.y - origin.y,
+    }
+    return ToDegrees(Math.atan2(vector.y, vector.x));
 }
 
 const RotationOffsetMode = {
@@ -120,8 +167,12 @@ class MechanicDrawable {
         this.rotationOffset = 0;
         this.rotationOffsetMode = RotationOffsetMode.addToMaster;
         if (rotationConnectedTo) {
-            if (rotationConnectedTo.angles) {
+            if (rotationConnectedTo.interpolationMethod >= 0) {
+                this.rotationFetcher = interpolatedAngleFetcher;
+            } else if (rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
+            } else if (rotationConnectedTo.dstMasterId) {
+                this.rotationFetcher = masterToMasterRotationFetcher;
             } else if (rotationConnectedTo.masterId) {
                 this.rotationFetcher = masterRotationFetcher;
                 this.rotationOffset = rotationConnectedTo.rotationOffset;
@@ -130,6 +181,7 @@ class MechanicDrawable {
         }
         this.master = null;
         this.rotationMaster = null;
+        this.dstRotationMaster = null;
         // Skill mode
         this.ownerID = null;
         this.owner = null;
@@ -160,7 +212,7 @@ class MechanicDrawable {
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster, this.start, this.end);
+        return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster, this.dstRotationMaster, this.start, this.end);
     }
 
     getPosition() {
@@ -209,13 +261,22 @@ class MechanicDrawable {
                 return false;
             }
         }
-        if (this.rotationFetcher === masterRotationFetcher) {
+        if (this.rotationFetcher === masterRotationFetcher || this.rotationFetcher === masterToMasterRotationFetcher) {
             if (this.rotationMaster === null) {
                 let masterId = this.rotationConnectedTo.masterId;
                 this.rotationMaster = animator.getActorData(masterId);
             }
             if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
                 return false;
+            }
+            if (this.rotationFetcher === masterToMasterRotationFetcher) {
+                if (this.dstRotationMaster === null) {
+                    let dstMasterId = this.rotationConnectedTo.dstMasterId;
+                    this.dstRotationMaster = animator.getActorData(dstMasterId);
+                }
+                if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.ownerID)) {
+                    return false;
+                }
             }
         }
         if (this.ownerID !== null) {
@@ -278,20 +339,21 @@ class FacingMechanicDrawable extends MechanicDrawable {
 }
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo) {
+    constructor(start, end, fill, growingData, color, connectedTo, rotationConnectedTo) {
         super(start, end, connectedTo, rotationConnectedTo);
         this.fill = fill;
-        this.growingEnd = growingEnd;
+        this.growingEnd = growingData.end;
+        this.growingReverse = growingData.reverse;
         this.color = color;
     }
 
     getPercent() {
-        if (this.growingEnd === 0) {
+        if (this.growingEnd <= this.start) {
             return 1.0;
         }
         var time = animator.reactiveDataStatus.time;
-        var value = Math.min((time - this.start) / (Math.abs(this.growingEnd) - this.start), 1.0);
-        if (this.growingEnd < 0) {
+        var value = Math.min((time - this.start) / (this.growingEnd - this.start), 1.0);
+        if (this.growingReverse) {
             value = 1 - value;
         }
         return value;
@@ -299,8 +361,8 @@ class FormMechanicDrawable extends MechanicDrawable {
 }
 
 class CircleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, radius, connectedTo, rotationConnectedTo, minRadius) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, radius, connectedTo, rotationConnectedTo, minRadius) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.radius = radius;
         this.minRadius = minRadius;
     }
@@ -332,8 +394,8 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
@@ -352,7 +414,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         ctx.save();
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
-        if (this.growingEnd < 0) {    
+        if (this.growingReverse) {    
             ctx.arc(0, 0, this.outerRadius , 2 * Math.PI, 0, false);
             ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
         }  else {
@@ -373,8 +435,8 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, width, height, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, width, height, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.height = height;
         this.width = width;
     }
@@ -406,8 +468,8 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 }
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingEnd, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingEnd, color, connectedTo, rotationConnectedTo);
+    constructor(start, end, fill, growingData, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
+        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
         this.openingAngleRadians = ToRadians(openingAngle);
         this.halfOpeningAngle = 0.5 * openingAngle;
         this.radius = radius;
@@ -443,8 +505,8 @@ class PieMechanicDrawable extends FormMechanicDrawable {
 }
 
 class LineMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, growingEnd, color, connectedFrom, connectedTo) {
-        super(start, end, false, growingEnd, color, connectedTo, null);
+    constructor(start, end, growingData, color, connectedFrom, connectedTo) {
+        super(start, end, false, growingData, color, connectedTo, null);
         this.connectedFrom = connectedFrom;
         this.targetPositionFetcher = null;
         if (connectedFrom.interpolationMethod >= 0) {
@@ -504,7 +566,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         const percent = this.getPercent();
         var ctx = animator.mainContext;
         ctx.save();
-        if (this.growingEnd < 0) {
+        if (this.growingReverse) {
             this.moveContext(ctx, target, 0);
             ctx.beginPath();
             ctx.moveTo(0, 0);
@@ -670,14 +732,21 @@ class IconMechanicDrawable extends MechanicDrawable {
         this.pixelSize = pixelSize;
         this.worldSize = worldSize;
         this.opacity = opacity;
+        this.canRotate = false;
     }
 
     getSize() {
         if (animator.displaySettings.useActorHitboxWidth && this.worldSize > 0) {
             return this.worldSize;
-        } else {
+        } else if (this.pixelSize > 0){
             return this.pixelSize / animator.scale;
+        } else if (this.worldSize > 0){
+            return this.worldSize;
         }
+    }
+
+    getOpacity() {
+        return this.opacity;
     }
 
     getSecondaryOffset() {
@@ -699,14 +768,71 @@ class IconMechanicDrawable extends MechanicDrawable {
         const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
-        ctx.globalAlpha = this.opacity;
+        ctx.globalAlpha = this.getOpacity();
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        // Don't rotate the icon
-        ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        if(!this.canRotate) {
+            // Don't rotate the icon
+            ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        }
         ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
+    }
+}
+
+class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
+    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacities, heights) {
+        super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, 0);
+        this.canRotate = true;
+        this.opacities = opacities;
+        this.heights = heights;
+    }
+
+    getHeight() {
+        let index = -1;
+        const heights = this.heights;
+        const totalPoints = heights.length / 2;
+        const time = animator.reactiveDataStatus.time;
+        for (var i = 0; i < totalPoints; i++) {
+            let heightTime = heights[2 * i + 1];
+            if (time < heightTime) {
+                index = i - 1;
+                break;
+            }
+            index = i;
+        }
+        if (index === -1) {
+            return heights[0];
+        } else if (index === totalPoints - 1) {
+            return heights[2 * index]
+        } else {
+            return heights[2 * index];
+        }
+    }
+
+    getOpacity() {
+        let index = -1;
+        const opacities = this.opacities;
+        const totalPoints = opacities.length / 2;
+        const time = animator.reactiveDataStatus.time;
+        let interpolate = 0;
+        for (var i = 0; i < totalPoints; i++) {
+            let opacityTime = opacities[2 * i + 1];
+            if (time < opacityTime) {
+                if (opacityTime - time <= 1500) interpolate = opacityTime;
+                index = i - 1;
+                break;
+            }
+            index = i;
+        }
+        if (index === -1) {
+            return opacities[0];
+        } else if (interpolate > 0) {
+            return opacities[2 * (index + 1)] - (interpolate - time) * (opacities[2 * (index + 1)] - opacities[2 * index ]) / 1500;
+        } else {
+            return opacities[2 * index];
+        }
     }
 }
 

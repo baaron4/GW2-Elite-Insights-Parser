@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("W", new Point3D(9295.668f, 1450.060f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
             if (artsariivs.Any())
@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC trashMob in _trashMobs)
             {
                 if (trashMob.IsSpecies(TrashID.SmallArtsariiv))
@@ -223,7 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     int castStart = (int)cast.Time;
                                     int castEnd = castStart + 3160;
-                                    replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), castEnd);
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
                                     (float, float)[][] positions = {
                                     // positions taken from effects
                                    new [] { (9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f) },
@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                    new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
                                    new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
                                 };
-                                    int[] radius = { 400, 290, 180, 70 };
+                                    uint[] radius = { 400, 290, 180, 70 };
                                     long nextInvul = log.CombatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == target.AgentItem && x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
                                     for (int i = 0; i < 4; i++)
                                     {
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         foreach ((float x, float y) in positions[i])
                                         {
                                             var position = new PositionConnector(new Point3D(x, y));
-                                            replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), "rgba(250, 120, 0, 0.2)", position), end);
+                                            replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
                                         }
                                     }
                                     break;
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time;
                     int end = start + 2640;
-                    AddBeamingSmileDecoration(effect, (start, end), "rgba(250, 120, 0, 0.2)");
+                    AddBeamingSmileDecoration(effect, (start, end), Colors.Orange, 0.2);
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmile, out IReadOnlyList<EffectEvent> beams))
@@ -277,18 +277,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     int start = (int)effect.Time;
                     int end = start + 300;
-                    AddBeamingSmileDecoration(effect, (start, end), "rgba(255, 0, 0, 0.2)");
+                    AddBeamingSmileDecoration(effect, (start, end), Colors.Red, 0.2);
                 }
             }
         }
 
-        private void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, string color)
+        private void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, Color color, double opacity)
         {
             const int length = 2500;
             const int hitbox = 360;
+            const int offset = 60;
             var rotation = new AngleConnector(effect.Rotation.Z);
-            GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f), true);
-            EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, position).UsingRotationConnector(rotation));
+            GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f + offset), true);
+            EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
         }
 
         internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)

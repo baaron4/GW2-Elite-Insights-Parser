@@ -31,6 +31,9 @@ facingIcon.onload = function () {
 function ToRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
+function ToDegrees(radians) {
+    return radians / (Math.PI / 180);
+}
 
 const resolutionMultiplier = 2.0;
 
@@ -198,6 +201,9 @@ class Animator {
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
                         break;
+                    case "BackgroundIconDecoration":
+                        this.backgroundActorData.push( new BackgroundIconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacities, actor.heights));
+                        break;
                     case "IconOverheadDecoration":
                         this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
                         break;
@@ -208,19 +214,19 @@ class Animator {
                 let decoration = null;
                 switch (actor.type) {
                     case "Circle":
-                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo, this.inchToPixel * actor.minRadius);
+                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, {end: actor.growingEnd, reverse: actor.growingReverse}, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo, this.inchToPixel * actor.minRadius);
                         break;
                     case "Rectangle":
-                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo, actor.rotationConnectedTo);
+                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, {end: actor.growingEnd, reverse: actor.growingReverse}, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Doughnut":
-                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo, actor.rotationConnectedTo);
+                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, {end: actor.growingEnd, reverse: actor.growingReverse}, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Pie":
-                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growingEnd, actor.color, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
+                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, {end: actor.growingEnd, reverse: actor.growingReverse}, actor.color, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
                         break;
                     case "Line":
-                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.growingEnd, actor.color, actor.connectedFrom, actor.connectedTo);
+                        decoration = new LineMechanicDrawable(actor.start, actor.end, {end: actor.growingEnd, reverse: actor.growingReverse}, actor.color, actor.connectedFrom, actor.connectedTo);
                         break;
                     case "IconDecoration":
                         decoration = new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);

@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            int boltBreakRadius = 180;
+            uint boltBreakRadius = 180;
             foreach (Segment seg in boltBreaks)
             {
                 var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
@@ -162,7 +162,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
-                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
+                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                     }
                     //
                     var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
@@ -171,21 +171,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 3000; // casttime 0 from skill def
                         int duration = 5000;
-                        int radius = 1200;
+                        uint radius = 1200;
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (targetPosition != null)
                         {
-                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(targetPosition)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(targetPosition)));
                             replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(start + duration));
                         }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
                 case (int)ArcDPSEnums.TrashID.ParalyzingWisp:

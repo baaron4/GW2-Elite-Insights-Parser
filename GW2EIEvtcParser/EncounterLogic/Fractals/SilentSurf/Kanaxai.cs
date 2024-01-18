@@ -102,14 +102,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+                {(int)ArcDPSEnums.TrashID.AspectOfTorment, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfLethargy, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfExposure, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfDeath, 1 },
+                {(int)ArcDPSEnums.TrashID.AspectOfFear, 1 },
+            };
+        }
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             var aspectCounts = new Dictionary<int, int>();
             foreach (AbstractSingleActor actor in Targets)
             {
@@ -262,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Kanaxai not found");
             }
-            BuffApplyEvent invul762Gain = combatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == kanaxai.AgentItem).FirstOrDefault();
+            BuffApplyEvent invul762Gain = combatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == kanaxai.AgentItem).FirstOrDefault(x => x.Time > 0);
             if (invul762Gain != null)
             {
                 fightData.SetSuccess(true, invul762Gain.Time);
@@ -286,26 +299,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
-                replay.Decorations.Add(new LineDecoration((start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                replay.Decorations.Add(new LineDecoration((start, (int)end), Colors.Yellow, 0.5, new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
             List<AbstractBuffEvent> phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
-            replay.AddTether(phantasmagorias, "rgba(0, 100, 255, 0.5)");
+            replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)), segment.End);
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, Colors.Orange, 0.2, new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -345,11 +358,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castDuration = 5400;
                         int expectedEndCastTime = (int)c.Time + castDuration;
-                        Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
-                        if (quickness != null)
+                        double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
+                        if (actualDuration > 0)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
                             replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
                         }
                         else
@@ -369,7 +380,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
@@ -386,24 +397,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // If the aspect has Sugar Rush AND Quickness
                         if (hasSugarRush && quickness != null)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double castTimeWithSugarRush = castDuration * 0.8;
-                            double actualFinalDuration = castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualFinalDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, c.Time, castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect has Sugar rush AND NOT Quickness
                         if (hasSugarRush && quickness == null)
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)Math.Ceiling((int)c.Time + castDuration * 0.8), 1), target, ParserIcons.EyeOverhead, 30);
+                            var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect DOESN'T have Sugar rush but HAS Quickness
                         if (!hasSugarRush && quickness != null)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect DOESN'T have Sugar Rush and Quickness
@@ -430,7 +442,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1500;
                     int start = (int)aoe.Time;
                     int effectEnd = start + duration;
-                    var circle = new CircleDecoration( 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+                    var circle = new CircleDecoration( 380, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
                 }
@@ -478,7 +490,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 3000;
                     int start = (int)harrowshot.Time;
                     int end = (int)harrowshot.Time + duration;
-                    var circle = new CircleDecoration(280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position));
+                    var circle = new CircleDecoration(280, (start, end), Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                 }
@@ -506,7 +518,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             int start = (int)aoe.Time;
             int effectEnd = start + duration;
-            var circle = new CircleDecoration(180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position));
+            var circle = new CircleDecoration(180, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
             EnvironmentDecorations.Add(circle);
             EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
         }
@@ -521,7 +533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="growing">Duration of the channel.</param>
         private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), "rgba(255, 55, 0, 0.2)", new AgentConnector(target)), growing);
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), Colors.Red, 0.2, new AgentConnector(target)), growing);
         }
     }
 }

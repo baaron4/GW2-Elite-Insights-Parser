@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return ParserHelper.GetNPCIcon(ID);
+            return AgentItem.Type == AgentItem.AgentType.Gadget ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 AbstractSingleActor masterActor = log.FindActor(master);
                 // Basic linkage
-                CombatReplay.Decorations.Add(new LineDecoration((CombatReplay.TimeOffsets.start, CombatReplay.TimeOffsets.end), "rgba(0, 255, 0, 0.5)", new AgentConnector(this), new AgentConnector(masterActor)));
+                CombatReplay.Decorations.Add(new LineDecoration((CombatReplay.TimeOffsets.start, CombatReplay.TimeOffsets.end), Colors.Green, 0.5, new AgentConnector(this), new AgentConnector(masterActor)));
                 // Prof specific treatment
                 ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, CombatReplay);
             }

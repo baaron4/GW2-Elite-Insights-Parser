@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var torches = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
             foreach (AgentItem torch in torches)
@@ -86,18 +86,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> holdOntoTheLight = log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight);
 
-            if (holdOntoTheLight.Any() && log.FightData.Success)
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityHoldOntoTheLight, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityHoldOntoTheLight], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
             }
         }
 
@@ -114,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castTime = 3330;
                         int hitTime = 1179;
-                        int radius = 1500;
+                        uint radius = 1500;
                         int endHitTime = (int)c.Time + hitTime;
                         int endCastTime = (int)c.Time + castTime;
 
@@ -124,10 +116,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
-                            var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
+                            var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
                             replay.AddDecorationWithGrowing(pie, endHitTime);
                             // Lingering AoE to match in game display
-                            replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     // Crushing Cruelty
@@ -135,12 +127,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in crushingCruelty)
                     {
                         int hitTime = 2833;
-                        int radius = 1500;
+                        uint radius = 1500;
                         long endTime = c.Time + hitTime;
 
                         // Position of the jump back
                         var jumpPosition = new Point3D((float)613.054, (float)-85.3458, (float)-7075.265);
-                        var circle = new CircleDecoration(radius, (c.Time, endTime), "rgba(250, 120, 0, 0.1)", new PositionConnector(jumpPosition));
+                        var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
                         replay.AddDecorationWithGrowing(circle, endTime);
                     }
                     // Douse in Darkness
@@ -148,24 +140,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in douseInDarkness)
                     {
                         int jumpTime = 2500;
-                        int radius = 1500;
+                        uint radius = 1500;
                         long endJump = c.Time + jumpTime;
                         int timings = 300;
 
                         // Jump up
-                        var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
+                        var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(jumpUpCircle, endJump);
                         // Pull
                         for (int i = 0; i < 4; i++)
                         {
                             long duration = c.Time + jumpTime + timings * i;
                             long end = c.Time + jumpTime + timings * (i + 1);
-                            replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
+                            replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
                         }
                         // Landing
                         long pullTime = c.Time + jumpTime + 1700;
                         long finalTime = pullTime + 1500;
-                        var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target));
+                        var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(landingCircle, finalTime);
                     }
                     // Cascade
@@ -192,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1800;
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
-                    var circle = new CircleDecoration(100, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position));
+                    var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, new PositionConnector(indicator.Position));
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
                     EnvironmentDecorations.Add(circle);
                 }
@@ -207,12 +199,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int end = (int)claw.Time + duration;
                     var circle = new CircleDecoration(100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(255, 0, 0, 0.2)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
         }
 
-        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, int width, int height)
+        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, uint width, uint height)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
             {
@@ -227,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         var connector = new PositionConnector(indicator.Position);
                         var rotationConnector = new AngleConnector(rotation);
-                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector), "rgba(255, 0, 0, 0.2)");
+                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
                     }
                 }
             }

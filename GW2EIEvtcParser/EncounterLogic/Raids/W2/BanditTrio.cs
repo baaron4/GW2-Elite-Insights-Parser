@@ -11,22 +11,36 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class BanditTrio : SalvationPass
     {
+        private static readonly Point3D ChestOfPrisonCampPosition = new Point3D(-903.703f, -9450.76f, -126.277008f);
         public BanditTrio(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
-            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launchd","Shell-Shocked (Launched from pad)", "Shell-Shocked",0),
+            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
+            new PlayerDstBuffApplyMechanic(Blind, "Blinded", new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.Zane)),
+            new PlayerDstBuffApplyMechanic(Burning, "Burning", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(ArcDPSEnums.TargetID.Narella)),
+            new PlayerDstBuffApplyMechanic(SlowBurn, "Slow Burn", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Pink), "Targeted.B", "Applied Targeted Buff (Berg)", "Targeted Application (Berg)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.Berg)),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Purple), "Targeted.A", "Applied Targeted Buff (Any)", "Targeted Application (Any)", 0),
+            new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.Cage)),
+            new PlayerCastStartMechanic(ThrowOilKeg, "Throw", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
+            new PlayerCastStartMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Beehive.T", "Threw Beehive", "Beehive Throw", 0),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(ArcDPSEnums.TargetID.Berg)),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
             new PlayerDstHitMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
             new PlayerDstHitMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
             new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new PlayerDstHitMechanic(FlakShotNarella, "Flak SHot", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
             });
             Extension = "trio";
-            GenericFallBackMethod = FallBackMethod.None;
+            GenericFallBackMethod = FallBackMethod.ChestGadget;
+            ChestID = ArcDPSEnums.ChestID.ChestOfPrisonCamp;
             Icon = EncounterIconBanditTrio;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000002;
@@ -50,6 +64,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override List<int> GetFriendlyNPCIDs()
+        {
+            return new List<int>
+            {
+                (int)ArcDPSEnums.TrashID.Cage
+            };
+        }
+
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
         {
             return new CombatReplayMap(CombatReplayBanditTrio,
@@ -57,35 +79,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (-2900, -12251, 2561, -7265)/*,
                             (-12288, -27648, 12288, 27648),
                             (2688, 11906, 3712, 14210)*/);
-        }
-
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-        {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            if (!fightData.Success)
-            {
-                IReadOnlyList<AgentItem> prisoners = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Prisoner2);
-                var prisonerDeaths = new List<DeadEvent>();
-                foreach (AgentItem prisoner in prisoners)
-                {
-                    prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
-                }
-                if (prisonerDeaths.Count == 0)
-                {
-                    AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella));
-                    if (narella == null)
-                    {
-                        throw new MissingKeyActorsException("Narella not found");
-                    }
-                    DeadEvent deadEvent = combatData.GetDeadEvents(narella.AgentItem).LastOrDefault();
-                    if (deadEvent != null)
-                    {
-                        fightData.SetSuccess(true, deadEvent.Time);
-                        return;
-                    }
-                    SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
-                }
-            }
         }
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -115,6 +108,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 startToUse = Math.Min(narella.FirstAware, startToUse);
             }
             return startToUse;
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            // Cage
+            AgentItem cage = combatData.Where(x => x.DstAgent == 224100 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
+            if (cage != null)
+            {
+                cage.OverrideType(AgentItem.AgentType.NPC);
+                cage.OverrideID(ArcDPSEnums.TrashID.Cage);
+            }
+
+            // Bombs
+            var bombs = combatData.Where(x => x.DstAgent == 0 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240).ToList();
+            foreach (AgentItem bomb in bombs)
+            {
+                bomb.OverrideType(AgentItem.AgentType.NPC);
+                bomb.OverrideID(ArcDPSEnums.TrashID.Bombs);
+            }
+
+            // Reward Chest
+            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            
+            agentData.Refresh();
+            ComputeFightTargets(agentData, combatData, extensions);
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -223,6 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.Prisoner1,
                 ArcDPSEnums.TrashID.Prisoner2,
                 ArcDPSEnums.TrashID.InsectSwarm,
+                ArcDPSEnums.TrashID.Bombs,
             };
         }
 
@@ -237,6 +256,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Berg:
+                    var overheadSmash = cls.Where(x => x.SkillId == OverheadSmashBerg).ToList();
+                    foreach (AbstractCastEvent c in overheadSmash)
+                    {
+                        uint radius = 550;
+                        int angle = 80;
+                        (long, long) lifespan = (c.Time, c.Time + c.ActualDuration);
+                        Point3D facing = target.GetCurrentRotation(log, lifespan.Item1 + 600, lifespan.Item2);
+                        if (facing != null)
+                        {
+                            var rotationConnector = new AngleConnector(facing);
+                            var agentConnector = new AgentConnector(target);
+                            var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
+                            replay.AddDecorationWithGrowing(cone, lifespan.Item2);
+                        }
+                    }
                     break;
                 case (int)ArcDPSEnums.TargetID.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == HailOfBulletsZane).ToList();
@@ -249,15 +283,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long firstConeEnd = firstConeStart + 400;
                         long secondConeEnd = secondConeStart + 400;
                         long thirdConeEnd = thirdConeStart + 400;
-                        int radius = 1500;
+                        uint radius = 1500;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), "rgba(255,200,0,0.3)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     break;
@@ -285,17 +319,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> environmentallyFriendly = log.CombatData.GetBuffData(EnvironmentallyFriendly);
-            if (environmentallyFriendly.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, EnvironmentallyFriendly, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[EnvironmentallyFriendly], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
             }
         }
     }

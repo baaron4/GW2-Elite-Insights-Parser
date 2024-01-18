@@ -66,11 +66,15 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingSrcSpecChecker(Spec.Chronomancer),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnFoeDamageModifier(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
             new BuffOnFoeDamageModifier(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
         };
 
 
@@ -97,9 +101,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfEternity, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in wellsOfEternity)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfEternity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -112,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
                     int effectTimeStart = (int)effect.Time;
                     int effectTimeEnd = effectTimeStart + 1000;
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd).UsingSkillMode(skill));
                 }
             }
 
@@ -122,9 +126,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfAction);
                 foreach (EffectEvent effect in wellsOfAction)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                     
                     // Well pulses - Hard coded because the effects don't have a Src
@@ -134,7 +138,7 @@ namespace GW2EIEvtcParser.EIData
                         int effectTimeStart = (int)effect.Time + pulseTimeDelay;
                         int effectTimeEnd = effectTimeStart + 300;
                         if (effectTimeStart > lifespan.Item2) { break; }
-                        var circle = (CircleDecoration)new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill);
+                        var circle = (CircleDecoration)new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
                         if (i < 3)
                         {
                             // Pulse inwards
@@ -156,9 +160,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
                 foreach (EffectEvent effect in wellsOfCalamity)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCalamity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -171,7 +175,7 @@ namespace GW2EIEvtcParser.EIData
                     int effectTimeStart = (int)effect.Time;
                     int effectTimeEnd = effectTimeStart + 1000;
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd, true).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd, true).UsingSkillMode(skill));
                 }
             }
 
@@ -181,9 +185,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in wellsOfPrecognition)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfPrecognition, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -196,7 +200,7 @@ namespace GW2EIEvtcParser.EIData
                     int effectTimeStart = (int)effect.Time;
                     int effectTimeEnd = effectTimeStart + 1000;
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd).UsingSkillMode(skill));
                 }
             }
 
@@ -206,9 +210,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfRecall_Senility);
                 foreach (EffectEvent effect in wellsOfSenility)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                     // Well pulses - Hard coded because the effects don't have a Src
@@ -218,7 +222,7 @@ namespace GW2EIEvtcParser.EIData
                         int effectTimeStart = (int)effect.Time + pulseTimeDelay;
                         int effectTimeEnd = effectTimeStart + 300;
                         if (effectTimeStart > lifespan.Item2) { break; }
-                        var circle = (CircleDecoration)new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill);
+                        var circle = (CircleDecoration)new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
                         if (i < 3)
                         {
                             // Pulse inwards
@@ -240,9 +244,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
                 foreach (EffectEvent effect in gravityWells)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGravityWell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -255,7 +259,7 @@ namespace GW2EIEvtcParser.EIData
                     int effectTimeStart = (int)effect.Time;
                     int effectTimeEnd = effectTimeStart + 1000;
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd, true).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, (effectTimeStart, effectTimeEnd), color, 0.5, connector).UsingFilled(false).UsingGrowingEnd(effectTimeEnd, true).UsingSkillMode(skill));
                 }
             }
         }

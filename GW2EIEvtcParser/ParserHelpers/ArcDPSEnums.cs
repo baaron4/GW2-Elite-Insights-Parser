@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser
             internal const ulong December2019Balance = 100690;
             internal const ulong February2020Balance = 102321;
             internal const ulong February2020Balance2 = 102389;
+            internal const ulong March2020Balance = 102724;
             internal const ulong July2020Balance = 104844;
             internal const ulong September2020SunquaPeakRelease = 106277;
             internal const ulong May2021Balance = 115190;
@@ -78,9 +79,11 @@ namespace GW2EIEvtcParser
             internal const int BuffAttrFlatIncRemoved = 20220308;
             internal const int FunctionalIDToGUIDEvents = 20220709;
             internal const int NewLogStart = 20221111;
+            internal const int Effect2Events = 20230718;
             internal const int FunctionalEffect2Events = 20230719;
             internal const int BuffExtensionBroken = 20230905;
             internal const int BuffExtensionOverstackValueChanged = 20231107;
+            internal const int LingeringAgents = 20231110;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -112,6 +115,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         internal static class RewardIDs
         {
+            internal const ulong FreezieChest = 914;
             internal const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
             internal const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
             internal const ulong KodansCurrentChest1 = 1028; // Current, once a day
@@ -521,6 +525,14 @@ namespace GW2EIEvtcParser
         private const int CAChest = -41;
         private const int ChestOfDesmina = -42;
         private const int UnknownAnomaly = -43;
+        private const int ChestOfPrisonCamp = -44;
+        private const int SnowPile = -45;
+        private const int Cage = -46;
+        private const int Bombs = -47;
+        private const int YourSoul = -48;
+        private const int QadimPlatform = -49;
+        private const int GravityBall = -50;
+        private const int JormagMovingFrostBeam = -51;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -567,6 +579,8 @@ namespace GW2EIEvtcParser
             Slubling4 = 16104,
             PoisonMushroom = ArcDPSEnums.PoisonMushroom,
             // Trio
+            Cage = ArcDPSEnums.Cage,
+            Bombs = ArcDPSEnums.Bombs,
             BanditSaboteur = 16117,
             Warg = 7481,
             VeteranTorturedWarg = 16129,
@@ -696,6 +710,7 @@ namespace GW2EIEvtcParser
             Deathling = 19759,
             UnderworldReaper = 19831,
             DhuumDesmina = 19481,
+            YourSoul = ArcDPSEnums.YourSoul,
             // CA
             ConjuredGreatsword = 21255,
             ConjuredShield = 21170,
@@ -721,6 +736,7 @@ namespace GW2EIEvtcParser
             WyvernMatriarch = 20997,
             WyvernPatriarch = 21183,
             QadimLamp = ArcDPSEnums.QadimLamp,
+            QadimPlatform = ArcDPSEnums.QadimPlatform,
             AngryZommoros = 20961,
             ChillZommoros = 21118,
             AssaultCube = 21092,
@@ -775,6 +791,7 @@ namespace GW2EIEvtcParser
             SmallJumpyTornado = 21961,
             SmallKillerTornado = 21957,
             BigKillerTornado = 21987,
+            SabirPlatform = 21998,
             // Peerless Qadim
             PeerlessQadimPylon = 21996,
             PeerlessQadimAuraPylon = 21962,
@@ -826,6 +843,30 @@ namespace GW2EIEvtcParser
             BloodLegionBlademaster = 22993,
             CharrTank = 22953,
             SonsOfSvanirHighShaman = 22283,
+            // Harvest Temple - Void Amalgamate
+            PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
+            VoidAmalgamate = 24375,
+            KillableVoidAmalgamate = 23956,
+            DragonBodyVoidAmalgamate = ArcDPSEnums.DragonBodyVoidAmalgamate,
+            VoidTangler = 25138,
+            VoidColdsteel = 23945,
+            VoidAbomination = 23936,
+            VoidSaltsprayDragon = 23846,
+            VoidObliterator = 23995,
+            VoidRotswarmer = 24590,
+            VoidGiant = 24450,
+            VoidSkullpiercer = 25177,
+            VoidTimeCaster = 25025,
+            VoidBrandbomber = 24783,
+            VoidBurster = 24464,
+            VoidWarforged1 = 24129,
+            VoidWarforged2 = 24855,
+            VoidStormseer = 24677,
+            VoidMelter = 24223,
+            VoidGoliath = 24761,
+            DragonEnergyOrb = DragonOrb,
+            GravityBall = ArcDPSEnums.GravityBall,
+            JormagMovingFrostBeam = ArcDPSEnums.JormagMovingFrostBeam,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,
             ScarletPhantomNormalBeam = 24404,
@@ -862,28 +903,6 @@ namespace GW2EIEvtcParser
             TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
-            // Void Amalgamate
-            PushableVoidAmalgamate = ArcDPSEnums.PushableVoidAmalgamate,
-            VoidAmalgamate = 24375,
-            KillableVoidAmalgamate = 23956,
-            DragonBodyVoidAmalgamate = ArcDPSEnums.DragonBodyVoidAmalgamate,
-            VoidTangler = 25138,
-            VoidColdsteel = 23945,
-            VoidAbomination = 23936,
-            VoidSaltsprayDragon = 23846,
-            VoidObliterator = 23995,
-            VoidRotswarmer = 24590,
-            VoidGiant = 24450,
-            VoidSkullpiercer = 25177,
-            VoidTimeCaster = 25025,
-            VoidBrandbomber = 24783,
-            VoidBurster = 24464,
-            VoidWarforged1 = 24129,
-            VoidWarforged2 = 24855,
-            VoidStormseer = 24677,
-            VoidMelter = 24223,
-            VoidGoliath = 24761,
-            DragonEnergyOrb = DragonOrb,
             // Cosmic Observatory
             TheTormented = 26016,
             VeteranTheTormented = 25829,
@@ -905,6 +924,7 @@ namespace GW2EIEvtcParser
             IceStormer = 21325,
             IceSpiker = 21337,
             IcyProtector = 21326,
+            SnowPile = ArcDPSEnums.SnowPile,
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,
@@ -1144,6 +1164,7 @@ namespace GW2EIEvtcParser
 
         public enum ChestID : int
         {
+            ChestOfPrisonCamp = ArcDPSEnums.ChestOfPrisonCamp,
             ChestOfDesmina = ArcDPSEnums.ChestOfDesmina,
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,

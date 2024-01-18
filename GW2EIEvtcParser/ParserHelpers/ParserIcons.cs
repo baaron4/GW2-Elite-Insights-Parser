@@ -22,9 +22,24 @@ namespace GW2EIEvtcParser.ParserHelpers
         public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
         /// <summary>
-        /// Generic blue arrow up.
+        /// Generic blue arrow pointing upwards.
         /// </summary>
         public const string GenericBlueArrowUp = "https://i.imgur.com/0EnjyQX.png";
+
+        /// <summary>
+        /// Generic Green arrow pointing upwards.
+        /// </summary>
+        public const string GenericGreenArrowUp = "https://i.imgur.com/Nlu3u04.png";
+
+        /// <summary>
+        /// Generic Red arrow pointing upwards.
+        /// </summary>
+        public const string GenericRedArrowUp = "https://i.imgur.com/hCrbYA6.png";
+
+        /// <summary>
+        /// Generic Purple arrow pointing upwards.
+        /// </summary>
+        public const string GenericPurpleArrowUp = "https://i.imgur.com/DBq6i0R.png";
 
         // High Resolution Icons 200px
         private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
@@ -307,7 +322,8 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashTheMindblade = "https://i.imgur.com/KyMgGQD.png";
         private const string TrashTheRitualist = "https://i.imgur.com/gG5p3Hz.png";
         private const string TrashTheSniper = "https://i.imgur.com/RWIjUoe.png";
-        private const string TrashVoidAmalgamate = "https://i.imgur.com/BuKbosz.png";
+        private const string TrashPushableVoidAmalgamate = "https://i.imgur.com/BuKbosz.png";
+        private const string TrashKillableVoidAmalgamate = "https://i.imgur.com/fSFEiPm.png";
         private const string TrashKraitHallucination = "https://i.imgur.com/JtISLvT.png";
         private const string TrashQuagganHallucination = "https://i.imgur.com/8dHLEfj.png";
         private const string TrashLichHallucination = "https://i.imgur.com/IXKqCYT.png";
@@ -358,6 +374,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashSpiritOfDestructionOrPain = "https://i.imgur.com/mKJ8X8k.png";
         private const string TrashTheTormented = "https://i.imgur.com/kEytVae.png";
         private const string TrashSoulFeast = "https://i.imgur.com/iNp5Rnx.png";
+        private const string TrashSnowPile = "https://i.imgur.com/uku1klD.png";
+        private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
+        private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
+        private const string TrashGravityBall = "https://i.imgur.com/7zm0q8A.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -572,6 +592,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string FixationGreenOverhead = "https://i.imgur.com/cDmJWrY.png";
         internal const string FixationPurpleOverhead = "https://i.imgur.com/UImUF0H.png";
         internal const string FixationRedOverhead = "https://i.imgur.com/wIYRfY6.png";
+        internal const string FixationYellowOverhead = "https://i.imgur.com/FAPQufJ.png";
         // - Squad Markers
         internal const string ArrowSquadMarkerOverhead = "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
         internal const string CircleSquadMarkerOverhead = "https://wiki.guildwars2.com/images/6/60/Commander_circle_marker.png";
@@ -641,6 +662,14 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string TargetOrder3Overhead = "https://wiki.guildwars2.com/images/d/d8/Target_Order-3_%28overhead_icon%29.png";
         internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
         internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
+
+        // NPC / Gadgets Icons not private
+        internal const string DhuumPlayerSoul = "https://i.imgur.com/rAyuxqS.png";
+
+        // - Other
+        internal const string QadimPlatform = "https://i.imgur.com/DbXr5Fo.png";
+
+        internal const string NoImage = "";
 
         /// <summary>
         /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
@@ -863,6 +892,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.Messenger, TrashTormentedDeadMessenger },
             { ArcDPSEnums.TrashID.Enforcer, TrashEnforcer },
             { ArcDPSEnums.TrashID.Echo, TrashEcho },
+            { ArcDPSEnums.TrashID.YourSoul, DhuumPlayerSoul },
             { ArcDPSEnums.TrashID.KeepConstructCore, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.ExquisiteConjunction, TrashKeepConstructCoreExquisiteConjunction },
             { ArcDPSEnums.TrashID.Jessica, TrashKeepConstructGhosts },
@@ -882,6 +912,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IcePatch, TrashIcePatch },
             { ArcDPSEnums.TrashID.BanditSaboteur, TrashBanditSaboteur },
             { ArcDPSEnums.TrashID.NarellaTornado, TrashTornado },
+            { ArcDPSEnums.TrashID.Cage, TrashCage },
+            { ArcDPSEnums.TrashID.Bombs, TrashBombs },
             { ArcDPSEnums.TrashID.Tornado, TrashTornado },
             { ArcDPSEnums.TrashID.Jade, TrashJade },
             { ArcDPSEnums.TrashID.AngryZommoros, TrashAngryChillZommoros },
@@ -899,6 +931,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.GreaterMagmaElemental2, TrashGreaterMagmaElemental },
             { ArcDPSEnums.TrashID.LavaElemental1, TrashLavaElemental },
             { ArcDPSEnums.TrashID.LavaElemental2, TrashLavaElemental },
+            { ArcDPSEnums.TrashID.QadimPlatform, NoImage},
             { ArcDPSEnums.TrashID.PyreGuardian, TrashPyreGuardianKillerTornado },
             { ArcDPSEnums.TrashID.SmallKillerTornado, TrashPyreGuardianKillerTornado},
             { ArcDPSEnums.TrashID.BigKillerTornado, TrashPyreGuardianKillerTornado },
@@ -909,6 +942,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.PyreGuardianResolution, TrashPyreGuardianResolution },
             { ArcDPSEnums.TrashID.PyreGuardianStab, TrashPyreGuardianStab },
             { ArcDPSEnums.TrashID.PyreGuardianProtect, TrashPyreGuardianProtect },
+            { ArcDPSEnums.TrashID.SabirPlatform, NoImage},
             { ArcDPSEnums.TrashID.ReaperOfFlesh, TrashReaperofFlesh },
             { ArcDPSEnums.TrashID.Kernan, TrashKernan },
             { ArcDPSEnums.TrashID.Knuckles, TrashKnuckles },
@@ -1022,6 +1056,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.IceSpiker, TrashIceSpiker },
             { ArcDPSEnums.TrashID.IceStormer, TrashIceElemental },
             { ArcDPSEnums.TrashID.IcyProtector, TrashIcyProtector },
+            { ArcDPSEnums.TrashID.SnowPile, TrashSnowPile },
             { ArcDPSEnums.TrashID.RiverOfSouls, TrashRiverOfSouls },
             { ArcDPSEnums.TrashID.WargBloodhound, TrashWargBloodhound },
             { ArcDPSEnums.TrashID.CrimsonMcLeod, TrashCrimsonMcLeod },
@@ -1069,6 +1104,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.VoidSkullpiercer, TrashVoidSkullpiercer },
             { ArcDPSEnums.TrashID.VoidTimeCaster, TrashVoidTimeCaster },
             { ArcDPSEnums.TrashID.VoidTimeCaster2, TrashVoidTimeCaster },
+            { ArcDPSEnums.TrashID.GravityBall, TrashGravityBall },
+            { ArcDPSEnums.TrashID.JormagMovingFrostBeam, TrashGenericRedEnemySkull },
             { ArcDPSEnums.TrashID.VoidThornheart1, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidThornheart2, TrashVoidThornheart },
             { ArcDPSEnums.TrashID.VoidBrandfang1, TrashVoidBrandfang },
@@ -1095,8 +1132,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.TheRitualistCM, TrashTheRitualist },
             { ArcDPSEnums.TrashID.TheSniper, TrashTheSniper },
             { ArcDPSEnums.TrashID.TheSniperCM, TrashTheSniper },
-            { ArcDPSEnums.TrashID.PushableVoidAmalgamate, TrashVoidAmalgamate },
-            { ArcDPSEnums.TrashID.KillableVoidAmalgamate, TrashVoidAmalgamate },
+            { ArcDPSEnums.TrashID.PushableVoidAmalgamate, TrashPushableVoidAmalgamate },
+            { ArcDPSEnums.TrashID.KillableVoidAmalgamate, TrashKillableVoidAmalgamate },
             { ArcDPSEnums.TrashID.FluxAnomaly1, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly2, TrashFluxAnomaly },
             { ArcDPSEnums.TrashID.FluxAnomaly3, TrashFluxAnomaly },

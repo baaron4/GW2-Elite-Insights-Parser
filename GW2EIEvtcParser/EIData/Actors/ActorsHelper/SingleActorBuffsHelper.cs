@@ -327,6 +327,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 numberOfClonesGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]);
             }
+            BuffsGraphModel numberOfRangerPets = null;
+            bool canUseRangerPets = ProfHelper.CanUseRangerPets(Actor.Spec);
+            if (canUseRangerPets)
+            {
+                numberOfRangerPets = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]);
+            }
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
@@ -404,6 +410,13 @@ namespace GW2EIEvtcParser.EIData
                         numberOfClonesGraph.MergePresenceInto(minionsSegments);
                     }
                 }
+                if (canUseRangerPets && RangerHelper.IsJuvenilePet(minions.ReferenceAgentItem))
+                {
+                    foreach (IReadOnlyList<Segment> minionsSegments in segments)
+                    {
+                        numberOfRangerPets.MergePresenceInto(minionsSegments);
+                    }
+                }
             }
             if (activeCombatMinionsGraph.BuffChart.Any())
             {
@@ -412,6 +425,10 @@ namespace GW2EIEvtcParser.EIData
             if (canSummonClones && numberOfClonesGraph.BuffChart.Any())
             {
                 _buffGraphs[SkillIDs.NumberOfClones] = numberOfClonesGraph;
+            }
+            if (canUseRangerPets && numberOfRangerPets.BuffChart.Any())
+            {
+                _buffGraphs[SkillIDs.NumberOfRangerPets] = numberOfRangerPets;
             }
         }
 

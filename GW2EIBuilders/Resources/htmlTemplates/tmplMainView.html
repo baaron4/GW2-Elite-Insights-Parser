@@ -46,9 +46,9 @@
                 :activetargets="activePhaseTargets"></stat-tables-component>
             <buff-tables-component v-if="tab === 1" :key="'buff-tables'"
                 :phaseindex="activePhase" :playerindex="activePlayer"></buff-tables-component>
-            <dmgmodifier-stats-component v-if="tab === 2" :key="'modifier'"
+            <dmgmodifier-stats-container-component v-if="tab === 2" :key="'modifier'"
                 :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets">
-            </dmgmodifier-stats-component>
+            </dmgmodifier-stats-container-component>
             <mechanics-stats-component v-if="tab === 3" :key="'mechanics'"
                 :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component>
             <graph-stats-component v-if="tab === 4" :key="'graph'"
@@ -114,7 +114,7 @@
                 return res;
             },
             hasDamageMods: function() {
-                return Object.keys(logData.damageModMap).length !== 0 ;
+                return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.damageIncModMap).length !== 0 ;
             },
             hasMechanics: function() {
                 return logData.mechanicMap.length > 0 && !logData.noMechanics;

@@ -30,17 +30,15 @@ namespace GW2EIEvtcParser.EIData
         public ParserHelper.Source Src { get; }
         public string Icon { get; }
         public string Name { get; }
-        public int ID { get; }
-        public string Tooltip { get; protected set; }
+        public string InitialTooltip { get; protected set; }
 
         internal DamageModifierMode Mode { get; } = DamageModifierMode.All;
         private List<DamageLogChecker> _dlCheckers { get; set; }
 
         internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
         {
-            Tooltip = tooltip;
+            InitialTooltip = tooltip;
             Name = name;
-            ID = Name.GetHashCode();
             DmgSrc = damageSource;
             GainPerStack = gainPerStack;
             if (GainPerStack == 0.0)
@@ -53,25 +51,6 @@ namespace GW2EIEvtcParser.EIData
             Icon = icon;
             GainComputer = gainComputer;
             Mode = mode;
-            switch (DmgSrc)
-            {
-                case DamageSource.All:
-                    Tooltip += "<br>Actor + Minions";
-                    break;
-                case DamageSource.NoPets:
-                    Tooltip += "<br>No Minions";
-                    break;
-            }
-            if (SrcType == DamageType.All)
-            {
-                throw new InvalidDataException("No known damage modifier that modifies every outgoing damage");
-            } 
-            Tooltip += "<br>Applied on " + SrcType.DamageTypeToString();
-            Tooltip += "<br>Compared against " + CompareType.DamageTypeToString();
-            if (!Multiplier)
-            {
-                Tooltip += "<br>Non multiplier";
-            }
             _dlCheckers = new List<DamageLogChecker>();
         }
 
@@ -135,14 +114,6 @@ namespace GW2EIEvtcParser.EIData
 
         internal DamageModifierDescriptor UsingApproximate(bool approximate)
         {
-            if (!Approximate && approximate)
-            {
-                Tooltip += "<br>Approximate";
-            }
-            else if (Approximate && !approximate)
-            {
-                Tooltip = Tooltip.Replace("<br>Approximate", "");
-            }
             Approximate = approximate;
             return this;
         }

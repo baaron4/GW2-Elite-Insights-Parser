@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDstHitMechanic(Bombshell, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+                new PlayerDstHitMechanic(BombShellRiverOfSouls, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
                 new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
             }
             );
@@ -99,15 +99,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Desmina not found");
             }
-            var desminaInitialPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
-            if (!combatData.GetMovementData(desmina).Any(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(desminaInitialPosition) < 100))
+            if (combatData.HasMovementData)
             {
-                return FightData.EncounterStartStatus.Late;
+                var desminaEncounterStartPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
+                var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+                if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
             }
             return FightData.EncounterStartStatus.Normal;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
@@ -163,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                     }
-                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == Bombshell).ToList();
+                    var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
@@ -183,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)replay.TimeOffsets.start;
                         int end = (int)replay.TimeOffsets.end;
-                        replay.Decorations.Add(new RectangleDecoration( 160, 390, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                        replay.Decorations.Add(new RectangleDecoration( 160, 390, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Enervator:

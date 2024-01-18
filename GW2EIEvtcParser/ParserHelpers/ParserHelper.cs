@@ -15,10 +15,10 @@ namespace GW2EIEvtcParser
         internal static readonly AgentItem _unknownAgent = new AgentItem();
 
         public const int CombatReplayPollingRate = 150;
-        internal const int CombatReplaySkillDefaultSizeInPixel = 22;
-        internal const int CombatReplaySkillDefaultSizeInWorld = 90;
-        internal const int CombatReplayOverheadDefaultSizeInPixel = 20;
-        internal const float CombatReplayOverheadDefaultOpacity = 1.0f;
+        internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
+        internal const uint CombatReplaySkillDefaultSizeInWorld = 90;
+        internal const uint CombatReplayOverheadDefaultSizeInPixel = 20;
+        internal const float CombatReplayOverheadDefaultOpacity = 0.8f;
 
         public const int MinionLimit = 1500;
 
@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser
             Thief, Daredevil, Deadeye, Specter,
             Ranger, Druid, Soulbeast, Untamed,
             Engineer, Scrapper, Holosmith, Mechanist,
+            PetSpecific,
             FightSpecific,
             FractalInstability,
             Unknown
@@ -578,6 +579,11 @@ namespace GW2EIEvtcParser
         internal static string GetProfIcon(Spec spec)
         {
             return ParserIcons.BaseResProfIcons.TryGetValue(spec, out string icon) ? icon : ParserIcons.UnknownProfessionIcon;
+        }
+
+        internal static string GetGadgetIcon()
+        {
+            return "https://wiki.guildwars2.com/images/1/17/Gadgeteer.png";
         }
 
         internal static string GetNPCIcon(int id)

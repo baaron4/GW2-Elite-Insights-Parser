@@ -234,7 +234,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Fixation
             replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
-            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
             // Shared Destruction (Green)
             int greenDuration = 6250;
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in greenEndEffectEvents)
                 {
-                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
+                    bool isSuccess = log.CombatData.GetEffectGUIDEvent(effect.EffectID).HexContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
                     AddSharedDestructionDecoration(p, replay, (effect.Time - greenDuration, effect.Time), isSuccess);
                 }
             }
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // This prevents the late green effect from appearing in the combat replay, since it doesn't exist in game.
                     if (!greenEndEffectEvents.Any(x => Math.Abs(x.Time - effect.Time) < 200 || Math.Abs(x.Time - greenDuration - effect.Time) < 200))
                     {
-                        AddSharedDestructionDecoration(p, replay, ProfHelper.ComputeEffectLifespan(log, effect, greenDuration), true);
+                        AddSharedDestructionDecoration(p, replay, effect.ComputeLifespan(log, greenDuration), true);
                     }
                 }
             }
@@ -279,10 +279,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (int, int) lifespan = ((int)effect.Time, (int)effect.Time + correctedDuration);
 
                     // Tether Sniper to Player
-                    replay.AddTetherByEffectGUID(log, effect, "rgba(255, 200, 0, 0.3)", correctedDuration, true);
+                    replay.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
 
                     // Circle around the player
-                    replay.Decorations.Add(new CircleDecoration(500, lifespan, "rgba(250, 50, 0, 0.2)", new AgentConnector(p)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(500, lifespan, Colors.Red, 0.2, new AgentConnector(p)).UsingFilled(false));
                 }
             }
 
@@ -291,9 +291,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in spreads)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
                 }
             }
 
@@ -302,9 +302,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new AgentConnector(p);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
                 }
             }
 
@@ -313,9 +313,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers4)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                     var connector = new AgentConnector(p);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
                 }
             }
 
@@ -324,9 +324,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in heavensPalm)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new AgentConnector(p);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, "rgba(200, 120, 0, 0.2)", connector), lifespan.Item2);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
                 }
             }
         }
@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in waveEffect)
                         {
                             int durationCone = 1000;
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, durationCone);
+                            (long, long) lifespan = effect.ComputeLifespan(log, durationCone);
                             AddDragonSlashWaveDecoration(log, target, replay, lifespan, durationCone);
                         }
                     }
@@ -391,11 +391,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in warningRectangle)
                         {
-                            (long, long) lifespanWarning = ProfHelper.ComputeEffectLifespan(log, effect, warningDuration);
+                            (long, long) lifespanWarning = effect.ComputeLifespan(log, warningDuration);
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-                            var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, "rgba(200, 120, 0, 0.2)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                            replay.AddDecorationWithBorder(rectangle, "rgba(250, 50, 0, 0.2)");
+                            var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, Colors.Orange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
+                            replay.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
                         }
                     }
                     // Damage decoration
@@ -406,20 +406,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                        replay.AddDecorationWithBorder(rectangle, "rgba(255, 0, 0, 0.2)");
+                        replay.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.TheEnforcer:
                 case (int)ArcDPSEnums.TrashID.TheEnforcerCM:
                     // Blue tether from Enforcer to Mindblade when they're close to each other
                     List<AbstractBuffEvent> enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                    replay.AddTether(enforcerInspiration, "rgba(0, 0, 255, 0.1)");
+                    replay.AddTether(enforcerInspiration, Colors.Blue, 0.1);
                     break;
                 case (int)ArcDPSEnums.TrashID.TheMindblade:
                 case (int)ArcDPSEnums.TrashID.TheMindbladeCM:
                     // Blue tether from Mindblade to Enforcer when they're close to each other
                     List<AbstractBuffEvent> mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                    replay.AddTether(mindbladeInspiration, "rgba(0, 0, 255, 0.1)");
+                    replay.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
                     break;
                 case (int)ArcDPSEnums.TrashID.TheRitualist:
                 case (int)ArcDPSEnums.TrashID.TheRitualistCM:
@@ -430,9 +430,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in volatileExpulsion)
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                             var connector = new AgentConnector(target);
-                            var circle = new CircleDecoration(380, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                            var circle = new CircleDecoration(380, lifespan, Colors.Orange, 0.2, connector);
                             replay.AddDecorationWithGrowing(circle, lifespan.Item2);
                         }
                     }
@@ -443,9 +443,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in volatileBurst)
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5500);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                             var connector = new AgentConnector(target);
-                            var doughnut = new DoughnutDecoration(100, 500, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                            var doughnut = new DoughnutDecoration(100, 500, lifespan, Colors.Orange, 0.2, connector);
                             replay.AddDecorationWithGrowing(doughnut, lifespan.Item2);
                         }
                     }
@@ -464,14 +464,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in smolReds)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 20800);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 20800);
                     var connector = new PositionConnector(effect.Position);
                     int damageDelay = 1610;
                     long warningEnd = lifespan.Item1 + damageDelay;
-                    var circle = new CircleDecoration(80, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(80, (lifespan.Item1, warningEnd), Colors.Red, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(warningEnd));
-                    EnvironmentDecorations.Add(new CircleDecoration(80, (warningEnd, lifespan.Item2), "rgba(250, 50, 0, 0.4)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(80, (warningEnd, lifespan.Item2), Colors.Red, 0.4, connector));
                 }
             }
 
@@ -480,9 +480,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mines)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 0);
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, "rgba(250, 50, 0, 0.4)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, Colors.Red, 0.4, connector));
                 }
             }
 
@@ -493,9 +493,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in electricRain)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2400);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2400);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(100, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -507,11 +507,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in jadeLob)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 1500);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1500);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(100, lifespan, "rgba(0, 200, 0, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(250, 50, 0, 0.2)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
 
@@ -520,11 +520,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in enforcerOrbsAoEs)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2708);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2708);
                     var connector = new PositionConnector(effect.Position);
                     var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 200, 0.2)", connector);
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(250, 50, 0, 0.2)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
 
@@ -533,15 +533,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in mindbladeReds)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     int damageDelay = 2000;
                     long warningEnd = lifespan.Item1 + damageDelay;
-                    var circle = new CircleDecoration(240, (lifespan.Item1, warningEnd), "rgba(250, 50, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(240, (lifespan.Item1, warningEnd), Colors.Red, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration());
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(warningEnd));
-                    EnvironmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.Item2), "rgba(250, 50, 0, 0.4)", connector));
+                    EnvironmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.Item2), Colors.Red, 0.4, connector));
                 }
             }
 
@@ -550,10 +550,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in rushingJustice)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 0);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    EnvironmentDecorations.Add(new RectangleDecoration( 50, 145, lifespan, "rgba(250, 50, 0, 0.2)", connector).UsingRotationConnector(rotationConnector));
+                    EnvironmentDecorations.Add(new RectangleDecoration( 50, 145, lifespan, Colors.Red, 0.2, connector).UsingRotationConnector(rotationConnector));
                 }
             }
 
@@ -562,9 +562,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in spiritualLightning)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                     var connector = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(90, lifespan, "rgba(200, 120, 0, 0.2)", connector);
+                    var circle = new CircleDecoration(90, lifespan, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -575,9 +575,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in stormOfSwords)
                 {
-                    (long, long) lifespanIndicator = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespanIndicator = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    var indicatorCircle = new CircleDecoration(200, lifespanIndicator, "rgba(200, 120, 0, 0.2)", connector);
+                    var indicatorCircle = new CircleDecoration(200, lifespanIndicator, Colors.Orange, 0.2, connector);
                     EnvironmentDecorations.Add(indicatorCircle);
                     EnvironmentDecorations.Add(indicatorCircle.UsingGrowingEnd(lifespanIndicator.Item2));
                     var initialPosition = new ParametricPoint3D(effect.Position, lifespanIndicator.Item2);
@@ -587,7 +587,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var finalPosition = new ParametricPoint3D(initialPosition + (velocity * stormDuration / 1000.0f) * new Point3D((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2)), lifespanIndicator.Item2 + stormDuration);
                     var animatedCircle = new CircleDecoration(200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition }));
                     EnvironmentDecorations.Add(animatedCircle);
-                    EnvironmentDecorations.Add(animatedCircle.GetBorderDecoration("rgba(250, 50, 0, 0.2)"));
+                    EnvironmentDecorations.Add(animatedCircle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
         }
@@ -598,7 +598,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (facingDirection == null) { return; }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
-            var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
+            var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
             replay.AddDecorationWithGrowing(pie, lifespan.Item2);
             replay.Decorations.Add(pie.GetBorderDecoration());
         }
@@ -609,17 +609,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (facingDirection == null) { return; }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
-            var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, "rgba(200, 120, 0, 0.2)", connector).UsingRotationConnector(rotationConnector);
+            var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
             replay.AddDecorationWithGrowing(pie, lifespan.Item2);
         }
 
         private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)
         {
-            string green = "rgba(0, 120, 0, 0.4)";
-            string color = isSuccessful ? green : "rgba(120, 0, 0, 0.4)";
+            Color green = Colors.DarkGreen;
+            Color color = isSuccessful ? green : Colors.DarkRed;
             var connector = new AgentConnector(p);
-            replay.Decorations.Add(new CircleDecoration(180, lifespan, green, connector).UsingGrowingEnd(lifespan.Item2));
-            replay.Decorations.Add(new CircleDecoration(180, lifespan, color, connector));
+            replay.Decorations.Add(new CircleDecoration(180, lifespan, green, 0.4, connector).UsingGrowingEnd(lifespan.Item2));
+            replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.4, connector));
         }
     }
 }

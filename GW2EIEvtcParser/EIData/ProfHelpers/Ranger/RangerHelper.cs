@@ -18,7 +18,17 @@ namespace GW2EIEvtcParser.EIData
     internal static class RangerHelper
     {
 
-        private static HashSet<int> NonSpiritMinions = new HashSet<int>()
+        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
+        {
+            (int)MinionID.FrostSpirit,
+            (int)MinionID.StoneSpirit,
+            (int)MinionID.StormSpirit,
+            (int)MinionID.SunSpirit,
+            (int)MinionID.WaterSpirit,
+            (int)MinionID.SpiritOfNatureRenewal,
+        };
+
+        private static HashSet<int> JuvenilePetIDs = new HashSet<int>()
         {
             (int)MinionID.JuvenileAlpineWolf,
             (int)MinionID.JuvenileArctodus,
@@ -82,6 +92,25 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileAetherHunter
         };
 
+        private static bool IsJuvenilePetID(int id)
+        {
+            return JuvenilePetIDs.Contains(id);
+        }
+
+        internal static bool IsJuvenilePet(AgentItem agentItem)
+        {
+            if (agentItem.Type == AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+            return IsJuvenilePetID(agentItem.ID);
+        }
+
+        internal static bool IsKnownMinionID(int id)
+        {
+            return IsJuvenilePetID(id) || SpiritIDs.Contains(id);
+        }
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             //new DamageCastFinder(12573,12573), // Hunter's Shot
@@ -102,11 +131,11 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
             new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-            new MinionSpawnCastFinder(RangerPetSpawned, NonSpiritMinions.ToList()).UsingNotAccurate(true),
+            new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs.ToList()).UsingNotAccurate(true),
         };
 
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Skills
             new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
@@ -225,6 +254,13 @@ namespace GW2EIEvtcParser.EIData
             // Nature Magic
             // We can't check buffs on minions yet
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostSpirit, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -276,8 +312,8 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
-            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, 1286, playerAgents);
-            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, 31436, playerAgents);
+            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
+            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
             var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
@@ -288,24 +324,9 @@ namespace GW2EIEvtcParser.EIData
             }
             else if (rangers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { 44980 }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { 31503 }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
+                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);
             }
-        }
-
-        private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
-        {
-            (int)MinionID.FrostSpirit,
-            (int)MinionID.StoneSpirit,
-            (int)MinionID.StormSpirit,
-            (int)MinionID.SunSpirit,
-            (int)MinionID.WaterSpirit,
-            (int)MinionID.SpiritOfNatureRenewal,
-        };
-
-        internal static bool IsKnownMinionID(int id)
-        {
-            return NonSpiritMinions.Contains(id) || SpiritIDs.Contains(id);
         }
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
@@ -318,9 +339,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDownPetTurtle, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in hunkerDowns)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHunkerDown, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -330,9 +351,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in barrages)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 600); // ~600ms interval
+                    (long, long) lifespan = effect.ComputeLifespan(log, 600); // ~600ms interval
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBarrage, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -342,9 +363,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in bonfires)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBonfire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -354,9 +375,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in frostTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFrostTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -366,9 +387,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in flameTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFlameTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -378,9 +399,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in vipersNests)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 3000);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVipersNest, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -390,9 +411,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in spikeTraps)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 2000); // roughly time displayed ingame
+                    (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpikeTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -406,10 +427,10 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
                         {
-                            (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
+                            (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                             var connector = new PositionConnector(effect.Position);
                             var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                            replay.Decorations.Add(new RectangleDecoration(400, 60, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                            replay.Decorations.Add(new RectangleDecoration(400, 60, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
                             replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                         }
                     }

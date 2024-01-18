@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser
         // Relics
         public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
         public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
-        public const string RelicOfCerusEye2 = "521b6C72BF291E4E8A895A0827AF1727";
+        public const string RelicOfCerusEye2 = "521B6C72BF291E4E8A895A0827AF1727";
         public const string RelicOfCerusBeam = "513AEEF08C217942A798831BD9F4903E"; // 1 second delayed
         public const string RelicOfCerusBeam2 = "43F06D75DF774C4DBB1383B8621B1047"; // 1 second delayed
         public const string RelicOfIce = "54F2B4920F7E2D4FAA56CED739BA2C41";
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
-        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the "trail" left behind
+        // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
         // Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
@@ -360,8 +360,32 @@ namespace GW2EIEvtcParser
         public const string MursaarOverseerProtectBubble = "17BC358A51ED2D43BF2ABE8AB642B86B"; // Src player
         public const string MursaarOverseerClaimMarker = "94F3501D777FAC439E78E143CE756B0A"; // No Src - No Dst
         public const string MursaarOverseerShockwave = "0F62A1315A00FC438B2F1273E6BC4054";
+        // Broken King
+        public const string BrokenKingNumbingBreachIndicator = "5341E83B29B534408E90DBE7BE6F452D";
+        public const string BrokenKingNumbingBreachDamage = "1BF014091BFD1E40A11ED36B92601342";
+        public const string BrokenKingHailstormGreen = "C97A7665B2AA6C4482026D4F2562E25E";
+        public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
+        public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
+        public const string BrokenKingKingsWrathConeAoEDamage = "22AC6BFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
+        // Dhuum
+        public const string DhuumScytheSwingIndicator = "91A23D51294E80458BE9C3C89A2ED138"; // 1200 duration
+        public const string DhuumScytheSwingDamage = "C79F5D95E11070448A39ACD7F6C5D0D3"; // 0 duration
+        public const string DhuumCullAoEIndicator = "1BB71ED45AF4354AB65BBEB976E8CFEE"; // 0 duration
+        public const string DhuumCullCracksIndicator = "F28528CBE08E0D43B3227A157CD1CCF2"; // dynamic duration, earlier cracks have longer duration than last ones.
+        public const string DhuumCullCracksDamage = "13B5022FBF7D884C9AA9ED667FEEC22F"; // 0 duration
+        public const string DhuumDeathMarkFirstIndicator = "6A0D725CD03D8D48BEA939CD1BBA7A9A"; // 2000 duration - Soul split warning indicator
+        public const string DhuumDeathMarkSecondIndicator = "4BA74BA044B7BD4BB1E3392641078D97"; // 1000 duration - Hit indicator (black smoke)
+        public const string DhuumDeathMarkDeathZone = "B8F90FE6AF4F2A4C84D349861A098392"; // 120000 duration
+        public const string DhuumSuperspeedOrb = "8F89945581099142B598977188BAC8E1"; // max duration - has end effect
+        public const string DhuumConeSlash = "21BA95CC014CC944A71E2A6FB28D9A86";
         // CA
         public const string CAArmSmash = "B1AAD873DB07E04E9D69627156CA8918";
+        // Qadim
+        public const string QadimCMIncinerationOrbs = "F0EC05F2019BD3429E7F8349BEB5A1DF"; // 2600 duration - 180 corner orb - 540 central orb
+        public const string QadimPyresIncinerationOrbs = "D3D9E94418D8094BAE0E0C510DDF2A91"; // 2300 duration - 240 radius
+        public const string QadimInfernoAoEs = "37DF91103EC45240AA7910575F1FC55F"; // On non static platform - 3000 duration - 150 radius
+        public const string QadimJumpingBlueOrbs = "9FE9CEE3B3B1A743B769D16B196AD45D";
+        public const string QadimPlatformStartsOrEndsMoving = "98891680AFB80A4E9CAFCCBD1662DF88";
         // Sabir
         public const string SabirFlashDischarge = "40818C8E9CC6EF4388C2821FCC26A9EC";
         // Qadim the Peerless
@@ -384,6 +408,10 @@ namespace GW2EIEvtcParser
         public const string QadimPeerlessMagmaWarningAoE = "E269977C2FC9474EAAD1051CDAFAD653"; // 4000 duration - Src player
         public const string QadimPeerlessMagmaLandingExplosion = "6617FA23565EE646ADAA7A646C895927"; // 1000 duration - No Src
         public const string QadimPeerlessMagmaDamagingAoE = "BABE69EC5AC7AF48A2F14A9FB8920C7F"; // 600000 duration - Src Qadim
+        // Freezie
+        public const string FreezieFrozenPatch = "2CE301ED692ACA4E964BFDFEED9D055E"; // 30000 duration
+        public const string FreezieOrangeAoE120 = "0760BCD6779C0248B480E59D41E785B4"; // Has multiple durations
+        public const string FreezieDoughnutRing = "3627917E07E3344EB97B795BE437DDF0"; // 10000 duration
         // Boneskinner
         public const string GraspAoeIndicator = "B9B32815D670DC4E8B8CF71E92A9FFD5"; // Orange aoe indicator
         public const string GraspClaws1 = "75B096EF78F3AB4CB1D05BAE9CA3235C"; // One is the claw, the other the red aoe indicator
@@ -428,10 +456,10 @@ namespace GW2EIEvtcParser
         public const string KainengOverlookDragonSlashWaveIndicator = "CB877C57D1423240BACDF8D6B52A440F";
         public const string KainengOverlookStormOfSwordsIndicator = "F019EA6ADC183B4599FDF7E67071E181";
         // Harvest Temple
-        public const string HarvestTemplePurificationLightnings = "ADDDB6E725094240845270262E59F2BD";
-        public const string HarvestTemplePurificationVoidZones = "F5A9E487E2B3A64A83661D87DE1CAF1F";
+        public const string HarvestTemplePurificationLightningOfJormag = "ADDDB6E725094240845270262E59F2BD";
+        public const string HarvestTemplePurificationStormfall = "F5A9E487E2B3A64A83661D87DE1CAF1F";
         public const string HarvestTemplePurificationZones = "D5B07DF36991DD48B64AC403EFAA6F9F";
-        public const string HarvestTemplePurificationFireBalls = "D49EB86EB17A0D4793768B19978C1B2C";
+        public const string HarvestTemplePurificationFlamesOfPrimordus = "D49EB86EB17A0D4793768B19978C1B2C";
         public const string HarvestTemplePurificationBeeLaunch = "73FE43AEE78ADC4B9527DF683481984F";
         public const string HarvestTemplePurificationPoisonTrail = "CCBA0AD77B52774DA48EE37AED9108F4";
         public const string HarvestTemplePurificationWaterProjectiles = "F8F9628F58DA09438574D66424399151";
@@ -442,11 +470,16 @@ namespace GW2EIEvtcParser
         public const string HarvestTemplePrimordusBigJaw = "4D8CA1836969BD4BBF345719576ACAAF";
         public const string HarvestTempleKralkatorrikBeamIndicator = "4ACBA11BFAC6B940BF6FD11CB332FFB8"; // This is the effect for the AoE indicator, the actual puddles are a different effect
         public const string HarvestTempleKralkatorrikBeamAoe = "8B55EBC6025EB3429D464EDA5710E419"; // This is the effect for the actual circular puddles
+        public const string HarvestTempleKralkatorrikCrystalBarrageImpact = "32B9E497929F054E8633EF013583E20C";
         public const string HarvestTempleMordremothPoisonRoarIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0";
         public const string HarvestTempleMordremothPoisonRoarImpact = "E500544171F13643899C178EC3FB38A9";
+        public const string HarvestTempleMordremothShockwave1 = "3DFB20FECCAF794EA194E1F93CB0146A"; // duration 0
+        public const string HarvestTempleMordremothShockwave2 = "17E4CA4ED7CAF843895AD75F2D45D9A6"; // duration 0
         public const string HarvestTempleZhaitanPutridDelugeImpact = "FE8B96A200376B4BA75297FF2367C5C4";
         public const string HarvestTempleZhaitanPutridDelugeAoE = "82A8BC954DD69E4DBBF526EE1C6A3E74";
-        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808Ef8E6C654A";
+        public const string HarvestTempleZhaitanTailSlamImpact = "7D0FBDEC2B1DEF4B8BC0FD6A5BFD3705";
+        public const string HarvestTempleZhaitanScreamIndicator = "12B49E1A9D034F45A3BD754331418F9B";
+        public const string HarvestTempleSpreadNM = "F39933B190100B4C87E808EF8E6C654A";
         public const string HarvestTempleSpreadCM = "BDF708225224C64183BA3CE2A609D37F";
         public const string HarvestTempleRedPuddleSelectNM = "0CD6F76C1BF9C049A2FCE4D86CB46475";
         public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
@@ -455,17 +488,52 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
-        public const string HarvestTempleVoidPool = "912F68E45158C14E9A30D6011B7B0C7F";
+        public const string HarvestTemplePurificationOrbSpawns = "4F982CD060507C44A25844BF0ADFCB54";
+        public const string HarvestTempleVoidPoolOrbGettingReadyToBeDangerous = "D11320204E28E643A48469AA8E4845BA";
+        public const string HarvestTempleInfluenceOfTheVoidPool = "912F68E45158C14E9A30D6011B7B0C7F";
         public const string HarvestTempleSooWonClaw = "CB877C57D1423240BACDF8D6B52A440F";
+        public const string HarvestTempleSooWonVoidOrbs1 = "F6964A4DE51DF04CA7E0F011BEE7D854"; // 2080 duration - these are the orbs spawning just before the claw swipe
+        public const string HarvestTempleSooWonVoidOrbs2 = "88E9C3112BF6DA4486845A0433782E9C"; // 2080 duration - these are the orbs spawning just before the claw swipe
         public const string HarvestTempleTormentOfTheVoidClawIndicator = "3F24896D3EF8D5459B399DAC8D0AD150"; // AoE indicator for bouncing orbs after Soo-Won's Claw Slap attack
-        public const string HarvestTempleTormentOfTheVoidTailIndicator = "C1A523D71A841048897211B1020B8D95"; // AoE indicator for bouncing orbs after Soo-Won's Tail Slam attack
+        public const string HarvestTempleScalableOrangeAoE = "C1A523D71A841048897211B1020B8D95"; // Generic orange aoe - variable radius - variable duration
         public const string HarvestTempleTsunamiIndicator = "8B0EBA3241E1ED469DAC7AFD4E385FF2";
         public const string HarvestTempleTsunami1 = "8F96447526A09B4F8545CBEA1B0046D4"; // There are multiple effects when the Tsunami goes off
         public const string HarvestTempleTsunami2 = "C2CF236673BC0141B6EE5A918869728A"; // There are multiple effects when the Tsunami goes off
         public const string HarvestTempleTsunami3 = "E4700E828E058649B9B94F170DEF8659"; // There are multiple effects when the Tsunami goes off
+        public const string HarvestTempleSooWonTsunamiSlamIndicator = "0D594F550B0BF043B0B299FC26A8463B";
         public const string HarvestTempleTailSlamIndicator = "49BD7FF8309E4047B4D17C83E660A461";
+        public const string HarvestTempleVoidBrandbomberBrandedArtillery = "3ED61C8A1C2E594A8AD2E2E69AF16322"; // duration 2310
+        public const string HarvestTempleLastLaughChampion = "A478BD35F568974091FC99670B5A9700"; // TODO CHECK - BRANDBOMBERS SPAWN IT ON DEATH
+        public const string HarvestTempleVoidGiantRottingBileIndicator = "912F68E45158C14E9A30D6011B7B0C7F"; // duration 1400
+        public const string HarvestTempleVoidGiantRottingBileDamage = "73931DCBD7D25E4FAE930BA1B896D07E"; // duration 10000
+        public const string HarvestTempleVoidTimecasterGravityCrushIndicator = "1344E9C82608BB47AADA2B850DB7DEF7"; // duration 1600
+        public const string HarvestTempleVoidTimecasterNightmareEpoch = "7D94F6283F23FC4A839D0F8EEE0549C5"; // duration 10000
+        public const string HarvestTempleVoidSaltsprayDragonHydroBurstWhirlpools = "8198E9B46FF7AB438927745B76759A7F"; // duration 3000
+        public const string HarvestTempleVoidSaltsprayDragonCallLightning = "6724030E0E64CA4E8D947A5CCFA8188E"; // duration 0 - using this for mechanic instead of orange aoe effect
+        public const string HarvestTempleVoidSaltsprayDragonFrozenFuryCone = "ECD550A176BD9249A6925E8C2DD0CA30";
+        public const string HarvestTempleVoidSaltsprayDragonFrozenFuryRectangle = "56E2F67D3D550442A7BE11E85FDDE65D";
+        public const string HarvestTempleVoidSaltsprayDragonRollingFlames = "084A4E29CD66A04C9ECDB8033EFFE6A1";
+        public const string HarvestTempleVoidSaltsprayDragonShatterEarth = "5978C1D3AE4BCD4BAB286BF4FD8B24E9";
+        public const string HarvestTempleVoidGoliathGlacialSlam = "B28E156F3C93ED4B842B4479ABF5F5C1"; // duration 5000
+        public const string HarvestTempleVoidObliteratorChargeIndicator = "8F65EC18AC385342982BCB28F9742B37"; // duration 1000
+        public const string HarvestTempleVoidObliteratorWyvernBreathIndicator = "8A1D085CA69E8A42A52196C99AE86CAF"; // duration 3400
+        public const string HarvestTempleVoidObliteratorWyvernBreathFire = "453283E51FF9EF489980B6F0208F5F43"; // duration 30000
+        public const string HarvestTempleVoidObliteratorFirebomb = "D2E7228A6225FB44911507A45EF2CCEC"; // duration 21000
+        public const string HarvestTempleVoidObliteratorShockwave = "4254DCF4AF72FF4A83847908DA98E427"; // duration 0, should probably be 2900
         // Old Lion's Court
         // Cosmic Observatory
+        public const string CosmicObservatoryDemonicBlastSliceIndicator = "A21A92783688A847963B86E96B8CC9BE";
+        public const string CosmicObservatoryDemonicBlastDagdaEffect1 = "D03CDF37E0AC8246ABD4E741ADD61427"; // 0 duration no effect end
+        public const string CosmicObservatoryDemonicBlastDagdaEffect2 = "3A19BC0143715C419504C25EA0B7ADFE"; // 0 duration no effect end
+        public const string CosmicObservatoryDemonicFever = "BDF708225224C64183BA3CE2A609D37F";
+        public const string CosmicObservatorySharedDestructionCosmicMeteorGreen = "3EEDE16455C8C8449237BCC77F107548";
+        public const string CosmicObservatorySharedDestructionCosmicMeteorGreenEnd = "FED0256743CC534695F30EB3655933AD";
+        public const string CosmicObservatorySpinningNebula = "8196855C5F76874CAF1DB683BD163811";
+        public const string CosmicObservatoryShootingStarsGreenArrow = "046AFA0B20E07447BDBB94A03FCA2662"; // 9000 duration
+        public const string CosmicObservatoryDemonicPoolsIndicator = "52C0855CB838424D91343DD5C176EC2E"; // 3000 duration
+        public const string CosmicObservatoryDemonicPoolsDamage = "F9020791BEE9BC41B6A17955120EDD32"; // 20000 duration - can end early
+        public const string CosmicObservatoryRainOfComets = "43A9C4FBF0628A4C9D38084854653547";
+        public const string CosmicObservatoryPlanetCrash = "B4529A29DF12BA4D913973FFAAE22926";
         // Temple of Febe
         public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
         public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player

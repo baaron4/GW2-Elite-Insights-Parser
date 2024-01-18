@@ -312,7 +312,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return demonicBonds.Any();
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
             bool needsDummy = !needsRefresh;
@@ -538,11 +538,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = start + 5000;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                         if (!log.FightData.IsCM)
                         {
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
+                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
                         }
                     }
                     var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1)).ToList();
@@ -557,25 +557,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             continue;
                         }
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
                         var connector = new AgentConnector(target);
                         for (int i = 0; i < 6; i++)
                         {
                             var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector1));
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
                             if (i % 5 != 0)
                             {
                                 var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", connector).UsingRotationConnector(rotationConnector2));
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
                             }
                         }
                     }
                     var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in signets)
                     {
-                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, Colors.Teal, 0.4, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Gambler:
@@ -589,12 +589,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Tear:
                     break;
                 case (int)ArcDPSEnums.TrashID.Hands:
-                    replay.Decorations.Add(new CircleDecoration(90, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Oil:
                     int delayOil = 3000;
-                    replay.Decorations.Add(new CircleDecoration(200, (start, start + delayOil), "rgba(255,100, 0, 0.5)", new AgentConnector(target)).UsingGrowingEnd(start + delayOil));
-                    replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, start + delayOil), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(start + delayOil));
+                    replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
                     AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
@@ -606,7 +606,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.DemonicBond:
                     replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
                     var demonicCenter = new Point3D(-8092.57f, 4176.98f);
-                    replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(target), new PositionConnector(demonicCenter)));
+                    replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                     AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                     if (shackledPrisoner != null)
                     {
@@ -643,7 +643,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                         Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), "rgba(0, 200, 200, 0.5)", new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
+                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
                 default:

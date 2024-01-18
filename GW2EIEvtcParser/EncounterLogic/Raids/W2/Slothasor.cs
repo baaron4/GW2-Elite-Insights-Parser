@@ -54,17 +54,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> slipperySlublings = log.CombatData.GetBuffData(SlipperySlubling);
-            if (slipperySlublings.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, SlipperySlubling, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[SlipperySlubling], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
             }
         }
 
@@ -119,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Mushrooms
             var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
@@ -168,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     var breath = cls.Where(x => x.SkillId == Halitosis).ToList();
                     foreach (AbstractCastEvent c in breath)
@@ -176,15 +169,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 2000;
-                        int range = 600;
+                        uint range = 600;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
                             var openingAngle = 60;
-                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start, start + preCastTime), "rgba(255,200,0,0.1)", connector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start, start + preCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), Colors.Orange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     var tantrum = cls.Where(x => x.SkillId == TantrumSkill).ToList();
@@ -192,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration(300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target));
+                        var circle = new CircleDecoration(300, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     var shakes = cls.Where(x => x.SkillId == SporeRelease).ToList();
@@ -200,7 +193,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration( 700, (start, end), "rgba(255, 0, 0, 0.4)", new AgentConnector(target));
+                        var circle = new CircleDecoration( 700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     break;
@@ -226,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
+                    replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }

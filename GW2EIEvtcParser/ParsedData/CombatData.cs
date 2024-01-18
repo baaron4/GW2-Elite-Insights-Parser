@@ -418,37 +418,49 @@ namespace GW2EIEvtcParser.ParsedData
             }
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in _buffDataByDst)
             {
-                var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                var dictExtensions = pair.Value.OfType<BuffExtensionEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                var dictApply = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
+                var dictStacks = pair.Value.OfType<AbstractBuffStackEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
+                var dictExtensions = pair.Value.OfType<BuffExtensionEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
                 var extensions = pair.Value.OfType<BuffExtensionEvent>().ToList();
-                foreach (BuffExtensionEvent extensionEvent in extensions)
+                foreach (KeyValuePair<uint, Dictionary<long, List<BuffExtensionEvent>>> extensionPair in dictExtensions)
                 {
-                    if (extensionEvent.BuffInstance != 0)
+                    if (extensionPair.Key == 0)
                     {
-                        if (dictApply.TryGetValue(extensionEvent.BuffInstance, out List<BuffApplyEvent> applies))
+                        continue;
+                    }
+                    if (dictApply.TryGetValue(extensionPair.Key, out Dictionary<long, List<BuffApplyEvent>> appliesPerBuffID))
+                    {
+                        foreach (KeyValuePair<long, List<BuffExtensionEvent>> extensionByBuffIDPair in extensionPair.Value)
                         {
-                            BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID);
-                            if (initialStackApplication != null)
+                            if (appliesPerBuffID.TryGetValue(extensionByBuffIDPair.Key, out List<BuffApplyEvent> applies))
                             {
-                                var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
-                                if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out List<AbstractBuffStackEvent> stacks))
+                                BuffExtensionEvent previousExtension = null;
+                                foreach (BuffExtensionEvent extensionEvent in extensionByBuffIDPair.Value)
                                 {
-                                    sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x.BuffID == extensionEvent.BuffID));
-                                }
-                                if (dictExtensions.TryGetValue(extensionEvent.BuffInstance, out List<BuffExtensionEvent> extensionsForBuffInstance))
-                                {
-                                    BuffExtensionEvent prevExt = extensionsForBuffInstance.LastOrDefault(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time && x != extensionEvent && x.BuffID == extensionEvent.BuffID);
-                                    if (prevExt != null)
+                                    BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
+                                    if (initialStackApplication != null)
                                     {
-                                        sequence.Add(prevExt);
+                                        var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
+                                        if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out Dictionary<long, List<AbstractBuffStackEvent>> stacksPerBuffID))
+                                        {
+                                            if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out List<AbstractBuffStackEvent> stacks))
+                                            {
+                                                sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
+                                            }
+                                        }
+                                        if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
+                                        {
+                                            sequence.Add(previousExtension);
+                                        }
+                                        previousExtension = extensionEvent;
+                                        sequence = sequence.OrderBy(x => x.Time).ToList();
+                                        extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                                     }
                                 }
-                                sequence = sequence.OrderBy(x => x.Time).ToList();
-                                extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                             }
                         }
                     }
+
                 }
             }
         }
@@ -1113,6 +1125,12 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<EffectEvent>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByGUID(string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
@@ -1125,7 +1143,13 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
-        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1135,7 +1159,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
-        /// <summary>Returns effect events for the given agent and effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1146,7 +1176,13 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
-        /// <summary>Returns effect events for the given agent and effect GUIDs.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent and effect GUIDs.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1167,7 +1203,13 @@ namespace GW2EIEvtcParser.ParsedData
             return found;
         }
 
-        /// <summary>Returns effect events for the given agent <b>including</b> minions and the given effect GUID.</summary>
+        /// <summary>
+        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUID.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1179,6 +1221,13 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
 
+        /// <summary>
+        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUIDs.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1203,10 +1252,15 @@ namespace GW2EIEvtcParser.ParsedData
         /// Returns effect events for the given agent and effect GUID.
         /// The same effects happening within epsilon milliseconds are grouped together.
         /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="groupedEffectEvents"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
         public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
         {
             var effectGroups = new List<List<EffectEvent>>();
-            groupedEffectEvents = effectGroups;
+            groupedEffectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
                 var processedTimes = new HashSet<long>();
                 foreach (EffectEvent first in effects)
@@ -1225,6 +1279,41 @@ namespace GW2EIEvtcParser.ParsedData
                         effectGroups.Add(group);
                     }
                 }
+                groupedEffectEvents = effectGroups;
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Returns effect events for the given effect GUID.
+        /// The same effects happening within epsilon milliseconds are grouped together.
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="groupedEffectEvents"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
+        public bool TryGetGroupedEffectEventsByGUID(string effectGUID, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedEffectEvents, long epsilon = ServerDelayConstant)
+        {
+            var effectGroups = new List<List<EffectEvent>>();
+            groupedEffectEvents = null;
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                var processedTimes = new HashSet<long>();
+                foreach (EffectEvent first in effects)
+                {
+                    if (processedTimes.Contains(first.Time))
+                    {
+                        continue;
+                    }
+                    var group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                    foreach (EffectEvent effect in group)
+                    {
+                        processedTimes.Add(effect.Time);
+                    }
+
+                    effectGroups.Add(group);
+                }
+                groupedEffectEvents = effectGroups;
                 return true;
             }
             return false;
@@ -1235,6 +1324,11 @@ namespace GW2EIEvtcParser.ParsedData
             return _statusEvents.EffectEvents;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <returns></returns>
         public EffectGUIDEvent GetEffectGUIDEvent(string effectGUID)
         {
             if (_metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt))
@@ -1244,6 +1338,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectID">ID of the effect</param>
+        /// <returns></returns>
         public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
         {
             if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
@@ -1253,7 +1352,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="markerGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <returns></returns>
         public MarkerGUIDEvent GetMarkerGUIDEvent(string markerGUID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(markerGUID, out MarkerGUIDEvent evt))
@@ -1263,6 +1366,11 @@ namespace GW2EIEvtcParser.ParsedData
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="markerID">ID of the marker</param>
+        /// <returns></returns>
         public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))

@@ -149,89 +149,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
+            // Handle non squad players
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            var set = new HashSet<string>();
-            var toRemove = new HashSet<AgentItem>();
             var garbageList = new List<AbstractSingleActor>();
-            var teamChangeDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            //
-            IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
-            ulong greenTeam = ulong.MaxValue;
-            var greenTeams = new List<ulong>();
-            foreach (AgentItem a in squadPlayers)
-            {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
-                {
-                    greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
-                }
-            }
-            if (greenTeams.Any())
-            {
-                greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
-            }
-            var playersToMerge = new Dictionary<PlayerNonSquad, AbstractSingleActor>();
-            var agentsToPlayersToMerge = new Dictionary<ulong, PlayerNonSquad>();
             //
             foreach (AgentItem a in aList)
             {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
-                {
-                    a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent).Any(x => x == greenTeam));
-                }
-                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
-                if (!set.Contains(nonSquadPlayer.Character))
-                {
-                    actorListToFill.Add(nonSquadPlayer);
-                    set.Add(nonSquadPlayer.Character);
-                }
-                else
-                {
-                    // we merge
-                    AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
-                    playersToMerge[nonSquadPlayer] = mainPlayer;
-                    agentsToPlayersToMerge[nonSquadPlayer.AgentItem.Agent] = nonSquadPlayer;
-                }
+                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
+                actorListToFill.Add(nonSquadPlayer);
             }
-            if (playersToMerge.Any())
-            {
-                foreach (CombatItem c in combatData)
-                {
-                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out PlayerNonSquad nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                    {
-                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
-                    }
-                    if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                    {
-                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
-                    }
-                }
-                foreach (KeyValuePair<PlayerNonSquad, AbstractSingleActor> pair in playersToMerge)
-                {
-                    PlayerNonSquad nonSquadPlayer = pair.Key;
-                    AbstractSingleActor mainPlayer = pair.Value;
-                    agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);
-                    mainPlayer.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
-                    toRemove.Add(nonSquadPlayer.AgentItem);
-                }
-            }
-            agentData.RemoveAllFrom(toRemove);
-        }
-
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
-        {
-            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
-
-            SolveWvWPlayers(agentData, combatData, extensions);
+            //
             if (!_detailed)
             {
                 var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
-                var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
-                var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
+                var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x)).ToList();
+                var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
                 {
                     if (c.IsDamage(extensions))

@@ -38,8 +38,13 @@ namespace GW2EIEvtcParser.EIData
             }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         };
 
-        internal static readonly List<DamageModifierDescriptor> DamageMods = new List<DamageModifierDescriptor>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            // Investigate for Blood as Sand, add a custom buff like for weaver attunements/ virtuoso blades using effect events?
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -61,9 +66,9 @@ namespace GW2EIEvtcParser.EIData
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
                     {
-                        (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000, player.AgentItem, PathUses);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 8000, player.AgentItem, PathUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration( 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration( 90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                         GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
@@ -71,7 +76,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, color.WithAlpha(0.5f).ToString()).UsingSkillMode(skill));
+                            replay.Decorations.Add(first.LineTo(icon, color, 0.5).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(icon);
                     }
@@ -84,9 +89,18 @@ namespace GW2EIEvtcParser.EIData
                var skill = new SkillModeDescriptor(player, Spec.Scourge, ManifestSandShadeSkill);
                 foreach (EffectEvent effect in scourgeShades)
                 {
-                    (long, long) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000);
+                    long duration;
+                    if (log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.WvW || log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.sPvP)
+                    {
+                        duration = log.LogData.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+                    } 
+                    else
+                    {
+                        duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+                    }
+                    (long, long) lifespan = effect.ComputeLifespan(log, duration);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShade, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }

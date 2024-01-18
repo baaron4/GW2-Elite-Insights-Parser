@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidDataException("Agent is not a squad Player");
             }
+            Character = Spec.ToString() + " pl-" + AgentItem.InstID;
             Account = "Non Squad Player " + (++NonSquadPlayers);
         }
         protected override void TrimCombatReplay(ParsedEvtcLog log)

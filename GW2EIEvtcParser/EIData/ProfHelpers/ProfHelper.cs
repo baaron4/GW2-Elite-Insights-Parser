@@ -345,9 +345,9 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, PortalEntranceWhiteMantleWatchwork);
                 foreach (EffectEvent effect in whiteMantlePortalInactive)
                 {
-                    (long, long) lifespan = ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeavingWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.2f).ToString(), connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.2, connector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -359,9 +359,9 @@ namespace GW2EIEvtcParser.EIData
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
                     {
-                        (long, long) lifespan = ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
                         GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
@@ -369,7 +369,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(decoration, color.WithAlpha(0.3f).ToString()).UsingSkillMode(skill));
+                            replay.Decorations.Add(first.LineTo(decoration, color, 0.3).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(decoration);
                     }
@@ -502,6 +502,19 @@ namespace GW2EIEvtcParser.EIData
             return _canSummonClones.Contains(spec);
         }
 
+        private static readonly HashSet<Spec> _canUseRangerPets = new HashSet<Spec>()
+        {
+            Spec.Ranger,
+            Spec.Druid,
+            Spec.Soulbeast,
+            Spec.Untamed,
+        };
+
+        internal static bool CanUseRangerPets(Spec spec)
+        {
+            return _canUseRangerPets.Contains(spec);
+        }
+
         /// <summary>
         /// Minions that aren't profession-specific bound.
         /// </summary>
@@ -555,66 +568,6 @@ namespace GW2EIEvtcParser.EIData
                 default:
                     break;
             }
-        }
-
-        /// <summary>
-        /// Computes the end time of an effect.
-        /// <br/>
-        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
-        /// Afterwards the effect duration is used, if greater 0 and less than max duration.
-        /// Finally, it defaults to max duration.
-        /// </summary>
-        internal static long ComputeEffectEndTime(ParsedEvtcLog log,EffectEvent effect, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
-        {
-            if (effect.EndEvent != null)
-            {
-                return effect.EndEvent.Time;
-            }
-            if (associatedBuff != null)
-            {
-                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
-                    .OfType<BuffRemoveAllEvent>()
-                    .FirstOrDefault(x => x.To == agent && x.Time >= effect.Time);
-                if (remove != null)
-                {
-                    return remove.Time;
-                }
-            }
-            if (effect.Duration > 0 && effect.Duration <= maxDuration)
-            {
-                return effect.Time + effect.Duration;
-            }
-            return effect.Time + maxDuration;
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.
-        /// Will use default duration if all other methods fail
-        /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
-        /// </summary>
-        internal static (long, long) ComputeEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
-        {
-            long start = effect.Time;
-            long end = ComputeEffectEndTime(log, effect, defaultDuration, agent, associatedBuff);
-            return (start, end);
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.
-        /// Will default to 0 duration if all other methods fail.
-        /// This method is to be used when the duration of the effect is not static (ex: a trap AoE getting triggered or when a trait can modify the duration).
-        /// See <see cref="ComputeEffectEndTime"/> for information about computed end times.
-        /// </summary>
-        internal static (long, long) ComputeDynamicEffectLifespan(ParsedEvtcLog log, EffectEvent effect, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
-        {
-            long durationToUse = defaultDuration;
-            if (!(effect is EffectEventCBTS51))
-            {
-                durationToUse = 0;
-            }
-            long start = effect.Time;
-            long end = ComputeEffectEndTime(log, effect, durationToUse, agent, associatedBuff);
-            return (start, end);
         }
 
 

@@ -738,7 +738,8 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI.</param>
         private void CompletePlayers(ParserController operation)
         {
-            //Fix Disconnected players
+            var toRemove = new HashSet<AgentItem>();
+            //Handle squad players
             IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
             foreach (AgentItem playerAgent in playerAgentList)
             {
@@ -756,6 +757,7 @@ namespace GW2EIEvtcParser
                         if (p.Character == player.Character) // same character, can be fused
                         {
                             skip = true;
+                            toRemove.Add(playerAgent);
                             operation.UpdateProgressWithCancellationCheck("Merging player");
                             RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
@@ -782,6 +784,81 @@ namespace GW2EIEvtcParser
                 {
                     p.AgentItem.OverrideToughness((ushort)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
                 }
+            }
+            // Handle non squad players
+            IReadOnlyList<AgentItem> nonSquadPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
+            if (nonSquadPlayerAgents.Any())
+            {
+                var encounteredNonSquadPlayerInstIDs = new HashSet<ushort>();
+                var teamChangeDict = _combatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
+                //
+                IReadOnlyList<AgentItem> squadPlayers = _agentData.GetAgentByType(AgentItem.AgentType.Player);
+                ulong greenTeam = ulong.MaxValue;
+                var greenTeams = new List<ulong>();
+                foreach (AgentItem a in squadPlayers)
+                {
+                    if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
+                    {
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
+                    }
+                }
+                if (greenTeams.Any())
+                {
+                    greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
+                }
+                var playersToMerge = new Dictionary<AgentItem, AgentItem>();
+                var agentsToPlayersToMerge = new Dictionary<ulong, AgentItem>();
+
+                //
+                var uniqueNonSquadPlayers = new List<AgentItem>();
+                foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
+                {
+                    if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out List<CombatItem> teamChangeList))
+                    {
+                        nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => x.DstAgent).Any(x => x == greenTeam));
+                    }
+                    if (!encounteredNonSquadPlayerInstIDs.Contains(nonSquadPlayer.InstID))
+                    {
+                        uniqueNonSquadPlayers.Add(nonSquadPlayer);
+                        encounteredNonSquadPlayerInstIDs.Add(nonSquadPlayer.InstID);
+                    }
+                    else
+                    {
+                        // we merge
+                        AgentItem mainPlayer = uniqueNonSquadPlayers.FirstOrDefault(x => x.InstID == nonSquadPlayer.InstID);
+                        playersToMerge[nonSquadPlayer] = mainPlayer;
+                        agentsToPlayersToMerge[nonSquadPlayer.Agent] = nonSquadPlayer;
+                    }
+                }
+                if (playersToMerge.Any())
+                {
+                    foreach (CombatItem c in _combatItems)
+                    {
+                        if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out AgentItem nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer, _enabledExtensions))
+                        {
+                            AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
+                            c.OverrideSrcAgent(mainPlayer.Agent);
+                        }
+                        if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer, _enabledExtensions))
+                        {
+                            AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
+                            c.OverrideDstAgent(mainPlayer.Agent);
+                        }
+                    }
+                    foreach (KeyValuePair<AgentItem, AgentItem> pair in playersToMerge)
+                    {
+                        AgentItem nonSquadPlayer = pair.Key;
+                        AgentItem mainPlayer = pair.Value;
+                        _agentData.SwapMasters(nonSquadPlayer, mainPlayer);
+                        mainPlayer.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
+                        toRemove.Add(nonSquadPlayer);
+                    }
+                }
+            }
+            //
+            if (toRemove.Any())
+            {
+                _agentData.RemoveAllFrom(toRemove);
             }
         }
 
@@ -987,7 +1064,7 @@ namespace GW2EIEvtcParser
             }
             //
             operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
-            _fightData.Logic.EIEvtcParse(_gw2Build, _fightData, _agentData, _combatItems, _enabledExtensions);
+            _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");

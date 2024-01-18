@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
             // Cosmic Meteor (green)
             IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -249,8 +249,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int start = (int)cosmicMeteor.Start;
                 int end = (int)cosmicMeteor.End;
-                string color = "rgba(0, 120, 0, 0.4)";
-                replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), color, new AgentConnector(p)), end);
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
             }
         }
 
@@ -279,7 +278,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 int offset = 520; // ~520ms at the start and between
                                 int duration = 2600;
-                                string color = "rgba(250, 120, 0, 0.2)";
                                 var connector = new AgentConnector(target);
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
@@ -288,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                                     long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
-                                    float facing = Point3D.GetRotationFromFacing(rotation);
+                                    float facing = Point3D.GetZRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
                                         int start = (int)cast.Time + offset * (i + 1);
@@ -298,10 +296,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         {
                                             break;
                                         }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), color, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
                                     }
                                 }
                                 break;
@@ -314,7 +312,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                                 int offset = 520; // ~520ms at the start and between
                                 int duration = 2600;
-                                string color = "rgba(250, 120, 0, 0.2)";
                                 var connector = new AgentConnector(target);
                                 ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
                                 if (rotation != null)
@@ -323,7 +320,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                                     BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                                     long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
-                                    float facing = Point3D.GetRotationFromFacing(rotation);
+                                    float facing = Point3D.GetZRotationFromFacing(rotation);
                                     for (int i = 0; i < 5; i++)
                                     {
                                         int start = (int)cast.Time + offset * (i + 1);
@@ -333,10 +330,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         {
                                             break;
                                         }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), color, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
                                     }
                                 }
                                 break;
@@ -355,7 +352,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
                 //             if (anomalyPos != null)
                 //             {
-                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), "rgba(0, 50, 200, 0.4)", new PositionConnector(anomalyPos)));
+                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(anomalyPos)));
                 //             }
                 //         }
                 //     }
@@ -377,8 +374,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)effect.Time;
                     int end = start + 2600; // effect has 3833ms duration for some reason
                     var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
-                    EnvironmentDecorations.Add(new PieDecoration( 1400, 30, (end, end + 300), "rgba(255, 0, 0, 0.2)", new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration( 1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
                 }
             }
         }

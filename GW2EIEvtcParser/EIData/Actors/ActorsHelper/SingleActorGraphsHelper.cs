@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (Segment seg in hps)
             {
-                if (seg.IntersectSegment(time - ServerDelayConstant, time + ServerDelayConstant))
+                if (seg.ContainsPoint(time))
                 {
                     return seg.Value;
                 }
@@ -156,7 +156,7 @@ namespace GW2EIEvtcParser.EIData
             }
             foreach (Segment seg in hps)
             {
-                if (seg.IntersectSegment(time - ServerDelayConstant, time + ServerDelayConstant))
+                if (seg.ContainsPoint(time))
                 {
                     return seg.Value;
                 }

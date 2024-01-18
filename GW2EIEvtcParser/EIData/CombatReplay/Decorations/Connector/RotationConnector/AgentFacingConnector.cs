@@ -6,6 +6,9 @@ namespace GW2EIEvtcParser.EIData
     {
         public AgentItem Agent { get; }
 
+        /// <summary>
+        /// Offset angle around Z axis, in degrees
+        /// </summary>
         public float RotationOffset { get; } = 0;
 
         public enum RotationOffsetMode
@@ -37,11 +40,11 @@ namespace GW2EIEvtcParser.EIData
             OffsetMode = rotationOffsetMode;
         }
 
-        public AgentFacingConnector(AbstractSingleActor agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetRotationFromFacing(rotationOffset), rotationOffsetMode)
+        public AgentFacingConnector(AbstractSingleActor agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
         {
         }
 
-        public AgentFacingConnector(AgentItem agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetRotationFromFacing(rotationOffset), rotationOffsetMode)
+        public AgentFacingConnector(AgentItem agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
         {
         }
         public class AgentFacingConnectorDescriptor : RotationConnectorDescriptor

@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem aiAgent = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault();
             if (aiAgent == null)
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 Extension = "elai";
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             // Manually set HP and names
             AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
             AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
@@ -378,9 +378,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
             {
-                IReadOnlyList<AbstractBuffEvent> dwd = log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons);
-                IReadOnlyList<AbstractBuffEvent> energyDispersal = log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal);
-                if (dwd.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Any())
                 {
                     int counter = 0;
                     foreach (Player p in log.PlayerList)
@@ -396,16 +394,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
                     }
                 }
-                if (energyDispersal.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
                 {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityEnergyDispersal, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityEnergyDispersal], 1));
-                            break;
-                        }
-                    }
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
                 }
             }
         }
@@ -415,7 +406,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Tethering Players to Fears
             List<AbstractBuffEvent> fearFixations = GetFilteredList(log.CombatData, new long[] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, p, true, true);
-            replay.AddTether(fearFixations, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fearFixations, Colors.Magenta, 0.5);
         }
     }
 }

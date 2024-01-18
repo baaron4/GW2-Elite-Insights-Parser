@@ -290,18 +290,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> fearNotThisKnight = log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight);
-            
-            if (fearNotThisKnight.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityFearNotThisKnight, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityFearNotThisKnight], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
             }
         }
 

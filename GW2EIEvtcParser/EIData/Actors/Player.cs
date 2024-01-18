@@ -88,15 +88,15 @@ namespace GW2EIEvtcParser.EIData
                     MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
                     if (marker != null)
                     {
-                        if (MarkerGUIDs.CommanderTagMarkersGUIDs.Contains(marker.ContentGUID))
+                        if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
                         {
-                            tagGUID = marker.ContentGUID;
+                            tagGUID = marker.HexContentGUID;
                             return true;
                         }
                     }
                     else if (tagEvent.TagID != 0)
                     {
-                        tagGUID = ParserIcons.BlueCommanderTagOverhead;
+                        tagGUID = MarkerGUIDs.BlueCommanderTag;
                         return true;
                     }
                 }

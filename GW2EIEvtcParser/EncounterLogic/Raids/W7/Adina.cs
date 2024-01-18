@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return base.AdjustLogic(agentData, combatData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
             long first = 0;
@@ -111,6 +111,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                { (int)ArcDPSEnums.TargetID.Adina, 0 },
+                { (int)ArcDPSEnums.TrashID.HandOfErosion, 1 },
+                { (int)ArcDPSEnums.TrashID.HandOfEruption, 1 },
+            };
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
@@ -136,12 +146,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long start = c.Time;
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
-                        int width = 1100; int height = 60;
+                        uint width = 1100; uint height = 60;
                         foreach (int angle in new List<int> { 90, 270 })
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
                     }
                     //
@@ -151,12 +161,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long start = c.Time;
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
-                        int width = 1100; int height = 60;
+                        uint width = 1100; uint height = 60;
                         foreach (int angle in new List<int> { 30, 150, 270})
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), "rgba(255, 100, 0, 0.2)", positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), "rgba(255, 50, 0, 0.5)", positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                         }
 
                     }
@@ -167,7 +177,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long start = c.Time;
                         int delay = 2000; // casttime 0 from skill def
                         int duration = 5000;
-                        int radius = 1100;
+                        uint radius = 1100;
                         replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + duration));
                     }
                     //
@@ -182,8 +192,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         long start = c.Time;
                         int duration = 4600; // cycle 3 from skill def
-                        int radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)).UsingGrowingEnd(start + duration));
+                        uint radius = 1100;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), Colors.LightOrange, 0.4, new AgentConnector(target)).UsingGrowingEnd(start + duration));
                     }
                     break;
                 default:
@@ -360,17 +370,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> conserveTheLand = log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand);
-            if (conserveTheLand.Any() && log.FightData.Success)
+
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityConserveTheLand, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityConserveTheLand], 1));
-                        break;
-                    }
-                }
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
             }
         }
     }

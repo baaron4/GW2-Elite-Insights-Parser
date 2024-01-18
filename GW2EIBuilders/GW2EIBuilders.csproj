@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.38.0</Version>
+    <Version>0.40.0</Version>
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 
@@ -82,6 +82,7 @@
     <None Include="Resources\htmlTemplates\tmplTargetTabGraph.html" />
     <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierStats.html" />
+    <None Include="Resources\htmlTemplates\tmplDamageModifierStatsContainer.html" />
     <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
     <None Include="Resources\htmlTemplates\tmplMainView.html" />
     <None Include="Resources\htmlTemplates\tmplDamageTaken.html" />

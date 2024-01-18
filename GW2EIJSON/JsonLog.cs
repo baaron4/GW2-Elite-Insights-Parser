@@ -192,6 +192,10 @@ namespace GW2EIJSON
             /// True if the modifier is an approximation
             /// </summary>
             public bool Approximate { get; set; }
+            /// <summary>
+            /// True if the modifier is an incoming damage modifier
+            /// </summary>
+            public bool Incoming { get; set; }
         }
         
         /// <summary>
@@ -380,6 +384,12 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="BuffMap"/>
         public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs { get; set; }
+
+        /// <summary>
+        /// Dictionary of damage modifiers. The key is the profession, the value is a list of damage mod ids
+        /// </summary>
+        /// <seealso cref="DamageModMap"/>
+        public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalDamageMods { get; set; }
 
         /// <summary>
         /// List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead

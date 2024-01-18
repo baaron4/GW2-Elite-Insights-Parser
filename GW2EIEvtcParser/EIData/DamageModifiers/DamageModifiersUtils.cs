@@ -1,12 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
@@ -15,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
     {
 
         public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW };
-        public enum DamageSource { All, NoPets };
+        public enum DamageSource { All, NoPets, NotApplicable };
 
         internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 

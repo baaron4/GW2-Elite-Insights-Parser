@@ -2,15 +2,15 @@
     <div>
         <ul class="nav nav-tabs">
             <li v-if="itemModifiers.length > 0">
-                <a class="nav-link" :class="{active: displayMode === 0}" @click="displayMode = 0"> Gear Based Damage
+                <a class="nav-link" :class="{active: displaymode === 0}" @click="displaymode = 0"> Gear Based Damage
                     Modifiers </a>
             </li>
             <li v-if="commonModifiers.length > 0">
-                <a class="nav-link" :class="{active: displayMode === 1}" @click="displayMode = 1"> Shared Damage
+                <a class="nav-link" :class="{active: displaymode === 1}" @click="displaymode = 1"> Shared Damage
                     Modifiers </a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: displayMode === 2}" @click="displayMode = 2"> Class Based Damage
+                <a class="nav-link" :class="{active: displaymode === 2}" @click="displaymode = 2"> Class Based Damage
                     Modifiers </a>
             </li>
         </ul>
@@ -23,16 +23,16 @@
             </li>
         </ul>
         <keep-alive>
-            <dmgmodifier-table-component v-if="displayMode === 0" :key="'gear'" :phaseindex="phaseindex"
+            <dmgmodifier-table-component v-if="displaymode === 0" :key="'gear' + extraID" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
-                :id="'damage-modifier-item-table'" :playerindices="null" :modifiers="itemModifiers"
-                :modifiersdata="phase.dmgModifiersItem" :sum="true"></dmgmodifier-table-component>
-            <dmgmodifier-table-component v-if="displayMode === 1" :key="'common'" :phaseindex="phaseindex"
+                :id="'damage-modifier-item-table' + extraID" :playerindices="null" :modifiers="itemModifiers"
+                :modifiersdata="dmgModifiersItemStats" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-table-component v-if="displaymode === 1" :key="'common' + extraID" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
-                :id="'damage-modifier-common-table'" :playerindices="null" :modifiers="commonModifiers"
-                :modifiersdata="phase.dmgModifiersCommon" :sum="true"></dmgmodifier-table-component>
-            <dmgmodifier-persstats-component v-if="displayMode === 2" :key="'pers'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activetargets="activetargets" :mode="mode">
+                :id="'damage-modifier-common-table' + extraID" :playerindices="null" :modifiers="commonModifiers"
+                :modifiersdata="dmgModifiersCommonStats" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-persstats-component v-if="displaymode === 2" :key="'pers' + extraID" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode" :incoming="incoming">
             </dmgmodifier-persstats-component>
         </keep-alive>
     </div>
@@ -40,30 +40,50 @@
 
 <script>
     Vue.component("dmgmodifier-stats-component", {
-        props: ['phaseindex', 'playerindex', 'activetargets'],
+        props: ['phaseindex', 'playerindex', 'activetargets', 'incoming'],
         template: `${template}`,
-        data: function () {
+        data: function () {          
+            const dmgModifiersItem = this.incoming ?  logData.dmgIncModifiersItem :  logData.dmgModifiersItem;
+            const dmgModifiersCommon = this.incoming ?  logData.dmgIncModifiersCommon :  logData.dmgModifiersCommon;
             return {
                 mode: logData.targetless ? 0 : 1,
                 targetless: logData.targetless,
-                displayMode: logData.dmgModifiersItem.length > 0 ? 0 : logData.dmgModifiersCommon.length > 0 ? 1 : 2
+                displaymode: dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2
             };
         },
         computed: {
+            extraID: function() {
+                return this.incoming ? 'inc' : '';
+            },
+            dmgModifiersItem: function() {
+                return this.incoming ?  logData.dmgIncModifiersItem :  logData.dmgModifiersItem;
+            },
+            dmgModifiersCommon: function() {
+                return this.incoming ?  logData.dmgIncModifiersCommon :  logData.dmgModifiersCommon;
+            },
+            dmgModifiersItemStats: function() {
+                return this.incoming ?  this.phase.dmgIncModifiersItem :  this.phase.dmgModifiersItem;
+            },
+            dmgModifiersCommonStats: function() {
+                return this.incoming ?  this.phase.dmgIncModifiersCommon :  this.phase.dmgModifiersCommon;
+            },
+            damageModMap: function() {
+                return this.incoming ?  logData.damageIncModMap :  logData.damageModMap;
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
             commonModifiers: function () {
                 var modifiers = [];
-                for (var i = 0; i < logData.dmgModifiersCommon.length; i++) {
-                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersCommon[i]]);
+                for (var i = 0; i < this.dmgModifiersCommon.length; i++) {
+                    modifiers.push(this.damageModMap['d' + this.dmgModifiersCommon[i]]);
                 }
                 return modifiers;
             },
             itemModifiers: function () {
                 var modifiers = [];
-                for (var i = 0; i < logData.dmgModifiersItem.length; i++) {
-                    modifiers.push(logData.damageModMap['d' + logData.dmgModifiersItem[i]]);
+                for (var i = 0; i < this.dmgModifiersItem.length; i++) {
+                    modifiers.push(this.damageModMap['d' + this.dmgModifiersItem[i]]);
                 }
                 return modifiers;
             }

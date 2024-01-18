@@ -129,6 +129,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.BlueKnight
             };
         }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)TargetID.MAMA, 0 },
+                {(int)TrashID.GreenKnight, 1 },
+                {(int)TrashID.RedKnight, 1 },
+                {(int)TrashID.BlueKnight, 1 },
+            };
+        }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
@@ -160,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int hitTime = (int)c.ExpectedEndTime;
                         int endTime = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), "rgba(255, 120, 0, 2)", new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, false, "rgba(255, 0, 0, 2)");
+                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, Colors.Red, 0.2, false);
                     }
 
                     // Leap with shockwaves
@@ -176,17 +186,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        int impactRadius = (int)target.HitboxWidth / 2 + 100;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), "rgba(255, 120, 0, 0.2)", new PositionConnector(targetPosition)), hitTime);
+                        uint impactRadius = target.HitboxWidth / 2 + 100;
+                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), Colors.Orange, 0.2, new PositionConnector(targetPosition)), hitTime);
                         // 3 rounds of decorations for the 3 waves
                         if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
                         {
-                            int shockwaveRadius = 1300;
+                            uint shockwaveRadius = 1300;
                             int duration = 2680;
                             for (int i = 0; i < 3; i++)
                             {
                                 int shockWaveStart = hitTime + i * 120;
-                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), "rgba(255, 200, 0, 0.3)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
                             }
                         }
                     }
@@ -206,8 +216,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int safeTime = endFirstAndSecondAoe + 1000;
                             int dangerTime = 77000;
 
-                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
-                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), "rgba(250, 120, 0, 0.1)", new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
+                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
                             replay.AddDecorationWithGrowing(new CircleDecoration(540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)), safeTime);
                             replay.Decorations.Add(new CircleDecoration(540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
                         }
@@ -221,8 +231,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = 6200;
                             int start = (int)shieldEffect.Time;
                             int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)), effectEnd, true);
+                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
+                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), effectEnd, true);
                         }
                     }
 
@@ -232,9 +242,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             int duration = (int)effect.Duration;
                             int start = (int)effect.Time;
                             int end = start + duration;
-                            int radius = 140;
+                            uint radius = 140;
                             var connector = new PositionConnector(effect.Position);
-                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), "rgba(250, 120, 0, 0.2)", connector).UsingFilled(false), true, end);
+                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingFilled(false), true, end);
                         }
                     }
 
@@ -261,9 +271,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int windUpStart = (int)c.Time - windUpDuration;
 
                         // Wind Up - Knight in air
-                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), c.Time, true);
+                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), Colors.Orange, 0.2, new AgentConnector(target)), c.Time, true);
                         // Hit - Knight falling
-                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
                     }
 
                     // Pull AoE
@@ -273,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int hitTime = (int)c.ExpectedEndTime;
                         int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
 
-                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)), hitTime);
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
                     }
                     break;
                 default:

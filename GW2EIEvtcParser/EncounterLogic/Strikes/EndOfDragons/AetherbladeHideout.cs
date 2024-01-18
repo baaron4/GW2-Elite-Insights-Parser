@@ -236,7 +236,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Ferrous Bombs
             var bombs = combatData.Where(x => x.DstAgent == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
@@ -304,23 +304,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
             
-            if(log.FightData.Success)
+            if (log.FightData.Success)
             {
-                IReadOnlyList<AbstractBuffEvent> triangulation = log.CombatData.GetBuffData(AchievementEligibilityTriangulation);
-                bool hasTriangulationBeenAdded = false;
-                if (triangulation.Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
                 {
-                    foreach (Player p in log.PlayerList)
-                    {
-                        if (p.HasBuff(log, AchievementEligibilityTriangulation, log.FightData.FightEnd - ServerDelayConstant))
-                        {
-                            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
-                            hasTriangulationBeenAdded = true;
-                            break;
-                        }
-                    }
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
                 }
-                if (!hasTriangulationBeenAdded && CustomCheckTriangulationEligibility(log))
+                else if (CustomCheckTriangulationEligibility(log))
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
                 }

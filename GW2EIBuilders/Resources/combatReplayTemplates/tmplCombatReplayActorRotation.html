@@ -76,6 +76,18 @@
             actorRotation: function () {
                 return this.actor.details.rotation[0];
             },
+            actorNoInstantRotation: function () {
+                var actorNoInstantRotation = [];
+                var actorNoInstantRotationIndex = [];
+                for (var i = 0; i < this.actorRotation.length; i++) {
+                    var rot = this.actorRotation[i];
+                    if (rot[3] !== RotationStatus.INSTANT) {
+                        actorNoInstantRotation.push(rot);
+                        actorNoInstantRotationIndex.push(i);
+                    }
+                }
+                return [actorNoInstantRotation, actorNoInstantRotationIndex];
+            },
             rotation: function () {
                 var res = {
                     current: null,
@@ -89,7 +101,23 @@
                 var item = this.actorRotation[id];
                 var x = item[0];
                 var duration = this.getSkillDuration(item);
+                var drawItem = false;
+                var [actorNoInstantRotation, actorNoInstantRotationIndex] = this.actorNoInstantRotation;
                 if (x <= time && time <= x + duration) {
+                    drawItem = true;
+                } else if (item[3] === RotationStatus.INSTANT && actorNoInstantRotation.length) {
+                    var idNoInstant =  this.findRotationIndex(actorNoInstantRotation, time, 0, actorNoInstantRotation.length - 1);
+                    id = Math.min(id, actorNoInstantRotationIndex[idNoInstant]);
+                    if (id !== idNoInstant) {
+                        item = this.actorRotation[id];
+                        x = item[0];
+                        duration = this.getSkillDuration(item);
+                        if (x <= time && time <= x + duration) {
+                            drawItem = true;
+                        }
+                    }
+                }
+                if (drawItem) {
                     res.current = {
                         time: item[0],
                         skill: findSkill(false, item[1]),

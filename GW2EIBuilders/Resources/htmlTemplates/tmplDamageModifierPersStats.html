@@ -10,9 +10,9 @@
                 <div v-show="specToBase[spec.name] === specmode">
                     <h3 class="text-center">{{ spec.name }}</h3>
                     <dmgmodifier-table-component :phaseindex="phaseindex" :playerindex="playerindex"
-                        :activetargets="activetargets" :mode="mode" :id="'damage-modifier-pers-table-'+spec.name"
+                        :activetargets="activetargets" :mode="mode" :id="'damage-modifier-pers-table-'+spec.name + (incoming ? 'inc' : '')"
                         :modifiers="personalModifiers[index]" :playerindices="spec.ids"
-                        :modifiersdata="phase.dmgModifiersPers" :sum="false"></dmgmodifier-table-component>
+                        :modifiersdata="dmgModifiersPersStats" :sum="false"></dmgmodifier-table-component>
                 </div>
             </div>
         </div>
@@ -21,18 +21,31 @@
 
 <script>
     Vue.component("dmgmodifier-persstats-component", {
-        props: ['phaseindex', 'playerindex', 'activetargets', 'mode'],
+        props: ['phaseindex', 'playerindex', 'activetargets', 'mode', 'incoming'],
         template: `${template}`,
         data: function () {
             return {
                 bases: [],
                 specmode: "Warrior",
-                specToBase: specToBase
+                specToBase: SpecToBase
             };
         },
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
+            },
+            damageModMap: function() {
+                return this.incoming ? logData.damageIncModMap : logData.damageModMap;
+            },
+            dmgModifiersPers: function() {           
+                return this.incoming ? logData.dmgIncModifiersPers : logData.dmgModifiersPers;
+            },
+            dmgModifiersPersStats: function() {
+                return this.incoming ? this.phase.dmgIncModifiersPers : this.phase.dmgModifiersPers;
+            },
+            dmgModifiersPersStats0: function() {
+                let phase0 = logData.phases[0];
+                return this.incoming ? phase0.dmgIncModifiersPers : phase0.dmgModifiersPers;
             },
             orderedSpecs: function () {
                 var res = [];
@@ -41,12 +54,12 @@
                     var spec = specs[i];
                     var pBySpec = [];
                     for (var j = 0; j < logData.players.length; j++) {
-                        if (logData.players[j].profession === spec && logData.phases[0].dmgModifiersPers[j].data.length > 0) {
+                        if (logData.players[j].profession === spec && this.dmgModifiersPersStats0[j].data.length > 0) {
                             pBySpec.push(j);
                         }
                     }
                     if (pBySpec.length) {
-                        aux.add(specToBase[spec]);
+                        aux.add(SpecToBase[spec]);
                         res.push({
                             ids: pBySpec,
                             name: spec
@@ -66,8 +79,8 @@
                 for (var i = 0; i < this.orderedSpecs.length; i++) {
                     var spec = this.orderedSpecs[i];
                     var data = [];
-                    for (var j = 0; j < logData.dmgModifiersPers[spec.name].length; j++) {
-                        data.push(logData.damageModMap['d' + logData.dmgModifiersPers[spec.name][j]]);
+                    for (var j = 0; j < this.dmgModifiersPers[spec.name].length; j++) {
+                        data.push(this.damageModMap['d' + this.dmgModifiersPers[spec.name][j]]);
                     }
                     res.push(data);
                 }

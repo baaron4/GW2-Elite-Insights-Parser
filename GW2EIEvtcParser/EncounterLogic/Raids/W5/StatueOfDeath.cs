@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        var circle = new CircleDecoration(180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target));
+                        var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
                     var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();
@@ -104,12 +104,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int cascading = 1500;
                         int duration = 15000 + cascading;
                         end = start + duration;
-                        int radius = 900;
+                        uint radius = 900;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         Point3D position = target.GetCurrentPosition(log, start);
                         if (facing != null && position != null)
                         {
-                            replay.Decorations.Add(new PieDecoration( radius, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new PieDecoration( radius, 60, (start, end), Colors.GreenishYellow, 0.5, new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls).ToList();
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
-                        var circle = new CircleDecoration(240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(target));
+                        var circle = new CircleDecoration(240, (gstart, gend), Colors.Green, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, gend);
                     }
                     break;

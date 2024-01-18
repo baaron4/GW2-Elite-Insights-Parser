@@ -227,6 +227,12 @@ namespace GW2EIEvtcParser.ParsedData
                         default:
                             throw new InvalidDataException("Invalid effect state change");
                     }
+#if !DEBUG
+                    if (effectEvt.OnNonStaticPlatform)
+                    {
+                        break;
+                    }
+#endif
                     statusEvents.EffectEvents.Add(effectEvt);
                     Add(statusEvents.EffectEventsBySrc, effectEvt.Src, effectEvt);
                     Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
@@ -243,12 +249,14 @@ namespace GW2EIEvtcParser.ParsedData
                             case ContentLocal.Effect:
                                 var effectGUID = new EffectGUIDEvent(stateChangeEvent);
                                 metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
-                                metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
+                                metaDataEvents.EffectGUIDEventsByGUID[effectGUID.HexContentGUID] = effectGUID;
+                                metaDataEvents.EffectGUIDEventsByGUID[effectGUID.Base64ContentGUID] = effectGUID;
                                 break;
                             case ContentLocal.Marker:
                                 var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
                                 metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
-                                metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
+                                metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.HexContentGUID] = markerGUID;
+                                metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.Base64ContentGUID] = markerGUID;
                                 break;
                             default:
                                 break;

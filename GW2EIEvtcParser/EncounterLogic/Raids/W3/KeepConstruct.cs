@@ -220,6 +220,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.Ianim,
             };
         }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.KeepConstruct, 0 },
+                {(int)ArcDPSEnums.TrashID.Jessica, 1 },
+                {(int)ArcDPSEnums.TrashID.Olson, 1 },
+                {(int)ArcDPSEnums.TrashID.Engul, 1 },
+                {(int)ArcDPSEnums.TrashID.Faerla, 1 },
+                {(int)ArcDPSEnums.TrashID.Caulle, 1 },
+                {(int)ArcDPSEnums.TrashID.Henley, 1 },
+                {(int)ArcDPSEnums.TrashID.Galletta, 1 },
+                {(int)ArcDPSEnums.TrashID.Ianim, 1 },
+            };
+        }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
@@ -235,9 +250,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             var countDict = new Dictionary<int, int>();
             var bigPhantasmIDs = new HashSet<int>
             {
@@ -280,7 +295,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in kcOrbCollect)
                     {
-                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, "rgba(255, 0, 0, 0.3)", new AgentConnector(target)).UsingFilled(false), true, seg.End);
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
                     }
                     var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
@@ -291,7 +306,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D position = target.GetCurrentInterpolatedPosition(log, end);
                         if (position != null)
                         {
-                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new PositionConnector(position)).UsingFilled(false), true, skillCast);
+                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
                         }
                     }
                     var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1).ToList();
@@ -300,7 +315,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int bladeDelay = 150;
                     int duration = 1000;
                     float bladeOpeningAngle = 360 * 3 / 32;
-                    int bladeRadius = 1600;
+                    uint bladeRadius = 1600;
                     foreach (AbstractCastEvent c in blades1)
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
@@ -311,13 +326,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
-                        float initialAngle = Point3D.GetRotationFromFacing(facing);
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
+                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle = initialAngle + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -330,17 +345,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
-                        float initialAngle1 = Point3D.GetRotationFromFacing(facing);
-                        replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
+                        float initialAngle1 = Point3D.GetZRotationFromFacing(facing);
+                        replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                         float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
                             float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades3)
@@ -353,21 +368,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             continue;
                         }
                         var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", connector));
+                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
                         float initialAngle1 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                         float initialAngle2 = initialAngle1 + 120;
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
                         float initialAngle3 = initialAngle1 - 120;
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
                             float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
                             float angle3 = initialAngle3 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,0,255,0.5)", connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
                         }
                     }
                     break;
@@ -381,17 +396,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Henley:
                 case (int)ArcDPSEnums.TrashID.Galletta:
                 case (int)ArcDPSEnums.TrashID.Ianim:
-                    replay.Decorations.Add(new CircleDecoration( 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
-                    replay.Decorations.Add(new CircleDecoration(400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration( 600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                     Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstPhantasmPosition != null)
                     {
-                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), "rgba(220, 50, 0, 0.3)", new PositionConnector(firstPhantasmPosition)), start);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(firstPhantasmPosition)), start);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.GreenPhantasm:
                     int lifetime = 8000;
-                    replay.AddDecorationWithGrowing(new CircleDecoration(210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(target)), start + lifetime);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(210, (start, start + lifetime), Colors.Green, 0.2, new AgentConnector(target)), start + lifetime);
                     break;
                 case (int)ArcDPSEnums.TrashID.RetrieverProjection:
                 case (int)ArcDPSEnums.TrashID.InsidiousProjection:
@@ -417,12 +432,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in xeraFury)
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, "rgba(200, 150, 0, 0.2)", new AgentConnector(p)), seg.End);
+                replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);
 
             }
             // Fixated Statue tether to Player
             List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, new long[] { StatueFixated1, StatueFixated2 }, p, true, true);
-            replay.AddTether(fixatedStatue, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixatedStatue, Colors.Magenta, 0.5);
             // Fixation Overhead
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);

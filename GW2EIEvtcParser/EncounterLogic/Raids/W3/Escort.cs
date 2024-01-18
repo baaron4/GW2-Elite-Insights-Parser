@@ -132,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem mcLeod = agentData.GetNPCsByID(ArcDPSEnums.TargetID.McLeodTheSilent).FirstOrDefault();
             if (mcLeod == null)
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             int curCrimson = 1;
             int curRadiant = 1;
             int curWarg = 1;
@@ -216,10 +216,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Glenna not found");
                 }
-                var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
-                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100)) 
+                if (combatData.HasMovementData)
                 {
-                    return FightData.EncounterStartStatus.Late;
+                    var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
+                    if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100))
+                    {
+                        return FightData.EncounterStartStatus.Late;
+                    }
                 }
                 return FightData.EncounterStartStatus.Normal;
             } 
@@ -246,10 +249,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.McLeodTheSilent,
-                (int)ArcDPSEnums.TargetID.DummyTarget,
-                (int)ArcDPSEnums.TrashID.WargBloodhound,
                 (int)ArcDPSEnums.TrashID.RadiantMcLeod,
                 (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
+                (int)ArcDPSEnums.TrashID.WargBloodhound,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
             };
         }
 
@@ -287,20 +290,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
-            }
-        }
-
-        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
-        {
-            foreach (Player p in log.PlayerList)
-            {
-                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
-                    break;
-                }
+                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
             }
         }
 

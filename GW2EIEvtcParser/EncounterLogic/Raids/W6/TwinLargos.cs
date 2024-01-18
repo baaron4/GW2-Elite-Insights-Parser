@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using System.Collections;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -116,6 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            targetPhases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
@@ -137,7 +139,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void FallBackPhases(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
         {
             IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
-            // clean Nikare related bugs
+            // clean Nikare/Kenut missing enter combat events related bugs
             switch (phases.Count)
             {
                 case 2:
@@ -151,10 +153,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -171,10 +175,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
+                                p2.Name += " (Fallback)";
                             }
                             else
                             {
                                 p2.OverrideStart(p1.End);
+                                p2.Name += " (Bad Fallback)";
                             }
                         }
                         // P1/P2 and P3 are merged
@@ -184,10 +190,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (hit != null)
                             {
                                 p3.OverrideStart(hit.Time);
+                                p3.Name += " (Fallback)";
                             }
                             else
                             {
                                 p3.OverrideStart(p2.End);
+                                p3.Name += " (Bad Fallback)";
                             }
                         }
                     }
@@ -202,6 +210,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (hit != null)
                 {
                     p1.OverrideStart(hit.Time);
+                    p1.Name += " (Fallback)";
+                } 
+                else
+                {
+                    p1.Name += " (Bad Fallback)";
                 }
             }
         }
@@ -246,6 +259,39 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterStartStatus.Normal;
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            ComputeFightTargets(agentData, combatData, extensions);
+            // discard hp update events after determined apply
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
+            if (nikare == null)
+            {
+                throw new MissingKeyActorsException("Nikare not found");
+            }
+            var nikareHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem)).ToList();
+            if (nikareHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+            {
+                CombatItem lastHPUpdate = nikareHPUpdates.Last();
+                if (lastHPUpdate.DstAgent == 10000)
+                {
+                    lastHPUpdate.OverrideSrcAgent(0);
+                }
+            }
+            AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+            if (kenut != null)
+            {
+                var kenutHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem)).ToList();
+                if (kenutHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+                {
+                    CombatItem lastHPUpdate = kenutHPUpdates.Last();
+                    if (lastHPUpdate.DstAgent == 10000)
+                    {
+                        lastHPUpdate.OverrideSrcAgent(0);
+                    }
+                }
+            }
+        }
+
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -256,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
-                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -264,8 +310,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        uint radius = 800;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
@@ -273,7 +319,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
-                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
                     var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
@@ -281,8 +327,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        int radius = 800;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)).UsingGrowingEnd(end));
+                        uint radius = 800;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
                     var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
                     foreach (AbstractCastEvent c in shockwave)
@@ -290,7 +336,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 960;
                         int duration = 3000;
-                        int radius = 1200;
+                        uint radius = 1200;
                         replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                     }
                     var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
@@ -299,14 +345,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1000;
                         int duration = 500;
-                        int width = 500;
-                        int height = 250;
+                        uint width = 500;
+                        uint height = 250;
                         Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), "rgba(255, 175, 0, 0.4)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;
@@ -324,24 +370,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int timer = 5000;
                 int duration = 83000;
-                int debuffRadius = 100;
-                int radius = 500;
+                uint debuffRadius = 100;
+                uint radius = 500;
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, "rgba(255, 100, 0, 0.4)", new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), "rgba(160, 160, 160, 0.5)", new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
             // Bubble (Aquatic Detainment)
             var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            int bubbleRadius = 100;
+            uint bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {
-                replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, "rgba(0, 200, 255, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(bubbleRadius, seg, Colors.LightBlue, 0.3, new AgentConnector(p)));
             }
         }
 

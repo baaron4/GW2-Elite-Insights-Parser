@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = false;
             bool needsDummy = true;
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var summon = cls.Where(x => x.SkillId == SummonFragments).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
-                    replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(255, 155, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -389,10 +389,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in intervention)
                 {
                     // Effect has duration of 4294967295 but the skill lasts only 6000
-                    (long, long) lifespan = ProfHelper.ComputeDynamicEffectLifespan(log, effect, 6000);
-                    var circle = new CircleDecoration(240, lifespan, "rgba(255, 200, 0, 0.3)", new PositionConnector(effect.Position));
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
+                    var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.GetBorderDecoration("rgba(0, 50, 200, 0.4)"));
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
                 }
             }
         }

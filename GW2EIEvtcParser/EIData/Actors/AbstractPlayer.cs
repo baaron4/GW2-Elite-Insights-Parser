@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData
 {
     public class AbstractPlayer : AbstractSingleActor
     {
+        public bool IsFriendlyPlayer => AgentItem.Type == AgentItem.AgentType.Player || AgentItem.IsNotInSquadFriendlyPlayer;
 
         // Constructors
         internal AbstractPlayer(AgentItem agent) : base(agent)
@@ -35,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override string GetIcon()
         {
-            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayer && !AgentItem.IsNotInSquadFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
+            return !IsFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)

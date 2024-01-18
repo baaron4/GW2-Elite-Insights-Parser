@@ -94,10 +94,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
                     var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    int shieldRadius = 100;
+                    uint shieldRadius = 100;
                     foreach (Segment seg in shields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
@@ -105,9 +105,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int precast = 1350;
                         int duration = 100;
-                        int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
+                        uint radius = 1200;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), Colors.Red, 0.05, new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), Colors.Red, 0.25, new AgentConnector(target)));
                     }
                     break;
                 default:

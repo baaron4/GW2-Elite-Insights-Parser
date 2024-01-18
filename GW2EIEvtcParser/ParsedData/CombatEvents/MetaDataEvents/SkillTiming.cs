@@ -3,7 +3,7 @@
     public class SkillTiming
     {
 
-        public byte ActionAction { get; }
+        public byte ActionByte { get; }
 
         public ArcDPSEnums.SkillAction Action { get; }
 
@@ -11,8 +11,8 @@
 
         internal SkillTiming(CombatItem evtcItem)
         {
-            ActionAction = (byte)evtcItem.SrcAgent;
-            Action = ArcDPSEnums.GetSkillAction(ActionAction);
+            ActionByte = (byte)evtcItem.SrcAgent;
+            Action = ArcDPSEnums.GetSkillAction(ActionByte);
             AtMillisecond = evtcItem.DstAgent;
         }
 

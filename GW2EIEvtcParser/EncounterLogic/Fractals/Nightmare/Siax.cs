@@ -117,9 +117,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("SW", new Point3D(891.370f, -3722.450f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
                 if (target.IsSpecies(TargetID.Siax))
@@ -159,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)detSegment.Start, attackEnd); // Start of determinated
                         }
-                        var doughnut = new DoughnutDecoration(0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
+                        var doughnut = new DoughnutDecoration(0, 1500, (start, attackEnd), Colors.Red, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(doughnut, expectedHitTime, true);
                     }
                     // Tail Swipe
@@ -168,12 +168,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int duration = 1500;
                         int openingAngle = 144;
-                        int radius = 600;
+                        uint radius = 600;
                         int start = (int)c.Time;
                         int end = start + duration;
                         if (replay.Rotations.Any())
                         {
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start, end), Colors.Orange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                         }
                     }
                     // 66% and 33% phases
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
                         }
-                        var circle = new CircleDecoration(1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target));
+                        var circle = new CircleDecoration(1500, (start, attackEnd), Colors.Red, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, expectedHitTime);
                     }
                     // Poison AoE
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 16000;
                         foreach (EffectEvent effect in poisonEffects)
                         {
-                            replay.Decorations.Add(new CircleDecoration(240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
+                            replay.Decorations.Add(new CircleDecoration(240, ((int)effect.Time, (int)effect.Time + duration), Colors.Green, 0.2, new PositionConnector(effect.Position)));
                         }
                     }
                     // Nightmare Hallucinations Spawn Event
@@ -208,7 +208,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 3000;
                         foreach (EffectEvent effect in spawnEffects)
                         {
-                            var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 500;
                         foreach (EffectEvent effect in barrageEffects)
                         {
-                            var circle = new CircleDecoration(100, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(100, (effect.Time, effect.Time + duration), Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 200;
                         foreach (EffectEvent effect in expulsionEffects)
                         {
-                            var circle = new CircleDecoration(240, (effect.Time, effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(240, (effect.Time, effect.Time + duration), Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.AddDecorationWithGrowing(circle, effect.Time + duration);
                         }
                     }
@@ -249,7 +249,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 20000;
                         int start = (int)c.Time + 18000;
                         int attackEnd = (int)c.Time + duration;
-                        replay.Decorations.Add(new CircleDecoration(3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(3000, (start, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)));
                     }
                     break;
                 case (int)TrashID.VolatileHallucinationSiax:
@@ -267,7 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-            replay.AddTether(fixationEvents, "rgba(255, 0, 255, 0.5)");
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
         }
     }
 }

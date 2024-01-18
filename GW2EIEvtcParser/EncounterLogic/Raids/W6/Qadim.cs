@@ -13,12 +13,13 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class Qadim : MythwrightGambit
     {
-
+        private bool _manualPlatforms = true;
         public Qadim(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -61,6 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(Claw, "Claw", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw","Claw (Reaper of Flesh attack)", "Reaper Claw",0),
             new PlayerDstHitMechanic(SwapQadim, "Swap", new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port","Swap (Ported from below Legendary Creature to Qadim)", "Port to Qadim",0),
             new PlayerDstBuffApplyMechanic(PowerOfTheLamp, "Power of the Lamp", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp","Power of the Lamp (Returned from the Lamp)", "Lamp Return",0),
+            new PlayerStatusMechanic<DeadEvent>("Taking Turns", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns", "Achievement Eligibility: Taking Turns", "Taking Turns", 0, (log, a) => log.CombatData.GetDeadEvents(a)).UsingEnable((log) => CustomCheckTakingTurns(log)).UsingAchievementEligibility(true),
             new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
@@ -90,9 +92,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)TargetID.Qadim,
                 (int)TrashID.AncientInvokedHydra,
+                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.WyvernMatriarch,
                 (int)TrashID.WyvernPatriarch,
-                (int)TrashID.ApocalypseBringer,
                 (int)TrashID.QadimLamp,
             };
         }
@@ -109,8 +111,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            bool refresh = false;
+            if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
+            {
+                var platformAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                foreach (AgentItem platform in platformAgents)
+                {
+                    platform.OverrideType(AgentItem.AgentType.NPC);
+                    platform.OverrideID(TrashID.QadimPlatform);
+                }
+                refresh = refresh || platformAgents.Any();
+            }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
             var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
@@ -119,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 lamp.OverrideType(AgentItem.AgentType.NPC);
                 lamp.OverrideID(TrashID.QadimLamp);
             }
-            bool refresh = lampAgents.Count > 0;
+            refresh = refresh || lampAgents.Any();
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -151,7 +164,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            ComputeFightTargets(agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC target in TrashMobs)
             {
                 if (target.IsSpecies(TrashID.PyreGuardianProtect))
@@ -171,19 +184,63 @@ namespace GW2EIEvtcParser.EncounterLogic
                     target.OverrideName("Stab " + target.Character);
                 }
             }
+            var platformNames = new List<string>()
+            {
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "00",
+                "01",
+                "02",
+                "03",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+                "11",
+            };
+            _manualPlatforms = TrashMobs.Count(x => platformNames.Contains(x.Character)) != 12;
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            // Can be improved
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            AgentItem qadim = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
+            if (qadim == null)
+            {
+                throw new MissingKeyActorsException("Qadim not found");
+            }
+            if (combatData.HasMovementData)
+            {
+                var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
+                var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+                if (!positions.Any(x => x.Distance2DToPoint(qadimAroundInitialPosition) < 150))
+                {
+                    return FightData.EncounterStartStatus.Late;
+                }
+            }
+            if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
+                (Targets.Any(x => x.IsSpecies(TrashID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BurningCrucible, BurningCrucible), // Burning Crucible
+                new DamageCastFinder(BurningCrucible, BurningCrucible),
             };
         }
 
@@ -241,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phase.Name = "Qadim P" + (i) / 2;
                     var pyresFirstAware = new List<long>();
-                    var pyres = new List<ArcDPSEnums.TrashID>
+                    var pyres = new List<TrashID>
                         {
                             TrashID.PyreGuardian,
                             TrashID.PyreGuardianProtect,
@@ -296,10 +353,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>()
+            return new List<TrashID>()
             {
+                TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
                 TrashID.IcebornHydra,
@@ -364,13 +422,79 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            AddPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            if (_manualPlatforms)
+            {
+                AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            }
+
+            // Incineration Orbs - CM
+            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
+            {
+                foreach (IReadOnlyList<EffectEvent> orbs in cmOrbs)
+                {
+                    var positions = orbs.Select(x => x.Position).ToList();
+                    Point3D middle = positions.FirstOrDefault(x => Point3D.IsInTriangle2D(x, positions.Where(y => y != x).ToList()));
+                    EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position == middle);
+                    if (middleEvent != null)
+                    {
+                        foreach (EffectEvent effect in orbs)
+                        {
+                            uint radius = (uint)(effect == middleEvent ? 540 : 180);
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
+                            var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                            var circle2 = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                            EnvironmentDecorations.Add(circle);
+                            EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
+                        }
+                    }
+                }
+            }
+
+            // Incineration Orbs - Pyres
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPyresIncinerationOrbs, out IReadOnlyList<EffectEvent> pyreOrbs))
+            {
+                foreach (EffectEvent effect in pyreOrbs)
+                {
+                    uint radius = 240;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }
+
+            // Bouncing blue orbs
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbEvents))
+            {
+                foreach (EffectEvent effect in blueOrbEvents)
+                {
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
+                    var circle = new CircleDecoration(100, lifespan, Colors.Blue, 0.5, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                }
+            }
+
+            // Inferno - Qadim's AoEs on every platform
+            // ! Disabled until we have a working solution for effects on moving platforms
+            /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimInfernoAoEs, out IReadOnlyList<EffectEvent> infernoAoEs))
+            {
+                foreach (EffectEvent effect in infernoAoEs)
+                {
+                    int radius = 150;
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                    var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                }
+            }*/
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            int ccRadius = 200;
+            uint ccRadius = 200;
             switch (target.ID)
             {
                 case (int)TargetID.Qadim:
@@ -378,15 +502,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var breakbar = cls.Where(x => x.SkillId == QadimCC).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
-                        int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Riposte
                     var riposte = cls.Where(x => x.SkillId == QadimRiposte).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
-                        int radius = 2200;
-                        replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        uint radius = 2200;
+                        replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), Colors.Red, 0.5, new AgentConnector(target)));
                     }
                     //Big Hit
                     var maceShockwave = cls.Where(x => x.SkillId == BigHit && x.Status != AbstractCastEvent.AnimationStatus.Interrupted).ToList();
@@ -395,15 +518,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 2230;
                         int duration = 2680;
-                        int radius = 2000;
-                        int impactRadius = 40;
+                        uint radius = 2000;
+                        uint impactRadius = 40;
                         int spellCenterDistance = 300;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                         }
@@ -414,21 +537,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
-                        int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     var eleBreath = cls.Where(x => x.SkillId == ElementalBreath).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1300;
+                        uint radius = 1300;
                         int delay = 2600;
                         int duration = 1000;
                         int openingAngle = 70;
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), "rgba(255, 180, 0, 0.3)", new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.LightOrange, 0.3, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                     break;
@@ -441,14 +563,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCast = Math.Min(3500, c.ActualDuration);
                         int duration = Math.Min(6500, c.ActualDuration);
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                        int range = 2800;
-                        int span = 2400;
+                        uint range = 2800;
+                        uint span = 2400;
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(range / 2, 0), true);
                             var rotationConnextor = new AngleConnector(facing);
-                            replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), "rgba(0,100,255,0.2)", positionConnector).UsingRotationConnector(rotationConnextor));
-                            replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), "rgba(0,100,255,0.5)", positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), Colors.LightBlue, 0.5, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     //Breath
@@ -456,7 +578,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in matBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1000;
+                        uint radius = 1000;
                         int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 70;
@@ -466,8 +588,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && pos != null)
                         {
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
                         }
                     }
                     //Tail Swipe
@@ -475,8 +597,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in matSwipe)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 700;
-                        int radiusDecrement = 100;
+                        uint maxRadius = 700;
+                        uint radiusDecrement = 100;
                         int delay = 1435;
                         int openingAngle = 59;
                         int angleIncrement = 60;
@@ -484,12 +606,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.3)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
                             }
                         }
@@ -500,7 +622,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var patCC = cls.Where(x => x.SkillId == PatriarchCC).ToList();
                     foreach (AbstractCastEvent c in patCC)
                     {
-                        int radius = ccRadius;
                         replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.4)", new AgentConnector(target)));
                     }
                     //Breath
@@ -508,7 +629,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in patBreath)
                     {
                         int start = (int)c.Time;
-                        int radius = 1000;
+                        uint radius = 1000;
                         int delay = 1600;
                         int duration = 3000;
                         int openingAngle = 60;
@@ -518,8 +639,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && pos != null)
                         {
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), "rgba(255, 50, 0, 0.3)", new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
                         }
                     }
                     //Tail Swipe
@@ -527,8 +648,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in patSwipe)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 700;
-                        int radiusDecrement = 100;
+                        uint maxRadius = 700;
+                        uint radiusDecrement = 100;
                         int delay = 1435;
                         int openingAngle = 59;
                         int angleIncrement = 60;
@@ -536,12 +657,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -553,8 +674,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1800;
                         int duration = 3000;
-                        int maxRadius = 2000;
-                        replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                        uint maxRadius = 2000;
+                        replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
@@ -562,33 +683,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 1600;
                         int duration = 3500;
-                        int maxRadius = 2000;
-                        int impactRadius = 500;
+                        uint maxRadius = 2000;
+                        uint impactRadius = 500;
                         int spellCenterDistance = 270; //hitbox radius
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
+                            replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
                         }
                     }
                     //CC
                     var summon = cls.Where(x => x.SkillId == SummonDestroyer).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
-                        int radius = ccRadius;
-                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Pizza
                     var forceWave = cls.Where(x => x.SkillId == WaveOfForce).ToList();
                     foreach (AbstractCastEvent c in forceWave)
                     {
                         int start = (int)c.Time;
-                        int maxRadius = 1000;
-                        int radiusDecrement = 200;
+                        uint maxRadius = 1000;
+                        uint radiusDecrement = 200;
                         int delay = 1560;
                         int openingAngle = 44;
                         int angleIncrement = 45;
@@ -596,19 +716,225 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float initialAngle = Point3D.GetRotationFromFacing(facing);
+                            float initialAngle = Point3D.GetZRotationFromFacing(facing);
                             var connector = new AgentConnector(target);
-                            for (int i = 0; i < coneAmount; i++)
+                            for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), "rgba(255, 180, 0, 0.4)", connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
                     break;
+                case (int)TrashID.QadimPlatform:
+                    if (_manualPlatforms)
+                    {
+                        return;
+                    }
+                    const float hiddenOpacity = 0.1f;
+                    const float visibleOpacity = 1f;
+                    const float noOpacity = -1f;
+                    var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
+                    var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
+                    int velocityIndex = 0;
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
+                    if (qadim == null)
+                    {
+                        throw new MissingKeyActorsException("Qadim not found");
+                    }
+                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
+                    long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
+                    float threshold = 1f;
+                    switch (target.Character)
+                    {
+                        case "00":
+                        case "0":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                }
+                            }
+                            break;
+                        case "01":
+                        case "1":
+                            ParametricPoint3D found = replay.Velocities.FirstOrDefault(x => new Point3D(-28.3569336f, -49.2431641f, 90.90576f).DistanceToPoint(x) < threshold);
+                            if (found != null)
+                            {
+                                opacities.Add(new ParametricPoint1D(hiddenOpacity, found.Time));
+                            }
+                            break;
+                        case "02":
+                        case "2":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "03":
+                        case "3":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "04":
+                        case "4":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "05":
+                        case "5":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "06":
+                        case "6":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbs))
+                                        {
+                                            EffectEvent lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
+                                            if (lastBlueOrb != null)
+                                            {
+                                                (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
+                                                if (Math.Abs(end - log.FightData.FightEnd) > 500)
+                                                {
+                                                    opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "07":
+                        case "7":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if(AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                    }
+                                }
+                            }
+                            break;
+                        case "08":
+                        case "8":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                            {
+                                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "09":
+                        case "9":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        case "10":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    {
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "11":
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    var platformDecoration = new BackgroundIconDecoration(ParserIcons.QadimPlatform, 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
+                    RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                    replay.Decorations.Add(platformDecoration.UsingRotationConnector(platformRotationConnector));
+                    break;
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Returns true if velocity was found
+        /// </summary>
+        /// <param name="velocities">Velocities of the platform</param>
+        /// <param name="opacities">Opacities of the platform, will be filled</param>
+        /// <param name="referenceVelocity">Velocity to find</param>
+        /// <param name="opacity">Opacity to add, won't be added if <0</param>
+        /// <param name="startIndex"></param>
+        /// <param name="foundIndexPlusOne"></param>
+        /// <param name="timeOffset">Time to be added to found velocity time</param>
+        /// <param name="forceHideTime">If > 0, forces the addition of a hidden opacity at given time</param>
+        /// <param name="hiddenOpacity">Hidden opacity value</param>
+        /// <returns></returns>
+        private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
+        {
+            float threshold = 1f;
+            for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
+            {
+                if (referenceVelocity.DistanceToPoint(velocities[velocityIndex]) < threshold)
+                {
+                    if (opacity >= 0)
+                    {
+                        opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
+                    }
+                    if (forceHideTime > 0 && opacity != hiddenOpacity)
+                    {
+                        opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
+                    }
+                    foundIndexPlusOne = velocityIndex + 1;
+                    return true;
+                }
+            }
+            foundIndexPlusOne = 0;
+            return false;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -621,7 +947,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        private static void AddPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
+        private static void AddManuallyAnimatedPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
@@ -630,8 +956,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             // It would be way nicer to calculate them here, but we don't have a nice vector library
             // and it would double the amount of work.
 
-            const string platformImageUrl = "https://i.imgur.com/DbXr5Fo.png";
-            const double hiddenOpacity = 0.2;
+            const string platformImageUrl = ParserIcons.QadimPlatform;
+            const double hiddenOpacity = 0.1;
 
             bool isCM = log.FightData.IsCM;
 
@@ -1032,21 +1358,122 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityTakingTurns).Any()) { CheckAchievementBuff(log, AchievementEligibilityTakingTurns); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any()) { CheckAchievementBuff(log, AchievementEligibilityManipulateTheManipulator); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
+                {
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                }
+                else if (CustomCheckManipulateTheManipulator(log))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityManipulateTheManipulator], 1));
+                }
             }
         }
 
-        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
+        /// <summary>
+        /// Check the player positions for the achievement eligiblity.<br></br>
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
+        private static bool CustomCheckTakingTurns(ParsedEvtcLog log)
         {
+            // Z coordinates info:
+            // The player in the lamp is roughly at -81
+            // The death zone from falling off the platform is roughly at -2950
+            // The main fight platform is at roughly at -4700
+
+            var lamps = log.AgentData.GetNPCsByID(TrashID.QadimLamp).ToList();
+            int lampLabyrinthZ = -250; // Height Threshold
+
             foreach (Player p in log.PlayerList)
             {
-                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
+                IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
+                var exitBuffs = log.CombatData.GetBuffData(PowerOfTheLamp).OfType<BuffApplyEvent>().Where(x => x.To == p.AgentItem).ToList();
+
+                // Count the times the player has entered and exited the lamp.
+                // A player that has entered the lamp but never exites and remains alive is elible for the achievement.
+
+                int entered = 0;
+                int exited = 0;
+
+                for (int i = 0; i < lamps.Count; i++)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
-                    break;
+                    if (positions.Any(x => x.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                    {
+                        entered++;
+                    }
+
+                    var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.FightData.FightEnd;
+                    var segment = new Segment(lamps[i].LastAware, end, 1);
+
+                    if (exitBuffs.Any(x => segment.ContainsPoint(x.Time)))
+                    {
+                        exited++;
+                    }
+
+                    if (entered > 1) { return false; } // Failed achievement
                 }
             }
+
+            return true; // Successful achievement
+        }
+
+        /// <summary>
+        /// Check the NPC positions for the achievement eligiblity.<br></br>
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
+        private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
+        {
+            AbstractSingleActor qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
+            AbstractSingleActor hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
+            AbstractSingleActor bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
+            AbstractSingleActor matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
+            AbstractSingleActor patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
+
+            if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
+            {
+                return !DistanceCheck(log, qadim, hydra) &&
+                    !DistanceCheck(log, qadim, bringer) &&
+                    !DistanceCheck(log, qadim, matriarch) &&
+                    !DistanceCheck(log, qadim, patriarch);
+            }
+            
+            return false;
+        }
+
+        /// <summary>
+        /// Find out if the distance points between <paramref name="qadim"/> and an <paramref name="add"/> goes under 2000 range.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="qadim"></param>
+        /// <param name="add"></param>
+        /// <returns><see langword="true"/> if distance goes under 2000, otherwise <see langword="false"/>.</returns>
+        private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
+        {
+            // Get positions of Ancient Invoked Hydra, Apocalypse Bringer, Wyvern Matriarch and Patriarch
+            var addPositions = add.GetCombatReplayPolledPositions(log).ToList();
+            if (addPositions.Count == 0)
+            {
+                return true;
+            }
+            // Get positions of Qadim during the times of the adds being present
+            var qadimPositions = qadim.GetCombatReplayPolledPositions(log).Where(x => x.Time >= addPositions.First().Time && x.Time <= addPositions.Last().Time).ToList();
+            if (qadimPositions.Count == 0)
+            {
+                return true;
+            }
+
+            // For each matching position polled, check if the distance between points is under 2000
+            for (int i = 0; i < Math.Min(addPositions.Count, qadimPositions.Count); i++)
+            {
+                if (qadimPositions[i].DistanceToPoint(addPositions[i]) < 2000)
+                {
+                    return true;
+                }
+            }
+
+            // Never went under 2000 range
+            return false;
         }
     }
 }

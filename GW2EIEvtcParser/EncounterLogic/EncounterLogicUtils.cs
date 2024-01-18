@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
         {
             AbstractSingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
             if (target == null)
@@ -36,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
             }
             long minTime = Math.Max(target.FirstAware, time);
-            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime);
+            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HPPercent > 0));
             var targetTotalHP = target.GetHealth(combatData);
             if (hpUpdate == null || targetTotalHP < 0)
             {
@@ -44,14 +45,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return false;
             }
             var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
-            double damageThreshold = damagingPlayers.Count * 120000;
-            double threshold = (1.0 - damageThreshold / targetTotalHP) * 100;
+            long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= time && x.Time <= time + 1000).Sum(x => x.HealthDamage);
+            double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2*damageDoneWithinOneSec);
+            double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
             return hpUpdate.HPPercent < threshold - 2;
         }
 
-        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets)
+        internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
         {
-            return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets);
+            return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
         }
 
         internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
@@ -234,6 +236,99 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="Quickness"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="startCastTime">Starting time of the cast.</param>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long expectedEndCastTime = startCastTime + castDuration;
+            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            if (quickness != null)
+            {
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                return castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="MistlockInstabilitySugarRush"/>.
+        /// </summary>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithSugarRush(long castDuration)
+        {
+            return castDuration * 0.8;
+        }
+
+        /// <summary>
+        /// Compute the cast duration while the target has <see cref="Quickness"/> and <see cref="MistlockInstabilitySugarRush"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="startCastTime">Starting time of the cast.</param>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The duration of the cast.</returns>
+        internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long expectedEndCastTime = startCastTime + castDuration;
+            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            if (quickness != null)
+            {
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                double castTimeWithSugarRush = ComputeCastTimeWithSugarRush(castDuration);
+                return castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
+            }
+            return 0;
+        }
+
+        internal static long ComputeEndCastTimeByStun(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        {
+            long standardEndCastTime = startCastTime + castDuration;
+            Segment stunSegment = actor.GetBuffStatus(log, Stun, startCastTime, standardEndCastTime).FirstOrDefault(x => x.Value > 0);
+            if (stunSegment != null)
+            {
+                return stunSegment.Start;
+            }
+            return standardEndCastTime;
+        }
+
+
+        /// <summary>
+        /// Matches an effect to another effect by proximity and filters out additional effects.
+        /// </summary>
+        /// <param name="startEffects">List of the initial effects for the positions.</param>
+        /// <param name="endEffects">List of the final effects for the positions.</param>
+        /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
+        internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
+        {
+            var matchedEffects = new List<(EffectEvent, EffectEvent, float)>();
+            foreach (EffectEvent startEffect in startEffects)
+            {
+                var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
+                if (candidateEffectEvents.Any())
+                {
+                    EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
+                    float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);
+                    matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
+                }
+            }
+
+            var filteredPairings = matchedEffects
+                .GroupBy(p => p.Item1) // Group by aoe
+                .SelectMany(group =>
+                {
+                    var minDistance = group.Min(p => p.Item3); // Find minimal distance in each group
+                    return group.Where(p => Math.Abs(p.Item3 - minDistance) < float.Epsilon); // Filter by minimal distance
+                })
+                .ToList();
+
+            return filteredPairings;
         }
     }
 }
