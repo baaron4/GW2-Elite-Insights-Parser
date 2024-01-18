@@ -117,7 +117,7 @@ namespace GW2EIDPSReport
             DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traceHandler, contentCreator);
             if (response != null && response.Error != null)
             {
-                traceHandler("DPSReport: UploadUsingEI failed - " + response.Error);
+                traceHandler("UploadUsingEI failed - " + response.Error);
                 return null;
             }
             return response;
@@ -175,7 +175,7 @@ namespace GW2EIDPSReport
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traceHandler("DPSReport: " + requestName + " tentative");
+                traceHandler(requestName + " tentative");
                 var webService = new Uri(@URI);
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -206,13 +206,13 @@ namespace GW2EIDPSReport
                             ContractResolver = DefaultJsonContractResolver,
                             StringEscapeHandling = StringEscapeHandling.EscapeHtml
                         });
-                        traceHandler("DPSReport: " + requestName + " tentative successful");
+                        traceHandler(requestName + " tentative successful");
                         return item;
                     }
                 }
                 catch (Exception e)
                 {
-                    traceHandler("DPSReport: " + requestName + " tentative failed - " + e.Message);
+                    traceHandler(requestName + " tentative failed - " + e.Message);
                 }
                 finally
                 {

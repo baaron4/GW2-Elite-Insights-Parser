@@ -44,7 +44,7 @@ namespace GW2EIWingman
         {
             if (!dpsReportLink.Contains("https") && !dpsReportLink.Contains(".report"))
             {
-                traceHandler("Wingman: Invalid dps.report link");
+                traceHandler("Invalid dps.report link");
                 return false;
             }
             return true;
@@ -68,7 +68,9 @@ namespace GW2EIWingman
         // Connection checking
         private static bool CheckConnection(TraceHandler traceHandler)
         {
-            return _GetWingmanResponse("CheckConnection", TestConnectionURL, traceHandler, HttpMethod.Get) == "True";
+            bool check = _GetWingmanResponse("CheckConnection", TestConnectionURL, traceHandler, HttpMethod.Get) == "True";
+            traceHandler("connection " + (check ? "OK" : "KO"));
+            return check;
         }
 
         private static bool IsEIVersionValid(Version parserVersion, TraceHandler traceHandler)
@@ -76,11 +78,18 @@ namespace GW2EIWingman
             string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
             if (returnedVersion == null)
             {
+                traceHandler("version missing");
                 return false;
             }
             returnedVersion = returnedVersion.Replace("v", "");
             var expectedVersion = new Version(returnedVersion);
-            return parserVersion.CompareTo(expectedVersion) >= 0;
+            bool check = parserVersion.CompareTo(expectedVersion) >= 0;
+            traceHandler("version " + (check ? "OK" : "KO"));
+            if (!check)
+            {
+                traceHandler("expected version to be at least " + expectedVersion.ToString());
+            }
+            return check;
         }
 
         public static bool CanBeUsed(Version parserVersion, TraceHandler traceHandler)
@@ -106,7 +115,7 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traceHandler("Wingman: CheckLogQueuedOrDB failed - " + e.Message);
+                traceHandler("CheckLogQueuedOrDB failed - " + e.Message);
                 return null;
             }
         }
@@ -128,7 +137,7 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traceHandler("Wingman: CheckLogQueued failed - " + e.Message);
+                traceHandler("CheckLogQueued failed - " + e.Message);
                 return null;
             }
         }
@@ -150,7 +159,7 @@ namespace GW2EIWingman
             }
             catch (Exception e)
             {
-                traceHandler("Wingman: ImportLogQueued failed - " + e.Message);
+                traceHandler("ImportLogQueued failed - " + e.Message);
                 return null;
             }
         }
@@ -163,7 +172,7 @@ namespace GW2EIWingman
             {
                 if (wingmanCheck.InDB || wingmanCheck.InQueue)
                 {
-                    traceHandler("Wingman: Upload failed - Log already present in Wingman DB");
+                    traceHandler("Upload failed - Log already present in Wingman DB");
                     return false;
                 }
                 else
@@ -173,12 +182,12 @@ namespace GW2EIWingman
                     {
                         if (wingmanUpload.Success != 1)
                         {
-                            traceHandler("Wingman: Upload failed - " + wingmanUpload.Note);
+                            traceHandler("Upload failed - " + wingmanUpload.Note);
                             return true;
                         }
                         else
                         {
-                            traceHandler("Wingman: Upload successful - " + wingmanUpload.Note);
+                            traceHandler("Upload successful - " + wingmanUpload.Note);
                             return true;
                         }
                     }
@@ -231,7 +240,7 @@ namespace GW2EIWingman
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traceHandler("Wingman: " + requestName + " tentative");
+                traceHandler(requestName + " tentative");
                 var webService = new Uri(@url);
                 var requestMessage = new HttpRequestMessage(method, webService);
                 requestMessage.Headers.ExpectContinue = false;
@@ -257,13 +266,13 @@ namespace GW2EIWingman
                     {
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        traceHandler("Wingman: " + requestName + " successful");
+                        traceHandler(requestName + " successful");
                         return stringContents;
                     }
                 }
                 catch (Exception e)
                 {
-                    traceHandler("Wingman: " + requestName + " failed " + e.Message);
+                    traceHandler(requestName + " failed " + e.Message);
                 }
                 finally
                 {

@@ -43,14 +43,14 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 SetPOV(povEvt.PoV, playerList);
             }
-            operation.UpdateProgressWithCancellationCheck("PoV " + PoVName);
+            operation.UpdateProgressWithCancellationCheck("Parsing: PoV " + PoVName);
             //
             BuildEvent buildEvt = combatData.GetBuildEvent();
             if (buildEvt != null)
             {
                 GW2Build = buildEvt.Build;
             }
-            operation.UpdateProgressWithCancellationCheck("GW2 Build " + GW2Build);
+            operation.UpdateProgressWithCancellationCheck("Parsing: GW2 Build " + GW2Build);
             //
             LanguageEvent langEvt = combatData.GetLanguageEvent();
             if (langEvt != null)
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.ParsedData
                 Language = langEvt.ToString();
                 LanguageID = langEvt.Language;
             }
-            operation.UpdateProgressWithCancellationCheck("Language " + Language);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Language " + Language);
             //
             LogStartEvent logStr = combatData.GetLogStartEvent();
             if (logStr != null)
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.ParsedData
             // log end event is missing, log start is present
             if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
             {
-                operation.UpdateProgressWithCancellationCheck("Missing Log End Event");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Missing Log End Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
                 SetLogEndStd(dur + unixStart);
@@ -86,17 +86,17 @@ namespace GW2EIEvtcParser.ParsedData
             // log start event is missing, log end is present
             if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
             {
-                operation.UpdateProgressWithCancellationCheck("Missing Log Start Event");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Missing Log Start Event");
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
                 SetLogStartStd(unixEnd - dur);
             }
-            operation.UpdateProgressWithCancellationCheck("Log Start " + LogStartStd);
-            operation.UpdateProgressWithCancellationCheck("Log End " + LogEndStd);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Log Start " + LogStartStd);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Log End " + LogEndStd);
             //
             foreach (ErrorEvent evt in combatData.GetErrorEvents())
             {
-                operation.UpdateProgressWithCancellationCheck("Error " + evt.Message);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Error " + evt.Message);
                 _logErrors.Add(evt.Message);
             }
             //

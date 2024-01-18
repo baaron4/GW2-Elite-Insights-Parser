@@ -190,12 +190,12 @@ namespace GW2EIEvtcParser.EIData
             }
             if (solved.Values.Distinct().Count() != solved.Values.Count)
             {
-                operation.UpdateProgressWithCancellationCheck("Incoherent Data in Buff Info Solver, no formula attribute adjustement will be done");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Incoherent Data in Buff Info Solver, no formula attribute adjustement will be done");
                 solved.Clear();
             }
             else if (solved.Any())
             {
-                operation.UpdateProgressWithCancellationCheck("Deduced " + solved.Count + " unknown buff formulas");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Deduced " + solved.Count + " unknown buff formulas");
             }
             foreach (KeyValuePair<long, Buff> pair in buffsByID)
             {

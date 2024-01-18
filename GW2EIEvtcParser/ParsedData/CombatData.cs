@@ -389,24 +389,24 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
             // master attachements
-            operation.UpdateProgressWithCancellationCheck("Processing Warrior Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Warrior Gadgets");
             WarriorHelper.ProcessGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Processing Engineer Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Engineer Gadgets");
             EngineerHelper.ProcessGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Attaching Ranger Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Ranger Gadgets");
             RangerHelper.ProcessGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Processing Revenant Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Revenant Gadgets");
             RevenantHelper.ProcessGadgets(players, this, agentData);
-            operation.UpdateProgressWithCancellationCheck("Processing Racial Gadget");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Racial Gadget");
             ProfHelper.ProcessRacialGadgets(players, this);
             // Custom events
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Buff Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
             EIBuffParse(players, skillData, fightData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Damage Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Cast Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
             EICastParse(players, skillData, fightData, agentData);
-            operation.UpdateProgressWithCancellationCheck("Creating Custom Status Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Status Events");
             EIMetaAndStatusParse(fightData, arcdpsVersion);
         }
 
@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser.ParsedData
             var wepSwaps = new List<WeaponSwapEvent>();
             var brkDamageData = new List<AbstractBreakbarDamageEvent>();
             var damageData = new List<AbstractHealthDamageEvent>();
-            operation.UpdateProgressWithCancellationCheck("Creating EI Combat Data");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
             foreach (CombatItem combatItem in combatEvents)
             {
                 bool insertToSkillIDs = false;
@@ -539,10 +539,10 @@ namespace GW2EIEvtcParser.ParsedData
             HasBreakbarDamageData = brkDamageData.Any();
             HasEffectData = _statusEvents.EffectEvents.Any();
             //
-            operation.UpdateProgressWithCancellationCheck("Combining SkillInfo with SkillData");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
             //
-            operation.UpdateProgressWithCancellationCheck("Creating Cast Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
             List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, fightData);
             _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
@@ -550,12 +550,12 @@ namespace GW2EIEvtcParser.ParsedData
             _instantCastDataById = new Dictionary<long, List<InstantCastEvent>>();
             _animatedCastDataById = animatedCastData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             //
-            operation.UpdateProgressWithCancellationCheck("Creating Buff Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
             _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             OffsetBuffExtensionEvents(evtcVersion);
             // damage events
-            operation.UpdateProgressWithCancellationCheck("Creating Damage Events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Events");
             _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());

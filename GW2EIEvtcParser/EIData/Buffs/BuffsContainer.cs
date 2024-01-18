@@ -111,8 +111,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (!buffIDs.Contains(buffInfoEvent.BuffID))
                     {
-                        operation.UpdateProgressWithCancellationCheck("Creating nourishement " + buffInfoEvent.BuffID);
-                        currentBuffs.Add(CreateCustomBuff("Unknown Nourishment", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png", buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Creating nourishement " + buffInfoEvent.BuffID);
+                        currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png", buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return x.First();
             });
-            operation.UpdateProgressWithCancellationCheck("Adjusting Buffs");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buffs");
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (formula.Attr1 == BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
+                            operation.UpdateProgressWithCancellationCheck("Parsing: Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
                         }
                     }
                 }

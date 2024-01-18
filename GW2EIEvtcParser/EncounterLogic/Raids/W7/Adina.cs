@@ -351,7 +351,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             catch (Exception)
             {
-                log.UpdateProgressWithCancellationCheck("Failed to associate Adina Combat Replay maps");
+                log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
             }
             //
             return map;

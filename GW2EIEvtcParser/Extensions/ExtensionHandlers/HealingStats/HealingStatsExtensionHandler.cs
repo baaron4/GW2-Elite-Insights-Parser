@@ -306,7 +306,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
-            operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision " + Revision + " combat events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching healing extension revision " + Revision + " combat events");
             //
             {
                 var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -327,7 +327,7 @@ namespace GW2EIEvtcParser.Extensions
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
-                operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
             }          
             //
             if (_barrierEvents.Any())
@@ -350,12 +350,12 @@ namespace GW2EIEvtcParser.Extensions
                 }
                 var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
-                operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
             int running = Math.Max(RunningExtensionInternal.Count, 1);
-            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
+            operation.UpdateProgressWithCancellationCheck("Parsing: " + (running != 1 ? running + " players have the extension running" : running + " player has the extension running"));
             //
-            operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attached healing extension combat events");
         }
 
     }
