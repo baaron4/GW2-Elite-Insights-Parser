@@ -214,15 +214,17 @@ namespace GW2EIWingman
             string name = fi.Name;
             string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".json";
             string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".html";
+            string jsonString = Encoding.UTF8.GetString(jsonFile);
+            string htmlString = Encoding.UTF8.GetString(htmlFile);
             Func<HttpContent> contentCreator = () =>
             {
                 var multiPartContent = new MultipartFormDataContent();
                 var fileContent = new ByteArrayContent(fileBytes);
                 fileContent.Headers.Add("Content-Type", "application/octet-stream");
                 multiPartContent.Add(fileContent, "file", name);
-                var jsonContent = new StringContent(Encoding.UTF8.GetString(jsonFile), Encoding.UTF8, "text/plain");
+                var jsonContent = new StringContent(jsonString, Encoding.UTF8, "text/plain");
                 multiPartContent.Add(jsonContent, "jsonfile", jsonName);
-                var htmlContent = new StringContent(Encoding.UTF8.GetString(htmlFile), Encoding.UTF8, "text/plain");
+                var htmlContent = new StringContent(htmlString, Encoding.UTF8, "text/plain");
                 multiPartContent.Add(htmlContent, "htmlfile", htmlName);
                 var data = new Dictionary<string, string> { { "account", account } };
                 var dataContent = new FormUrlEncodedContent(data);
