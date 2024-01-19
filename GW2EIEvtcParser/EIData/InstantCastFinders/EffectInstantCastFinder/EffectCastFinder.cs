@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        private AgentItem GetAgent(EffectEvent effectEvent)
+        protected AgentItem GetAgent(EffectEvent effectEvent)
         {
             return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
         }

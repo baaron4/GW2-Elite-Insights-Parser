@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.EIData
         {
             BuffID = buffID;
         }
-        protected AgentItem GetCasterAgent(AgentItem agent)
+        protected AgentItem GetCasterAgent(Event evt)
         {
-            return Minions ? agent.GetFinalMaster() : agent;
+            return Minions ? GetKeyAgent(evt).GetFinalMaster() : GetKeyAgent(evt);
         }
 
         protected abstract AgentItem GetKeyAgent(Event evt);
@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            var applies = combatData.GetBuffData(BuffID).OfType<Event>().GroupBy(x => GetCasterAgent(GetKeyAgent(x))).ToDictionary(x => x.Key, x => x.ToList());
+            var applies = combatData.GetBuffData(BuffID).OfType<Event>().GroupBy(x => GetCasterAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<AgentItem, List<Event>> pair in applies)
             {
                 long lastTime = int.MinValue;
