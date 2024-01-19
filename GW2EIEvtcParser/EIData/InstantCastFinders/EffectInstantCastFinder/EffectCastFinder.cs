@@ -8,15 +8,22 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
+        protected bool Minions { get; private set; } = false;
         private readonly string _effectGUID;
         private int _speciesId { get; set; } = 0;
 
-        protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
+        public EffectCastFinder WithMinions(bool minions)
         {
-            return combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            Minions = minions;
+            return this;
         }
 
-        protected virtual AgentItem GetAgent(EffectEvent effectEvent)
+        private AgentItem GetAgent(EffectEvent effectEvent)
+        {
+            return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
+        }
+
+        protected virtual AgentItem GetKeyAgent(EffectEvent effectEvent)
         {
             return effectEvent.Src;
         }
@@ -77,21 +84,21 @@ namespace GW2EIEvtcParser.EIData
             EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
             if (effectGUIDEvent != null)
             {
-                Dictionary<AgentItem, List<EffectEvent>> effects = GetEffectEventDict(effectGUIDEvent, combatData);
+                var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => GetAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
                 {
                     long lastTime = int.MinValue;
                     foreach (EffectEvent effectEvent in pair.Value)
                     {
-                        if (effectEvent.Time - lastTime < ICD)
-                        {
-                            lastTime = effectEvent.Time;
-                            continue;
-                        }
                         if (CheckCondition(effectEvent, combatData, agentData, skillData))
                         {
+                            if (effectEvent.Time - lastTime < ICD)
+                            {
+                                lastTime = effectEvent.Time;
+                                continue;
+                            }
                             lastTime = effectEvent.Time;
-                            AgentItem caster = GetAgent(effectEvent);
+                            AgentItem caster = pair.Key;
                             if (_speciesId > 0 && caster.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
                             {
                                 AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
