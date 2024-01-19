@@ -34,12 +34,13 @@ namespace GW2EIEvtcParser.EIData
                 {
                     foreach (SpawnEvent spawn in combatData.GetSpawnEvents(agent))
                     {
-                        if (spawn.Time - lastTime < ICD)
+                        if (CheckCondition(spawn, combatData, agentData, skillData))
                         {
-                            lastTime = spawn.Time;
-                        }
-                        else if (CheckCondition(spawn, combatData, agentData, skillData))
-                        {
+                            if (spawn.Time - lastTime < ICD)
+                            {
+                                lastTime = spawn.Time;
+                                continue;
+                            }
                             lastTime = spawn.Time;
                             result.Add(new InstantCastEvent(spawn.Time, skillData.Get(SkillID), pair.Key));
                         }
