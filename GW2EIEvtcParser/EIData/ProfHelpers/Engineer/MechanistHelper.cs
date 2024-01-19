@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayBuff),
+            new BuffGainCastFinder(DischargeArray, DischargeArrayBuff).WithMinions(true),
             new EffectCastFinderByDstFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone)
                 .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
                 .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
