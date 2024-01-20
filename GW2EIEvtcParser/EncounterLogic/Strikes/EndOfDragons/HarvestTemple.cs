@@ -889,8 +889,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // 1: When the instance is bugged from a previous wipe, the orange warning indicator is not present but the red damage field is always visible.
                     // 2: The red damage field is not in the same position of the orange warning indicator, rending the indicator inaccurate.
                     
-                    var jawsOfDestructionPoint = new Point3D(591.0542f, -21528.8555f, -15418.3f);
-                    var jawsOfDestructionPosition = new PositionConnector(jawsOfDestructionPoint);
+                    var jawsOfDestructionPosition = new Point3D(591.0542f, -21528.8555f, -15418.3f);
+                    var jawsOfDestructionConnector = new PositionConnector(jawsOfDestructionPosition);
                     int jawsOfDestructionIndicatorDuration = 6950;
 
                     // Jaws of Primordus - Orange Indicator
@@ -901,7 +901,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // The indicator doesn't get cancelled when phasing to Kralkatorrik but also doesn't do anything, we remove it when phasing.
                             long growingEnd = effect.Time + jawsOfDestructionIndicatorDuration;
                             (long start, long end) lifespanIndicator = (effect.Time, Math.Min(growingEnd, target.LastAware));
-                            var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionPosition);
+                            var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionConnector);
                             replay.AddDecorationWithGrowing(indicator, growingEnd);
                         }
                     }
@@ -915,13 +915,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (jawsOfDestructionIndicators == null || jawsOfDestructionIndicators.FirstOrDefault(x => x.Time > effect.Time - 10000 && x.Time < effect.Time) == null)
                             {
                                 (long start, long end) lifespanIndicator = (effect.Time - jawsOfDestructionIndicatorDuration, effect.Time);
-                                var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionPosition);
+                                var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionConnector);
                                 replay.AddDecorationWithGrowing(indicator, lifespanIndicator.end);
                             }
                             // The damage field gets cancelled when phasing to Kralkatorrik.
                             (long start, long end) lifespanDamage = effect.ComputeLifespan(log, 5000);
                             lifespanDamage.end = Math.Min(lifespanDamage.end, target.LastAware);
-                            var damage = new CircleDecoration(1450, lifespanDamage, Colors.Red, 0.4, jawsOfDestructionPosition);
+                            var damage = new CircleDecoration(1450, lifespanDamage, Colors.Red, 0.4, jawsOfDestructionConnector);
                             replay.Decorations.Add(damage);
                         }
                     }
@@ -1027,27 +1027,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact, out IReadOnlyList<EffectEvent> zhaitanPoisonImpactEffects))
+                    // Putrid Deluge
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact, out IReadOnlyList<EffectEvent> putridDelugeImpacts))
                     {
-                        foreach (EffectEvent effect in zhaitanPoisonImpactEffects)
+                        foreach (EffectEvent effect in putridDelugeImpacts)
                         {
                             (long start, long end) lifespan = (effect.Time - 2000, effect.Time);
                             replay.AddDecorationWithGrowing(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
                         }
                     }
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE, out IReadOnlyList<EffectEvent> zhaitanPoisonAoeEffects))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE, out IReadOnlyList<EffectEvent> putridDelugeAoEs))
                     {
-                        foreach (EffectEvent effect in zhaitanPoisonAoeEffects)
+                        foreach (EffectEvent effect in putridDelugeAoEs)
                         {
                             int fieldDuration = 10000;
                             (long start, long end) lifespan = (effect.Time, effect.Time + fieldDuration);
-                            if (lifespan.start > target.LastAware)
+                            if (lifespan.start < target.LastAware)
                             {
-                                lifespan.end = effect.Time + 10000;
-                            }
-                            else
-                            {
-                                lifespan.end = Math.Min(target.LastAware, lifespan.start + 10000);
+                                lifespan.end = Math.Min(target.LastAware, lifespan.end);
                             }
                             replay.AddDecorationWithBorder(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.4);
                         }

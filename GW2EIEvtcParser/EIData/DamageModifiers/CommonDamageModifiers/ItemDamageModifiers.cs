@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
                     PlateOfPeppercornSpicedBeefCarpaccio, PlateOfPeppercornSpicedPoultryAspic, PeppercornSpicedEggsBenedict, SpicedPepperCremeBrulee,
                     SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad, 
                     SpherifiedPeppercornSpicedOysterSoup, MistsInfusedSpherifiedPeppercornSpicedOysterSoup,
-                }, "Ascended Food: -10%", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByMultiPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
+                }, "Ascended Food: -10%", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
             new BuffOnActorDamageModifier(
                 new long[]
                 {
