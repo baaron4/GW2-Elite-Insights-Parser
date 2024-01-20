@@ -72,6 +72,21 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        protected virtual bool DebugChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
+        {
+            var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
+            var testGUIDs = test.Select(x => combatData.GetEffectGUIDEvent(x.EffectID)).Select(x => x.HexContentGUID).ToList();
+            var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
+            var test2GUIDs = test2.Select(x => combatData.GetEffectGUIDEvent(evt.EffectID)).Select(x => x.HexContentGUID).ToList();
+            return true;
+        }
+
+        internal EffectCastFinder UsingDebugChecker()
+        {
+            UsingChecker(DebugChecker);
+            return this;
+        }
+
         internal EffectCastFinder UsingAgentRedirectionIfUnknown(int speciesID)
         {
             _speciesId = speciesID;

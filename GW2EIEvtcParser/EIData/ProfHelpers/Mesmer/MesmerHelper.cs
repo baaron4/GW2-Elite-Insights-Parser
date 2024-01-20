@@ -29,57 +29,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new BuffGainCastFinder(PortalExeunt, PortalUses),
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-            /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            }), // Distortion
-            new BuffGainCastFinder(10192, 10243, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
-                if (evt.To.Prof == "Chronomancer")
-                {
-                    return false;
-                }
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            }), // Distortion
-            new BuffGainCastFinder(10192, 10243, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any()) 
-                    {
-                        return false;
-                    }
-                }
-                return true;
-                
-            }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
-
             // identify swap by buff remove
             // identify phase retreat by spawned staff clone
             // fallback to blink or phase retreat
