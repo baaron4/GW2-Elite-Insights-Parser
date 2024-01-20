@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
         {
-            if (effectEvt.Src.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+            if (effectEvt.Src.IsNonIdentifiedSpecies())
             {
                 return agentData.GetNPCsByID(ArcDPSEnums.TrashID.Environment).FirstOrDefault();
             }

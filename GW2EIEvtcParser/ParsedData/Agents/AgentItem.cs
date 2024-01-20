@@ -483,6 +483,11 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetCurrentBreakbarState(log, time);
         }
 
+        public bool IsNonIdentifiedSpecies()
+        {
+            return IsSpecies(ArcDPSEnums.NonIdentifiedSpecies);
+        }
+
         public bool IsSpecies(int id)
         {
             return !IsPlayer && ID == id;

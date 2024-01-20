@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EIData
                             }
                             lastTime = effectEvent.Time;
                             AgentItem caster = pair.Key;
-                            if (_speciesId > 0 && caster.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+                            if (_speciesId > 0 && caster.IsNonIdentifiedSpecies())
                             {
                                 AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                                 if (agent != null)
