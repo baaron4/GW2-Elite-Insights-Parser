@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         // Fields
         public ulong Agent { get; }
-        public int ID { get; protected set; }
+        public int ID { get; protected set; } = ArcDPSEnums.NonIdentifiedSpecies;
         public int UniqueID { get; }
         public AgentItem Master { get; protected set; }
         public ushort InstID { get; protected set; }

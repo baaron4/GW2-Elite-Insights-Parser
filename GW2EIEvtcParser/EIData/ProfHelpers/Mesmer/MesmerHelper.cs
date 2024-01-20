@@ -47,32 +47,22 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
                 .UsingChecker((evt, combatData, agentData, skillData) => !agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
-
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionBuff).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) =>{
-                if (evt.Src.Spec != Spec.Mesmer || evt.Src.Spec != Spec.Mirage)
-                {
-                    return false;
-                }
-                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
-                {
-                    return false;
-                }
-                return true;
-            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
-                if (evt.Src.BaseSpec != Spec.Mesmer || evt.Src.Spec == Spec.Virtuoso)
-                {
-                    return false;
-                }
-                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
-                {
-                    return false;
-                }
-                return true;
-            }).WithBuilds(GW2Builds.October2022Balance),
+            // Shatters
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
+                .WithBuilds(GW2Builds.October2022Balance),
             // Mantras        
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),

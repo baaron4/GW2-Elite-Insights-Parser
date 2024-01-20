@@ -16,7 +16,8 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceBuff), // Legendary Renegade Stance
             new DamageCastFinder(CallOfTheRenegade, CallOfTheRenegade), // Call of the Renegade
-            new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == Spec.Renegade)
+            new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove)
+                .UsingSrcSpecChecker(Spec.Revenant)
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>

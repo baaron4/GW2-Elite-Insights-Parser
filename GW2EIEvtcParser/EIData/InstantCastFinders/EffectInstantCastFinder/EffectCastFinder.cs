@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
         {
-            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.BaseSpec == spec);
             return this;
         }
         
@@ -53,9 +53,43 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal EffectCastFinder UsingSrcNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec != spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingSrcSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => specs.Contains(evt.Src.Spec));
+            return this;
+        }
+        internal EffectCastFinder UsingSrcNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => !specs.Contains(evt.Src.Spec));
+            return this;
+        }
+
         internal EffectCastFinder UsingDstSpecChecker(Spec spec)
         {
-            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.Spec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.Spec != spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && specs.Contains(evt.Dst.Spec));
+            return this;
+        }
+        internal EffectCastFinder UsingDstNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && !specs.Contains(evt.Dst.Spec));
             return this;
         }
 

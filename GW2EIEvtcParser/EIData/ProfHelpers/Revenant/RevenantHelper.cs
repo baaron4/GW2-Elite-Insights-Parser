@@ -68,7 +68,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .WithBuilds(GW2Builds.June2022Balance),
             new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
-                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
+                .UsingSrcBaseSpecChecker(Spec.Revenant)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
         };
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -22,6 +23,65 @@ namespace GW2EIEvtcParser.EIData
         public virtual BuffCastFinder<Event> WithMinions(bool minions)
         {
             Minions = minions;
+            return this;
+        }
+
+
+        internal BuffCastFinder<Event> UsingByBaseSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.By.BaseSpec == spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingToBaseSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.To.BaseSpec == spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingBySpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.By.Spec == spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingByNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.By.Spec != spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingBySpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => specs.Contains(evt.By.Spec));
+            return this;
+        }
+        internal BuffCastFinder<Event> UsingByNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => !specs.Contains(evt.By.Spec));
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingToSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.To.Spec == spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingToNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.To.Spec != spec);
+            return this;
+        }
+
+        internal BuffCastFinder<Event> UsingToSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => specs.Contains(evt.To.Spec));
+            return this;
+        }
+        internal BuffCastFinder<Event> UsingToNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => !specs.Contains(evt.To.Spec));
             return this;
         }
 
