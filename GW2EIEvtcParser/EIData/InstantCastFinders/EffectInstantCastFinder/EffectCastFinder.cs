@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
-        protected bool Minions { get; private set; } = false;
+        protected bool Minions { get; set; } = false;
         private readonly string _effectGUID;
         private int _speciesId { get; set; } = 0;
 

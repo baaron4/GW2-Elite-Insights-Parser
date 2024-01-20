@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where Event: AbstractBuffEvent
     {
-        protected bool Minions { get; private set; } = false;
+        protected bool Minions { get; set; } = false;
         protected long BuffID { get; }
         protected BuffCastFinder(long skillID, long buffID) : base(skillID)
         {

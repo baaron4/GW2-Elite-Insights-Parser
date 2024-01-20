@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         public MinionCommandCastFinder(long skillID, int speciesID) : base(skillID, MinionCommandBuff)
         {
             SpeciesID = speciesID;
-            base.WithMinions(true);
+            Minions = true;
             UsingChecker((evt, combatData, agentData, skillData) => evt.To.Type != AgentItem.AgentType.Gadget && evt.To.IsSpecies(speciesID) && evt.To.Master != null);
         }
     }

@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public BuffGiveCastFinder(long skillID, long buffID) : base(skillID, buffID)
         {
-            base.WithMinions(true);
+            Minions = true;
             UsingChecker((bae, combatData, agentData, skillData) => !bae.Initial);
         }
         protected override AgentItem GetKeyAgent(BuffApplyEvent evt)
