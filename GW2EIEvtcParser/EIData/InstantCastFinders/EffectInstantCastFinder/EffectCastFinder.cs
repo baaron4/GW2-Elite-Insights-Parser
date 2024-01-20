@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        protected virtual bool DebugChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
+        protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
             var testGUIDs = test.Select(x => combatData.GetEffectGUIDEvent(x.EffectID)).Select(x => x.HexContentGUID).ToList();
@@ -81,9 +81,9 @@ namespace GW2EIEvtcParser.EIData
             return true;
         }
 
-        internal EffectCastFinder UsingDebugChecker()
+        internal EffectCastFinder UsingDebugEffectChecker()
         {
-            UsingChecker(DebugChecker);
+            UsingChecker(DebugEffectChecker);
             return this;
         }
 

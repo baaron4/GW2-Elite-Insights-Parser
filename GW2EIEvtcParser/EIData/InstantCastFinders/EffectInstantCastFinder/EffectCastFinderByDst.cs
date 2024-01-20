@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
             return effectEvent.Dst;
         }
 
-        protected override bool DebugChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
+        protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var test = combatData.GetEffectEventsBySrc(evt.Dst).Where(x => Math.Abs(x.Time - evt.Time) <= ParserHelper.ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
             var testGUIDs = test.Select(x => combatData.GetEffectGUIDEvent(x.EffectID)).Select(x => x.HexContentGUID).ToList();
