@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         protected override AgentItem GetKeyAgent(EffectEvent effectEvent)
         {
-            return effectEvent.Dst;
+            return effectEvent.IsAroundDst ? effectEvent.Dst : ParserHelper._unknownAgent;
         }
 
         protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
