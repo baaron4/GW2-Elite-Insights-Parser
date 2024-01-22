@@ -45,14 +45,18 @@ namespace GW2EIParser
         /// Location of the output
         /// </summary>
         internal string OutLocation { get; set; }
+
+        private readonly List<string> _GeneratedFiles;
         /// <summary>
         /// Location of the generated files
         /// </summary>
-        public List<string> GeneratedFiles { get; }
+        public IReadOnlyList<string> GeneratedFiles => _GeneratedFiles;
+
+        private readonly List<string> _OpenableFiles;
         /// <summary>
         /// Location of the openable files
         /// </summary>
-        public List<string> OpenableFiles { get; }
+        public IReadOnlyList<string> OpenableFiles => _OpenableFiles;
         /// <summary>
         /// Link to dps.report
         /// </summary>
@@ -72,8 +76,8 @@ namespace GW2EIParser
         {
             Status = status;
             InputFile = location;
-            GeneratedFiles = new List<string>();
-            OpenableFiles = new List<string>();
+            _GeneratedFiles = new List<string>();
+            _OpenableFiles = new List<string>();
         }
 
         public override void Reset()
@@ -83,8 +87,8 @@ namespace GW2EIParser
             DPSReportLink = null;
             OutLocation = null;
             Elapsed = "";
-            GeneratedFiles.Clear();
-            OpenableFiles.Clear();
+            _GeneratedFiles.Clear();
+            _OpenableFiles.Clear();
         }
 
         public void Start()
@@ -97,6 +101,17 @@ namespace GW2EIParser
             _stopWatch.Stop();
             Elapsed = ("Elapsed " + _stopWatch.ElapsedMilliseconds + " ms");
             _stopWatch.Restart();
+        }
+
+        public void AddOpenableFile(string path)
+        {
+            _GeneratedFiles.Add(path);
+            _OpenableFiles.Add(path);
+        }
+
+        public void AddFile(string path)
+        {
+            _GeneratedFiles.Add(path);
         }
 
         public void FinalizeStatus(string prefix)

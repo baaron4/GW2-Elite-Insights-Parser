@@ -293,7 +293,7 @@ namespace GW2EIParser
                     Compress.Write(data, 0, data.Length);
                 }
             }
-            operation.GeneratedFiles.Add(outputFile);
+            operation.AddFile(outputFile);
         }
 
         private static DirectoryInfo GetSaveDirectory(FileInfo fInfo)
@@ -338,7 +338,7 @@ namespace GW2EIParser
                 saveDirectory.FullName,
                 $"{fName}.log"
                 );
-                operation.GeneratedFiles.Add(outputFile);
+                operation.AddFile(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -369,8 +369,7 @@ namespace GW2EIParser
                 saveDirectory.FullName,
                 $"{fName}.html"
                 );
-                operation.GeneratedFiles.Add(outputFile);
-                operation.OpenableFiles.Add(outputFile);
+                operation.AddOpenableFile(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
@@ -393,8 +392,7 @@ namespace GW2EIParser
                     saveDirectory.FullName,
                     $"{fName}.csv"
                 );
-                operation.GeneratedFiles.Add(outputFile);
-                operation.OpenableFiles.Add(outputFile);
+                operation.AddOpenableFile(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
@@ -433,7 +431,7 @@ namespace GW2EIParser
                     }
                     else
                     {
-                        operation.GeneratedFiles.Add(outputFile);
+                        operation.AddFile(outputFile);
                     }
                     operation.UpdateProgressWithCancellationCheck("JSON created");
                 }
@@ -464,7 +462,7 @@ namespace GW2EIParser
                     }
                     else
                     {
-                        operation.GeneratedFiles.Add(outputFile);
+                        operation.AddFile(outputFile);
                     }
                     operation.UpdateProgressWithCancellationCheck("XML created");
                 }
