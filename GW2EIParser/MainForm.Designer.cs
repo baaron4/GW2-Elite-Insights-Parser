@@ -1,4 +1,9 @@
-﻿namespace GW2EIParser
+﻿using System.Drawing;
+using System.Windows.Forms.VisualStyles;
+using System.Windows.Forms;
+using System;
+
+namespace GW2EIParser
 {
     partial class MainForm
     {
@@ -44,6 +49,7 @@
             this.LocationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StatusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParseButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.ReParseButtonState = new DataGridViewDisableButtonColumn();
             this.OperatorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.TlpMainWindow = new System.Windows.Forms.ToolTip(this.components);
             this.BtnClearFailed = new System.Windows.Forms.Button();
@@ -169,7 +175,8 @@
             this.DgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.LocationDataGridViewTextBoxColumn,
             this.StatusDataGridViewTextBoxColumn,
-            this.ParseButtonState});
+            this.ParseButtonState,
+            this.ReParseButtonState});
             this.DgvFiles.DataSource = this.OperatorBindingSource;
             this.DgvFiles.GridColor = System.Drawing.SystemColors.Control;
             this.DgvFiles.Location = new System.Drawing.Point(16, 46);
@@ -212,6 +219,16 @@
             this.ParseButtonState.ReadOnly = true;
             this.ParseButtonState.ToolTipText = "Left click open files and output location\r\nRight click to copy dps.report link to" +
     " clipboard, if applicable\r\nMiddle click to only open output location";
+            // 
+            // ReParseButtonState
+            // 
+            this.ReParseButtonState.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ReParseButtonState.DataPropertyName = "ReParseText";
+            this.ReParseButtonState.FillWeight = 10F;
+            this.ReParseButtonState.HeaderText = "Re-Parse";
+            this.ReParseButtonState.Name = "ReParseButtonState";
+            this.ReParseButtonState.ReadOnly = true;
+            this.ReParseButtonState.ToolTipText = "Only useable if the file was already successfully parsed";
             // 
             // OperatorBindingSource
             // 
@@ -345,6 +362,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn LocationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn StatusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ParseButtonState;
+        private DataGridViewDisableButtonColumn ReParseButtonState;
         private System.Windows.Forms.Label LblVersion;
         private System.IO.FileSystemWatcher LogFileWatcher;
         private System.Windows.Forms.Label LblWatchingDir;
@@ -353,6 +371,110 @@
         private System.Windows.Forms.Button BtnDiscordBatch;
         private System.Windows.Forms.CheckBox ChkApplicationTraces;
         private System.Windows.Forms.CheckBox ChkAutoDiscordBatch;
+
+        #region CUSTOM_GRID_VIEW
+        // https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/disable-buttons-in-a-button-column-in-the-datagrid?view=netframeworkdesktop-4.8&redirectedfrom=MSDN
+        public class DataGridViewDisableButtonColumn : DataGridViewButtonColumn
+        {
+            public DataGridViewDisableButtonColumn()
+            {
+                this.CellTemplate = new DataGridViewDisableButtonCell();
+            }
+        }
+
+        public class DataGridViewDisableButtonCell : DataGridViewButtonCell
+        {
+            private bool enabledValue;
+            public bool Enabled
+            {
+                get
+                {
+                    return enabledValue;
+                }
+                set
+                {
+                    enabledValue = value;
+                }
+            }
+
+            // Override the Clone method so that the Enabled property is copied.
+            public override object Clone()
+            {
+                DataGridViewDisableButtonCell cell =
+                    (DataGridViewDisableButtonCell)base.Clone();
+                cell.Enabled = this.Enabled;
+                return cell;
+            }
+
+            // By default, enable the button cell.
+            public DataGridViewDisableButtonCell()
+            {
+                this.enabledValue = true;
+            }
+
+            protected override void Paint(Graphics graphics,
+                Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
+                DataGridViewElementStates elementState, object value,
+                object formattedValue, string errorText,
+                DataGridViewCellStyle cellStyle,
+                DataGridViewAdvancedBorderStyle advancedBorderStyle,
+                DataGridViewPaintParts paintParts)
+            {
+                // The button cell is disabled, so paint the border,
+                // background, and disabled button for the cell.
+                if (!this.enabledValue)
+                {
+                    // Draw the cell background, if specified.
+                    if ((paintParts & DataGridViewPaintParts.Background) ==
+                        DataGridViewPaintParts.Background)
+                    {
+                        SolidBrush cellBackground =
+                            new SolidBrush(cellStyle.BackColor);
+                        graphics.FillRectangle(cellBackground, cellBounds);
+                        cellBackground.Dispose();
+                    }
+
+                    // Draw the cell borders, if specified.
+                    if ((paintParts & DataGridViewPaintParts.Border) ==
+                        DataGridViewPaintParts.Border)
+                    {
+                        PaintBorder(graphics, clipBounds, cellBounds, cellStyle,
+                            advancedBorderStyle);
+                    }
+
+                    // Calculate the area in which to draw the button.
+                    Rectangle buttonArea = cellBounds;
+                    Rectangle buttonAdjustment =
+                        this.BorderWidths(advancedBorderStyle);
+                    buttonArea.X += buttonAdjustment.X;
+                    buttonArea.Y += buttonAdjustment.Y;
+                    buttonArea.Height -= buttonAdjustment.Height;
+                    buttonArea.Width -= buttonAdjustment.Width;
+
+                    // Draw the disabled button.
+                    ButtonRenderer.DrawButton(graphics, buttonArea,
+                        PushButtonState.Disabled);
+
+                    // Draw the disabled button text.
+                    if (this.FormattedValue is String)
+                    {
+                        TextRenderer.DrawText(graphics,
+                            (string)this.FormattedValue,
+                            this.DataGridView.Font,
+                            buttonArea, SystemColors.GrayText);
+                    }
+                }
+                else
+                {
+                    // The button cell is enabled, so let the base class
+                    // handle the painting.
+                    base.Paint(graphics, clipBounds, cellBounds, rowIndex,
+                        elementState, value, formattedValue, errorText,
+                        cellStyle, advancedBorderStyle, paintParts);
+                }
+            }
+        }
+        #endregion
     }
 }
 

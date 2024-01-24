@@ -45,6 +45,11 @@ namespace GW2EIEvtcParser.EIData
             AgentItem = agent;
         }
 
+        public bool IsNonIdentifiedSpecies()
+        {
+            return AgentItem.IsNonIdentifiedSpecies();
+        }
+
         public bool IsSpecies(int id)
         {
             return AgentItem.IsSpecies(id);

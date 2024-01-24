@@ -25,13 +25,13 @@ namespace GW2EIEvtcParser.EIData
                 long lastTime = int.MinValue;
                 foreach (AnimatedCastEvent cast in pair.Value)
                 {
-                    if (cast.Time - lastTime < ICD)
-                    {
-                        lastTime = cast.Time;
-                        continue;
-                    }
                     if (CheckCondition(cast, combatData, agentData, skillData))
                     {
+                        if (cast.Time - lastTime < ICD)
+                        {
+                            lastTime = cast.Time;
+                            continue;
+                        }
                         result.Add(new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster()));
                     }
                 }

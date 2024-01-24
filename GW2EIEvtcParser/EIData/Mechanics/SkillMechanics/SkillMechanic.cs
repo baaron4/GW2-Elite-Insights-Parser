@@ -8,6 +8,8 @@ namespace GW2EIEvtcParser.EIData
     internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEvent>
     {
 
+        protected bool Minions { get; private set; } = false;
+
         public SkillMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
         }
@@ -16,7 +18,23 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
+        public SkillMechanic WithMinions(bool withMinions)
+        {
+            Minions = withMinions;
+            return this;
+        }
+
         protected abstract AgentItem GetAgentItem(AbstractHealthDamageEvent ahde);
+
+        protected AgentItem GetCreditedAgentItem(AbstractHealthDamageEvent ahde)
+        {
+            AgentItem agentItem = GetAgentItem(ahde);
+            if (Minions && agentItem != null)
+            {
+                agentItem = agentItem.GetFinalMaster();
+            }
+            return agentItem;
+        }
 
         protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
@@ -29,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                     AbstractSingleActor amp = null;
                     if (Keep(ahde, log))
                     {
-                        amp = GetActor(log, GetAgentItem(ahde), regroupedMobs);
+                        amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
                     }
                     if (amp != null)
                     {

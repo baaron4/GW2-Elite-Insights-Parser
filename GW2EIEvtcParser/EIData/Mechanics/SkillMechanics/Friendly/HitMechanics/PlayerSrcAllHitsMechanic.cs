@@ -6,19 +6,11 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class PlayerSrcAllHitsMechanic : SkillMechanic
+    internal class PlayerSrcAllHitsMechanic : PlayerSrcHitMechanic
     {
-
-        private bool Minions { get; set; } = false;
 
         public PlayerSrcAllHitsMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
-        }
-
-        public PlayerSrcAllHitsMechanic WithMinions(bool minions)
-        {
-            Minions = minions;
-            return this;
         }
 
         protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)

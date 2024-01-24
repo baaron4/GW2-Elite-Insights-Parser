@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         time = lastTime;
                     }
-                    AbstractSingleActor amp = GetActor(log, GetAgentItem(ahde), regroupedMobs);
+                    AbstractSingleActor amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
                     if (amp != null)
                     {
                         if (regroupedSkillDst.TryGetValue(time, out HashSet<AbstractSingleActor> set))

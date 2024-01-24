@@ -8,15 +8,22 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
+        protected bool Minions { get; set; } = false;
         private readonly string _effectGUID;
         private int _speciesId { get; set; } = 0;
 
-        protected virtual Dictionary<AgentItem, List<EffectEvent>> GetEffectEventDict(EffectGUIDEvent effectGUIDEvent, CombatData combatData)
+        public EffectCastFinder WithMinions(bool minions)
         {
-            return combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            Minions = minions;
+            return this;
         }
 
-        protected virtual AgentItem GetAgent(EffectEvent effectEvent)
+        protected AgentItem GetAgent(EffectEvent effectEvent)
+        {
+            return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
+        }
+
+        protected virtual AgentItem GetKeyAgent(EffectEvent effectEvent)
         {
             return effectEvent.Src;
         }
@@ -36,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
         {
-            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.BaseSpec == spec);
             return this;
         }
         
@@ -46,9 +53,43 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal EffectCastFinder UsingSrcNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec != spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingSrcSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => specs.Contains(evt.Src.Spec));
+            return this;
+        }
+        internal EffectCastFinder UsingSrcNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => !specs.Contains(evt.Src.Spec));
+            return this;
+        }
+
         internal EffectCastFinder UsingDstSpecChecker(Spec spec)
         {
-            UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == spec);
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.Spec == spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstNotSpecChecker(Spec spec)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.Spec != spec);
+            return this;
+        }
+
+        internal EffectCastFinder UsingDstSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && specs.Contains(evt.Dst.Spec));
+            return this;
+        }
+        internal EffectCastFinder UsingDstNotSpecsChecker(HashSet<Spec> specs)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && !specs.Contains(evt.Dst.Spec));
             return this;
         }
 
@@ -65,6 +106,21 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
+        {
+            var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
+            var testGUIDs = test.Select(x => combatData.GetEffectGUIDEvent(x.EffectID)).Select(x => x.HexContentGUID).ToList();
+            var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
+            var test2GUIDs = test2.Select(x => combatData.GetEffectGUIDEvent(evt.EffectID)).Select(x => x.HexContentGUID).ToList();
+            return true;
+        }
+
+        internal EffectCastFinder UsingDebugEffectChecker()
+        {
+            UsingChecker(DebugEffectChecker);
+            return this;
+        }
+
         internal EffectCastFinder UsingAgentRedirectionIfUnknown(int speciesID)
         {
             _speciesId = speciesID;
@@ -77,22 +133,22 @@ namespace GW2EIEvtcParser.EIData
             EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
             if (effectGUIDEvent != null)
             {
-                Dictionary<AgentItem, List<EffectEvent>> effects = GetEffectEventDict(effectGUIDEvent, combatData);
+                var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => GetAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
                 {
                     long lastTime = int.MinValue;
                     foreach (EffectEvent effectEvent in pair.Value)
                     {
-                        if (effectEvent.Time - lastTime < ICD)
-                        {
-                            lastTime = effectEvent.Time;
-                            continue;
-                        }
                         if (CheckCondition(effectEvent, combatData, agentData, skillData))
                         {
+                            if (effectEvent.Time - lastTime < ICD)
+                            {
+                                lastTime = effectEvent.Time;
+                                continue;
+                            }
                             lastTime = effectEvent.Time;
-                            AgentItem caster = GetAgent(effectEvent);
-                            if (_speciesId > 0 && caster.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+                            AgentItem caster = pair.Key;
+                            if (_speciesId > 0 && caster.IsNonIdentifiedSpecies())
                             {
                                 AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                                 if (agent != null)

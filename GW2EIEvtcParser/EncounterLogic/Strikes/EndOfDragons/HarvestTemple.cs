@@ -499,7 +499,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem jormagAgent = agentData.GetNPCsByID(ArcDPSEnums.TargetID.TheDragonVoidJormag).FirstOrDefault();
                 if (jormagAgent != null)
                 {
-                    var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsSpecies(ArcDPSEnums.NonIdentifiedSpecies))
+                    var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                         .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
                         .Distinct()
                         .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value).Length() > 0) > 2)

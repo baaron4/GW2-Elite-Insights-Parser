@@ -42,8 +42,9 @@ namespace GW2EIEvtcParser.EIData
             new MinionCastCastFinder(RoilingSmash, RoilingSmash),
             new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
             new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-            new BuffGainWithMinionsCastFinder(DischargeArray, DischargeArrayBuff),
-            new EffectCastFinderByDstFromMinion(CrisisZone, EffectGUIDs.MechanistCrisisZone)
+            new BuffGainCastFinder(DischargeArray, DischargeArrayBuff).WithMinions(true),
+            new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
+                .WithMinions(true)
                 .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
                 .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
             new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),

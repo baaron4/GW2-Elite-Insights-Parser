@@ -16,7 +16,8 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.Spec == Spec.Deadeye), // Needs more testing to check for collisions
+            new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy)
+                .UsingDstSpecChecker(Spec.Deadeye), // Needs more testing to check for collisions
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
