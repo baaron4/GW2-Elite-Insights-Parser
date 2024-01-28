@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
-            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsSpecies(ArcDPSEnums.NonIdentifiedSpecies) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
+            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsNonIdentifiedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
             var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
             var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in allEffectEvents)

@@ -56,19 +56,19 @@ namespace GW2EIEvtcParser.EIData
             new MinionCommandCastFinder(EarthElementalStomp, (int) MinionID.EarthElemental),
             // Hammer
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+                .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+                .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+                .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
-                .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec != Spec.Weaver)
+                .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         };

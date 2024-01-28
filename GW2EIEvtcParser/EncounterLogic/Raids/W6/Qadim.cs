@@ -121,6 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     platform.OverrideType(AgentItem.AgentType.NPC);
                     platform.OverrideID(TrashID.QadimPlatform);
+                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                 }
                 refresh = refresh || platformAgents.Any();
             }

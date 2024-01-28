@@ -22,13 +22,13 @@ namespace GW2EIEvtcParser.EIData
                 long lastTime = int.MinValue;
                 foreach (AbstractHealthDamageEvent de in pair.Value)
                 {
-                    if (de.Time - lastTime < ICD)
-                    {
-                        lastTime = de.Time;
-                        continue;
-                    }
                     if (CheckCondition(de, combatData, agentData, skillData))
                     {
+                        if (de.Time - lastTime < ICD)
+                        {
+                            lastTime = de.Time;
+                            continue;
+                        }
                         lastTime = de.Time;
                         res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));
                     }

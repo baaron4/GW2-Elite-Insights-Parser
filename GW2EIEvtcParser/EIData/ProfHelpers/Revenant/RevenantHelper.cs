@@ -42,28 +42,34 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(CallOfTheCentaur, CallOfTheCentaur),
             new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill)
+            new EffectCastFinderByDst(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill)
+                .WithMinions(true)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
-            new EffectCastFinderByDstFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+            new EffectCastFinderByDst(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+                .WithMinions(true)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet))
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-            new EffectCastFinderFromMinion(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+            new EffectCastFinder(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
+                .WithMinions(true)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
                 .WithBuilds( GW2Builds.June2022Balance),
-            new EffectCastFinderFromMinion(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
+            new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
+                .WithMinions(true)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .WithBuilds(GW2Builds.June2022Balance),
-            new EffectCastFinderFromMinion(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
+            new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
+                .WithMinions(true)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .WithBuilds(GW2Builds.June2022Balance),
             new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
-                .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Revenant && evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
+                .UsingSrcBaseSpecChecker(Spec.Revenant)
+                .UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
         };
 
 

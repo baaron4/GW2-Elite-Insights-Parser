@@ -877,7 +877,7 @@ namespace GW2EIEvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");
             foreach (ulong missingAgentValue in allAgentValues)
             {
-                _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, 0, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
+                _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, ArcDPSEnums.NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
             }
             var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);

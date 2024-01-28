@@ -22,9 +22,12 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingDstSpecChecker(Spec.Untamed),
 
             // Pet
-            new EffectCastFinderFromMinion(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst),
-            new EffectCastFinderFromMinion(RendingVines, EffectGUIDs.UntamedRendingVines),
-            new EffectCastFinderFromMinion(EnvelopingHaze, EffectGUIDs.UntamedEnvelopingHaze),
+            new EffectCastFinder(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst)
+                .WithMinions(true),
+            new EffectCastFinder(RendingVines, EffectGUIDs.UntamedRendingVines)
+                .WithMinions(true),
+            new EffectCastFinder(EnvelopingHaze, EffectGUIDs.UntamedEnvelopingHaze)
+                .WithMinions(true),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>

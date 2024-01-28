@@ -79,8 +79,7 @@ namespace GW2EIParser
                 _logsFiles.Add(file);
                 AddTraceMessage("UI: Added " + file);
 
-                var operation = new FormOperationController(file, "Ready to parse", DgvFiles);
-                OperatorBindingSource.Add(operation);
+                var operation = new FormOperationController(file, "Ready to parse", DgvFiles, OperatorBindingSource);
 
                 if (Properties.Settings.Default.AutoParse)
                 {
@@ -472,6 +471,21 @@ namespace GW2EIParser
                                 {
                                     System.Diagnostics.Process.Start(operation.OutLocation);
                                 }
+                                break;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        switch (operation.State)
+                        {
+                            case OperationState.Complete:
+                                AddTraceMessage("UI: Reparse log");
+                                QueueOrRunOperation(operation);
+                                BtnCancelAll.Enabled = true;
+                                break;
+                            default:
                                 break;
                         }
                     }

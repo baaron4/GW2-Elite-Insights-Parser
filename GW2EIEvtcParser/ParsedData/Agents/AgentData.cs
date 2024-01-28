@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.ParsedData
 #if DEBUG
         private Dictionary<string, List<AgentItem>> _allAgentsByName;
 #endif
-        public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
-        public HashSet<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
+        public IReadOnlyCollection<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
+        public IReadOnlyCollection<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
         internal AgentData(List<AgentItem> allAgentsList)
         {
