@@ -142,7 +142,7 @@ namespace GW2EIParser
             }
             if (Properties.Settings.Default.UploadToWingman)
             {
-#if DEBUG
+#if !DEBUG
                 if (!isWingmanCompatible)
                 {
                     originalController.UpdateProgressWithCancellationCheck("Wingman: unsupported log");
@@ -169,10 +169,11 @@ namespace GW2EIParser
                             {
                                 // We need to create a parser that matches Wingman's expected settings
                                 var parser = new EvtcParser(expectedSettings, APIController);
-                                originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog");
+                                originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog, this will extend total processing duration if file generation is also requested");
                                 logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
                             }
                             byte[] jsonFile, htmlFile;
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Creating JSON");
                             var uploadResult = new UploadResults();
                             {
                                 var ms = new MemoryStream();
@@ -184,6 +185,7 @@ namespace GW2EIParser
 
                                 jsonFile = ms.ToArray();
                             }
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Creating HTML");
                             {
                                 var ms = new MemoryStream();
                                 var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
@@ -197,6 +199,7 @@ namespace GW2EIParser
                             {
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
                             }
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing Upload");
                             string result = logToUse.FightData.Success ? "kill" : "fail";
                             WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                         }
@@ -470,7 +473,7 @@ namespace GW2EIParser
                     operation.UpdateProgressWithCancellationCheck("Program: XML created");
                 }
             }
-            operation.UpdateProgressWithCancellationCheck($"Program: completed for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }

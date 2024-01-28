@@ -83,8 +83,9 @@ namespace GW2EIWingman
             }
             returnedVersion = returnedVersion.Replace("v", "");
             var expectedVersion = new Version(returnedVersion);
+            traceHandler("Used version " + parserVersion.ToString());
             bool check = parserVersion.CompareTo(expectedVersion) >= 0;
-            traceHandler("version " + (check ? "OK" : "KO"));
+            traceHandler("Version " + (check ? "OK" : "KO"));
             if (!check)
             {
                 traceHandler("expected version to be at least " + expectedVersion.ToString());
@@ -200,10 +201,21 @@ namespace GW2EIWingman
         public static bool CheckUploadPossible(FileInfo fi, string account, TraceHandler traceHandler, Version parserVersion)
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
-            var data = new Dictionary<string, string> { { "account", account }, { "filesize", fi.Length.ToString() }, { "timestamp", creationTime }, { "file", fi.Name } };
+            var data = new Dictionary<string, string> { 
+                { "account", account }, 
+                { "filesize", fi.Length.ToString() }, 
+                { "timestamp", creationTime }, 
+                { "file", fi.Name } 
+            };
             Func<HttpContent> contentCreator = () =>
             {
-                return new FormUrlEncodedContent(data);
+                var multiPartContent = new MultipartFormDataContent();
+                foreach (KeyValuePair<string, string> pair in data)
+                {
+                    var content = new StringContent(pair.Value, NoBOMEncodingUTF8, "text/plain");
+                    multiPartContent.Add(content, pair.Key);
+                }
+                return multiPartContent;
             };
             return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traceHandler, parserVersion, HttpMethod.Post, contentCreator) == "True";
         }
@@ -214,21 +226,26 @@ namespace GW2EIWingman
             string name = fi.Name;
             string jsonName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".json";
             string htmlName = Path.GetFileNameWithoutExtension(fi.Name) + suffix + ".html";
-            string jsonString = Encoding.UTF8.GetString(jsonFile);
-            string htmlString = Encoding.UTF8.GetString(htmlFile);
+            string jsonString = NoBOMEncodingUTF8.GetString(jsonFile);
+            string htmlString = NoBOMEncodingUTF8.GetString(htmlFile);
+            var data = new Dictionary<string, string> {
+                { "account", account },
+            };
             Func<HttpContent> contentCreator = () =>
             {
                 var multiPartContent = new MultipartFormDataContent();
                 var fileContent = new ByteArrayContent(fileBytes);
                 fileContent.Headers.Add("Content-Type", "application/octet-stream");
                 multiPartContent.Add(fileContent, "file", name);
-                var jsonContent = new StringContent(jsonString, Encoding.UTF8, "text/plain");
+                var jsonContent = new StringContent(jsonString, NoBOMEncodingUTF8, "text/plain");
                 multiPartContent.Add(jsonContent, "jsonfile", jsonName);
-                var htmlContent = new StringContent(htmlString, Encoding.UTF8, "text/plain");
+                var htmlContent = new StringContent(htmlString, NoBOMEncodingUTF8, "text/plain");
                 multiPartContent.Add(htmlContent, "htmlfile", htmlName);
-                var data = new Dictionary<string, string> { { "account", account } };
-                var dataContent = new FormUrlEncodedContent(data);
-                multiPartContent.Add(dataContent);
+                foreach (KeyValuePair<string, string> pair in data)
+                {
+                    var content = new StringContent(pair.Value, NoBOMEncodingUTF8, "text/plain");
+                    multiPartContent.Add(content, pair.Key);
+                }
                 return multiPartContent;
             };
 
@@ -268,7 +285,7 @@ namespace GW2EIWingman
                     {
                         Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
                         string stringContents = stringContentsTask.Result;
-                        traceHandler(requestName + " successful");
+                        traceHandler(requestName + " successful: " + stringContents);
                         return stringContents;
                     }
                 }
