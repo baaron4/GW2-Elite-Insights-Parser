@@ -35,7 +35,7 @@ namespace GW2EIParser
 
         internal static int GetMaxParallelRunning()
         {
-            if (Properties.Settings.Default.SendEmbedToWebhook || Properties.Settings.Default.UploadToDPSReports || (false && Properties.Settings.Default.UploadToWingman))
+            if (Properties.Settings.Default.SendEmbedToWebhook || Properties.Settings.Default.UploadToDPSReports || Properties.Settings.Default.UploadToWingman)
             {
                 return Math.Max(Environment.ProcessorCount / 2, 1);
             }
@@ -119,12 +119,12 @@ namespace GW2EIParser
             string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
-                originalController.UpdateProgressWithCancellationCheck("Uploading to DPSReport using EI");
-                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress(str), Properties.Settings.Default.DPSReportUserToken,
+                originalController.UpdateProgressWithCancellationCheck("DPSReport: Uploading");
+                DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Properties.Settings.Default.DPSReportUserToken,
                 originalLog.ParserSettings.AnonymousPlayers,
                 originalLog.ParserSettings.DetailedWvWParse);
                 uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
-                originalController.UpdateProgressWithCancellationCheck("DPSReports using EI: " + uploadresult[0]);
+                originalController.UpdateProgressWithCancellationCheck("DPSReport: " + uploadresult[0]);
                 /*
                 if (Properties.Settings.Default.UploadToWingman)
                 {
@@ -140,18 +140,18 @@ namespace GW2EIParser
                 }
                 */
             }
-            if (false && Properties.Settings.Default.UploadToWingman)
+            if (Properties.Settings.Default.UploadToWingman)
             {
 #if !DEBUG
                 if (!isWingmanCompatible)
                 {
-                    originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: unsupported log");
+                    originalController.UpdateProgressWithCancellationCheck("Wingman: unsupported log");
                 } 
                 else
                 {
                     string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
 
-                    if (WingmanController.CheckUploadPossible(fInfo, accName, str => originalController.UpdateProgress(str), ParserVersion))
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, str => originalController.UpdateProgress("Wingman: " + str), ParserVersion))
                     {
                         try
                         {
@@ -169,10 +169,11 @@ namespace GW2EIParser
                             {
                                 // We need to create a parser that matches Wingman's expected settings
                                 var parser = new EvtcParser(expectedSettings, APIController);
-                                originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog");
+                                originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog, this will extend total processing duration if file generation is also requested");
                                 logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
                             }
                             byte[] jsonFile, htmlFile;
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Creating JSON");
                             var uploadResult = new UploadResults();
                             {
                                 var ms = new MemoryStream();
@@ -184,6 +185,7 @@ namespace GW2EIParser
 
                                 jsonFile = ms.ToArray();
                             }
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Creating HTML");
                             {
                                 var ms = new MemoryStream();
                                 var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
@@ -197,16 +199,18 @@ namespace GW2EIParser
                             {
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
                             }
-                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, str => originalController.UpdateProgress(str), ParserVersion);
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing Upload");
+                            string result = logToUse.FightData.Success ? "kill" : "fail";
+                            WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                         }
                         catch (Exception e)
                         {
-                            originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: " + e.Message);
+                            originalController.UpdateProgressWithCancellationCheck("Wingman: operation failed " + e.Message);
                         }
                     } 
                     else
                     {
-                        originalController.UpdateProgressWithCancellationCheck("Can not upload to Wingman: log already uploaded");
+                        originalController.UpdateProgressWithCancellationCheck("Wingman: upload is not possible");
                     }
                 }
                 originalController.UpdateProgressWithCancellationCheck("Wingman: operation completed");
@@ -249,12 +253,12 @@ namespace GW2EIParser
                     if (Properties.Settings.Default.SendSimpleMessageToWebhook)
                     {
                         WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, uploadStrings[0], out string message);
-                        operation.UpdateProgressWithCancellationCheck(message);
+                        operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
                     } 
                     else
                     {
                         WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, BuildEmbed(log, uploadStrings[0]),out string message);
-                        operation.UpdateProgressWithCancellationCheck(message);
+                        operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
                     }
                 }
                 if (uploadStrings[0].Contains("https"))
@@ -350,7 +354,7 @@ namespace GW2EIParser
 
         private static void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadStrings, FileInfo fInfo)
         {
-            operation.UpdateProgressWithCancellationCheck("Creating File(s)");
+            operation.UpdateProgressWithCancellationCheck("Program: Creating File(s)");
 
             DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
@@ -364,7 +368,7 @@ namespace GW2EIParser
             operation.OutLocation = saveDirectory.FullName;
             if (Properties.Settings.Default.SaveOutHTML)
             {
-                operation.UpdateProgressWithCancellationCheck("Creating HTML");
+                operation.UpdateProgressWithCancellationCheck("Program: Creating HTML");
                 string outputFile = Path.Combine(
                 saveDirectory.FullName,
                 $"{fName}.html"
@@ -383,11 +387,11 @@ namespace GW2EIParser
                         ), htmlAssets, ParserVersion, uploadResults);
                     builder.CreateHTML(sw, saveDirectory.FullName);
                 }
-                operation.UpdateProgressWithCancellationCheck("HTML created");
+                operation.UpdateProgressWithCancellationCheck("Program: HTML created");
             }
             if (Properties.Settings.Default.SaveOutCSV)
             {
-                operation.UpdateProgressWithCancellationCheck("Creating CSV");
+                operation.UpdateProgressWithCancellationCheck("Program: Creating CSV");
                 string outputFile = Path.Combine(
                     saveDirectory.FullName,
                     $"{fName}.csv"
@@ -399,14 +403,14 @@ namespace GW2EIParser
                     var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadResults);
                     builder.CreateCSV(sw);
                 }
-                operation.UpdateProgressWithCancellationCheck("CSV created");
+                operation.UpdateProgressWithCancellationCheck("Program: CSV created");
             }
             if (Properties.Settings.Default.SaveOutJSON || Properties.Settings.Default.SaveOutXML)
             {
                 var builder = new RawFormatBuilder(log, new RawFormatSettings(Properties.Settings.Default.RawTimelineArrays), ParserVersion, uploadResults);
                 if (Properties.Settings.Default.SaveOutJSON)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Creating JSON");
+                    operation.UpdateProgressWithCancellationCheck("Program: Creating JSON");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.json"
@@ -427,17 +431,17 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr, operation);
-                        operation.UpdateProgressWithCancellationCheck("JSON compressed");
+                        operation.UpdateProgressWithCancellationCheck("Program: JSON compressed");
                     }
                     else
                     {
                         operation.AddFile(outputFile);
                     }
-                    operation.UpdateProgressWithCancellationCheck("JSON created");
+                    operation.UpdateProgressWithCancellationCheck("Program: JSON created");
                 }
                 if (Properties.Settings.Default.SaveOutXML)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Creating XML");
+                    operation.UpdateProgressWithCancellationCheck("Program: Creating XML");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
                         $"{fName}.xml"
@@ -458,16 +462,16 @@ namespace GW2EIParser
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr, operation);
-                        operation.UpdateProgressWithCancellationCheck("XML compressed");
+                        operation.UpdateProgressWithCancellationCheck("Program: XML compressed");
                     }
                     else
                     {
                         operation.AddFile(outputFile);
                     }
-                    operation.UpdateProgressWithCancellationCheck("XML created");
+                    operation.UpdateProgressWithCancellationCheck("Program: XML created");
                 }
             }
-            operation.UpdateProgressWithCancellationCheck($"Completed parsing for {result}ed {log.FightData.Logic.Extension}");
+            operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.FightData.Logic.Extension}");
         }
 
     }

@@ -126,11 +126,11 @@ namespace GW2EIEvtcParser.EIData
             }
             if (Capacity != buffInfoEvent.MaxStacks)
             {
-                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
             }
             if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
             {
-                operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
             }
         }
 

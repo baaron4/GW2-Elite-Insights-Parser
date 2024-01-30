@@ -127,26 +127,26 @@ namespace GW2EIEvtcParser
             {
                 using (BinaryReader reader = CreateReader(evtcStream))
                 {
-                    operation.UpdateProgressWithCancellationCheck("Reading Binary");
-                    operation.UpdateProgressWithCancellationCheck("Parsing fight data");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Parsing fight data");
                     ParseFightData(reader, operation);
-                    operation.UpdateProgressWithCancellationCheck("Parsing agent data");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
                     ParseAgentData(reader, operation);
-                    operation.UpdateProgressWithCancellationCheck("Parsing skill data");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
                     ParseSkillData(reader, operation);
-                    operation.UpdateProgressWithCancellationCheck("Parsing combat list");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
                     ParseCombatList(reader, operation);
-                    operation.UpdateProgressWithCancellationCheck("Linking agents to combat list");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
                     CompleteAgents(operation);
-                    operation.UpdateProgressWithCancellationCheck("Preparing data for log generation");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
                     PreProcessEvtcData(operation);
-                    operation.UpdateProgressWithCancellationCheck("Data parsed");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
                     var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
                     //
                     if (multiThreadAccelerationForBuffs)
                     {
                         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                        operation.UpdateProgressWithCancellationCheck("Multi threading");
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
                         var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies);
                         friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
                         var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
@@ -245,15 +245,15 @@ namespace GW2EIEvtcParser
             {
                 throw new EvtcFileException("Not EVTC");
             }
-            operation.UpdateProgressWithCancellationCheck("ArcDPS Build " + evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Build " + evtcVersion);
 
             // 1 byte: revision
             _revision = reader.ReadByte();
-            operation.UpdateProgressWithCancellationCheck("ArcDPS Combat Item Revision " + _revision);
+            operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Combat Item Revision " + _revision);
 
             // 2 bytes: fight instance ID
             _id = reader.ReadUInt16();
-            operation.UpdateProgressWithCancellationCheck("Fight Instance " + _id);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Fight Instance " + _id);
             // 1 byte: skip
             _ = reader.ReadByte();
         }
@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser
                 GW2APISpec spec = _apiController.GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Missing or outdated GW2 API Cache or unknown player spec");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Missing or outdated GW2 API Cache or unknown player spec");
                     return "Unknown";
                 }
                 return spec.Elite ? spec.Name : spec.Profession;
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser
             // 4 bytes: player count
             uint agentCount = reader.ReadUInt32();
 
-            operation.UpdateProgressWithCancellationCheck("Agent Count " + agentCount);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Agent Count " + agentCount);
             // 96 bytes: each player
             for (int i = 0; i < agentCount; i++)
             {
@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser
             _skillData = new SkillData(_apiController, _evtcVersion);
             // 4 bytes: player count
             uint skillCount = reader.ReadUInt32();
-            operation.UpdateProgressWithCancellationCheck("Skill Count " + skillCount);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Skill Count " + skillCount);
             //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
             // 68 bytes: each skill
             for (int i = 0; i < skillCount; i++)
@@ -594,7 +594,7 @@ namespace GW2EIEvtcParser
         {
             // 64 bytes: each combat
             long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
-            operation.UpdateProgressWithCancellationCheck("Combat Event Count " + cbtItemCount);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Count " + cbtItemCount);
             int discardedCbtEvents = 0;
             bool keepOnlyExtensionEvents = false;
             for (long i = 0; i < cbtItemCount; i++)
@@ -623,7 +623,7 @@ namespace GW2EIEvtcParser
                     keepOnlyExtensionEvents = true;
                 }
             }
-            operation.UpdateProgressWithCancellationCheck("Combat Event Discarded " + discardedCbtEvents);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Discarded " + discardedCbtEvents);
             if (!_combatItems.Any())
             {
                 throw new EvtcCombatEventException("No combat events found");
@@ -663,7 +663,7 @@ namespace GW2EIEvtcParser
                     if (handler != null)
                     {
                         _enabledExtensions[handler.Signature] = handler;
-                        operation.UpdateProgressWithCancellationCheck("Encountered supported extension " + handler.Name + " on " + handler.Version);
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Encountered supported extension " + handler.Name + " on " + handler.Version);
                     }
                     // No need to keep that event, it'll be immediately parsed by the handler
                     return false;
@@ -745,7 +745,7 @@ namespace GW2EIEvtcParser
             {
                 if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
                 {
-                    operation.UpdateProgressWithCancellationCheck("Skipping invalid player");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Skipping invalid player");
                     continue;
                 }
                 bool skip = false;
@@ -758,7 +758,7 @@ namespace GW2EIEvtcParser
                         {
                             skip = true;
                             toRemove.Add(playerAgent);
-                            operation.UpdateProgressWithCancellationCheck("Merging player");
+                            operation.UpdateProgressWithCancellationCheck("Parsing: Merging player " + player.AgentItem.InstID);
                             RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
                             p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
                             break;
@@ -778,7 +778,7 @@ namespace GW2EIEvtcParser
             uint minToughness = _playerList.Min(x => x.Toughness);
             if (minToughness > 0)
             {
-                operation.UpdateProgressWithCancellationCheck("Adjusting player toughness scores");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting player toughness scores");
                 uint maxToughness = _playerList.Max(x => x.Toughness);
                 foreach (Player p in _playerList)
                 {
@@ -874,7 +874,7 @@ namespace GW2EIEvtcParser
             allAgentValues.UnionWith(_combatItems.Where(x => x.DstIsAgent()).Select(x => x.DstAgent));
             allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
             allAgentValues.Remove(0);
-            operation.UpdateProgressWithCancellationCheck("Creating " + allAgentValues.Count + " missing agents");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");
             foreach (ulong missingAgentValue in allAgentValues)
             {
                 _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, ArcDPSEnums.NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
@@ -936,7 +936,7 @@ namespace GW2EIEvtcParser
 #endif
             }
             _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
-            operation.UpdateProgressWithCancellationCheck("Keeping " + _allAgentsList.Count + " agents");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
             _agentData = new AgentData(_allAgentsList);
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
@@ -944,7 +944,7 @@ namespace GW2EIEvtcParser
                 throw new EvtcAgentException("No players found");
             }
 
-            operation.UpdateProgressWithCancellationCheck("Linking minions to their masters");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Linking minions to their masters");
             foreach (CombatItem c in _combatItems)
             {
                 if (c.SrcIsAgent() && c.SrcMasterInstid != 0)
@@ -957,7 +957,7 @@ namespace GW2EIEvtcParser
                 }
             }
 
-            operation.UpdateProgressWithCancellationCheck("Adjusting minion names");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting minion names");
             foreach (AgentItem agent in _agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (agent.Master != null)
@@ -969,7 +969,7 @@ namespace GW2EIEvtcParser
             // Adjust extension events if needed
             if (_enabledExtensions.Any())
             {
-                operation.UpdateProgressWithCancellationCheck("Adjust extension events");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting extension events");
                 foreach (CombatItem combatItem in _combatItems)
                 {
                     if (combatItem.IsExtension)
@@ -985,7 +985,7 @@ namespace GW2EIEvtcParser
 
             _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartTime, _logEndTime, _evtcVersion);
 
-            operation.UpdateProgressWithCancellationCheck("Creating players");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating players");
             CompletePlayers(operation);
         }
 
@@ -1019,10 +1019,10 @@ namespace GW2EIEvtcParser
         /// <exception cref="MissingKeyActorsException"></exception>
         private void PreProcessEvtcData(ParserController operation)
         {
-            operation.UpdateProgressWithCancellationCheck("Offset time");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
             OffsetEvtcData();
-            operation.UpdateProgressWithCancellationCheck("Offset of " + (_fightData.FightStartOffset) + " ms added");
-            operation.UpdateProgressWithCancellationCheck("Adding environment agent");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
             _agentData.AddCustomNPCAgent(_fightData.LogStart, _fightData.LogEnd, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
             // Removal of players present before the fight but not during
             var agentsToRemove = new HashSet<AgentItem>();
@@ -1031,7 +1031,7 @@ namespace GW2EIEvtcParser
                 if (p.LastAware < 0)
                 {
                     agentsToRemove.Add(p.AgentItem);
-                    operation.UpdateProgressWithCancellationCheck("Removing player from player list (gone before fight start)");
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (gone before fight start)");
                 }
             }
             //
@@ -1051,7 +1051,7 @@ namespace GW2EIEvtcParser
                             if (!damageEvents.Any())
                             {
                                 agentsToRemove.Add(p.AgentItem);
-                                operation.UpdateProgressWithCancellationCheck("Removing player from player list (spawned after fight start in 10 men content)");
+                                operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start in 10 men content)");
                             }
                         }
                     }
@@ -1063,16 +1063,16 @@ namespace GW2EIEvtcParser
                 throw new EvtcAgentException("No valid players");
             }
             //
-            operation.UpdateProgressWithCancellationCheck("Encounter specific processing");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
             _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
             if (!_fightData.Logic.Targets.Any())
             {
                 throw new MissingKeyActorsException("No Targets found");
             }
-            operation.UpdateProgressWithCancellationCheck("Player count: " + _playerList.Count);
-            operation.UpdateProgressWithCancellationCheck("Friendlies count: " + _fightData.Logic.NonPlayerFriendlies.Count);
-            operation.UpdateProgressWithCancellationCheck("Targets count: " + _fightData.Logic.Targets.Count);
-            operation.UpdateProgressWithCancellationCheck("Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + _playerList.Count);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + _fightData.Logic.NonPlayerFriendlies.Count);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + _fightData.Logic.Targets.Count);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
         }
 
         /// <summary>

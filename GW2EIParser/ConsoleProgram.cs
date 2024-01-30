@@ -60,12 +60,12 @@ namespace GW2EIParser
             }
             catch (ProgramException ex)
             {
-                operation.UpdateProgress(ex.InnerException.Message);
+                operation.UpdateProgress("Program: " + ex.InnerException.Message);
                 operation.FinalizeStatus("Parsing Failure - ");
             }
             catch (Exception)
             {
-                operation.UpdateProgress("Something terrible has happened");
+                operation.UpdateProgress("Program: something terrible has happened");
                 operation.FinalizeStatus("Parsing Failure - ");
             }
             finally
