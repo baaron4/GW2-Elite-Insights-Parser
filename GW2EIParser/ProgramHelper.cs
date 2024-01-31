@@ -111,9 +111,9 @@ namespace GW2EIParser
         {
             // Only upload supported 5 men, 10 men and golem logs, without anonymous players
             var isWingmanCompatible = !originalLog.ParserSettings.AnonymousPlayers && (
-                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced10 ||
-                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Instanced5 ||
-                            originalLog.FightData.Logic.Mode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseMode.Benchmark
+                            originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Instanced10 ||
+                            originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Instanced5 ||
+                            originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Benchmark
                             );
             //Upload Process
             string[] uploadresult = new string[2] { "", "" };

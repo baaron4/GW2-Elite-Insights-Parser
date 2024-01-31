@@ -116,7 +116,7 @@ namespace GW2EIBuilders.HtmlModels
 
             EncounterDuration = log.FightData.DurationString;
             Success = log.FightData.Success;
-            Wvw = log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            Wvw = log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
             Targetless = log.FightData.Logic.Targetless;
             FightName = log.FightData.FightName;
             FightIcon = log.FightData.Logic.Icon;

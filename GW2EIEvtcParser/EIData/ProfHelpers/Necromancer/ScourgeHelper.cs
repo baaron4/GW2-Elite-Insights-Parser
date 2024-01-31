@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in scourgeShades)
                 {
                     long duration;
-                    if (log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.WvW || log.FightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.sPvP)
+                    if (log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.sPvP)
                     {
                         duration = log.LogData.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
                     } 

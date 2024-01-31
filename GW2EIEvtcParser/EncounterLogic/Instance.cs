@@ -21,7 +21,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Instance(int id) : base(id)
         {
             Extension = "instance";
-            Mode = ParseMode.FullInstance;
+            ParseMode = ParseModeEnum.FullInstance;
+            SkillMode = SkillModeEnum.PvE;
             Icon = InstanceIconGeneric;
             EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
             EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
