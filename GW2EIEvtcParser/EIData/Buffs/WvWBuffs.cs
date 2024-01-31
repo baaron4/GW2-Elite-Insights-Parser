@@ -87,6 +87,10 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Overgrowth Bonus Tier 2", OvergrowthBonusTier2, Source.Common, BuffClassification.Support, BuffImages.InvokeLightning),
             new Buff("Overgrowth Bonus Tier 3", OvergrowthBonusTier3, Source.Common, BuffClassification.Support, BuffImages.InvokeLightning),
             new Buff("Koda's Armor", KodasArmor, Source.Common, BuffClassification.Support, BuffImages.KodasArmor),
+            // Guild Hall
+            new Buff("Guild Hall - PvE", GuildHallPvEMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallPvEMode),
+            new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Support, BuffImages.GuildHallsPvPMode),
+            new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Support, BuffImages.GuildHallWvWMode),
         };
     }
 }

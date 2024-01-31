@@ -54,6 +54,10 @@
             public const long ObsidianSanctumMask = 0x000500;
             public const long EdgeOfTheMistsMask = 0x000600;
             public const long ArmisticeBastionMask = 0x000700;
+            public const long GildedHollowMask = 0x000800;
+            public const long LostPrecipiceMask = 0x000900;
+            public const long WindsweptHavenMask = 0x000A00;
+            public const long IsleOfReflectionMask = 0x000B00;
         }
 
     }

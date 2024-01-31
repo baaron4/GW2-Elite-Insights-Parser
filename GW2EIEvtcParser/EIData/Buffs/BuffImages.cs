@@ -125,6 +125,9 @@
         internal const string KodasArmor = "https://wiki.guildwars2.com/images/8/88/Koda%27s_Armor.png";
         internal const string SpoiledSupply = "https://wiki.guildwars2.com/images/e/e2/Spoiled_Supply.png";
         internal const string EmergencyWaypoint = "https://wiki.guildwars2.com/images/8/87/Emergency_Waypoint.png";
+        internal const string GuildHallPvEMode = "https://wiki.guildwars2.com/images/4/4b/3240357.png";
+        internal const string GuildHallsPvPMode = "https://wiki.guildwars2.com/images/8/87/3240358.png";
+        internal const string GuildHallWvWMode = "https://wiki.guildwars2.com/images/7/70/3240359.png";
         #endregion Commons
 
         #region Gear

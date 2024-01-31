@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -140,8 +141,61 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EncounterID |= EncounterIDs.WvWMasks.ArmisticeBastionMask;
                     Icon = InstanceIconEternalBattlegrounds;
                     return _defaultName + " - Armistice Bastion";
+                case 1068:
+                case 1101:
+                case 1107:
+                case 1108:
+                case 1121:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.GildedHollowMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Gilded Hollow";
+                case 1069:
+                case 1071:
+                case 1076:
+                case 1104:
+                case 1124:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.LostPrecipiceMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Lost Precipice";
+                case 1214:
+                case 1215:
+                case 1224:
+                case 1232:
+                case 1243:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.WindsweptHavenMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Windswept Haven";
+                case 1419:
+                case 1426:
+                case 1435:
+                case 1444:
+                case 1462:
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.IsleOfReflectionMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Isle of Reflection";
             }
             return _defaultName;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
+            modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
+            modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
+            var usedModes = modes.OrderBy(x => x.Time).Select(x => x.BuffID).Distinct().ToList();
+            foreach (long buffID in usedModes)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
+            }
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -151,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
+            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
             // Handle non squad players
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
             var garbageList = new List<AbstractSingleActor>();

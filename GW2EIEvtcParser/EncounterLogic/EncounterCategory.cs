@@ -46,6 +46,7 @@
             EdgeOfTheMists,
             ObsidianSanctum,
             ArmisticeBastion,
+            GuildHall,
             //
             Golem,
             //
