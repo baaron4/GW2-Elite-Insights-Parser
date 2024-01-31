@@ -277,7 +277,7 @@ Displays damage/DPS in real time. The picture says it all.
 
 #### Selection
 
-<img src="./docs/Images/selectionCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/selectionCR.PNG" width="45%" height="45%">
 
 Allows to display or remove specific information from the Combat Replay such as:
 - Group highlights
@@ -332,7 +332,7 @@ On this component you can observe the status of the currently active targets:
 
 #### Mechanics
 
-<img src="./docs/Images/mechanicsCR.PNG" width="45%" height="45%">
+<img src="./docs/Images/mechanicsCR.PNG" width="60%" height="60%">
 
 With this table, you can directly jump on the timestamp of a specific mechanic.
 
@@ -342,7 +342,7 @@ It is possible to filter the table by:
 
 ### Healing Statistics
 
-<img src="./docs/Images/healingStatistics.png" width="45%" height="45%">
+<img src="./docs/Images/healingStatistics.png" width="60%" height="60%">
 
 Elite Insights fully supports healing statistics through the [ArcDPS Healing Stats Extenstion](https://github.com/Krappa322/arcdps_healing_stats).
 
