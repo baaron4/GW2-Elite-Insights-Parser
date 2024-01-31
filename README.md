@@ -29,7 +29,7 @@ We suggest following [this guide](https://snowcrows.com/guides/getting-started/a
 
 3. Launch GW2EI.exe (UI or console).
 
-NOTE: ArcDPS log files are located at "C:\Users\\\<USERNAME>\\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"
+NOTE: ArcDPS EVTC log files are located by default at "C:\Users\\\<USERNAME>\\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs".
 
 ## UI Usage
 ![program](./docs/Images/EILook.PNG)
@@ -184,7 +184,7 @@ This panel is where the main navigation of the Statistics module will happen, yo
 
 The target selection will impact what you'll observe on every panel that has a "Target" section.
 
-On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailled explanation on how this value is computed), used weapons and the commander tag (if applicable).
+On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailed explanation on how this value is computed), used weapons and the commander tag (if applicable).
 
 #### General Stats
 <img src="./docs/Images/general.PNG" width="60%" height="60%">
@@ -200,9 +200,9 @@ On general stats you can see macro statistics regarding incoming/outgoing damage
 
 <img src="./docs/Images/buff.PNG" width="60%" height="60%">
 
-This component will show you buff uptimes, ordered by categories, and generation information for each players.
+This component will show you buff uptimes, ordered by categories, and generation information for each player.
 
-On generation tables, please check the "question mark" above for a detailled explanation of the meaning of the tooltips.
+On generation tables, please check the "question mark" above for a detailed explanation of the meaning of the tooltips.
 
 #### Damage Modifiers
 
@@ -210,9 +210,9 @@ On generation tables, please check the "question mark" above for a detailled exp
 
 This component contains damage modifiers, ordered by categories.
 
-The modifiers are categorised by outgoing and oncoming, then further split into gear based, shared and class based modifiers.
+The modifiers are categorised by outgoing and incoming, then further split into gear based, shared and class based modifiers.
 
-Damage modifiers with a positive value indicate that the player has dealth or taken increased damage, negative value means the opposite.
+Damage modifiers with a positive value indicate that the player dealt or taken increased damage, negative value means the opposite.
 
 Please note that it is not possible to check traits or gear which means that Elite Insights will assume that every gear and trait based damage modifiers are present. Buff based damage modifiers are only shown if present.
 
@@ -344,9 +344,9 @@ It is possible to filter the table by:
 
 <img src="./docs/Images/healingStatistics.png" width="60%" height="60%">
 
-Elite Insights fully supports healing statistics through the [ArcDPS Healing Stats Extenstion](https://github.com/Krappa322/arcdps_healing_stats).
+Elite Insights fully supports healing statistics through the [ArcDPS Healing Stats Extension](https://github.com/Krappa322/arcdps_healing_stats).
 
-Download and install this extenstion to gain access to healing statistics. Read their README for furhter information.
+Download and install this extenstion to gain access to healing statistics. Read their README for further information.
 
 ## JSON Overview 
 
