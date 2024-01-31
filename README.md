@@ -19,7 +19,7 @@ For general ArcDPS-related discussions and troubleshooting, including ArcDPS, Ar
 
 ## Logging
 
-We suggest following [this guide](https://snowcrows.com/guides/getting-started/arc-dps) written by <img src="https://assets.snowcrows.com/images/logo/logo.png" width="20px" height="20px"> Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
+We suggest following [this guide](https://snowcrows.com/guides/getting-started/arc-dps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
 
 ## Set Up
 
@@ -161,13 +161,13 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ## HTML Overview
 
-For a more detailed look, please check [this guide](https://snowcrows.com/en/guides/starting-to-raid/reading-logs) written by <img src="https://assets.snowcrows.com/images/logo/logo.png" width="20px" height="20px"> Snow Crows.
+For a more detailed look, please check [this guide](https://snowcrows.com/en/guides/starting-to-raid/reading-logs) written by Snow Crows.
 
 ### Header
 
 <img src="./docs/Images/header.PNG" width="60%" height="60%">
 
-The header shows you the status of the fight and let's you swap themes and modules. Right now, only two modules are available: Statistics and Combat Replay.
+The header shows you the status of the fight and lets you swap themes and modules. There are three modules available: Statistics, Combat Replay and Healing Statistics.
 
 ### Footer
 
@@ -191,9 +191,10 @@ On players, you can observe gear related scores (between 0 and 10, please check 
 
 On general stats you can see macro statistics regarding incoming/outgoing damage and player behavior:
 - "Damage Stats" contains outgoing damage related information.
-- "Gameplay Stats" contains secondary player information like critical hit rates, flaking rates, number of time one's attack was blocked/absorbed, etc...
+- "Gameplay Stats" contains generic information like time spent casting or not casting skills, average distance to the commander player, etc...
+- "Offensive Stats" contains secondary player information like critical hit rates, flaking rates, number of time one's attack was blocked/absorbed, etc...
 - "Defensive Stats" contains incoming damage related information.
-- "Support Stats" contains boon strip and condition removal related information.
+- "Support Stats" contains boon strips, conditions removal, resurrection and related information.
 
 #### Buffs
 
@@ -207,7 +208,11 @@ On generation tables, please check the "question mark" above for a detailled exp
 
 <img src="./docs/Images/damageMods.PNG" width="60%" height="60%">
 
-This component contains damage increases by modifiers, ordered once again by categories. 
+This component contains damage modifiers, ordered by categories.
+
+The modifiers are categorised by outgoing and oncoming, then further split into gear based, shared and class based modifiers.
+
+Damage modifiers with a positive value indicate that the player has dealth or taken increased damage, negative value means the opposite.
 
 Please note that it is not possible to check traits or gear which means that Elite Insights will assume that every gear and trait based damage modifiers are present. Buff based damage modifiers are only shown if present.
 
@@ -270,6 +275,28 @@ The display supports two manipulations: Pan and Zoom.
 
 Displays damage/DPS in real time. The picture says it all.
 
+#### Selection
+
+<img src="./docs/Images/selectionCR.PNG" width="30%" height="30%">
+
+Allows to display or remove specific information from the Combat Replay such as:
+- Group highlights
+- Secondary NPCs
+- Encounter Mechanics
+- Player Skills
+- Use in-game hitbox sizes
+- Show all minions
+- Show selected's minions
+
+Player skills displayed are categorised in the following groups:
+- Show on select: displays only when the player is selected
+- Important buffs: skill that applies an important buff such as Stability
+- Projectile Management: skill that can reflect or destroy projectiles
+- Heal: healing skill
+- Cleanse: condition removal skill
+- Strip: boon removal skill
+- Portal: a portal skill such as Mesmer's Open Portal, Scourge's Sand Swell, Thief's Shadow Portal, etc...
+
 #### Indicators
 
 <img src="./docs/Images/indicatorCR.PNG" width="45%" height="45%">
@@ -313,9 +340,17 @@ It is possible to filter the table by:
 - The type of the mechanic
 - The actor involved
 
+### Healing Statistics
+
+<img src="./docs/Images/healingStatistics.png" width="45%" height="45%">
+
+Elite Insights fully supports healing statistics through the [ArcDPS Healing Stats Extenstion](https://github.com/Krappa322/arcdps_healing_stats).
+
+Download and install this extenstion to gain access to healing statistics. Read their README for furhter information.
+
 ## JSON Overview 
 
-The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html).
+The JSON documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html).
 
 ## Contributors
 
