@@ -332,7 +332,7 @@ On this component you can observe the status of the currently active targets:
 
 #### Mechanics
 
-<img src="./docs/Images/mechanicsCR.PNG" width="60%" height="60%">
+<img src="./docs/Images/mechanicsCR.PNG" width="30%" height="30%">
 
 With this table, you can directly jump on the timestamp of a specific mechanic.
 
