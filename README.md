@@ -1,26 +1,40 @@
-# Contact
-The following discord is used for general ArcDPS related discussions and troubleshooting, whether we are talking about ArcDPS, ArcDPS addons or EVTC log parsing:
+# GW2 Elite Insights Parser
 
-https://discord.gg/T4kSbKJ5Sf
+[![Github](https://img.shields.io/static/v1?style=for-the-badge&message=GitHub%20Page&color=%23131519&logo=GitHub&logoColor=FFFFFF&label=)](https://github.com/baaron4/GW2-Elite-Insights-Parser)
+[![JSON DOCS](https://img.shields.io/static/v1?style=for-the-badge&message=JSON%20DOCS&color=%23131519&logo=JSON&logoColor=FFFFFF&label=)](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html)
 
-Our GitHub Page: https://baaron4.github.io/GW2-Elite-Insights-Parser/
+[![Release](https://img.shields.io/github/v/release/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=%23ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/releases/latest)
+[![GitHub issues](https://img.shields.io/github/issues/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/issues)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/baaron4/GW2-Elite-Insights-Parser/total?style=for-the-badge&labelColor=%23131519&color=%23ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/releases/latest)
 
-# GW2-Elite-Insights-Parser
+[![GitHub contributors](https://img.shields.io/github/contributors/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=%23ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/graphs/contributors)
+[![GitHub forks](https://img.shields.io/github/forks/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/forks)
+[![GitHub watchers](https://img.shields.io/github/watchers/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/watchers)
+[![GitHub Repo stars](https://img.shields.io/github/stars/baaron4/GW2-Elite-Insights-Parser?style=for-the-badge&labelColor=%23131519&color=ffce26)](https://github.com/baaron4/GW2-Elite-Insights-Parser/stargazers)
+
+## Contact
+For general ArcDPS-related discussions and troubleshooting, including ArcDPS, ArcDPS addons, or EVTC log parsing, please join our Discord server.
+
+[![](https://discordapp.com/api/guilds/456611641526845473/widget.png?style=banner2)](https://discord.gg/T4kSbKJ5Sf)
+
+## Logging
+
+We suggest following [this guide](https://snowcrows.com/guides/getting-started/arc-dps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
+
 ## Set Up
 
-1. Go to Release section.
+1. Download the GW2EI.zip file from the [latest release](https://github.com/baaron4/GW2-Elite-Insights-Parser/releases/latest). Don't forget to check regularly to stay updated (we have a channel that notifies new releases on our discord).
 
-2. Download the GW2EI.zip file from the latest release. Don't forget to check regularly to stay updated (we have a channel that notifies new releases on our discord).
+2. Extract all files anywhere you like.
 
-3. Extract all files anywhere you like.
+3. Launch GW2EI.exe (UI or console).
 
-4. Launch GW2EI.exe (UI or console).
+NOTE: ArcDPS EVTC log files are located by default at "C:\Users\\\<USERNAME>\\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs".
 
-NOTE: ArcDPS log files are currently located within "C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"
 ## UI Usage
 ![program](./docs/Images/EILook.PNG)
 
-1. Drag and drop 1 or multiple .evtc, .evtc.zip or .zevtc files into program.
+1. Drag and drop one or multiple .evtc, .evtc.zip, or .zevtc files onto the program.
 
 2. Click parse.
 
@@ -32,7 +46,7 @@ You can change the settings at any time using the Settings window.
 
 ![how to](https://user-images.githubusercontent.com/30677999/40148954-6ec9215a-5936-11e8-94ad-d2520e7c4539.PNG)
 
-If you would like to have your logs parsed without the GUI pass the file location of each evtc file as a string. 
+If you want your logs parsed without the GUI, pass the file location of each EVTC file as a string.
 
 Settings can be configured using .conf files (see Settings/sample.conf for an example). You can then use it with -c:
 
@@ -147,13 +161,13 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ## HTML Overview
 
-For a more detailed look, please check the following guide: https://snowcrows.com/en/guides/starting-to-raid/reading-logs.
+For a more detailed look, please check [this guide](https://snowcrows.com/en/guides/starting-to-raid/reading-logs) written by Snow Crows.
 
 ### Header
 
 <img src="./docs/Images/header.PNG" width="60%" height="60%">
 
-The header shows you the status of the fight and let's you swap themes and modules. Right now, only two modules are available: Statistics and Combat Replay.
+The header shows you the status of the fight and lets you swap themes and modules. There are three modules available: Statistics, Combat Replay and Healing Statistics.
 
 ### Footer
 
@@ -170,30 +184,35 @@ This panel is where the main navigation of the Statistics module will happen, yo
 
 The target selection will impact what you'll observe on every panel that has a "Target" section.
 
-On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailled explanation on how this value is computed), used weapons and the commander tag (if applicable).
+On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailed explanation on how this value is computed), used weapons and the commander tag (if applicable).
 
 #### General Stats
 <img src="./docs/Images/general.PNG" width="60%" height="60%">
 
 On general stats you can see macro statistics regarding incoming/outgoing damage and player behavior:
 - "Damage Stats" contains outgoing damage related information.
-- "Gameplay Stats" contains secondary player information like critical hit rates, flaking rates, number of time one's attack was blocked/absorbed, etc...
+- "Gameplay Stats" contains generic information like time spent casting or not casting skills, average distance to the commander player, etc...
+- "Offensive Stats" contains secondary player information like critical hit rates, flaking rates, number of time one's attack was blocked/absorbed, etc...
 - "Defensive Stats" contains incoming damage related information.
-- "Support Stats" contains boon strip and condition removal related information.
+- "Support Stats" contains boon strips, conditions removal, resurrection and related information.
 
 #### Buffs
 
 <img src="./docs/Images/buff.PNG" width="60%" height="60%">
 
-This component will show you buff uptimes, ordered by categories, and generation information for each players.
+This component will show you buff uptimes, ordered by categories, and generation information for each player.
 
-On generation tables, please check the "question mark" above for a detailled explanation of the meaning of the tooltips.
+On generation tables, please check the "question mark" above for a detailed explanation of the meaning of the tooltips.
 
 #### Damage Modifiers
 
 <img src="./docs/Images/damageMods.PNG" width="60%" height="60%">
 
-This component contains damage increases by modifiers, ordered once again by categories. 
+This component contains damage modifiers, ordered by categories.
+
+The modifiers are categorised by outgoing and incoming, then further split into gear based, shared and class based modifiers.
+
+Damage modifiers with a positive value indicate that the player dealt or taken increased damage, negative value means the opposite.
 
 Please note that it is not possible to check traits or gear which means that Elite Insights will assume that every gear and trait based damage modifiers are present. Buff based damage modifiers are only shown if present.
 
@@ -246,7 +265,7 @@ This component focuses on the selected target:
 
 The main display is where the animation happens.
 
-It is possible to control animation speed and jump into specific fight phases.
+It is possible to control the animation speed and jump to specific fight phases.
 
 The display supports two manipulations: Pan and Zoom.
 
@@ -258,11 +277,25 @@ Displays damage/DPS in real time. The picture says it all.
 
 #### Selection
 
-<img src="./docs/Images/selectionCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/selectionCR.PNG" width="45%" height="45%">
 
-This component lets you select a specific player. Once a player is selected, they will appear with a green square around on the main display. 
+Allows to display or remove specific information from the Combat Replay such as:
+- Group highlights
+- Secondary NPCs
+- Encounter Mechanics
+- Player Skills
+- Use in-game hitbox sizes
+- Show all minions
+- Show selected's minions
 
-If "Highlight Selected Group" is checked, players on the same group as the selected player will have a blue square around them.
+Player skills displayed are categorised in the following groups:
+- Show on select: displays only when the player is selected
+- Important buffs: skill that applies an important buff such as Stability
+- Projectile Management: skill that can reflect or destroy projectiles
+- Heal: healing skill
+- Cleanse: condition removal skill
+- Strip: boon removal skill
+- Portal: a portal skill such as Mesmer's Open Portal, Scourge's Sand Swell, Thief's Shadow Portal, etc...
 
 #### Indicators
 
@@ -276,18 +309,30 @@ With this panel you can customize the display further by adding range indicators
 
 <img src="./docs/Images/playersBuffCR.PNG" width="30%" height="30%">
 
+This component lets you select a specific player. Once a player is selected, they will appear with a green square around on the main display.
+
+If "Highlight Selected Group" is checked, players on the same group as the selected player will have a blue square around them.
+
+You can observe the status of the currently active players:
+- Health and Barrier
+- Present buff/debuffs
+- Skill casts
+
 #### Targets
 
 <img src="./docs/Images/targetsCR.PNG" width="30%" height="30%">
 
-On this component you can observe the status of currently active targets. The status includes:
-- Health
-- Breakbar
+This component lets you select a specific target. Once a target is selected, they will appear with a green square around on the main display.
+
+On this component you can observe the status of the currently active targets:
+- Health and Barrier
+- Breakbar state and select a breakbar phase
 - Present buff/debuffs
+- Skill casts
 
 #### Mechanics
 
-<img src="./docs/Images/mechanicsCR.PNG" width="45%" height="45%">
+<img src="./docs/Images/mechanicsCR.PNG" width="30%" height="30%">
 
 With this table, you can directly jump on the timestamp of a specific mechanic.
 
@@ -295,11 +340,19 @@ It is possible to filter the table by:
 - The type of the mechanic
 - The actor involved
 
+### Healing Statistics
+
+<img src="./docs/Images/healingStatistics.png" width="60%" height="60%">
+
+Elite Insights fully supports healing statistics through the [ArcDPS Healing Stats Extension](https://github.com/Krappa322/arcdps_healing_stats).
+
+Download and install this extenstion to gain access to healing statistics. Read their README for further information.
+
 ## JSON Overview 
 
-The Json documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html).
+The JSON documentation can be found [here](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html).
 
-# Contributors
+## Contributors
 
 Thank you to all our [contributors](https://github.com/baaron4/GW2-Elite-Insights-Parser/graphs/contributors).
 
