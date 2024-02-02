@@ -14,7 +14,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public OpenWorldLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.OpenWorld;
+            ParseMode = ParseModeEnum.OpenWorld;
+            SkillMode = SkillModeEnum.PvE;
             EncounterCategoryInformation.Category = EncounterCategory.FightCategory.OpenWorld;
             EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
             EncounterID |= EncounterIDs.EncounterMasks.OpenWorldMask;

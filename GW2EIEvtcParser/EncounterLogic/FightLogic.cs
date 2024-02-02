@@ -17,7 +17,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     public abstract class FightLogic
     {
 
-        public enum ParseMode { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
+        public enum ParseModeEnum { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
+        public enum SkillModeEnum { PvE, WvW, sPvP };
 
         [Flags]
         protected enum FallBackMethod { 
@@ -30,7 +31,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private CombatReplayMap _map;
         protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
-        public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
+        public ParseModeEnum ParseMode { get; protected set; } = ParseModeEnum.Unknown;
+        public SkillModeEnum SkillMode { get; protected set; } = SkillModeEnum.PvE;
         public string Extension { get; protected set; }
         public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;

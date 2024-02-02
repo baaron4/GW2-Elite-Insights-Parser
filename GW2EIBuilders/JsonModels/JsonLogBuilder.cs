@@ -119,7 +119,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.IsLateStart = log.FightData.IsLateStart;
             jsonLog.MissingPreEvent = log.FightData.MissingPreEvent;
             jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
-            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var personalDamageMods = new Dictionary<string, HashSet<long>>();
             var skillMap = new Dictionary<string, SkillDesc>();

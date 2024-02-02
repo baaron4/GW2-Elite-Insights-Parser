@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser
         public IReadOnlyList<AbstractSingleActor> Friendlies { get; }
         public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
         public IReadOnlyCollection<AgentItem> FriendlyAgents { get; }
-        public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Benchmark;
+        public bool IsBenchmarkMode => FightData.Logic.ParseMode == FightLogic.ParseModeEnum.Benchmark;
         public IReadOnlyDictionary<ParserHelper.Spec, List<AbstractSingleActor>> FriendliesListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
         public BuffsContainer Buffs { get; }
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Container");
             Buffs = new BuffsContainer(CombatData, operation);
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Modifier Container");
-            DamageModifiers = new DamageModifiersContainer(CombatData, fightData.Logic.Mode, parserSettings);
+            DamageModifiers = new DamageModifiersContainer(CombatData, fightData.Logic.ParseMode, fightData.Logic.SkillMode, parserSettings);
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Mechanic Data");
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");

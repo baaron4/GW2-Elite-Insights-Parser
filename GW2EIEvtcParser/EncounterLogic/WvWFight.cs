@@ -20,7 +20,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         private readonly bool _detailed;
         public WvWFight(int triggerID, bool detailed) : base(triggerID)
         {
-            Mode = ParseMode.WvW;
+            ParseMode = ParseModeEnum.WvW;
+            SkillMode = SkillModeEnum.WvW;
             Icon = EncounterIconWvW;
             _detailed = detailed;
             Extension = _detailed ? "detailed_wvw" : "wvw";
@@ -83,18 +84,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 // EB
                 case 38:
-                    return new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (8958, 12798, 12030, 15870)*/);
+                    return new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864, -36864, 36864, 36864));
                 // Green Alpine
                 case 95:
-                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)/*, (-30720, -43008, 30720, 43008), (5630, 11518, 8190, 15102)*/);
+                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
                 // Blue Alpine
                 case 96:
-                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)/*, (-30720, -43008, 30720, 43008), (12798, 10878, 15358, 14462)*/);
+                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
                 // Red Desert
                 case 1099:
-                    return new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
+                    return new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864));
                 case 968:
-                    return new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
+                    return new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864));
             }
             return base.GetCombatMapInternal(log);
         }
@@ -249,6 +250,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+                }
+            }
+            CombatItem modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
+            if (modeEvent != null)
+            {
+                switch((long)modeEvent.SkillID)
+                {
+                    case GuildHallPvEMode:
+                        SkillMode = SkillModeEnum.PvE; 
+                        break;
+                    case GuildHallsPvPMode:
+                        SkillMode = SkillModeEnum.sPvP;
+                        break;
+                    case GuildHallWvWMode:
+                        SkillMode = SkillModeEnum.WvW;
+                        break;
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);

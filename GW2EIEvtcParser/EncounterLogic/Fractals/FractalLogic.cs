@@ -16,7 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         protected FractalLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Instanced5;
+            ParseMode = ParseModeEnum.Instanced5;
+            SkillMode = SkillModeEnum.PvE;
             MechanicList.AddRange(new List<Mechanic>
             {
             new PlayerDstBuffApplyMechanic(FluxBombBuff, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),

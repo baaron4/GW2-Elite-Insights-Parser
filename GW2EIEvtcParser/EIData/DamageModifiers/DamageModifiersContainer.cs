@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName { get; }
 
-        internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
         {
             var AllOutgoingDamageModifiers = new List<List<DamageModifierDescriptor>>
             {
@@ -73,7 +73,7 @@ namespace GW2EIEvtcParser.EIData
             var currentOutgoingDamageMods = new List<OutgoingDamageModifier>();
             foreach (List<DamageModifierDescriptor> modifierDescriptor in AllOutgoingDamageModifiers)
             {
-                currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
+                currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
             }
             OutgoingDamageModifiersPerSource = currentOutgoingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
             OutgoingDamageModifiersByName = currentOutgoingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EIData
             var currentIncomingDamageMods = new List<IncomingDamageModifier>();
             foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)
             {
-                currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
+                currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
             }
             IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
             IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>

@@ -78,12 +78,12 @@ namespace GW2EIEvtcParser.EIData
             return gw2Build < _maxBuild && gw2Build >= _minBuild;
         }
 
-        internal virtual bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        internal virtual bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
         {
             // Remove approx based damage mods from PvP contexts
             if (Approximate)
             {
-                if (mode == FightLogic.ParseMode.WvW || mode == FightLogic.ParseMode.sPvP)
+                if (parseMode == FightLogic.ParseModeEnum.WvW || parseMode == FightLogic.ParseModeEnum.sPvP)
                 {
                     return false;
                 }
@@ -92,19 +92,17 @@ namespace GW2EIEvtcParser.EIData
             {     
                 return true;
             }
-            switch (mode)
+            switch (skillMode)
             {
-                case FightLogic.ParseMode.Unknown:
-                case FightLogic.ParseMode.OpenWorld:
-                    return Mode == DamageModifierMode.PvE;
-                case FightLogic.ParseMode.FullInstance:
-                case FightLogic.ParseMode.Instanced5:
-                case FightLogic.ParseMode.Instanced10:
-                case FightLogic.ParseMode.Benchmark:
+                case FightLogic.SkillModeEnum.PvE:
+                    if (parseMode == FightLogic.ParseModeEnum.OpenWorld || parseMode == FightLogic.ParseModeEnum.Unknown)
+                    {
+                        return Mode == DamageModifierMode.PvE;
+                    }
                     return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly || Mode == DamageModifierMode.PvEWvW;
-                case FightLogic.ParseMode.WvW:
+                case FightLogic.SkillModeEnum.WvW:
                     return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEWvW);
-                case FightLogic.ParseMode.sPvP:
+                case FightLogic.SkillModeEnum.sPvP:
                     return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
             }
             return false;

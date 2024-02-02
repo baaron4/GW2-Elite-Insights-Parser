@@ -14,7 +14,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected RaidLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Instanced10;
+            ParseMode = ParseModeEnum.Instanced10;
+            SkillMode = SkillModeEnum.PvE;
             EncounterCategoryInformation.Category = FightCategory.Raid;
             EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
         }

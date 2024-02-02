@@ -749,7 +749,7 @@ namespace GW2EIEvtcParser
                     continue;
                 }
                 bool skip = false;
-                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Instanced5 || _fightData.Logic.Mode == FightLogic.ParseMode.sPvP);
+                var player = new Player(playerAgent, _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
@@ -1035,7 +1035,7 @@ namespace GW2EIEvtcParser
                 }
             }
             //
-            if (_fightData.Logic.Mode == FightLogic.ParseMode.Instanced10)
+            if (_fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced10)
             {
                 foreach (Player p in _playerList)
                 {

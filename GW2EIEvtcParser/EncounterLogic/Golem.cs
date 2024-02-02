@@ -19,7 +19,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         public Golem(int id) : base(id)
         {
-            Mode = ParseMode.Benchmark;
+            ParseMode = ParseModeEnum.Benchmark;
+            SkillMode = SkillModeEnum.PvE;
             EncounterID |= EncounterIDs.EncounterMasks.GolemMask;
             EncounterID |= 0x000100;
             switch (GetTargetID(id))

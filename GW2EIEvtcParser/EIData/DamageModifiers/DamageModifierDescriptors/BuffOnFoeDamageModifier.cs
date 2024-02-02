@@ -51,14 +51,14 @@ namespace GW2EIEvtcParser.EIData
             return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, time)) > 0.0;
         }
 
-        internal override bool Keep(FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        internal override bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
         {
             // Remove target  based damage mods from PvP contexts
-            if (mode == FightLogic.ParseMode.WvW || mode == FightLogic.ParseMode.sPvP)
+            if (parseMode == FightLogic.ParseModeEnum.WvW || parseMode == FightLogic.ParseModeEnum.sPvP)
             {
                 return false;
             }
-            return base.Keep(mode, parserSettings);
+            return base.Keep(parseMode, skillMode,parserSettings);
         }
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
