@@ -14,6 +14,8 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new DamageCastFinder(KingOfFires, KingOfFires).WithBuilds(GW2Builds.July2019Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            new EffectCastFinder(Outrage, EffectGUIDs.BerserkerOutrage)
+                .UsingSrcSpecChecker(Spec.Berserker),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>

@@ -13,6 +13,7 @@
     public static class SkillIDs
     {
 
+        #region Custom
         /////////////// Custom IDS
         public const long Unknown = -1; 
         public const long WeaponSwap = -2;
@@ -51,12 +52,14 @@
         public const long MarkOfBloodOrChillblains = -33;
         public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         public const long NumberOfRangerPets = -35;
-        ////////////////
+        #endregion
+        #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
         internal const long ArcDPSGenericBreakbar = 65002;
         internal const long ArcDPSDodge20220307 = 23275;
         internal const long ArcDPSGenericBreakbar20220307 = 23276;
-        ///
+        #endregion
+        #region Core
         public const long Protection = 717;
         public const long Regeneration = 718;
         public const long Swiftness = 719;
@@ -1336,6 +1339,8 @@
         public const long CatsShadow = 25641;
         public const long GhastlyAppearance = 25642;
         public const long PactFleetFinisher = 26519;
+        #endregion
+        #region Hearth of Thorns
         public const long VengefulHammersSkill = 26557;
         public const long EnergyExpulsionHeal = 26558;
         public const long RiteOfTheGreatDwarf = 26596;
@@ -1463,6 +1468,7 @@
         public const long JusticeDragonhunter = 30232;
         public const long MedBlasterHeal = 30235;
         public const long LesserSignetOfWrath = 30255;
+        public const long Outrage = 30258;
         public const long VampiricAura = 30285;
         public const long LeechingBolt1 = 30301;
         public const long WellOfEternity = 30305;
@@ -2237,6 +2243,8 @@
         public const long SlamArtsariiv = 39925;
         public const long RadiantFury2 = 39926;
         public const long FixatedBloom2 = 39928;
+        #endregion
+        #region Path of Fire
         public const long DarkAura = 39978;
         public const long WeakeningChargeDaredevilMinion = 40005;
         public const long CupOfLightRoastedCoffee = 40014;
@@ -2978,6 +2986,8 @@
         public const long Rewinder = 56928;
         public const long SplitSecond = 56930;
         public const long ShadowPortalOpenedBuff = 57031;
+        #endregion
+        #region Icebrood Saga
         public const long SpherifiedSesameOysterSoup = 57037;
         public const long PlateOfBeefCarpaccioWithSalsaGarnish = 57042;
         public const long SesameVeggieFlatbread = 57050;
@@ -3306,6 +3316,8 @@
         public const long EmpathicManipulationGuilt = 61602;
         public const long EmpathicManipulation2 = 61604;
         public const long EmpathicManipulationSorrow = 61606;
+        #endregion
+        #region End of Dragons
         public const long VoidObliteratorChargeWindup = 61713;
         public const long VoidObliteratorFirebomb = 61838;
         public const long VoidObliteratorCharge = 61895;
@@ -3977,6 +3989,8 @@
         public const long AspectOfLethargyNoTetherBuff = 69458;
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
+        #endregion
+        #region Secret of the Obscure
         public const long EmpoweredEnvyEmbodiment = 69479;
         public const long InsatiableHunger1 = 69544;
         public const long WailOfDespair1 = 69548;
@@ -4104,6 +4118,7 @@
         public const long GuildHallWvWMode = 72110;
         public const long GuildHallPvEMode = 72113;
         public const long GuildHallsPvPMode = 72118;
+        #endregion
     }
 
 }

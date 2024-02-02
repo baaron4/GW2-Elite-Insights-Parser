@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser
 {
     public static class EffectGUIDs
     {
+        #region Generic
         // Generic
         // blue circles indicating radius of boons etc.
         public const string Generic240UnitRadius = "E7C50E0E148CBE44BB2770AF2D6750A4"; // e.g. speed of synergy, bypass coating
@@ -21,12 +22,16 @@ namespace GW2EIEvtcParser
         public const string StealthReveal = "A37F8E2B550B254DA89F933BDF654B41"; // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
         public const string WhiteMantlePortalInactive = "D43373FEFA19A54DA2A2B6BB7834A338";
         public const string WhiteMantlePortalActive = "388CF9246218A34DB2F8107E19FCA471";
+        #endregion
+        #region Mounts
         // Skyscale
         public const string SkyscaleLaunch = "F6A06D8222280F40B17A6984F9B5894F";
         public const string SkyscaleFireball = "0325D55E6A772047981F4EEAA5CAE537";
         public const string SkyscaleFireballExplosion = "BA8C9DDEAC761A48ACC53777F1D68C34";
         public const string SkyscaleBlast1 = "4D30A7F374E56E4F806420A81EAEA03F";
         public const string SkyscaleBlast2 = "E15FF7FD742AA24BB6C2BE38087CFC22";
+        #endregion
+        #region Gear
         // Relics
         public const string RelicWhiteCircle = "866307A6A0E34242BDC3067AB24A549D"; // Appears for Nightmare, Citadel, Krait
         public const string RelicOfCerusEye = "1066BEACB107C743908D860DA2D59796";
@@ -42,7 +47,8 @@ namespace GW2EIEvtcParser
         public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
         public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         public const string RelicOfAkeem = "8181E21A43EAFB42BC8FFB001F02CF44"; // Target Src
-        // Mesmer
+        #endregion
+        #region Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
         public const string MesmerThePrestigeDisappear2 = "5FA6527231BB8041AC783396142C6200"; // also used with elementalist cleansing fire
         public const string MesmerSignetOfMidnight = "02154B72900B5740A73CD0ADECED27BF";
@@ -92,7 +98,8 @@ namespace GW2EIEvtcParser
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush
         // public const string MesmerTrail = "73414BA39AFCF540A90CF91DE961CCEF"; // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
-        // Necromancer
+        #endregion
+        #region Necromancer
         public const string NecromancerNecroticTraversal = "47C48881C5AC214388F6253197A7F11A";
         public const string NecromancerUnholyBurst = "C4E8DD3234E0C647993857940ED79AC1"; // also used for spiteful spirit
         public const string NecromancerPlagueSignet = "E78ED095E97F1D4A8BEB901796449E2F"; // might be pov only?
@@ -128,7 +135,8 @@ namespace GW2EIEvtcParser
         public const string HarbingerDoomApproaches = "88C0010F0B7148469B88E2A1B4500DCC";
         public const string HarbingerVitalDrawSelfDst = "667EAEE89766E14E883E6ECA5D3D267B"; // Target self
         public const string HarbingerVitalDrawAoE = "859611F71893924989B056F6A011C160"; // Ground effect
-        // Elementalist
+        #endregion
+        #region Elementalist
         public const string ElementalistArmorOfEarth1 = "D43DC34DEF81B746BC130F7A0393AAC7";
         public const string ElementalistArmorOfEarth2 = "D0C072102FAA6A4EA8A16CB73F3B96DD"; // happens at the same time as the other, could be relevant to check should collisions appear
         //public const string ElementalistCleansingFire = "5FA6527231BB8041AC783396142C6200"; // also used with mesmer the prestige, collides with some air traits
@@ -157,13 +165,16 @@ namespace GW2EIEvtcParser
         public const string CatalystDeployWaterJadeSphere = "6D7EB5747873484DAF29C01FA51FE175";
         public const string CatalystDeployAirJadeSphere = "A3C8A55C3E530140A7F99AAA1CBB4E09";
         public const string CatalystDeployEarthJadeSphere = "A674D3E7BC0C4342BC7A4EF0EE8FF8F0";
-        // Warrior
+        #endregion
+        #region Warrior
         public const string WarriorSignetOfMight = "75EF160EAFC0394CACC436CF89819148";
         public const string WarriorSignetOfStamina = "1E720C4D42448D45BDCB6307869D3D66"; // not actually instant cast, just for reference
         public const string WarriorDolyakSignet = "D7F8FA5695F8714B99A51EE72EF6E178";
         public const string SpellbreakerWindsOfDisenchantment = "926917599B6B6E498AD62B812001B823";
         public const string BladeswornDragonspikeMine = "B5BE541DBF290E4AA381E1E52A2A3525";
-        // Revenant
+        public const string BerserkerOutrage = "AC32B7F7BB281B4D94713F180C44F322";
+        #endregion
+        #region Revenant
         public const string RevenantTabletAutoHeal = "C715D15450E56E4998F9EB90B91C5668";
         public const string RevenantTabletVentarisWill = "D3FD740370D6B747B2DA4F8F065A0177";
         public const string RevenantProtectiveSolace = "63683ECFD27DA746BF0B16404D817978";
@@ -174,7 +185,8 @@ namespace GW2EIEvtcParser
         public const string RevenantInspiringReinforcement = "09171204F3936841813E518123E2F867";
         public const string RevenantInspiringReinforcementPart = "E6D6CD56B9A61E40A86F982C60421625";
         public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
-        // Guardian
+        #endregion
+        #region Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
@@ -210,7 +222,8 @@ namespace GW2EIEvtcParser
         public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
-        // Engineer
+        #endregion
+        #region Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
         public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
@@ -234,7 +247,8 @@ namespace GW2EIEvtcParser
         public const string MechanistShiftSignet1 = "E1C1DD7F866B4149A1BADD216C9AA69D"; // happens twice, without owner at destination, with owner at origin?
         public const string MechanistShiftSignet2 = "DB22850AE209B34BBD11372F56D42D43";
         public const string MechanistOverclockSignet = "734834E7EB7CD74EB129ACBCE5C64C1D";
-        // Ranger
+        #endregion
+        #region Ranger
         public const string RangerLightningReflexes = "3CF1D1228CBC3740AA33EDA357EABED4";
         public const string RangerQuickeningZephyr = "B23157C515072E46B5514419B0F923B7";
         public const string RangerSignetOfRenewal = "EA9896A81DDF4843B18DBF6EE4F25E18";
@@ -261,7 +275,8 @@ namespace GW2EIEvtcParser
         public const string UntamedVenomousOutburst = "60BE4692A455B140A05AD794BF4753F6";
         public const string UntamedRendingVines = "2C40B0741111444F98895A658A7F978F";
         public const string UntamedEnvelopingHaze = "F2B1B61970FC59418AC049BF3A07FFD4";
-        // Thief
+        #endregion
+        #region Thief
         public const string ThiefTeleportTrail = "03A8D8B8F81FE94FB52FFE5F74F31C9E"; // likely the trail, used with infiltrators arrow, shadow step, infiltrators signet, measured shot
         // public const string ThiefTeleport = "1DEF5F2ECCF6CA4683ECC2DAED54726C"; // used with e.g. shadow shot, shadow strike
         public const string ThiefShadowstep = "2C40AE26C91BEE468E245D0009B590F9";
@@ -298,6 +313,8 @@ namespace GW2EIEvtcParser
         public const string SpecterWellOfSorrow3 = "1B56F702912BE7428182CA57036AEE99"; // ~1240ms delay
         public const string SpecterShadowfall1 = "FB21A6E213C240459BD8E9524088FA66";
         public const string SpecterShadowfall2 = "D8E380E80E843A4092C8DD53C5A51F0F"; // ~880ms delay
+        #endregion
+        #region Fractals
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
@@ -343,6 +360,8 @@ namespace GW2EIEvtcParser
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
         public const string AxeGroundAoE2 = "CE91D2D4CD6C4141B3977FA70FFE05BB";
         public const string HarrowshotAoE = "3AE17719B3D7374BAC4899DA0A3E7DF9";
+        #endregion
+        #region Raids
         // Vale Guardian
         public const string ValeGuardianDistributedMagic = "43FD739499BB6040BBF9EEF37781B2CE";
         public const string ValeGuardianMagicSpike = "55364633145D264A934935C3F026B19F";
@@ -408,6 +427,8 @@ namespace GW2EIEvtcParser
         public const string QadimPeerlessMagmaWarningAoE = "E269977C2FC9474EAAD1051CDAFAD653"; // 4000 duration - Src player
         public const string QadimPeerlessMagmaLandingExplosion = "6617FA23565EE646ADAA7A646C895927"; // 1000 duration - No Src
         public const string QadimPeerlessMagmaDamagingAoE = "BABE69EC5AC7AF48A2F14A9FB8920C7F"; // 600000 duration - Src Qadim
+        #endregion
+        #region Strikes
         // Freezie
         public const string FreezieFrozenPatch = "2CE301ED692ACA4E964BFDFEED9D055E"; // 30000 duration
         public const string FreezieOrangeAoE120 = "0760BCD6779C0248B480E59D41E785B4"; // Has multiple durations
@@ -543,5 +564,6 @@ namespace GW2EIEvtcParser
         public const string TempleOfFebeRegretGreen = "015E5CF598A13D4F8D6CCFD66643525F"; // Owner Embodiment of Regret Target Player
         public const string TempleOfFebeGreenSuccess = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
         public const string TempleOfFebeGreenFailure = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        #endregion
     }
 }
