@@ -18,6 +18,8 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         private readonly string _defaultName;
         private readonly bool _detailed;
+        private bool _foundSkillMode { get; set; }
+        private bool _isGuildHall { get; set; }
         public WvWFight(int triggerID, bool detailed) : base(triggerID)
         {
             ParseMode = ParseModeEnum.WvW;
@@ -147,9 +149,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 1107:
                 case 1108:
                 case 1121:
+                    _isGuildHall = true;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                     EncounterID |= EncounterIDs.WvWMasks.GildedHollowMask;
                     Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
                     //Icon = InstanceIconEternalBattlegrounds;
                     return (_detailed ? "Detailed " : "") + "Gilded Hollow";
                 case 1069:
@@ -157,9 +164,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 1076:
                 case 1104:
                 case 1124:
+                    _isGuildHall = true;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                     EncounterID |= EncounterIDs.WvWMasks.LostPrecipiceMask;
                     Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
                     //Icon = InstanceIconEternalBattlegrounds;
                     return (_detailed ? "Detailed " : "") + "Lost Precipice";
                 case 1214:
@@ -167,9 +179,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 1224:
                 case 1232:
                 case 1243:
+                    _isGuildHall = true;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                     EncounterID |= EncounterIDs.WvWMasks.WindsweptHavenMask;
                     Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
                     //Icon = InstanceIconEternalBattlegrounds;
                     return (_detailed ? "Detailed " : "") + "Windswept Haven";
                 case 1419:
@@ -177,9 +194,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case 1435:
                 case 1444:
                 case 1462:
+                    _isGuildHall = true;
                     EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                     EncounterID |= EncounterIDs.WvWMasks.IsleOfReflectionMask;
                     Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
                     //Icon = InstanceIconEternalBattlegrounds;
                     return (_detailed ? "Detailed " : "") + "Isle of Reflection";
             }
@@ -189,13 +211,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
-            modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
-            modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
-            var usedModes = modes.OrderBy(x => x.Time).Select(x => x.BuffID).Distinct().ToList();
-            foreach (long buffID in usedModes)
+            if (_isGuildHall)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
+                var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
+                modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
+                modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
+                var usedModes = modes.OrderBy(x => x.Time).Select(x => x.BuffID).Distinct().ToList();
+                foreach (long buffID in usedModes)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
+                }
+                // When buff is missing on a player, they are in PvE mode
+                if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To == x.AgentItem)))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[GuildHallPvEMode], 1));
+                }
             }
         }
 
@@ -255,7 +285,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
             if (modeEvent != null)
             {
-                switch((long)modeEvent.SkillID)
+                _foundSkillMode = true;
+                switch ((long)modeEvent.SkillID)
                 {
                     case GuildHallPvEMode:
                         SkillMode = SkillModeEnum.PvE; 
