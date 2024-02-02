@@ -274,6 +274,7 @@ namespace GW2EIEvtcParser
             ExtensionCombat = 49,
             FractalScale = 50,
             Effect_51 = 51,
+            RuleSet = 52,
             Unknown
         };
 
