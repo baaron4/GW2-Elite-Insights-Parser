@@ -73,7 +73,7 @@ namespace GW2EIWingman
             return check;
         }
 
-        private static bool IsEIVersionValid(Version parserVersion, TraceHandler traceHandler)
+        private static bool VerifyEIVersion(Version parserVersion, TraceHandler traceHandler)
         {
             string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
             if (returnedVersion == null)
@@ -95,11 +95,11 @@ namespace GW2EIWingman
 
         public static bool CanBeUsed(Version parserVersion, TraceHandler traceHandler)
         {
-            return CheckConnection(traceHandler) && IsEIVersionValid(parserVersion, traceHandler);
+            return CheckConnection(traceHandler) && (parserVersion == null || VerifyEIVersion(parserVersion, traceHandler));
         }
         //
 
-        public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
+        public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, TraceHandler traceHandler)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
@@ -107,7 +107,7 @@ namespace GW2EIWingman
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -121,7 +121,7 @@ namespace GW2EIWingman
             }
         }
 
-        public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
+        public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, TraceHandler traceHandler)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
@@ -129,7 +129,7 @@ namespace GW2EIWingman
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -143,7 +143,7 @@ namespace GW2EIWingman
             }
         }
 
-        public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
+        public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, TraceHandler traceHandler)
         {
             if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
             {
@@ -151,7 +151,7 @@ namespace GW2EIWingman
             }
             try
             {
-                return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, parserVersion, HttpMethod.Post), new JsonSerializerSettings
+                return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     ContractResolver = DefaultJsonContractResolver,
@@ -165,10 +165,10 @@ namespace GW2EIWingman
             }
         }
 
-        public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, TraceHandler traceHandler, Version parserVersion)
+        public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, TraceHandler traceHandler)
         {
             // Check if the URL is already present on Wingman
-            WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler, parserVersion);
+            WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler);
             if (wingmanCheck != null)
             {
                 if (wingmanCheck.InDB || wingmanCheck.InQueue)
@@ -178,7 +178,7 @@ namespace GW2EIWingman
                 }
                 else
                 {
-                    WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traceHandler, parserVersion);
+                    WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traceHandler);
                     if (wingmanUpload != null)
                     {
                         if (wingmanUpload.Success != 1)
@@ -198,7 +198,7 @@ namespace GW2EIWingman
             return false;
         }
 
-        public static bool CheckUploadPossible(FileInfo fi, string account, TraceHandler traceHandler, Version parserVersion)
+        public static bool CheckUploadPossible(FileInfo fi, string account, TraceHandler traceHandler)
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
             var data = new Dictionary<string, string> { 
@@ -217,7 +217,7 @@ namespace GW2EIWingman
                 }
                 return multiPartContent;
             };
-            return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traceHandler, parserVersion, HttpMethod.Post, contentCreator) == "True";
+            return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traceHandler, null, HttpMethod.Post, contentCreator) == "True";
         }
         public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, string suffix, TraceHandler traceHandler, Version parserVersion)
         {
