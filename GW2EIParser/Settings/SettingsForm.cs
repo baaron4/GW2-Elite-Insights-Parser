@@ -29,7 +29,7 @@ namespace GW2EIParser.Setting
 
         public void ConditionalSettingDisable(bool busy)
         {
-            ChkMultiThreaded.Enabled = !busy;
+            ChkSingleThreaded.Enabled = !busy;
             ChkMultiLogs.Enabled = !busy;
             ChkUploadDPSReports.Enabled = !busy;
             ChkUploadWingman.Enabled = !busy;
@@ -68,7 +68,7 @@ namespace GW2EIParser.Setting
             ChkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             ChkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             ChkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
-            ChkMultiThreaded.Checked = Properties.Settings.Default.MultiThreaded;
+            ChkSingleThreaded.Checked = Properties.Settings.Default.SingleThreaded;
             RadioThemeLight.Checked = Properties.Settings.Default.LightTheme;
             RadioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
             PictureTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
@@ -181,9 +181,9 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.SaveOutCSV = ChkOutputCsv.Checked;
         }
 
-        private void ChkMultiThreadedCheckedChanged(object sender, EventArgs e)
+        private void ChkSingleThreadedCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.MultiThreaded = ChkMultiThreaded.Checked;
+            Properties.Settings.Default.SingleThreaded = ChkSingleThreaded.Checked;
         }
 
         private void ChkPhaseParsingCheckedChanged(object sender, EventArgs e)

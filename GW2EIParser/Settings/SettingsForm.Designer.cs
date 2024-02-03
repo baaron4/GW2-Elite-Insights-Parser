@@ -43,7 +43,7 @@
             this.ChkOutputHtml = new System.Windows.Forms.CheckBox();
             this.ChkOutputCsv = new System.Windows.Forms.CheckBox();
             this.ChkPhaseParsing = new System.Windows.Forms.CheckBox();
-            this.ChkMultiThreaded = new System.Windows.Forms.CheckBox();
+            this.ChkSingleThreaded = new System.Windows.Forms.CheckBox();
             this.ChkCombatReplay = new System.Windows.Forms.CheckBox();
             this.ChkUploadDPSReports = new System.Windows.Forms.CheckBox();
             this.ChkUploadWingman = new System.Windows.Forms.CheckBox();
@@ -273,17 +273,17 @@
             this.ChkPhaseParsing.UseVisualStyleBackColor = true;
             this.ChkPhaseParsing.CheckedChanged += new System.EventHandler(this.ChkPhaseParsingCheckedChanged);
             // 
-            // ChkMultiThreaded
+            // ChkSingleThreaded
             // 
-            this.ChkMultiThreaded.AutoSize = true;
-            this.ChkMultiThreaded.Location = new System.Drawing.Point(6, 19);
-            this.ChkMultiThreaded.Name = "ChkMultiThreaded";
-            this.ChkMultiThreaded.Size = new System.Drawing.Size(202, 17);
-            this.ChkMultiThreaded.TabIndex = 29;
-            this.ChkMultiThreaded.Text = "Use multi threading on log processing";
-            this.TlpSettings.SetToolTip(this.ChkMultiThreaded, "Keep default value if unsure.");
-            this.ChkMultiThreaded.UseVisualStyleBackColor = true;
-            this.ChkMultiThreaded.CheckedChanged += new System.EventHandler(this.ChkMultiThreadedCheckedChanged);
+            this.ChkSingleThreaded.AutoSize = true;
+            this.ChkSingleThreaded.Location = new System.Drawing.Point(6, 19);
+            this.ChkSingleThreaded.Name = "ChkSingleThreaded";
+            this.ChkSingleThreaded.Size = new System.Drawing.Size(202, 17);
+            this.ChkSingleThreaded.TabIndex = 29;
+            this.ChkSingleThreaded.Text = "Use a single thread when log processing";
+            this.TlpSettings.SetToolTip(this.ChkSingleThreaded, "Keep default value if unsure (Unchecked).");
+            this.ChkSingleThreaded.UseVisualStyleBackColor = true;
+            this.ChkSingleThreaded.CheckedChanged += new System.EventHandler(this.ChkSingleThreadedCheckedChanged);
             // 
             // ChkCombatReplay
             // 
@@ -578,7 +578,7 @@
             // 
             // GroupParsing
             // 
-            this.GroupParsing.Controls.Add(this.ChkMultiThreaded);
+            this.GroupParsing.Controls.Add(this.ChkSingleThreaded);
             this.GroupParsing.Controls.Add(this.ChkMultiLogs);
             this.GroupParsing.Controls.Add(this.ChkAutoParse);
             this.GroupParsing.Controls.Add(this.ChkAutoAdd);
@@ -1006,7 +1006,7 @@
         private System.Windows.Forms.CheckBox ChkOutputHtml;
         private System.Windows.Forms.CheckBox ChkOutputCsv;
         private System.Windows.Forms.CheckBox ChkPhaseParsing;
-        private System.Windows.Forms.CheckBox ChkMultiThreaded;
+        private System.Windows.Forms.CheckBox ChkSingleThreaded;
         private System.Windows.Forms.Label LblCustomTooShort;
         private System.Windows.Forms.NumericUpDown NumericCustomTooShort;
         private System.Windows.Forms.CheckBox ChkCombatReplay;

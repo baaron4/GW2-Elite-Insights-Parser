@@ -74,12 +74,12 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool MultiThreaded {
+        public bool SingleThreaded {
             get {
-                return ((bool)(this["MultiThreaded"]));
+                return ((bool)(this["SingleThreaded"]));
             }
             set {
-                this["MultiThreaded"] = value;
+                this["SingleThreaded"] = value;
             }
         }
         

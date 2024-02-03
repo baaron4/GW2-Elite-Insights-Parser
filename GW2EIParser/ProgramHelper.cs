@@ -170,7 +170,7 @@ namespace GW2EIParser
                                 // We need to create a parser that matches Wingman's expected settings
                                 var parser = new EvtcParser(expectedSettings, APIController);
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog, this will extend total processing duration if file generation is also requested");
-                                logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded);
+                                logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, !Properties.Settings.Default.SingleThreaded);
                             }
                             byte[] jsonFile, htmlFile;
                             originalController.UpdateProgressWithCancellationCheck("Wingman: Creating JSON");
@@ -241,7 +241,7 @@ namespace GW2EIParser
                                             APIController);
 
                 //Process evtc here
-                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, Properties.Settings.Default.MultiThreaded && HasFormat());
+                ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, !Properties.Settings.Default.SingleThreaded && HasFormat());
                 if (failureReason != null)
                 {
                     failureReason.Throw();
