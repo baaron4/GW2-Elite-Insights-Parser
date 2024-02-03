@@ -78,19 +78,19 @@ namespace GW2EIWingman
             string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
             if (returnedVersion == null)
             {
-                traceHandler("version missing");
-                return false;
+                traceHandler("Could not fetch version from Wingman");
+                return true;
             }
             returnedVersion = returnedVersion.Replace("v", "");
             var expectedVersion = new Version(returnedVersion);
             traceHandler("Used version " + parserVersion.ToString());
             bool check = parserVersion.CompareTo(expectedVersion) >= 0;
-            traceHandler("Version " + (check ? "OK" : "KO"));
+            traceHandler("Version " + (check ? "up to date" : "outdated"));
             if (!check)
             {
-                traceHandler("expected version to be at least " + expectedVersion.ToString());
+                traceHandler("Expected version to be at least " + expectedVersion.ToString() + ", please update your EI.");
             }
-            return check;
+            return true;
         }
 
         public static bool CanBeUsed(Version parserVersion, TraceHandler traceHandler)
