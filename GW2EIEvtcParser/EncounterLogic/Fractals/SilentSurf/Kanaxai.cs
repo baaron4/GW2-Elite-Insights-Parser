@@ -521,7 +521,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
         }
 
-        /// /// <summary>
+        /// <summary>
         /// Adds the World Cleaver decoration.
         /// </summary>
         /// <param name="target">Kanaxai.</param>

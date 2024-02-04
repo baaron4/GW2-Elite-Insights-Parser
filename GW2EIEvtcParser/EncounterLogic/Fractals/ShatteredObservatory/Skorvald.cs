@@ -599,6 +599,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
+        /// <summary>
+        /// Add Horizon Strike decoration.
+        /// </summary>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="target">Actor.</param>
+        /// <param name="lifespan">Start and End of cast.</param>
+        /// <param name="degree">Degree of the strike.</param>
         private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, float degree)
         {
             var connector = new AgentConnector(target);
@@ -615,11 +622,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
         }
 
+        /// <summary>
+        /// Add Solar Discharge decoration.
+        /// </summary>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="target">Actor.</param>
+        /// <param name="lifespan">Start and End of cast.</param>
         private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan)
         {
             replay.Decorations.Add(new CircleDecoration(1200, lifespan, Colors.Red, 0.6, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
         }
 
+        /// <summary>
+        /// Add Kick decoration.
+        /// </summary>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="target">Actor.</param>
+        /// <param name="lifespan">Start and End of cast.</param>
+        /// <param name="expectedEndCast">Expected end of the cast.</param>
+        /// <param name="rotation">Rotation degree.</param>
         private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, long expectedEndCast, float rotation)
         {
             int translation = 150;
