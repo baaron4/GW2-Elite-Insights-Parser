@@ -85,7 +85,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ### Parser Settings
 
--__MultiThreaded__: if true, multiple threads will be used for parsing a single log.
+-__SingleThreaded__: if true, only a single thread will be used for parsing a single log.
 
 -__ParseMultipleLogs__: if true, multiple logs will be parsed in parallel.
 
@@ -149,9 +149,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__DPSReportUserToken__: dps.report user token.
 
--__UploadToRaidar__: if true, the log will be uploaded to raidar (deprecated, service not available).
-
--__UploadToWingman__: if true, the log will be uploaded to Wingman uploadProcessed API.
+-__UploadToWingman__: if true, the log will be uploaded to Wingman via the "uploadProcessed" endpoint.
 
 -__WebhookURL__: Webhook URL to send an embed or simple message to.
 
