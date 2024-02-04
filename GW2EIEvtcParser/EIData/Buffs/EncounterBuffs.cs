@@ -51,6 +51,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Mistlock Instability: Vengeance", MistlockInstabilityVengeance, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityVengeance),
             new Buff("Mistlock Instability: We Bleed Fire", MistlockInstabilityWeBleedFire, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityWeBleedFire),
             new Buff("Mistlock Instability: Toxic Sickness", MistlockInstabilityToxicSickness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicSickness),
+            // Related buffs
+            new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
         };
 
         internal static readonly List<Buff> FightSpecific = new List<Buff>

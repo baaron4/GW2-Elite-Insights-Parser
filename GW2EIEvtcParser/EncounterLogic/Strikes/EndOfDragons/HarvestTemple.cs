@@ -664,6 +664,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
                 AddShareTheVoidDecoration(greenEffects, true);
@@ -1343,7 +1345,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint radius = 500;
                         long castDuration = 1680;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         (long start, long end) lifespan = (c.Time, actualEndCast);
                         var agentConnector = new AgentConnector(c.Caster);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);
@@ -1523,7 +1525,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint width = target.HitboxWidth;
                         long castDuration = 1000;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
@@ -1543,7 +1545,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 60;
                         long castDuration = 3400;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
@@ -1623,7 +1625,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint radius = 600;
                         long castDuration = 1880;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         (long start, long end) lifespan = (c.Time, actualEndCast);
                         var agentConnector = new AgentConnector(c.Caster);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);

@@ -145,6 +145,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
             {
                 int distributedMagicDuration = 6700;

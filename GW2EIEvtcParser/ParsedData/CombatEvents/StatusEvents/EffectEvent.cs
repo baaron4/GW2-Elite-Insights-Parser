@@ -161,13 +161,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// <param name="log">The log.</param>
         /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
         /// <returns>The computed start and end times.</returns>
-        public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, string secondaryEffectGUID)
+        public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, string secondaryEffectGUID, double minDistance = 1e-6)
         {
             long start = Time;
             long end = start + Duration;
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
             {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && x.Position.DistanceToPoint(Position) < 1e-6);
+                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && x.Position.DistanceToPoint(Position) < minDistance);
                 if (firstEffect != null)
                 {
                     end = firstEffect.Time;

@@ -423,6 +423,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (_manualPlatforms)
             {
                 AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);

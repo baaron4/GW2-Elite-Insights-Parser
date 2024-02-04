@@ -20,22 +20,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.FractalMasks.NightmareMask;
         }
 
-        protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplay replay, string cascadeOfTormentEffectGUID, int cotDuration, uint innerRadius, uint outerRadius)
+        protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, List<GenericDecoration> environmentDecorations, string guid, uint innerRadius, uint outerRadius)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(cascadeOfTormentEffectGUID, out IReadOnlyList<EffectEvent> expulsionEffects))
+            int duration = 1000;
+            if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> cascadeOfTorment))
             {
-                foreach (EffectEvent effect in expulsionEffects)
+                foreach (EffectEvent effect in cascadeOfTorment)
                 {
-                    long endTime = effect.Time + cotDuration;
+                    (long start, long end) lifespanIndicator = (effect.Time, effect.Time + duration);
+                    (long start, long end) lifespanDamage = (lifespanIndicator.end, lifespanIndicator.end + 150);
                     if (innerRadius == 0)
                     {
-                        replay.Decorations.Add(new CircleDecoration(outerRadius, (effect.Time, endTime), Colors.Orange, 0.2, new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new CircleDecoration(outerRadius, (endTime, endTime + 150), Colors.Orange, 0.4, new PositionConnector(effect.Position)));
+                        environmentDecorations.Add(new CircleDecoration(outerRadius, lifespanIndicator, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
+                        environmentDecorations.Add(new CircleDecoration(outerRadius, lifespanDamage, Colors.Orange, 0.4, new PositionConnector(effect.Position)));
                     }
                     else
                     {
-                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (effect.Time, endTime), Colors.Orange, 0.2, new PositionConnector(effect.Position)));
-                        replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, (endTime, endTime + 150), Colors.Orange, 0.4, new PositionConnector(effect.Position)));
+                        environmentDecorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespanIndicator, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
+                        environmentDecorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespanDamage, Colors.Orange, 0.4, new PositionConnector(effect.Position)));
                     }
                 }
             }

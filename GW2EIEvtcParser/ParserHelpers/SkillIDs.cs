@@ -1987,6 +1987,7 @@
         public const long MistlockInstabilityFluxBomb = 36386;
         public const long FluxBombSkill = 36393;
         public const long PlateOfIslandPudding = 36406;
+        public const long POV_ToxicTrailBuff = 36410;
         public const long ToxicTrail = 36456;
         public const long EnragedFractal = 36498;
         public const long PlateOfSweetCurriedMussels = 36508;
@@ -1997,6 +1998,7 @@
         public const long VolatileExpulsionSiax = 36894;
         public const long Extraction = 36903;
         public const long NightmareBullet2 = 36919;
+        public const long POV_ToxicSicknessBuff = 36922;
         public const long TormentingBlast = 36926;
         public const long LungeNightmareHallucination = 36927;
         public const long CausticExplosionSiaxBreakbar = 36929;
@@ -2015,6 +2017,7 @@
         public const long CausticExplosionEnsolyss = 37096;
         public const long Blastwave2 = 37103;
         public const long BowlOfWinterberrySeaweedSalad = 37111;
+        public const long ExplosiveLaunch = 37121;
         public const long NigthmareMiasmaEnsolyss3 = 37151;
         public const long LungeEnsolyss = 37154;
         public const long GrenadeBarrage2 = 37172;
@@ -2085,6 +2088,7 @@
         public const long SpearImpact = 37816;
         public const long OffBalance = 37846;
         public const long InevitableBetrayalFailBig = 37851;
+        public const long POV_FluxBombCooldownBuff = 37857;
         public const long FixatedSamarog = 37868;
         public const long FormUpAndAdvance = 37871;
         public const long DemonicAura = 37872;
@@ -2124,6 +2128,7 @@
         public const long EnemyTile = 38184;
         public const long WeakMinded = 38187;
         public const long BrutalizeBuff = 38199;
+        public const long POV_FluxBombSafeTimeBuff = 38206;
         public const long Annihilate2 = 38208;
         public const long SharedAgony75 = 38209;
         public const long SharedAgony3 = 38210;

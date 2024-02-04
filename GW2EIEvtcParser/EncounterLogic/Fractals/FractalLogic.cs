@@ -24,6 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0), // No longer tracking damage
             new SpawnMechanic((int)ArcDPSEnums.TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
             new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Debilitated", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", 0),
+            new PlayerSrcEffectMechanic(new [] { EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator }, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", 0),
             /* Not trackable due to health % damage for now
             new PlayerDstHitMechanic(ToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.DarkGreen, 10), "ToxSick.H", "Hit by Toxic Sickness", "Toxic Sickness Hit", 0),
             new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
@@ -146,25 +147,40 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ToxicSicknessPuke1, out IReadOnlyList<EffectEvent> sicknessEffects))
-            {
-                var sicknessEffectsOnPlayer = sicknessEffects.Where(x => x.Dst == p.AgentItem).ToList();
 
-                foreach (EffectEvent sicknessEffect in sicknessEffectsOnPlayer)
+            // Toxic Sickness - Old Indicator
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.ToxicSicknessOldIndicator, out IReadOnlyList<EffectEvent> toxicSicknessOld))
+            {
+                foreach (EffectEvent effect in toxicSicknessOld)
                 {
-                    if (replay.Rotations.Any())
-                    {
-                        int duration = 4000;
-                        uint radius = 600;
-                        int openingAngle = 36;
-                        int effectStart = (int)sicknessEffect.Time;
-                        int effectEnd = effectStart + duration;
-                        var rotationConnector = new AgentFacingConnector(p);
-                        var connector = new AgentConnector(p);
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectStart, effectEnd), Colors.DarkGreen, 0.2, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (effectEnd, effectEnd + 200), Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotationConnector));
-                    }
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 4000);
+                    (long start, long end) lifespanPuke = (lifespan.end, lifespan.end + 200);
+                    var rotation = new AgentFacingConnector(p);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new PieDecoration(600, 36, lifespan, Colors.DarkGreen, 0.2, connector).UsingRotationConnector(rotation));
+                    replay.Decorations.Add(new PieDecoration(600, 36, lifespanPuke, Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotation));                   
                 }
+            }
+
+            // Toxic Sickness - New Indicator
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.ToxicSicknessNewIndicator, out IReadOnlyList<EffectEvent> toxicSicknessNew))
+            {
+                foreach (EffectEvent effect in toxicSicknessNew)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 4000);
+                    (long start, long end) lifespanPuke = (lifespan.end, lifespan.end + 200);
+                    var rotation = new AgentFacingConnector(p);
+                    var connector = new AgentConnector(p);
+                    replay.Decorations.Add(new PieDecoration(600, 36, lifespan, Colors.DarkGreen, 0.2, connector).UsingRotationConnector(rotation));
+                    replay.Decorations.Add(new PieDecoration(600, 36, lifespanPuke, Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotation));
+                }
+            }
+
+            // Flux Bomb on selected player
+            var fluxBombApplies = p.GetBuffStatus(log, FluxBombBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment segment in fluxBombApplies)
+            {
+                replay.AddDecorationWithGrowing(new CircleDecoration(120, segment, Colors.LightOrange, 0.2, new AgentConnector(p)), segment.End);
             }
         }
 
@@ -196,23 +212,23 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombEffects))
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombs))
             {
-                foreach (EffectEvent fluxEffect in fluxBombEffects)
+                foreach (EffectEvent effect in fluxBombs)
                 {
-                    int duration = 5000;
-                    int start = (int)fluxEffect.Time;
-                    int effectEnd = start + duration;
-                    var circle = new CircleDecoration(120, (start, effectEnd), Colors.Blue, 0.1, new PositionConnector(fluxEffect.Position));
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 5000);
+                    var circle = new CircleDecoration(120, lifespan, Colors.Blue, 0.1, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
 
                     int pulseDuration = 1000;
-                    int pulse = start + pulseDuration;
-                    int previousPulse = start;
+                    long pulse = lifespan.start + pulseDuration;
+                    long previousPulse = lifespan.start;
                     for (int pulses = 0; pulses < 5; pulses++)
                     {
-                        EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), Colors.Blue, 0.1, new PositionConnector(fluxEffect.Position)).UsingGrowingEnd(pulse));
+                        EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), Colors.Blue, 0.1, new PositionConnector(effect.Position)).UsingGrowingEnd(pulse));
                         previousPulse = pulse;
                         pulse += pulseDuration;
                     }

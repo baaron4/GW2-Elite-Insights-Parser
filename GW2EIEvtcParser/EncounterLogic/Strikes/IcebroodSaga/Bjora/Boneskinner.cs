@@ -176,6 +176,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             // Grasp AoE Orange Indicator
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out IReadOnlyList<EffectEvent> indicators))
             {

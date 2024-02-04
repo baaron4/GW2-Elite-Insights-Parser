@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
                 CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
-                return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
+                return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
         }
@@ -258,7 +258,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeNPCCombatReplayActors(target, log, replay);
 
             IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
-            switch (target.ID) {
+            switch (target.ID)
+            {
                 case (int)TargetID.Arkk:
                     foreach (AbstractCastEvent cast in casts)
                     {
@@ -271,95 +272,77 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 // TODO: add growing square
                                 break;
                             case HorizonStrikeArkk1:
-                            {
-                                if (log.CombatData.HasEffectData)
-                                {
-                                    continue;
-                                }
-                                int offset = 520; // ~520ms at the start and between
-                                int duration = 2600;
-                                var connector = new AgentConnector(target);
-                                ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
-                                if (rotation != null)
-                                {
-                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
-                                    BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
-                                    BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                                    long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
-                                    float facing = Point3D.GetZRotationFromFacing(rotation);
-                                    for (int i = 0; i < 5; i++)
-                                    {
-                                        int start = (int)cast.Time + offset * (i + 1);
-                                        int end = start + duration;
-                                        float angle = facing + 180 / 5 * i;
-                                        if (start >= cap)
-                                        {
-                                            break;
-                                        }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, start + duration), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                    }
-                                }
-                                break;
-                            }
                             case HorizonStrikeArkk2:
-                            {
-                                if (log.CombatData.HasEffectData)
+                                if (!log.CombatData.HasEffectData)
                                 {
-                                    continue;
-                                }
-                                int offset = 520; // ~520ms at the start and between
-                                int duration = 2600;
-                                var connector = new AgentConnector(target);
-                                ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
-                                if (rotation != null)
-                                {
-                                    IEnumerable<BuffApplyEvent> applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
-                                    BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
-                                    BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                                    long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
-                                    float facing = Point3D.GetZRotationFromFacing(rotation);
-                                    for (int i = 0; i < 5; i++)
+                                    int offset = 520; // ~520ms at the start and between
+                                    int castDuration = 2600;
+                                    var connector = new AgentConnector(target);
+                                    ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
+                                    if (rotation != null)
                                     {
-                                        int start = (int)cast.Time + offset * (i + 1);
-                                        int end = start + duration;
-                                        float angle = facing + 90 - 180 / 5 * i;
-                                        if (start >= cap)
+                                        var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time).ToList();
+                                        BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
+                                        BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
+                                        long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
+                                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
+                                        float facing = Point3D.GetZRotationFromFacing(rotation);
+                                        for (int i = 0; i < 5; i++)
                                         {
-                                            break;
+                                            long start = cast.Time + offset * (i + 1);
+                                            long end = start + castDuration;
+                                            if (cast.SkillId == HorizonStrikeArkk1)
+                                            {
+                                                float angle = facing + 180 / 5 * i;
+                                                if (start >= cap)
+                                                {
+                                                    break;
+                                                }
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                            }
+                                            else if (cast.SkillId == HorizonStrikeArkk2)
+                                            {
+                                                float angle = facing + 90 - 180 / 5 * i;
+                                                if (start >= cap)
+                                                {
+                                                    break;
+                                                }
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                            }
                                         }
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
                                     }
                                 }
                                 break;
-                            }
+                            default:
+                                break;
                         }
                     }
                     break;
-                // case (int)TrashID.TemporalAnomalyArkk:
-                //     if (!log.CombatData.HasEffectData)
-                //     {
-                //         foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
-                //         {
-                //             int start = (int)exitCombat.Time;
-                //             BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
-                //             int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
-                //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
-                //             if (anomalyPos != null)
-                //             {
-                //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(anomalyPos)));
-                //             }
-                //         }
-                //     }
-                //     break;
+                    // case (int)TrashID.TemporalAnomalyArkk:
+                    //     if (!log.CombatData.HasEffectData)
+                    //     {
+                    //         foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
+                    //         {
+                    //             int start = (int)exitCombat.Time;
+                    //             BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
+                    //             int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
+                    //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
+                    //             if (anomalyPos != null)
+                    //             {
+                    //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(anomalyPos)));
+                    //             }
+                    //         }
+                    //     }
+                    //     break;
             }
         }
-        
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
@@ -375,7 +358,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int end = start + 2600; // effect has 3833ms duration for some reason
                     var rotation = new AngleConnector(effect.Rotation.Z + 90);
                     EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
-                    EnvironmentDecorations.Add(new PieDecoration( 1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
                 }
             }
         }
